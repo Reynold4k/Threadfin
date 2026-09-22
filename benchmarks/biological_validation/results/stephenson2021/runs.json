@@ -1,0 +1,202 @@
+[
+  {
+    "key": "tf__pca__r0.3__cw0.0",
+    "basis": "X_pca",
+    "resolution": 0.3,
+    "cdr3_weight": 0.0,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 5,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.009153798952627513,
+      "ari": -0.05412638564927569,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 4,
+    "top_enrichment": {
+      "tf__pca__r0.3__cw0.0": "0",
+      "state": "Plasmablast",
+      "n_cells": 355,
+      "odds_ratio": 1.9473147085087383,
+      "pvalue": 8.301304929810046e-09,
+      "fdr": 8.301304929810046e-08
+    }
+  },
+  {
+    "key": "tf__pca__r0.3__cw0.3",
+    "basis": "X_pca",
+    "resolution": 0.3,
+    "cdr3_weight": 0.3,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 3,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.009299305826954919,
+      "ari": -0.014017810147005432,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 2,
+    "top_enrichment": {
+      "tf__pca__r0.3__cw0.3": "0",
+      "state": "Plasmablast",
+      "n_cells": 278,
+      "odds_ratio": 1.7848835742576756,
+      "pvalue": 2.3120055017505655e-08,
+      "fdr": 1.3872033010503393e-07
+    }
+  },
+  {
+    "key": "tf__pca__r0.8__cw0.0",
+    "basis": "X_pca",
+    "resolution": 0.8,
+    "cdr3_weight": 0.0,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 9,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.07750497079986891,
+      "ari": 0.038548140741097844,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 8,
+    "top_enrichment": {
+      "tf__pca__r0.8__cw0.0": "2",
+      "state": "Plasmablast",
+      "n_cells": 236,
+      "odds_ratio": 11.87339794589903,
+      "pvalue": 1.7662304923288626e-90,
+      "fdr": 3.179214886191953e-89
+    }
+  },
+  {
+    "key": "tf__pca__r0.8__cw0.3",
+    "basis": "X_pca",
+    "resolution": 0.8,
+    "cdr3_weight": 0.3,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 9,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.014918347803074999,
+      "ari": 0.011297444039020482,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 2,
+    "top_enrichment": {
+      "tf__pca__r0.8__cw0.3": "4",
+      "state": "Plasmablast",
+      "n_cells": 110,
+      "odds_ratio": 3.369769004917047,
+      "pvalue": 1.0445402296509268e-17,
+      "fdr": 1.8801724133716681e-16
+    }
+  },
+  {
+    "key": "tf__umap__r0.3__cw0.0",
+    "basis": "X_umap",
+    "resolution": 0.3,
+    "cdr3_weight": 0.0,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 4,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.12566107942633545,
+      "ari": 0.06810051751745709,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 3,
+    "top_enrichment": {
+      "tf__umap__r0.3__cw0.0": "2",
+      "state": "Plasmablast",
+      "n_cells": 323,
+      "odds_ratio": 11.638239875389408,
+      "pvalue": 2.998206089085526e-106,
+      "fdr": 2.3985648712684207e-105
+    }
+  },
+  {
+    "key": "tf__umap__r0.3__cw0.3",
+    "basis": "X_umap",
+    "resolution": 0.3,
+    "cdr3_weight": 0.3,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 3,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.022161959135668357,
+      "ari": -0.002229673429771566,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 3,
+    "top_enrichment": {
+      "tf__umap__r0.3__cw0.3": "0",
+      "state": "Plasmablast",
+      "n_cells": 271,
+      "odds_ratio": 2.5972397079189222,
+      "pvalue": 9.521491746934488e-20,
+      "fdr": 5.712895048160693e-19
+    }
+  },
+  {
+    "key": "tf__umap__r0.8__cw0.0",
+    "basis": "X_umap",
+    "resolution": 0.8,
+    "cdr3_weight": 0.0,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 7,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.11663769319738887,
+      "ari": 0.041964751521401694,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 7,
+    "top_enrichment": {
+      "tf__umap__r0.8__cw0.0": "4",
+      "state": "Plasmablast",
+      "n_cells": 259,
+      "odds_ratio": 16.350539568345322,
+      "pvalue": 4.157986205959676e-114,
+      "fdr": 5.821180688343546e-113
+    }
+  },
+  {
+    "key": "tf__umap__r0.8__cw0.3",
+    "basis": "X_umap",
+    "resolution": 0.8,
+    "cdr3_weight": 0.3,
+    "min_clone_size": 3,
+    "n_neighbors": 20,
+    "seed": 0,
+    "n_clone_clusters": 8,
+    "n_cells_labeled": 2353,
+    "concordance": {
+      "nmi": 0.05382647333846171,
+      "ari": 0.020640800178136683,
+      "n_cells_used": 2353
+    },
+    "n_significant_enrichments": 7,
+    "top_enrichment": {
+      "tf__umap__r0.8__cw0.3": "2",
+      "state": "Plasmablast",
+      "n_cells": 209,
+      "odds_ratio": 8.702457831325301,
+      "pvalue": 1.88677992835048e-68,
+      "fdr": 3.018847885360768e-67
+    }
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "name": "ln_vaccine_gse195673",
+  "loader": "ln_vaccine_gse195673",
+  "data_dir": "/data/scratch/projects/punim1236/threadfin_data/gse195673_ln_vaccine",
+  "donor_key": "donor",
+  "description": "SARS-CoV-2 mRNA vaccine, axillary lymph-node FNA + blood, 8 donors, 5 timepoints (Kim/Zhou et al. 2022, Nature). Author-integrated h5ad + Change-O BCR tables (Zenodo 5895181).",
+  "signatures": {
+    "Naive B": ["TCL1A", "IGHD", "FCER2"],
+    "GC DZ": ["CXCR4", "AICDA", "MKI67"],
+    "GC LZ": ["CD83", "CD86", "BCL6"],
+    "Memory B": ["CD27", "CCR6"],
+    "Plasmablast": ["PRDM1", "XBP1", "JCHAIN", "SDC1", "MZB1"]
+  }
+}

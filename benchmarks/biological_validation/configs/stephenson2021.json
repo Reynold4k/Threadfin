@@ -1,0 +1,13 @@
+{
+  "name": "stephenson2021",
+  "loader": "stephenson_h5mu",
+  "data": "/data/scratch/projects/punim1236/threadfin_data/stephenson2021_5k.h5mu",
+  "donor_key": "patient_id",
+  "description": "COVID-19 PBMC, 5k BCR+ B-lineage cells (Stephenson et al. 2021, Nat Med; via scirpy). Reference state: initial_clustering (B_cell/Plasmablast).",
+  "signatures": {
+    "Naive B": ["TCL1A", "IGHD", "FCER2"],
+    "Memory B": ["CD27", "CCR6"],
+    "Plasmablast": ["PRDM1", "XBP1", "JCHAIN", "SDC1", "MZB1"],
+    "IFN response": ["ISG15", "MX1", "IFI6"]
+  }
+}

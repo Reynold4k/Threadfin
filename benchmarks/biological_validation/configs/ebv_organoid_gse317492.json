@@ -1,0 +1,15 @@
+{
+  "name": "ebv_organoid_gse317492",
+  "loader": "ebv_gse317492",
+  "data_dir": "/data/scratch/projects/punim1236/threadfin_data/gse317492_ebv",
+  "donor_key": null,
+  "description": "Tonsil organoid primary EBV infection, d0/d4/d7/d14/d21, GFP+/- sorted at d14/d21 (Mitul et al. 2026, PNAS). GFP status = experimentally infected cells (external, non-transcriptomic label).",
+  "signatures": {
+    "Naive B": ["TCL1A", "IGHD", "FCER2"],
+    "GC DZ": ["CXCR4", "AICDA", "MKI67"],
+    "GC LZ": ["CD83", "CD86", "BCL6"],
+    "Memory B": ["CD27", "CCR6"],
+    "Plasmablast": ["PRDM1", "XBP1", "JCHAIN", "SDC1", "MZB1"],
+    "EBV/IFN": ["ISG15", "MX1", "IFI6", "EBNA1"]
+  }
+}
