@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# data and large artifacts (download via benchmarks/download_data.sh)
+data/
+*.h5ad
+*.h5mu
+*.h5
+manuscript.ipynb
