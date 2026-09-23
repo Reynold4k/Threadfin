@@ -29,5 +29,6 @@
   },
   "min_clone_size": 2,
   "heldout_min_clone_cells": 6,
-  "notes": "5k subset is sparse: exact-CDR3 clonotypes are mostly singletons; min_clone_size lowered to 2 accordingly."
+  "notes": "5k subset is sparse: exact-CDR3 clonotypes are mostly singletons; min_clone_size lowered to 2 accordingly.",
+  "cov_abdab": "/data/scratch/projects/punim1236/threadfin_data/cov_abdab_080224.csv"
 }

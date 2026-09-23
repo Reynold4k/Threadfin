@@ -327,7 +327,10 @@ def load_ln_vaccine_gse195673(cfg):
     per_cell = heavy.drop_duplicates("cell_id").set_index("cell_id")
     if "isotype" in per_cell.columns and "c_call" not in per_cell.columns:
         per_cell = per_cell.rename(columns={"isotype": "c_call"})
-    keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3_aa", "clone_id")
+    keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3_aa", "clone_id",
+                        # discovery layer: author spike-specificity, ELISA-validated
+                        # mAb labels, SHM frequency, BCR compartment
+                        "s_pos_clone", "elisa", "nuc_RS_freq_19_312", "compartment")
             if c in per_cell.columns]
     bcr = per_cell[keep].rename(columns={"cdr3_aa": "cdr3"})
     bcr.index.name = "barcode"

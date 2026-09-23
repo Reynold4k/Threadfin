@@ -37,11 +37,12 @@ _MAX_LEN_DIFF = 4
 def _norm_gene(call, prefix: str) -> str:
     """Normalize a gene call to allele-free form.
 
-    Handles multi-calls ('IGHV3-23*01,IGHV3-23*02' -> 'IGHV3-23') and the
+    Handles multi-calls ('IGHV3-23*01,IGHV3-23*02' -> 'IGHV3-23'), the
     bare '3-23' style seen in some CoV-AbDab rows (bare '3-23' with
-    ``prefix='IGHV'`` -> 'IGHV3-23').
+    ``prefix='IGHV'`` -> 'IGHV3-23'), and CoV-AbDab's species suffix
+    ('IGHV4-31 (Human)' -> 'IGHV4-31').
     """
-    g = _gene(call).upper()
+    g = _gene(str(call).split("(")[0].strip()).upper()
     if g and not g.startswith("IG") and g[0].isdigit():
         g = prefix + g
     return g
