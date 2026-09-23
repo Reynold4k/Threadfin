@@ -21,10 +21,27 @@ the B-cell receptor:
   like?*
 
 This view is powerful for **ancestry and specificity**, but it is blind to
-**behaviour**. Two clones with completely different receptors may be doing
-exactly the same thing (e.g. both becoming plasmablasts), and one expanded
-clone can contain cells in very different states. A sequence network cannot
-see any of that, because it never looks at the transcriptome.
+**behaviour**, for two reasons.
+
+First, real repertoires are dominated by **singletons**: in all five public
+datasets validated with Threadfin the median clonotype size is exactly one
+cell, and clonotypes expanded to >=3 cells are only 0.5–5% of the
+repertoire (mirroring the classic observation that "the majority of
+clonotypes were singletons and only 9–18% of patients' clonotypes were
+clonally expanded", [Sturm et al. 2020](https://doi.org/10.1093/bioinformatics/btaa611)).
+Lineage-tree methods (Immcantation/SCOPer-style) can therefore only be
+inferred for a small, unrepresentative minority of clones — and a tree
+encodes the **ancestry of the receptor sequence**, not what the cells are
+doing.
+
+Second, **receptor identity is not cell state**. Cells of the same clonal
+group routinely occupy different transcriptional clusters ("lymphocytes
+sharing the same immune receptor specificity may still undergo very
+different cell fates and functions in the course of an immune response",
+[Yermanos et al. 2021](https://pmc.ncbi.nlm.nih.gov/articles/PMC8046018/)),
+and conversely, genetically unrelated clones converge on the same state
+during a response. A sequence network cannot see either direction, because
+it never looks at the transcriptome.
 
 ## What Threadfin adds
 
@@ -41,8 +58,9 @@ Concretely, Threadfin:
    forming **clone communities**;
 3. labels every cell with the community of its clone, so the community
    structure can be inspected on the normal cell UMAP;
-4. can order clone communities along **clone-level pseudotime**, describing
-   how lineages traverse transcriptional states;
+4. infers **clonal state transitions** — across real timepoints
+   (`community_transition`, `clone_fate_table`), or along a
+   diffusion-pseudotime ordering of the clone graph (`clonal_pseudotime`);
 5. can optionally blend CDR3 sequence distance into the clone distance
    (`cdr3_weight`), testing whether sequence-similar clones also behave
    similarly.
@@ -65,7 +83,7 @@ Concretely, Threadfin:
 | Which sequence-related clones **diverge** transcriptionally? | same VDJ key / similar CDR3 but different community; or cells of one clone spanning communities | `metrics.clone_state_purity` (entropy), `cdr3_weight` comparison |
 | Which clones are transcriptionally **stable vs plastic**? | per-clone purity/entropy across cell states | `metrics.clone_state_purity` |
 | Which communities occupy GC / memory / plasma / activated states? | Fisher-exact enrichment of curated or de-novo states per community | `metrics.state_enrichment` |
-| Do some communities appear **earlier or later** in a response? | enrichment of timepoint labels per community; clone-level pseudotime | `state_enrichment` on timepoint; `clonal_pseudotime` |
+| Do some communities appear **earlier or later** in a response? | enrichment of timepoint labels per community; diffusion ordering of the clone graph | `state_enrichment` on timepoint; `clonal_pseudotime` |
 | Does **sequence similarity agree with fate similarity** — or do they decouple? | compare expression-only vs sequence-only vs blended clone groupings | `cdr3_weight` grid in the validation pipeline |
 
 ### Worked example from the bundled benchmark
@@ -119,25 +137,42 @@ Reading of the table:
 * **LN vaccine (Kim 2022)** — the flagship dataset (8 donors, 193k B cells,
   GC + blood + bone-marrow compartments). Communities are strongly enriched
   for author-annotated states (17–37 significant enrichments per run; null 3
-  p = 0.015). Communities have coherent **isotype** compositions (e.g. one
-  community is 80% IGHG, another 88% IGHG, others IGHM/IGHD-rich), and a
-  **clonal-state transition matrix across the vaccination time course is
-  essentially diagonal**: a clone's community membership at d28 predicts its
-  membership at d60/d110 — clonal transcriptional identity is stable across
-  the response (with the caveat that communities are coarse).
-* **Flu vaccine (Wang 2023)** — 711 clones are observed at both d0 and d7;
-  expanded d7 plasmablast clones concentrate in a small number of
-  communities (top enrichment OR 290, FDR ≈ 0). Clone state-purity is the
-  highest of all datasets relative to its null (0.883 vs 0.356).
+  p = 0.015). Communities have coherent **isotype** compositions although
+  isotype was never used to build the graph (the three largest communities
+  are 80%, 88% and 83% IGHG; others are IGHM/IGHD-rich), and the
+  **community transition matrix across the vaccination time course is
+  perfectly diagonal (1,016/1,016 clone transitions, d28 → d60 → d110)**: a
+  clone's community membership at d28 predicts its membership months later —
+  clonal transcriptional identity is a stable property of the lineage across
+  the GC response (with the caveat that communities are coarse).
+* **Flu vaccine (Wang 2023)** — 711 clones are observed at both d0 and d7,
+  enabling genuine clonal fate tracking. Expanded d7 plasmablast clones
+  concentrate in a small number of communities (top enrichments OR 290 and
+  OR 1,341 at higher resolution, both FDR ≈ 0); communities stratify by
+  class-switch status (one community 75% IGHM/21% IGHD unswitched, another
+  52% IGHG/25% IGHA switched); the d0→d7 transition matrix is perfectly
+  diagonal (272/272). Clone state-purity is the highest of all datasets
+  relative to its null (0.883 vs 0.356).
 * **Tonsil (King 2021)** — a methodological finding in itself: exact
   cellranger clonotypes in these libraries are almost all singletons (13
   clones with >=3 cells), and only Threadfin's **sequence-similarity clone
   definition** (`define_clones`, merging SHM variants within the same V/J
   into lineages) recovers an analysable clonal landscape (200 expanded
-  lineages). A plasmablast community is recovered under both bases.
+  lineages). A plasmablast community is recovered under both bases
+  (OR 5.8–26.9, FDR <= 1e-13). With only 200 lineages, community boundaries
+  are unstable (basis ARI ≈ 0; enrichment-count null not rejected) — but
+  clone-level structure is real (purity 0.662 vs 0.489; held-out 0.99 vs
+  0.66).
 * **EBV organoid (Mitul 2026)** — highest concordance with de-novo states
-  (NMI 0.67) and the largest expanded-clone set; the joint GEX+BCR
-  embedding finds 20 communities with NMI 0.59.
+  (NMI 0.67) and the largest expanded-clone set (4,564); top community–state
+  pair OR 5,547 (FDR ≈ 0); the joint GEX+BCR embedding finds 20 communities
+  with NMI 0.59. This is the one dataset where the BCR modality is
+  measurably informative at clone level (testcor_bcr = 0.31 over 1,389
+  inter-clone edges) — consistent with acute infection expanding
+  sequence-related, low-SHM families. Honest caveat: the enrichment-count
+  null is not rejected here (32 observed vs 41.2 under size-matched random
+  communities), so claims rest on concordance, purity and held-out
+  replication.
 
 ### What the BCR modality does — and does not — add at clone level
 
