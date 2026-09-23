@@ -1,0 +1,24 @@
+{
+  "n_big_clones": 20,
+  "n_repeats": 5,
+  "basis": "X_pca",
+  "min_clone_cells": 8,
+  "cocluster_rate_mean": 0.99,
+  "cocluster_rate_sd": 0.020000000000000018,
+  "chance_rate_mean": 0.664190082644628,
+  "rates": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.95
+  ],
+  "chances": [
+    0.7267768595041322,
+    0.7846694214876033,
+    0.619297520661157,
+    0.5819834710743801,
+    0.6082231404958677
+  ],
+  "interpretation": "cocluster_rate >> chance_rate => clone communities are reproducible on held-out cells of the same clone"
+}

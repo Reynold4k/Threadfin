@@ -59,7 +59,8 @@ def read_10x_vdj(
         raise ValueError("No productive BCR contigs left after filtering.")
 
     umis = contigs["umis"] if "umis" in contigs.columns else pd.Series(1, index=contigs.index)
-    contigs = contigs.assign(_umis=umis).sort_values("_umis", ascending=False)
+    contigs = contigs.assign(_umis=umis).sort_values(
+        "_umis", ascending=False, kind="mergesort")
 
     n_contigs = contigs.groupby("barcode").size().rename("n_contigs")
 
@@ -114,11 +115,30 @@ def read_airr(path: str, cell_col: str | None = None) -> pd.DataFrame:
         else:
             raise ValueError("Cannot find a cell barcode column; pass `cell_col` explicitly.")
 
-    keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3", "cdr3_aa") if c in bcr.columns]
+    keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3", "cdr3_aa",
+                        "junction_aa", "clone_id", "locus") if c in bcr.columns]
     if "cdr3" not in keep and "cdr3_aa" in keep:
         bcr = bcr.rename(columns={"cdr3_aa": "cdr3"})
-        keep = ["cdr3" if c == "cdr3_aa" else c for c in keep]
-    per_cell = bcr.drop_duplicates(cell_col).set_index(cell_col)[keep]
+    elif "cdr3" not in keep and "junction_aa" in keep:
+        bcr = bcr.rename(columns={"junction_aa": "cdr3"})
+    # some AIRR tables ship an empty junction_aa but a populated nucleotide
+    # junction; translate it wherever the amino-acid CDR3 is missing
+    if "junction" in bcr.columns:
+        from .sequence import translate_nt
+
+        if "cdr3" not in bcr.columns:
+            bcr["cdr3"] = bcr["junction"].map(translate_nt)
+        elif bcr["cdr3"].isna().any():
+            na = bcr["cdr3"].isna()
+            bcr["cdr3"] = bcr["cdr3"].astype(object)
+            bcr.loc[na, "cdr3"] = bcr.loc[na, "junction"].map(translate_nt)
+    # prefer the heavy chain for per-cell V/D/J calls when a locus column exists
+    if "locus" in bcr.columns and (bcr["locus"] == "IGH").any():
+        bcr = bcr[bcr["locus"] == "IGH"]
+    per_cell = bcr.drop_duplicates(cell_col).set_index(cell_col)
+    keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3", "clone_id")
+            if c in per_cell.columns]
+    per_cell = per_cell[keep]
     per_cell.index.name = "barcode"
     return per_cell
 
@@ -152,17 +172,21 @@ def build_clone_key(
         for col in ("v_call", "d_call", "j_call"):
             if col not in bcr_table.columns:
                 raise ValueError(f"strategy='vdj' requires a '{col}' column.")
-        bcr_table[out_col] = (
+        key = (
             bcr_table["v_call"].astype(str)
             + "_"
             + bcr_table["d_call"].astype(str)
             + "_"
             + bcr_table["j_call"].astype(str)
         )
+        missing = bcr_table[["v_call", "d_call", "j_call"]].isna().any(axis=1)
+        bcr_table[out_col] = key.mask(missing)
     elif strategy in ("clonotype_id", "cdr3"):
         if strategy not in bcr_table.columns:
             raise ValueError(f"strategy='{strategy}' requires a '{strategy}' column.")
-        bcr_table[out_col] = bcr_table[strategy].astype(str)
+        vals = bcr_table[strategy]
+        is_na = vals.isna() | vals.astype(str).isin(("None", "", "nan"))
+        bcr_table[out_col] = vals.astype(str).mask(is_na)
     else:
         raise ValueError(f"Unknown strategy: {strategy!r}")
     return bcr_table

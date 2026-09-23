@@ -71,12 +71,97 @@ Concretely, Threadfin:
 ### Worked example from the bundled benchmark
 
 On 5,000 B-lineage cells from COVID-19 patients (Stephenson et al. 2021),
-Threadfin finds four clone communities. Community 3 is an island of large,
-expanded clones that is **22.7× enriched for the plasmablast state**
-(FDR ≈ 1e-111) and expresses plasmablast/interferon programmes. A sequence
-network of the same data shows which clones are *related*; Threadfin shows
-which clones are *doing the same thing* — here, mounting the antibody-secreting
-response.
+Threadfin finds a clone community that is **~198× enriched for the
+plasmablast state** (FDR ≈ 6e-34) and expresses plasmablast/interferon
+programmes. A sequence network of the same data shows which clones are
+*related*; Threadfin shows which clones are *doing the same thing* — here,
+mounting the antibody-secreting response. (Note: the bundled 5k subset is
+sparse, so exact-CDR3 clonotypes are mostly singletons; the benchmark config
+uses `min_clone_size=2` and the community count is small — see the dataset
+report for an honest discussion.)
+
+## Evidence across five public datasets
+
+All numbers below come from `benchmarks/biological_validation/results/`
+(per-dataset `summary.json` / `report.md`; cross-dataset table in
+`results/cross_dataset_summary.md`). Every dataset was processed with the
+same pipeline; dataset-specific parameters are declared in the JSON configs.
+
+| dataset | cells | clones | expanded (>=3) | null1 purity vs null (p) | held-out vs chance | basis ARI |
+|---|---|---|---|---|---|---|
+| Stephenson 2021 COVID PBMC (5k subset) | 5,000 | 4,823 | 22 | 0.973 vs 0.817 (0.005) | n/a (only 2 communities) | 0.944 |
+| Flu vaccine PBMC (Wang 2023, GSE175522) | 123,693 | 80,682 | 499 | 0.883 vs 0.356 (0.005) | 0.97 vs 0.26 | 0.313 |
+| Tonsil (King 2021, E-MTAB-9005/9003) | 22,478 | 10,473 | 200 | 0.662 vs 0.489 (0.005) | 0.99 vs 0.66 | 0.000 |
+| EBV tonsil organoid (Mitul 2026, GSE317492) | 205,630 | 89,757 | 4,564 | 0.791 vs 0.314 (0.005) | 0.985 vs 0.101 | 0.352 |
+| LN vaccine GC (Kim 2022, GSE195673) | 193,442 | 92,761 | 4,396 | 0.849 vs 0.478 (0.005) | 0.928 vs 0.087 | 0.234 |
+
+Reading of the table:
+
+* **Null 1 (within-donor clone-label permutation) is rejected on every
+  dataset** (p <= 0.005): clones are far more transcriptionally pure than
+  chance. This is the core claim — clonal identity carries transcriptional
+  information — and it holds across tissues, diseases and sequencing
+  protocols.
+* **Held-out split-clone validation is strong wherever more than a handful
+  of communities exist**: sibling halves of the same clone re-co-cluster at
+  0.93–0.99 vs chance 0.09–0.26 (flu/EBV/LN). On Stephenson the test is
+  uninformative (two coarse communities make the chance level ~1.0) and we
+  say so rather than quoting the number.
+* **Fine-grained community boundaries are basis-dependent** (clone-level ARI
+  0.23–0.35 between PCA and UMAP bases on the three large datasets; 0.0 on
+  tonsil). We therefore state conclusions at the level of *enrichments*,
+  not boundaries — and the headline enrichments do replicate across bases
+  (e.g. tonsil plasmablast community: OR 5.8–26.9, FDR <= 1e-13 in all
+  runs that resolve the community).
+
+### Per-dataset biology
+
+* **LN vaccine (Kim 2022)** — the flagship dataset (8 donors, 193k B cells,
+  GC + blood + bone-marrow compartments). Communities are strongly enriched
+  for author-annotated states (17–37 significant enrichments per run; null 3
+  p = 0.015). Communities have coherent **isotype** compositions (e.g. one
+  community is 80% IGHG, another 88% IGHG, others IGHM/IGHD-rich), and a
+  **clonal-state transition matrix across the vaccination time course is
+  essentially diagonal**: a clone's community membership at d28 predicts its
+  membership at d60/d110 — clonal transcriptional identity is stable across
+  the response (with the caveat that communities are coarse).
+* **Flu vaccine (Wang 2023)** — 711 clones are observed at both d0 and d7;
+  expanded d7 plasmablast clones concentrate in a small number of
+  communities (top enrichment OR 290, FDR ≈ 0). Clone state-purity is the
+  highest of all datasets relative to its null (0.883 vs 0.356).
+* **Tonsil (King 2021)** — a methodological finding in itself: exact
+  cellranger clonotypes in these libraries are almost all singletons (13
+  clones with >=3 cells), and only Threadfin's **sequence-similarity clone
+  definition** (`define_clones`, merging SHM variants within the same V/J
+  into lineages) recovers an analysable clonal landscape (200 expanded
+  lineages). A plasmablast community is recovered under both bases.
+* **EBV organoid (Mitul 2026)** — highest concordance with de-novo states
+  (NMI 0.67) and the largest expanded-clone set; the joint GEX+BCR
+  embedding finds 20 communities with NMI 0.59.
+
+### What the BCR modality does — and does not — add at clone level
+
+The v2 joint embedding quantifies each modality's role honestly:
+
+* The clone-level BCR graph is **sparse by biology, not by bug**: distinct
+  clonotypes sharing >=0.85 CDR3 identity within the same V/J are rare
+  (0–1,389 edges per dataset). Consequently the joint embedding is
+  GEX-dominated on all five datasets (modality contribution <= 19% BCR).
+  On tonsil there are *zero* inter-clone BCR edges — after SHM merging,
+  lineages are sequence-islands.
+* Where enough BCR edges exist to judge (EBV: 1,389), latent distances
+  correlate positively with BCR similarity (testcor_bcr = 0.31); on LN
+  the correlation is weakly negative (-0.12). We report these as-is: on
+  current public data, sequence convergence between *distinct* clones is
+  too rare to reweight clone-level geometry. The BCR modality's real value
+  in Threadfin is **upstream** (sequence-aware clone definition, which
+  rescued the tonsil dataset) and in **annotation** (isotype/SHM per
+  community), not in blending distances.
+* The v1 `cdr3_weight` blend illustrates why naive distance mixing fails:
+  on LN it collapses concordance (NMI 0.196 -> 0.016) because z-scored
+  near-degenerate sequence distances dominate the blend. It is kept for
+  backward compatibility; the graph-based joint embedding is the
+  recommended path.
 
 ## What Threadfin does **not** claim
 

@@ -12,3 +12,6 @@ data/
 *.h5mu
 *.h5
 manuscript.ipynb
+.coverage
+benchmarks/biological_validation/*.out
+benchmarks/biological_validation/smoke_*.out

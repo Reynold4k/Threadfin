@@ -1,0 +1,7 @@
+{
+  "real_n_significant": 19,
+  "null_mean": 13.405,
+  "null_sd": 2.4374115368562608,
+  "p_value": 0.014925373134328358,
+  "preserves": "community sizes, clone\u2192state composition; destroys community\u2192state link"
+}

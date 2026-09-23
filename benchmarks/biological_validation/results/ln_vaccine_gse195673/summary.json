@@ -1,0 +1,317 @@
+{
+  "name": "ln_vaccine_gse195673",
+  "description": "SARS-CoV-2 mRNA vaccine, axillary lymph-node FNA + blood, 8 donors, 5 timepoints (Kim/Zhou et al. 2022, Nature). Author-integrated h5ad + Change-O BCR tables (Zenodo 5895181).",
+  "qc": {
+    "n_cells": 193442,
+    "n_genes": 15842,
+    "n_bcr_positive_cells": 153049,
+    "frac_bcr_positive": 0.7912,
+    "n_clonotypes": 92761,
+    "clone_size_median": 1.0,
+    "clone_size_max": 918,
+    "expanded_clones_min2": 8496,
+    "expanded_clones_min3": 4396,
+    "expanded_clones_min5": 2488,
+    "levels_donor": {
+      "368-10": 49394,
+      "368-02a": 34719,
+      "368-07": 25528,
+      "368-22": 20821,
+      "368-01a": 19382,
+      "368-20": 17609,
+      "368-04": 13015,
+      "368-13": 12974
+    },
+    "levels_timepoint": {
+      "d60": 74805,
+      "d110": 46163,
+      "d28": 29248,
+      "d201": 27515,
+      "d35": 13762,
+      "d28+d35": 1949
+    },
+    "levels_state": {
+      "GC": 62156,
+      "RMB": 42255,
+      "Naive": 38686,
+      "PB": 27231,
+      "LNPC": 12299,
+      "B & T": 10797,
+      "PB-like": 18
+    },
+    "description": "SARS-CoV-2 mRNA vaccine, axillary lymph-node FNA + blood, 8 donors, 5 timepoints (Kim/Zhou et al. 2022, Nature). Author-integrated h5ad + Change-O BCR tables (Zenodo 5895181)."
+  },
+  "runs": [
+    {
+      "key": "tf__pca__r0.3__cw0.0",
+      "basis": "X_pca",
+      "resolution": 0.3,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 11,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.19555720411241745,
+        "ari": 0.15205469352573608,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 19,
+      "top_enrichment": {
+        "tf__pca__r0.3__cw0.0": "0",
+        "state": "GC",
+        "n_cells": 17464,
+        "odds_ratio": 2.4163481465798724,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__pca__r0.3__cw0.3",
+      "basis": "X_pca",
+      "resolution": 0.3,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 9,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.015892964400048625,
+        "ari": 0.02207184074784692,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 17,
+      "top_enrichment": {
+        "tf__pca__r0.3__cw0.3": "2",
+        "state": "GC",
+        "n_cells": 10008,
+        "odds_ratio": 2.4628055800732476,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__pca__r0.8__cw0.0",
+      "basis": "X_pca",
+      "resolution": 0.8,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 22,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.20185833832874414,
+        "ari": 0.11092981028936238,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 34,
+      "top_enrichment": {
+        "tf__pca__r0.8__cw0.0": "12",
+        "state": "PB",
+        "n_cells": 960,
+        "odds_ratio": 155.611258629846,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__pca__r0.8__cw0.3",
+      "basis": "X_pca",
+      "resolution": 0.8,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 14,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.03822359510831025,
+        "ari": 0.03481933616630303,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 24,
+      "top_enrichment": {
+        "tf__pca__r0.8__cw0.3": "0",
+        "state": "GC",
+        "n_cells": 10008,
+        "odds_ratio": 2.4628055800732476,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__umap__r0.3__cw0.0",
+      "basis": "X_umap",
+      "resolution": 0.3,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 14,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.2707238092594109,
+        "ari": 0.13607700302053322,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 22,
+      "top_enrichment": {
+        "tf__umap__r0.3__cw0.0": "10",
+        "state": "PB",
+        "n_cells": 1224,
+        "odds_ratio": 569.7150914634146,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__umap__r0.3__cw0.3",
+      "basis": "X_umap",
+      "resolution": 0.3,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 12,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.015884924562791673,
+        "ari": 0.029334447421933783,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 22,
+      "top_enrichment": {
+        "tf__umap__r0.3__cw0.3": "1",
+        "state": "GC",
+        "n_cells": 10006,
+        "odds_ratio": 2.4246198988134333,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__umap__r0.8__cw0.0",
+      "basis": "X_umap",
+      "resolution": 0.8,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 24,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.2415203643593278,
+        "ari": 0.08606398167390925,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 37,
+      "top_enrichment": {
+        "tf__umap__r0.8__cw0.0": "10",
+        "state": "PB",
+        "n_cells": 1198,
+        "odds_ratio": 101.04055917471618,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__umap__r0.8__cw0.3",
+      "basis": "X_umap",
+      "resolution": 0.8,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 3,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 15,
+      "n_cells_labeled": 60584,
+      "concordance": {
+        "nmi": 0.06037519519705177,
+        "ari": 0.04963903840590908,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 28,
+      "top_enrichment": {
+        "tf__umap__r0.8__cw0.3": "13",
+        "state": "PB",
+        "n_cells": 1073,
+        "odds_ratio": 39.93574509709594,
+        "pvalue": 0.0,
+        "fdr": 0.0
+      }
+    },
+    {
+      "key": "tf__joint__r0.3",
+      "basis": "joint",
+      "resolution": 0.3,
+      "cdr3_weight": null,
+      "n_clone_clusters": 23,
+      "n_cells_labeled": 60584,
+      "n_bcr_edges": 98,
+      "concordance": {
+        "nmi": 0.20227294210296062,
+        "ari": 0.10008087569687758,
+        "n_cells_used": 60584
+      },
+      "n_significant_enrichments": 35
+    }
+  ],
+  "robustness": {
+    "key_a": "tf__pca__r0.3__cw0.0",
+    "key_b": "tf__umap__r0.3__cw0.0",
+    "n_clones_compared": 4396,
+    "clone_level_ari": 0.23441176534935396,
+    "clone_level_nmi": 0.43917869848808755
+  },
+  "joint_diagnostics": {
+    "testcor_gex": 0.2431214143881897,
+    "testcor_bcr": -0.123340173609747,
+    "n_edges": 65433,
+    "modality_contribution": {
+      "gex": 0.8866016152543916,
+      "bcr": 0.11339838474560836
+    }
+  },
+  "null_permutation": {
+    "real_mean_purity": 0.8488178210687103,
+    "null_mean": 0.4784198384403506,
+    "null_sd": 0.0022962574750761463,
+    "p_value": 0.004975124378109453,
+    "n_permutations": 200,
+    "preserves": "clone-size distribution, donor composition, state composition; destroys clone\u2192state link (within donor)"
+  },
+  "null_random_communities": {
+    "real_n_significant": 19,
+    "null_mean": 13.405,
+    "null_sd": 2.4374115368562608,
+    "p_value": 0.014925373134328358,
+    "preserves": "community sizes, clone\u2192state composition; destroys community\u2192state link"
+  },
+  "heldout": {
+    "n_big_clones": 1517,
+    "n_repeats": 5,
+    "basis": "X_pca",
+    "min_clone_cells": 8,
+    "cocluster_rate_mean": 0.9277521423862888,
+    "cocluster_rate_sd": 0.01117604189981422,
+    "chance_rate_mean": 0.08668731158423787,
+    "rates": [
+      0.9123269611074489,
+      0.9419907712590639,
+      0.928806855636124,
+      0.9373764007910349,
+      0.9182597231377719
+    ],
+    "chances": [
+      0.07530378263157288,
+      0.08735838724015844,
+      0.09962263863852114,
+      0.09487632684180496,
+      0.07627542256913188
+    ],
+    "interpretation": "cocluster_rate >> chance_rate => clone communities are reproducible on held-out cells of the same clone"
+  },
+  "runtime_min": 18.3
+}

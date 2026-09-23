@@ -1,0 +1,314 @@
+{
+  "name": "stephenson2021",
+  "description": "COVID-19 PBMC, 5k BCR+ B-lineage cells (Stephenson et al. 2021, Nat Med; via scirpy). Reference state: initial_clustering (B_cell/Plasmablast).",
+  "qc": {
+    "n_cells": 5000,
+    "n_genes": 24929,
+    "n_bcr_positive_cells": 4997,
+    "frac_bcr_positive": 0.9994,
+    "n_clonotypes": 4823,
+    "clone_size_median": 1.0,
+    "clone_size_max": 20,
+    "expanded_clones_min2": 75,
+    "expanded_clones_min3": 22,
+    "expanded_clones_min5": 11,
+    "levels_donor": {
+      "MH9143277": 437,
+      "MH9143275": 338,
+      "AP8": 295,
+      "MH9179826": 290,
+      "MH9179822": 283,
+      "MH9143424": 282,
+      "MH9143421": 247,
+      "MH9143273": 247,
+      "MH9143426": 244,
+      "MH9143420": 232,
+      "MH9143321": 226,
+      "MH9179824": 225,
+      "AP5": 212,
+      "MH9143325": 208,
+      "AP4": 203,
+      "CV0171": 197,
+      "MH9179823": 166,
+      "AP12": 154,
+      "MH9143323": 144,
+      "CV0068": 83,
+      "CV0284": 81,
+      "CV0231": 61,
+      "CV0262": 58,
+      "CV0155": 57,
+      "CV0201": 30
+    },
+    "levels_state": {
+      "B_cell": 4077,
+      "Plasmablast": 923
+    },
+    "description": "COVID-19 PBMC, 5k BCR+ B-lineage cells (Stephenson et al. 2021, Nat Med; via scirpy). Reference state: initial_clustering (B_cell/Plasmablast)."
+  },
+  "runs": [
+    {
+      "key": "tf__pca__r0.3__cw0.0",
+      "basis": "X_pca",
+      "resolution": 0.3,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 2,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.614567663850554,
+        "ari": 0.7716202815461654,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 2,
+      "top_enrichment": {
+        "tf__pca__r0.3__cw0.0": "0",
+        "state": "Plasmablast",
+        "n_cells": 193,
+        "odds_ratio": 197.5952380952381,
+        "pvalue": 2.976652360986259e-34,
+        "fdr": 5.953304721972518e-34
+      }
+    },
+    {
+      "key": "tf__pca__r0.3__cw0.3",
+      "basis": "X_pca",
+      "resolution": 0.3,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 1,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.0,
+        "ari": 0.0,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 0,
+      "top_enrichment": null
+    },
+    {
+      "key": "tf__pca__r0.8__cw0.0",
+      "basis": "X_pca",
+      "resolution": 0.8,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 3,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.4165596061822518,
+        "ari": 0.35732632815713733,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 3,
+      "top_enrichment": {
+        "tf__pca__r0.8__cw0.0": "2",
+        "state": "B_cell",
+        "n_cells": 44,
+        "odds_ratio": 201.14285714285714,
+        "pvalue": 8.364753192213929e-35,
+        "fdr": 5.018851915328357e-34
+      }
+    },
+    {
+      "key": "tf__pca__r0.8__cw0.3",
+      "basis": "X_pca",
+      "resolution": 0.8,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 3,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.4151010128183669,
+        "ari": 0.35159329996321775,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 3,
+      "top_enrichment": {
+        "tf__pca__r0.8__cw0.3": "2",
+        "state": "B_cell",
+        "n_cells": 44,
+        "odds_ratio": 201.14285714285714,
+        "pvalue": 8.364753192213929e-35,
+        "fdr": 5.018851915328357e-34
+      }
+    },
+    {
+      "key": "tf__umap__r0.3__cw0.0",
+      "basis": "X_umap",
+      "resolution": 0.3,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 2,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.6830294358640376,
+        "ari": 0.8198881546699919,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 2,
+      "top_enrichment": {
+        "tf__umap__r0.3__cw0.0": "0",
+        "state": "Plasmablast",
+        "n_cells": 196,
+        "odds_ratio": 401.3333333333333,
+        "pvalue": 3.5829325082338885e-37,
+        "fdr": 7.165865016467777e-37
+      }
+    },
+    {
+      "key": "tf__umap__r0.3__cw0.3",
+      "basis": "X_umap",
+      "resolution": 0.3,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 2,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.7434433219668439,
+        "ari": 0.853456331465149,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 2,
+      "top_enrichment": {
+        "tf__umap__r0.3__cw0.3": "0",
+        "state": "Plasmablast",
+        "n_cells": 198,
+        "odds_ratio": 1216.2857142857142,
+        "pvalue": 1.1116469844837844e-39,
+        "fdr": 2.2232939689675688e-39
+      }
+    },
+    {
+      "key": "tf__umap__r0.8__cw0.0",
+      "basis": "X_umap",
+      "resolution": 0.8,
+      "cdr3_weight": 0.0,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 3,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.3954206582244544,
+        "ari": 0.3084419716048697,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 3,
+      "top_enrichment": {
+        "tf__umap__r0.8__cw0.0": "2",
+        "state": "B_cell",
+        "n_cells": 43,
+        "odds_ratio": 168.48979591836735,
+        "pvalue": 2.053513265473693e-33,
+        "fdr": 1.2321079592842158e-32
+      }
+    },
+    {
+      "key": "tf__umap__r0.8__cw0.3",
+      "basis": "X_umap",
+      "resolution": 0.8,
+      "cdr3_weight": 0.3,
+      "min_clone_size": 2,
+      "n_neighbors": 20,
+      "seed": 0,
+      "n_clone_clusters": 3,
+      "n_cells_labeled": 249,
+      "concordance": {
+        "nmi": 0.4782355508910457,
+        "ari": 0.3471167654985266,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 3,
+      "top_enrichment": {
+        "tf__umap__r0.8__cw0.3": "2",
+        "state": "B_cell",
+        "n_cells": 43,
+        "odds_ratio": 1216.2857142857142,
+        "pvalue": 1.1116469844837844e-39,
+        "fdr": 6.669881906902706e-39
+      }
+    },
+    {
+      "key": "tf__joint__r0.3",
+      "basis": "joint",
+      "resolution": 0.3,
+      "cdr3_weight": null,
+      "n_clone_clusters": 1,
+      "n_cells_labeled": 249,
+      "n_bcr_edges": 16,
+      "concordance": {
+        "nmi": 0.0,
+        "ari": 0.0,
+        "n_cells_used": 249
+      },
+      "n_significant_enrichments": 0
+    }
+  ],
+  "robustness": {
+    "key_a": "tf__pca__r0.3__cw0.0",
+    "key_b": "tf__umap__r0.3__cw0.0",
+    "n_clones_compared": 75,
+    "clone_level_ari": 0.9439592828098136,
+    "clone_level_nmi": 0.8954323048661614
+  },
+  "joint_diagnostics": {
+    "testcor_gex": 0.1439949185840846,
+    "testcor_bcr": 0.5064558522811577,
+    "n_edges": 985,
+    "modality_contribution": {
+      "gex": 0.7348266996681829,
+      "bcr": 0.2651733003318171
+    }
+  },
+  "null_permutation": {
+    "real_mean_purity": 0.9732698412698413,
+    "null_mean": 0.8168564862914863,
+    "null_sd": 0.02246578220672521,
+    "p_value": 0.004975124378109453,
+    "n_permutations": 200,
+    "preserves": "clone-size distribution, donor composition, state composition; destroys clone\u2192state link (within donor)"
+  },
+  "null_random_communities": {
+    "real_n_significant": 2,
+    "null_mean": 0.54,
+    "null_sd": 0.8879189152169246,
+    "p_value": 0.2736318407960199,
+    "preserves": "community sizes, clone\u2192state composition; destroys community\u2192state link"
+  },
+  "heldout": {
+    "n_big_clones": 10,
+    "n_repeats": 5,
+    "basis": "X_pca",
+    "min_clone_cells": 6,
+    "cocluster_rate_mean": 1.0,
+    "cocluster_rate_sd": 0.0,
+    "chance_rate_mean": 1.0,
+    "rates": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "chances": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "interpretation": "cocluster_rate >> chance_rate => clone communities are reproducible on held-out cells of the same clone"
+  },
+  "runtime_min": 0.9
+}

@@ -192,6 +192,7 @@ def null_random_communities(
     adata,
     cluster_key: str,
     state_key: str = "state",
+    clone_key: str = "clone_id",
     n_permutations: int = 200,
     seed: int = 0,
 ) -> dict:

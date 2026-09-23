@@ -105,7 +105,7 @@ def load_stephenson_h5mu(cfg):
     bcr.index.name = "barcode"
     import threadfin as tf
 
-    bcr = tf.build_clone_key(bcr, strategy="vdj")
+    bcr = tf.build_clone_key(bcr, strategy="cdr3")  # h5mu has no author clone ids
     return adata, bcr
 
 
@@ -159,13 +159,16 @@ def load_ebv_gse317492(cfg):
         contig = d / f"{gsm_b}_{tag}_vdjB_filtered_contig_annotations.csv.gz"
         tab = tf.read_10x_vdj(str(contig))
         tab.index = [f"{tag}|{b}" for b in tab.index]
+        cid = tab["clonotype_id"]
+        tab["clonotype_id"] = (tag + "|" + cid.astype(str)).mask(
+            cid.isna() | cid.astype(str).isin(("None", "")))
         bcrs.append(tab)
         adatas.append(ad)
 
     import anndata as ad_
 
     adata = ad_.concat(adatas, join="outer", fill_value=0)
-    bcr = tf.build_clone_key(pd.concat(bcrs), strategy="vdj")
+    bcr = tf.build_clone_key(pd.concat(bcrs), strategy="clonotype_id")
     return adata, bcr
 
 
@@ -190,7 +193,7 @@ def load_flu_gse175522(cfg):
         ad = _read_mtx_dir(mtx_dir)
         ad.obs_names = [f"{sample}|{b.split('-')[0]}" for b in ad.obs_names]
         ad.obs["donor"] = donor
-        ad.obs["timepoint"] = "pre" if tp == "0" else "d7"
+        ad.obs["timepoint"] = "d0" if tp == "0" else "d7"
         ad.obs["condition"] = "young" if donor in young else "older"
         adatas.append(ad)
 
@@ -233,23 +236,46 @@ def load_tonsil_king2021(cfg):
         csvs = list(Path(vdj_dir).rglob("filtered_contig_annotations.csv*"))
         tab = tf.read_10x_vdj(str(csvs[0]))
         tab.index = [f"{donor}|{b.split('-')[0]}" for b in tab.index]
+        # namespace cellranger clonotype ids per donor before concatenation
+        cid = tab["clonotype_id"]
+        tab["clonotype_id"] = (donor + "|" + cid.astype(str)).mask(
+            cid.isna() | cid.astype(str).isin(("None", "")))
         bcrs.append(tab)
 
     import anndata as ad_
 
     adata = ad_.concat(adatas, join="outer", fill_value=0)
-    bcr = tf.build_clone_key(pd.concat(bcrs), strategy="vdj")
+    bcr = tf.build_clone_key(pd.concat(bcrs), strategy="clonotype_id")
+    # merge SHM variants into lineages: exact cellranger clonotypes in the
+    # 'Total' libraries are mostly singletons (13 clones >=3 cells);
+    # sequence-similarity grouping recovers expanded GC lineages (~266).
+    bcr["clone_id"] = tf.define_clones(
+        bcr, cdr3_sim_threshold=0.85, same_vj=True,
+        method="connected", out_col="seq_clone")
 
     # author cell-type annotations (non-circular reference states)
     meta_path = d / "CellTypeMetaData.txt"
     if meta_path.exists():
         meta = pd.read_csv(meta_path, sep="\t", index_col=0)
         meta.index = meta.index.astype(str)
+        # meta barcodes look like 'BCP2_Total_AAACCTGGTACGAAAT'
+        parsed = meta.index.str.extract(r"^BCP(\d+)_[A-Za-z0-9]+_([A-Z]{16})$")
+        ok = parsed[0].notna()
+        meta = meta[ok.values]
+        meta.index = [f"BCP{int(dnr):03d}|{bc}" for dnr, bc in parsed.loc[ok.values].values]
+        meta = meta[~meta.index.duplicated(keep="first")]
         adata.obs = adata.obs.join(meta, how="left")
-        for cand in ("cell_type", "CellType", "celltype", "annotation"):
-            if cand in adata.obs.columns:
+        n_annot = adata.obs["Subset"].notna().sum() if "Subset" in adata.obs.columns else 0
+        print(f"[tonsil] author annotations matched: {n_annot}/{adata.n_obs}", flush=True)
+        for cand in ("Subset", "CellType", "cell_type"):
+            if cand in adata.obs.columns and adata.obs[cand].notna().sum() > 0:
                 adata.obs["state"] = adata.obs[cand].astype(str)
                 break
+    # keep B lineage only (the 'Total' libraries include T cells and others)
+    if "Lineage" in adata.obs.columns:
+        n0 = adata.n_obs
+        adata = adata[adata.obs["Lineage"].astype(str).str.contains("B")].copy()
+        print(f"[tonsil] B-lineage subset: {adata.n_obs}/{n0} cells", flush=True)
     return adata, bcr
 
 
@@ -257,28 +283,58 @@ def load_tonsil_king2021(cfg):
 
 
 def load_ln_vaccine_gse195673(cfg):
-    """Author-integrated B-cell h5ad + Change-O BCR heavy/light tables."""
+    """Author-integrated B-cell h5ad + Change-O BCR heavy/light tables.
+
+    The h5ad obs_names are bare 10x barcodes that collide across samples;
+    the unique key is obs["cell_id"] ('368-01a_s5@BARCODE-1'), which matches
+    the BCR tables' cell_id column.
+    """
     import scanpy as sc
-    import threadfin as tf
 
     d = Path(cfg["data_dir"])
     adata = sc.read_h5ad(d / "gex_b_cells.h5ad")
-    # raw counts: prefer layers['counts'] if present, else X
-    if "counts" in adata.layers:
-        adata.X = adata.layers["counts"].copy()
+    for layer in ("counts", "raw_counts"):
+        if layer in adata.layers:
+            adata.X = adata.layers[layer].copy()
+            break
+
+    adata.obs["cell_id"] = adata.obs["cell_id"].astype(str)
+    adata.obs_names = adata.obs["cell_id"].values
+    if adata.obs_names.duplicated().any():
+        raise ValueError("cell_id not unique in LN vaccine h5ad")
+    # author cell-state annotation as reference labels
+    if "anno_leiden_0.18" in adata.obs.columns:
+        adata.obs["state"] = adata.obs["anno_leiden_0.18"].astype(str)
+    for col in ("donor", "sample", "tissue"):
+        if col in adata.obs.columns:
+            adata.obs[col] = adata.obs[col].astype(str)
+
+    # timepoint/compartment from bcr_meta.tsv via the 'donor_sample' prefix of
+    # cell_id (e.g. '368-01a_s5@BARCODE-1' -> donor 368-01a, sample s5)
+    meta_path = d / "bcr_meta.tsv"
+    if meta_path.exists():
+        meta = pd.read_csv(meta_path, sep="\t")
+        meta["ds"] = meta["donor"].astype(str) + "_" + meta["sample"].astype(str)
+        meta = meta.drop_duplicates("ds").set_index("ds")
+        ds_key = adata.obs["cell_id"].str.split("@").str[0]
+        for src, dst in (("timepoint", "timepoint"), ("sorting", "compartment")):
+            if src in meta.columns:
+                adata.obs[dst] = ds_key.map(meta[src]).astype("string").values
+        n_tp = adata.obs["timepoint"].notna().sum() if "timepoint" in adata.obs.columns else 0
+        print(f"[ln] timepoint mapped for {n_tp}/{adata.n_obs} cells", flush=True)
 
     heavy = pd.read_csv(d / "bcr_heavy.tsv.gz", sep="\t", low_memory=False)
-    # cell_id looks like '368-01a_s5@BARCODE-1'
-    heavy = heavy.assign(barcode=heavy["cell_id"].str.split("@").str[-1])
-    per_cell = heavy.drop_duplicates("barcode").set_index("barcode")
+    per_cell = heavy.drop_duplicates("cell_id").set_index("cell_id")
+    if "isotype" in per_cell.columns and "c_call" not in per_cell.columns:
+        per_cell = per_cell.rename(columns={"isotype": "c_call"})
     keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "cdr3_aa", "clone_id")
             if c in per_cell.columns]
     bcr = per_cell[keep].rename(columns={"cdr3_aa": "cdr3"})
     bcr.index.name = "barcode"
     if "clone_id" not in bcr.columns:
-        bcr = tf.build_clone_key(bcr, strategy="vdj")
+        import threadfin as tf
 
-    # harmonize barcode naming: h5ad obs_names may already be 10x barcodes
+        bcr = tf.build_clone_key(bcr, strategy="vdj")
     return adata, bcr
 
 

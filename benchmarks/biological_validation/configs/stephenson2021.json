@@ -5,9 +5,29 @@
   "donor_key": "patient_id",
   "description": "COVID-19 PBMC, 5k BCR+ B-lineage cells (Stephenson et al. 2021, Nat Med; via scirpy). Reference state: initial_clustering (B_cell/Plasmablast).",
   "signatures": {
-    "Naive B": ["TCL1A", "IGHD", "FCER2"],
-    "Memory B": ["CD27", "CCR6"],
-    "Plasmablast": ["PRDM1", "XBP1", "JCHAIN", "SDC1", "MZB1"],
-    "IFN response": ["ISG15", "MX1", "IFI6"]
-  }
+    "Naive B": [
+      "TCL1A",
+      "IGHD",
+      "FCER2"
+    ],
+    "Memory B": [
+      "CD27",
+      "CCR6"
+    ],
+    "Plasmablast": [
+      "PRDM1",
+      "XBP1",
+      "JCHAIN",
+      "SDC1",
+      "MZB1"
+    ],
+    "IFN response": [
+      "ISG15",
+      "MX1",
+      "IFI6"
+    ]
+  },
+  "min_clone_size": 2,
+  "heldout_min_clone_cells": 6,
+  "notes": "5k subset is sparse: exact-CDR3 clonotypes are mostly singletons; min_clone_size lowered to 2 accordingly."
 }

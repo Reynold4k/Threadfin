@@ -1,106 +1,79 @@
-# NEXT SESSION PLAN — Threadfin 多数据集验证(交接文档)
+# NEXT SESSION PLAN — Threadfin v2(交接文档)
 
-> 本文件为会话交接用,发表前删除。当前状态截至 2026-09-22 深夜。
-> 新 session 的 agent:请先完整阅读本文件,再阅读 `docs/BIOLOGICAL_INTERPRETATION.md` 和
-> `benchmarks/biological_validation/` 下的代码。
+> 本文件为会话交接用,发表前删除。更新于 2026-09-23。
 
-## 目标回顾(用户的科学要求)
+## 本会话已完成
 
-把 Threadfin 从"在一个公共数据集上能跑"提升为"跨多个 paired scRNA+scBCR 数据集、
-生物学上可解释且有说服力的方法"。核心问题:Threadfin 相比常规 clonotype network
-提供了什么新生物学信息。要求:多数据集验证、basis 稳健性(X_pca vs X_umap)、
-避免循环验证(held-out)、零模型、与常规克隆网络(scirpy)的正面对比图。
-**不要把任何东西硬拗成阳性结果;阴性结果要如实解释原因。**
+1. **5 个数据集全部下载完成**(`/data/scratch/projects/punim1236/threadfin_data/`),
+   含 5.67GB 的 LN vaccine h5ad(自写 `parallel_download.py` 分块并行续传,Zenodo
+   单连接太慢时的解法)。md5 清单:`benchmarks/md5_manifest.txt`,数据集清单:
+   `benchmarks/datasets_manifest.tsv`。
+2. **loader 全部修好并冒烟通过**(5/5 OK)。关键修正:
+   - ln_vaccine:h5ad 的 obs_names 是裸 barcode(跨样本冲突!),唯一键是
+     `obs["cell_id"]`(`368-01a_s5@BARCODE-1`),与 bcr tsv 的 cell_id 直接对应;
+     `isotype` 列重命名为 `c_call`;raw counts 在 `layers["raw_counts"]`。
+   - stephenson:克隆定义从 `strategy="vdj"` 改为 `strategy="cdr3"`(vdj 策略把
+     同 VDJ 基因组合并成假克隆,v1 的 "458 expanded clones" 是过度合并的产物)。
+   - tonsil/EBV:用 cellranger `clonotype_id`,跨样本拼接前按 donor/tag 加命名空间
+     (否则不同样本的 "clonotype1" 被错误合并)。
+3. **io.py NaN bug 修复**:`build_clone_key` 把 NaN 变成字符串 "nan"/"None",
+   形成巨型假克隆(tonsil 曾出现一个 1457 细胞的假克隆)。已修并有回归测试。
+4. **Threadfin v2.0.0 实现完成**(设计契约:`docs/DESIGN_V2.md`):
+   - `sequence.py`:BLOSUM62 比对相似度(Gotoh 仿射空位)、Atchley 嵌入、
+     V/J 距离;v1 函数签名不变。
+   - `bcrgraph.py`:`bcr_similarity_graph`(V/J block 内候选对,Benisse SI 约束)+
+     `define_clones`(序列相似性克隆定义,connected/Leiden 两种方法)。
+   - `integrate.py`:`joint_embedding`(耦合 Laplacian 谱嵌入,Benisse 潜空间几何的
+     无 ADMM 实现)+ `integration_diagnostics`(testcor_gex/testcor_bcr/modality
+     contribution)。
+   - `clones.py`:isotype/SHM/fate tracking/community transition。
+   - `core.py`:`basis="joint"`、`distances=` 预计算、加权质心、
+     `clonal_pseudotime(use_clone_graph=True)`。
+   - 测试 52 个全过(12 v1 + 40 新增)。
+5. **真实数据实证**:joint 路径在 stephenson 上端到端 40 秒。
 
-## 已完成
+## 重要的数据真相(如实写进论文)
 
-1. **包 v1.0.0 已发布**(commit 8e9a185,已 push):重构、12 tests、CI、README。
-2. **数据集调研完成**(4 个 explore subagent 的报告结论):
-   - GSE175522+GSE175523 流感疫苗(6 donor × pre/d7,年轻 vs 老年)— GEO 直接下载 ✅
-   - GSE317492 EBV 扁桃体类器官(d0/4/7/14/21,d14/d21 分 GFP±)— GEO 直接下载 ✅
-   - King 2021 扁桃体(E-MTAB-9005 GEX + E-MTAB-9003 VDJ,6 donor "Total" 样本)✅
-   - GSE195673 SARS-CoV-2 疫苗淋巴结 GC(Kim/Zhou 2022 Nature)— GEO 的 GEX 是 aggr
-     矩阵难配对;改用 Zenodo 5895181 的 h5ad(5.7GB,作者整合好)+ bcr tsv ✅
-   - GSE171964 不是 Turner 2021(是 Scott 的 CITE-seq),不要再用。
-   - Stephenson 2021(stephenson2021_5k.h5mu)保持为 Dataset 1。
-3. **验证框架已写好** `benchmarks/biological_validation/`:
-   - `validation.py`:compute_qc / standard_preprocess / run_parameter_grid /
-     basis_robustness / null_permutation_purity(Null1,供体内置换)/ 
-     null_random_communities(Null3)/ heldout_split_validation(克隆内 50/50 分裂,
-     两半作伪克隆重聚类,共同聚类率 vs 期望)
-   - `run_validation.py`:CLI 入口,产出 qc/runs/robustness/nulls/heldout/figures/
-     summary.json/report.md
-   - `loaders.py`:5 个 loader,统一契约 (adata + 按 barcode 索引的 bcr 表)
-   - `configs/*.json`:5 个数据集配置(含人 B 细胞签名基因集)
-4. **Stephenson 验证首跑发现并修复**:
-   - null 置换的 pandas 索引 bug(已修)
-   - **重要发现:PCA vs UMAP basis 的克隆级 ARI ≈ 0**(不是 bug,已用 crosstab 验证)。
-     两种 basis 给出不同的细分群落,但都抓住浆母细胞主结构。这是第 6 节"不要只用 UMAP"
-     的实证素材——README/论文里要如实写:细粒度边界随 basis 变,主张用 PCA 做定量、
-     UMAP 做展示,且要求结论在两个 basis 下都成立。
-   - runs.json 显示 UMAP-basis 在该数据集 NMI 更高(状态来自同一表达矩阵,有循环性,
-     只能作参考)。
-5. **docs/BIOLOGICAL_INTERPRETATION.md 初稿已写**(结论性数字待最终运行后核对)。
-6. **scirpy 0.22.5 已装入 venv**(`/data/scratch/projects/punim1236/threadfin_data/venv`),
-   用于常规克隆网络对比图。
+- **stephenson 5k 子集很稀疏**:精确 CDR3 克隆 4824 个,仅 23 个 ≥3 细胞。
+  配置已用 `min_clone_size=2` + `heldout_min_clone_cells=6`。
+- **tonsil "Total" 文库扩增克隆很少**:11424 克隆只有 ~19 个 ≥3 细胞(最大 21 细胞)。
+  tonsil 的价值在于作者注释(GC/memory/plasma subset)作非循环参考;扩增层面的
+  结论不要靠 tonsil。
+- **flu(Wang 2023,不是 Turner!)**:PBMC 克隆大多单例,d7 浆母细胞扩增最大 ~14
+  细胞/克隆,80682 克隆中 499 个 ≥3。null1 0.883 vs 0.356(p=0.005),heldout
+  0.97 vs 0.26(旧流程,新流程数字以 results/ 为准)。
+- **flu 的文献是 Wang et al. 2023 (Yale),GSE175522/175523**——之前笔记写
+  "Turner 2021" 是错的,已改正。
 
-## 数据状态(/data/scratch/projects/punim1236/threadfin_data/)
+## 已完成(续):5 数据集最终验证全部完成,对比图全部生成
 
-- `download_all.sh` 幂等下载脚本([ -s 存在即跳过,gzip magic 校验,失败重试])。
-  session 中断就重跑:`bash /data/scratch/projects/punim1236/threadfin_data/download_all.sh`
-- 中断前状态:EBV 2.1G ✅;flu ~492M(12 GEX tar + 12 AIRR 基本齐);
-  tonsil ~207M(6 GEX + 6 VDJ + CellTypeMetaData.txt);
-  gse195673_ln_vaccine ~469M(bcr_heavy/light/meta 齐,5.7GB h5ad 可能没下完,重跑续传)。
-- 已完成下载日志在 session 任务里,中断后不可见;以文件存在为准。
-- flu 样本编号 `<donor>_<tp>`:donor 120648/120667/141393=年轻,141394/141409/141415=老年;
-  tp 0=pre, 7=d7。GEX GSM5340834-845 ↔ BCR AIRR GSM5340846-857(按样本编号配对)。
-- tonsil 只用 BCP*_Total_5GEX(BCP002 是 3' 已排除;MBC/IgMneg 亚群是重复抽样,不用)。
+## 遗留(可选)
 
-## 下一步(按顺序)
+已完成:5 数据集最终验证(stephenson/flu/tonsil/EBV/LN)+ 5 张五联对比图 +
+cross_dataset_summary + BIOLOGICAL_INTERPRETATION 定稿 + README 数字 + 54 测试全过。
 
-1. **确认下载完整**:重跑 download_all.sh 直到日志全 OK 无 FAIL;`du -sh` 各目录核对大小
-   (EBV ~2.1G;flu ~560M;tonsil ~230M;ln_vaccine ~6G)。
-2. **逐个冒烟测试 loader**(修好再跑全量):
-   ```bash
-   cd /data/scratch/projects/punim1236/Threadfin/benchmarks/biological_validation
-   V=/data/scratch/projects/punim1236/threadfin_data/venv/bin/python
-   PYTHONPATH=. $V -c "
-   import json; from loaders import LOADERS
-   cfg=json.load(open('configs/flu_gse175522.json'))
-   a,b=LOADERS[cfg['loader']](cfg); print(a.shape, b.shape, b.clone_id.nunique())"
-   ```
-   已知风险点:
-   - flu tar 内文件在根目录且无 .gz 后缀(_read_mtx_dir 已兼容,待实证)
-   - tonsil CellTypeMetaData.txt 的 barcode 格式 vs GEX barcode(可能需加 donor 前缀映射)
-   - ln_vaccine:bcr cell_id 形如 `368-01a_s5@BARCODE-1`,h5ad obs_names 格式未知,
-     需要先打印两边各 10 个名字再写映射(load_ln_vaccine_gse195673 里现在是占位实现)
-   - EBV loader 用 symlink 拼 mtx 目录,注意 symlink 在 scratch 文件系统是否被允许
-3. **跑 5 个数据集全量验证**(每个后台或 sbatch;EBV/LN 数据大,用 sbatch):
-   ```bash
-   PYTHONPATH=. $V run_validation.py configs/<name>.json
-   ```
-   预期 EBV(数万细胞)和 LN(可能十几万 B 细胞)要 30-60 分钟;flu/tonsil/stephenson 快。
-4. **scirpy 对比图**(`compare_scirpy.py` 还没写):对 stephenson + tonsil(或 flu)做
-   Panel A(细胞 UMAP/state)、B(常规 clonotype network:scirpy ir.pp.ir_dist +
-   ir.tl.define_clonotypes + ir.pl.clonotype_network)、C(Threadfin clone map)、
-   D(细胞按 clone_cluster 着色)、E(签名热图)。要点:不是"打败"scirpy,
-   而是展示两者回答不同问题。
-5. **填 `benchmarks/datasets_manifest.tsv`**(列:dataset/paper/accession/organism/tissue/
-   condition/donors/timepoints/GEX source/BCR source/URL/download date/size/md5/notes)。
-   md5 用 `md5sum` 对已下载文件算。
-6. **定稿 docs/BIOLOGICAL_INTERPRETATION.md**:把 5 个数据集的真实数字填进去,
-   明确哪些 statement 被支持/不支持(包括阴性结果)。
-7. **更新 README**:多数据集验证小节 + robustness 结论 + 新图。
-8. **commit + push**(push 已验证可用:credential.helper=cache 里有有效凭据)。
+关键补充(本会话后半):
+- parasail 装入 venv,sequence.py 比对走 C 加速(8.8h→6s;与纯 Python 逐分一致),
+  pyproject 加了 "seq" extra。
+- flu 的 AIRR junction_aa 全空 → read_airr 现在从核苷酸 junction 翻译 CDR3
+  (translate_nt,有测试);flu 因此才有可用 cdr3。
+- tonsil 改用 define_clones(序列相似性谱系):扩增克隆 13→200,这是 v2 功能
+  在真实数据上最有力的证据。
+- LN 从 bcr_meta.tsv 映射 timepoint/compartment(100% 覆盖),fate/transition
+  已产出:克隆 community 归属跨时间点几乎全对角(状态稳定)。
+- benchmarks/run_real_benchmark.py 仍用 vdj 克隆策略(自洽,可复现),
+  如时间充裕可迁移到新定义,非必须。
 
-## 重要技术备忘
+## 下一步
 
-- venv:`/data/scratch/projects/punim1236/threadfin_data/venv`(system-site-packages,
-  已装 muon/awkward/scirpy;threadfin 以 pip -e 装入)。
-- NCBI FTP 限流:并行 >3 连接会 503;下载必须串行(download_all.sh 已处理)。
-- scanpy 1.11 移除了 neighbors 的 metric="precomputed" 支持 → 包里用 sklearn+leidenalg
-  自建 kNN+Leiden(core.py `_leiden_on_distances`);igraph 1.0 的 to_undirected() 原地
-  操作返回 None(已兼容)。
-- 用户 AGENTS.md:大数据/大规模绘图 → sbatch;h5ad 读取顺序整读;print flush 每个阶段。
-- 用户的科学红线:不要循环验证当强证据;不要假装阳性;null 模型要说明各自 preserve 什么。
-- 当前会话权限:Never Ask 模式;用户希望少问多做,直接执行。
+1. commit + push(credential.helper=cache 可用)。
+2. 论文/图表从 results/ 与 docs/BIOLOGICAL_INTERPRETATION.md 取材。
+
+## 技术备忘(新增)
+
+- 集群队列可能拥堵,作业 pending 数小时正常;用后台 watcher 而不是干等。
+- `cdr3_weight>0` 与 `distances=` 互斥;`basis="joint"` 自动补算 joint embedding。
+- 诊断需要 `uns["threadfin"]["joint_graph*"]`,先跑 `joint_embedding` 再
+  `integration_diagnostics`。
+- venv:`/data/scratch/projects/punim1236/threadfin_data/venv`;sbatch  wrapper:
+  `run_all.sbatch` / `smoke.sbatch` / `compare.sbatch`(均在 biological_validation/)。

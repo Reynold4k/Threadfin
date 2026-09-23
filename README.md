@@ -31,8 +31,8 @@ question), Threadfin asks *"which clones share a fate?"*.
 | [dandelion](https://github.com/zktuong/dandelion) | Python | VDJ contig annotation, clonal networks, cell-level trajectory | ✗ | ✗ (cell-level) | ✗ |
 | [scRepertoire](https://github.com/ncborcherding/scRepertoire) | R | clonotype counting/overlap/gene usage on Seurat objects | ✗ | ✗ | ✗ |
 | [Immcantation (SCOPer/Change-O)](https://immcantation.readthedocs.io) | R | clonal-family definition & lineage trees from sequences | ✗ | ✗ (lineage trees) | ✗ |
-| [BENISSE](https://github.com/zhanglab-wsu/BENISSE) | Python | BCR sequence embedding network | ✗ | ✗ | sequence only |
-| **Threadfin** | Python | **clone centroids in GEX space → clone communities** | **✓** | **✓ (DPT on the clone graph)** | **✓ (`cdr3_weight`)** |
+| [Benisse](https://github.com/wooyongc/Benisse) | Python+R | BCR sequence embedding + sparse-graph integration with GEX | ✗ | ✗ | ✓ (ADMM graph learning) |
+| **Threadfin** | Python | **clone centroids in GEX space → clone communities** | **✓** | **✓ (DPT on the clone graph)** | **✓ (`cdr3_weight`, and a coupled GEX+BCR graph embedding, `joint_embedding`)** |
 
 Threadfin is complementary, not competing: run your favourite VDJ pipeline
 (Cell Ranger / Immcantation / dandelion) upstream, then use Threadfin to
@@ -64,6 +64,11 @@ adata = tf.attach_bcr(adata, bcr)               # adds obs['clone_id']
 adata = tf.clonotype_recluster(adata, min_clone_size=3, resolution=0.3)
 adata = tf.clonal_pseudotime(adata)
 
+# 3b) v2: joint GEX+BCR latent embedding (coupled graph, Benisse-inspired)
+tf.joint_embedding(adata, basis="X_pca", lam=0.5)
+adata = tf.clonotype_recluster(adata, basis="joint", key_added="joint_cluster")
+print(tf.integration_diagnostics(adata))
+
 # 4) evaluate + visualize
 print(tf.metrics.state_concordance(adata, "clone_cluster", "leiden"))
 print(tf.metrics.state_enrichment(adata, "clone_cluster", "leiden"))
@@ -73,6 +78,28 @@ tf.plotting.cells(adata, color="clone_cluster", save="cells.png")
 
 A runnable end-to-end example on public data is in
 [`examples/quickstart.py`](examples/quickstart.py).
+
+## What's new in v2
+
+Threadfin 2.0 adds a principled BCR-sequence layer (design contract:
+[`docs/DESIGN_V2.md`](docs/DESIGN_V2.md)):
+
+- **BLOSUM62-aware CDR3 similarity** (affine-gap global alignment, with
+  equal-length Hamming fast paths) instead of v1's equal-length-only Hamming;
+- a **sparse clone×clone BCR similarity graph** whose candidate pairs are
+  restricted to same-V/J blocks (the Benisse SI constraint — biologically the
+  right support set, and the reason it scales);
+- **sequence-similarity clone definition** (`define_clones`), the
+  scirpy-style sequence view, available natively;
+- a **coupled GEX+BCR clone embedding** (`joint_embedding`): Benisse's
+  latent geometry (a regularized inverse of a coupled graph Laplacian, i.e.
+  commute-time distances) computed directly with sparse normalized-Laplacian
+  eigenmaps — no ADMM, no dense n×n solves, no torch dependency;
+- **integration diagnostics** quantifying how much each modality drives the
+  joint structure (Benisse `testCor` analogues) — including honest reporting
+  when the BCR modality contributes nothing on a dataset;
+- clone-level biology readouts: isotype composition, SHM load, and
+  clone fate tracking across timepoints (`tf.clones`).
 
 ## Benchmarks
 
@@ -111,6 +138,27 @@ finer structure than a B-cell/plasmablast split.)
 | clonotype map | cells colored by clone cluster | signature heatmap |
 |---|---|---|
 | ![clone map](benchmarks/results/clone_map_cluster.png) | ![cells](benchmarks/results/cells_clone_cluster.png) | ![signatures](benchmarks/results/signature_heatmap.png) |
+
+### Multi-dataset biological validation
+
+Threadfin v2 was validated end-to-end on five public paired scRNA+scBCR
+datasets (download scripts + loaders in
+[`benchmarks/biological_validation/`](benchmarks/biological_validation/),
+dataset manifest in [`benchmarks/datasets_manifest.tsv`](benchmarks/datasets_manifest.tsv)):
+
+| dataset | cells | clones | expanded (>=3) | clone purity vs permutation null | held-out co-clustering vs chance |
+|---|---|---|---|---|---|
+| Stephenson 2021 COVID PBMC (5k) | 5,000 | 4,823 | 22 | 0.97 vs 0.82 (p=0.005) | n/a (2 communities) |
+| Flu vaccine (Wang 2023) | 123,693 | 80,682 | 499 | 0.88 vs 0.36 (p=0.005) | 0.97 vs 0.26 |
+| Tonsil (King 2021) | 22,478 | 10,473 | 200 | 0.66 vs 0.49 (p=0.005) | 0.99 vs 0.66 |
+| EBV organoid (Mitul 2026) | 205,630 | 89,757 | 4,564 | 0.79 vs 0.31 (p=0.005) | 0.985 vs 0.101 |
+| LN vaccine GC (Kim 2022) | 193,442 | 92,761 | 4,396 | 0.85 vs 0.48 (p=0.005) | 0.93 vs 0.09 |
+
+Full interpretation, including the negative results (basis-dependent fine
+boundaries; sparse clone-level BCR graphs), is in
+[`docs/BIOLOGICAL_INTERPRETATION.md`](docs/BIOLOGICAL_INTERPRETATION.md).
+Cross-dataset machine-readable summary:
+[`benchmarks/biological_validation/results/cross_dataset_summary.md`](benchmarks/biological_validation/results/cross_dataset_summary.md).
 
 ### Scaling (synthetic data, up to 200k cells / 10k clones)
 
@@ -164,13 +212,20 @@ python benchmarks/run_scaling_benchmark.py benchmarks/results
 |---|---|
 | `tf.read_10x_vdj` / `tf.read_airr` | read Cell Ranger / AIRR-format BCR tables |
 | `tf.build_clone_key` | build clonotype keys (`vdj` / `clonotype_id` / `cdr3`) |
+| `tf.define_clones` | sequence-similarity clone (re)definition via the BCR graph |
+| `tf.bcr_similarity_graph` | sparse clone×clone BCR similarity graph (V/J-blocked, BLOSUM62-aware) |
 | `tf.attach_bcr` | attach BCR annotations to `AnnData` (vectorized) |
-| `tf.clone_centroids` | per-clone centroids in any embedding |
-| `tf.clonotype_recluster` | the core: clone clustering in state space |
+| `tf.clone_centroids` | per-clone centroids in any embedding (optionally weighted) |
+| `tf.clonotype_recluster` | the core: clone clustering in state space (incl. `basis="joint"`) |
+| `tf.joint_embedding` | coupled GEX+BCR graph embedding of clones (Benisse-inspired, ADMM-free) |
+| `tf.integration_diagnostics` | latent-vs-GEX / latent-vs-BCR correlations, modality contribution |
 | `tf.clonal_pseudotime` | diffusion pseudotime over the clone graph |
+| `tf.clones.clone_isotype_summary` / `clone_shm_summary` | isotype / SHM per clone or community |
+| `tf.clones.clone_fate_table` / `community_transition` | clone fate tracking across timepoints |
 | `tf.metrics.state_concordance` | NMI/ARI vs reference cell states |
 | `tf.metrics.state_enrichment` | per-cluster state enrichment (Fisher + FDR) |
 | `tf.metrics.clone_state_purity` | per-clone state purity/entropy |
+| `tf.sequence.cdr3_similarity` / `atchley_embedding` | BLOSUM62-aware CDR3 similarity; deterministic physicochemical embedding |
 | `tf.plotting.clone_map` / `cells` / `signature_heatmap` | publication-quality figures |
 
 The legacy entry point `bcr_reclustering(adata, bcr_table)` from the original

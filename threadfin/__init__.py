@@ -21,17 +21,25 @@ from .core import (
     clone_centroids,
     clonotype_recluster,
 )
+from .integrate import integration_diagnostics, joint_embedding
+from .bcrgraph import bcr_similarity_graph, define_clones
+from . import clones
 from .io import attach_bcr, build_clone_key, read_10x_vdj, read_airr
 from . import metrics, plotting, sequence
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __all__ = [
     "attach_bcr",
     "bcr_reclustering",
+    "bcr_similarity_graph",
     "build_clone_key",
     "clonal_pseudotime",
     "clone_centroids",
+    "clones",
     "clonotype_recluster",
+    "define_clones",
+    "integration_diagnostics",
+    "joint_embedding",
     "metrics",
     "plotting",
     "read_10x_vdj",

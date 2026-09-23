@@ -51,11 +51,48 @@ def main(cfg_path: str):
 
     # ---- parameter grid (incl. basis comparison) ----
     bases = [b for b in ("X_pca", "X_umap") if b in adata.obsm]
-    adata, runs = V.run_parameter_grid(adata, bases=bases)
+    min_cs = cfg.get("min_clone_size", 3)
+    adata, runs = V.run_parameter_grid(adata, bases=bases, min_clone_size=min_cs)
     (outdir / "runs.json").write_text(json.dumps(runs, indent=2, cls=V.NpEncoder))
 
     main_key = "tf__pca__r0.3__cw0.0" if "X_pca" in bases else f"tf__umap__r0.3__cw0.0"
     umap_key = "tf__umap__r0.3__cw0.0"
+
+    # ---- joint GEX+BCR embedding (v2) ----
+    joint_diag = None
+    joint_base = "X_pca" if "X_pca" in bases else "X_umap"
+    print(f"[{name}] joint GEX+BCR embedding ...", flush=True)
+    try:
+        tf.joint_embedding(adata, basis=joint_base, min_clone_size=min_cs,
+                           lam=cfg.get("joint_lam", 0.5), random_state=0)
+        joint_diag = tf.integration_diagnostics(adata, basis=joint_base)
+        (outdir / "joint_diagnostics.json").write_text(json.dumps(joint_diag, indent=2))
+        ad = tf.clonotype_recluster(adata.copy(), basis="joint", min_clone_size=min_cs,
+                                    resolution=0.3, random_state=0,
+                                    key_added="tf__joint__r0.3")
+        adata.obs["tf__joint__r0.3"] = ad.obs["tf__joint__r0.3"]
+        joint_run = {
+            "key": "tf__joint__r0.3", "basis": "joint", "resolution": 0.3,
+            "cdr3_weight": None,
+            "n_clone_clusters": int(adata.obs["tf__joint__r0.3"].nunique()),
+            "n_cells_labeled": int(adata.obs["tf__joint__r0.3"].notna().sum()),
+            "n_bcr_edges": int(adata.uns["threadfin"]["joint_graph_bcr"].nnz // 2),
+        }
+        if "state" in adata.obs.columns:
+            joint_run["concordance"] = tf.metrics.state_concordance(
+                adata, "tf__joint__r0.3", "state")
+            enr = tf.metrics.state_enrichment(adata, "tf__joint__r0.3", "state")
+            joint_run["n_significant_enrichments"] = int((enr["fdr"] < 0.05).sum())
+        runs.append(joint_run)
+        (outdir / "runs.json").write_text(json.dumps(runs, indent=2, cls=V.NpEncoder))
+        print(f"[{name}]   joint: {joint_run['n_clone_clusters']} clusters, "
+              f"testcor_gex={joint_diag['testcor_gex']:.3f}, "
+              f"testcor_bcr={joint_diag.get('testcor_bcr', float('nan')):.3f}, "
+              f"modality={joint_diag['modality_contribution']}", flush=True)
+    except Exception as e:
+        print(f"[{name}]   joint embedding FAILED: {e}", flush=True)
+        joint_diag = {"error": str(e)}
+        (outdir / "joint_diagnostics.json").write_text(json.dumps(joint_diag, indent=2))
 
     # ---- basis robustness ----
     robust = None
@@ -68,7 +105,7 @@ def main(cfg_path: str):
     # ---- null models (on the main run) ----
     print(f"[{name}] null 1 (label permutation) ...", flush=True)
     null1 = V.null_permutation_purity(adata, donor_key=cfg.get("donor_key"),
-                                      seed=0)
+                                      min_clone_size=min_cs, seed=0)
     (outdir / "null_permutation.json").write_text(json.dumps(null1, indent=2))
     print(f"[{name}]   real purity {null1['real_mean_purity']:.3f} vs null "
           f"{null1['null_mean']:.3f} (p={null1['p_value']:.4f})", flush=True)
@@ -79,7 +116,8 @@ def main(cfg_path: str):
 
     # ---- held-out split-clone validation ----
     print(f"[{name}] held-out split validation ...", flush=True)
-    heldout = V.heldout_split_validation(adata, basis="X_pca" if "X_pca" in bases else "X_umap")
+    heldout = V.heldout_split_validation(adata, basis="X_pca" if "X_pca" in bases else "X_umap",
+                                         min_clone_cells=cfg.get("heldout_min_clone_cells", 8))
     (outdir / "heldout.json").write_text(json.dumps(heldout, indent=2))
     print(f"[{name}]   co-cluster {heldout.get('cocluster_rate_mean', float('nan')):.2f} "
           f"vs chance {heldout.get('chance_rate_mean', float('nan')):.2f}", flush=True)
@@ -89,9 +127,12 @@ def main(cfg_path: str):
     figs = outdir / "figures"
     tf.plotting.cells(adata, color="state", save=str(figs / "cells_state.png"))
     tf.plotting.cells(adata, color=main_key, save=str(figs / "cells_clone_cluster.png"))
+    if "tf__joint__r0.3" in adata.obs.columns:
+        tf.plotting.cells(adata, color="tf__joint__r0.3",
+                          save=str(figs / "cells_joint_cluster.png"))
     # clone map from the main run (rerun cheaply to keep the clone map in uns)
     tf.clonotype_recluster(adata, basis="X_pca" if "X_pca" in bases else "X_umap",
-                           min_clone_size=3, resolution=0.3, random_state=0)
+                           min_clone_size=min_cs, resolution=0.3, random_state=0)
     tf.clonal_pseudotime(adata)
     tf.plotting.clone_map(adata, color="clone_cluster",
                           save=str(figs / "clone_map.png"))
@@ -105,10 +146,36 @@ def main(cfg_path: str):
     # null figure
     _plot_null(null1, figs / "null_purity.png")
 
+    # ---- clone-level biology readouts (v2: isotype / fate tracking) ----
+    print(f"[{name}] clone biology readouts ...", flush=True)
+    biology = {}
+    if "bcr_c_call" in adata.obs.columns:
+        try:
+            iso = tf.clones.clone_isotype_summary(adata, cluster_key=main_key)
+            iso.to_csv(outdir / "isotype_by_community.csv", index=False)
+            iso_clone = tf.clones.clone_isotype_summary(adata, cluster_key=None)
+            iso_clone.to_csv(outdir / "isotype_by_clone.csv", index=False)
+            biology["isotype"] = "isotype_by_community.csv"
+        except Exception as e:
+            print(f"[{name}]   isotype summary failed: {e}", flush=True)
+    if "timepoint" in adata.obs.columns:
+        try:
+            fate = tf.clones.clone_fate_table(adata, state_key="state")
+            fate.to_csv(outdir / "clone_fate_table.csv", index=False)
+            trans = tf.clones.community_transition(adata, time_key="timepoint",
+                                                   cluster_key=main_key)
+            trans.to_csv(outdir / "community_transition.csv")
+            biology["fate"] = "clone_fate_table.csv"
+            biology["transition"] = "community_transition.csv"
+        except Exception as e:
+            print(f"[{name}]   fate/transition failed: {e}", flush=True)
+    (outdir / "biology.json").write_text(json.dumps(biology, indent=2))
+
     # ---- machine-readable summary + human-readable report ----
     summary = {
         "name": name, "description": cfg.get("description", ""),
         "qc": qc, "runs": runs, "robustness": robust,
+        "joint_diagnostics": joint_diag,
         "null_permutation": {k: v for k, v in null1.items() if k != "nulls"},
         "null_random_communities": null3, "heldout": heldout,
         "runtime_min": round((time.time() - t0) / 60, 1),
@@ -155,6 +222,17 @@ def _write_report_md(summary: dict, path):
             f"| {r['key']} | {r['n_clone_clusters']} | {fmt(c.get('nmi'))} | "
             f"{fmt(c.get('ari'))} | {r.get('n_significant_enrichments', '-')} |")
     lines += ["", "## Robustness and statistical support", ""]
+    jd = summary.get("joint_diagnostics")
+    if jd and "error" not in jd:
+        mc = jd["modality_contribution"]
+        lines.append(
+            f"- **Joint GEX+BCR embedding** (lam=0.5): latent-vs-GEX distance "
+            f"Spearman **{jd['testcor_gex']:.3f}**, latent-vs-BCR "
+            f"**{jd.get('testcor_bcr', float('nan')):.3f}** over "
+            f"{jd['n_edges']} graph edges; modality contribution GEX "
+            f"{mc['gex']:.2f} / BCR {mc['bcr']:.2f}")
+    elif jd:
+        lines.append(f"- **Joint GEX+BCR embedding**: failed ({jd['error']})")
     if rob:
         lines.append(
             f"- **Basis robustness** (PCA vs UMAP): clone-level ARI "

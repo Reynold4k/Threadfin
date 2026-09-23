@@ -40,6 +40,7 @@ def clone_centroids(
     clone_key: str = "clone_id",
     basis: str = "X_umap",
     min_clone_size: int = 1,
+    weight_col: str | None = None,
 ) -> pd.DataFrame:
     """Compute the centroid of every clonotype in a transcriptional embedding.
 
@@ -55,6 +56,9 @@ def clone_centroids(
         expression matrix.
     min_clone_size
         Clonotypes with fewer cells are dropped from the centroid table.
+    weight_col
+        Optional ``obs`` column of per-cell weights; centroids become
+        weighted means (NaN weights count as 0).
 
     Returns
     -------
@@ -77,7 +81,24 @@ def clone_centroids(
     df["clone"] = clones[valid].to_numpy()
 
     sizes = df.groupby("clone").size().rename("n_cells")
-    centroids = df.groupby("clone").mean()
+    if weight_col is not None:
+        if weight_col not in adata.obs.columns:
+            raise KeyError(f"'{weight_col}' not found in adata.obs.")
+        w = np.nan_to_num(
+            pd.to_numeric(adata.obs[weight_col], errors="coerce").to_numpy(
+                dtype=float
+            )[valid.to_numpy()],
+            nan=0.0,
+        )
+        coord_cols = [c for c in df.columns if c != "clone"]
+        weighted = df[coord_cols].multiply(w, axis=0)
+        weighted["clone"] = df["clone"]
+        denom = pd.Series(w).groupby(df["clone"].to_numpy()).sum()
+        centroids = weighted.groupby("clone").sum().div(
+            denom.replace(0, np.nan), axis=0
+        )
+    else:
+        centroids = df.groupby("clone").mean()
     centroids.columns = [f"{basis}_{i}" for i in range(centroids.shape[1])]
     centroids = centroids.join(sizes)
     centroids = centroids[centroids["n_cells"] >= min_clone_size]
@@ -142,6 +163,7 @@ def clonotype_recluster(
     n_neighbors: int = 20,
     resolution: float = 0.3,
     cdr3_weight: float = 0.0,
+    distances: np.ndarray | None = None,
     embed_clones: bool = True,
     random_state: int = 0,
     key_added: str = "clone_cluster",
@@ -162,7 +184,10 @@ def clonotype_recluster(
         ``obs`` column holding the clonotype id.
     basis
         Embedding used for centroids (``"X_umap"`` reproduces the original
-        manuscript; ``"X_pca"`` is more robust on noisy data).
+        manuscript; ``"X_pca"`` is more robust on noisy data). ``"joint"``
+        uses the coupled GEX+BCR embedding in
+        ``adata.uns['threadfin']['joint']``, computing it with default
+        parameters via :func:`threadfin.integrate.joint_embedding` if absent.
     min_clone_size
         Clonotypes with fewer cells are excluded from clustering (their cells
         receive ``NaN``). Singletons are mostly uninformative.
@@ -174,7 +199,12 @@ def clonotype_recluster(
         In ``[0, 1]``. If > 0, the transcriptional distance between clones is
         blended with their consensus-CDR3 Hamming distance:
         ``D = (1 - w) * z(D_gex) + w * z(D_cdr3)``. Requires clone-level CDR3
-        information stored by :func:`threadfin.attach_bcr`.
+        information stored by :func:`threadfin.attach_bcr`. Mutually exclusive
+        with ``distances``.
+    distances
+        Optional precomputed clone-level distances (condensed pdist vector or
+        square matrix, ordered like the centroid table), used instead of
+        distances computed on ``basis``.
     embed_clones
         If ``True``, compute a UMAP of the clonotype centroids (stored in the
         clone map as ``x``/``y``) for visualization.
@@ -194,8 +224,16 @@ def clonotype_recluster(
     if copy:
         adata = adata.copy()
 
-    centroids = clone_centroids(adata, clone_key=clone_key, basis=basis,
-                                min_clone_size=min_clone_size)
+    if basis == "joint":
+        joint = adata.uns.get(_CLONE_MAP_KEY, {}).get("joint")
+        if joint is None:
+            from .integrate import joint_embedding
+
+            joint = joint_embedding(adata, clone_key=clone_key)
+        centroids = joint[joint["n_cells"] >= min_clone_size].copy()
+    else:
+        centroids = clone_centroids(adata, clone_key=clone_key, basis=basis,
+                                    min_clone_size=min_clone_size)
     n_clones = centroids.shape[0]
     if n_clones < 5:
         raise ValueError(
@@ -208,7 +246,18 @@ def clonotype_recluster(
     coord_cols = [c for c in centroids.columns if c != "n_cells"]
     d_gex = squareform(pdist(centroids[coord_cols].to_numpy(), metric="euclidean"))
 
-    if cdr3_weight > 0:
+    if distances is not None:
+        if cdr3_weight > 0:
+            raise ValueError("distances and cdr3_weight are mutually exclusive.")
+        d = np.asarray(distances, dtype=float)
+        dist = squareform(d) if d.ndim == 1 else d
+        if dist.shape != (n_clones, n_clones):
+            raise ValueError(
+                f"distances has shape {dist.shape}; expected ({n_clones}, "
+                f"{n_clones}) (or a condensed vector) matching the "
+                f"{n_clones} centroid clones."
+            )
+    elif cdr3_weight > 0:
         if not 0 <= cdr3_weight <= 1:
             raise ValueError("cdr3_weight must be in [0, 1].")
         clone_info = adata.uns.get(_CLONE_INFO_KEY)
@@ -250,6 +299,7 @@ def clonotype_recluster(
     adata.obs[key_added] = adata.obs[clone_key].map(mapping).astype("category")
 
     adata.uns.setdefault(_CLONE_MAP_KEY, {})["clone_map"] = clone_map
+    adata.uns[_CLONE_MAP_KEY]["clone_distances"] = dist
     adata.uns[_CLONE_MAP_KEY]["clonotype_recluster"] = {
         "basis": basis,
         "min_clone_size": min_clone_size,
@@ -273,6 +323,7 @@ def clonal_pseudotime(
     root: str | None = None,
     key_added: str = "clonal_pseudotime",
     random_state: int = 0,
+    use_clone_graph: bool = False,
 ):
     """Diffusion pseudotime over the clonotype graph.
 
@@ -294,6 +345,12 @@ def clonal_pseudotime(
         Name of the ``obs`` column receiving the pseudotime.
     random_state
         Seed.
+    use_clone_graph
+        If ``True``, run DPT on the kNN graph implied by the clone distances
+        stored by :func:`clonotype_recluster` (adaptive-Gaussian kernel over
+        the stored distance matrix) instead of recomputing neighbors on the
+        centroid coordinates. Falls back to the default behavior with a
+        warning when no stored distances are available.
 
     Returns
     -------
@@ -312,7 +369,40 @@ def clonal_pseudotime(
 
     ad = AnnData(coords)
     n_neighbors = int(min(15, ad.n_obs - 1))
-    sc.pp.neighbors(ad, n_neighbors=n_neighbors)
+    stored = adata.uns.get(_CLONE_MAP_KEY, {}).get("clone_distances")
+    if use_clone_graph and stored is not None and stored.shape == (ad.n_obs, ad.n_obs):
+        import scipy.sparse as sp
+        from sklearn.neighbors import NearestNeighbors
+
+        nn = NearestNeighbors(
+            n_neighbors=n_neighbors + 1, metric="precomputed"
+        ).fit(stored)
+        d_knn, idx = nn.kneighbors(stored)
+        d_knn, idx = d_knn[:, 1:], idx[:, 1:]  # drop self
+        sigma = np.maximum(d_knn[:, -1:], 1e-10)
+        w = np.exp(-(d_knn**2) / (sigma**2))
+        rows = np.repeat(np.arange(ad.n_obs), n_neighbors)
+        conn = sp.csr_matrix(
+            (w.ravel(), (rows, idx.ravel())), shape=(ad.n_obs, ad.n_obs)
+        )
+        conn = conn.maximum(conn.T)
+        dmat = sp.csr_matrix(
+            (d_knn.ravel(), (rows, idx.ravel())), shape=(ad.n_obs, ad.n_obs)
+        )
+        ad.uns["neighbors"] = {
+            "connectivities": conn,
+            "distances": dmat.maximum(dmat.T),
+            "params": {"n_neighbors": n_neighbors, "method": "umap",
+                       "metric": "precomputed"},
+        }
+    else:
+        if use_clone_graph:
+            warnings.warn(
+                "use_clone_graph=True but no stored clone distances found; "
+                "falling back to centroid-coordinate neighbors.",
+                stacklevel=2,
+            )
+        sc.pp.neighbors(ad, n_neighbors=n_neighbors)
     if root is None:
         ad.uns["iroot"] = int(np.argmin(coords[:, 0]))
     else:
