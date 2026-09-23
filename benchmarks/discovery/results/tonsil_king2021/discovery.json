@@ -1,0 +1,30 @@
+{
+ "name": "tonsil_king2021",
+ "n_communities": 5,
+ "min_clone_size": 3,
+ "community_top_markers": {
+  "0": [
+   "IGKV4-1",
+   "TUBB4B",
+   "HMGB2"
+  ],
+  "1": [
+   "IGLV2-23",
+   "IGLV1-51",
+   "IGHD"
+  ],
+  "2": [
+   "IGKV1-5",
+   "ZBP1",
+   "IGKC"
+  ],
+  "3": [
+   "IGLV2-14"
+  ],
+  "4": [
+   "IGLV3-21",
+   "IGHV3-21"
+  ]
+ },
+ "runtime_min": 1.1
+}

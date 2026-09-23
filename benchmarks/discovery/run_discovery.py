@@ -72,9 +72,13 @@ def discover_ln(adata, out: Path, summary: dict):
     """Spike specificity (author s_pos_clone + ELISA), SHM maturation,
     LN<->blood migration, community programmes."""
     # --- per-clone specificity labels from author annotation
-    spos = adata.obs["bcr_s_pos_clone"].astype("string")
-    lab = pd.DataFrame({"clone_id": adata.obs["clone_id"], "spos": spos}).dropna()
-    lab["is_spos"] = lab["spos"] == "TRUE"
+    # (pandas parses TRUE/FALSE as bool; accept bool or string)
+    def _truthy(s: pd.Series) -> pd.Series:
+        return s.map(lambda x: str(x).strip().upper() == "TRUE")
+
+    lab = pd.DataFrame({"clone_id": adata.obs["clone_id"],
+                        "raw": adata.obs["bcr_s_pos_clone"]}).dropna()
+    lab["is_spos"] = _truthy(lab["raw"])
     frac = lab.groupby("clone_id")["is_spos"].mean()
     labels = pd.DataFrame({
         "clone_id": frac.index,
@@ -90,8 +94,9 @@ def discover_ln(adata, out: Path, summary: dict):
     elisa = adata.obs.get("bcr_elisa")
     if elisa is not None:
         el = pd.DataFrame({"clone_id": adata.obs["clone_id"],
-                           "hit": elisa.astype("string") == "TRUE"}).dropna(subset=["clone_id"])
-        any_hit = el.groupby("clone_id")["hit"].max()
+                           "hit": _truthy(elisa)})
+        el = el.dropna(subset=["clone_id"])
+        any_hit = el.groupby("clone_id")["hit"].max().astype(bool)
         el_labels = pd.DataFrame({"clone_id": any_hit.index,
                                   "elisa_validated": np.where(any_hit, "ELISA+", "ELISA-")})
         adata = tf.annotate_specificity(adata, labels=el_labels,
@@ -122,6 +127,7 @@ def discover_ln(adata, out: Path, summary: dict):
             "shm": shm,
         }).dropna()
         df = df[df["spec"].isin(("S+", "S-"))]
+        df = df[df["tp"] != "d28+d35"]  # mixed-sort sample excluded from the curve
         curve = (df.groupby(["spec", "tp"])["shm"]
                  .agg(["median", "count"]).reset_index())
         curve = curve[curve["count"] >= 20]
@@ -137,22 +143,33 @@ def discover_ln(adata, out: Path, summary: dict):
                 u = stats.mannwhitneyu(a, b, alternative="greater")
                 mw.append({"timepoint": tp, "median_S+": a.median(),
                            "median_S-": b.median(), "p_S+_greater": u.pvalue})
-        mwd = pd.DataFrame(mw).sort_values("timepoint", key=lambda s: s.map(_tp_sort_key))
+        mwd = (pd.DataFrame(mw)
+               .sort_values("timepoint", key=lambda s: s.map(_tp_sort_key))
+               if mw else pd.DataFrame())
         mwd.to_csv(out / "shm_spos_vs_sneg.csv", index=False)
-        summary["shm_maturation"] = mwd.to_dict("records")
+        summary["shm_maturation"] = mwd.to_dict("records") if mw else []
 
     # --- LN <-> blood migration, S+ vs S- clones
+    # migr(g1,g2) sums per-clone p_g1*p_g2, so it scales with the number of
+    # clones; report per-clone normalised values and dual-tissue rates.
     mig = {}
     for label, mask in (("all", adata.obs["clone_id"].notna()),
                         ("S+", adata.obs["spike_specific"].astype(str) == "S+"),
                         ("S-", adata.obs["spike_specific"].astype(str) == "S-")):
         sub = adata[mask & adata.obs["tissue"].notna()].copy()
-        if sub.obs["clone_id"].nunique() < 10:
+        n_cl = sub.obs["clone_id"].nunique()
+        if n_cl < 10:
             continue
         m = tf.migration_index(sub, group_key="tissue", min_clone_size=3)
         m.to_csv(out / f"migration_tissue_{label.replace('+','pos').replace('-','neg')}.csv")
+        # fraction of expanded clones (>=3 cells) observed in both tissues
+        dist = tf.clone_distribution(sub, group_key="tissue", min_clone_size=3)
+        dual = float(((dist > 0).sum(axis=1) >= 2).mean()) if len(dist) else float("nan")
+        entry = {"n_clones_ge3": int(len(dist)), "frac_dual_tissue": dual}
         if {"LN", "blood"} <= set(m.index):
-            mig[label] = float(m.loc["LN", "blood"])
+            entry["migr_LN_blood"] = float(m.loc["LN", "blood"])
+            entry["migr_LN_blood_per_clone"] = float(m.loc["LN", "blood"]) / max(len(dist), 1)
+        mig[label] = entry
     summary["migration_LN_blood"] = mig
 
     # --- programmes
@@ -279,7 +296,7 @@ def discover_ebv(adata, out: Path, summary: dict):
     """GFP+ infection enrichment + time migration + programmes."""
     enr = _enrichment_table(adata, "clone_cluster", "condition")
     enr.to_csv(out / "gfp_enrichment.csv", index=False)
-    top = enr[enr["state"] == "GFP+"].sort_values("odds_ratio", ascending=False)
+    top = enr[enr["condition"] == "GFP+"].sort_values("odds_ratio", ascending=False)
     summary["gfp_enrichment_top"] = top.head(5).to_dict("records")
     mig = tf.migration_index(adata, group_key="timepoint", min_clone_size=3)
     mig.to_csv(out / "migration_timepoint.csv")
@@ -345,9 +362,11 @@ def main():
     tf.attach_bcr(adata, bcr, clone_col="clone_id")
 
     min_cs = cfg.get("min_clone_size", 3)
-    print(f"[discovery] {name}: recluster (min_clone_size={min_cs})", flush=True)
+    res = cfg.get("discovery_resolution", 0.3)
+    print(f"[discovery] {name}: recluster (min_clone_size={min_cs}, res={res})",
+          flush=True)
     tf.clonotype_recluster(adata, basis="X_pca", min_clone_size=min_cs,
-                           resolution=0.3, random_state=0)
+                           resolution=res, random_state=0)
     n_com = adata.obs["clone_cluster"].nunique()
     print(f"[discovery] {name}: {n_com} communities", flush=True)
 

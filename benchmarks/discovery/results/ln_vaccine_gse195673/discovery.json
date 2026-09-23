@@ -1,0 +1,182 @@
+{
+ "name": "ln_vaccine_gse195673",
+ "n_communities": 11,
+ "min_clone_size": 3,
+ "n_spike_pos_clones": 1368,
+ "n_spike_neg_clones": 91393,
+ "n_elisa_validated_clones": 1350,
+ "spike_enrichment_top": [
+  {
+   "clone_cluster": "3",
+   "specificity": "S+",
+   "n_cells": 9013,
+   "fraction": 0.8663014225297963,
+   "odds_ratio": 4.832919069131405,
+   "pvalue": 0.0,
+   "fdr": 0.0
+  },
+  {
+   "clone_cluster": "0",
+   "specificity": "S+",
+   "n_cells": 17071,
+   "fraction": 0.7026837902362724,
+   "odds_ratio": 1.7831932887628539,
+   "pvalue": 7.603126340715183e-243,
+   "fdr": 3.3453755899146805e-242
+  },
+  {
+   "clone_cluster": "4",
+   "specificity": "S+",
+   "n_cells": 3163,
+   "fraction": 0.7281307550644567,
+   "odds_ratio": 1.6760671000367364,
+   "pvalue": 5.83470280835672e-52,
+   "fdr": 1.833763739769255e-51
+  },
+  {
+   "clone_cluster": "5",
+   "specificity": "S+",
+   "n_cells": 2243,
+   "fraction": 0.6695522388059701,
+   "odds_ratio": 1.2393852693126315,
+   "pvalue": 5.124490517408929e-09,
+   "fdr": 1.1273879138299644e-08
+  },
+  {
+   "clone_cluster": "6",
+   "specificity": "S+",
+   "n_cells": 2448,
+   "fraction": 0.5951859956236324,
+   "odds_ratio": 0.8813209845073215,
+   "pvalue": 0.9999383320747233,
+   "fdr": 1.0
+  }
+ ],
+ "shm_gradient": {
+  "kruskal_H": 8564.164420180352,
+  "kruskal_p": 0.0,
+  "community_medians": {
+   "0": 0.0224719101123595,
+   "1": 0.007407407,
+   "10": 0.01481481,
+   "2": 0.04494382,
+   "3": 0.03333333,
+   "4": 0.02592593,
+   "5": 0.0259259259259259,
+   "6": 0.03333333,
+   "7": 0.01851852,
+   "8": 0.003703704,
+   "9": 0.01111111
+  }
+ },
+ "shm_maturation": [
+  {
+   "timepoint": "d28",
+   "median_S+": 0.0074906368520599,
+   "median_S-": 0.007407407,
+   "p_S+_greater": 0.006281100925289351
+  },
+  {
+   "timepoint": "d35",
+   "median_S+": 0.01481481,
+   "median_S-": 0.007407407,
+   "p_S+_greater": 1.2172587823198927e-81
+  },
+  {
+   "timepoint": "d60",
+   "median_S+": 0.02197802,
+   "median_S-": 0.007407407,
+   "p_S+_greater": 0.0
+  },
+  {
+   "timepoint": "d110",
+   "median_S+": 0.037037037037037,
+   "median_S-": 0.01481481,
+   "p_S+_greater": 0.0
+  },
+  {
+   "timepoint": "d201",
+   "median_S+": 0.05185185092592595,
+   "median_S-": 0.02962963,
+   "p_S+_greater": 0.0
+  }
+ ],
+ "migration_LN_blood": {
+  "all": {
+   "n_clones_ge3": 4396,
+   "frac_dual_tissue": 0.13967242948134667,
+   "migr_LN_blood": 93.60428870999425,
+   "migr_LN_blood_per_clone": 0.021293059306186135
+  },
+  "S+": {
+   "n_clones_ge3": 1347,
+   "frac_dual_tissue": 0.25092798812175204,
+   "migr_LN_blood": 42.57259323354869,
+   "migr_LN_blood_per_clone": 0.031605488666331616
+  },
+  "S-": {
+   "n_clones_ge3": 3049,
+   "frac_dual_tissue": 0.09052148245326337,
+   "migr_LN_blood": 51.03169547644558,
+   "migr_LN_blood_per_clone": 0.016737191038519377
+  }
+ },
+ "community_top_markers": {
+  "0": [
+   "TCL1A",
+   "RGS13",
+   "MEF2B"
+  ],
+  "1": [
+   "IGHG1",
+   "ITM2C",
+   "JCHAIN"
+  ],
+  "10": [
+   "IGLV3-25",
+   "IGLC2",
+   "IGLC3"
+  ],
+  "2": [
+   "FCMR",
+   "CD24",
+   "BANK1"
+  ],
+  "3": [
+   "IGKV3-20",
+   "MS4A1",
+   "MARCKSL1"
+  ],
+  "4": [
+   "IGKV3-11",
+   "IGHV1-69D",
+   "IGKV3D-11"
+  ],
+  "5": [
+   "IGKV3-15",
+   "IGKV3D-15",
+   "S100A9"
+  ],
+  "6": [
+   "IGKV4-1",
+   "IGHV4-59",
+   "IGKC"
+  ],
+  "7": [
+   "IGLV3-1",
+   "IGLC2",
+   "IGKV2D-26"
+  ],
+  "8": [
+   "IGLV3-21",
+   "IGHG1",
+   "ITM2C"
+  ],
+  "9": [
+   "IGKV3-20",
+   "IGKC",
+   "ITM2C"
+  ]
+ },
+ "runtime_min": 9.0
+}

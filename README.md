@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python >=3.9](https://img.shields.io/badge/python-%3E%3D3.9-blue.svg)](https://www.python.org)
+[![tests](https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg)](https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml)
 
 Threadfin integrates paired single-cell BCR and transcriptome data to place
 every B-cell clonotype into a transcriptional state space. Classic repertoire
@@ -18,11 +19,41 @@ gene-expression embedding; clonotypes are then clustered in that space into
 **clone communities** — groups of genetically distinct clones that converge
 on the same transcriptional state or fate. Communities are mapped back to
 cells for inspection, and clonal state transitions are inferred across real
-timepoints or along a diffusion-based ordering of the clone graph. Version 2
-adds a BCR-sequence layer (BLOSUM62-aware CDR3 similarity, sequence-aware
-lineage grouping, and a coupled GEX+BCR graph embedding inspired by Benisse)
-so the two modalities can be integrated rigorously — plus diagnostics that
-state honestly when one modality contributes nothing.
+timepoints or along a diffusion-based ordering of the clone graph. The BCR
+sequence layer (BLOSUM62-aware CDR3 similarity, sequence-aware lineage
+grouping, coupled GEX+BCR graph embedding inspired by Benisse) is used where
+it provably helps — and the v3 discovery layer connects communities to
+antigen specificity, affinity maturation, tissue migration and gene
+programmes, with null-model validation throughout.
+
+## The gap Threadfin closes
+
+A systematic review of the published tools and their public issue trackers
+(full evidence with quotes and links: [`docs/GAP_ANALYSIS.md`](docs/GAP_ANALYSIS.md)):
+
+* **No tool groups clones by transcriptional state.** Benisse's graph is
+  hard-constrained by V/J sequence; CoNGA tests sequence↔expression
+  correlation but does not group clones; dandelion's V(D)J feature space is
+  pseudobulk V/J usage; mvTCR embeds cells, not clones; scirpy/scRepertoire/
+  Immcantation are sequence-first toolboxes.
+* **No tool validates clone–state coupling statistically.** We ship
+  within-donor permutation nulls, size-matched community nulls, held-out
+  split-clone replication and cross-basis robustness — run on 5 public
+  datasets, with failures reported as-is.
+* **Clone fate/migration tracking is chronically unmet** — scirpy's
+  STARTRAC-indices issue has been open since 2020
+  ([#36](https://github.com/scverse/scirpy/issues/36)); users repeatedly ask
+  how to follow clones across clusters, timepoints and tissues
+  (scRepertoire [#428](https://github.com/BorchLab/scRepertoire/issues/428),
+  [#585](https://github.com/BorchLab/scRepertoire/issues/585)).
+* **Real repertoires break sequence-first tools**: the median clonotype has
+  exactly 1 cell in every dataset we analysed; cell-level clone networks die
+  past ~20k cells ([dandelion #235](https://github.com/tuonglab/dandelion/issues/235))
+  and lineage-tree builders can be left with zero clones
+  ([dowser #38](https://github.com/immcantation/dowser/issues/38)).
+  Threadfin's clone-as-node design scales with clone count, not cell count.
+* **Pure Python, scanpy-native, CPU-only** — no GPU (mvTCR), no R+torch
+  two-language stack (Benisse/TESSA), no C++ deps (CoNGA).
 
 ## Why infer states at the level of clones?
 
@@ -221,6 +252,63 @@ not evidence of large-scale structure.
 Machine-readable:
 [`results/cross_dataset_summary.md`](benchmarks/biological_validation/results/cross_dataset_summary.md).
 
+## Biological reconstruction with the discovery layer (v3)
+
+The discovery layer connects clone communities to the axes clonal research
+actually cares about. All results below are reproduced by
+[`benchmarks/discovery/`](benchmarks/discovery/) (committed tables +
+figures per dataset).
+
+### Reconstructing the vaccine response in the lymph node (Kim et al. 2022)
+
+The authors' BCR tables carry per-clone **spike-specificity calls**
+(`s_pos_clone`, 1,368 spike-positive clones) and **ELISA-validated
+monoclonal antibodies** (1,350 clones), plus per-sequence V-region mutation
+frequencies. Threadfin was given **none** of this when building communities;
+the labels are used purely as held-out biology:
+
+* **Specificity maps onto communities.** One community is 86.6%
+  spike-specific (OR 4.8, FDR ≈ 0; 9,013 cells), and three more are
+  significantly S+-enriched (OR 1.7–1.8, FDR ≤ 1e-51) — transcriptional
+  communities recovered by Threadfin align with *which antigen the clones
+  bind*, information the method never saw.
+* **Affinity maturation, reconstructed at clonal level.** Median SHM of
+  spike-specific clones rises monotonically across the response —
+  0.75% (d28) → 1.5% (d35) → 2.2% (d60) → 3.7% (d110) → 5.2% (d201) —
+  and exceeds non-specific clones at every timepoint from d35 on
+  (Mann–Whitney p ≤ 1e-81). This reproduces, in one figure, the paper's
+  central finding of months-long GC-driven maturation of vaccine-specific
+  clones.
+* **GC clones emigrate to blood.** Spike-specific expanded clones are
+  observed in **both** LN and blood 2.8× more often than non-specific clones
+  (25.1% vs 9.1% of clones ≥3 cells; per-clone migration index 0.032 vs
+  0.017) — the clonal footprint of the GC→circulation output.
+* **Programmes are community-specific**: the GC programme (AICDA/BCL6/
+  RGS13) and the plasmablast programme (XBP1/JCHAIN/MZB1) each light up
+  distinct communities, and community SHM medians span 0.4%–4.5%
+  (Kruskal–Wallis p ≈ 0), ordering communities along maturation.
+
+![LN discovery](benchmarks/discovery/results/ln_vaccine_gse195673/figures/discovery_ln.png)
+
+### External labels recovered in the other datasets
+
+* **EBV organoid**: the dominant clone community is **39.7× enriched for
+  experimentally infected (GFP+) cells** (10,812 cells, FDR ≈ 0) — the
+  communities recover infection status, a label measured by viral reporter
+  sorting, not by transcriptome.
+* **COVID-19 PBMC**: the plasmablast community is enriched for **severe**
+  disease (OR 3.5, FDR 0.003), the B-cell community for asymptomatic/mild
+  donors (OR 32, FDR 7e-7) — clone communities stratify clinical severity.
+  Reference matching against CoV-AbDab flags SARS-CoV-2-binding clones and
+  places them in the plasmablast community (small numbers on the 5k subset;
+  reported as-is).
+* **Flu vaccine**: clonal expansion indices rise from d0 to d7 in both age
+  groups, and the repertoire is almost entirely private (1 public clone
+  across 6 donors) — consistent with private-dominated vaccine responses.
+* **Tonsil**: the plasmablast gene programme lights up exactly one lineage
+  community (score 0.85 vs ≤0.10 elsewhere), recovered from
+  sequence-similarity lineages where exact clonotypes had failed.
+
 ## The biological interpretation — and its limits
 
 Reading a Threadfin clone map: one point = one clonotype (a genetically
@@ -248,6 +336,10 @@ We also report what does **not** hold, because it disciplines the claims:
 * **Small clones are noisy.** Conclusions rest on expanded clones
   (`min_clone_size`); the Stephenson 5k subset is included as a reference,
   not as evidence of large-scale structure.
+* **Reference-database specificity hits are evidence, not proof**:
+  heavy-chain-only matching can collide across antigens for public CDR3s;
+  treat `annotate_specificity` reference-mode hits as hypotheses to
+  validate, and prefer author-validated labels where they exist.
 
 ## Installation
 
@@ -275,12 +367,19 @@ adata = tf.attach_bcr(adata, bcr)               # adds obs['clone_id']
 adata = tf.clonotype_recluster(adata, min_clone_size=3, resolution=0.3)
 adata = tf.clonal_pseudotime(adata)             # diffusion ordering of the clone graph
 
-# 3b) v2: joint GEX+BCR latent embedding (coupled graph, Benisse-inspired)
+# 3b) joint GEX+BCR latent embedding (coupled graph, Benisse-inspired)
 tf.joint_embedding(adata, basis="X_pca", lam=0.5)
 adata = tf.clonotype_recluster(adata, basis="joint", key_added="joint_cluster")
 print(tf.integration_diagnostics(adata))
 
-# 4) evaluate + visualize
+# 4) discovery layer: specificity, migration, programmes
+adata = tf.annotate_specificity(adata, labels=clone_labels,
+                                label_col="spike_specific")
+print(tf.specificity_enrichment(adata))          # Fisher per community
+print(tf.migration_index(adata, group_key="tissue"))   # STARTRAC-style
+print(tf.community_markers(adata))               # marker genes per community
+
+# 5) evaluate + visualize
 print(tf.metrics.state_concordance(adata, "clone_cluster", "leiden"))
 print(tf.metrics.state_enrichment(adata, "clone_cluster", "leiden"))
 tf.plotting.clone_map(adata, color="clone_cluster", save="clone_map.png")
@@ -316,8 +415,11 @@ A runnable end-to-end example on public data is in
 | `tf.joint_embedding` | coupled GEX+BCR graph embedding of clones (Benisse-inspired, ADMM-free) |
 | `tf.integration_diagnostics` | latent-vs-GEX / latent-vs-BCR correlations, modality contribution |
 | `tf.clonal_pseudotime` | diffusion-pseudotime ordering of the clone graph (clonal state-transition inference) |
-| `tf.clones.clone_isotype_summary` / `clone_shm_summary` | isotype / SHM per clone or community |
-| `tf.clones.clone_fate_table` / `community_transition` | clone fate tracking across timepoints |
+| `tf.annotate_specificity` / `tf.specificity_enrichment` | clone-level antigen specificity (labels or CoV-AbDab-style reference matching) + per-community enrichment |
+| `tf.migration_index` / `transition_index` / `expansion_index` / `clone_distribution` | STARTRAC-style clonal migration/transition/expansion indices |
+| `tf.community_markers` / `tf.community_score` | marker genes and gene-programme scores per community |
+| `tf.clones.clone_isotype_summary` / `clone_shm_summary` / `shm_gradient_test` | isotype / SHM per clone or community, maturation-gradient tests |
+| `tf.clones.clone_fate_table` / `community_transition` / `public_clone_summary` | clone fate tracking; cross-donor public clones |
 | `tf.metrics.*` | NMI/ARI concordance, state enrichment (Fisher + FDR), clone purity/entropy |
 | `tf.sequence.cdr3_similarity` / `atchley_embedding` | BLOSUM62-aware CDR3 similarity; deterministic physicochemical embedding |
 | `tf.plotting.clone_map` / `cells` / `signature_heatmap` | publication-quality figures |
@@ -330,17 +432,17 @@ space. The closest published methods either define/analyse clonotypes
 sequence-first, or integrate sequence with expression but do not infer
 transcriptional-state communities of clones:
 
-| Tool (original publication) | What it does with clonotypes | Infers clone communities by transcriptional state | Clonal trajectory inference | Sequence×expression integration |
-|---|---|---|---|---|
-| [scirpy](https://scirpy.scverse.org/) ([Sturm et al. 2020, *Bioinformatics*](https://doi.org/10.1093/bioinformatics/btaa611)) | CDR3-similarity clonotypes, repertoire stats, UMAP overlays | ✗ | ✗ | ✗ |
-| [dandelion](https://github.com/zktuong/dandelion) ([Suo et al. 2024, *Nat Biotechnol*](https://pmc.ncbi.nlm.nih.gov/articles/PMC10791579/)) | VDJ reannotation, clonal networks, V(D)J feature-space trajectory | ✗ | ✗ (cell-level only) | ✗ |
-| [scRepertoire](https://github.com/ncborcherding/scRepertoire) ([Borcherding et al. 2021, *F1000Research*](https://f1000research.com/articles/10-230/v1)) | clonotype counting/overlap/gene usage on Seurat objects | ✗ | ✗ | ✗ |
-| [Immcantation / SCOPer](https://immcantation.readthedocs.io) ([Gupta et al. 2015, *Bioinformatics*](https://doi.org/10.1093/bioinformatics/btv359); [Nouri & Kleinstein 2018, *Front Immunol*](https://www.frontiersin.org/articles/10.3389/fimmu.2018.00682/full)) | clonal-family definition & lineage trees from sequences | ✗ | ✗ (sequence lineage trees) | ✗ |
-| [Benisse](https://github.com/wooyongc/Benisse) ([Zhang et al. 2022, *Nat Mach Intell*](https://www.nature.com/articles/s42256-022-00492-6)) | BCR embedding + sparse-graph integration with GEX | ✗ (graph components on clones) | ✗ | ✓ (ADMM graph learning) |
-| [CoNGA](https://github.com/phbradley/conga) ([Schattgen et al. 2022, *Nat Methods*](https://pmc.ncbi.nlm.nih.gov/articles/PMC8832949/)) | GEX–TCR neighbour-graph overlap scores per clonotype | ✗ (scores individual clonotypes) | ✗ | ✓ (graph-overlap test, TCR) |
-| [TESSA](https://github.com/jcao89757/TESSA) ([Zhang et al. 2021, *Nat Methods*](https://pmc.ncbi.nlm.nih.gov/articles/PMC7799492/)) | weighted TCR embedding networks constrained by GEX | ✗ | ✗ | ✓ (Bayesian, TCR) |
-| [mvTCR](https://github.com/SchubertLab/mvTCR) ([Drost et al. 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220149/)) | multi-view VAE joint GEX+TCR latent space | ✗ | ✗ | ✓ (deep generative, TCR) |
-| **Threadfin** (this repo) | **clone centroids in GEX space → clone communities** | **✓** | **✓ (diffusion-based ordering of the clone graph)** | **✓ (coupled-graph joint embedding; BCR lineage grouping)** |
+| Tool (original publication) | What it does with clonotypes | Infers clone communities by transcriptional state | Clonal trajectory inference | Clone migration indices | Sequence×expression integration |
+|---|---|---|---|---|---|
+| [scirpy](https://scirpy.scverse.org/) ([Sturm et al. 2020, *Bioinformatics*](https://doi.org/10.1093/bioinformatics/btaa611)) | CDR3-similarity clonotypes, repertoire stats, UMAP overlays | ✗ | ✗ | ✗ ([open issue since 2020](https://github.com/scverse/scirpy/issues/36)) | ✗ |
+| [dandelion](https://github.com/zktuong/dandelion) ([Suo et al. 2024, *Nat Biotechnol*](https://pmc.ncbi.nlm.nih.gov/articles/PMC10791579/)) | VDJ reannotation, clonal networks, V(D)J feature-space trajectory | ✗ | ✗ (cell-level only) | ✗ | ✗ |
+| [scRepertoire](https://github.com/ncborcherding/scRepertoire) ([Borcherding et al. 2021, *F1000Research*](https://f1000research.com/articles/10-230/v1)) | clonotype counting/overlap/gene usage on Seurat objects | ✗ | ✗ | ✓ (STARTRAC wrapper) | ✗ |
+| [Immcantation / SCOPer](https://immcantation.readthedocs.io) ([Gupta et al. 2015, *Bioinformatics*](https://doi.org/10.1093/bioinformatics/btv359); [Nouri & Kleinstein 2018, *Front Immunol*](https://www.frontiersin.org/articles/10.3389/fimmu.2018.00682/full)) | clonal-family definition & lineage trees from sequences | ✗ | ✗ (sequence lineage trees) | ✗ | ✗ |
+| [Benisse](https://github.com/wooyongc/Benisse) ([Zhang et al. 2022, *Nat Mach Intell*](https://www.nature.com/articles/s42256-022-00492-6)) | BCR embedding + sparse-graph integration with GEX | ✗ (graph components on clones) | ✗ | ✗ | ✓ (ADMM graph learning) |
+| [CoNGA](https://github.com/phbradley/conga) ([Schattgen et al. 2022, *Nat Methods*](https://pmc.ncbi.nlm.nih.gov/articles/PMC8832949/)) | GEX–TCR neighbour-graph overlap scores per clonotype | ✗ (scores individual clonotypes) | ✗ | ✗ | ✓ (graph-overlap test, TCR) |
+| [TESSA](https://github.com/jcao89757/TESSA) ([Zhang et al. 2021, *Nat Methods*](https://pmc.ncbi.nlm.nih.gov/articles/PMC7799492/)) | weighted TCR embedding networks constrained by GEX | ✗ | ✗ | ✗ | ✓ (Bayesian, TCR) |
+| [mvTCR](https://github.com/SchubertLab/mvTCR) ([Drost et al. 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220149/)) | multi-view VAE joint GEX+TCR latent space | ✗ | ✗ | ✗ | ✓ (deep generative, TCR) |
+| **Threadfin** (this repo) | **clone centroids in GEX space → clone communities** | **✓** | **✓ (diffusion-based ordering of the clone graph)** | **✓ (STARTRAC-style, clone-level)** | **✓ (coupled-graph joint embedding; BCR lineage grouping; specificity annotation)** |
 
 Notes on the comparison: Benisse is the conceptual parent of our joint
 embedding — Threadfin replaces its ADMM on dense n×n matrices (and its
@@ -353,7 +455,8 @@ that (see the tonsil case study above).
 ## Citing Threadfin
 
 If you use Threadfin, please cite this repository
-(https://github.com/Reynold4k/Threadfin). A manuscript is in preparation.
+(https://github.com/Reynold4k/Threadfin; see [`CITATION.cff`](CITATION.cff)).
+A manuscript is in preparation.
 
 ## License
 

@@ -1,0 +1,20 @@
+[sbatch] Wed 23 Sep 2026 15:44:00 AEST running ../biological_validation/configs/ln_vaccine_gse195673.json
+[discovery] ln_vaccine_gse195673: loading
+[ln] timepoint mapped for 193442/193442 cells
+[discovery] ln_vaccine_gse195673: preprocess (193442 cells)
+[threadfin] attached BCR: 153049/193442 cells, 129378 clones.
+[discovery] ln_vaccine_gse195673: recluster (min_clone_size=3)
+/home/czhu3869/.local/lib/python3.11/site-packages/umap/umap_.py:1865: UserWarning: using precomputed metric; inverse_transform will be unavailable
+  warn("using precomputed metric; inverse_transform will be unavailable")
+/home/czhu3869/.local/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[threadfin] 4396 clones -> 11 clone clusters ('clone_cluster' added to obs, clone map in uns['threadfin']).
+[discovery] ln_vaccine_gse195673: 11 communities
+[discovery] ln_vaccine_gse195673: running discovery block
+/data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/run_discovery.py:326: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  .groupby("community").head(3))
+/data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/run_discovery.py:328: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  str(c): g["gene"].tolist() for c, g in top.groupby("community")}
+[discovery] wrote /data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/results/ln_vaccine_gse195673/figures/discovery_ln.png
+[discovery] ln_vaccine_gse195673: done in 9.1 min
+[sbatch] Wed 23 Sep 2026 15:53:36 AEST all done

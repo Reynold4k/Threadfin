@@ -1,0 +1,85 @@
+{
+ "name": "stephenson2021",
+ "n_communities": 2,
+ "min_clone_size": 2,
+ "severity_enrichment_top": [
+  {
+   "clone_cluster": "1",
+   "severity": "Asymptomatic",
+   "n_cells": 12,
+   "odds_ratio": 32.108108108108105,
+   "pvalue": 6.785346459608176e-08,
+   "fdr": 6.785346459608176e-07
+  },
+  {
+   "clone_cluster": "1",
+   "severity": "Mild",
+   "n_cells": 7,
+   "odds_ratio": 16.5,
+   "pvalue": 0.00020566529190072468,
+   "fdr": 0.0010283264595036235
+  },
+  {
+   "clone_cluster": "0",
+   "severity": "Severe",
+   "n_cells": 81,
+   "odds_ratio": 3.4884453781512605,
+   "pvalue": 0.0008973060879613624,
+   "fdr": 0.0029910202932045414
+  },
+  {
+   "clone_cluster": "0",
+   "severity": "Moderate",
+   "n_cells": 99,
+   "odds_ratio": 1.688118811881188,
+   "pvalue": 0.07369795086624109,
+   "fdr": 0.18424487716560273
+  },
+  {
+   "clone_cluster": "1",
+   "severity": "Critical",
+   "n_cells": 4,
+   "odds_ratio": 1.0222222222222221,
+   "pvalue": 0.5813180952086121,
+   "fdr": 0.999999998089479
+  },
+  {
+   "clone_cluster": "0",
+   "severity": "Critical",
+   "n_cells": 16,
+   "odds_ratio": 0.9782608695652174,
+   "pvalue": 0.646135893263634,
+   "fdr": 0.999999998089479
+  }
+ ],
+ "cov_abdab_matched_clones": 6,
+ "cov_abdab_enrichment": [
+  {
+   "clone_cluster": "0",
+   "specificity": "SARS-CoV2_WT",
+   "n_cells": 2,
+   "fraction": 1.0,
+   "odds_ratio": NaN,
+   "pvalue": 1.0,
+   "fdr": 1.0
+  }
+ ],
+ "fine_state_concordance": {
+  "nmi": 0.2520226681840135,
+  "ari": 0.15455139330933912,
+  "n_cells_used": 249
+ },
+ "community_top_markers": {
+  "0": [
+   "JCHAIN",
+   "MZB1",
+   "TXNDC5"
+  ],
+  "1": [
+   "MS4A1",
+   "HLA-DRA",
+   "AB_CD20"
+  ]
+ },
+ "runtime_min": 0.7
+}

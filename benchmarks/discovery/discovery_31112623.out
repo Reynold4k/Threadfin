@@ -1,0 +1,24 @@
+[sbatch] Wed 23 Sep 2026 15:06:58 AEST running ../biological_validation/configs/ln_vaccine_gse195673.json
+[discovery] ln_vaccine_gse195673: loading
+[ln] timepoint mapped for 193442/193442 cells
+[discovery] ln_vaccine_gse195673: preprocess (193442 cells)
+[threadfin] attached BCR: 153049/193442 cells, 129378 clones.
+[discovery] ln_vaccine_gse195673: recluster (min_clone_size=3)
+/home/czhu3869/.local/lib/python3.11/site-packages/umap/umap_.py:1865: UserWarning: using precomputed metric; inverse_transform will be unavailable
+  warn("using precomputed metric; inverse_transform will be unavailable")
+/home/czhu3869/.local/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[threadfin] 4396 clones -> 11 clone clusters ('clone_cluster' added to obs, clone map in uns['threadfin']).
+[discovery] ln_vaccine_gse195673: 11 communities
+[discovery] ln_vaccine_gse195673: running discovery block
+Traceback (most recent call last):
+  File "/data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/run_discovery.py", line 369, in <module>
+    main()
+  File "/data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/run_discovery.py", line 360, in main
+    else fn(adata, out, summary)
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/scratch/projects/punim1236/Threadfin/benchmarks/discovery/run_discovery.py", line 96, in discover_ln
+    "elisa_validated": np.where(any_hit, "ELISA+", "ELISA-")})
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "missing.pyx", line 419, in pandas._libs.missing.NAType.__bool__
+TypeError: boolean value of NA is ambiguous
