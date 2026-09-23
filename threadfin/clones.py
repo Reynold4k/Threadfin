@@ -53,6 +53,18 @@ def clone_isotype_summary(adata, *, cluster_key: str | None = "clone_cluster") -
     return out.sort_values([group_col, "isotype"]).reset_index(drop=True)
 
 
+def _cell_shm(adata, mut_col: str | None) -> pd.Series:
+    """Per-cell SHM values: ``obs[mut_col]``, else ``100 - obs['bcr_v_identity']``."""
+    if mut_col is not None and mut_col in adata.obs.columns:
+        return pd.to_numeric(adata.obs[mut_col], errors="coerce")
+    if "bcr_v_identity" in adata.obs.columns:
+        return 100.0 - pd.to_numeric(adata.obs["bcr_v_identity"], errors="coerce")
+    raise ValueError(
+        f"SHM summary needs '{mut_col}' or 'bcr_v_identity' in adata.obs "
+        "(an AIRR mutation count or V-gene identity column)."
+    )
+
+
 def clone_shm_summary(
     adata, *, mut_col: str | None = "bcr_mu_count", cluster_key: str | None = None
 ) -> pd.DataFrame:
@@ -69,15 +81,7 @@ def clone_shm_summary(
     """
     if "clone_id" not in adata.obs.columns:
         raise KeyError("'clone_id' not found in adata.obs.")
-    if mut_col is not None and mut_col in adata.obs.columns:
-        shm = pd.to_numeric(adata.obs[mut_col], errors="coerce")
-    elif "bcr_v_identity" in adata.obs.columns:
-        shm = 100.0 - pd.to_numeric(adata.obs["bcr_v_identity"], errors="coerce")
-    else:
-        raise ValueError(
-            f"SHM summary needs '{mut_col}' or 'bcr_v_identity' in adata.obs "
-            "(an AIRR mutation count or V-gene identity column)."
-        )
+    shm = _cell_shm(adata, mut_col)
 
     df = pd.DataFrame({"clone_id": adata.obs["clone_id"], "shm": shm})
     df = df.dropna(subset=["clone_id", "shm"])
@@ -189,3 +193,116 @@ def community_transition(
     mat.index.name = "from_cluster"
     mat.columns.name = "to_cluster"
     return mat
+
+
+def shm_gradient_test(
+    adata,
+    *,
+    cluster_key: str = "clone_cluster",
+    order: list | None = None,
+    mut_col: str | None = "bcr_mu_count",
+) -> dict:
+    """Test for a somatic-hypermutation gradient across clone communities.
+
+    Cell-level SHM values (``obs[mut_col]``, with the same
+    ``bcr_v_identity`` fallback as :func:`clone_shm_summary`) are compared
+    across communities with a Kruskal-Wallis test. If ``order`` gives the
+    expected maturation order of the communities, a Spearman correlation
+    between community median SHM and that order is added.
+
+    Cells with missing community or SHM values are excluded.
+
+    Returns
+    -------
+    dict with ``kruskal_H``, ``kruskal_p``, ``spearman_rho`` / ``spearman_p``
+    (``None`` without ``order``) and ``community_medians`` (Series).
+    """
+    from scipy.stats import kruskal, spearmanr
+
+    if cluster_key not in adata.obs.columns:
+        raise KeyError(f"'{cluster_key}' not found in adata.obs.")
+    df = pd.DataFrame(
+        {"community": adata.obs[cluster_key], "shm": _cell_shm(adata, mut_col)}
+    ).dropna()
+
+    groups = [g["shm"].to_numpy() for _, g in df.groupby("community", observed=True)]
+    if len(groups) < 2:
+        raise ValueError(
+            f"Need at least two communities with SHM values in '{cluster_key}'."
+        )
+    stat, pval = kruskal(*groups)
+    medians = df.groupby("community", observed=True)["shm"].median()
+
+    rho = sp = None
+    if order is not None:
+        missing = [c for c in order if c not in medians.index]
+        if missing:
+            raise ValueError(
+                f"order lists communities absent from '{cluster_key}': {missing}"
+            )
+        r = spearmanr(medians.loc[list(order)].to_numpy(), np.arange(len(order)))
+        rho, sp = float(r.statistic), float(r.pvalue)
+
+    return {
+        "kruskal_H": float(stat),
+        "kruskal_p": float(pval),
+        "spearman_rho": rho,
+        "spearman_p": sp,
+        "community_medians": medians,
+    }
+
+
+def public_clone_summary(
+    adata,
+    *,
+    clone_key: str = "clone_id",
+    donor_key: str,
+    cluster_key: str | None = "clone_cluster",
+) -> pd.DataFrame:
+    """Summary of public clones (observed in >= 2 donors).
+
+    Cells with missing ``clone_key`` / ``donor_key`` (and ``cluster_key``,
+    if given) are excluded.
+
+    Returns
+    -------
+    Tidy DataFrame, one row per public clone: ``[clone_key, n_donors,
+    n_cells, donor_list, dominant_cluster, state_purity]`` (the last two
+    only when ``cluster_key`` is given; ``state_purity`` is the fraction of
+    the clone's cells in its dominant community), sorted by ``n_donors``
+    then ``n_cells`` descending.
+    """
+    cols = [clone_key, donor_key]
+    for col in (clone_key, donor_key):
+        if col not in adata.obs.columns:
+            raise KeyError(f"'{col}' not found in adata.obs.")
+    if cluster_key is not None:
+        if cluster_key not in adata.obs.columns:
+            raise KeyError(f"'{cluster_key}' not found in adata.obs.")
+        cols.append(cluster_key)
+
+    df = adata.obs[cols].dropna()
+    rows = []
+    for clone, grp in df.groupby(clone_key, observed=True):
+        donors = sorted(grp[donor_key].unique(), key=str)
+        if len(donors) < 2:
+            continue
+        row = {
+            clone_key: clone,
+            "n_donors": int(len(donors)),
+            "n_cells": int(len(grp)),
+            "donor_list": list(donors),
+        }
+        if cluster_key is not None:
+            freq = grp[cluster_key].value_counts(normalize=True)
+            row["dominant_cluster"] = freq.index[0]
+            row["state_purity"] = float(freq.iloc[0])
+        rows.append(row)
+
+    out_cols = [clone_key, "n_donors", "n_cells", "donor_list"]
+    if cluster_key is not None:
+        out_cols += ["dominant_cluster", "state_purity"]
+    out = pd.DataFrame(rows, columns=out_cols)
+    return out.sort_values(
+        ["n_donors", "n_cells"], ascending=[False, False], kind="stable"
+    ).reset_index(drop=True)

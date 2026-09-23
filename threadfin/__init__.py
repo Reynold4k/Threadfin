@@ -25,24 +25,43 @@ from .integrate import integration_diagnostics, joint_embedding
 from .bcrgraph import bcr_similarity_graph, define_clones
 from . import clones
 from .io import attach_bcr, build_clone_key, read_10x_vdj, read_airr
-from . import metrics, plotting, sequence
+from . import metrics, migration, plotting, programs, sequence, specificity
+from .migration import (
+    clone_distribution,
+    expansion_index,
+    migration_index,
+    transition_index,
+)
+from .programs import community_markers, community_score
+from .specificity import annotate_specificity, specificity_enrichment
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __all__ = [
+    "annotate_specificity",
     "attach_bcr",
     "bcr_reclustering",
     "bcr_similarity_graph",
     "build_clone_key",
     "clonal_pseudotime",
     "clone_centroids",
+    "clone_distribution",
     "clones",
     "clonotype_recluster",
+    "community_markers",
+    "community_score",
     "define_clones",
+    "expansion_index",
     "integration_diagnostics",
     "joint_embedding",
     "metrics",
+    "migration",
+    "migration_index",
     "plotting",
+    "programs",
     "read_10x_vdj",
     "read_airr",
     "sequence",
+    "specificity",
+    "specificity_enrichment",
+    "transition_index",
 ]
