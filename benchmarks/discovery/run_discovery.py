@@ -369,6 +369,8 @@ def main():
                            resolution=res, random_state=0)
     n_com = adata.obs["clone_cluster"].nunique()
     print(f"[discovery] {name}: {n_com} communities", flush=True)
+    tf.plotting.clone_map(adata, color="clone_cluster",
+                          save=out / "figures" / "clone_map_discovery.png")
 
     summary = {"name": name, "n_communities": int(n_com),
                "min_clone_size": int(min_cs)}
