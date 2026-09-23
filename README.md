@@ -105,71 +105,120 @@ Everything below is reproduced by two committed pipelines —
 migration, gene programmes). Dataset sources and checksums:
 [`benchmarks/datasets_manifest.tsv`](benchmarks/datasets_manifest.tsv).
 
-**How to read a Threadfin clone map:** one point = one clonotype (a
-genetically distinct lineage); point size = expansion (cells per clone);
-position = the clone's average transcriptional state; colour = inferred
-**clone community**. Communities are scored against labels the method never
-saw (author cell states, antigen specificity, infection status, severity),
-with permutation nulls for every claim.
+**How to read the figures.** A *clone map* has one point per clonotype (a
+genetically distinct B-cell lineage); point size = how expanded the clone
+is; position = the average transcriptional state of that clone's cells;
+colour = the inferred **clone community** (clones whose cells are doing the
+same thing). Communities are then scored against biology the algorithm never
+saw: author cell-type labels, experimentally measured antigen specificity,
+viral-infection status, clinical severity.
+
+**How to read the numbers.** *OR* (odds ratio) = how many times more likely
+than chance (OR 5 = 5× enriched). *FDR* = p-value corrected for multiple
+testing. *vs null* = compared against the same analysis with clone labels
+shuffled within each donor. *Held-out* = split every big clone's cells into
+two independent halves, re-run the whole pipeline, and check the two halves
+land in the same community — this rules out that communities are an artefact
+of the cells we happened to sample.
 
 ### 1. Lymph-node germinal-centre response to mRNA vaccination
 *[Kim et al. 2022, Nature](https://www.nature.com/articles/s41586-022-04527-1) — GSE195673 / [Zenodo 5895181](https://zenodo.org/records/5895181) (8 donors, 193,442 B cells, LN FNA + blood + bone marrow, d28–d201)*
 
-The study tracked the SARS-CoV-2 mRNA-vaccine GC reaction in draining lymph
-nodes for months and showed vaccine-induced GCs keep producing
-affinity-matured clones long after the blood response wanes. 92,761
-clonotypes (median size 1; 4,396 expanded to ≥3 cells) over author-annotated
-GC / memory / naive / plasmablast / LN-plasma-cell states.
+**The study.** Eight mRNA-vaccine recipients were sampled for months after
+vaccination: fine-needle aspirates of the draining lymph node, plus blood
+and bone marrow. The paper's headline: vaccine-induced germinal centres
+(GCs) persist for months and keep maturing spike-specific B cells long after
+the blood response fades. The authors annotated every cell (GC / memory /
+naive / plasmablast / LN plasma cell), experimentally tested which clones
+bind spike, and measured each receptor's mutation load. That makes this the
+perfect test bed: we can build communities on expression alone and then
+check them against three independent experimental readouts.
 
-**Threadfin resolves 11 clone communities** over the 4,396 expanded clones,
-coherent in three independent ways:
+**What Threadfin did.** Of the 92,761 distinct clones, 4,396 are expanded
+(≥3 cells) — the rest are singletons and carry no analysable signal.
+Threadfin placed each expanded clone at its cells' average position in
+expression space and grouped them into **11 clone communities**, using no
+sequence, no author labels, no specificity information.
 
-* **cell states** — 17–37 significant enrichments vs the authors'
-  annotations per parameter setting (size-matched null p = 0.015); the
-  largest community maps onto GC cells (OR 2.4, FDR ≈ 0), a plasmablast
-  community emerges at higher resolution (OR 156);
-* **class-switch history** — never used to build the graph, yet the three
-  largest communities are 80% / 88% / 83% IGHG while others are
-  IGHM/IGHD-rich;
-* **temporal stability** — the community transition matrix of clones
-  followed across d28 → d60 → d110 is **perfectly diagonal (1,016/1,016)**:
-  a clone's early-response community predicts its community months later.
+**Walking through the main figure** (left to right):
 
 ![LN vaccine five-panel](benchmarks/biological_validation/results/ln_vaccine_gse195673/figures/comparison_five_panel.png)
 
-*Walk through the panels left to right: A — cells by author state. B — the
-classic view: top-20 sequence-defined clonotypes on the cell UMAP (each a
-scattered point cloud — sequence networks say nothing about behaviour).
-C — Threadfin clone map (one point per clone; size = expansion; colour =
-community). D — the same communities projected back onto cells. E — gene
-signatures per community: the plasmablast programme lights up exactly one
-community.*
+* **Panel A — the cells as the authors see them.** Every dot is a cell,
+  coloured by the authors' annotation. This is the reference landscape the
+  communities must recover without ever being shown.
+* **Panel B — why the classic view is not enough.** The 20 largest
+  sequence-defined clones overlaid on the cell UMAP: each clone is a
+  scattered cloud spread over several states. You can see *which cells are
+  related*, but nothing about *what they are doing* — and certainly not
+  which *different* clones behave alike. This is the gap.
+* **Panel C — the Threadfin clone map.** Now each clone is a single point
+  (size = expansion). Clones that behave alike sit together and form
+  visible neighbourhoods; the clustering of these points gives the 11
+  communities. Because clones are points rather than clouds, "which clones
+  behave alike" becomes a question you can answer by looking.
+* **Panel D — communities projected back onto cells.** Each cell takes its
+  clone's community colour. If communities were random, this panel would be
+  salt-and-pepper noise; instead, communities occupy coherent regions of the
+  cell landscape — they line up with the real cell states of panel A
+  (17–37 significant community↔state enrichments per parameter setting;
+  size-matched random groupings essentially never do this, p = 0.015).
+* **Panel E — gene programmes per community.** The plasmablast programme
+  (the antibody-secreting machinery: XBP1, JCHAIN, MZB1) lights up exactly
+  one community. Because no gene signatures were used to build the
+  communities, this clean separation is independent evidence that the
+  communities are biologically coherent.
 
-**Held-out biology the method never saw.** The authors' BCR tables carry
-per-clone spike-specificity calls (1,368 S+ clones) and 1,350 ELISA-validated
-monoclonal antibodies, plus per-sequence SHM frequencies:
+**Three independent layers agree with the communities:**
 
-* **Specificity maps onto communities**: one community is 86.6%
-  spike-specific (OR 4.8, FDR ≈ 0; 9,013 cells); three more are S+-enriched
-  (OR 1.7–1.8, FDR ≤ 1e-51).
-* **Affinity maturation, reconstructed**: median SHM of S+ clones rises
-  monotonically 0.75% (d28) → 1.5% (d35) → 2.2% (d60) → 3.7% (d110) →
-  5.2% (d201), above S− clones from d35 on (p ≤ 1e-81) — the paper's
-  central finding in one curve.
-* **GC clones emigrate to blood**: S+ expanded clones span LN+blood 2.8×
-  more often than S− clones (25.1% vs 9.1%; per-clone migration index
-  0.032 vs 0.017).
+1. *Cell states.* The largest community maps onto GC cells (17,464 cells,
+   OR 2.4, FDR ≈ 0); at higher resolution a dedicated plasmablast community
+   emerges (OR 156).
+2. *Antibody class.* Class-switching was never shown to the algorithm, yet
+   the three largest communities are 80%, 88% and 83% IgG, while others are
+   IgM/IgD-rich. Two molecular layers that were measured independently vote
+   for the same grouping.
+3. *Time.* We followed 1,016 clones across consecutive timepoints
+   (d28 → d60 → d110). Every single one (1,016/1,016) stayed in its
+   community — a clone's position in the response at day 28 predicts its
+   position months later, echoing the paper's finding that vaccine GC
+   clones are durable lineages rather than transient bursts.
+
+**Then we confronted the communities with experiments the method never saw:**
 
 ![LN discovery](benchmarks/discovery/results/ln_vaccine_gse195673/figures/discovery_ln.png)
 
-*Left: per-community enrichment of spike-specific clones (red = FDR < 0.05).
-Middle: affinity maturation of S+ vs S− clones across the five-month
-response. Right: gene programmes per community (GC, plasmablast and naive
-programmes occupy distinct communities).*
+* **Left panel — antigen specificity.** The authors had lab-tested which
+  clones bind spike (1,368 spike-positive clones; 1,350 of them confirmed
+  by ELISA). One community is 86.6% spike-binding clones (OR 4.8, FDR ≈ 0,
+  9,013 cells), and communities 0/4/5 follow (70%/73%/67% spike-binding;
+  OR 1.7–1.8, FDR ≤ 1e-51). Because the communities were built from
+  expression alone, this alignment means *transcriptional state and antigen
+  specificity are coupled at the level of whole clones* — clones that bind
+  the vaccine antigen behave alike. Note the mirror image: communities 8
+  and 9, which carry the strongest plasmablast programme (right panel), are
+  *depleted* of spike binders (8% and 11%) — consistent with circulating
+  plasmablasts being a mixed bag of many specificities, while the lymph-node
+  GC communities are the vaccine-driven ones.
+* **Middle panel — affinity maturation, reconstructed.** Spike-binding
+  clones accumulate mutations month after month: median SHM 0.75% (d28) →
+  1.5% (d35) → 2.2% (d60) → 3.7% (d110) → 5.2% (d201) of V-region
+  nucleotides, ahead of non-binding clones from d35 onwards (Mann–Whitney
+  p ≤ 1e-81). Because SHM accumulates inside GCs under selection, this
+  widening red–blue gap *is* the affinity-maturation engine running on
+  vaccine-specific clones — the paper's central result, recovered from clone
+  communities alone.
+* **Right panel — gene programmes.** The GC programme (AICDA/BCL6/RGS13)
+  marks communities 0, 3, 4; the plasmablast programme marks 1, 8, 9, 10;
+  the naive programme is lowest exactly in the GC communities. Each
+  community owns a distinct functional programme.
+* **Emigration (not shown).** Spike-binding expanded clones are 2.8× more
+  likely than other clones to appear in *both* lymph node and blood (25.1%
+  vs 9.1%) — the clonal footprint of GC cells leaving for circulation.
 
-Statistics: clone state-purity 0.849 vs 0.478 within-donor permutation null
-(p = 0.005); held-out split-clone co-clustering **0.93 vs 0.09 chance**
-(1,517 clones, sibling halves re-derived independently).
+Statistics: cells of one clone are far more state-coherent than chance
+(purity 0.849 vs 0.478 within-donor null, p = 0.005); held-out clone halves
+re-co-cluster at **0.93 vs 0.09 chance** (1,517 clones).
 Reproduce: [`configs/ln_vaccine_gse195673.json`](benchmarks/biological_validation/configs/ln_vaccine_gse195673.json) →
 [`results/ln_vaccine_gse195673/`](benchmarks/biological_validation/results/ln_vaccine_gse195673/) +
 [`discovery results`](benchmarks/discovery/results/ln_vaccine_gse195673/).
@@ -177,37 +226,66 @@ Reproduce: [`configs/ln_vaccine_gse195673.json`](benchmarks/biological_validatio
 ### 2. Influenza vaccination, young vs older adults
 *[Wang et al. 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10564424/) — GSE175522/GSE175523 (6 donors × d0/d7, 123,693 cells)*
 
-A seasonal-flu vaccine study comparing young and older adults. The authors
-tracked `clone_id` across both timepoints, so **711 clones are observed at
-both d0 and d7** — genuine clonal fate tracking, not cross-sectional
-comparison.
+**The study.** Six donors (three young, three older) sampled before (d0) and
+seven days after (d7) seasonal flu vaccination — the classic setting for
+studying why vaccine responses weaken with age. Crucially, the authors
+tracked clone IDs across timepoints, so **711 clones are seen at both d0 and
+d7**: we can follow what the *same clone* did, rather than compare two
+independent snapshots.
 
-**What Threadfin finds:** the day-7 plasmablast burst is carried by a
-restricted set of clonal lineages — expanded d7 plasmablast clones
-concentrate in a few communities (top enrichments OR 290, and OR 1,341 at
-higher resolution; FDR ≈ 0). Communities stratify by class-switch status
-(one 75% IGHM / 21% IGHD unswitched; another 52% IGHG / 25% IGHA switched,
-vaccine-responsive), and the d0→d7 community transition matrix is perfectly
-diagonal (272/272). Clone–state coupling is the strongest of all five
-datasets (purity 0.883 vs 0.356 null, p = 0.005; held-out 0.97 vs 0.26
-chance).
+**What Threadfin did.** 80,682 clonotypes, 499 expanded (≥3 cells) → 3
+communities at the reference resolution (more at higher resolution). Blood
+B cells are a mixture of resting and responding cells, so the question is
+whether the day-7 plasmablast burst is visible as a *clonal* phenomenon.
+
+**What we found.**
+
+* *The day-7 antibody burst is carried by a few clone communities.*
+  Expanded d7 plasmablast clones pile into a small number of communities
+  (OR 290; OR 1,341 at higher resolution; both FDR ≈ 0). If the response
+  were a diffuse mobilization of the whole repertoire, plasmablast clones
+  would be spread thin; instead they concentrate — the response is
+  oligoclonal, and you can point at exactly which communities carry it.
+* *Communities remember class-switching.* One community is 75% IgM / 21%
+  IgD (unswitched clones); another is 52% IgG / 25% IgA (switched,
+  vaccine-experienced clones). Again: isotype was never used.
+* *A clone's pre-vaccine state predicts its day-7 state.* Of the clones
+  seen at both timepoints, every community assignment carried over (272/272
+  transitions diagonal). Clone–state coupling is the strongest of all five
+  datasets (purity 0.883 vs 0.356 null, p = 0.005; held-out 0.97 vs 0.26
+  chance) — in an acute recall response, what a clone does is maximally
+  determined by which clone it is.
 
 | clone map (499 clones) | communities on the cell UMAP |
 |---|---|
 | ![flu clone map](benchmarks/biological_validation/results/flu_gse175522/figures/clone_map.png) | ![flu cells](benchmarks/biological_validation/results/flu_gse175522/figures/cells_clone_cluster.png) |
 
-*Left: every point is a clone; the orange community on the right is the
-vaccine-responsive switched compartment. Right: the same communities
-projected back onto 123,693 cells (grey = no BCR).*
+*Left — the clone map: one point per clone. The orange community sits apart
+from the rest; it is the switched (IgG/IgA), vaccine-responsive compartment.
+Right — communities projected back onto all 123,693 cells (grey = no BCR
+recovered): each community occupies its own region of the cell landscape,
+so the clone-level grouping reflects real cell-state structure rather than
+clonal noise.*
 
 ![flu discovery](benchmarks/discovery/results/flu_gse175522/figures/discovery_flu.png)
 
-*Left: clonal expansion indices rise from d0 (blue) to d7 (red) in both age
-groups. Middle: clone-level migration between timepoints (59.2 cross-terms =
-clones shared d0↔d7). Right: the plasmablast programme lights up community 1
-— matching the community where d7 plasmablast clones concentrate.*
+* **Left — expansion dynamics.** The clonal expansion index rises from d0
+  (blue) to d7 (red) in both young and older donors: vaccination measurably
+  restructures the repertoire within a week, at every age. (The index
+  measures how uneven clone sizes are — a few big clones dominate after
+  vaccination.)
+* **Middle — clones shared between timepoints.** The off-diagonal (59.2)
+  quantifies clones observed at *both* d0 and d7 — the substrate of the
+  perfectly stable community assignments above.
+* **Right — gene programmes.** The plasmablast programme lights up community
+  1 — the same community where the expanded d7 plasmablast clones
+  concentrate. Two independent views (state enrichment and gene programme)
+  name the same community as the engine of the response.
+* *The repertoire is private*: exactly 1 clone was shared between any two
+  of the 6 donors — vaccine-responsive clones are person-specific, which is
+  why repertoire studies need per-donor null models (ours shuffle labels
+  within donor).
 
-The repertoire is almost entirely private (1 public clone across 6 donors).
 Reproduce: [`configs/flu_gse175522.json`](benchmarks/biological_validation/configs/flu_gse175522.json) →
 [`results/flu_gse175522/`](benchmarks/biological_validation/results/flu_gse175522/) +
 [`discovery results`](benchmarks/discovery/results/flu_gse175522/).
@@ -215,29 +293,48 @@ Reproduce: [`configs/flu_gse175522.json`](benchmarks/biological_validation/confi
 ### 3. Human tonsil B-cell maturation
 *King et al. 2021 — [E-MTAB-9005](https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-9005)/E-MTAB-9003 (6 donors, 22,478 B-lineage cells)*
 
-A tonsil atlas with 15 author states spanning the full maturation axis
-(naive → preGC → dark/light-zone GC → cycling → memory incl. FCRL4⁺ →
-pre-plasmablast → plasmablast). **A methodological finding in itself**:
-exact cellranger clonotypes here are almost all singletons (13 of 10,473
-have ≥3 cells) — ongoing SHM fragments every lineage, so any exact-clonotype
-analysis is dead on arrival in exactly the tissue where B-cell biology is
-most interesting.
+**The study.** A tonsil atlas covering the whole B-cell maturation axis —
+naive → germinal centre (dark/light zone) → memory (including the FCRL4⁺
+subset) → plasmablast — in 15 author-annotated states.
 
-Threadfin's sequence-similarity clone definition (`define_clones`, merging
-SHM variants within the same V/J into lineages) recovers **200 expanded
-lineages**, and a plasmablast community is recovered under both embedding
-bases (OR 5.8–26.9, FDR ≤ 1e-13). Limits reported honestly: with 200
-lineages the graph resolves coarse structure (boundaries unstable across
-bases; enrichment-count null not rejected), but clone-level signal is real
-(purity 0.662 vs 0.489 null; held-out 0.99 vs 0.66).
+**Why this dataset is a stress test.** In an active GC, every B-cell lineage
+keeps mutating, so its cells all carry slightly different receptors: exact
+clonotypes here are almost all singletons (13 of 10,473 have ≥3 cells). Any
+clone-level analysis built on exact clonotypes is dead on arrival in exactly
+the tissue where B-cell biology is richest. This is the same failure users
+hit in public issue trackers (dowser ends up with zero clones to build trees
+on; cell-level clone networks collapse under singletons).
+
+**What Threadfin did differently.** Its sequence-aware step
+(`define_clones`) merges hypermutation variants of the same V/J
+rearrangement back into lineages — recovering **200 expanded lineages**
+where exact clonotypes gave 13. This is why the BCR sequence layer lives
+*inside* Threadfin rather than upstream.
+
+**What we found.**
+
+* *A plasmablast lineage community appears under both embedding bases* (OR
+  5.8–26.9, FDR ≤ 1e-13) — so the finding does not depend on the
+  visualisation method.
+* *The signal is clone-level, not noise*: cells of one lineage are more
+  state-coherent than chance (purity 0.662 vs 0.489 null, p = 0.005), and
+  held-out lineage halves re-co-cluster at 0.99 vs 0.66 chance.
+* *Honest limits*: with only 200 lineages, the graph resolves coarse
+  structure — community boundaries shift between embeddings (ARI ≈ 0) and
+  the enrichment-count null is not rejected. We report this because a
+  200-node graph cannot support fine-grained claims; the robust claim is
+  the plasmablast community, not the boundaries.
 
 | lineage clone map (200 lineages, resolution 0.8) | plasmablast programme per community |
 |---|---|
 | ![tonsil clone map](benchmarks/discovery/results/tonsil_king2021/figures/clone_map_discovery.png) | ![tonsil discovery](benchmarks/discovery/results/tonsil_king2021/figures/discovery_tonsil.png) |
 
-*Left: the rescued lineage landscape — each point is an SHM-merged lineage,
-not an exact clonotype. Right: the plasmablast gene programme lights up
-exactly one lineage community (score 0.85 vs ≤ 0.10 elsewhere).*
+*Left — the rescued lineage landscape: each point is an SHM-merged lineage
+(not an exact clonotype), coloured by its community at higher resolution.
+Right — the antibody-secreting (plasmablast) gene programme lights up
+exactly one lineage community (score 0.85 vs ≤ 0.10 everywhere else):
+even in a dataset where the standard toolchain cannot define analysable
+clones at all, Threadfin recovers the maturation axis' terminal community.*
 
 Reproduce: [`configs/tonsil_king2021.json`](benchmarks/biological_validation/configs/tonsil_king2021.json) →
 [`results/tonsil_king2021/`](benchmarks/biological_validation/results/tonsil_king2021/) +
@@ -246,32 +343,51 @@ Reproduce: [`configs/tonsil_king2021.json`](benchmarks/biological_validation/con
 ### 4. Primary EBV infection in tonsil organoids
 *[Mitul et al. 2026, PNAS](https://www.pnas.org/doi/10.1073/pnas.2603586123) — GSE317492 (d0–d21, GFP± sorted, 205,630 cells)*
 
-A primary-EBV-infection time course with GFP reporter sorting at d14/d21
-marking experimentally infected cells — an external, non-transcriptomic
-label communities are scored against but never see. Largest expanded-clone
-set (4,564 of 89,757 clonotypes) and highest concordance with de-novo states
-(NMI 0.67; top community–state pair OR 5,547, FDR ≈ 0; held-out 0.985 vs
-0.101; purity 0.791 vs 0.314 null).
+**The study.** Tonsil organoids infected with EBV and followed for 21 days.
+At d14/d21 the authors sorted cells by a viral GFP reporter — an
+**experimental** label of "this cell is infected", measured by fluorescence,
+not by transcriptome. That is the strongest kind of validation label:
+it cannot leak into the clustering because it lives on a different physical
+channel. Largest dataset here: 4,564 expanded clones out of 89,757.
 
-**The dominant clone community is 39.7× enriched for experimentally
-infected (GFP+) cells** (10,812 cells, FDR ≈ 0) — clone communities recover
-infection status measured by viral reporter sorting. EBV is also the one
-dataset where the clone-level BCR graph is measurably informative
-(testcor_bcr = 0.31 over 1,389 inter-clone edges): acute infection expands
-recently activated, low-SHM families, so sequence and state transiently
-align — the regime where Benisse-style sequence-guided integration earns its
-keep. Honest caveat: the enrichment-count null is not rejected here (32
-observed vs 41.2 under size-matched random communities); claims rest on
-concordance, purity and held-out replication.
+**What we found.**
+
+* *Communities recover experimental infection.* The dominant clone community
+  is **39.7× enriched for GFP+ cells** (10,812 cells, FDR ≈ 0). Communities
+  built only from expression + clonality reproduce a label measured by
+  viral reporter sorting — because infected clones genuinely share a
+  transcriptional state, the community structure sees the infection without
+  being told about it.
+* *Highest clone–state concordance of all datasets* (NMI 0.67; held-out
+  0.985 vs 0.101 chance; purity 0.791 vs 0.314 null).
+* *The one dataset where sequence adds clone-level signal.* In the joint
+  GEX+BCR embedding, sequence-similar clones sit closer than expected
+  (testcor_bcr = 0.31 over 1,389 inter-clone sequence edges). The biology:
+  acute infection rapidly expands recently activated, low-mutation clonal
+  families, so sequence relatedness and cell state transiently align — the
+  regime where Benisse-style sequence-guided integration earns its keep.
+  (On the four other datasets the clone-level BCR graph is too sparse to
+  matter, and we say so.)
+* *The GFP− side is equally structured*: the community carrying the GC
+  programme (community 12, right panel below) contains *zero* GFP+ cells —
+  the uninfected bystander compartment keeps its own clonal identity.
+* *Honest caveat*: the enrichment-count null is not rejected here (32
+  observed vs 41.2 expected under size-matched random communities), so the
+  claims rest on concordance, purity and held-out replication rather than
+  enrichment counts. We also observe essentially no cross-timepoint clone
+  sharing (samples pool four donors each), so this dataset is not used for
+  fate tracking.
 
 | clone map (4,564 clones) | communities recover experimental infection |
 |---|---|
 | ![ebv clone map](benchmarks/biological_validation/results/ebv_organoid_gse317492/figures/clone_map.png) | ![ebv discovery](benchmarks/discovery/results/ebv_organoid_gse317492/figures/discovery_ebv.png) |
 
-*Left: the clonal landscape of the infection time course (13 communities).
-Right: per-community enrichment for GFP+ experimentally infected cells
-(red = FDR < 0.05) and gene programmes per community (community 12 = GC
-programme).*
+*Left — the clonal landscape of the infection time course (13 communities;
+each point a clone). Right — per-community enrichment for GFP+ infected
+cells (red = significant): community 0 towers over the rest (OR ≈ 40), and
+the GC-programme community (12) is completely GFP−. The clone map partitions
+the organoid into "infected" and "bystander" biology without ever seeing
+the reporter.*
 
 Reproduce: [`configs/ebv_organoid_gse317492.json`](benchmarks/biological_validation/configs/ebv_organoid_gse317492.json) →
 [`results/ebv_organoid_gse317492/`](benchmarks/biological_validation/results/ebv_organoid_gse317492/) +
@@ -280,30 +396,47 @@ Reproduce: [`configs/ebv_organoid_gse317492.json`](benchmarks/biological_validat
 ### 5. COVID-19 PBMC (the bundled quickstart dataset)
 *[Stephenson et al. 2021, Nat Med](https://www.nature.com/articles/s41591-021-01329-2) — 5,000 BCR+ B-lineage cells*
 
-The atlas that established the expanded, interferon-activated plasmablast
-compartment of severe COVID-19 (923 of 5,000 B-lineage cells here).
-Threadfin recovers that response without ever looking at receptor sequences:
-one clone community is **~198× enriched for plasmablasts** (193 cells, FDR
-6e-34) with the expected plasmablast/interferon programme — and the
-community **stratifies clinical severity** (enriched for severe disease,
-OR 3.5, FDR 0.003; the B-cell community is enriched for asymptomatic/mild
-donors, OR 32, FDR 7e-7). Reference matching against
-[CoV-AbDab](https://opig.stats.ox.ac.uk/webapps/covabdab/) flags
-SARS-CoV-2-binding clones and places them in the plasmablast community
-(small numbers on the 5k subset; reported as-is). Caveats we state openly:
-the subset is sparse (median clone size 1; 22 clones ≥3 cells, so
-`min_clone_size=2`), and with two communities the held-out test is
-uninformative — a reference and tutorial, not evidence of large-scale
-structure.
+**The study.** The atlas that established a hallmark of severe COVID-19:
+an expanded, interferon-activated plasmablast compartment in blood (923 of
+the 5,000 B-lineage cells in this subset). This is the dataset bundled with
+the quickstart example, so it is deliberately small.
 
-| clone map (75 clones) | permutation null vs observed purity | community × severity |
+**What we found.**
+
+* *The response is recovered sequence-free.* One clone community is ~198×
+  enriched for plasmablasts (193 cells, FDR 6e-34) and expresses the
+  plasmablast/interferon programme. Against the authors' finer annotation,
+  the same community captures the antibody-secreting states (Plasmablast,
+  Plasma_cell_IgG OR 4.9, Plasma_cell_IgA OR 4.2), while the other
+  community captures naive (OR 19) and exhausted B cells (OR 28).
+* *The community tracks disease severity.* The plasmablast community is
+  enriched for cells from severely ill donors (OR 3.5, FDR 0.003), and
+  depleted of asymptomatic donors (OR 0.03); the B-cell community shows the
+  mirror image (asymptomatic OR 32, FDR 7e-7). Because severity labels were
+  never used, the communities stratify the clinic on their own.
+* *Reference-database check.* Matching clone CDR3s against CoV-AbDab (all
+  published anti-coronavirus antibodies) flags 6 SARS-CoV-2-binding clones
+  (including near-identical matches to known neutralizing antibodies). Five
+  are singletons, so they carry no community label by design; the one match
+  large enough to be assigned sits exactly in the plasmablast community —
+  as it should, if that community is the acute anti-viral response. Small
+  numbers on a 5k subset; reported as-is.
+* *Honest limits*: the subset is sparse (median clone size 1; only 22
+  clones with ≥3 cells, so `min_clone_size=2`), and with just two
+  communities the held-out test is uninformative. Treat this dataset as the
+  tutorial, not as evidence of large-scale structure.
+
+| clone map (75 clones) | permutation null vs observed | community × severity |
 |---|---|---|
 | ![stephenson clone map](benchmarks/biological_validation/results/stephenson2021/figures/clone_map.png) | ![stephenson null](benchmarks/biological_validation/results/stephenson2021/figures/null_purity.png) | ![stephenson discovery](benchmarks/discovery/results/stephenson2021/figures/discovery_stephenson.png) |
 
-*Left: clone map with the plasmablast community (blue) separated from B-cell
-clones. Middle: observed clone state-purity (red line) vs the within-donor
-permutation null (grey). Right: community × severity odds ratios
-(* = FDR < 0.05) and gene programmes per community.*
+*Left — the clone map: the plasmablast community (dark blue) separates
+cleanly from the B-cell clones. Middle — why this is not a fluke: the red
+line is the observed clone state-purity; the grey histogram is what you get
+when clone labels are shuffled within each donor 200 times. They do not
+overlap. Right — community × clinical severity odds ratios (\* = FDR <
+0.05) and gene programmes per community: the plasmablast community (0) is
+the severe-disease compartment.*
 
 Reproduce: [`configs/stephenson2021.json`](benchmarks/biological_validation/configs/stephenson2021.json) →
 [`results/stephenson2021/`](benchmarks/biological_validation/results/stephenson2021/) +
