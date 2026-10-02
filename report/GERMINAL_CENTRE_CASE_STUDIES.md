@@ -158,6 +158,44 @@ consistent with the original report that high-affinity clones divide more but
 mutate less per division, though with these numbers it is a hint rather than a
 result.
 
+## Step 7. Is the clone's behaviour just a readout of its antibody?
+
+A sceptical reading of everything above is that the expression differences
+between clones simply reflect how good each clone's antibody is, in which case
+the receptor sequence alone would be enough and gene expression would add
+nothing. This can be tested.
+
+Somatic hypermutation scatters mutations across the V region; those that change
+an amino acid are visible to selection, those that are silent are not. A clone
+whose antibody has been selected for therefore carries more amino-acid-changing
+mutations than mutation alone would produce. How many to expect is not a
+universal constant - it depends on the clone's own germline sequence, because
+the genetic code makes some positions more likely to change a residue than
+others - so the expectation is computed per clone by mutating its own germline
+at random (`case_studies/sequence_selection.py`).
+
+Across all three experiments the antibodies do show the expected signature of
+selection: 78-79% of mutations change an amino acid, against 77.3-77.5%
+expected by chance. But this sequence-level selection score is **largely
+unrelated** to what the clone's cells were doing:
+
+| experiment | compared with | clones | correlation | p |
+|---|---|---|---|---|
+| RBD vaccine | fraction of cells most divided | 1,101 | +0.08 | 0.009 |
+| RBD vaccine | fraction of cells binding the bait | 820 | -0.03 | 0.32 |
+| RBD vaccine | fraction of cells sorted dark zone | 281 | +0.09 | 0.15 |
+| NP-OVA, divisions | fraction of cells most divided | 343 | +0.05 | 0.36 |
+| NP-OVA, sorted fates | fraction of cells that are plasma cells | 94 | -0.13 | 0.20 |
+
+Only the largest comparison reaches significance, and even there the
+correlation is weak. We read this cautiously, in two directions. It is a
+reminder that a weak correlation over a thousand clones is not a strong
+biological effect. And it suggests that the clone-level signal Threadfin
+measures in gene expression is **not simply a restatement of the antibody
+sequence**: if it were, the two measurements would agree far more than they do.
+That is the clearest argument we have for needing expression at the level of
+clones at all.
+
 ## What we are not claiming
 
 * These are associations in published observational data. Threadfin's output is

@@ -38,6 +38,8 @@ GROUPS = {
                                  (["Myc+ light zone"], ["light zone"])]},
     "mouse_np": {"column": "division_gate",
                  "comparisons": [(["mCherry-low"], ["mCherry-high"])]},
+    "mouse_rbd": {"column": "division_gate",
+                  "comparisons": [(["mCherry-low"], ["mCherry-high"])]},
 }
 
 
