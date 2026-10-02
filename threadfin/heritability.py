@@ -36,6 +36,7 @@ def gene_heritability(
     layer: str | None = "log_norm",
     genes=None,
     min_frac_expressed: float = 0.05,
+    exclude_receptor_genes: bool = True,
     n_perm: int = 100,
     chunk_size: int = 1000,
     random_state: int = 0,
@@ -55,6 +56,11 @@ def gene_heritability(
     genes
         Genes to test (default: genes expressed in at least
         ``min_frac_expressed`` of the analysed cells).
+    exclude_receptor_genes
+        Leave immunoglobulin/TCR genes out of the scan. They encode the
+        receptor itself, so they are clonal by definition; their median ICC is
+        still reported (``uns[...]['receptor_gene_icc']``) as a positive
+        control for the statistic.
     n_perm
         Permutations (shared across genes, so the cost is ``n_perm`` matrix
         products per chunk of genes).
@@ -105,6 +111,13 @@ def gene_heritability(
             missing = list(pd.Index(genes)[gene_idx < 0][:5])
             raise KeyError(f"genes not in var_names, e.g. {missing}")
 
+    from .pp import ig_gene_mask
+
+    receptor = ig_gene_mask(var_names[gene_idx], constant=True, tr_genes=True)
+    control_idx = gene_idx[receptor]
+    if exclude_receptor_genes:
+        gene_idx = gene_idx[~receptor]
+
     strata = codes(adata.obs[strata_key])[0][cells] if strata_key is not None else None
     cl = clone_codes[cells]
     rng = np.random.default_rng(random_state)
@@ -133,13 +146,21 @@ def gene_heritability(
         }, index=var_names[cols]))
     out = pd.concat(rows)
     out["fdr"] = bh_fdr(out["pvalue"].to_numpy())
+    control_icc = float("nan")
+    if exclude_receptor_genes and control_idx.size:
+        full = _dense_chunk(x, control_idx[:200])
+        mu = np.asarray(ctx_member @ full) / np.maximum(ctx_n, 1)[:, None]
+        control_icc = float(np.median(variance_components(full[cells] - mu[np.maximum(ctx[cells], 0)], cl)
+                                      .icc_per_feature))
     out = out.sort_values("icc", ascending=False)
     out.index.name = "gene"
     get_uns(adata)["gene_heritability"] = out
+    get_uns(adata)["gene_heritability_receptor_icc"] = control_icc
     log(
         f"gene heritability: {out.shape[0]} genes, {cells.size} cells in "
         f"{int((sizes >= 2).sum())} clones; {int((out['fdr'] < 0.05).sum())} genes clonally "
-        f"inherited at FDR < 0.05 (median ICC {out['icc'].median():.3f}).",
+        f"inherited at FDR < 0.05 (median ICC {out['icc'].median():.3f}; receptor-gene positive "
+        f"control {control_icc:.2f}).",
         verbose,
     )
     return out

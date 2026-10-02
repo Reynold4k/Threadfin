@@ -1,0 +1,109 @@
+recovery default 1
+recovery default 2
+recovery default 3
+recovery default 4
+recovery default 5
+recovery strong_batch 1
+recovery strong_batch 2
+recovery strong_batch 3
+recovery strong_batch 4
+recovery strong_batch 5
+recovery no_batch 1
+recovery no_batch 2
+recovery no_batch 3
+recovery no_batch 4
+recovery no_batch 5
+recovery bifurcation 1
+recovery bifurcation 2
+recovery bifurcation 3
+recovery bifurcation 4
+recovery bifurcation 5
+recovery small_clones 1
+recovery small_clones 2
+recovery small_clones 3
+recovery small_clones 4
+recovery small_clones 5
+recovery spread 1
+recovery spread 2
+recovery spread 3
+recovery spread 4
+recovery spread 5
+calibration 0
+calibration 1
+calibration 2
+calibration 3
+calibration 4
+calibration 5
+calibration 6
+calibration 7
+calibration 8
+calibration 9
+calibration 10
+calibration 11
+calibration 12
+calibration 13
+calibration 14
+calibration 15
+calibration 16
+calibration 17
+calibration 18
+calibration 19
+calibration 20
+calibration 21
+calibration 22
+calibration 23
+calibration 24
+calibration 25
+calibration 26
+calibration 27
+calibration 28
+calibration 29
+calibration 30
+calibration 31
+calibration 32
+calibration 33
+calibration 34
+calibration 35
+calibration 36
+calibration 37
+calibration 38
+calibration 39
+calibration 40
+calibration 41
+calibration 42
+calibration 43
+calibration 44
+calibration 45
+calibration 46
+calibration 47
+calibration 48
+calibration 49
+memory 0.0 1
+memory 0.0 2
+memory 0.0 3
+memory 0.0 4
+memory 0.0 5
+memory 0.25 1
+memory 0.25 2
+memory 0.25 3
+memory 0.25 4
+memory 0.25 5
+memory 0.5 1
+memory 0.5 2
+memory 0.5 3
+memory 0.5 4
+memory 0.5 5
+memory 0.75 1
+memory 0.75 2
+memory 0.75 3
+memory 0.75 4
+memory 0.75 5
+memory 1.0 1
+memory 1.0 2
+memory 1.0 3
+memory 1.0 4
+memory 1.0 5
+scaling 10000
+scaling 50000
+scaling 200000
+scaling 1000000

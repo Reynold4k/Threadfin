@@ -111,9 +111,10 @@ class ThreadfinResult:
     settings: dict = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
+        n_prog = self.programmes.shape[0]
+        n_cl = int(self.clones["clone_programme"].notna().sum()) if "clone_programme" in self.clones else 0
         return (f"ThreadfinResult(clonal ICC={self.coherence['icc']:.3f}, "
-                f"p={self.coherence['p_value']:.3g}, programmes={self.programmes.shape[0]}, "
-                f"clones={int(self.clones['clone_programme'].notna().sum())})")
+                f"p={self.coherence['p_value']:.3g}, programmes={n_prog}, clones in programmes={n_cl})")
 
     def summary(self) -> str:
         """Plain-language summary of the results."""
@@ -142,14 +143,15 @@ class ThreadfinResult:
                                 np.zeros(len(prof_vc["tau2"])))
         lines.append(f"   A clone's profile is reliable (>= 0.5) once it has >= {vc.min_cells_for(0.5)} cells.")
         prog = self.programmes
-        params = get_programmes(ad)["params"]
-        n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
-        lines += [
-            "",
-            "2. Which clones behave alike? (clonal programmes)",
-            f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} clones; {n_stable} are "
-            f"stable (bootstrap Jaccard >= {params['stability_threshold']}).",
-        ]
+        lines += ["", "2. Which clones behave alike? (clonal programmes)"]
+        if prog.empty:
+            lines.append("   Not enough reliably profiled clones to define programmes in this dataset.")
+        else:
+            params = get_programmes(ad)["params"]
+            n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
+            verb = "is" if n_stable == 1 else "are"
+            lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} reliable clones; "
+                         f"{n_stable} {verb} stable (bootstrap Jaccard >= {params['stability_threshold']}).")
         for name, row in prog.iterrows():
             desc = ""
             if self.composition is not None and name in self.composition.index:
@@ -318,13 +320,20 @@ def run(
                                  random_state=random_state, verbose=verbose)
 
     # Step 5 - group clones into programmes, with bootstrap stability
-    programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, verbose=verbose)
+    try:
+        programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, verbose=verbose)
+    except ValueError as e:  # too few expanded clones: keep the coherence result
+        log(f"no programmes: {e}", verbose)
+        programmes = pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
+                                           "stability"])
 
     # Step 6 - describe and test the programmes
-    composition = programme_composition(adata, state_key) if state_key else None
+    composition = None
     tests = {}
-    for col in ([test] if isinstance(test, str) else (test or [])):
-        tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
+    if not programmes.empty:
+        composition = programme_composition(adata, state_key) if state_key else None
+        for col in ([test] if isinstance(test, str) else (test or [])):
+            tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
     memory = None
     if time_key is not None:
         memory = clonal_memory(adata, time_key, random_state=random_state, verbose=verbose)

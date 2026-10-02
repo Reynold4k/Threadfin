@@ -223,19 +223,29 @@ def _legacy_clone_map(adata, color="clone_cluster", size_by="n_cells", size_rang
 
 
 def coherence(adata, *, ax=None, save=None):
-    """Observed clonal ICC against the within-stratum permutation null."""
+    """Observed clonal ICC next to the within-stratum permutation null.
+
+    Two bars: the share of variance explained by clone identity, and the same
+    statistic after shuffling clone labels within strata (whisker = 95% of
+    permutations). The excess of the first over the second is the clonal
+    signal beyond sampling.
+    """
     res = adata.uns.get("threadfin", {}).get("coherence")
     if res is None:
         raise ValueError("Run threadfin.tl.clonal_coherence() first.")
-    fig, ax = _ax(ax, figsize=(2.6, 2.0))
+    fig, ax = _ax(ax, figsize=(2.2, 2.2))
     null = np.asarray(res["null"]) * 100
-    ax.hist(null, bins=25, color=OTHER, edgecolor="white", linewidth=0.5)
     obs = res["icc"] * 100
-    ax.axvline(obs, color=PALETTE[0], linewidth=1.5)
-    ax.text(obs, ax.get_ylim()[1] * 0.95, f" observed {obs:.1f}%", color=INK, va="top",
-            ha="left" if obs < np.max(null) * 3 else "right")
-    ax.set_xlabel("variance explained by clone (%)")
-    ax.set_ylabel("permutations")
+    lo, hi = np.quantile(null, [0.025, 0.975])
+    ax.bar([0, 1], [obs, null.mean()], width=0.6, color=[PALETTE[0], OTHER])
+    ax.errorbar([1], [null.mean()], yerr=[[null.mean() - lo], [hi - null.mean()]], fmt="none",
+                ecolor=INK_2, elinewidth=0.8, capsize=2)
+    top = max(obs, hi)
+    for x, v in ((0, obs), (1, null.mean())):
+        ax.text(x, (hi if x == 1 else v) + 0.03 * top, f"{v:.1f}%", ha="center", va="bottom", color=INK)
+    ax.set_xticks([0, 1], ["observed", "shuffled\nwithin samples"])
+    ax.set_ylim(0, top * 1.25)
+    ax.set_ylabel("variance explained by clone (%)")
     ax.set_title(f"clonal coherence (p = {res['p_value']:.2g})", color=INK)
     return _finish(fig, save)
 
@@ -280,11 +290,12 @@ def stability(adata, *, ax=None, save=None):
     fig, ax = _ax(ax, figsize=(2.6, 2.0))
     x = np.arange(len(summ))
     ax.bar(x, summ["stability"], width=0.6, color=PALETTE[0])
-    for thr, lab in ((prog["params"]["stability_threshold"], "stable"), (0.6, "unstable below")):
+    for thr, lab in ((prog["params"]["stability_threshold"], "stable"), (0.6, "do not interpret below")):
         ax.axhline(thr, color=MUTED, linewidth=0.6)
-        ax.text(len(summ) - 0.5, thr, f" {lab}", color=INK_2, va="bottom", ha="right",
-                fontsize=mpl.rcParams["font.size"] - 1)
+        ax.text(1.02, thr, lab, transform=ax.get_yaxis_transform(), color=INK_2, va="center", ha="left",
+                fontsize=mpl.rcParams["font.size"] - 1, clip_on=False)
     ax.set_xticks(x, [str(i) for i in summ.index])
+    ax.set_xlim(-0.6, len(summ) - 0.4)
     ax.set_ylim(0, 1.05)
     ax.set_ylabel("bootstrap Jaccard")
     ax.set_title("programme stability", color=INK)
@@ -392,8 +403,8 @@ def overview(adata, *, state_key: str | None = None, save=None):
         ax_d.set_xticks(range(len(summ)), [str(i) for i in summ.index])
         ax_d.set_ylabel("clones")
         ax_d.set_title("programme sizes", color=INK)
-    for ax, lab in ((ax_b, "b"), (ax_c, "c"), (ax_d, "d")):
-        ax.text(-0.28, 1.12, lab, transform=ax.transAxes, fontweight="bold", color=INK,
+    for ax, lab, dx in ((ax_b, "b", -0.28), (ax_c, "c", -0.28), (ax_d, "d", -0.12)):
+        ax.text(dx, 1.12, lab, transform=ax.transAxes, fontweight="bold", color=INK,
                 fontsize=mpl.rcParams["font.size"] + 2)
     return _finish(fig, save)
 

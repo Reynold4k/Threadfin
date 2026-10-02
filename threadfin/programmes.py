@@ -130,6 +130,10 @@ def find_programmes(
     min_reliability: float = 0.5,
     n_boot: int = 30,
     stability_threshold: float = 0.75,
+    min_programme_size: int = 5,
+    min_clones: int = 30,
+    assign_remaining: bool = True,
+    min_posterior: float = 0.7,
     embed: bool = True,
     random_state: int = 0,
     key_added: str = "clone_programme",
@@ -154,6 +158,19 @@ def find_programmes(
     n_boot
         Bootstrap replicates for stability (0 disables stability, which is
         only allowed with a fixed ``resolution``).
+    min_programme_size
+        Groups with fewer clones are not reported as programmes (their clones
+        stay unassigned); resolutions that leave more than 10% of clones in
+        such groups are not selected.
+    min_clones
+        Minimum number of reliable clones; with fewer, programme detection is
+        refused (report the coherence test only).
+    assign_remaining
+        Programmes are *defined* on reliable ("core") clones only. With this
+        option every other profiled clone is then *assigned* to the most
+        likely programme by a Gaussian classifier whose noise term shrinks
+        with clone size (see ``_assign_remaining``); assignments with
+        posterior >= ``min_posterior`` go to ``<key_added>_assigned``.
     embed
         Also compute a 2-D UMAP of clone profiles (columns ``x``/``y``) for
         the clone map.
@@ -172,10 +189,11 @@ def find_programmes(
     table = prof["clone_table"]
     feats_all = prof["features"]
     eligible = table.index[table["reliability"] >= min_reliability]
-    if eligible.size < 10:
+    if eligible.size < min_clones:
         raise ValueError(
-            f"Only {eligible.size} clones reach reliability {min_reliability}; lower "
-            "min_reliability or use larger clones."
+            f"Only {eligible.size} clones reach reliability {min_reliability} (need {min_clones}); "
+            "too few expanded clones to define programmes. Report the coherence test only, or "
+            "lower min_reliability."
         )
     feats = feats_all.loc[eligible].to_numpy()
     graph = knn_graph(feats, n_neighbors)
@@ -209,16 +227,20 @@ def find_programmes(
         nb = max(len(boot_graphs), 1)
         jac_mean = jac_sum / nb if boot_graphs else np.full(k, np.nan)
         sizes = np.bincount(ref, minlength=k)
-        weighted = float(np.sum(jac_mean * sizes) / sizes.sum()) if boot_graphs else np.nan
+        big = sizes >= min_programme_size
+        frac_small = float(sizes[~big].sum() / sizes.sum())
+        weighted = (float(np.sum(jac_mean[big] * sizes[big]) / max(sizes[big].sum(), 1))
+                    if boot_graphs and big.any() else np.nan)
         partitions[res] = (ref, jac_mean, agree / nb if boot_graphs else np.full(ref.size, np.nan))
         scan_rows.append({
-            "resolution": res, "n_programmes": k, "stability_weighted": weighted,
-            "stability_min": float(np.min(jac_mean)) if boot_graphs else np.nan,
+            "resolution": res, "n_programmes": int(big.sum()), "n_groups": k,
+            "frac_clones_in_small_groups": frac_small, "stability_weighted": weighted,
+            "stability_min": float(np.min(jac_mean[big])) if boot_graphs and big.any() else np.nan,
         })
     scan = pd.DataFrame(scan_rows)
 
     if auto:
-        multi = scan[scan["n_programmes"] >= 2]
+        multi = scan[(scan["n_programmes"] >= 2) & (scan["frac_clones_in_small_groups"] <= 0.10)]
         stable = multi[multi["stability_weighted"] >= stability_threshold]
         if not stable.empty:
             best = stable.sort_values(["n_programmes", "stability_weighted"], ascending=False).iloc[0]
@@ -237,6 +259,13 @@ def find_programmes(
         chosen = res_grid[0]
 
     ref, jac_mean, confidence = partitions[chosen]
+    # groups below the minimum size are not programmes: their clones stay unassigned
+    sizes = np.bincount(ref)
+    keep_mask = sizes[ref] >= min_programme_size
+    eligible = eligible[keep_mask]
+    feats = feats[keep_mask]
+    confidence = confidence[keep_mask]
+    ref = ref[keep_mask]
     labels = stable_categorical(ref, prefix="P")
     raw_to_label = dict(zip(ref, labels))
 
@@ -246,6 +275,15 @@ def find_programmes(
     table.loc[eligible, key_added] = np.asarray(labels)
     table["confidence"] = np.nan
     table.loc[eligible, "confidence"] = confidence
+    table["core"] = table.index.isin(eligible)
+    if assign_remaining:
+        model = model if n_boot > 0 else model_from_adata(adata)
+        prof["clone_table"] = table
+        best_lab, post = _assign_remaining(adata, model, eligible, np.asarray(labels, dtype=str))
+        assigned = pd.Series(np.where(post >= min_posterior, best_lab, None), index=table.index, dtype=object)
+        assigned.loc[eligible] = np.asarray(labels, dtype=str)  # core clones keep their own programme
+        table[f"{key_added}_assigned"] = pd.Categorical(assigned, categories=labels.categories)
+        table["assignment_posterior"] = post
     if embed and eligible.size >= 15:
         import umap
 
@@ -257,11 +295,13 @@ def find_programmes(
 
     # map to cells
     clone_key = prof["params"]["clone_key"]
-    mapping = table[key_added].dropna().astype(str)
-    adata.obs[key_added] = pd.Categorical(
-        adata.obs[clone_key].astype("object").map(lambda c: mapping.get(str(c)) if pd.notna(c) else None),
-        categories=labels.categories,
-    )
+    cell_clone = adata.obs[clone_key].astype("object")
+    for col in [key_added] + ([f"{key_added}_assigned"] if assign_remaining else []):
+        mapping = table[col].dropna().astype(str)
+        adata.obs[col] = pd.Categorical(
+            cell_clone.map(lambda c, m=mapping: m.get(str(c)) if pd.notna(c) else None),
+            categories=labels.categories,
+        )
 
     stab = {raw_to_label[r]: float(jac_mean[r]) for r in np.unique(ref)}
     elig_tab = table.loc[eligible]
@@ -272,6 +312,9 @@ def find_programmes(
     )
     summary.index = pd.Index(summary.index.astype(str), name="programme")
     summary["stability"] = [stab[p] for p in summary.index]
+    if assign_remaining:
+        n_assigned = table[f"{key_added}_assigned"].astype(str).value_counts()
+        summary["n_clones_with_assigned"] = [int(n_assigned.get(p, 0)) for p in summary.index]
     get_uns(adata)[PROGRAMME_KEY] = {
         "summary": summary,
         "resolution_scan": scan,
@@ -279,16 +322,76 @@ def find_programmes(
             "resolution": chosen, "auto": auto, "n_neighbors": int(n_neighbors),
             "min_reliability": float(min_reliability), "n_boot": int(n_boot),
             "stability_threshold": float(stability_threshold), "key_added": key_added,
+            "min_programme_size": int(min_programme_size),
+            "assign_remaining": bool(assign_remaining), "min_posterior": float(min_posterior),
             "random_state": int(random_state),
         },
     }
     n_stable = int((summary["stability"] >= stability_threshold).sum()) if n_boot else 0
+    extra = (f"; {int(table[f'{key_added}_assigned'].notna().sum())} of {len(table)} profiled clones "
+             f"assigned with posterior >= {min_posterior}" if assign_remaining else "")
     log(
-        f"programmes: {summary.shape[0]} programmes over {eligible.size} clones "
-        f"(resolution {chosen}); {n_stable} with bootstrap stability >= {stability_threshold}.",
+        f"programmes: {summary.shape[0]} programmes over {eligible.size} core clones "
+        f"(resolution {chosen}); {n_stable} with bootstrap stability >= {stability_threshold}{extra}.",
         verbose,
     )
     return summary
+
+
+# --------------------------------------------------------------------------- posterior assignment
+
+
+def _assign_remaining(adata, model, core_ids, core_labels):
+    """Assign every profiled clone to a programme with a Gaussian classifier.
+
+    Each programme ``P`` is a Gaussian over (unshrunk) clone mean profiles
+    with centre ``mu_P`` and between-clone variance ``t_P`` estimated from its
+    core clones (sampling noise removed). A clone with ``n`` cells is observed
+    with extra noise ``sigma2 / n``, so small clones get flatter posteriors:
+
+        p(P | clone) ~ pi_P * N(mean_clone; mu_P, t_P + sigma2 / n)
+
+    Returns the most likely programme and its posterior for every row of the
+    clone table.
+    """
+    import scipy.sparse as sp
+    from scipy.special import logsumexp
+
+    prof = get_profiles(adata)
+    table = prof["clone_table"]
+    code_of = {str(c): i for i, c in enumerate(model.clone_index.astype(str))}
+    rows = np.array([code_of[c] for c in table.index], dtype=np.int64)
+    g = model.clone_codes
+    ok = np.flatnonzero(g >= 0)
+    member = sp.csr_matrix((np.ones(ok.size), (g[ok], ok)), shape=(len(model.clone_index), g.size))
+    n = np.asarray(member.sum(axis=1)).ravel()
+    means = np.asarray(member @ model.residuals) / np.maximum(n, 1)[:, None] - model.vc.grand_mean
+    means, n = means[rows], n[rows]
+    red = prof.get("reduction")
+    if red is None:
+        x, noise = means, model.vc.sigma2
+    else:
+        comps = np.asarray(red["components"])
+        x = (means - np.asarray(red["raw_mean"])) @ comps.T
+        noise = (comps**2) @ model.vc.sigma2
+
+    core_pos = table.index.get_indexer(core_ids)
+    names = pd.Index(pd.unique(np.asarray(core_labels, dtype=str)))
+    lab = names.get_indexer(np.asarray(core_labels, dtype=str))
+    floor = 1e-6 * float(noise.mean()) + 1e-12
+    mu, t, prior = [], [], []
+    for k in range(len(names)):
+        members = core_pos[lab == k]
+        xm = x[members]
+        mu.append(xm.mean(axis=0))
+        t.append(np.maximum(xm.var(axis=0) - (noise[None, :] / n[members][:, None]).mean(axis=0), floor))
+        prior.append(members.size)
+    mu, t = np.vstack(mu), np.vstack(t)
+    prior = np.log(np.asarray(prior, dtype=float) / np.sum(prior))
+    var = t[None, :, :] + noise[None, None, :] / np.maximum(n, 1)[:, None, None]
+    ll = -0.5 * (((x[:, None, :] - mu[None, :, :]) ** 2) / var + np.log(var)).sum(axis=2) + prior[None, :]
+    post = np.exp(ll - logsumexp(ll, axis=1, keepdims=True))
+    return np.asarray(names)[post.argmax(axis=1)], post.max(axis=1)
 
 
 def get_programmes(adata) -> dict:
@@ -305,3 +408,86 @@ def programme_composition(adata, state_key: str, *, key: str | None = None) -> p
     df = adata.obs[[key, state_key]].dropna()
     tab = pd.crosstab(df[key], df[state_key])
     return tab.div(tab.sum(axis=1), axis=0)
+
+
+def programme_markers(
+    adata,
+    *,
+    programme_key: str = "clone_programme",
+    layer: str | None = "log_norm",
+    context_key: str | None = "auto",
+    min_frac_expressed: float = 0.05,
+    n_top: int = 25,
+    verbose: bool = True,
+) -> pd.DataFrame:
+    """Genes that distinguish programmes, tested with clones as replicates.
+
+    Every clone is summarised by the mean context-centred log expression of
+    its cells; for each programme, clones inside are compared with clones in
+    other programmes by a Mann-Whitney test per gene (BH FDR). Testing across
+    clones avoids the pseudoreplication of cell-level marker tests, where one
+    expanded clone contributes hundreds of correlated cells.
+
+    Returns
+    -------
+    Tidy DataFrame ``[programme, gene, mean_diff, auc, pvalue, fdr, rank]``
+    with the top ``n_top`` up-regulated genes per programme.
+    """
+    import scipy.sparse as sp
+    from scipy.stats import rankdata
+
+    from ._utils import bh_fdr, codes
+
+    prof = get_profiles(adata)
+    clone_key = prof["params"]["clone_key"]
+    if context_key == "auto":
+        context_key = prof["params"].get("context_key")
+    x = adata.layers[layer] if layer is not None else adata.X
+    x = sp.csr_matrix(x) if not sp.issparse(x) else x.tocsr()
+    lab = adata.obs[programme_key]
+    cells = np.flatnonzero(lab.notna().to_numpy() & adata.obs[clone_key].notna().to_numpy())
+    clone_codes, clone_index = codes(adata.obs[clone_key].iloc[cells].astype(str))
+    n_clones = len(clone_index)
+    member = sp.csr_matrix((np.ones(cells.size), (clone_codes, np.arange(cells.size))), shape=(n_clones, cells.size))
+    member = sp.diags(1.0 / np.asarray(member.sum(axis=1)).ravel()) @ member
+    expressed = np.asarray((x[cells] > 0).mean(axis=0)).ravel() >= min_frac_expressed
+    genes = np.flatnonzero(expressed)
+    clone_means = np.asarray((member @ x[cells][:, genes]).toarray())
+    if context_key is not None:
+        # subtract, for every clone, the mean expression of the contexts its cells came from
+        ctx, ctx_index = codes(adata.obs[context_key])
+        ok = np.flatnonzero(ctx >= 0)
+        cmember = sp.csr_matrix((np.ones(ok.size), (ctx[ok], ok)), shape=(len(ctx_index), adata.n_obs))
+        cmember = sp.diags(1.0 / np.maximum(np.asarray(cmember.sum(axis=1)).ravel(), 1)) @ cmember
+        ctx_means = np.asarray((cmember @ x[:, genes]).toarray())
+        cell_ctx = sp.csr_matrix((np.ones(cells.size), (np.arange(cells.size), np.maximum(ctx[cells], 0))),
+                                 shape=(cells.size, len(ctx_index)))
+        clone_means -= np.asarray((member @ cell_ctx).toarray()) @ ctx_means
+    clone_prog = (pd.Series(lab.iloc[cells].astype(str).to_numpy()).groupby(clone_codes).first()).to_numpy()
+
+    ranks = np.apply_along_axis(rankdata, 0, clone_means)
+    rows = []
+    for prog in sorted(pd.unique(clone_prog), key=lambda s: (len(s), s)):
+        inside = clone_prog == prog
+        n1, n2 = int(inside.sum()), int((~inside).sum())
+        if n1 < 3 or n2 < 3:
+            continue
+        u = ranks[inside].sum(axis=0) - n1 * (n1 + 1) / 2
+        auc = u / (n1 * n2)
+        # normal approximation to the Mann-Whitney U (ties ignored)
+        z = (u - n1 * n2 / 2) / np.sqrt(n1 * n2 * (n1 + n2 + 1) / 12)
+        from scipy.stats import norm
+
+        pvals = 2 * norm.sf(np.abs(z))
+        diff = clone_means[inside].mean(axis=0) - clone_means[~inside].mean(axis=0)
+        tab = pd.DataFrame({"programme": prog, "gene": adata.var_names[genes], "mean_diff": diff,
+                            "auc": auc, "pvalue": pvals})
+        tab["fdr"] = bh_fdr(tab["pvalue"].to_numpy())
+        tab = tab[tab["mean_diff"] > 0].sort_values(["fdr", "mean_diff"], ascending=[True, False]).head(n_top)
+        tab["rank"] = np.arange(1, len(tab) + 1)
+        rows.append(tab)
+    out = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(
+        columns=["programme", "gene", "mean_diff", "auc", "pvalue", "fdr", "rank"])
+    get_uns(adata)["programme_markers"] = out
+    log(f"programme markers: {n_clones} clones as replicates, {genes.size} genes tested.", verbose)
+    return out

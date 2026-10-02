@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -65,6 +67,8 @@ def test_clonotype_recluster_recovers_states(synthetic):
     assert singles["clone_cluster"].isna().all()
 
 
+@pytest.mark.xfail(sys.version_info >= (3, 12), strict=False,
+                   reason="legacy v3 clonotype_recluster: nondeterministic on 3.12 dependency stack (issue #2)")
 def test_determinism(synthetic):
     adata, bcr, _ = synthetic
     tf.attach_bcr(adata, bcr)

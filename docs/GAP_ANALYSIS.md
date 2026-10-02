@@ -1,151 +1,119 @@
-# Gap analysis: what is missing in single-cell BCR repertoire analysis
+# Where Threadfin fits: the gap it closes
 
-*This document is the evidence base for Threadfin's design. Every claim is
-backed by a primary quote (paper or GitHub issue, with link). Written
-2026-09-23; issue states may have changed since.*
+*Updated 2 October 2026 for v4. Every tool below was checked against its
+publication (and, where relevant, its code). Benchmark numbers refer to
+`benchmarks/simulation` and `benchmarks/public_datasets` in this repository.*
 
 ---
 
 ## The question
 
-Paired scRNA-seq + scBCR-seq measures, for each B cell, both **what receptor
-it carries** (the V(D)J sequence) and **what it is doing** (the
-transcriptome). The biological questions that matter for clonal research —
-*which clones respond to the antigen, which clones become plasma cells or
-memory, how clones move between tissues over time* — live at the
-intersection of the two modalities. We asked: **which existing tool can
-answer "what are the clones doing, and which clones are doing the same
-thing?" at clonal resolution, with statistical support?**
+A paired single-cell RNA-seq + BCR-seq experiment measures, for every B cell,
+**which clone it belongs to** (its receptor sequence) and **what it is doing**
+(its transcriptome). Immunologists want to know, at the level of clones:
 
-## Gap 1 — No tool infers transcriptional-state communities of clones
+1. Does a clone's identity shape what its cells do, beyond where and when the
+   cells were sampled?
+2. Which genetically unrelated clones behave alike (for example, clones biased
+   towards plasma-cell output versus clones retained in the germinal centre)?
+3. Are such behaviours linked to the antigen specificity, mutation load,
+   isotype or selection history of the clones?
+4. Do clones keep their behaviour over time or across tissues?
 
-| Tool | What it actually does with clones | Why it is not clone-level state inference |
+Answering these needs (i) B-cell clones defined from hypermutated sequences,
+(ii) clone-level estimates that are honest about how few cells most clones
+have, and (iii) statistics that count clones, not cells, and respect the
+sampling design. No existing tool provides this combination.
+
+## The landscape (2018-2026)
+
+### 1. Immune-repertoire toolkits: sequence first, expression as overlay
+
+| Tool | What it does with clones and expression | What it does not do |
 |---|---|---|
-| **Benisse** ([Zhang et al. 2022, *Nat Mach Intell*](https://www.nature.com/articles/s42256-022-00492-6)) | Embeds BCR CDR3H (Atchley factors, torch encoder) and learns a sparse BCR graph guided by GEX via ADMM | The graph is **constrained by sequence**: *"two BCR clones share the same V/J genes and are connected in the crude graph"* (Supplementary Note). It cannot group sequence-unrelated clones that converge on the same state — precisely the biology of convergent responses. No fate tracking, no clonal diffusion ordering. |
-| **CoNGA** ([Schattgen et al. 2022, *Nat Biotechnol*](https://pmc.ncbi.nlm.nih.gov/articles/PMC8832949/)) | Tests per-clonotype overlap between GEX and TCR neighbour graphs | A **correlation test**, not a grouping: it scores whether a clonotype's sequence neighbours are also expression neighbours. TCR-only (tcrdist does not model SHM/CSR); dandelion's authors measured that *"Both CoNGA and mvTCR failed to preserve the intercellular relationships"* on their data. |
-| **TESSA** ([Zhang et al. 2021, *Nat Methods*](https://pmc.ncbi.nlm.nih.gov/articles/PMC7799492/)) | TCR embedding network reweighted by GEX | Networks are defined by sequence similarity to estimate **antigen specificity**, not transcriptional state. CDR3β only; T cells only; repo unmaintained since 2021-10. |
-| **mvTCR** ([Drost et al. 2024, *Nat Commun*](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220149/)) | Cell-level multi-view VAE embedding of GEX+TCR | Embedding is **cell-level** (*"Even within cells of a clonotype, mvTCR expressed the variability of the transcriptome"*) — no clone-as-unit concept. BCR explicitly deferred: *"an in-depth benchmark must be conducted upon the availability of large-scale B cell datasets with specificity annotation."* Requires GPU. |
-| **dandelion** ([Suo et al. 2024, *Nat Biotechnol*](https://pmc.ncbi.nlm.nih.gov/articles/PMC10791579/)) | V(D)J feature space = V/J **usage frequencies** over cell pseudobulks; Palantir trajectory in that space | Pseudobulk-of-cells, not clone-level; no CDR3 similarity in the embedding; trajectory is developmental, not clonal fate. |
-| **scirpy** ([Sturm et al. 2020](https://doi.org/10.1093/bioinformatics/btaa611)) | Clonotype definition, repertoire stats, `clonotype_modularity` | `clonotype_modularity` measures whether cells of one clone cluster in GEX — a single scalar per comparison, no grouping of clones into communities, no fate. |
-| **scRepertoire** ([Borcherding et al. 2021](https://f1000research.com/articles/10-230/v1)) | Clonotype counting/overlap overlaid on Seurat clusters | Descriptive overlays; authors' stated scope is *"processing …, descriptive statistics, clonal comparisons, and repertoire diversity"*. |
-| **Immcantation/dowser** ([Gupta et al. 2015](https://doi.org/10.1093/bioinformatics/btv359)) | Clonal families and lineage trees from sequences | Trees encode receptor ancestry. The 2024 review notes the suite *"do not explicitly interact with the scRNA-seq analysis tool kits"* ([Irac et al., *Nat Methods* 2024](https://doi.org/10.1038/s41592-024-02243-4)). |
+| **scirpy** (Sturm et al. 2020, *Bioinformatics*; scverse) | clonotype definition, repertoire statistics; `clonotype_modularity` scores whether a clonotype's cells are connected in the expression kNN graph | no grouping of clones by state; per-clonotype scores without a null that respects samples; no time/tissue memory |
+| **Dandelion** (Suo et al. 2024, *Nat Biotechnol*) | improved V(D)J annotation; V(D)J-usage feature space on pseudobulks of cells; trajectories | pseudobulks are groups of cells, not clones; no clone-level state inference |
+| **scRepertoire 2** (Yang et al. 2025, *PLoS Comput Biol*) | clonotype tracking, diversity, STARTRAC indices on Seurat objects | descriptive; indices without clone-level nulls |
+| **Platypus** (Yermanos et al. 2021, *NAR Genom Bioinform*); **crocketa** (2026, *BMC Genomics*) | end-to-end workflows joining repertoire and expression | workflows, not statistical models of clone state |
+| **Immcantation** (Change-O/SCOPer; **dowser**, Hoehn et al. 2022, *PLoS Comput Biol*) | clonal families and lineage trees; phylogenetic tests of migration, differentiation and isotype switching *within* clones | requires trees (expanded clones); models sequence ancestry, not between-clone state structure |
+| **HILARy** (Spisak et al. 2024, *eLife*); **TRIBAL** (Weber et al. 2024, *Cell Genomics*) | high-precision clonal families; isotype-aware lineage trees | clone definition / phylogeny only |
+| **AMULETY** (Wang et al. 2026, *Immunoinformatics*) | language-model embeddings of receptor sequences | sequence representation only |
 
-## Gap 2 — No tool ships statistical validation of clone–state coupling
+### 2. Receptor-transcriptome integration: does a *similar receptor* mean a similar state?
 
-The closest statistical devices in the literature answer *different*
-questions: CoNGA's score tests sequence-neighbourhood/expression-neighbourhood
-overlap per clonotype; TESSA randomized cluster labels 10,000× to validate
-that its networks capture antigen specificity. **No published tool tests
-whether clonal identity carries transcriptional information at all** (a
-clone-label permutation null), **whether clone groupings replicate on
-held-out cells**, or **whether they survive a change of embedding basis**.
-Threadfin runs all three on every dataset, and reports failures as-is.
+| Tool | Unit and estimand | Relation to Threadfin |
+|---|---|---|
+| **CoNGA** (Schattgen et al. 2022, *Nat Biotechnol*) | per clonotype: overlap of receptor-similarity and expression neighbourhoods (T cells; experimental B-cell mode) | asks whether sequence-similar clonotypes share expression; Threadfin asks whether the *same* clone shares a state and which *unrelated* clones behave alike |
+| **TESSA** (Zhang et al. 2021, *Nat Methods*), **Benisse** (Zhang et al. 2022, *Nat Mach Intell*) | receptor embeddings regularised by expression (TCR / BCR) | sequence-similarity graphs; no clone-level state statistics |
+| **mvTCR** (Drost et al. 2024, *Nat Commun*), **CoMBCR** (Zou et al. 2026, *Bioinformatics*) | cell-level joint embeddings of receptor and expression (TCR / BCR) | cell-level representations; no clone-level inference, nulls or memory |
+| **tcrpheno / TiRP / TCR-mem** (Lagattuta et al. 2022, *Nat Immunol*; 2025, *Cell Rep*) | receptor sequence features that predict T-cell fate | sequence-to-fate prediction, complementary |
+| **STARTRAC** (Zhang et al. 2018, *Nature*); **TCRi** (Ceglia et al. 2022, bioRxiv) | clone-sharing indices between clusters/tissues; information-theoretic clonotype-phenotype metrics | descriptive indices over predefined cell clusters |
 
-## Gap 3 — Clone fate tracking across time and tissue is chronically unmet
+### 3. Clone-level analysis in lineage tracing: closest in spirit, built for synthetic barcodes
 
-Public evidence that users need this and cannot get it:
+| Tool | What it does | Why it does not transfer to B-cell repertoires |
+|---|---|---|
+| **clone2vec** (Isaev, Erickson, Adameyko & Kharchenko 2026, bioRxiv) | learns clone embeddings with a skip-gram model over the cell kNN graph; applied to lineage barcodes and to TCR clones in tumours | exact barcodes (no hypermutation-aware clone definition); no model of sampling context; no per-clone reliability; no clone-level tests or nulls; no memory index. In our simulations clones nested in shifted samples reduce it to ARI 0.10 (default scenario) |
+| **ClonoCluster** (Richman et al. 2023, *Cell Genomics*) | hybrid *cell* clusters weighting clone identity | clusters cells, not clones |
+| **CoSpar** (Wang et al. 2022, *Nat Biotechnol*), **moslin** (Lange et al. 2024, *Genome Biol*), **CellRank 2** (Weiler et al. 2024, *Nat Methods*), **DestinyNet** (2026, *Patterns*) | fate maps and transition probabilities from barcoded time courses | designed for prospective barcoding with planned sampling; not for donor-private, mostly singleton, hypermutated repertoires |
 
-* scirpy issue [#36](https://github.com/scverse/scirpy/issues/36) — the
-  maintainers proposed STARTRAC-style migration/expansion/transition indices
-  in **April 2020; still open**.
-* scRepertoire issue [#585](https://github.com/BorchLab/scRepertoire/issues/585)
-  (2026-08) — users get a STARTRAC table but *cannot interpret it*;
-  [#428](https://github.com/BorchLab/scRepertoire/issues/428),
-  [#399](https://github.com/BorchLab/scRepertoire/issues/399) — longitudinal
-  clone tracking requested repeatedly.
-* scRepertoire [#578](https://github.com/BorchLab/scRepertoire/issues/578)
-  (2026-06) — users need dowser-style lineage information attached to
-  expression analysis.
-* dandelion's trajectory workflow requires users to supply their own scVI
-  embedding ([discussion #303](https://github.com/tuonglab/dandelion/discussions/303))
-  and operates on pseudobulks, not clones.
+### 4. The biology says the question is real
 
-## Gap 4 — Real repertoires break sequence-first tools
+Clonal state inheritance is now well documented: B-cell clones have restricted
+fate sets and transcriptional memory (Swift, Horns & Quake 2023, *Life Sci
+Alliance*); non-genetic B-cell states stay stable within germinal-centre clonal
+bursts (Xiang et al. 2026, *Cell Syst*); germinal centres output plasma cells
+across affinities (Sprumont et al. 2023, *Cell*); high-affinity clones divide
+more but mutate less per division (Merkenschlager et al. 2025, *Nature*); and
+receptor sequence biases T-cell fate (Mantena & Raychaudhuri 2026, *Immunol
+Rev*). What is missing is a calibrated, clone-level method to measure these
+effects in ordinary paired single-cell data.
 
-The dominant feature of real data is singletons (median clone size = 1 in
-all five of our validation datasets; *"the majority of clonotypes were
-singletons and only 9–18% of patients' clonotypes were clonally expanded"* —
-[Sturm et al. 2020](https://pmc.ncbi.nlm.nih.gov/articles/PMC7751015/)).
-Consequences visible in public issue trackers:
+## The gap, stated precisely
 
-* dowser [#38](https://github.com/immcantation/dowser/issues/38) — after
-  clone filtering, *zero* clones remain for tree building.
-* dandelion [#235](https://github.com/tuonglab/dandelion/issues/235) —
-  kernel dies building a cell-level clone network past ~20k cells;
-  [#517](https://github.com/tuonglab/dandelion/issues/517) — cells with >1
-  VDJ chain silently dropped from clone calling.
-* CoNGA [#49](https://github.com/phbradley/conga/issues/49) — 7,744 of
-  7,846 clones are singletons; downstream plots produce nothing.
-* scirpy [#201](https://github.com/scverse/scirpy/issues/201) —
-  `clonotype_network` errors out on a repertoire of ~12k near-all-singleton
-  clones.
+| Requirement | Repertoire toolkits | Receptor-expression integrators | Lineage-tracing clone tools | **Threadfin v4** |
+|---|---|---|---|---|
+| B-cell clones from hypermutated sequences, within donors | yes (Immcantation, Dandelion, scirpy) | partly | no (exact barcodes) | **yes** (`define_clones`) |
+| Clone as the unit of inference | no | no (cells or clonotype pairs) | yes | **yes** |
+| Sampling context removed from clone profiles | no | no | no | **yes** (context-centred random-effects model) |
+| Per-clone reliability / uncertainty | no | no | no | **yes** (BLUP shrinkage, Spearman-Brown reliability, posterior assignment) |
+| Distributional clone profiles (mixed vs intermediate clones) | no | no | partly (clone2vec, implicitly) | **yes** (kernel mean embeddings) |
+| Calibrated test that clone identity explains state | no (cell-level or global nulls) | no | no | **yes** (within-sample permutation of the clonal ICC) |
+| Clone-level association tests (specificity, isotype, SHM, gates) | no (cell-level counts) | no | partly | **yes** (stratified permutation, Mantel-Haenszel) |
+| Non-circular clonal memory across time/tissue | no | no | trajectory-based | **yes** (noise-corrected memory index) |
+| Which genes are clonally inherited | no | no | partly | **yes** (`gene_heritability`) |
+| Ground-truth simulator with B-cell-like sampling | no | no | partly | **yes** (`threadfin.sim`) |
 
-Cell-level sequence networks are quadratic in the wrong variable. Treating
-the **clone as the node** (a few hundred to a few thousand expanded clones)
-is the scalable design — and, as our tonsil case study shows,
-sequence-*similarity* clone definition is often required before any
-clone-level analysis is possible at all.
+## Why the statistics matter: what goes wrong without them
 
-## Gap 5 — The integration tools that exist are hard to run
+These failures are not hypothetical; the v3 release of this package itself
+made them, and the v4 benchmarks quantify them:
 
-Benisse: PyTorch encoder + R core, pinned `torch==2.2.2`, 9 manual
-hyperparameters, pretrained model undocumented
-([#14](https://github.com/wooyongc/Benisse/issues/14)); installation issues
-[#5](https://github.com/wooyongc/Benisse/issues/5),
-[#6](https://github.com/wooyongc/Benisse/issues/6),
-[#12](https://github.com/wooyongc/Benisse/issues/12). TESSA: pinned Python
-3.6.4/Keras 2.2.4/R 3.5.1, unmaintained since 2021. mvTCR: requires GPU;
-roughly a third of its issues are install/dependency failures
-([#10](https://github.com/SchubertLab/mvTCR/issues/10),
-[#21](https://github.com/SchubertLab/mvTCR/issues/21)). CoNGA: C++ TCRdist +
-ImageMagick/Inkscape. **A pure-Python, scanpy-native, CPU-only package is
-itself a contribution.**
+* **Global or donor-level nulls.** With no clonal signal at all but clones
+  confined to samples that differ technically, shuffling clone labels across
+  samples (or only within donor) reports "significant clonality" in every
+  simulation; shuffling within samples is calibrated.
+* **Cell-level tests.** Testing whether a programme is enriched for a label by
+  counting cells calls a coin flipped per clone "significant" in essentially
+  every programme, because one expanded clone contributes hundreds of
+  correlated cells.
+* **Immunoglobulin genes in the embedding.** Receptor transcripts are
+  identical within a clone; including them inflated the clonal ICC by about a
+  quarter on real data and makes isotype a circular validation label.
+* **Clone-level labels compared over time.** A programme label computed from
+  all of a clone's cells is the same at every time point, so its "transition
+  matrix" is diagonal whatever happens biologically; a snapshot-based,
+  noise-corrected memory index recovers the true switching rate.
 
-## Why the field agrees this gap matters
+## Threadfin's contribution in one paragraph
 
-* *"All current analytical approaches for BCRs solely investigate the BCR
-  sequences and ignore their correlations with the transcriptomics of the
-  B cells, yielding conclusions of unknown functional relevance"* — Benisse
-  abstract, 2022.
-* *"a fundamental limitation of these approaches is that all conclusions are
-  drawn based on solely interrogating the TCR sequences"* — TESSA, 2021.
-* *"T cells sharing the same TCR … distribute non-randomly across gene
-  expression-based clusters … a layer of T cell transcriptional diversity is
-  clonally inherited"* — mvTCR, 2024 (the clonal-state layer is real
-  biology).
-* *"systematic approaches that can identify previously unknown populations
-  … by correlating gene expression and TCR sequence have not been reported"*
-  — CoNGA, 2022.
-* Irac et al., *Nat Methods* 2024 review: integration methods exist but
-  *"none of the current scTCR/BCR-seq analysis tool kits … provide native
-  implementations or direct linkage to these methods"* — the toolchain
-  fracture is explicit.
-* LIBRA-seq (Setliff et al., *Cell* 2019): *"BCR sequencing … provides
-  limited information about the antigen specificity of the sequenced BCRs"* —
-  the specificity-annotation gap that reference-database matching addresses.
-
-## Threadfin's position
-
-Threadfin is built to close exactly these gaps:
-
-1. **Clone communities in transcriptional state space** (Gap 1) —
-   `clonotype_recluster`, with the BCR layer used where it helps
-   (`define_clones` upstream, isotype/SHM annotation downstream, coupled
-   graph embedding where sequence edges exist).
-2. **Validation as part of the method** (Gap 2) — within-donor permutation
-   nulls, size-matched community nulls, held-out split-clone replication,
-   cross-basis robustness, all shipped in
-   `benchmarks/biological_validation/` and run on 5 public datasets.
-3. **Clonal fate tracking** (Gap 3) — `clone_fate_table`,
-   `community_transition`, migration/transition indices, and
-   diffusion-based ordering of the clone graph.
-4. **Clone-as-node scalability and sequence-aware clone definition**
-   (Gap 4) — runtime scales with clone count, not cell count; tonsil case
-   study (13 usable exact clonotypes → 200 lineages).
-5. **Pure Python / scanpy-native / CPU-only** (Gap 5) — AnnData in, AnnData
-   out; optional parasail acceleration; no GPU, no R, no external binaries.
-
-And the v3 discovery layer (below) goes from *description* to *biological
-reconstruction*: antigen-specificity annotation against reference databases
-(CoV-AbDab) or author-validated labels, per-community gene programmes, SHM
-gradients, and cross-tissue/ cross-time migration indices.
+Threadfin treats each B-cell clone as the unit of inference. It defines clones
+within donors from hypermutated sequences, describes each clone by a shrunken,
+context-adjusted profile of its cells (a centroid or a kernel embedding of its
+cell distribution) with an explicit reliability, measures how much of
+transcriptional variation is clonally inherited with a sampling-aware null,
+groups clones into stability-assessed programmes, tests those programmes
+against clone-level labels counting clones rather than cells, quantifies
+clonal memory across time points and tissues without circularity, and ranks
+genes by clonal heritability — in pure Python, AnnData-native, with a single
+`threadfin.run()` entry point and a ground-truth simulator for benchmarking.

@@ -192,6 +192,24 @@ def build_clone_key(
     return bcr_table
 
 
+def _clone_modes(tab: pd.DataFrame, clone_col: str) -> pd.DataFrame:
+    """Most frequent value of every column per clone (ties: smallest value as text).
+
+    Vectorised: one group count per column instead of a Python call per clone.
+    """
+    out = pd.DataFrame(index=pd.Index(pd.unique(tab[clone_col]), name=clone_col))
+    for col in (c for c in tab.columns if c != clone_col):
+        sub = tab[[clone_col, col]].dropna()
+        if sub.empty:
+            out[col] = None
+            continue
+        counts = sub.groupby([clone_col, col], observed=True, sort=False).size().rename("n").reset_index()
+        counts["_key"] = counts[col].astype(str)
+        counts = counts.sort_values([clone_col, "n", "_key"], ascending=[True, False, True], kind="mergesort")
+        out[col] = counts.drop_duplicates(clone_col).set_index(clone_col)[col].reindex(out.index)
+    return out
+
+
 def attach_bcr(
     adata,
     bcr_table: pd.DataFrame,
@@ -248,12 +266,7 @@ def attach_bcr(
 
     n_clones = int(tab.loc[tab.index.isin(adata.obs_names), clone_col].nunique())
     if summarize:
-        clone_info = (
-            tab.dropna(subset=[clone_col])
-            .groupby(clone_col)
-            .agg({c: (lambda s: (lambda m: m.iloc[0] if len(m) else None)(s.mode()))
-                  for c in tab.columns if c != clone_col})
-        )
+        clone_info = _clone_modes(tab.dropna(subset=[clone_col]), clone_col)
         clone_info["n_cells_bcr_table"] = tab[clone_col].value_counts()
         adata.uns[_CLONE_INFO_KEY] = clone_info
 

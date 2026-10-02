@@ -108,8 +108,9 @@ def test_programmes_and_association(sim):
     ad.obs["coin"] = np.random.default_rng(0).choice(["heads", "tails"], size=ad.n_obs)
     res_coin = tf.tl.association_test(ad, "coin", n_perm=200, verbose=False)
     assert res_coin["fdr"].min() > 0.05
-    # numeric label path
-    ad.obs["score"] = ad.obs["true_programme"].str[1:].astype(float)
+    # numeric label path: per-cell indicator of the most common true programme
+    top = ad.obs.loc[ad.obs["clone_programme"].notna(), "true_programme"].value_counts().index[0]
+    ad.obs["score"] = (ad.obs["true_programme"] == top).astype(float)
     res_num = tf.tl.association_test(ad, "score", n_perm=200, verbose=False)
     assert {"rank_effect", "median_in_programme"} <= set(res_num.columns)
     assert res_num.attrs["kruskal_pvalue"] < 0.05
@@ -245,3 +246,28 @@ def test_run_end_to_end(sim, tmp_path):
     fig = result.plot(save=str(tmp_path / "overview.png"))
     assert (tmp_path / "overview.png").exists()
     assert fig is not None
+
+
+def test_programme_markers_clone_level(sim):
+    import scipy.sparse as sp
+
+    ad = sim.copy()
+    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor",
+                         representation="kernel", verbose=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        tf.tl.find_programmes(ad, n_boot=6, embed=False, verbose=False)
+    # plant a marker in the true programme that dominates the purest recovered programme
+    comp = pd.crosstab(ad.obs["clone_programme"], ad.obs["true_programme"], normalize="index")
+    best_prog = comp.max(axis=1).idxmax()
+    planted = comp.loc[best_prog].idxmax()
+    rng = np.random.default_rng(0)
+    expr = rng.poisson(1.0, size=(ad.n_obs, 30)).astype(float)
+    expr[:, 0] += 3.0 * (ad.obs["true_programme"] == planted).to_numpy()
+    ad2 = AnnData(X=sp.csr_matrix(np.log1p(expr)), obs=ad.obs.copy(), obsm=dict(ad.obsm), uns=dict(ad.uns),
+                  var=pd.DataFrame(index=[f"gene{i}" for i in range(30)]))
+    markers = tf.tl.programme_markers(ad2, layer=None, verbose=False)
+    assert {"programme", "gene", "mean_diff", "auc", "fdr"} <= set(markers.columns)
+    top = markers[markers["programme"] == str(best_prog)].sort_values("rank")
+    assert top["gene"].iloc[0] == "gene0"
+    assert top["fdr"].iloc[0] < 0.05

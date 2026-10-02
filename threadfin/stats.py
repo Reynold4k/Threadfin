@@ -57,7 +57,9 @@ def clonal_coherence(
     in ``adata.uns['threadfin']['coherence']``.
     """
     prof = get_profiles(adata)
-    model = model_from_adata(adata)
+    # the ICC is always measured on unsmoothed cells in the embedding itself, so it reads
+    # as "share of transcriptional variance explained by clone" whatever the profile type
+    model = model_from_adata(adata, unsmoothed=True, representation="mean")
     strata_key = strata_key or prof["params"].get("context_key")
     strata = None
     if strata_key is not None:
@@ -124,10 +126,10 @@ def clone_labels(
     if how == "auto":
         how = "mean" if numeric else "majority"
     grouped = df.groupby("_clone", observed=True)[label_key]
-    if how == "mean":
-        out = grouped.mean()
-    elif how == "median":
-        out = grouped.median()
+    if how in ("mean", "median"):
+        values = pd.to_numeric(df[label_key], errors="coerce")
+        grouped = values.groupby(df["_clone"])
+        out = grouped.mean() if how == "mean" else grouped.median()
     elif how.startswith("fraction:"):
         level = how.split(":", 1)[1]
         out = df[label_key].astype(str).eq(level).groupby(df["_clone"]).mean()

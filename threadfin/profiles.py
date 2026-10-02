@@ -174,13 +174,45 @@ def _center_by(x: np.ndarray, ctx: np.ndarray, finite: np.ndarray) -> np.ndarray
     return x - np.where((ctx >= 0)[:, None], mu[np.maximum(ctx, 0)], fallback)
 
 
+def neighbour_average(x: np.ndarray, k: int, random_state: int = 0) -> np.ndarray:
+    """Average every cell with its ``k`` nearest cells (itself included).
+
+    Borrows strength from cells in the same local state, which denoises the
+    profiles of small clones. Used for programme profiles only: the
+    coherence and memory statistics are computed on unsmoothed cells.
+    """
+    n = x.shape[0]
+    k = int(min(k, n))
+    if n > 50_000:
+        from pynndescent import NNDescent
+
+        idx = NNDescent(x, n_neighbors=k, random_state=random_state).neighbor_graph[0]
+    else:
+        from sklearn.neighbors import NearestNeighbors
+
+        idx = NearestNeighbors(n_neighbors=k).fit(x).kneighbors(x, return_distance=False)
+    out = np.zeros_like(x)
+    for j in range(k):  # column-wise accumulation keeps memory at O(n * features)
+        out += x[idx[:, j]]
+    return out / k
+
+
+def median_bandwidth(x: np.ndarray, n_sample: int = 2000, rng=None) -> float:
+    """Median distance between random pairs of cells (Gretton et al. 2012)."""
+    rng = rng or np.random.default_rng(0)
+    n = x.shape[0]
+    idx = rng.choice(n, size=min(n, n_sample), replace=False)
+    d = np.linalg.norm(x[idx] - x[rng.permutation(idx)], axis=1)
+    return float(np.median(d[d > 0])) if np.any(d > 0) else 1.0
+
+
 def local_bandwidth(x: np.ndarray, k: int = 30, n_sample: int = 2000, rng=None) -> float:
     """Kernel bandwidth from the typical distance to a cell's k-th neighbour.
 
-    The global median pairwise distance (the usual heuristic) is dominated by
-    differences *between* cell states and blurs them together; the local
-    k-nearest-neighbour scale matches the width of a single state, so the
-    kernel features resolve which states a clone occupies.
+    A local scale (about the width of one cell state) resolves finer
+    differences between clones' state distributions than the median
+    heuristic, but every cell's features are noisier, so only larger clones
+    reach a given reliability. Useful for datasets with many large clones.
     """
     from sklearn.neighbors import NearestNeighbors
 
@@ -194,15 +226,10 @@ def local_bandwidth(x: np.ndarray, k: int = 30, n_sample: int = 2000, rng=None) 
 
 
 def _random_fourier_features(
-    x: np.ndarray, n_features: int, bandwidth: float | None, rng: np.random.Generator
+    x: np.ndarray, n_features: int, bandwidth: float, rng: np.random.Generator
 ) -> tuple[np.ndarray, float]:
-    """Gaussian-kernel random Fourier features; bandwidth = median distance."""
-    n, p = x.shape
-    if bandwidth is None:
-        m = min(n, 2000)
-        idx = rng.choice(n, size=m, replace=False)
-        d = np.linalg.norm(x[idx] - x[rng.permutation(idx)], axis=1)
-        bandwidth = float(np.median(d[d > 0])) if np.any(d > 0) else 1.0
+    """Gaussian-kernel random Fourier features with the given bandwidth."""
+    p = x.shape[1]
     w = rng.normal(0.0, 1.0 / bandwidth, size=(p, n_features))
     phase = rng.uniform(0.0, 2 * np.pi, size=n_features)
     return np.sqrt(2.0 / n_features) * np.cos(x @ w + phase), bandwidth
@@ -265,7 +292,8 @@ def build_model(
     context_key: str | None = None,
     representation: str = "mean",
     n_features: int = 256,
-    bandwidth: float | None = None,
+    bandwidth: float | str = "median",
+    smooth: int = 0,
     random_state: int = 0,
 ) -> ProfileModel:
     """Build the profile model: features, context centring, variance components."""
@@ -280,6 +308,7 @@ def build_model(
         "context_key": context_key,
         "representation": representation,
         "n_features": int(n_features),
+        "smooth": int(smooth),
         "random_state": int(random_state),
     }
 
@@ -293,15 +322,22 @@ def build_model(
     # 1) remove each context's mean, so a clone is compared with the cells it
     #    was sampled with (this also removes technical shifts between samples)
     resid = _center_by(x, ctx, finite)
+    rng = np.random.default_rng(random_state)
+    if representation == "kernel":
+        # bandwidth from unsmoothed cells, so smoothed and unsmoothed models share one kernel
+        if bandwidth is None or bandwidth == "median":
+            bandwidth = median_bandwidth(resid[finite], rng=rng)
+        elif bandwidth == "local":
+            bandwidth = local_bandwidth(resid[finite], rng=rng)
+    if smooth and smooth > 1:
+        resid = np.where(finite[:, None], neighbour_average(np.where(finite[:, None], resid, 0.0), smooth,
+                                                            random_state), 0.0)
 
     # 2) "kernel": describe each cell by random Fourier features of its
     #    context-centred position, then centre again so that a clone's profile
     #    is the difference between its own cell distribution and its context's
     if representation == "kernel":
-        rng = np.random.default_rng(random_state)
-        if bandwidth is None:
-            bandwidth = local_bandwidth(resid[finite], rng=rng)
-        feats, bw = _random_fourier_features(resid, n_features, bandwidth, rng)
+        feats, bw = _random_fourier_features(resid, n_features, float(bandwidth), rng)
         params["bandwidth"] = bw
         resid = _center_by(feats, ctx, finite)
 
@@ -325,7 +361,8 @@ def clone_profiles(
     representation: str = "mean",
     n_features: int = 256,
     n_components: int = 30,
-    bandwidth: float | None = None,
+    bandwidth: float | str = "median",
+    smooth: int | None = None,
     min_cells: int = 2,
     random_state: int = 0,
     verbose: bool = True,
@@ -353,6 +390,15 @@ def clone_profiles(
         ``"mean"`` (shrunken centroid) or ``"kernel"`` (shrunken kernel mean
         embedding from ``n_features`` random Fourier features, reduced to
         ``n_components`` principal components).
+    bandwidth
+        Kernel bandwidth: ``"median"`` (median distance between cells, the
+        standard heuristic), ``"local"`` (distance to the 30th nearest
+        neighbour; sharper, but needs larger clones) or a number.
+    smooth
+        Average each cell with its ``smooth`` nearest cells before profiling
+        (denoises small clones by borrowing strength from their local state).
+        Default: 15 for ``"kernel"``, 0 for ``"mean"``. The coherence test and
+        clonal memory always use unsmoothed cells.
     min_cells
         Clones with fewer cells are not profiled.
 
@@ -362,10 +408,12 @@ def clone_profiles(
     ``reliability`` and, when available, ``donor`` and ``n_contexts``.
     Profiles and model parameters go to ``adata.uns['threadfin']['profiles']``.
     """
+    if smooth is None:
+        smooth = 15 if representation == "kernel" else 0
     model = build_model(
         adata, clone_key=clone_key, basis=basis, context_key=context_key,
         representation=representation, n_features=n_features, bandwidth=bandwidth,
-        random_state=random_state,
+        smooth=smooth, random_state=random_state,
     )
     blup, n_eff, rel = model.group_blups(model.clone_codes, len(model.clone_index))
     keep = n_eff >= min_cells
@@ -422,13 +470,19 @@ def get_profiles(adata) -> dict:
     return prof
 
 
-def model_from_adata(adata) -> ProfileModel:
-    """Rebuild the :class:`ProfileModel` used by :func:`clone_profiles`."""
+def model_from_adata(adata, *, unsmoothed: bool = False, representation: str | None = None) -> ProfileModel:
+    """Rebuild the :class:`ProfileModel` used by :func:`clone_profiles`.
+
+    ``unsmoothed=True`` skips neighbour averaging and ``representation``
+    overrides the stored representation; both are used by statistics that
+    must treat cells as independent draws (coherence, memory).
+    """
     p = get_profiles(adata)["params"]
     return build_model(
         adata, clone_key=p["clone_key"], basis=p["basis"], context_key=p["context_key"],
-        representation=p["representation"], n_features=p["n_features"],
-        bandwidth=p.get("bandwidth"), random_state=p["random_state"],
+        representation=representation or p["representation"], n_features=p["n_features"],
+        bandwidth=p.get("bandwidth", "median"), smooth=0 if unsmoothed else p.get("smooth", 0),
+        random_state=p["random_state"],
     )
 
 

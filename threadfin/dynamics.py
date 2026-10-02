@@ -134,7 +134,7 @@ def clonal_memory(
     clone_key = prof["params"]["clone_key"]
     require_obs(adata, time_key)
     rng = np.random.default_rng(random_state)
-    model = model_from_adata(adata)
+    model = model_from_adata(adata, unsmoothed=True)  # smoothing would leak between snapshots
     snaps, means, sigma2, levels = _snapshots(adata, model, clone_key, time_key, order, min_cells)
     table = prof["clone_table"]
     donor = table["donor"].astype(str) if "donor" in table.columns else pd.Series(dtype=str)

@@ -9,14 +9,17 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
-        run: pip install -e ".[test,leiden,seq]"
+        run: pip install -e ".[test,seq]"
       - name: Run tests
         run: python -m pytest tests/ -q
+      - name: Quick start on simulated data
+        run: python examples/quickstart.py --simulated
