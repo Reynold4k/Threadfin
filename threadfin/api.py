@@ -8,11 +8,15 @@ RNA-seq + BCR-seq dataset, in this order:
    which clone a cell belongs to, tested against shuffled clone labels.
 2. **Which clones behave alike?** - genetically distinct clones are grouped
    into *clonal programmes* by the state bias of their cells (for example
-   "plasmablast-biased" or "germinal-centre-retained" clones), each with a
-   bootstrap stability score.
-3. **What distinguishes the programmes?** - optional clone-level tests
-   against any labels you have (antigen specificity, isotype, infection,
-   disease group), and clonal memory across time points.
+   "plasmablast-biased" or "germinal-centre-retained" clones). Every split
+   between programmes must pass a significance test, and every programme
+   gets a bootstrap stability score; if no split is significant, the clones
+   vary along a continuum and a single programme is reported.
+3. **Do your labels explain how clones differ?** - optional clone-level
+   tests against any labels you have (antigen specificity, isotype,
+   infection, disease group): first whether the label explains clone
+   profiles at all, then which programmes differ; and clonal memory across
+   time points.
 
 Every step is also available on its own in :mod:`threadfin.tl`.
 """
@@ -107,6 +111,7 @@ class ThreadfinResult:
     clones: pd.DataFrame = field(repr=False)
     composition: pd.DataFrame | None = field(default=None, repr=False)
     tests: dict = field(default_factory=dict, repr=False)
+    profile_tests: dict = field(default_factory=dict, repr=False)
     memory: dict | None = field(default=None, repr=False)
     settings: dict = field(default_factory=dict, repr=False)
 
@@ -146,13 +151,19 @@ class ThreadfinResult:
         lines += ["", "2. Which clones behave alike? (clonal programmes)"]
         if prog.empty:
             lines.append("   Not enough reliably profiled clones to define programmes in this dataset.")
+        elif prog.shape[0] == 1:
+            tests = get_programmes(ad).get("split_tests", pd.DataFrame())
+            p_root = f" (split test p = {tests['pvalue'].iloc[0]:.2g})" if not tests.empty else ""
+            lines.append(f"   No distinct programmes: the {int(prog['n_clones'].sum()):,} reliable clones differ, "
+                         f"but along a continuum rather than in separate groups{p_root}.")
         else:
             params = get_programmes(ad)["params"]
             n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
             verb = "is" if n_stable == 1 else "are"
-            lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} reliable clones; "
-                         f"{n_stable} {verb} stable (bootstrap Jaccard >= {params['stability_threshold']}).")
-        for name, row in prog.iterrows():
+            lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} reliable clones "
+                         f"(every split significant); {n_stable} {verb} stable "
+                         f"(bootstrap Jaccard >= {params['stability_threshold']}).")
+        for name, row in (prog.iterrows() if prog.shape[0] > 1 else []):
             desc = ""
             if self.composition is not None and name in self.composition.index:
                 comp = self.composition.loc[name].sort_values(ascending=False)
@@ -160,8 +171,15 @@ class ThreadfinResult:
             flag = "" if row["stability"] >= 0.6 else "  [unstable - do not interpret]"
             lines.append(f"   {name}: {int(row['n_clones']):,} clones, {int(row['n_cells']):,} cells, "
                          f"stability {row['stability']:.2f}{desc}{flag}")
+        if self.profile_tests or self.tests:
+            lines += ["", "3. Do your labels explain how clones differ? (clone-level tests)"]
+        for label, r in self.profile_tests.items():
+            verdict = "explains" if r["p_value"] < 0.05 else "does not significantly explain"
+            lines.append(f"   {label} {verdict} clone states: {100 * r['r2']:.1f}% of clone-profile variance "
+                         f"vs {100 * r['null_mean']:.1f}% for shuffled labels (p = {r['p_value']:.3g}, "
+                         f"{r['n_clones']} clones).")
         if self.tests:
-            lines += ["", "3. What distinguishes the programmes? (clone-level tests, FDR < 0.05)"]
+            lines.append("   Programme differences (FDR < 0.05):")
             for label, tab in self.tests.items():
                 sig = tab[tab["fdr"] < 0.05]
                 if sig.empty:
@@ -216,7 +234,7 @@ def run(
     test=None,
     clone_key: str = "clone_id",
     basis: str | None = None,
-    representation: str = "mean",
+    representation: str = "kernel",
     n_perm: int = 200,
     n_boot: int = 30,
     random_state: int = 0,
@@ -260,8 +278,11 @@ def run(
         should exclude immunoglobulin genes (see
         :func:`threadfin.pp.ig_gene_mask`).
     representation
-        ``"mean"`` (clone centroid, default) or ``"kernel"`` (whole cell
-        distribution of each clone).
+        How each clone is summarised for grouping into programmes:
+        ``"kernel"`` (default; the whole distribution of the clone's cells,
+        so two clones with the same average but different spreads differ)
+        or ``"mean"`` (the clone centroid only). The coherence test always
+        uses clone means.
     n_perm, n_boot
         Permutations for the coherence test; bootstrap replicates for
         programme stability.
@@ -286,7 +307,7 @@ def run(
     from .pp import prepare_embedding
     from .profiles import clone_profiles
     from .programmes import find_programmes, programme_composition
-    from .stats import association_test, clonal_coherence
+    from .stats import association_test, clonal_coherence, profile_association
 
     # Step 1 - clones from BCR sequences (within each donor)
     if bcr is not None:
@@ -319,7 +340,7 @@ def run(
     coherence = clonal_coherence(adata, strata_key=sample_key, n_perm=n_perm,
                                  random_state=random_state, verbose=verbose)
 
-    # Step 5 - group clones into programmes, with bootstrap stability
+    # Step 5 - group clones into programmes (significant splits only), with bootstrap stability
     try:
         programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, verbose=verbose)
     except ValueError as e:  # too few expanded clones: keep the coherence result
@@ -329,10 +350,16 @@ def run(
 
     # Step 6 - describe and test the programmes
     composition = None
-    tests = {}
+    tests, profile_tests = {}, {}
     if not programmes.empty:
         composition = programme_composition(adata, state_key) if state_key else None
-        for col in ([test] if isinstance(test, str) else (test or [])):
+    for col in ([test] if isinstance(test, str) else (test or [])):
+        # does the label explain clone states at all? (needs no programmes)
+        try:
+            profile_tests[col] = profile_association(adata, col, random_state=random_state, verbose=verbose)
+        except ValueError as e:
+            log(f"profile test '{col}' skipped: {e}", verbose)
+        if programmes.shape[0] >= 2:  # which programmes differ? (needs >= 2 programmes)
             tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
     memory = None
     if time_key is not None:
@@ -341,7 +368,7 @@ def run(
     clones = adata.uns["threadfin"]["profiles"]["clone_table"]
     result = ThreadfinResult(
         adata=adata, coherence=coherence, programmes=programmes, clones=clones,
-        composition=composition, tests=tests, memory=memory,
+        composition=composition, tests=tests, profile_tests=profile_tests, memory=memory,
         settings={"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
                   "state_key": state_key, "time_key": time_key, "basis": basis,
                   "representation": representation},

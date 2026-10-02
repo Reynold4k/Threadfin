@@ -1,0 +1,282 @@
+{
+ "dataset": "stephenson",
+ "title": "Stephenson et al. 2021 Nat Med - COVID-19 PBMC, 5k BCR+ B-lineage cells",
+ "clone_definition": {
+  "threshold": 0.185,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 5000,
+  "n_clones": 4757,
+  "n_expanded": 83
+ },
+ "qc": {
+  "n_cells": 5000,
+  "n_cells_bcr": 5000,
+  "n_clones": 4757,
+  "clones_ge2": 83,
+  "clones_ge3": 24,
+  "clones_ge5": 14,
+  "clones_ge10": 5,
+  "cells_in_clones_ge2": 326,
+  "largest_clone": 53,
+  "n_donors": 25,
+  "n_samples": 29
+ },
+ "coherence": {
+  "icc": 0.34622681346688366,
+  "null_mean": 0.02342827356636153,
+  "null_q95": 0.043594269974017844,
+  "excess": 0.32279853990052215,
+  "p_value": 0.001996007984031936,
+  "n_clones": 83,
+  "n_cells": 326,
+  "min_cells_reliability_0.5": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 3,
+  "n_merged": 1,
+  "root_pvalue": 0.009750825892724623
+ },
+ "programme_markers": {
+  "P1": [
+   "HLA-DRA",
+   "MS4A1",
+   "BANK1",
+   "CD74",
+   "CXCR4",
+   "FCMR",
+   "TCL1A",
+   "LINC00926",
+   "HLA-DPB1",
+   "BTG1",
+   "HLA-DRB1",
+   "HLA-DPA1"
+  ],
+  "P2": [
+   "JCHAIN",
+   "MZB1",
+   "SEC11C",
+   "FKBP11",
+   "SPCS3",
+   "HSP90B1",
+   "PPIB",
+   "SSR3",
+   "SSR4",
+   "SUB1",
+   "SPCS2",
+   "MYDGF"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.972,
+   "germinal centre": 0.003,
+   "dark zone / cycling": 0.132,
+   "light zone": -0.006,
+   "memory": 0.075,
+   "naive": -0.043,
+   "interferon": 0.023
+  },
+  "P2": {
+   "plasma cell": 1.667,
+   "germinal centre": 0.005,
+   "dark zone / cycling": 0.025,
+   "light zone": -0.062,
+   "memory": 0.106,
+   "naive": -0.34,
+   "interferon": 0.064
+  }
+ },
+ "programmes": {
+  "n": 2,
+  "resolution": 0.6,
+  "n_clones": 83,
+  "n_cells": 326,
+  "n_clones_with_assigned": 83,
+  "stability": {
+   "P1": 0.751,
+   "P2": 0.501
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.20973467151892794,
+   "null_mean": 0.05923658954865521,
+   "excess_r2": 0.15049808197027273,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 81,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.16277045923936756,
+     -0.02927526245312366,
+     0.24825422560248867
+    ],
+    "IGHD": [
+     0.04303642813177534,
+     -0.08129103091557564,
+     -0.03347277743582526
+    ],
+    "IGHG": [
+     -0.34133771505468424,
+     -0.21558171477137952,
+     -0.23460363078061885
+    ],
+    "IGHM": [
+     0.575347695714509,
+     0.31244047052046187,
+     0.021591414629462815
+    ]
+   },
+   "note": "heavy-chain isotype"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.09120420458656849,
+   "null_mean": 0.021903476774023246,
+   "excess_r2": 0.06930072781254523,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 83,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.3846881036795003,
+     -0.05576699312508632,
+     0.07612336582779185
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "severity": {
+   "label": "severity",
+   "kind": "categorical",
+   "r2": 0.18405151196165398,
+   "null_mean": 0.04865920220080007,
+   "excess_r2": 0.13539230976085392,
+   "p_value": 0.0009995002498750624,
+   "n_clones": 83,
+   "n_levels": 5,
+   "strata_key": null,
+   "n_perm": 2000,
+   "axis_correlation": {
+    "Asymptomatic": [
+     0.20195583490718508,
+     0.2621542087737499,
+     0.0058256490838611095
+    ],
+    "Critical": [
+     -0.3022071316202477,
+     0.3293514847597909,
+     0.20267783677525597
+    ],
+    "Mild": [
+     0.023249008455737005,
+     0.22614944588762362,
+     -0.06551993292071338
+    ],
+    "Moderate": [
+     0.2861119342421564,
+     0.05211704378388723,
+     0.0829618247988409
+    ],
+    "Severe": [
+     -0.21954523203797283,
+     -0.4785479020919868,
+     -0.16390012714355573
+    ]
+   },
+   "note": "clinical severity of the donor (donor-level label: not separable from other donor differences)"
+  }
+ },
+ "programme_associations": {
+  "isotype": {
+   "n_clones": 81,
+   "n_significant_fdr05": 2
+  },
+  "mutation_frequency": {
+   "n_clones": 83,
+   "n_significant_fdr05": 2
+  },
+  "severity": {
+   "n_clones": 83,
+   "n_significant_fdr05": 2
+  }
+ },
+ "memory": {},
+ "heritability": {
+  "n_genes": 7941,
+  "median_icc": 0.051800039530528766,
+  "top_genes": [
+   "HAUS8",
+   "SPIDR",
+   "FAM30A",
+   "UBE2D4",
+   "MZB1",
+   "JCHAIN",
+   "DEK",
+   "CD74",
+   "PPIB",
+   "SELENOM",
+   "CD38",
+   "MS4A1",
+   "SMAD5",
+   "HLA-DRA",
+   "HIP1R",
+   "TXNDC5",
+   "FKBP11",
+   "MSL2",
+   "ITM2C",
+   "ZUP1",
+   "UBXN11",
+   "HLA-DPB1",
+   "TMEM167B",
+   "FOXP1",
+   "MIR22HG"
+  ],
+  "receptor_gene_icc": 0.7990797463016481,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.2067,
+    "matched_background_median_icc": 0.0516,
+    "pvalue_vs_matched": 0.0036
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0348,
+    "matched_background_median_icc": 0.0208,
+    "pvalue_vs_matched": 0.2061
+   },
+   "light zone": {
+    "median_icc": -0.0083,
+    "matched_background_median_icc": 0.0128,
+    "pvalue_vs_matched": 0.6028
+   },
+   "memory": {
+    "median_icc": 0.0749,
+    "matched_background_median_icc": 0.0256,
+    "pvalue_vs_matched": 0.0336
+   },
+   "naive": {
+    "median_icc": 0.0224,
+    "matched_background_median_icc": 0.0133,
+    "pvalue_vs_matched": 0.3448
+   },
+   "interferon": {
+    "median_icc": 0.0486,
+    "matched_background_median_icc": 0.0199,
+    "pvalue_vs_matched": 0.1744
+   }
+  }
+ },
+ "runtime_min": 0.6
+}

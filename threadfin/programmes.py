@@ -7,15 +7,31 @@ in the germinal centre). Programmes are found by Leiden community detection
 on a k-nearest-neighbour graph of clone profiles
 (:func:`threadfin.tl.clone_profiles`).
 
-Because community detection always returns *some* partition, every
-programme is reported with a bootstrap stability score: cells are resampled
-within clones (Poisson bootstrap), profiles are re-estimated, the graph is
-rebuilt and re-partitioned, and each original programme is matched to its
-best bootstrap counterpart by Jaccard overlap (Hennig 2007, "clusterboot").
-Following Hennig, programmes with mean Jaccard >= 0.75 are considered stable
-and those below 0.6 should not be interpreted. The Leiden resolution is
-chosen as the finest one whose size-weighted stability reaches the
-threshold, instead of being fixed by hand.
+Community detection always returns *some* partition, even when clones vary
+continuously without forming groups. Two safeguards address this:
+
+1. **Split test.** The Leiden communities are arranged in a tree (average
+   linkage of their centroids) and tested top-down: at every node, the clones
+   below it are compared with a single multivariate Gaussian fitted to them
+   (same mean and covariance). The statistic is the 2-means cluster index
+   (within / total sum of squares, as in SigClust, Liu et al. 2008); the
+   null distribution comes from re-clustering Gaussian samples, so the test
+   accounts for the fact that the clusters were found in the same data. A
+   node is split only if p <= alpha * (n_node - 1) / (n_all - 1), with
+   n the number of clones, which controls the family-wise error along the
+   tree (Meinshausen 2008; the same rule as sc-SHC, Grabski et al. 2023). Communities below a non-significant
+   node are merged. When even the root is not significant, the clones form
+   a single programme: they differ (see the coherence test) but along a
+   continuum rather than in distinct groups.
+2. **Bootstrap stability.** Cells are resampled within clones (Poisson
+   bootstrap), profiles are re-estimated and the whole procedure (graph,
+   Leiden, split test) is repeated; each programme is matched to its best
+   bootstrap counterpart by Jaccard overlap (Hennig 2007, "clusterboot").
+   Programmes with mean Jaccard >= 0.75 are stable; below 0.6 they should
+   not be interpreted.
+
+The Leiden resolution is chosen as the finest one whose size-weighted
+stability reaches the threshold, instead of being fixed by hand.
 """
 
 from __future__ import annotations
@@ -95,6 +111,118 @@ def jaccard_match(ref: np.ndarray, other: np.ndarray) -> tuple[np.ndarray, np.nd
     return jac.max(axis=1), other == best[ref]
 
 
+# --------------------------------------------------------------------------- split test
+
+
+def _two_means_index(x: np.ndarray, rng, extra_split=None, n_random: int = 2, n_iter: int = 30) -> float:
+    """Smallest 2-means cluster index (within / total sum of squares) over a few starts.
+
+    Starts: the sign of the first principal component, ``n_random`` random
+    pairs of centres and, if given, ``extra_split`` (a boolean labelling).
+    """
+    xc = x - x.mean(axis=0)
+    tss = float(np.einsum("ij,ij->", xc, xc))
+    if xc.shape[0] < 3 or tss <= 0:
+        return 1.0
+    _, _, vt = np.linalg.svd(xc, full_matrices=False)
+    starts = [xc @ vt[0] > 0]
+    for _ in range(n_random):
+        a, b = rng.choice(xc.shape[0], size=2, replace=False)
+        starts.append(((xc - xc[a]) ** 2).sum(1) < ((xc - xc[b]) ** 2).sum(1))
+    if extra_split is not None:
+        starts.append(np.asarray(extra_split, dtype=bool))
+    best = np.inf
+    for lab in starts:
+        for _ in range(n_iter):  # Lloyd iterations for two centres
+            if lab.all() or not lab.any():
+                break
+            c1, c0 = xc[lab].mean(axis=0), xc[~lab].mean(axis=0)
+            new = xc @ (c1 - c0) > 0.5 * (c1 @ c1 - c0 @ c0)
+            if np.array_equal(new, lab):
+                break
+            lab = new
+        if lab.all() or not lab.any():
+            continue
+        wss = tss - lab.sum() * np.sum(xc[lab].mean(0) ** 2) - (~lab).sum() * np.sum(xc[~lab].mean(0) ** 2)
+        best = min(best, wss)
+    return float(best / tss) if np.isfinite(best) else 1.0
+
+
+def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, return_null: bool = False) -> dict:
+    """Is ``x`` (clones x features) better described by two clusters than by one Gaussian?
+
+    The 2-means cluster index of ``x`` is compared with its distribution in
+    ``n_null`` samples from a Gaussian with the mean and covariance of ``x``.
+    The p-value uses a normal fit to the null indices (so that it can be
+    smaller than ``1 / n_null``); the empirical p-value is also returned
+    (and, with ``return_null``, the null indices themselves).
+    """
+    from scipy.stats import norm
+
+    rng = np.random.default_rng(random_state)
+    x = np.asarray(x, dtype=float)
+    observed = _two_means_index(x, rng, extra_split=split)
+    cov = np.atleast_2d(np.cov(x, rowvar=False))
+    w, v = np.linalg.eigh(cov)
+    root = v * np.sqrt(np.clip(w, 0, None))
+    null = np.array([_two_means_index(rng.standard_normal(x.shape) @ root.T, rng) for _ in range(n_null)])
+    sd = float(null.std(ddof=1)) if n_null > 1 else np.nan
+    p_norm = float(norm.cdf((observed - null.mean()) / sd)) if sd and sd > 0 else float(observed < null.mean())
+    p_emp = float((1 + np.sum(null <= observed)) / (n_null + 1))
+    out = {"cluster_index": observed, "null_mean": float(null.mean()), "null_sd": sd,
+           "pvalue": p_norm, "pvalue_empirical": p_emp}
+    if return_null:
+        out["null"] = null
+    return out
+
+
+def _merge_by_split_test(feats, labels, alpha, n_null, rng):
+    """Test the community tree top-down and merge communities below non-significant nodes.
+
+    Returns ``(merged_labels, tests)`` with merged labels ``0..K-1`` and one
+    row per tested node.
+    """
+    from scipy.cluster.hierarchy import linkage, to_tree
+
+    names = np.unique(labels)
+    if names.size < 2:
+        return np.zeros(labels.size, dtype=np.int64), pd.DataFrame()
+    centroids = np.vstack([feats[labels == k].mean(axis=0) for k in names])
+    root = to_tree(linkage(centroids, method="average"))
+    total = labels.size
+    rows, groups = [], []
+
+    def visit(node):
+        if node.is_leaf():
+            groups.append([names[node.id]])
+            return
+        a = [names[i] for i in node.left.pre_order()]
+        b = [names[i] for i in node.right.pre_order()]
+        inside = np.isin(labels, a + b)
+        res = split_test(feats[inside], np.isin(labels[inside], a), n_null=n_null,
+                         random_state=int(rng.integers(2**31)))
+        level = alpha * (inside.sum() - 1) / (total - 1)
+        rows.append({"communities_left": [int(c) for c in a], "communities_right": [int(c) for c in b],
+                     "n_clones": int(inside.sum()), **res,
+                     "alpha_node": float(level), "split": bool(res["pvalue"] <= level)})
+        if res["pvalue"] <= level:
+            visit(node.left)
+            visit(node.right)
+        else:
+            groups.append(a + b)
+
+    visit(root)
+    merged = np.empty(labels.size, dtype=np.int64)
+    for g, members in enumerate(groups):
+        merged[np.isin(labels, members)] = g
+    tests = pd.DataFrame(rows)
+    if not tests.empty:
+        to_group = {int(c): g for g, members in enumerate(groups) for c in members}
+        for side in ("left", "right"):
+            tests[f"groups_{side}"] = [sorted({to_group[c] for c in cs}) for cs in tests[f"communities_{side}"]]
+    return merged, tests
+
+
 # --------------------------------------------------------------------------- bootstrap
 
 
@@ -132,6 +260,9 @@ def find_programmes(
     stability_threshold: float = 0.75,
     min_programme_size: int = 5,
     min_clones: int = 30,
+    test_splits: bool = True,
+    alpha: float = 0.05,
+    n_null: int = 100,
     assign_remaining: bool = True,
     min_posterior: float = 0.7,
     embed: bool = True,
@@ -165,6 +296,13 @@ def find_programmes(
     min_clones
         Minimum number of reliable clones; with fewer, programme detection is
         refused (report the coherence test only).
+    test_splits, alpha, n_null
+        Merge communities that are not significantly better described as two
+        groups than as one Gaussian (see the module docstring); ``alpha`` is
+        the family-wise error along the community tree and ``n_null`` the
+        number of Gaussian null samples per test. The node tests are stored
+        in ``adata.uns['threadfin']['programmes']['split_tests']``. A single
+        programme means "no distinct programmes".
     assign_remaining
         Programmes are *defined* on reliable ("core") clones only. With this
         option every other profiled clone is then *assigned* to the most
@@ -206,7 +344,7 @@ def find_programmes(
     res_grid = list(resolutions) if auto else [float(resolution)]
 
     rng = np.random.default_rng(random_state)
-    boot_graphs = []
+    boot_graphs, boot_feats = [], []
     if n_boot > 0:
         model = model_from_adata(adata)
         code_of = {str(c): i for i, c in enumerate(model.clone_index.astype(str))}
@@ -266,6 +404,23 @@ def find_programmes(
     feats = feats[keep_mask]
     confidence = confidence[keep_mask]
     ref = ref[keep_mask]
+    split_tests = pd.DataFrame()
+    if test_splits:
+        ref, split_tests = _merge_by_split_test(feats, ref, alpha, n_null, rng)
+        if boot_graphs:
+            # stability of the final programmes: repeat Leiden *and* the split test in every bootstrap
+            jac_mean = np.zeros(int(ref.max()) + 1)
+            agree = np.zeros(ref.size)
+            for b, (bf, bg) in enumerate(zip(boot_feats, boot_graphs)):
+                bl = leiden(bg, chosen, seed=random_state + b + 1)[keep_mask]
+                bl, _ = _merge_by_split_test(bf[keep_mask], bl, alpha, max(n_null // 4, 20), rng)
+                jac, ok = jaccard_match(ref, bl)
+                jac_mean += jac
+                agree += ok
+            jac_mean /= len(boot_graphs)
+            confidence = agree / len(boot_graphs)
+        else:
+            jac_mean = np.full(int(ref.max()) + 1, np.nan)
     labels = stable_categorical(ref, prefix="P")
     raw_to_label = dict(zip(ref, labels))
 
@@ -315,11 +470,19 @@ def find_programmes(
     if assign_remaining:
         n_assigned = table[f"{key_added}_assigned"].astype(str).value_counts()
         summary["n_clones_with_assigned"] = [int(n_assigned.get(p, 0)) for p in summary.index]
+    if not split_tests.empty:  # name the two sides of every tested node by the final programmes
+        split_tests = split_tests.copy()
+        for side in ("left", "right"):
+            split_tests[f"programmes_{side}"] = [", ".join(sorted({str(raw_to_label[g]) for g in gs if g in raw_to_label},
+                                                                  key=lambda t: (len(t), t)))
+                                                 for gs in split_tests.pop(f"groups_{side}")]
     get_uns(adata)[PROGRAMME_KEY] = {
         "summary": summary,
         "resolution_scan": scan,
+        "split_tests": split_tests,
         "params": {
             "resolution": chosen, "auto": auto, "n_neighbors": int(n_neighbors),
+            "test_splits": bool(test_splits), "alpha": float(alpha), "n_null": int(n_null),
             "min_reliability": float(min_reliability), "n_boot": int(n_boot),
             "stability_threshold": float(stability_threshold), "key_added": key_added,
             "min_programme_size": int(min_programme_size),
@@ -330,11 +493,17 @@ def find_programmes(
     n_stable = int((summary["stability"] >= stability_threshold).sum()) if n_boot else 0
     extra = (f"; {int(table[f'{key_added}_assigned'].notna().sum())} of {len(table)} profiled clones "
              f"assigned with posterior >= {min_posterior}" if assign_remaining else "")
-    log(
-        f"programmes: {summary.shape[0]} programmes over {eligible.size} core clones "
-        f"(resolution {chosen}); {n_stable} with bootstrap stability >= {stability_threshold}{extra}.",
-        verbose,
-    )
+    if summary.shape[0] == 1:
+        log(f"programmes: no significant split among {eligible.size} core clones (resolution {chosen}): the "
+            "clones differ, but along a continuum rather than in distinct programmes.", verbose)
+    else:
+        n_merged = int((~split_tests["split"]).sum()) if not split_tests.empty else 0
+        merged_txt = f" after merging {n_merged} non-significant split(s)" if n_merged else ""
+        log(
+            f"programmes: {summary.shape[0]} programmes over {eligible.size} core clones "
+            f"(resolution {chosen}{merged_txt}); {n_stable} with bootstrap stability >= {stability_threshold}{extra}.",
+            verbose,
+        )
     return summary
 
 

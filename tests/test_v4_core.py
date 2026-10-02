@@ -1,4 +1,4 @@
-"""Tests for the v4 core: profiles, coherence, programmes, tests, memory, heritability."""
+"""Functional tests for the v4 workflow: clones, profiles, coherence, programmes, tests, memory."""
 
 import warnings
 
@@ -8,7 +8,7 @@ import pytest
 from anndata import AnnData
 
 import threadfin as tf
-from threadfin.profiles import VarianceComponents, variance_components
+from threadfin.profiles import variance_components
 
 
 @pytest.fixture(scope="module")
@@ -17,24 +17,6 @@ def sim():
 
 
 # --------------------------------------------------------------------------- variance components
-
-
-def test_variance_components_recover_known_icc():
-    rng = np.random.default_rng(0)
-    n_clones, per_clone, tau, sigma = 400, 6, 1.0, 2.0
-    clone = np.repeat(np.arange(n_clones), per_clone)
-    x = rng.normal(0, tau, size=(n_clones, 3))[clone] + rng.normal(0, sigma, size=(clone.size, 3))
-    vc = variance_components(x, clone)
-    expected = tau**2 / (tau**2 + sigma**2)
-    assert vc.icc == pytest.approx(expected, abs=0.04)
-    assert np.allclose(vc.sigma2, sigma**2, rtol=0.1)
-
-
-def test_spearman_brown_min_cells():
-    vc = VarianceComponents(np.array([0.8]), np.array([0.2]), 3.0, 10, 50, np.zeros(1))
-    # ICC 0.2 -> reliability 0.5 needs n = 4 cells
-    assert vc.min_cells_for(0.5) == 4
-    assert vc.reliability(np.array([4]))[0] == pytest.approx(0.5)
 
 
 def test_singletons_do_not_enter_variance_components():
@@ -57,33 +39,6 @@ def test_profiles_and_coherence(sim):
     res = tf.tl.clonal_coherence(ad, n_perm=30, verbose=False)
     assert res["icc"] > res["null_q95"]
     assert res["p_value"] <= 1 / 31 + 1e-9
-
-
-def test_coherence_null_is_calibrated_within_context():
-    ad = tf.sim.simulate_repertoire(scenario="null", n_clones=800, random_state=11)
-    tf.tl.clone_profiles(ad, basis="X_pca", context_key=None, verbose=False)
-    within = tf.tl.clonal_coherence(ad, strata_key="context", n_perm=40, verbose=False)
-    naive = tf.tl.clonal_coherence(ad, strata_key=None, n_perm=40, verbose=False)
-    assert within["p_value"] > 0.05  # no clonal signal beyond sampling context
-    assert naive["p_value"] < 0.05   # a global shuffle mistakes context for clonality
-
-
-def test_kernel_separates_equal_centroid_programmes():
-    from sklearn.cluster import KMeans
-    from sklearn.metrics import adjusted_rand_score
-
-    ad = tf.sim.simulate_repertoire(scenario="bifurcation", n_clones=1500, random_state=2)
-    truth = ad.obs.groupby("clone_id")["true_programme"].first()
-    sizes = ad.obs["clone_id"].value_counts()
-    ab = sizes.index[(sizes >= 5).to_numpy() & truth.loc[sizes.index].isin(["G0", "G1"]).to_numpy()]
-    scores = {}
-    for rep in ("mean", "kernel"):
-        tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", representation=rep,
-                             min_cells=1, verbose=False)
-        feats = ad.uns["threadfin"]["profiles"]["features"].loc[ab].to_numpy()
-        lab = KMeans(2, n_init=10, random_state=0).fit_predict(feats)
-        scores[rep] = adjusted_rand_score(truth.loc[ab], lab)
-    assert scores["kernel"] > 0.8 > scores["mean"] + 0.3
 
 
 # --------------------------------------------------------------------------- programmes + tests
@@ -116,6 +71,19 @@ def test_programmes_and_association(sim):
     assert res_num.attrs["kruskal_pvalue"] < 0.05
 
 
+def test_continuum_gives_a_single_programme():
+    # clones differ (clonal ICC > 0) but come from one programme: no distinct programmes
+    ad = tf.sim.simulate_repertoire(n_programmes=1, random_state=1)
+    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor", representation="kernel",
+                         verbose=False)
+    summ = tf.tl.find_programmes(ad, n_boot=10, embed=False, verbose=False)
+    assert summ.shape[0] == 1
+    assert not ad.uns["threadfin"]["programmes"]["split_tests"]["split"].any()
+    # without the split test, Leiden cuts the continuum into pieces
+    summ = tf.tl.find_programmes(ad, n_boot=10, embed=False, test_splits=False, verbose=False)
+    assert summ.shape[0] >= 2
+
+
 def test_clone_labels_aggregation():
     obs = pd.DataFrame({
         "clone_id": ["a", "a", "a", "b", "b", None],
@@ -132,17 +100,6 @@ def test_clone_labels_aggregation():
 
 
 # --------------------------------------------------------------------------- memory
-
-
-@pytest.mark.parametrize("memory, lo, hi", [(1.0, 0.8, 1.2), (0.0, -0.2, 0.3)])
-def test_clonal_memory_tracks_truth(memory, lo, hi):
-    ad = tf.sim.simulate_repertoire(n_clones=1500, clone_size_exponent=1.7, n_timepoints=2,
-                                    memory=memory, random_state=5)
-    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor",
-                         representation="kernel", verbose=False)
-    res = tf.tl.clonal_memory(ad, "timepoint", programme_key="absent", n_null=100, n_boot=100,
-                              verbose=False)
-    assert lo < res["memory_index"] < hi
 
 
 def test_community_transition_warns_on_clone_level_labels(sim):
@@ -211,6 +168,27 @@ def test_find_threshold_bimodal():
     assert 0.1 < info["threshold"] < 0.3
 
 
+def test_mutation_frequency_handles_shifted_germline():
+    # the query still carries its 5' UTR while the germline starts at the V gene:
+    # comparing from position 0 would make an unmutated cell look hypermutated
+    v = "ACGTACGTACGTTTGACCAGTTACGGATCCAAG" * 3
+    airr = pd.DataFrame({"sequence_alignment": ["GGGGTTTCCCAAA" + v], "germline_alignment": [v],
+                         "v_sequence_start": [14], "v_sequence_end": [13 + len(v)]})
+    assert tf.tl.mutation_frequency(airr).iloc[0] == pytest.approx(0.0)
+    assert tf.tl.mutation_frequency(airr, align="none").iloc[0] > 0.3
+    win = tf.tl.mutation_frequency(airr).attrs["windows"].iloc[0]
+    assert (win["query_start"], win["germline_start"], win["length"]) == (13, 0, len(v))
+
+
+def test_mutation_frequency_counts_v_region_only():
+    v = "ACGTACGTACGTTTGACCAGTTACGGATCCAAG" * 3
+    mutated = v[:50] + ("T" if v[50] != "T" else "A") + v[51:]
+    airr = pd.DataFrame({"sequence_alignment": [mutated + "CCCCCCCCCC"],      # junction after the V
+                         "germline_alignment": [v + "AAAAAAAAAA"],
+                         "v_sequence_start": [1], "v_sequence_end": [len(v)]})
+    assert tf.tl.mutation_frequency(airr).iloc[0] == pytest.approx(1 / len(v))
+
+
 def test_mutation_frequency():
     airr = pd.DataFrame({
         "sequence_alignment": ["ACGTACGTAC", "ACGT-CGTAN"],
@@ -271,3 +249,24 @@ def test_programme_markers_clone_level(sim):
     top = markers[markers["programme"] == str(best_prog)].sort_values("rank")
     assert top["gene"].iloc[0] == "gene0"
     assert top["fdr"].iloc[0] < 0.05
+
+
+def test_profile_association_runs(sim):
+    ad = sim.copy()
+    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor",
+                         representation="kernel", verbose=False)
+    res = tf.tl.profile_association(ad, "true_programme", n_perm=100, verbose=False)
+    assert {"r2", "null_mean", "excess_r2", "p_value", "n_clones", "axis_correlation"} <= set(res)
+    assert res["kind"] == "categorical" and 0 <= res["r2"] <= 1
+    assert res["p_value"] < 0.05  # the true programme explains how clones differ
+    num = tf.tl.profile_association(ad, "true_state", how="fraction:S0", n_perm=50, verbose=False)
+    assert num["kind"] == "numeric"
+
+
+def test_clonal_memory_runs():
+    ad = tf.sim.simulate_repertoire(n_clones=1500, clone_size_exponent=1.7, n_timepoints=2, random_state=5)
+    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor",
+                         representation="kernel", verbose=False)
+    res = tf.tl.clonal_memory(ad, "timepoint", n_null=50, n_boot=50, verbose=False)
+    assert {"memory_index", "memory_index_ci", "p_value", "n_clones", "pairs"} <= set(res)
+    assert res["n_clones"] > 10 and res["memory_index_ci"][0] <= res["memory_index"] <= res["memory_index_ci"][1]

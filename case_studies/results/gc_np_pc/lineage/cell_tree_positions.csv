@@ -1,0 +1,238 @@
+clone,group,donor,file,mutations,window_length,depth,ancestral,germline,n_descendant_genotypes
+M1|C00001,light zone,M1,M1_C00001,0,292,0.0,False,True,6
+M1|C00001,Myc+ light zone,M1,M1_C00001,1,292,1.0,False,False,0
+M1|C00001,plasma cell,M1,M1_C00001,1,292,1.0,False,False,0
+M1|C00001,Myc+ light zone,M1,M1_C00001,3,292,3.0,False,False,0
+M1|C00001,light zone,M1,M1_C00001,2,292,2.0,False,False,0
+M1|C00001,light zone,M1,M1_C00001,5,292,5.0,False,False,0
+M1|C00002,Myc+ light zone,M1,M1_C00002,4,294,4.0,False,False,0
+M1|C00002,Myc+ light zone,M1,M1_C00002,4,294,4.0,False,False,0
+M1|C00002,Myc+ light zone,M1,M1_C00002,4,294,4.0,False,False,0
+M1|C00002,Myc+ light zone,M1,M1_C00002,12,294,12.0,False,False,0
+M1|C00002,Myc+ light zone,M1,M1_C00002,5,294,6.0,False,False,0
+M1|C00003,plasma cell,M1,M1_C00003,0,294,0.0,False,True,3
+M1|C00003,light zone,M1,M1_C00003,2,294,2.0,False,False,0
+M1|C00003,light zone,M1,M1_C00003,3,294,3.0,False,False,0
+M1|C00003,Myc+ light zone,M1,M1_C00003,7,294,7.0,False,False,0
+M2|C00001,Myc+ light zone,M2,M2_C00001,0,302,0.0,False,True,3
+M2|C00001,Myc+ light zone,M2,M2_C00001,0,302,0.0,False,True,3
+M2|C00001,Myc+ light zone,M2,M2_C00001,1,302,1.0,False,False,0
+M2|C00001,Myc+ light zone,M2,M2_C00001,2,302,2.0,False,False,0
+M2|C00001,Myc+ light zone,M2,M2_C00001,4,302,4.0,False,False,0
+M2|C00002,Myc+ light zone,M2,M2_C00002,1,294,1.0,False,False,0
+M2|C00002,light zone,M2,M2_C00002,1,294,1.0,True,False,1
+M2|C00002,light zone,M2,M2_C00002,2,294,2.0,False,False,0
+M3|C00001,plasma cell,M3,M3_C00001,5,294,5.0,False,False,0
+M3|C00001,plasma cell,M3,M3_C00001,4,294,4.0,False,False,0
+M3|C00001,Myc+ light zone,M3,M3_C00001,2,294,2.0,False,False,0
+M3|C00001,Myc+ light zone,M3,M3_C00001,3,294,3.0,True,False,1
+M3|C00001,plasma cell,M3,M3_C00001,5,294,5.0,False,False,0
+M3|C00002,Myc+ light zone,M3,M3_C00002,5,292,5.0,False,False,0
+M3|C00002,dark zone,M3,M3_C00002,7,292,7.0,False,False,0
+M3|C00002,plasma cell,M3,M3_C00002,5,292,5.0,False,False,0
+M3|C00002,Myc+ light zone,M3,M3_C00002,6,292,6.0,False,False,0
+M3|C00003,Myc+ light zone,M3,M3_C00003,2,294,2.0,False,False,0
+M3|C00003,dark zone,M3,M3_C00003,5,294,5.0,False,False,0
+M3|C00003,dark zone,M3,M3_C00003,9,294,9.0,False,False,0
+M4|C00001,Myc+ light zone,M4,M4_C00001,1,294,1.0,True,False,2
+M4|C00001,Myc+ light zone,M4,M4_C00001,1,294,1.0,True,False,2
+M4|C00001,Myc+ light zone,M4,M4_C00001,5,294,5.0,True,False,1
+M4|C00001,Myc+ light zone,M4,M4_C00001,6,294,6.0,False,False,0
+M5|C00001,dark zone,M5,M5_C00001,1,293,1.0,True,False,6
+M5|C00001,Myc+ light zone,M5,M5_C00001,7,293,7.0,False,False,0
+M5|C00001,dark zone,M5,M5_C00001,3,293,3.0,False,False,0
+M5|C00001,Myc+ light zone,M5,M5_C00001,5,293,5.0,False,False,0
+M5|C00001,Myc+ light zone,M5,M5_C00001,3,293,3.0,False,False,0
+M5|C00001,Myc+ light zone,M5,M5_C00001,2,293,2.0,True,False,1
+M5|C00001,dark zone,M5,M5_C00001,3,293,3.0,False,False,0
+M5|C00002,Myc+ light zone,M5,M5_C00002,1,294,1.0,False,False,0
+M5|C00002,dark zone,M5,M5_C00002,1,294,1.0,False,False,0
+M5|C00002,Myc+ light zone,M5,M5_C00002,1,294,1.0,False,False,0
+M5|C00003,Myc+ light zone,M5,M5_C00003,1,294,1.0,True,False,1
+M5|C00003,Myc+ light zone,M5,M5_C00003,1,294,1.0,True,False,1
+M5|C00003,dark zone,M5,M5_C00003,2,294,2.0,False,False,0
+M6|C00001,Myc+ light zone,M6,M6_C00001,0,294,0.0,False,True,3
+M6|C00001,plasma cell,M6,M6_C00001,1,294,1.0,False,False,0
+M6|C00001,Myc+ light zone,M6,M6_C00001,1,294,1.0,False,False,0
+M6|C00001,Myc+ light zone,M6,M6_C00001,3,294,3.0,False,False,0
+M6|C00002,plasma cell,M6,M6_C00002,2,294,2.0,False,False,0
+M6|C00002,Myc+ light zone,M6,M6_C00002,3,294,3.0,False,False,0
+M6|C00002,Myc+ light zone,M6,M6_C00002,2,294,2.0,False,False,0
+M6|C00003,Myc+ light zone,M6,M6_C00003,0,290,0.0,False,True,2
+M6|C00003,Myc+ light zone,M6,M6_C00003,3,290,3.0,False,False,0
+M6|C00003,Myc+ light zone,M6,M6_C00003,3,290,3.0,False,False,0
+M8|C00001,dark zone,M8,M8_C00001,0,293,0.0,False,True,4
+M8|C00001,dark zone,M8,M8_C00001,5,293,5.0,False,False,0
+M8|C00001,Myc+ light zone,M8,M8_C00001,1,293,1.0,False,False,0
+M8|C00001,plasma cell,M8,M8_C00001,1,293,1.0,False,False,0
+M8|C00001,dark zone,M8,M8_C00001,5,293,5.0,False,False,0
+M8|C00002,Myc+ light zone,M8,M8_C00002,6,294,6.0,False,False,0
+M8|C00002,Myc+ light zone,M8,M8_C00002,5,294,5.0,False,False,0
+M8|C00002,Myc+ light zone,M8,M8_C00002,3,294,3.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,1,290,1.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,2,290,2.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,1,290,1.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,1,290,1.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,4,290,4.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,6,290,6.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,4,290,4.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,4,290,4.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,4,290,4.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00001,dark zone,S1,S1_C00001,2,290,2.0,False,False,0
+S1|C00001,dark zone,S1,S1_C00001,6,290,6.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,2,290,2.0,True,False,1
+S1|C00001,plasma cell,S1,S1_C00001,2,290,2.0,True,False,1
+S1|C00001,plasma cell,S1,S1_C00001,2,290,2.0,True,False,1
+S1|C00001,plasma cell,S1,S1_C00001,2,290,2.0,True,False,1
+S1|C00001,dark zone,S1,S1_C00001,5,290,5.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00001,light zone,S1,S1_C00001,11,290,11.0,False,False,0
+S1|C00001,plasma cell,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00001,dark zone,S1,S1_C00001,3,290,3.0,False,False,0
+S1|C00002,plasma cell,S1,S1_C00002,0,291,0.0,False,True,23
+S1|C00002,plasma cell,S1,S1_C00002,0,291,0.0,False,True,23
+S1|C00002,plasma cell,S1,S1_C00002,0,291,0.0,False,True,23
+S1|C00002,dark zone,S1,S1_C00002,2,291,2.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,3,291,3.0,False,False,0
+S1|C00002,dark zone,S1,S1_C00002,2,291,2.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,2,291,2.0,False,False,0
+S1|C00002,plasma cell,S1,S1_C00002,1,291,1.0,True,False,2
+S1|C00002,light zone,S1,S1_C00002,2,291,2.0,True,False,2
+S1|C00002,light zone,S1,S1_C00002,5,291,5.0,False,False,0
+S1|C00002,plasma cell,S1,S1_C00002,2,291,2.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,6,291,6.0,False,False,0
+S1|C00002,dark zone,S1,S1_C00002,3,291,3.0,False,False,0
+S1|C00002,dark zone,S1,S1_C00002,4,291,4.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,3,291,3.0,False,False,0
+S1|C00002,dark zone,S1,S1_C00002,6,291,7.0,True,False,1
+S1|C00002,light zone,S1,S1_C00002,2,291,2.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,10,291,11.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,4,291,4.0,False,False,0
+S1|C00002,dark zone,S1,S1_C00002,6,291,6.0,False,False,0
+S1|C00002,light zone,S1,S1_C00002,6,291,6.0,False,False,0
+S1|C00003,plasma cell,S1,S1_C00003,0,294,0.0,False,True,8
+S1|C00003,plasma cell,S1,S1_C00003,0,294,0.0,False,True,8
+S1|C00003,plasma cell,S1,S1_C00003,0,294,0.0,False,True,8
+S1|C00003,plasma cell,S1,S1_C00003,0,294,0.0,False,True,8
+S1|C00003,light zone,S1,S1_C00003,5,294,5.0,False,False,0
+S1|C00003,plasma cell,S1,S1_C00003,4,294,4.0,False,False,0
+S1|C00003,light zone,S1,S1_C00003,8,294,8.0,False,False,0
+S1|C00003,dark zone,S1,S1_C00003,1,294,1.0,False,False,0
+S1|C00003,light zone,S1,S1_C00003,3,294,3.0,False,False,0
+S1|C00003,light zone,S1,S1_C00003,1,294,1.0,True,False,1
+S1|C00003,plasma cell,S1,S1_C00003,1,294,1.0,False,False,0
+S1|C00003,plasma cell,S1,S1_C00003,1,294,1.0,False,False,0
+S1|C00003,light zone,S1,S1_C00003,4,294,4.0,False,False,0
+S1|C00005,light zone,S1,S1_C00005,0,294,0.0,False,True,6
+S1|C00005,light zone,S1,S1_C00005,3,294,3.0,False,False,0
+S1|C00005,light zone,S1,S1_C00005,1,294,1.0,False,False,0
+S1|C00005,dark zone,S1,S1_C00005,2,294,2.0,False,False,0
+S1|C00005,light zone,S1,S1_C00005,5,294,5.0,False,False,0
+S1|C00005,light zone,S1,S1_C00005,7,294,7.0,False,False,0
+S1|C00006,light zone,S1,S1_C00006,0,294,0.0,False,True,6
+S1|C00006,plasma cell,S1,S1_C00006,2,294,2.0,False,False,0
+S1|C00006,plasma cell,S1,S1_C00006,5,294,5.0,False,False,0
+S1|C00006,light zone,S1,S1_C00006,5,294,5.0,False,False,0
+S1|C00006,dark zone,S1,S1_C00006,8,294,8.0,False,False,0
+S1|C00007,plasma cell,S1,S1_C00007,0,294,0.0,False,True,5
+S1|C00007,light zone,S1,S1_C00007,3,294,3.0,False,False,0
+S1|C00007,light zone,S1,S1_C00007,7,294,7.0,False,False,0
+S1|C00007,light zone,S1,S1_C00007,7,294,7.0,False,False,0
+S1|C00007,light zone,S1,S1_C00007,2,294,2.0,False,False,0
+S1|C00008,light zone,S1,S1_C00008,2,294,2.0,False,False,0
+S1|C00008,light zone,S1,S1_C00008,5,294,5.0,False,False,0
+S1|C00008,plasma cell,S1,S1_C00008,1,294,1.0,False,False,0
+S1|C00008,plasma cell,S1,S1_C00008,1,294,1.0,False,False,0
+S1|C00009,light zone,S1,S1_C00009,4,294,4.0,False,False,0
+S1|C00009,light zone,S1,S1_C00009,7,294,7.0,False,False,0
+S1|C00009,plasma cell,S1,S1_C00009,3,294,3.0,True,False,1
+S1|C00009,light zone,S1,S1_C00009,7,294,7.0,False,False,0
+S1|C00010,light zone,S1,S1_C00010,0,294,0.0,False,True,2
+S1|C00010,light zone,S1,S1_C00010,4,294,4.0,False,False,0
+S1|C00010,plasma cell,S1,S1_C00010,1,294,1.0,False,False,0
+S1|C00011,plasma cell,S1,S1_C00011,1,294,1.0,True,False,2
+S1|C00011,light zone,S1,S1_C00011,3,294,3.0,False,False,0
+S1|C00011,light zone,S1,S1_C00011,2,294,2.0,False,False,0
+S1|C00012,plasma cell,S1,S1_C00012,0,294,0.0,False,True,2
+S1|C00012,light zone,S1,S1_C00012,4,294,4.0,False,False,0
+S1|C00012,light zone,S1,S1_C00012,2,294,2.0,False,False,0
+S2|C00002,light zone,S2,S2_C00002,0,294,0.0,False,True,2
+S2|C00002,light zone,S2,S2_C00002,0,294,0.0,False,True,2
+S2|C00002,light zone,S2,S2_C00002,3,294,3.0,False,False,0
+S2|C00002,light zone,S2,S2_C00002,1,294,1.0,False,False,0
+S2|C00003,light zone,S2,S2_C00003,0,294,0.0,False,True,2
+S2|C00003,light zone,S2,S2_C00003,4,294,4.0,False,False,0
+S2|C00003,plasma cell,S2,S2_C00003,2,294,2.0,False,False,0
+S3|C00001,light zone,S3,S3_C00001,0,294,0.0,False,True,8
+S3|C00001,plasma cell,S3,S3_C00001,1,294,1.0,True,False,7
+S3|C00001,light zone,S3,S3_C00001,2,294,2.0,False,False,0
+S3|C00001,light zone,S3,S3_C00001,3,294,3.0,False,False,0
+S3|C00001,plasma cell,S3,S3_C00001,2,294,2.0,False,False,0
+S3|C00001,plasma cell,S3,S3_C00001,5,294,5.0,False,False,0
+S3|C00001,plasma cell,S3,S3_C00001,5,294,5.0,False,False,0
+S3|C00001,plasma cell,S3,S3_C00001,5,294,5.0,False,False,0
+S3|C00001,dark zone,S3,S3_C00001,8,294,8.0,False,False,0
+S3|C00002,light zone,S3,S3_C00002,2,294,2.0,False,False,0
+S3|C00002,plasma cell,S3,S3_C00002,3,294,3.0,False,False,0
+S3|C00002,plasma cell,S3,S3_C00002,2,294,2.0,False,False,0
+S3|C00002,light zone,S3,S3_C00002,3,294,3.0,True,False,3
+S3|C00002,light zone,S3,S3_C00002,8,294,8.0,False,False,0
+S3|C00002,plasma cell,S3,S3_C00002,4,294,4.0,False,False,0
+S3|C00002,light zone,S3,S3_C00002,6,294,6.0,False,False,0
+S3|C00002,light zone,S3,S3_C00002,5,294,5.0,False,False,0
+S3|C00003,plasma cell,S3,S3_C00003,1,294,1.0,False,False,0
+S3|C00003,plasma cell,S3,S3_C00003,1,294,1.0,False,False,0
+S3|C00003,plasma cell,S3,S3_C00003,1,294,1.0,False,False,0
+S3|C00003,plasma cell,S3,S3_C00003,1,294,1.0,False,False,0
+S3|C00003,light zone,S3,S3_C00003,2,294,2.0,False,False,0
+S3|C00004,light zone,S3,S3_C00004,2,294,2.0,False,False,0
+S3|C00004,plasma cell,S3,S3_C00004,2,294,2.0,True,False,1
+S3|C00004,light zone,S3,S3_C00004,4,294,4.0,True,False,1
+S3|C00004,plasma cell,S3,S3_C00004,7,294,7.0,False,False,0
+S3|C00004,plasma cell,S3,S3_C00004,5,294,5.0,False,False,0
+S3|C00005,plasma cell,S3,S3_C00005,4,294,4.0,True,False,1
+S3|C00005,plasma cell,S3,S3_C00005,4,294,4.0,True,False,1
+S3|C00005,plasma cell,S3,S3_C00005,4,294,4.0,True,False,1
+S3|C00005,plasma cell,S3,S3_C00005,4,294,4.0,True,False,1
+S3|C00005,plasma cell,S3,S3_C00005,5,294,5.0,False,False,0
+S3|C00006,light zone,S3,S3_C00006,0,290,0.0,False,True,3
+S3|C00006,light zone,S3,S3_C00006,5,290,5.0,False,False,0
+S3|C00006,plasma cell,S3,S3_C00006,3,290,3.0,True,False,1
+S3|C00006,plasma cell,S3,S3_C00006,4,290,4.0,False,False,0
+S3|C00007,light zone,S3,S3_C00007,1,290,1.0,True,False,2
+S3|C00007,light zone,S3,S3_C00007,6,290,6.0,False,False,0
+S3|C00007,plasma cell,S3,S3_C00007,8,290,8.0,False,False,0
+S3|C00008,light zone,S3,S3_C00008,4,294,4.0,False,False,0
+S3|C00008,light zone,S3,S3_C00008,1,294,1.0,True,False,1
+S3|C00008,plasma cell,S3,S3_C00008,4,294,4.0,False,False,0
+S4|C00001,light zone,S4,S4_C00001,0,293,0.0,False,True,4
+S4|C00001,light zone,S4,S4_C00001,0,293,0.0,False,True,4
+S4|C00001,light zone,S4,S4_C00001,2,293,2.0,False,False,0
+S4|C00001,light zone,S4,S4_C00001,5,293,5.0,False,False,0
+S4|C00001,plasma cell,S4,S4_C00001,6,293,6.0,False,False,0
+S4|C00002,light zone,S4,S4_C00002,0,276,0.0,False,True,4
+S4|C00002,dark zone,S4,S4_C00002,8,276,8.0,False,False,0
+S4|C00002,light zone,S4,S4_C00002,1,276,1.0,False,False,0
+S4|C00002,light zone,S4,S4_C00002,3,276,3.0,False,False,0
+S4|C00002,light zone,S4,S4_C00002,6,276,6.0,False,False,0
+S4|C00003,light zone,S4,S4_C00003,0,294,0.0,False,True,2
+S4|C00003,light zone,S4,S4_C00003,0,294,0.0,False,True,2
+S4|C00003,plasma cell,S4,S4_C00003,4,294,4.0,False,False,0
+S4|C00003,light zone,S4,S4_C00003,2,294,2.0,False,False,0
+S4|C00004,light zone,S4,S4_C00004,0,294,0.0,False,True,3
+S4|C00004,dark zone,S4,S4_C00004,4,294,4.0,False,False,0
+S4|C00004,dark zone,S4,S4_C00004,1,294,1.0,True,False,1
+S4|C00004,light zone,S4,S4_C00004,3,294,3.0,False,False,0
+S4|C00005,dark zone,S4,S4_C00005,6,294,6.0,False,False,0
+S4|C00005,dark zone,S4,S4_C00005,4,294,4.0,False,False,0
+S4|C00005,light zone,S4,S4_C00005,6,294,6.0,False,False,0
+S4|C00005,dark zone,S4,S4_C00005,3,294,3.0,False,False,0
+S4|C00006,light zone,S4,S4_C00006,2,294,2.0,False,False,0
+S4|C00006,light zone,S4,S4_C00006,3,294,3.0,False,False,0
+S4|C00006,dark zone,S4,S4_C00006,4,294,4.0,False,False,0
+S4|C00008,light zone,S4,S4_C00008,5,293,5.0,False,False,0
+S4|C00008,plasma cell,S4,S4_C00008,3,293,3.0,False,False,0
+S4|C00008,light zone,S4,S4_C00008,3,293,3.0,False,False,0

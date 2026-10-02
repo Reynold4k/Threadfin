@@ -86,13 +86,18 @@ def _linkage_edges(codes: np.ndarray, threshold: float):
     return np.concatenate(src), np.concatenate(dst)
 
 
-def find_threshold(distances, *, default: float = 0.15, lo: float = 0.02, hi: float = 0.35) -> dict:
+def find_threshold(distances, *, default: float = 0.15, lo: float = 0.02, hi: float = 0.25,
+                   max_first_mode: float = 0.12) -> dict:
     """Threshold at the density valley of a distance-to-nearest distribution.
 
     Clonally related sequences sit close to their nearest relative, unrelated
     sequences far away, so the distance-to-nearest distribution is bimodal;
-    the valley between the modes separates them. Falls back to ``default``
-    when no valley is found in ``[lo, hi]``.
+    the valley between the modes separates them. The first ("related") mode
+    must lie below ``max_first_mode`` and the valley inside ``[lo, hi]``;
+    otherwise (for example in repertoires dominated by unmutated naive B
+    cells, where no clean related mode exists) ``default`` is returned. The
+    upper bound follows common practice for nucleotide junction distances
+    (thresholds of roughly 0.05-0.20; Gupta et al. 2017).
     """
     from scipy.stats import gaussian_kde
 
@@ -104,17 +109,15 @@ def find_threshold(distances, *, default: float = 0.15, lo: float = 0.02, hi: fl
     grid = np.linspace(0.0, max(0.6, float(np.quantile(d, 0.99))), 601)
     dens = gaussian_kde(d)(grid)
     peaks = np.flatnonzero((dens[1:-1] > dens[:-2]) & (dens[1:-1] >= dens[2:])) + 1
-    if peaks.size >= 2:
-        left = peaks[grid[peaks] < hi]
-        right = peaks[grid[peaks] > lo]
-        if left.size and right.size:
-            p1 = left[np.argmax(dens[left])]
-            later = right[right > p1]
-            if later.size:
-                p2 = later[np.argmax(dens[later])]
-                valley = p1 + int(np.argmin(dens[p1:p2 + 1]))
-                if lo <= grid[valley] <= hi:
-                    info.update(threshold=float(grid[valley]), method="density")
+    first = peaks[grid[peaks] <= max_first_mode]
+    if first.size:
+        p1 = first[np.argmax(dens[first])]
+        later = peaks[peaks > p1]
+        if later.size:
+            p2 = later[np.argmax(dens[later])]
+            valley = p1 + int(np.argmin(dens[p1:p2 + 1]))
+            if lo <= grid[valley] <= hi:
+                info.update(threshold=float(grid[valley]), method="density")
     return info
 
 
@@ -274,41 +277,127 @@ def _split_by_light(bcr, work, v_col, j_col, junction_col):
     return pd.factorize(new)[0]
 
 
+SKIP_BASES = np.frombuffer(b"-.N", dtype=np.uint8)
+
+
+def _encode_seq(s: str) -> np.ndarray:
+    return np.frombuffer(s.upper().encode("ascii", "replace"), dtype=np.uint8)
+
+
+def _mismatch_rate(a: np.ndarray, b: np.ndarray) -> tuple[int, int]:
+    m = min(a.size, b.size)
+    a, b = a[:m], b[:m]
+    ok = ~(np.isin(a, SKIP_BASES) | np.isin(b, SKIP_BASES))
+    return int((a[ok] != b[ok]).sum()), int(ok.sum())
+
+
+def _best_start(needle: str, haystack: str, max_offset: int, probe: int) -> tuple[int, float]:
+    """Offset in ``haystack`` where ``needle`` best matches, and that mismatch rate."""
+    a = _encode_seq(needle[:probe])
+    if a.size == 0 or len(haystack) < a.size:
+        return 0, 1.0
+    b = _encode_seq(haystack[: a.size + max_offset])
+    if b.size < a.size:
+        return 0, 1.0
+    from numpy.lib.stride_tricks import sliding_window_view
+
+    ok = ~np.isin(a, SKIP_BASES)
+    if not ok.any():
+        return 0, 1.0
+    counts = (sliding_window_view(b, a.size)[:, ok] != a[ok]).sum(axis=1)
+    i = int(np.argmin(counts))
+    return i, float(counts[i] / ok.sum())
+
+
+def align_starts(sequence: str, germline: str, *, max_offset: int = 400, probe: int = 200) -> tuple[int, int]:
+    """Where the V region starts in the query and in the germline string.
+
+    AIRR files should give both in one coordinate system, but pipelines
+    differ in how much upstream sequence (5' UTR, leader) each string
+    carries, and the AIRR coordinate columns refer to the raw read rather
+    than to these alignment strings. The start of one string is therefore
+    located inside the other, in whichever direction matches better; the
+    result is ``(0, 0)`` for files that already agree.
+    """
+    g_in_s, rate_a = _best_start(germline, sequence, max_offset, probe)   # germline starts later in the query
+    s_in_g, rate_b = _best_start(sequence, germline, max_offset, probe)   # query starts later in the germline
+    return (g_in_s, 0) if rate_a <= rate_b else (0, s_in_g)
+
+
+def v_region_windows(airr: pd.DataFrame, sequence_col: str, germline_col: str, *, align: str = "auto",
+                     max_offset: int = 400) -> pd.DataFrame:
+    """Where the V segment sits in the query and germline strings, for every row.
+
+    Starts come from :func:`align_starts` (``align="auto"``) or are both 0
+    (``align="none"``, the AIRR standard). The length is the V length from
+    ``v_sequence_start`` / ``v_sequence_end`` when available, so the junction
+    - whose N additions have no germline to compare with - is excluded.
+
+    Returns 0-based ``query_start``, ``germline_start`` and ``length``
+    (NaN where the V region cannot be located).
+    """
+    def col(name):
+        return airr[name] if name in airr.columns else None
+
+    qs, qe = col("v_sequence_start"), col("v_sequence_end")
+    seq, germ = airr[sequence_col].to_numpy(), airr[germline_col].to_numpy()
+    out = np.full((len(airr), 3), np.nan)
+    for k in range(len(airr)):
+        s_, g_ = seq[k], germ[k]
+        if not (isinstance(s_, str) and isinstance(g_, str)) or not s_ or not g_:
+            continue
+        q0, g0 = align_starts(s_, g_, max_offset=max_offset) if align == "auto" else (0, 0)
+        if qs is not None and qe is not None and pd.notna(qs.iloc[k]) and pd.notna(qe.iloc[k]):
+            n = int(qe.iloc[k]) - int(qs.iloc[k]) + 1          # V length, not an offset
+        else:
+            n = min(len(s_) - q0, len(g_) - g0)
+        n = int(min(n, len(s_) - q0, len(g_) - g0))
+        if n > 0:
+            out[k] = (q0, g0, n)
+    return pd.DataFrame(out, index=airr.index, columns=["query_start", "germline_start", "length"])
+
+
 def mutation_frequency(
     airr: pd.DataFrame,
     *,
     sequence_col: str = "sequence_alignment",
     germline_col: str = "germline_alignment",
-    v_end_col: str | None = "v_germline_end",
+    align: str = "auto",
 ) -> pd.Series:
     """V-region somatic mutation frequency from AIRR alignments.
 
-    Counts mismatches between the aligned query and its germline over the V
-    segment (positions up to ``v_end_col`` when available, otherwise the
-    whole alignment), ignoring gaps (``-``, ``.``) and ambiguous ``N``.
-    Returns mismatches / compared positions per row (NaN if unavailable).
+    Counts substitutions between the query and its germline over the V
+    segment (:func:`v_region_windows`), ignoring gaps (``-``, ``.``) and
+    ambiguous ``N``; returns mismatches / compared positions per row (NaN
+    when the V region cannot be located).
+
+    With ``align="auto"`` (the default) the two strings are first put in a
+    common coordinate system, because pipelines differ in how much upstream
+    sequence each carries; without this, cells of such a dataset all look
+    hypermutated. ``align="none"`` compares them from their starts, as the
+    AIRR standard specifies. Insertions and deletions are not modelled, so a
+    clone with an indel in its V region can look more mutated than it is.
+    The windows used are reported in ``.attrs['windows']``.
     """
-    seq = airr.get(sequence_col)
-    germ = airr.get(germline_col)
-    if seq is None or germ is None:
+    if sequence_col not in airr.columns or germline_col not in airr.columns:
         raise KeyError(f"mutation_frequency needs '{sequence_col}' and '{germline_col}'.")
-    v_end = airr[v_end_col] if (v_end_col and v_end_col in airr.columns) else None
+    if align not in ("auto", "none"):
+        raise ValueError("align must be 'auto' or 'none'.")
+    seq, germ = airr[sequence_col].to_numpy(), airr[germline_col].to_numpy()
+    win = v_region_windows(airr, sequence_col, germline_col, align=align, max_offset=400)
     out = np.full(len(airr), np.nan)
-    skip = np.frombuffer(b"-.N", dtype=np.uint8)
-    for k, (s, g) in enumerate(zip(seq.to_numpy(), germ.to_numpy())):
-        if not (isinstance(s, str) and isinstance(g, str)):
+    for k in range(len(airr)):
+        s_, g_ = seq[k], germ[k]
+        q0, g0, n = win.iloc[k]
+        if not (isinstance(s_, str) and isinstance(g_, str)) or not np.isfinite(n):
             continue
-        n = min(len(s), len(g))
-        if v_end is not None and pd.notna(v_end.iloc[k]):
-            n = min(n, int(v_end.iloc[k]))
-        if n <= 0:
-            continue
-        a = np.frombuffer(s[:n].upper().encode("ascii", "replace"), dtype=np.uint8)
-        b = np.frombuffer(g[:n].upper().encode("ascii", "replace"), dtype=np.uint8)
-        ok = ~(np.isin(a, skip) | np.isin(b, skip))
-        if ok.any():
-            out[k] = float((a[ok] != b[ok]).mean())
-    return pd.Series(out, index=airr.index, name="mutation_frequency")
+        q0, g0, n = int(q0), int(g0), int(n)
+        mism, compared = _mismatch_rate(_encode_seq(s_[q0:q0 + n]), _encode_seq(g_[g0:g0 + n]))
+        if compared > 0:
+            out[k] = mism / compared
+    res = pd.Series(out, index=airr.index, name="mutation_frequency")
+    res.attrs["windows"] = win
+    return res
 
 
 # =========================================================================== summaries

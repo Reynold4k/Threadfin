@@ -1,7 +1,0 @@
-{
-  "key_a": "tf__pca__r0.3__cw0.0",
-  "key_b": "tf__umap__r0.3__cw0.0",
-  "n_clones_compared": 499,
-  "clone_level_ari": 0.31339428830903554,
-  "clone_level_nmi": 0.37133986899477905
-}

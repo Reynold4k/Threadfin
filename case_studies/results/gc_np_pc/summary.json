@@ -1,0 +1,96 @@
+{
+ "dataset": "gc_np_pc",
+ "title": "ElTanbouly et al. 2023 J Exp Med - NP-OVA day 14, sorted GC B cells (DZ, LZ, Myc+ LZ) and plasma cells, Smart-seq2 + TRUST4 (11 mice)",
+ "clone_definition": {
+  "threshold": 0.15,
+  "threshold_method": "default",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 762,
+  "n_clones": 487,
+  "n_expanded": 113
+ },
+ "qc": {
+  "n_cells": 884,
+  "n_cells_bcr": 762,
+  "n_clones": 487,
+  "clones_ge2": 113,
+  "clones_ge3": 49,
+  "clones_ge5": 21,
+  "clones_ge10": 3,
+  "cells_in_clones_ge2": 388,
+  "largest_clone": 24,
+  "n_donors": 11,
+  "n_samples": 11
+ },
+ "coherence": {
+  "icc": 0.042557419367254254,
+  "null_mean": 0.027691239283235025,
+  "null_q95": 0.07058634771845801,
+  "excess": 0.014866180084019229,
+  "p_value": 0.22355289421157684,
+  "n_clones": 113,
+  "n_cells": 388,
+  "min_cells_reliability_0.5": 23
+ },
+ "programmes": {
+  "n": 0,
+  "note": "Only 3 clones reach reliability 0.5 (need 30); too few expanded clones to define programmes. Report the coherence test only, or lower min_reliability."
+ },
+ "label_effects": {},
+ "programme_associations": {},
+ "memory": {
+  "plasma_cell": {
+   "n_clones": 5,
+   "n_pairs": 5,
+   "memory_index": -0.08982524554509053,
+   "memory_index_ci": [
+    -0.28942611678031616,
+    0.05911789645632164
+   ],
+   "p_value": 0.9201596806387226,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "GC",
+    "PC"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 13774,
+  "median_icc": 0.0,
+  "top_genes": [
+   "Kcnq3",
+   "Tafa5",
+   "Gm49575",
+   "AC160336.1",
+   "Ccng2",
+   "Cyren",
+   "Gm5472",
+   "Irs2",
+   "Gm47019",
+   "Fmr1nb",
+   "Sspn",
+   "Piga",
+   "Rab11fip2",
+   "A1bg",
+   "Gm11823",
+   "Mlxipl",
+   "Adamts19",
+   "Lingo1",
+   "Sema3d",
+   "Cd200r2",
+   "Zfp420",
+   "Hmgb1-ps3",
+   "Gm9750",
+   "Cyp7b1",
+   "Gm20811"
+  ],
+  "receptor_gene_icc": 0.13478123063790526,
+  "gene_sets": {}
+ },
+ "runtime_min": 0.2
+}

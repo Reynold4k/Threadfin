@@ -1,0 +1,238 @@
+{
+ "n_ribosome_genes": 85,
+ "np_within_library_profile_vs_division": {
+  "r2": 0.1597498259156243,
+  "null_mean": 0.01917441005387079,
+  "excess_r2": 0.1405754158617535,
+  "p_value": 0.0001999600079984003,
+  "n_clones": 53,
+  "axis_correlation": {
+   "label": [
+    -0.4126849753993522,
+    -0.4761098377640988,
+    0.5581629813828268
+   ]
+  }
+ },
+ "np_within_library_programmes": {
+  "error": "Only one programme: clone-level tests compare programmes, so at least two are needed."
+ },
+ "np_ribosome_vs_division[all cells]": {
+  "spearman_rho": 0.1932272541705801,
+  "p_within_donor_perm": 0.010994502748625687,
+  "n_clones": 150
+ },
+ "np_ribosome_vs_division[mCherry-high]": {
+  "spearman_rho": 0.13853809223570407,
+  "p_within_donor_perm": 0.15092453773113443,
+  "n_clones": 107
+ },
+ "np_ribosome_vs_division[mCherry-low]": {
+  "spearman_rho": 0.0714078145314148,
+  "p_within_donor_perm": 0.3758120939530235,
+  "n_clones": 145
+ },
+ "np_w33l_vs_division": {
+  "n_w33l_clones": 25,
+  "n_germline_clones": 8,
+  "median_frac_low_w33l": 0.8,
+  "median_frac_low_germline": 0.9642857142857143,
+  "mannwhitney_p_greater": 0.9278979816779167
+ },
+ "rbd_within_library_profile[RBD protein][division_gate]": {
+  "r2": 0.11799643215191874,
+  "null_mean": 0.006149430459183119,
+  "excess_r2": 0.11184700169273562,
+  "p_value": 0.0001999600079984003,
+  "n_clones": 192,
+  "axis_correlation": {
+   "label": [
+    0.3175797473590391,
+    0.571411741400432,
+    0.2742229321994441
+   ]
+  }
+ },
+ "rbd_within_library_profile[RBD protein][rbd_bait]": {
+  "r2": 0.018462632143999066,
+  "null_mean": 0.006923051226878766,
+  "excess_r2": 0.0115395809171203,
+  "p_value": 0.033393321335732855,
+  "n_clones": 192,
+  "axis_correlation": {
+   "label": [
+    -0.17843594054158565,
+    0.0004868160107116174,
+    -0.00930737743556337
+   ]
+  }
+ },
+ "rbd_within_library_profile[mRNA][division_gate]": {
+  "r2": 0.11634798436903832,
+  "null_mean": 0.020971600368246187,
+  "excess_r2": 0.09537638400079212,
+  "p_value": 0.0033993201359728054,
+  "n_clones": 58,
+  "axis_correlation": {
+   "label": [
+    0.13748271349031174,
+    -0.13834738464433885,
+    -0.11351897007870305
+   ]
+  }
+ },
+ "rbd_within_library_profile[mRNA][zone_gate]": {
+  "r2": 0.05098387969515504,
+  "null_mean": 0.018582606396560487,
+  "excess_r2": 0.03240127329859455,
+  "p_value": 0.026194761047790442,
+  "n_clones": 58,
+  "axis_correlation": {
+   "label": [
+    0.03723535502289032,
+    -0.06339242260095378,
+    0.37327674084930546
+   ]
+  }
+ },
+ "rbd_binding_vs_division": {
+  "spearman_rho": -0.3583479641292592,
+  "p_within_donor_perm": 0.0004997501249375312,
+  "n_clones": 354,
+  "design_null_mean_rho": -0.25334217904111667,
+  "design_null_95": [
+   -0.34609629282728654,
+   -0.17393356726757314
+  ],
+  "p_vs_design_null": 0.021956087824351298,
+  "cells_per_gate": {
+   "mCherry-high": {
+    "RBD+": 2674,
+    "RBD-": 4814
+   },
+   "mCherry-low": {
+    "RBD+": 1736,
+    "RBD-": 4949
+   }
+  }
+ },
+ "rbd_ribosome_vs_division[all cells]": {
+  "spearman_rho": 0.261780330112877,
+  "p_within_donor_perm": 0.0004997501249375312,
+  "n_clones": 354
+ },
+ "rbd_ribosome_vs_division[mCherry-high]": {
+  "spearman_rho": 0.06149461341332095,
+  "p_within_donor_perm": 0.312343828085957,
+  "n_clones": 262
+ },
+ "rbd_ribosome_vs_division[mCherry-low]": {
+  "spearman_rho": 0.018279809336251732,
+  "p_within_donor_perm": 0.7456271864067966,
+  "n_clones": 310
+ },
+ "mouse_np_geneset_heritability": [
+  {
+   "gene_set": "translation (ribosomal)",
+   "n_genes": 82,
+   "statistic": "excess_icc",
+   "median_icc": 0.0443,
+   "matched_background_median_icc": 0.0319,
+   "frac_significant": 0.0,
+   "pvalue_vs_matched": 0.0,
+   "fdr": 0.0
+  },
+  {
+   "gene_set": "dark zone / cell cycle",
+   "n_genes": 12,
+   "statistic": "excess_icc",
+   "median_icc": 0.0414,
+   "matched_background_median_icc": 0.0239,
+   "frac_significant": 0.0,
+   "pvalue_vs_matched": 0.0663,
+   "fdr": 0.0663
+  },
+  {
+   "gene_set": "light zone",
+   "n_genes": 10,
+   "statistic": "excess_icc",
+   "median_icc": 0.0559,
+   "matched_background_median_icc": 0.0195,
+   "frac_significant": 0.0,
+   "pvalue_vs_matched": 0.0,
+   "fdr": 0.0001
+  },
+  {
+   "gene_set": "plasma cell",
+   "n_genes": 5,
+   "statistic": "excess_icc",
+   "median_icc": 0.046,
+   "matched_background_median_icc": 0.0235,
+   "frac_significant": 0.0,
+   "pvalue_vs_matched": 0.0288,
+   "fdr": 0.036
+  },
+  {
+   "gene_set": "interferon",
+   "n_genes": 9,
+   "statistic": "excess_icc",
+   "median_icc": 0.1244,
+   "matched_background_median_icc": 0.0101,
+   "frac_significant": 0.0,
+   "pvalue_vs_matched": 0.0,
+   "fdr": 0.0
+  }
+ ],
+ "mouse_rbd_geneset_heritability": [
+  {
+   "gene_set": "translation (ribosomal)",
+   "n_genes": 82,
+   "statistic": "excess_icc",
+   "median_icc": 0.0575,
+   "matched_background_median_icc": 0.0423,
+   "frac_significant": 1.0,
+   "pvalue_vs_matched": 0.0,
+   "fdr": 0.0
+  },
+  {
+   "gene_set": "dark zone / cell cycle",
+   "n_genes": 12,
+   "statistic": "excess_icc",
+   "median_icc": 0.0772,
+   "matched_background_median_icc": 0.0323,
+   "frac_significant": 1.0,
+   "pvalue_vs_matched": 0.0002,
+   "fdr": 0.0002
+  },
+  {
+   "gene_set": "light zone",
+   "n_genes": 11,
+   "statistic": "excess_icc",
+   "median_icc": 0.0798,
+   "matched_background_median_icc": 0.032,
+   "frac_significant": 1.0,
+   "pvalue_vs_matched": 0.0001,
+   "fdr": 0.0001
+  },
+  {
+   "gene_set": "plasma cell",
+   "n_genes": 5,
+   "statistic": "excess_icc",
+   "median_icc": 0.0712,
+   "matched_background_median_icc": 0.0246,
+   "frac_significant": 1.0,
+   "pvalue_vs_matched": 0.0006,
+   "fdr": 0.0006
+  },
+  {
+   "gene_set": "interferon",
+   "n_genes": 10,
+   "statistic": "excess_icc",
+   "median_icc": 0.0779,
+   "matched_background_median_icc": 0.0129,
+   "frac_significant": 1.0,
+   "pvalue_vs_matched": 0.0,
+   "fdr": 0.0
+  }
+ ]
+}

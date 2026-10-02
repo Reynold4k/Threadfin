@@ -1,0 +1,6 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+rbd_bait:RBD+,numeric,0.0126617756397089,0.00396458781088044,0.00869718782882846,0.013493253373313344,294,,donor,2000,fraction of the clone's cells binding RBD bait (protein arm)
+division_gate:mCherry-low,numeric,0.08020384282024537,0.005087090232053533,0.07511675258819184,0.0004997501249375312,381,,donor,2000,fraction of the clone's cells in the mCherry-low gate
+zone_gate:DZ,numeric,0.08958310689657448,0.01261930396296002,0.07696380293361446,0.0004997501249375312,87,,donor,2000,fraction of the clone's cells sorted as dark zone (mRNA arm)
+mutation_frequency,numeric,0.008849479026699462,0.002855349692658943,0.00599412933404052,0.022488755622188907,381,,donor,2000,V-region mutation frequency
+isotype,categorical,0.008383528869367135,0.0025190057425828554,0.005864523126784279,0.017491254372813594,373,2.0,donor,2000,heavy-chain isotype

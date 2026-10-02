@@ -360,6 +360,33 @@ def memory(res: dict, *, ax=None, save=None):
     return _finish(fig, save)
 
 
+def label_effects(results: dict, *, ax=None, save=None):
+    """How much of the difference between clones each label explains.
+
+    ``results`` maps label names to :func:`threadfin.tl.profile_association`
+    results. Blue: share of clone-profile variance explained by the label;
+    grey: the same with labels shuffled among clones of the same donor.
+    """
+    labels = list(results)
+    if not labels:
+        raise ValueError("No label results to plot.")
+    fig, ax = _ax(ax, figsize=(3.4, 0.42 * len(labels) + 0.9))
+    y = np.arange(len(labels))[::-1].astype(float)
+    obs = np.array([100 * results[k]["r2"] for k in labels])
+    null = np.array([100 * results[k]["null_mean"] for k in labels])
+    ax.barh(y + 0.18, obs, height=0.34, color=PALETTE[0], label="observed")
+    ax.barh(y - 0.18, null, height=0.34, color=OTHER, label="labels shuffled among clones")
+    for yy, v, k in zip(y, obs, labels):
+        ax.text(v, yy + 0.18, f"  p = {results[k]['p_value']:.2g}", va="center", color=INK,
+                fontsize=mpl.rcParams["font.size"] - 1)
+    ax.set_yticks(y, labels)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(0, max(obs.max(), null.max()) * 1.35)
+    ax.set_xlabel("difference between clones explained (%)")
+    ax.legend(loc="lower right", frameon=False, fontsize=mpl.rcParams["font.size"] - 1)
+    return _finish(fig, save)
+
+
 def heritability(table: pd.DataFrame, *, highlight: dict | None = None, n_label: int = 12,
                  ax=None, save=None):
     """Genes ranked by clonal ICC; optional gene sets highlighted (<= 3 sets)."""

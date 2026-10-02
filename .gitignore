@@ -6,12 +6,16 @@ dist/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# data and large artifacts (download via benchmarks/download_data.sh)
+# data and large artifacts (download via case_studies/download.sh)
 data/
 *.h5ad
 *.h5mu
 *.h5
 manuscript.ipynb
 .coverage
-benchmarks/biological_validation/*.out
-benchmarks/biological_validation/smoke_*.out
+
+# lineage-tree working files: regenerate with case_studies/lineage_trees.py + run_gctree.sh
+case_studies/results/*/lineage/trees/
+case_studies/results/*/lineage/*.fasta
+case_studies/results/*/lineage/status.txt
+case_studies/logs/

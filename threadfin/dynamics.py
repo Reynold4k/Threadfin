@@ -217,8 +217,8 @@ def clonal_memory(
         "pairs": pairs,
     }
 
-    # descriptive: programme of each snapshot by nearest programme centroid
-    if programme_key in table.columns and table[programme_key].notna().any():
+    # descriptive: programme of each snapshot by nearest programme centroid (needs >= 2 programmes)
+    if programme_key in table.columns and table[programme_key].dropna().nunique() >= 2:
         lab = table[programme_key].dropna().astype(str)
         clone_means = pd.DataFrame(index=snaps.index)
         centroids, names = [], sorted(lab.unique(), key=lambda s: (len(s), s))

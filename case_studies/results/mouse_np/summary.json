@@ -1,0 +1,234 @@
+{
+ "dataset": "mouse_np",
+ "title": "Merkenschlager et al. 2025 Nature - NP-OVA germinal centres, H2B-mCherry division reporter (7 mice)",
+ "clone_definition": {
+  "threshold": 0.161,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 3894,
+  "n_clones": 1536,
+  "n_expanded": 373
+ },
+ "qc": {
+  "n_cells": 10109,
+  "n_cells_bcr": 3894,
+  "n_clones": 1536,
+  "clones_ge2": 373,
+  "clones_ge3": 251,
+  "clones_ge5": 150,
+  "clones_ge10": 80,
+  "cells_in_clones_ge2": 2731,
+  "largest_clone": 92,
+  "n_donors": 7,
+  "n_samples": 14
+ },
+ "coherence": {
+  "icc": 0.0928271469651806,
+  "null_mean": 0.03470714074136718,
+  "null_q95": 0.04384108788486284,
+  "excess": 0.05812000622381342,
+  "p_value": 0.001996007984031936,
+  "n_clones": 373,
+  "n_cells": 2731,
+  "min_cells_reliability_0.5": 10
+ },
+ "programme_splits": {
+  "n_leiden_communities": 2,
+  "n_merged": 1,
+  "root_pvalue": 0.09964452425182957
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 69,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "division_gate:mCherry-low": {
+   "label": "division_gate:mCherry-low",
+   "kind": "numeric",
+   "r2": 0.17560296508752998,
+   "null_mean": 0.01390396678224748,
+   "excess_r2": 0.1616989983052825,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 69,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.598381045052525,
+     0.17487118212821523,
+     -0.17713701562705525
+    ]
+   },
+   "note": "fraction of the clone's cells that divided most (mCherry-low gate)"
+  },
+  "w33l": {
+   "label": "w33l",
+   "kind": "categorical",
+   "r2": 0.022906325996782027,
+   "null_mean": 0.068627013325713,
+   "excess_r2": -0.045720687328930976,
+   "p_value": 0.9815092453773113,
+   "n_clones": 19,
+   "n_levels": 2,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "W33L": [
+     0.1347150628109127,
+     0.365655170486763,
+     -0.15396007178390023
+    ],
+    "germline W33": [
+     -0.1347150628109127,
+     -0.365655170486763,
+     0.15396007178390023
+    ]
+   },
+   "note": "VH186.2 W33L high-affinity mutation (IGHV1-72 clones)"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.020885638131025456,
+   "null_mean": 0.014324802242904486,
+   "excess_r2": 0.00656083588812097,
+   "p_value": 0.1874062968515742,
+   "n_clones": 69,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.10276037196402271,
+     0.07966897460179609,
+     -0.1790314035995418
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.05083400449741471,
+   "null_mean": 0.03244797082902672,
+   "excess_r2": 0.018386033668387987,
+   "p_value": 0.09295352323838081,
+   "n_clones": 69,
+   "n_levels": 3,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHD": [
+     0.19484204028490001,
+     -0.20701966780270628,
+     -0.09133220638354689
+    ],
+    "IGHG": [
+     -0.07807414781719467,
+     0.08241160047370548,
+     0.021687263282554072
+    ],
+    "IGHM": [
+     -0.08524339262464377,
+     0.09133220638354689,
+     0.06088813758903125
+    ]
+   },
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {},
+ "memory": {
+  "division_gate": {
+   "n_clones": 70,
+   "n_pairs": 70,
+   "memory_index": 0.27758472174465265,
+   "memory_index_ci": [
+    0.030420745083560755,
+    0.4949617565401331
+   ],
+   "p_value": 0.015968063872255488,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "mCherry-high",
+    "mCherry-low"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 9085,
+  "median_icc": 0.01886853937657231,
+  "top_genes": [
+   "Gm30211",
+   "Cd72",
+   "Slc15a2",
+   "Eya1",
+   "Lgals9",
+   "Usp18",
+   "Gm42031",
+   "Slpi",
+   "Il10ra",
+   "Gm4316",
+   "Apoe",
+   "Serpinb1a",
+   "Ifitm3",
+   "Cmpk2",
+   "Ifi203",
+   "Gm43305",
+   "Ephx1",
+   "Cr2",
+   "Cdk5rap1",
+   "Arhgap24",
+   "Mndal",
+   "Ifi27l2a",
+   "Gm35082",
+   "Ms4a4c",
+   "Ly6d"
+  ],
+  "receptor_gene_icc": 0.7474630806843208,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.0462,
+    "matched_background_median_icc": 0.0184,
+    "pvalue_vs_matched": 0.0059
+   },
+   "germinal centre": {
+    "median_icc": 0.0648,
+    "matched_background_median_icc": 0.0261,
+    "pvalue_vs_matched": 0.0716
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0468,
+    "matched_background_median_icc": 0.0224,
+    "pvalue_vs_matched": 0.0525
+   },
+   "light zone": {
+    "median_icc": 0.0496,
+    "matched_background_median_icc": 0.0147,
+    "pvalue_vs_matched": 0.0
+   },
+   "memory": {
+    "median_icc": 0.0197,
+    "matched_background_median_icc": 0.0053,
+    "pvalue_vs_matched": 0.1492
+   },
+   "naive": {
+    "median_icc": 0.0422,
+    "matched_background_median_icc": 0.0161,
+    "pvalue_vs_matched": 0.0714
+   },
+   "interferon": {
+    "median_icc": 0.076,
+    "matched_background_median_icc": 0.007,
+    "pvalue_vs_matched": 0.0
+   }
+  }
+ },
+ "runtime_min": 1.0
+}

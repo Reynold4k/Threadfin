@@ -1,0 +1,303 @@
+{
+ "dataset": "ebv",
+ "title": "Mitul et al. 2026 PNAS - EBV infection of tonsil organoids (d0-d21, GFP+/- sorts)",
+ "clone_definition": {
+  "threshold": 0.073,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "cdr3_nt",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 123369,
+  "n_clones": 79856,
+  "n_expanded": 6923
+ },
+ "qc": {
+  "n_cells": 205630,
+  "n_cells_bcr": 123369,
+  "n_clones": 79856,
+  "clones_ge2": 6923,
+  "clones_ge3": 4525,
+  "clones_ge5": 2808,
+  "clones_ge10": 1256,
+  "cells_in_clones_ge2": 50436,
+  "largest_clone": 356,
+  "n_donors": 1,
+  "n_samples": 7
+ },
+ "coherence": {
+  "icc": 0.15680103042336327,
+  "null_mean": 0.042004801296193314,
+  "null_q95": 0.04335173538368671,
+  "excess": 0.11479622912716995,
+  "p_value": 0.001996007984031936,
+  "n_clones": 6923,
+  "n_cells": 50436,
+  "min_cells_reliability_0.5": 6
+ },
+ "programme_splits": {
+  "n_leiden_communities": 3,
+  "n_merged": 0,
+  "root_pvalue": 8.788546331982897e-05
+ },
+ "programme_markers": {
+  "P1": [
+   "IFI44L",
+   "RPL30",
+   "FCMR",
+   "RPS27",
+   "BTG1",
+   "ITM2B",
+   "RPL34",
+   "IFITM3",
+   "SELL",
+   "CD37",
+   "NIBAN3",
+   "RPS12"
+  ],
+  "P2": [
+   "SEC11C",
+   "CD27",
+   "CTSH",
+   "CFLAR",
+   "MEF2B",
+   "ZBTB38",
+   "LGALS3",
+   "PDIA4",
+   "LINC03034",
+   "ATF5",
+   "LGALS1",
+   "KCNN3"
+  ],
+  "P3": [
+   "TXN",
+   "C1QBP",
+   "TYMS",
+   "LDHB",
+   "TUBB",
+   "NME2",
+   "AHCY",
+   "TUBA1B",
+   "EIF4A1",
+   "NME1",
+   "HMGA1",
+   "PPA1"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.348,
+   "germinal centre": -0.028,
+   "dark zone / cycling": 0.139,
+   "light zone": 0.075,
+   "memory": 0.095,
+   "naive": 0.114,
+   "interferon": 0.457
+  },
+  "P2": {
+   "plasma cell": 0.552,
+   "germinal centre": 0.044,
+   "dark zone / cycling": 0.118,
+   "light zone": 0.113,
+   "memory": 0.106,
+   "naive": -0.109,
+   "interferon": 0.347
+  },
+  "P3": {
+   "plasma cell": 0.381,
+   "germinal centre": -0.043,
+   "dark zone / cycling": 0.251,
+   "light zone": 0.095,
+   "memory": 0.082,
+   "naive": 0.016,
+   "interferon": 0.264
+  }
+ },
+ "programmes": {
+  "n": 3,
+  "resolution": 0.2,
+  "n_clones": 2314,
+  "n_cells": 37350,
+  "n_clones_with_assigned": 6499,
+  "stability": {
+   "P1": 0.461,
+   "P2": 0.388,
+   "P3": 0.152
+  },
+  "n_stable": 0
+ },
+ "label_effects": {
+  "gfp": {
+   "label": "gfp",
+   "kind": "numeric",
+   "r2": 0.09543940332710377,
+   "null_mean": 0.0004314531915120276,
+   "excess_r2": 0.09500795013559174,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 2303,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.023649533534197936,
+     0.633080516729194,
+     0.21387307896578017
+    ]
+   },
+   "note": "fraction of the clone's d14/d21 cells that are EBV-GFP+"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.1426574147567274,
+   "null_mean": 0.001290186013383623,
+   "excess_r2": 0.1413672287433438,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 2309,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.26903054855285446,
+     0.15275307050547923,
+     -0.18038919255247524
+    ],
+    "IGHD": [
+     -0.06689723704571901,
+     0.028051126612130363,
+     -0.0015534486342520166
+    ],
+    "IGHG": [
+     -0.5008715945977437,
+     0.23347539752066054,
+     -0.14177154686402232
+    ],
+    "IGHM": [
+     0.6275427272573604,
+     -0.30897863523469316,
+     0.23959936252104888
+    ]
+   },
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "gfp": {
+   "n_clones": 2303,
+   "n_significant_fdr05": 3
+  },
+  "isotype": {
+   "n_clones": 2309,
+   "n_significant_fdr05": 11
+  }
+ },
+ "memory": {
+  "timepoint": {
+   "n_clones": 85,
+   "n_pairs": 134,
+   "memory_index": 0.30754719509352746,
+   "memory_index_ci": [
+    0.21418568331570106,
+    0.4011606868459734
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.7761194029850746,
+   "persistence_null": 0.4287313432835822,
+   "levels": [
+    "d0",
+    "d4",
+    "d7",
+    "d14",
+    "d21"
+   ]
+  },
+  "gfp": {
+   "n_clones": 1355,
+   "n_pairs": 1355,
+   "memory_index": 0.3291713034033873,
+   "memory_index_ci": [
+    0.30789409344484825,
+    0.3538795412656638
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.46420664206642065,
+   "persistence_null": 0.25903321033210336,
+   "levels": [
+    "GFP+",
+    "GFP-"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 10953,
+  "median_icc": 0.019344356938411907,
+  "top_genes": [
+   "ENSG00000275063",
+   "IFI27",
+   "ENSG00000290104",
+   "ATF5",
+   "GTSF1",
+   "TCL1A",
+   "RPS26",
+   "PLAC8",
+   "FAM30A",
+   "HLA-DQA2",
+   "ENSG00000243276",
+   "CTSH",
+   "LAMP5",
+   "CD27",
+   "MGST1",
+   "HLA-DQB1",
+   "SEC11C",
+   "IL4I1",
+   "RGS13",
+   "IFITM3",
+   "RPSA2",
+   "KCTD14",
+   "LGALS1",
+   "RPS10",
+   "TOX"
+  ],
+  "receptor_gene_icc": 0.771476642998492,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.1242,
+    "matched_background_median_icc": 0.0292,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.0701,
+    "matched_background_median_icc": 0.0116,
+    "pvalue_vs_matched": 0.0002
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0477,
+    "matched_background_median_icc": 0.0178,
+    "pvalue_vs_matched": 0.0294
+   },
+   "light zone": {
+    "median_icc": 0.0517,
+    "matched_background_median_icc": 0.0206,
+    "pvalue_vs_matched": 0.0031
+   },
+   "memory": {
+    "median_icc": 0.0735,
+    "matched_background_median_icc": 0.0214,
+    "pvalue_vs_matched": 0.0007
+   },
+   "naive": {
+    "median_icc": 0.0972,
+    "matched_background_median_icc": 0.0218,
+    "pvalue_vs_matched": 0.0
+   },
+   "interferon": {
+    "median_icc": 0.0801,
+    "matched_background_median_icc": 0.0367,
+    "pvalue_vs_matched": 0.0139
+   }
+  }
+ },
+ "runtime_min": 11.5
+}

@@ -1,0 +1,4 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+isotype,categorical,0.20973467151892794,0.05923658954865521,0.15049808197027273,0.0004997501249375312,81,4.0,donor,2000,heavy-chain isotype
+mutation_frequency,numeric,0.09120420458656849,0.021903476774023246,0.06930072781254523,0.0004997501249375312,83,,donor,2000,V-region mutation frequency
+severity,categorical,0.18405151196165398,0.04865920220080007,0.13539230976085392,0.0009995002498750624,83,5.0,,2000,clinical severity of the donor (donor-level label: not separable from other donor differences)

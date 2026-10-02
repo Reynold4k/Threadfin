@@ -1,0 +1,157 @@
+{
+ "dataset": "tonsil",
+ "title": "King et al. 2021 Sci Immunol - paediatric tonsil (6 donors)",
+ "clone_definition": {
+  "threshold": 0.167,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "cdr3_nt",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 11570,
+  "n_clones": 10179,
+  "n_expanded": 670
+ },
+ "qc": {
+  "n_cells": 22478,
+  "n_cells_bcr": 11570,
+  "n_clones": 10179,
+  "clones_ge2": 670,
+  "clones_ge3": 259,
+  "clones_ge5": 75,
+  "clones_ge10": 16,
+  "cells_in_clones_ge2": 2061,
+  "largest_clone": 42,
+  "n_donors": 6,
+  "n_samples": 6
+ },
+ "coherence": {
+  "icc": 0.1664152341750897,
+  "null_mean": 0.025892133196221842,
+  "null_q95": 0.038688271519106414,
+  "excess": 0.14052310097886783,
+  "p_value": 0.001996007984031936,
+  "n_clones": 670,
+  "n_cells": 2061,
+  "min_cells_reliability_0.5": 6
+ },
+ "programme_splits": {
+  "n_leiden_communities": 2,
+  "n_merged": 1,
+  "root_pvalue": 0.35770383894138236
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 75,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.12710378761016136,
+   "null_mean": 0.040662185807205556,
+   "excess_r2": 0.0864416018029558,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 73,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.20898454402725952,
+     0.0999491297521676,
+     0.1253907264163557
+    ],
+    "IGHD": [
+     0.38513567597562176,
+     0.37301602183652877,
+     0.16967515794730187
+    ],
+    "IGHG": [
+     -0.07059537599139683,
+     -0.266090263352188,
+     -0.42900266948618065
+    ],
+    "IGHM": [
+     -0.23531208644697368,
+     -0.2689280987965414,
+     0.23926691142927575
+    ]
+   },
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {},
+ "memory": {},
+ "heritability": {
+  "n_genes": 8974,
+  "median_icc": 0.016291407190570803,
+  "top_genes": [
+   "FAM30A",
+   "GAPDH",
+   "GTSF1",
+   "ACTG1",
+   "ACTB",
+   "COTL1",
+   "RPL28",
+   "METAP2",
+   "CFL1",
+   "XBP1",
+   "PFN1",
+   "PPIA",
+   "SSR4",
+   "HMGN1",
+   "CORO1A",
+   "ZBP1",
+   "JCHAIN",
+   "ARHGDIB",
+   "FKBP11",
+   "ARPC2",
+   "RPS6",
+   "B2M",
+   "PSMA8",
+   "PRDX4",
+   "AL139020.1"
+  ],
+  "receptor_gene_icc": 0.6598804373165287,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.2049,
+    "matched_background_median_icc": 0.0229,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.0688,
+    "matched_background_median_icc": 0.035,
+    "pvalue_vs_matched": 0.0476
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.093,
+    "matched_background_median_icc": 0.0299,
+    "pvalue_vs_matched": 0.0001
+   },
+   "light zone": {
+    "median_icc": 0.0128,
+    "matched_background_median_icc": 0.0047,
+    "pvalue_vs_matched": 0.4261
+   },
+   "memory": {
+    "median_icc": 0.1029,
+    "matched_background_median_icc": -0.0022,
+    "pvalue_vs_matched": 0.0
+   },
+   "naive": {
+    "median_icc": 0.1264,
+    "matched_background_median_icc": 0.0176,
+    "pvalue_vs_matched": 0.0
+   },
+   "interferon": {
+    "median_icc": 0.0273,
+    "matched_background_median_icc": 0.0034,
+    "pvalue_vs_matched": 0.1792
+   }
+  }
+ },
+ "runtime_min": 1.2
+}

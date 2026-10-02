@@ -68,7 +68,9 @@ def gene_heritability(
     Returns
     -------
     DataFrame indexed by gene: ``icc``, ``tau2``, ``sigma2``, ``mean``,
-    ``frac_expressed``, ``null_mean``, ``pvalue`` and ``fdr``, sorted by ICC.
+    ``frac_expressed``, ``null_mean``, ``pvalue``, ``fdr`` and ``excess_icc``
+    (``icc - null_mean``, the effect size), sorted by ``excess_icc``. In large
+    datasets nearly every gene passes FDR < 0.05; interpret ``excess_icc``.
     Also stored in ``adata.uns['threadfin']['gene_heritability']``.
     """
     prof = get_uns(adata).get("profiles", {})
@@ -146,13 +148,16 @@ def gene_heritability(
         }, index=var_names[cols]))
     out = pd.concat(rows)
     out["fdr"] = bh_fdr(out["pvalue"].to_numpy())
+    # effect size: clonal ICC beyond what sample structure alone produces; with tens of
+    # thousands of cells almost every gene is "significant", so rank by this instead
+    out["excess_icc"] = out["icc"] - out["null_mean"]
     control_icc = float("nan")
     if exclude_receptor_genes and control_idx.size:
         full = _dense_chunk(x, control_idx[:200])
         mu = np.asarray(ctx_member @ full) / np.maximum(ctx_n, 1)[:, None]
         control_icc = float(np.median(variance_components(full[cells] - mu[np.maximum(ctx[cells], 0)], cl)
                                       .icc_per_feature))
-    out = out.sort_values("icc", ascending=False)
+    out = out.sort_values("excess_icc", ascending=False)
     out.index.name = "gene"
     get_uns(adata)["gene_heritability"] = out
     get_uns(adata)["gene_heritability_receptor_icc"] = control_icc
@@ -166,29 +171,45 @@ def gene_heritability(
     return out
 
 
-def geneset_heritability(table: pd.DataFrame, gene_sets: dict[str, list[str]]) -> pd.DataFrame:
+def geneset_heritability(table: pd.DataFrame, gene_sets: dict[str, list[str]], *, n_bins: int = 10,
+                         seed: int = 0) -> pd.DataFrame:
     """Summarise :func:`gene_heritability` over named gene sets.
 
-    For each set, reports how many of its genes were tested, their median
-    ICC, the fraction significant at FDR < 0.05, and a Mann-Whitney p-value
-    comparing the set's ICCs with all other tested genes.
+    Highly expressed genes are measured with less noise and therefore have
+    higher ICCs, so each set is compared with an **expression-matched**
+    background: other tested genes drawn from the same mean-expression deciles
+    as the set's genes (up to 20 background genes per set gene). Reports the
+    set's median ICC, the matched background median, the fraction of set genes
+    significant at FDR < 0.05 and a Mann-Whitney p-value (set vs matched
+    background).
     """
     from scipy.stats import mannwhitneyu
 
+    rng = np.random.default_rng(seed)
+    bins = pd.Series(pd.qcut(table["mean"].rank(method="first"), n_bins, labels=False), index=table.index)
     rows = []
     for name, genes in gene_sets.items():
         present = [g for g in genes if g in table.index]
-        if not present:
+        if len(present) < 3:
             continue
-        inside = table.loc[present, "icc"].to_numpy()
-        outside = table.drop(index=present)["icc"].to_numpy()
-        p = mannwhitneyu(inside, outside, alternative="two-sided").pvalue if outside.size else np.nan
+        others = table.index.difference(present)
+        background = []
+        for b, k in bins.loc[present].value_counts().items():
+            pool = others[bins.loc[others].to_numpy() == b]
+            if pool.size:
+                background.extend(rng.choice(pool, size=min(pool.size, 20 * k), replace=False))
+        col = "excess_icc" if "excess_icc" in table.columns else "icc"
+        inside = table.loc[present, col].to_numpy()
+        matched = table.loc[background, col].to_numpy()
+        p = mannwhitneyu(inside, matched, alternative="two-sided").pvalue if matched.size else np.nan
         rows.append({
-            "gene_set": name, "n_genes": len(present), "median_icc": float(np.median(inside)),
+            "gene_set": name, "n_genes": len(present), "statistic": col,
+            "median_icc": float(np.median(inside)),
+            "matched_background_median_icc": float(np.median(matched)) if matched.size else np.nan,
             "frac_significant": float((table.loc[present, "fdr"] < 0.05).mean()),
-            "pvalue_vs_background": float(p), "genes": ",".join(present),
+            "pvalue_vs_matched": float(p), "genes": ",".join(present),
         })
     out = pd.DataFrame(rows)
     if not out.empty:
-        out["fdr"] = bh_fdr(out["pvalue_vs_background"].to_numpy())
+        out["fdr"] = bh_fdr(out["pvalue_vs_matched"].to_numpy())
     return out

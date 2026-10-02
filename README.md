@@ -7,22 +7,36 @@
 [![Python >= 3.10](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org)
 
 A B-cell clone is a family of cells descended from one ancestor that share a
-B-cell receptor. Paired single-cell sequencing tells you, for every cell,
-which clone it belongs to and what it is doing. Threadfin uses the **clone as
-the unit of analysis** and answers three questions:
+B-cell receptor. Paired single-cell sequencing tells you, for every cell, which
+clone it belongs to and what it is doing. Threadfin uses the **clone as the
+unit of analysis**.
 
-1. **Does clone identity shape cell state?** How much of the variation in gene
-   expression is explained by which clone a cell belongs to, beyond when and
-   where the cells were sampled.
-2. **Which clones behave alike?** Genetically unrelated clones are grouped into
-   *clonal programmes* by the states of their cells (for example clones biased
-   towards plasma-cell output, or clones retained in the germinal centre).
-3. **What distinguishes the programmes?** Clone-level tests against anything
-   you measured: antigen binding, isotype, mutation load, infection, sort
-   gate, and whether clones keep their state over time or across tissues.
+This matters most where the biology is a cycle. In a germinal centre, B cells
+divide and mutate their receptor, test it, and are then either sent back for
+another round or leave as plasma or memory cells. Nothing in that cycle is a
+beginning or an end, so ordering single cells along a pseudotime asks a
+question the biology does not answer. A clone is different: all of its cells
+descend from one ancestor, so a clone has a history even when its cells do not
+have an order. Threadfin therefore compares clones with one another, and asks
+which clones look as though they were recently selected and which look as
+though they were sent back to divide again.
 
-Every result comes with an honest measure of uncertainty, and every test
-counts clones, not cells.
+It answers four questions:
+
+1. **Is B-cell state inherited within clones?** How much of the variation in
+   gene expression is explained by which clone a cell belongs to, beyond when
+   and where the cells were sampled.
+2. **Which clones behave alike?** Clones are grouped only when the split
+   between groups is real; otherwise they are reported as a continuum.
+3. **What explains the differences between clones?** Clone-level tests against
+   anything you measured: antigen binding, isotype, mutation load, division
+   history, sort gate, infection, tissue, time.
+4. **Do clones keep their state** over time, across tissues, or across the
+   compartments of a germinal centre?
+
+Every result comes with an honest measure of uncertainty, every test counts
+clones rather than cells, and the output is a hypothesis about clones that
+experiments still have to confirm.
 
 ---
 
@@ -88,7 +102,8 @@ print(result.summary())
 | per-clone table | `result.clones` | size, reliability, programme, bootstrap confidence, posterior |
 | clonal coherence | `result.coherence` | share of variance explained by clone, null, p-value |
 | programme summary | `result.programmes` | size and bootstrap stability of each programme |
-| label tests | `result.tests[label]` | clone-level odds ratios / effects, permutation p, FDR |
+| label vs clone states | `result.profile_tests[label]` | share of clone-profile variance explained by the label, permutation p |
+| label vs programmes | `result.tests[label]` | per-programme odds ratios / effects, permutation p, FDR (needs >= 2 programmes) |
 | clonal memory | `result.memory` | memory index (1 = clones keep their state, 0 = no memory) |
 
 ## How it works (one paragraph per step)
@@ -104,14 +119,19 @@ print(result.summary())
 3. **Coherence test.** The share of transcriptional variance explained by
    clone identity is compared with clones shuffled *within samples*, so
    differences between samples are never mistaken for clonality.
-4. **Programmes.** Reliable clones are grouped by similarity of their profiles;
-   resampling the cells 30-50 times tells how stable each programme is
+4. **Programmes.** Reliable clones are grouped by similarity of their
+   profiles. Every split between groups must pass a significance test against
+   a single-group model, so clones that only vary along a continuum are
+   reported as one group instead of being cut into artificial programmes.
+   Resampling the cells 30-50 times tells how stable each programme is
    (Jaccard >= 0.75 = stable). Smaller clones are then assigned to programmes
    with a probability.
-5. **Tests and memory.** Labels are compared between programmes with clones as
-   replicates and permutations within donors; clonal memory compares each
-   clone's snapshots at different time points with snapshots of random clones,
-   after removing sampling noise.
+5. **Tests and memory.** A label is first tested for whether it explains how
+   clone profiles differ at all (this works even without distinct
+   programmes), then compared between programmes; clones are the replicates
+   and labels are shuffled within donors. Clonal memory compares each clone's
+   snapshots at different time points with snapshots of random clones, after
+   removing sampling noise.
 
 Full statistical details: [`docs/METHODS.md`](docs/METHODS.md).
 
@@ -130,7 +150,8 @@ tf.tl.clone_profiles(adata, basis="X_threadfin",          # 2. clone profiles
                      context_key="sample", donor_key="donor")
 tf.tl.clonal_coherence(adata)                             # 3. coherence test
 tf.tl.find_programmes(adata)                              # 4. programmes
-tf.tl.association_test(adata, "isotype")                  # 5. clone-level tests
+tf.tl.profile_association(adata, "isotype")               # 5. label vs clone states
+tf.tl.association_test(adata, "isotype")                  #    label vs programmes
 tf.tl.programme_markers(adata)                            #    genes, clones as replicates
 tf.tl.clonal_memory(adata, "timepoint")                   #    memory over time
 tf.tl.gene_heritability(adata)                            #    which genes are clonally inherited
@@ -140,20 +161,45 @@ Figures: `tf.pl.clone_map`, `tf.pl.coherence`, `tf.pl.stability`,
 `tf.pl.programme_composition`, `tf.pl.association`, `tf.pl.memory`,
 `tf.pl.heritability`, `tf.pl.overview`.
 
-## Validation
+## What Threadfin found in public data
 
-* **Simulations with a known answer** (`benchmarks/simulation/`): programme
-  recovery against eight approaches, calibration of every test under the
-  null, the memory index against the true switching rate, and scaling to
-  millions of cells.
-* **Seven public datasets** (`benchmarks/public_datasets/`), human and mouse,
-  including a germinal-centre experiment with a fluorescent division reporter
-  and antigen-bait sorting that provide experimental ground truth.
+Eight published datasets, human and mouse, were re-analysed with the same
+script (`case_studies/`). A few of the findings:
 
-A step-by-step, biologist-friendly walkthrough of every dataset is in
-[`report/PUBLIC_DATASETS_REPORT.md`](report/PUBLIC_DATASETS_REPORT.md); how
-Threadfin relates to other tools is in [`docs/GAP_ANALYSIS.md`](docs/GAP_ANALYSIS.md);
-the figure plan for the manuscript is in [`paper/figure_plan/`](paper/figure_plan/).
+**Germinal centres have no beginning and no end**, so ordering single cells
+along a pseudotime asks a question the biology does not answer. Comparing
+*clones* works instead, because a clone has a history even when its cells do
+not have an order. In two mouse experiments with a model antigen, where cells
+were sorted by how often they had divided and by germinal-centre zone:
+
+* clone identity explained 9-15% of B-cell state, far more than shuffled
+  clones (p = 0.002), but never most of it: a clone biases what its cells do;
+* clones did **not** fall into distinct programmes - they differ along a
+  continuum;
+* how many times a clone's cells had divided was the strongest explanation of
+  how clones differ (18% and 8%), with the dark/light-zone sort comparable
+  (9%), while antigen binding and mutation load explained much less;
+* about half of what distinguishes a clone was still recognisable when its
+  cells were caught in a different part of the cycle.
+
+**In a vaccinated human lymph node**, spike-binding clones were concentrated in
+the germinal-centre and one antibody-secreting group of clones (odds ratios
+around 3 across donors). Clones kept their state over months (memory index
+0.26), but the same clone's cells in blood and lymph node did not resemble each
+other at all - where a cell is matters more than which clone it came from.
+
+**Seven days after influenza vaccination**, the antibody-secreting burst came
+from class-switched, mutated clones, as expected if it is recall of existing
+memory rather than a new response.
+
+These are associations in observational data: Threadfin produces hypotheses
+about clones that need experiments to confirm. The step-by-step walkthroughs
+are in [`report/PUBLIC_DATASETS_REPORT.md`](report/PUBLIC_DATASETS_REPORT.md)
+and, for the germinal centre,
+[`report/GERMINAL_CENTRE_CASE_STUDIES.md`](report/GERMINAL_CENTRE_CASE_STUDIES.md);
+the analysis code is in [`case_studies/`](case_studies/); how Threadfin relates
+to other tools is in [`docs/GAP_ANALYSIS.md`](docs/GAP_ANALYSIS.md); the
+manuscript figure plan is in [`paper/figure_plan/`](paper/figure_plan/).
 
 ## Upgrading from v3
 

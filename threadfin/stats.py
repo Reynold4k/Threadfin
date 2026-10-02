@@ -241,6 +241,8 @@ def association_test(
         raise ValueError(f"No clones with both a programme and a '{label_key}' value.")
     rng = np.random.default_rng(random_state)
     prog_codes, progs = codes(df["programme"])
+    if len(progs) < 2:
+        raise ValueError("Only one programme: clone-level tests compare programmes, so at least two are needed.")
     strata = codes(df["stratum"])[0]
     numeric = pd.api.types.is_numeric_dtype(df["label"]) and not pd.api.types.is_bool_dtype(df["label"])
 
@@ -257,6 +259,119 @@ def association_test(
     log(f"association '{label_key}': {len(df)} clones, {n_sig} programme effects at FDR < 0.05 "
         f"(within-'{strata_key}' permutation).", verbose)
     return out
+
+
+# --------------------------------------------------------------------------- label vs clone profiles
+
+
+def profile_association(
+    adata,
+    label_key: str,
+    *,
+    clone_key: str | None = None,
+    strata_key: str | None = "auto",
+    how: str = "auto",
+    min_frac: float = 0.5,
+    min_reliability: float = 0.5,
+    n_perm: int = 2000,
+    random_state: int = 0,
+    verbose: bool = True,
+) -> dict:
+    """Does a clone-level label explain how clones differ? (no programmes needed)
+
+    Programme tests (:func:`association_test`) need distinct programmes. When
+    clones vary along a continuum there are none, but a label (division
+    history, antigen binding, isotype) can still track where a clone sits.
+    This test asks how much of the variation between clone profiles is
+    explained by the label: the share of the profile sum of squares between
+    label groups (categorical labels, as in PERMANOVA; Anderson 2001) or
+    captured by a linear trend in the label (numeric labels, as in
+    distance-based redundancy analysis; McArdle & Anderson 2001). The
+    p-value comes from permuting labels among clones within strata (donors).
+
+    Parameters
+    ----------
+    label_key, how, min_frac
+        Cell-level label and how it is collapsed per clone (see
+        :func:`clone_labels`).
+    strata_key
+        Clone-table column whose levels define permutation strata;
+        ``"auto"`` uses the donor when available.
+    min_reliability
+        Only clones whose profile reliability reaches this value are used.
+
+    Returns
+    -------
+    dict with ``r2`` (fraction of profile variance explained by the label),
+    the permutation ``null_mean``, ``excess_r2`` (``r2 - null_mean``),
+    ``p_value``, ``n_clones``, ``kind`` and, for every level of a categorical
+    label (or for the numeric label), Spearman correlations with the first
+    three principal axes of the profiles (``axis_correlation``). Stored in
+    ``adata.uns['threadfin']['profile_associations'][label_key]``.
+    """
+    from scipy.stats import spearmanr
+
+    prof = get_profiles(adata)
+    table = prof["clone_table"]
+    clone_key = clone_key or prof["params"]["clone_key"]
+    if strata_key == "auto":
+        strata_key = "donor" if "donor" in table.columns else None
+    labels = clone_labels(adata, label_key, clone_key=clone_key, how=how, min_frac=min_frac)
+    use = table.index[(table["reliability"] >= min_reliability).to_numpy()]
+    use = use[labels.reindex(use).notna().to_numpy()]
+    if use.size < 10:
+        raise ValueError(f"Only {use.size} reliable clones have a '{label_key}' value (need >= 10).")
+    x = prof["features"].loc[use].to_numpy(dtype=float)
+    x = x - x.mean(axis=0)
+    total = float(np.einsum("ij,ij->", x, x))
+    y = labels.loc[use]
+    strata = (codes(table.loc[use, strata_key].astype(str))[0] if strata_key is not None
+              else np.zeros(use.size, dtype=np.int64))
+    numeric = pd.api.types.is_numeric_dtype(y) and not pd.api.types.is_bool_dtype(y)
+    rng = np.random.default_rng(random_state)
+
+    if numeric:
+        yv = y.to_numpy(dtype=float)
+
+        def stat(v):
+            v = v - v.mean()
+            ss = float(v @ v)
+            return 0.0 if ss <= 0 else float(np.sum((x.T @ v) ** 2) / ss / total)
+    else:
+        yv, levels = codes(y.astype(str))
+        if len(levels) < 2:
+            raise ValueError(f"'{label_key}' has a single level among the reliable clones.")
+
+        def stat(v):
+            sums = np.zeros((len(levels), x.shape[1]))
+            np.add.at(sums, v, x)
+            n = np.bincount(v, minlength=len(levels)).astype(float)
+            ok = n > 0
+            return float(np.sum(sums[ok] ** 2 / n[ok, None]) / total)
+
+    observed = stat(yv)
+    null = np.array([stat(permute_within(yv, strata, rng)) for _ in range(n_perm)])
+    p_value = perm_pvalue(observed, null)
+
+    # where along the main axes of clone variation does the label sit?
+    _, _, vt = np.linalg.svd(x, full_matrices=False)
+    axes = x @ vt[: min(3, vt.shape[0])].T
+    if numeric:
+        axis_corr = {"label": [float(spearmanr(axes[:, k], yv).statistic) for k in range(axes.shape[1])]}
+    else:
+        axis_corr = {str(lv): [float(spearmanr(axes[:, k], (yv == i).astype(float)).statistic)
+                               for k in range(axes.shape[1])] for i, lv in enumerate(levels)}
+    res = {
+        "label": label_key, "kind": "numeric" if numeric else "categorical", "r2": observed,
+        "null_mean": float(null.mean()), "excess_r2": float(observed - null.mean()), "p_value": float(p_value),
+        "n_clones": int(use.size), "n_levels": None if numeric else int(len(levels)),
+        "strata_key": strata_key, "n_perm": int(n_perm), "axis_correlation": axis_corr,
+    }
+    get_uns(adata).setdefault("profile_associations", {})[label_key] = res
+    log(f"profile association '{label_key}': explains {100 * observed:.1f}% of clone-profile variance vs "
+        f"{100 * res['null_mean']:.1f}% for permuted labels (p = {p_value:.3g}, {use.size} clones, "
+        f"within-'{strata_key}' permutation).", verbose)
+    return res
 
 
 def _categorical_association(df, prog_codes, progs, strata, n_perm, rng):

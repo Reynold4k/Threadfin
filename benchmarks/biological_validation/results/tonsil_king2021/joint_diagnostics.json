@@ -1,9 +1,0 @@
-{
-  "testcor_gex": -0.02405236049201388,
-  "testcor_bcr": NaN,
-  "n_edges": 3183,
-  "modality_contribution": {
-    "gex": 1.0,
-    "bcr": 0.0
-  }
-}
