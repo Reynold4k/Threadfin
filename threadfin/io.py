@@ -197,64 +197,71 @@ def attach_bcr(
     bcr_table: pd.DataFrame,
     clone_col: str = "clone_id",
     prefix: str = "bcr_",
+    summarize: bool = True,
+    verbose: bool = True,
 ) -> "object":
     """Attach per-cell BCR annotations to ``adata.obs`` (vectorized).
 
-    Cells without a BCR get ``NaN``. A clone-level summary table
-    (one row per clone: v/d/j calls, consensus CDR3, number of cells) is
-    stored in ``adata.uns['threadfin_clones']`` for downstream use by
-    :func:`threadfin.clonotype_recluster`.
+    Cells without a BCR get ``NaN``. Every column of ``bcr_table`` is added
+    to ``obs`` with ``prefix`` (the clone column keeps its own name).
+    Columns from a previous call with the same prefix are replaced.
 
     Parameters
     ----------
     adata
         :class:`anndata.AnnData` with ``obs_names`` matching the BCR barcodes.
     bcr_table
-        Per-cell BCR table indexed by barcode. Should already contain a
-        ``clone_col`` column (see :func:`build_clone_key`).
+        Per-cell BCR table indexed by barcode, with a ``clone_col`` column
+        (see :func:`threadfin.define_clones` or :func:`build_clone_key`).
     clone_col
-        Column of ``bcr_table`` holding the clonotype id.
+        Column of ``bcr_table`` holding the clone id.
     prefix
         Prefix for the added ``obs`` columns.
+    summarize
+        Also store a clone-level summary (modal V/D/J calls and CDR3 per
+        clone) in ``adata.uns['threadfin_clones']``; only needed by the legacy
+        sequence-blending functions (``cdr3_weight``, ``joint_embedding``).
 
     Returns
     -------
     The modified ``adata`` (in place and returned).
     """
     if clone_col not in bcr_table.columns:
-        raise ValueError(f"bcr_table needs a '{clone_col}' column; see build_clone_key().")
+        raise ValueError(f"bcr_table needs a '{clone_col}' column; see define_clones().")
 
     tab = bcr_table.copy()
     tab.index = tab.index.astype(str)
+    if tab.index.has_duplicates:
+        raise ValueError("bcr_table has duplicated barcodes; keep one row per cell.")
     adata.obs_names = adata.obs_names.astype(str)
 
-    n_matched = adata.obs_names.isin(tab.index).sum()
+    n_matched = int(adata.obs_names.isin(tab.index).sum())
     if n_matched == 0:
         raise ValueError(
             "No overlap between adata.obs_names and BCR barcodes — check barcode formatting."
         )
 
-    cols = {c: prefix + c for c in tab.columns}
-    adata.obs = adata.obs.join(tab.rename(columns=cols), how="left")
-    adata.obs[clone_col] = adata.obs[prefix + clone_col]
-    adata.obs = adata.obs.drop(columns=[prefix + clone_col])
+    renamed = {c: prefix + c for c in tab.columns if c != clone_col}
+    stale = [c for c in list(renamed.values()) + [clone_col] if c in adata.obs.columns]
+    obs = adata.obs.drop(columns=stale)
+    adata.obs = obs.join(tab.rename(columns=renamed), how="left")
 
-    clone_info = (
-        tab.dropna(subset=[clone_col])
-        .groupby(clone_col)
-        .agg({c: (lambda s: (lambda m: m.iloc[0] if len(m) else None)(s.mode()))
-              for c in tab.columns if c != clone_col})
-    )
-    clone_info["n_cells_bcr_table"] = tab[clone_col].value_counts()
-    adata.uns[_CLONE_INFO_KEY] = clone_info
+    n_clones = int(tab.loc[tab.index.isin(adata.obs_names), clone_col].nunique())
+    if summarize:
+        clone_info = (
+            tab.dropna(subset=[clone_col])
+            .groupby(clone_col)
+            .agg({c: (lambda s: (lambda m: m.iloc[0] if len(m) else None)(s.mode()))
+                  for c in tab.columns if c != clone_col})
+        )
+        clone_info["n_cells_bcr_table"] = tab[clone_col].value_counts()
+        adata.uns[_CLONE_INFO_KEY] = clone_info
 
     adata.uns.setdefault("threadfin", {})["attach_bcr"] = {
         "n_cells_total": int(adata.n_obs),
-        "n_cells_with_bcr": int(n_matched),
-        "n_clones": int(clone_info.shape[0]),
+        "n_cells_with_bcr": n_matched,
+        "n_clones": n_clones,
     }
-    print(
-        f"[threadfin] attached BCR: {n_matched}/{adata.n_obs} cells, "
-        f"{clone_info.shape[0]} clones."
-    )
+    if verbose:
+        print(f"[threadfin] attached BCR: {n_matched}/{adata.n_obs} cells, {n_clones} clones.", flush=True)
     return adata
