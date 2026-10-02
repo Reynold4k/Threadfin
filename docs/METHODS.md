@@ -6,8 +6,12 @@ References are listed at the end.
 
 ## 1. Clones (`define_clones`)
 
-A clone is the family of B cells descended from one V(D)J recombination
-event. Clones are defined from heavy-chain sequences **within each donor**
+A clone is the family of cells descended from one V(D)J recombination event.
+The rule differs by receptor and is read from the V genes (`receptor="auto"`):
+B-cell receptors hypermutate, so relatives must be merged by sequence
+similarity as described below, while T-cell receptors do not, so a T-cell
+clone is the set of cells carrying the same receptor (exact junction, same V
+and J). Clones are defined from heavy-chain sequences **within each donor**
 (two people never share a clone). Two cells can belong to the same clone only
 if they use the same IGHV and IGHJ genes and their junctions have the same
 length; within such a group, junctions that differ by less than a threshold

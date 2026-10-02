@@ -3,7 +3,7 @@
 ``threadfin.run`` answers three questions about a paired single-cell
 RNA-seq + BCR-seq dataset, in this order:
 
-1. **Does clone identity shape cell state?** - the *clonal coherence*: how
+1. **Is cell state inherited within clones?** - the *clonal coherence*: how
    much of the transcriptional variation inside each sample is explained by
    which clone a cell belongs to, tested against shuffled clone labels.
 2. **Which clones behave alike?** - genetically distinct clones are grouped
@@ -233,6 +233,7 @@ def run(
     time_key: str | None = None,
     test=None,
     clone_key: str = "clone_id",
+    receptor: str = "auto",
     basis: str | None = None,
     representation: str = "kernel",
     n_perm: int = 200,
@@ -273,6 +274,10 @@ def run(
         level (e.g. ``["isotype", "antigen_binding"]``).
     clone_key
         Name of the clone-id column (created when ``bcr`` is given).
+    receptor
+        ``"auto"`` reads it from the V genes: B-cell receptors hypermutate, so
+        relatives are merged by sequence similarity, while T-cell clones are
+        cells carrying the same receptor. Force with ``"bcr"`` or ``"tcr"``.
     basis
         Existing ``obsm`` embedding to use instead of building one. It
         should exclude immunoglobulin genes (see
@@ -318,8 +323,8 @@ def run(
             raise ValueError("No BCR barcodes match adata.obs_names; check barcode prefixes/suffixes.")
         if donor_key is not None:
             table["donor"] = adata.obs[donor_key].astype(str).reindex(table.index).values
-        table = define_clones(table, donor_key="donor" if donor_key else None, out_col=clone_key,
-                              verbose=verbose)
+        table = define_clones(table, receptor=receptor, donor_key="donor" if donor_key else None,
+                              out_col=clone_key, verbose=verbose)
         attach_bcr(adata, table.drop(columns=["donor"], errors="ignore"), clone_col=clone_key,
                    summarize=False, verbose=verbose)
     elif clone_key not in adata.obs.columns:

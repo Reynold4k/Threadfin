@@ -124,6 +124,7 @@ def find_threshold(distances, *, default: float = 0.15, lo: float = 0.02, hi: fl
 def define_clones(
     bcr: pd.DataFrame,
     *,
+    receptor: str = "auto",
     donor_key: str | None = "donor",
     v_col: str = "v_call",
     j_col: str = "j_call",
@@ -136,13 +137,26 @@ def define_clones(
     out_col: str = "clone_id",
     verbose: bool = True,
 ) -> pd.DataFrame:
-    """Group cells into B-cell clones (lineages) from their receptor sequences.
+    """Group cells into clones from their receptor sequences.
+
+    A clone is the family of cells descended from one V(D)J recombination.
+    B cells hypermutate their receptor, so relatives are joined when their
+    junctions are similar enough (single linkage below ``threshold``); T cells
+    do not, so their clones are cells with the *same* receptor. Which rule to
+    use is read from the V genes unless ``receptor`` says otherwise.
 
     Parameters
     ----------
     bcr
         Per-cell table (one row per cell, e.g. from :func:`threadfin.read_bcr`)
-        with V gene, J gene and junction (or CDR3) sequence of the heavy chain.
+        with V gene, J gene and junction (or CDR3) sequence of the heavy (B) or
+        beta/delta (T) chain.
+    receptor
+        ``"auto"`` (default) looks at the V genes: ``IG*`` means B cells and
+        ``TR*`` means T cells. ``"bcr"`` or ``"tcr"`` force the rule;
+        ``"tcr"`` sets ``threshold=0`` (exact junction matching), because
+        T-cell receptors are not hypermutated and a distance threshold would
+        merge unrelated clonotypes.
     donor_key
         Column identifying the individual. Clones are never formed across
         donors. ``None`` treats all cells as one donor.
@@ -171,7 +185,14 @@ def define_clones(
     from scipy.sparse import coo_matrix
     from scipy.sparse.csgraph import connected_components
 
+    if receptor not in ("auto", "bcr", "tcr"):
+        raise ValueError("receptor must be 'auto', 'bcr' or 'tcr'.")
     out = bcr.copy()
+    if receptor == "auto":
+        genes = out[v_col].astype(str).str.upper() if v_col in out.columns else pd.Series(dtype=str)
+        receptor = "tcr" if genes.str.startswith("TR").mean() > 0.5 else "bcr"
+    if receptor == "tcr" and threshold == "auto":
+        threshold = 0.0                      # T-cell receptors do not hypermutate
     if junction_col is None:
         junction_col = next((c for c in ("junction", "cdr3_nt", "junction_aa", "cdr3") if c in out.columns), None)
     for col in (v_col, j_col, junction_col):
@@ -242,12 +263,14 @@ def define_clones(
     n_clones = int(labels.nunique())
     expanded = int((labels.value_counts() >= 2).sum())
     out.attrs["clone_definition"] = {
+        "receptor": receptor,
         "threshold": thr, "threshold_method": info["method"], "sequence": seq_type,
         "junction_col": junction_col, "donor_key": donor_key, "light_chain": light_chain,
         "n_cells": int(labels.notna().sum()), "n_clones": n_clones, "n_expanded": expanded,
     }
+    how = ("exact junction matching" if thr == 0 else f"{seq_type} Hamming threshold {thr:.3f} ({info['method']})")
     log(f"define_clones: {labels.notna().sum()} cells -> {n_clones} clones ({expanded} with >= 2 "
-        f"cells); {seq_type} Hamming threshold {thr:.3f} ({info['method']}).", verbose)
+        f"cells); {receptor.upper()}, {how}.", verbose)
     return out
 
 

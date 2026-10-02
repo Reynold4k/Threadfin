@@ -6,10 +6,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python >= 3.10](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org)
 
-A B-cell clone is a family of cells descended from one ancestor that share a
-B-cell receptor. Paired single-cell sequencing tells you, for every cell, which
-clone it belongs to and what it is doing. Threadfin uses the **clone as the
-unit of analysis**.
+A clone is a family of cells descended from one ancestor that share an immune
+receptor. Paired single-cell sequencing tells you, for every cell, which clone
+it belongs to and what it is doing. Threadfin uses the **clone as the unit of
+analysis**. It is built for B cells, whose receptors hypermutate, and also
+handles T cells, where a clone is simply the cells carrying the same receptor.
 
 This matters most where the biology is a cycle. In a germinal centre, B cells
 divide and mutate their receptor, test it, and are then either sent back for
@@ -96,7 +97,7 @@ print(result.summary())
 
 | Output | Where | Meaning |
 |---|---|---|
-| clone of every cell | `adata.obs["clone_id"]` | defined within donors, hypermutated variants merged |
+| clone of every cell | `adata.obs["clone_id"]` | defined within donors; hypermutated variants merged for B cells, exact clonotypes for T cells |
 | programme of every cell | `adata.obs["clone_programme"]` | the programme of the cell's clone (reliable clones) |
 | extended programme labels | `adata.obs["clone_programme_assigned"]` | also smaller clones, assigned with posterior >= 0.7 |
 | per-clone table | `result.clones` | size, reliability, programme, bootstrap confidence, posterior |
@@ -108,9 +109,11 @@ print(result.summary())
 
 ## How it works (one paragraph per step)
 
-1. **Clones.** Cells are grouped into clones within each donor: same IGHV and
-   IGHJ genes, same junction length, and junction sequences closer than a
-   threshold found automatically from the data.
+1. **Clones.** Cells are grouped into clones within each donor: same V and J
+   genes, same junction length, and junction sequences closer than a threshold
+   found automatically from the data. B-cell receptors hypermutate, so
+   relatives differ; T-cell receptors do not, so T-cell clones are the cells
+   carrying the same receptor. Which rule applies is read from the V genes.
 2. **Clone profiles.** Each clone is described relative to the cells it was
    sampled with. Small clones are shrunk towards their sample, large clones
    keep their own profile, and each clone gets a *reliability* score; the

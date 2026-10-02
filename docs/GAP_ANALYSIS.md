@@ -42,49 +42,59 @@ collected.
 
 | Tool | Answers | Relation to Threadfin |
 |---|---|---|
-| **CoNGA** (Schattgen et al. 2022, *Nat Biotechnol*) | whether receptor-similar clonotypes share expression neighbourhoods (mainly T cells) | asks about *similar sequences*; Threadfin asks about *the same clone* and about unrelated clones with shared fates |
-| **TESSA** (Zhang et al. 2021, *Nat Methods*); **Benisse** (Zhang et al. 2022, *Nat Mach Intell*) | receptor embeddings shaped by expression | sequence-similarity structure, not clone fates |
-| **mvTCR** (Drost et al. 2024, *Nat Commun*) | joint cell embeddings of receptor and expression | cell-level, not clone-level |
+| **BiGCN** (Liu et al. 2026, *Small Methods*) | a joint embedding of transcriptome and BCR, learned with a graph network, for annotating B-cell states | the unit is the **cell**: it produces a better cell representation. Threadfin asks questions about clones and reports how certain each answer is |
+| **CoNGA** (Schattgen et al. 2022, *Nat Biotechnol*) | whether receptor-similar clonotypes share expression neighbourhoods | asks about *similar sequences*; Threadfin asks about *the same clone*, and about unrelated clones with shared behaviour |
+| **sciCSR** (Ng et al. 2023, *Nat Methods*) | B-cell state transitions and class-switch dynamics from expression | transitions between cell states; no clone-level estimates |
+| **Clonotrace** (2025, preprint) | state transitions and fate bias from expression plus clonotype (mainly T cells) | overlaps "which clones behave alike"; trajectory-shaped, and does not model where a clone was sampled |
+| **TESSA** (Zhang et al. 2021, *Nat Methods*); **Benisse** (Zhang et al. 2022, *Nat Mach Intell*) | receptor embeddings shaped by expression | sequence-similarity structure, not clone behaviour |
+| **SeQuoIA** (2025, preprint) | selection pressure in germinal centres from somatic mutation patterns alone | **complementary**: it reads selection from the sequences, Threadfin reads clone behaviour from expression. The two can be checked against each other |
 | **STARTRAC** (Zhang et al. 2018, *Nature*) | clone sharing between predefined clusters and tissues | descriptive indices over predefined cell clusters |
 
-### Clone-level analysis from lineage tracing: closest in spirit
+### Clone-level variation in other systems
 
-| Tool | Answers | Why it does not transfer to B-cell repertoires |
+| Tool | Answers | Why it does not transfer directly |
 |---|---|---|
-| **clone2vec** (Isaev et al. 2026, bioRxiv) | embeddings of clones from the cell neighbourhood graph | built for exact synthetic barcodes; no hypermutation-aware clones, no adjustment for where clones were sampled, no clone-level tests |
+| **Mold et al. 2024, *Cell Systems*** | established that gene expression is **clonally heritable**, by comparing variation within and between clones of cultured human lymphocytes and mouse brain cells | the measurement Threadfin builds on. It was made where clone membership is known and all cells come from one culture. In a repertoire, clones are inferred from hypermutating receptors, are mostly one to three cells, and are confounded with the sample, tissue or sort gate they came from - which is the problem Threadfin solves |
+| **clone2vec** (Isaev et al. 2026, preprint) | embeddings of clones learned from the cell neighbourhood graph | built for exact synthetic barcodes; no hypermutation-aware clones, no adjustment for where a clone was sampled, no clone-level tests |
 | **ClonoCluster** (Richman et al. 2023, *Cell Genomics*) | cell clusters informed by clone identity | clusters cells, not clones |
-| **CoSpar** (Wang et al. 2022, *Nat Biotechnol*); **moslin** (Lange et al. 2024, *Genome Biol*); **CellRank 2** (Weiler et al. 2024, *Nat Methods*) | fate maps from barcoded time courses | designed for prospective barcoding, not donor-private, mostly small, hypermutated repertoires |
+| **CoSpar** (Wang et al. 2022, *Nat Biotechnol*); **moslin** (Lange et al. 2024, *Genome Biol*); **CellRank 2** (Weiler et al. 2024, *Nat Methods*) | fate maps from barcoded time courses | designed for prospective barcoding with planned sampling, not donor-private, mostly small, hypermutated repertoires |
 
 ### The biology says the questions are real
 
 B-cell clones have restricted fate sets and transcriptional memory (Swift,
-Horns & Quake 2023, *Life Sci Alliance*); germinal centres produce plasma
-cells across a range of affinities (Sprumont et al. 2023, *Cell*);
-high-affinity germinal-centre clones divide more but mutate less per division
-(Merkenschlager et al. 2025, *Nature*). These results come from dedicated
-experimental systems. What has been missing is a way to ask the same questions
-in ordinary paired single-cell data.
+Horns & Quake 2023, *Life Sci Alliance*); germinal centres produce plasma cells
+across a range of affinities (Sprumont et al. 2023, *Cell*); high-affinity
+germinal-centre clones divide more but mutate less per division (Merkenschlager
+et al. 2025, *Nature*). A mathematical model of the germinal centre (Xiang et
+al. 2026, *Cell Systems*) predicts that non-genetic cell states are variable
+while B cells search for help but stable within proliferative clonal bursts,
+and that this stability speeds up affinity maturation. That prediction is about
+a quantity nobody measures directly from data: how much of a clone's state
+survives a round of selection. Threadfin measures it.
 
 ## The gap Threadfin fills
 
-| Question | Repertoire toolkits | Receptor-expression integration | Lineage-tracing clone tools | **Threadfin** |
+| Question | Repertoire toolkits | Receptor-expression integration | Clone-level tools elsewhere | **Threadfin** |
 |---|---|---|---|---|
 | Clones from hypermutated sequences, within donors | yes | partly | no | **yes** |
-| Is fate inherited within clones, beyond where cells were sampled? | no | no | no | **yes** (clonal coherence) |
-| Which clones behave alike, or is it a continuum? | no | no | partly | **yes** (programmes with significant splits only) |
-| What explains differences between clones (antigen, isotype, gates, tissue)? | no (cell counts) | no | no | **yes** (clone-level label tests) |
-| Do clones keep their state over time or across tissues? | no | no | trajectory-based | **yes** (clonal memory) |
-| Which genes are clonally inherited? | no | no | partly | **yes** (gene-level clonal heritability) |
-| How reliable is each clone's profile, given its size? | no | no | no | **yes** (per-clone reliability) |
+| Is state inherited within clones, beyond where the cells were sampled? | no | no | measured, but only where clones are known and co-cultured | **yes**, with the sampling design accounted for |
+| Which clones behave alike - **or is it a continuum?** | no | no (clusters are always returned) | no | **yes**: groups are reported only when the split is real |
+| What explains differences between clones, with clones as replicates? | no (cell counts) | no | no | **yes** |
+| Do clones keep their state over time, tissue or selection round? | no | trajectory-shaped | no | **yes** |
+| How reliable is each clone's answer, given how few cells it has? | no | no | no | **yes** |
 
 ## In one paragraph
 
-Threadfin treats each B-cell clone as the unit of analysis. It defines clones
-within donors from hypermutated sequences, describes each clone relative to
-the cells it was sampled with (so that sample and batch differences are not
-mistaken for clonal ones), measures how much of B-cell state is clonally
-inherited, groups clones into programmes only when the groups are genuinely
-distinct, tests what distinguishes clones with clones rather than cells as
-replicates, measures whether clones keep their state over time and across
-tissues, and ranks genes by clonal inheritance, all from one `threadfin.run()`
-call on standard AnnData objects.
+Treating a clone as the unit of analysis is not new - gene expression was shown
+to be clonally heritable in cultured lymphocyte clones (Mold et al. 2024) - but
+doing it on an immune repertoire is, because there the clones are inferred from
+hypermutating receptors, most of them hold one to three cells, and which clone
+a cell belongs to is tangled up with which sample, tissue or sort gate it came
+from. Threadfin makes that measurement valid: it defines clones within donors,
+describes each clone relative to the cells it was sampled with, reports how
+reliable each clone's answer is given its size, reports groups of clones only
+when the split between them is real, tests what explains the differences
+between clones with clones as the replicates, and measures how much of a
+clone's state survives over time, across tissues or across a round of
+selection - all from one `threadfin.run()` call on standard AnnData objects,
+for B-cell and T-cell receptors alike.
