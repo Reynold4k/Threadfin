@@ -361,8 +361,8 @@ def sim_runtime(ax):
 
 DATASET_NAMES = {"ln_vaccine": "Lymph node, mRNA vaccine", "mouse_np": "Mouse GC, NP",
                  "mouse_rbd": "Mouse GC, RBD", "flu": "Blood, influenza vaccine", "ebv": "Tonsil organoids, EBV",
-                 "tonsil": "Tonsil", "stephenson": "Blood, COVID-19"}
-DATASET_ORDER = ["ln_vaccine", "mouse_np", "mouse_rbd", "flu", "ebv", "tonsil", "stephenson"]
+                 "tonsil": "Tonsil", "stephenson": "Blood, COVID-19", "gc_np_pc": "Mouse GC, sorted fates"}
+DATASET_ORDER = ["ln_vaccine", "mouse_np", "mouse_rbd", "gc_np_pc", "flu", "ebv", "tonsil", "stephenson"]
 
 
 def clone_threshold_panel(ax, ax_in=None, dataset="ln_vaccine"):
@@ -419,7 +419,7 @@ def reliability_panel(ax):
         s = load_summary(ds)
         if s is None:
             continue
-        rho = s["coherence"]["main"]["icc"]
+        rho = s["coherence"]["icc"]
         r = n * rho / (1 + (n - 1) * rho)
         ax.plot(n, r, color=c, lw=1)
         ends.append((DATASET_NAMES[ds], r[-1], c, rho))
@@ -469,10 +469,10 @@ def kernel_toy_panel(fig, x, y, w, h, letter):
     ax = panel(fig, x, y + h * 0.72, w, h * 0.28)
     vals = [np.linalg.norm(a.mean(0) - b.mean(0)), mmd(a, b)]
     ax.barh([1, 0], vals, height=0.55, color=[GREY, BLUE])
-    ax.set_yticks([1, 0], ["centroid distance\n(mean profile)", "distribution distance\n(kernel profile, MMD)"])
+    ax.set_yticks([1, 0], ["average state", "whole distribution"], fontsize=5)
     ax.tick_params(axis="y", length=0)
-    ax.set_xlabel("distance between clone A and clone B")
-    ax.set_title("same centroid (x), different distributions", fontsize=5.5, color=INK, pad=2)
+    ax.set_xlabel("difference measured between clone A and clone B")
+    ax.set_title("the two clones have the same average state (x)", fontsize=5.5, color=INK, pad=2)
 
 
 _SPLIT_CACHE = {}
@@ -754,6 +754,198 @@ def gc_memory_panel(ax):
             fontsize=4.8, color=INK2, ha="right", va="top", linespacing=1.3)
 
 
+# ------------------------------------------------------------------ lymph-node panels
+
+
+def programme_signature_panel(ax, dataset="ln_vaccine"):
+    """What kind of B cells each group of clones is made of."""
+    from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm
+
+    summ = load_summary(dataset)
+    sig = (summ or {}).get("programme_signatures")
+    if not sig:
+        missing(ax, "what each group of clones is made of")
+        return
+    d = pd.DataFrame(sig).T if isinstance(next(iter(sig.values())), dict) else None
+    if d is None or d.empty:
+        missing(ax, "what each group of clones is made of")
+        return
+    order = ["germinal centre", "dark zone / cycling", "light zone", "plasma cell", "memory", "naive", "interferon"]
+    d = d[[c for c in order if c in d.columns]]
+    cmap = LinearSegmentedColormap.from_list("div", ["#2a78d6", "#dcdcd4", "#eb6834"])
+    v = float(np.nanmax(np.abs(d.to_numpy())))
+    im = ax.imshow(d.to_numpy(), cmap=cmap, norm=TwoSlopeNorm(0, -v, v), aspect="auto")
+    ax.set_xticks(range(d.shape[1]), [c.replace(" / ", "/\n") for c in d.columns], rotation=45, ha="right",
+                  fontsize=4.8)
+    ax.set_yticks(range(d.shape[0]), d.index, fontsize=5)
+    ax.tick_params(length=0)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    for i in range(d.shape[0]):
+        for j in range(d.shape[1]):
+            val = d.iat[i, j]
+            ax.text(j, i, f"{val:.1f}", ha="center", va="center", fontsize=4.4,
+                    color="white" if abs(val) > 0.6 * v else INK)
+    cb = ax.figure.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
+    cb.set_label("gene-set score\n(clones averaged)", fontsize=4.6, color=INK2, linespacing=1.1)
+    cb.ax.tick_params(labelsize=4.4, length=1.5)
+    cb.outline.set_visible(False)
+
+
+def spike_binding_panel(ax, dataset="ln_vaccine", label="spike_binding", level="S+"):
+    """How much each group of clones is enriched for antigen-binding clones."""
+    t = load_table(dataset, "programme_associations.csv")
+    if t is None or "level" not in t:
+        missing(ax, "antigen-binding clones per group")
+        return
+    d = t[(t["label"] == label) & (t["level"] == level)].sort_values("programme")
+    if d.empty:
+        missing(ax, "antigen-binding clones per group")
+        return
+    y = np.arange(len(d))[::-1].astype(float)
+    ax.errorbar(d["odds_ratio"], y, xerr=[d["odds_ratio"] - d["ci_low"], d["ci_high"] - d["odds_ratio"]],
+                fmt="o", ms=3.5, color=BLUE, ecolor=INK2, elinewidth=0.6, capsize=1.5,
+                markeredgecolor="white", markeredgewidth=0.3)
+    ax.axvline(1, color=MUTED, lw=0.5)
+    ax.set_xscale("log")
+    log_ticks(ax, "x", [0.01, 0.1, 1, 10, 100])
+    ax.set_yticks(y, [f"{r.programme}: {100 * r.frac_in_programme:.0f}% vs {100 * r.frac_elsewhere:.0f}%"
+                      for r in d.itertuples()], fontsize=5)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlabel("odds of being a spike-binding clone\n(within donors)")
+    caption(ax, "Each row: the share of spike-binding clones inside that group of clones versus elsewhere. "
+                "Compared within donors, so differences between people cannot produce it.", y=-0.52)
+
+
+def memory_over_time_panel(ax, dataset="ln_vaccine"):
+    """Does a clone keep its state over months, and between tissues?"""
+    s = load_summary(dataset)
+    mem = (s or {}).get("memory") or {}
+    pretty = {"timepoint": "the same clone,\nweeks to months apart", "tissue": "the same clone,\nlymph node vs blood"}
+    rows = [{"label": pretty.get(k, k), **v} for k, v in mem.items() if k in pretty]
+    if not rows:
+        missing(ax, "clonal memory over time and tissue")
+        return
+    d = pd.DataFrame(rows)
+    y = np.arange(len(d))[::-1].astype(float)
+    lo = [m - c[0] for m, c in zip(d["memory_index"], d["memory_index_ci"])]
+    hi = [c[1] - m for m, c in zip(d["memory_index"], d["memory_index_ci"])]
+    ax.errorbar(d["memory_index"], y, xerr=[lo, hi], fmt="o", ms=4, color=BLUE, ecolor=INK2, elinewidth=0.7,
+                capsize=2, markeredgecolor="white", markeredgewidth=0.3)
+    ax.axvline(0, color=MUTED, lw=0.5)
+    ax.set_yticks(y, [f"{r.label}\n({r.n_clones} clones)" for r in d.itertuples()], fontsize=5)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(-0.15, 0.6)
+    ax.set_xlabel("clonal memory index")
+    caption(ax, "A clone keeps part of its state over months, but its cells in blood and lymph node do not "
+                "resemble each other: where a cell is matters more than which clone it came from.", y=-0.55)
+
+
+# ------------------------------------------------------------------ blood, tonsil and gene panels
+
+HUMAN_SETS = [("flu", "Blood, influenza vaccine"), ("tonsil", "Tonsil"), ("stephenson", "Blood, COVID-19"),
+              ("ebv", "Tonsil organoids, EBV")]
+PRETTY_LABELS = {"isotype": "isotype", "mutation_frequency": "somatic mutation load",
+                 "timepoint": "sampled before or 7 days after vaccination", "gfp": "infected by the virus",
+                 "severity": "donor's disease severity", "tissue": "sampled in blood or lymph node",
+                 "spike_binding": "antibody binds the vaccine antigen", "elisa": "antibody binds in ELISA"}
+
+
+def label_effects_across(ax, datasets, title_note=""):
+    """What explains the differences between clones, across several datasets."""
+    rows = []
+    for ds, name in datasets:
+        t = load_table(ds, "label_effects.csv")
+        s = load_summary(ds)
+        if t is None:
+            continue
+        for _, r in t.iterrows():
+            key = str(r["label"]).split(":")[0]
+            if key in PRETTY_LABELS:
+                rows.append({"dataset": name, "label": PRETTY_LABELS[key], "r2": 100 * r["r2"],
+                             "null": 100 * r["null_mean"], "p": r["p_value"], "n": int(r["n_clones"]),
+                             "donor_level": "donor-level" in str(r.get("note", ""))})
+    if not rows:
+        missing(ax, "what explains the differences between clones")
+        return
+    d = pd.DataFrame(rows).sort_values(["dataset", "r2"])
+    y = np.arange(len(d)).astype(float)
+    colour = [GREY if (r.p >= 0.05) else (YELLOW if r.donor_level else BLUE) for r in d.itertuples()]
+    ax.barh(y, d["r2"], height=0.62, color=colour)
+    ax.barh(y, d["null"], height=0.62, color="none", edgecolor=INK2, linewidth=0.45, linestyle=(0, (2, 1)))
+    ax.set_yticks(y, [f"{r.dataset}: {r.label}" for r in d.itertuples()], fontsize=4.8)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(0, max(d["r2"]) * 1.45)
+    for yy, r in zip(y, d.itertuples()):
+        ax.text(r.r2 + max(d["r2"]) * 0.015, yy, f"{r.n:,} clones, p = {r.p:.2g}", va="center", fontsize=4.4,
+                color=INK2)
+    ax.set_xlabel("differences between clones explained (%)")
+    caption(ax, "Dashed outline: the same label shuffled among clones of the same donor. Yellow: a label that is "
+                "fixed for a donor, so it cannot be separated from other differences between people. " + title_note,
+            y=-0.2)
+
+
+def geneset_inheritance_panel(ax):
+    """Which B-cell programmes are inherited within clones, against genes of similar expression."""
+    path = DATA / "cross_dataset_geneset_heritability.csv"
+    if not path.exists():
+        missing(ax, "which gene programmes are clonally inherited")
+        return
+    d = pd.read_csv(path)
+    d = d[(d["n_genes"] >= 4) & (d["median_icc"] > 0) & (d["matched_background_median_icc"] > 0)].copy()
+    d["ratio"] = d["median_icc"] / d["matched_background_median_icc"]
+    names = {"ln_vaccine": "lymph node", "flu": "blood, influenza", "stephenson": "blood, COVID-19",
+             "tonsil": "tonsil", "ebv": "tonsil organoids", "mouse_np": "mouse GC (NP)",
+             "mouse_rbd": "mouse GC (RBD)"}
+    cols = dict(zip(names.values(), [BLUE, ORANGE, AQUA, YELLOW, MAGENTA, GREEN, VIOLET]))
+    d["name"] = d["dataset"].map(names)
+    order = d.groupby("gene_set")["ratio"].median().sort_values().index
+    rng = np.random.default_rng(0)
+    for i, gs in enumerate(order):
+        sub = d[d["gene_set"] == gs]
+        ax.scatter(sub["ratio"], i + rng.normal(0, 0.07, len(sub)), s=10,
+                   color=[cols.get(n, GREY) for n in sub["name"]], edgecolors="white", linewidths=0.3, zorder=3)
+        ax.plot([sub["ratio"].median()] * 2, [i - 0.32, i + 0.32], color=INK, lw=1.1, zorder=4)
+    ax.axvline(1, color=MUTED, lw=0.6)
+    ax.set_xscale("log")
+    log_ticks(ax, "x", [1, 2, 5, 10, 30])
+    ax.set_yticks(range(len(order)), [g.replace(" / ", "/") for g in order], fontsize=5)
+    ax.tick_params(axis="y", length=0)
+    ax.set_ylim(-0.6, len(order) - 0.4)
+    ax.set_xlabel("inherited within clones, relative to genes of similar expression")
+    handles = [plt.Line2D([], [], marker="o", ls="", ms=3, color=c) for c in cols.values()]
+    ax.legend(handles, list(cols), fontsize=4.4, loc="lower right", handletextpad=0.2, labelspacing=0.22,
+              borderaxespad=0.2)
+    caption(ax, "Above 1: the genes of that programme are more clonally inherited than other genes expressed at "
+                "the same level. One point per dataset; the line is the median across datasets.", y=-0.34)
+
+
+def top_clonal_genes_panel(ax, datasets=("ln_vaccine", "flu", "mouse_rbd"), n_top=8):
+    """The genes whose expression is most strongly inherited within clones."""
+    rows = []
+    names = {"ln_vaccine": "lymph node", "flu": "blood, influenza", "mouse_rbd": "mouse germinal centre"}
+    for ds in datasets:
+        t = load_table(ds, "gene_heritability.csv", index_col=0)
+        if t is None:
+            continue
+        col = "excess_icc" if "excess_icc" in t.columns else "icc"
+        top = t.sort_values(col, ascending=False).head(n_top)
+        rows.append(pd.DataFrame({"dataset": names.get(ds, ds), "gene": top.index, "value": top[col].to_numpy()}))
+    if not rows:
+        missing(ax, "most clonally inherited genes")
+        return
+    d = pd.concat(rows)
+    ax.set_axis_off()
+    ax.set_xlim(0, 1), ax.set_ylim(0, 1)
+    for k, (name, g) in enumerate(d.groupby("dataset", sort=False)):
+        x = 0.02 + k * 0.34
+        ax.text(x, 0.97, name, fontsize=5.2, color=INK, fontweight="bold", va="top")
+        for i, r in enumerate(g.itertuples()):
+            ax.text(x, 0.86 - i * 0.095, r.gene, fontsize=5, color=INK2, va="top", style="italic")
+    caption(ax, "Genes ranked by how much more of their variation is explained by clone identity than by "
+                "shuffled clones. Receptor genes are excluded: they are clonal by definition.", y=-0.1)
+
+
 # ------------------------------------------------------------------ figures
 
 
@@ -845,7 +1037,7 @@ def figure_1():
                 "genes -> clone profiles relative to the cells sampled with them -> is state inherited within "
                 "clones? -> which clones behave alike (or a continuum)? -> what explains the differences between "
                 "clones? -> do clones keep their state?")
-    kernel_toy_panel(fig, 4, 114, 78, 48, "e")
+    kernel_toy_panel(fig, 14, 114, 72, 48, "e")
     reliability_panel(panel(fig, 108, 114, 55, 42, "f"))
     placeholder(panel(fig, 0, 174, 90, 36, "g"),
                 "Clonal memory (schematic): the same clone sampled twice, compared with a random clone of the same "
@@ -860,6 +1052,62 @@ def figure_1():
     save(fig, "Figure_1")
 
 
+def figure_3():
+    fig = new_page("Figure 3", "A vaccinated human lymph node over six months",
+                   "Groups of clones, which of them carry the vaccine-specific antibodies, and how long a clone "
+                   "keeps its state.")
+    placeholder(panel(fig, 0, 4, 183, 26, "a"),
+                "Study design (to draw): eight donors, two doses of an mRNA vaccine, lymph-node needle aspirates "
+                "and blood from week 0 to month 6; paired single-cell RNA and BCR sequencing")
+    programme_signature_panel(panel(fig, 12, 42, 62, 36, "b"))
+    spike_binding_panel(panel(fig, 110, 42, 58, 32, "c"))
+    memory_over_time_panel(panel(fig, 12, 104, 62, 26, "d"))
+    placeholder(panel(fig, 100, 100, 83, 34, "e"),
+                "Interpretation (to draw): the vaccine-specific response sits in the germinal-centre group of "
+                "clones and in one of the two antibody-secreting groups; the other secreting group and the "
+                "resting group are bystanders")
+    placeholder(panel(fig, 0, 146, 90, 32, "f"),
+                "Clone map coloured by spike binding (to add once the clone map of this dataset is laid out)")
+    placeholder(panel(fig, 96, 146, 87, 32, "g"),
+                "What would settle it (to draw): following the same clones in the same person over time, rather "
+                "than comparing snapshots")
+    save(fig, "Figure_3")
+
+
+def figure_4():
+    fig = new_page("Figure 4", "Clone states in human blood, tonsil and organoids",
+                   "The same four questions asked of four more datasets, including two that are reported as "
+                   "exploratory.")
+    placeholder(panel(fig, 0, 4, 183, 24, "a"),
+                "Datasets (to draw): blood before and 7 days after influenza vaccination; paediatric tonsil; "
+                "blood across COVID-19 severity; tonsil organoids infected with Epstein-Barr virus")
+    programme_signature_panel(panel(fig, 12, 40, 58, 30, "b"), dataset="flu")
+    programme_signature_panel(panel(fig, 110, 40, 58, 22, "c"), dataset="stephenson")
+    label_effects_across(panel(fig, 44, 88, 62, 54, "d"), HUMAN_SETS)
+    placeholder(panel(fig, 0, 156, 90, 34, "e"),
+                "Interpretation (to draw): the day-7 secreting burst comes from class-switched, mutated clones, "
+                "as expected for recall of existing memory; in tonsil the clones form a continuum ordered by "
+                "class switching")
+    placeholder(panel(fig, 96, 156, 87, 34, "f"),
+                "Caveats panel (to draw): pooled donors in the organoid experiment; 83 clones in the COVID-19 "
+                "subset; day 0 and day 7 are different blood draws")
+    save(fig, "Figure_4")
+
+
+def figure_5():
+    fig = new_page("Figure 5", "Which parts of the B-cell programme are inherited within clones",
+                   "Gene-level inheritance, compared with genes expressed at the same level.")
+    geneset_inheritance_panel(panel(fig, 20, 6, 80, 46, "a"))
+    top_clonal_genes_panel(panel(fig, 112, 6, 71, 46, "b"))
+    placeholder(panel(fig, 0, 70, 90, 36, "c"),
+                "Interpretation (to draw): the germinal-centre cycle is something every clone passes through, "
+                "while naive, memory and plasma-cell identity travels with the clone")
+    placeholder(panel(fig, 96, 70, 87, 36, "d"),
+                "What would settle it (to draw): perturbing the genes that look inherited, or following clones "
+                "through the cycle, since these are associations in observational data")
+    save(fig, "Figure_5")
+
+
 def figure_methods_internal():
     """Methodological panels, kept outside the repository (see internal_validation/figures)."""
     fig = new_page("Methods figure", "Clone definition, programme splits and benchmarks",
@@ -872,6 +1120,9 @@ def figure_methods_internal():
 def main():
     figure_1()
     figure_2()
+    figure_3()
+    figure_4()
+    figure_5()
     figure_methods_internal()
     figure_benchmarks_internal()
 
