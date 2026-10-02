@@ -10,7 +10,7 @@ url: "https://github.com/Reynold4k/Threadfin"
 repository-code: "https://github.com/Reynold4k/Threadfin"
 license: MIT
 version: 4.0.0
-date-released: "2026-10-02"
+date-released: "2026-10-03"
 keywords:
   - single-cell
   - scRNA-seq
@@ -21,9 +21,12 @@ keywords:
   - immunology
 abstract: >-
   Threadfin treats each B-cell clone as the unit of analysis in paired
-  single-cell RNA-seq and BCR-seq data. It defines clones within donors,
-  estimates shrunken, context-adjusted clone state profiles with explicit
-  reliability, tests how much transcriptional variation is clonally
-  inherited with sampling-aware permutation nulls, groups clones into
-  bootstrap-stable clonal programmes, performs clone-level association tests
-  and measures clonal memory across time points and tissues.
+  single-cell RNA-seq and BCR-seq data. This matters most where the biology
+  is a cycle, such as a germinal centre, in which cells cannot be ordered but
+  clones can be compared with one another. Threadfin defines clones within
+  donors, describes each clone relative to the cells it was sampled with,
+  measures how much of B-cell state is inherited within clones, groups clones
+  only when the split between groups is significant, tests what explains the
+  differences between clones with clones as replicates, and measures whether
+  clones keep their state over time, across tissues and across the
+  compartments of a germinal centre.

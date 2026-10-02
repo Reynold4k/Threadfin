@@ -19,3 +19,7 @@ case_studies/results/*/lineage/trees/
 case_studies/results/*/lineage/*.fasta
 case_studies/results/*/lineage/status.txt
 case_studies/logs/
+
+# quickstart output
+threadfin_summary.txt
+threadfin_overview.png
