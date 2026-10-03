@@ -132,6 +132,40 @@ def _airr_heavy(path, keep_extra=()) -> pd.DataFrame:
     return tab
 
 
+def read_10x_h5(path):
+    """10x ``filtered_feature_bc_matrix.h5`` -> AnnData with a ``feature_type`` column."""
+    import anndata as ad
+    import h5py
+    import scipy.sparse as sp
+
+    with h5py.File(path, "r") as f:
+        g = f["matrix"]
+        x = sp.csc_matrix((g["data"][:], g["indices"][:], g["indptr"][:]), shape=g["shape"][:]).T.tocsr()
+        var = pd.DataFrame({k: [v.decode() for v in g["features"][k][:]] for k in ("id", "name", "feature_type")})
+        obs = pd.DataFrame(index=[b.decode() for b in g["barcodes"][:]])
+    var.index = pd.Index(var["name"])
+    a = ad.AnnData(X=x.astype(np.float32), obs=obs, var=var)
+    a.var_names_make_unique()
+    return a
+
+
+def _contigs_heavy(path) -> pd.DataFrame:
+    """Productive heavy chains of a 10x ``filtered_contig_annotations.csv``, one per cell.
+
+    Handles both the current column names (``v_call``) and the older ones
+    (``v_gene``), which differ between Cell Ranger versions.
+    """
+    t = pd.read_csv(path)
+    t = t.rename(columns={"v_gene": "v_call", "j_gene": "j_call", "d_gene": "d_call", "c_gene": "c_call",
+                          "cdr3_nt": "junction"})
+    t = t[t["productive"].astype(str).str.upper().isin(("TRUE", "T", "1")) & t["chain"].eq("IGH")]
+    count = next((c for c in ("umis", "reads") if c in t.columns), None)
+    if count:
+        t = t.sort_values(count, ascending=False, kind="mergesort")
+    return t.drop_duplicates("barcode").set_index("barcode")
+
+
+
 # =========================================================================== human datasets
 
 
@@ -544,6 +578,158 @@ def load_gc_np_pc():
     return adata, bcr.loc[bcr.index.isin(adata.obs_names)]
 
 
+# =========================================================================== influenza infection (lung and node)
+
+_GSE317692 = DATA / "gse317692_flu_lung"
+
+
+def load_flu_lung():
+    """GSE317692: influenza A (PR8) infection of mice; lung and mediastinal lymph node B cells, day 20.
+
+    Each of 15 mice contributes both tissues (hashtagged, one 10x pool per
+    tissue), so a clone can be followed from the draining lymph node into the
+    infected lung. Cells were stained with haemagglutinin tetramers of the
+    infecting strain (PR8) and of a heterologous strain (Cal09), giving an
+    antigen-specificity label, and seven of the mice lack B-cell alpha-v
+    integrin, a regulator of germinal-centre dynamics - a genetic perturbation
+    to test clone-level measurements against.
+    """
+    import anndata as ad
+
+    folder = _GSE317692
+    meta = pd.read_csv(folder / "sample_annotation.csv.gz", encoding="utf-8-sig")
+    meta["mouseId"] = meta["mouseId"].astype(str)
+    groups = meta.drop_duplicates("mouseId").set_index("mouseId")["studyGroup"]
+    tissue_of_pool = meta.drop_duplicates("pool").set_index("pool")["tissue"]
+
+    ads, bcrs = [], []
+    for pool, h5 in ((1, "pool616-1_1_matrix.h5"), (2, "pool616-1_2_matrix.h5")):
+        a = read_10x_h5(folder / h5)
+        tag = f"P{pool}"
+        a.obs_names = [f"{tag}|{b}" for b in a.obs_names]
+        prot = a[:, a.var["feature_type"] != "Gene Expression"].copy()
+        counts = pd.DataFrame(np.asarray(prot.X.todense()), index=prot.obs_names, columns=prot.var_names)
+        tetramers = [c for c in counts.columns if "HA" in c.upper()]
+        hto = counts.drop(columns=tetramers)
+        a = a[:, a.var["feature_type"] == "Gene Expression"].copy()
+        a.obs["mouse"] = demux_hashtags(hto).values
+        a.obs["tissue"] = tissue_of_pool[pool]
+        for t in tetramers:                       # CLR within the pool, then a 2-means cut per tetramer
+            logc = np.log1p(counts[t].to_numpy())
+            a.obs[f"tetramer_{t.replace(' ', '')}"] = logc - logc.mean()
+        a.obs["ha_binding"] = _tetramer_call(counts[tetramers])
+        ads.append(a)
+        airr = next(folder.glob(f"*pool616-1_{pool}_airr_rearrangement.tsv.gz"))
+        b = _airr_heavy(airr)
+        b.index = [f"{tag}|{i}" for i in b.index]
+        bcrs.append(b)
+
+    adata = ad.concat(ads, join="outer", fill_value=0)
+    keep = ~adata.obs["mouse"].astype(str).isin(["negative", "doublet"])
+    adata = adata[keep.to_numpy()].copy()
+    adata.obs["donor"] = adata.obs["mouse"].astype(str)
+    adata.obs["genotype"] = adata.obs["donor"].map(groups).astype(str)        # Control or cKO (B-cell alpha-v)
+    adata.obs["sample"] = adata.obs["donor"] + "_" + adata.obs["tissue"].astype(str)
+    bcr = pd.concat(bcrs)
+    keep_cols = ["v_call", "j_call", "junction", "c_call", "mutation_frequency", "sequence_alignment",
+                 "germline_alignment", "v_sequence_start", "v_sequence_end"]
+    bcr = bcr.loc[bcr.index.isin(adata.obs_names), [c for c in keep_cols if c in bcr.columns]]
+    return adata, bcr
+
+
+def _tetramer_call(counts: pd.DataFrame, min_total: int = 3) -> pd.Series:
+    """Antigen-probe call per cell: which haemagglutinin tetramer(s) the cell bound."""
+    from sklearn.cluster import KMeans
+
+    logc = np.log1p(counts.to_numpy(dtype=float))
+    clr = logc - logc.mean(axis=0, keepdims=True)
+    pos = np.zeros_like(clr, dtype=bool)
+    for j in range(clr.shape[1]):
+        km = KMeans(2, n_init=10, random_state=0).fit(clr[:, [j]])
+        pos[:, j] = km.labels_ == int(np.argmax(km.cluster_centers_.ravel()))
+    names = np.asarray([c.replace(" ", "") for c in counts.columns])
+    n = pos.sum(axis=1)
+    out = np.where(n == 0, "non-binding", "")
+    out = np.where(n == 1, names[pos.argmax(axis=1)], out)
+    out = np.where(n > 1, "both strains", out)
+    out = np.where(counts.to_numpy().sum(axis=1) < min_total, "non-binding", out)
+    return pd.Series(out, index=counts.index)
+
+
+
+# =========================================================================== outside the germinal centre
+
+_GSE253857 = DATA / "gse253857_bmpc"
+
+
+def load_bone_marrow_pc():
+    """GSE253857: human bone-marrow plasma cells and memory B cells, with blood counterparts.
+
+    Antibody-secreting cells that reach the bone marrow are the source of
+    long-lived serum antibody, and they get there long after any germinal
+    centre has closed. Cells were sorted by compartment (plasma cells, memory
+    B cells) and, in some samples, by what their antibody binds: the spike
+    protein of SARS-CoV-2, reflecting a recent vaccination, or tetanus toxoid,
+    reflecting an immunisation decades earlier. The contrast asks whether
+    clonal structure is a germinal-centre phenomenon or outlives it.
+
+    The deposited contig files carry no germline alignment, so mutation load
+    is not available for this dataset.
+    """
+    import anndata as ad
+
+    folder = _GSE253857
+    ads, bcrs = [], []
+    for h5 in sorted(folder.glob("*.filtered_feature_bc_matrix.h5")):
+        name = h5.name.replace(".filtered_feature_bc_matrix.h5", "")
+        contig = next((c for c in folder.glob("*_BCR.filtered_contig_annotations.csv.gz")
+                       if c.name.replace("_BCR.filtered_contig_annotations.csv.gz", "")
+                       == name.replace("-", "_")), None)
+        if contig is None:                      # no receptors for this run
+            continue
+        a = read_10x_h5(h5)
+        a = a[:, a.var["feature_type"] == "Gene Expression"].copy()
+        a.obs_names = [f"{name}|{b}" for b in a.obs_names]
+        tissue = "blood" if name.lower().startswith("blood") or "blood" in name.lower() else "bone marrow"
+        sort = _bmpc_sort(name)
+        a.obs["sample"] = name
+        a.obs["tissue"] = tissue
+        a.obs["sorted_as"] = sort
+        a.obs["antigen"] = ("SARS-CoV-2 spike" if "spike" in name.lower() else
+                            "tetanus toxoid" if "tetanus" in name.lower() else "not sorted by antigen")
+        a.obs["donor"] = _bmpc_donor(name)
+        ads.append(a)
+        b = _contigs_heavy(contig)
+        b.index = [f"{name}|{i}" for i in b.index]
+        bcrs.append(b)
+    adata = ad.concat(ads, join="outer", fill_value=0)
+    bcr = pd.concat(bcrs)
+    bcr = bcr.loc[bcr.index.isin(adata.obs_names), ["v_call", "j_call", "junction", "c_call"]]
+    return adata, bcr
+
+
+def _bmpc_sort(name: str) -> str:
+    low = name.lower()
+    if "pcs-bmem" in low or "pc_bmem" in low or "pcs_bmem" in low:
+        return "plasma and memory"
+    if "pcs" in low or low.endswith("_pc"):
+        return "plasma cells"
+    if "bmem" in low or "bsm" in low:
+        return "memory B cells"
+    return "antigen-sorted"
+
+
+def _bmpc_donor(name: str) -> str:
+    """Donor id from the sample name; pooled runs are kept as their own group."""
+    import re
+
+    if "pool" in name.lower():
+        return "pooled donors"
+    m = re.findall(r"(\d{3,4}|\d)(?=$|[_-])", name)
+    return f"donor {m[-1]}" if m else "unknown"
+
+
+
 LOADERS = {
     "ln_vaccine": load_ln_vaccine,
     "flu": load_flu,
@@ -553,4 +739,6 @@ LOADERS = {
     "mouse_np": load_mouse_np,
     "mouse_rbd": load_mouse_rbd,
     "gc_np_pc": load_gc_np_pc,
+    "flu_lung": load_flu_lung,
+    "bone_marrow_pc": load_bone_marrow_pc,
 }

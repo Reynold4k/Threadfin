@@ -1,0 +1,384 @@
+{
+ "dataset": "bone_marrow_pc",
+ "title": "GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some sorted by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, decades old)",
+ "clone_definition": {
+  "threshold": 0.179,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 83655,
+  "n_clones": 60696,
+  "n_expanded": 10218
+ },
+ "qc": {
+  "n_cells": 124738,
+  "n_cells_bcr": 83655,
+  "n_clones": 60696,
+  "clones_ge2": 10218,
+  "clones_ge3": 3851,
+  "clones_ge5": 1190,
+  "clones_ge10": 234,
+  "cells_in_clones_ge2": 33177,
+  "largest_clone": 661,
+  "n_donors": 7,
+  "n_samples": 20
+ },
+ "coherence": {
+  "icc": 0.40208769615874956,
+  "null_mean": 0.23966693575108547,
+  "null_q95": 0.24305212813514923,
+  "excess": 0.1624207604076641,
+  "p_value": 0.001996007984031936,
+  "n_clones": 10218,
+  "n_cells": 33177,
+  "min_cells_reliability_0.5": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 4,
+  "n_merged": 0,
+  "root_pvalue": 3.450713998096395e-266
+ },
+ "programme_markers": {
+  "P1": [
+   "MZB1",
+   "SSR4",
+   "DERL3",
+   "XBP1",
+   "TXNDC5",
+   "FKBP11",
+   "SEC11C",
+   "IGLL5",
+   "HSP90B1",
+   "FOS",
+   "PRDX4",
+   "HERPUD1"
+  ],
+  "P2": [
+   "HLA-DRA",
+   "HLA-DPB1",
+   "CD52",
+   "HLA-DPA1",
+   "MS4A1",
+   "HLA-DRB1",
+   "LTB",
+   "CD37",
+   "HLA-DRB5",
+   "LAPTM5",
+   "TMSB4X",
+   "HLA-DQB1"
+  ],
+  "P3": [
+   "COTL1",
+   "IRF8",
+   "SELL",
+   "PTPRC",
+   "CORO1A",
+   "ITGB2",
+   "HLA-DRB1",
+   "FAM65B",
+   "CD52",
+   "HLA-DPB1",
+   "FAIM3",
+   "LCP1"
+  ],
+  "P4": [
+   "RP11-685N3.1",
+   "MALAT1",
+   "GTSF1",
+   "NBPF15",
+   "MDN1",
+   "BPNT1",
+   "CKS1B",
+   "RNF146",
+   "MSMO1",
+   "VPS16",
+   "RP11-812E19.9",
+   "TCTA"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 1.82,
+   "germinal centre": -0.008,
+   "dark zone / cycling": 0.035,
+   "light zone": 0.058,
+   "memory": 0.185,
+   "naive": -0.12,
+   "interferon": 0.062
+  },
+  "P2": {
+   "plasma cell": -0.582,
+   "germinal centre": 0.005,
+   "dark zone / cycling": 0.168,
+   "light zone": 0.314,
+   "memory": 0.352,
+   "naive": 0.195,
+   "interferon": 0.066
+  },
+  "P3": {
+   "plasma cell": 0.7,
+   "germinal centre": 0.0,
+   "dark zone / cycling": 0.084,
+   "light zone": 0.153,
+   "memory": 0.266,
+   "naive": 0.012,
+   "interferon": 0.062
+  },
+  "P4": {
+   "plasma cell": 0.234,
+   "germinal centre": -0.003,
+   "dark zone / cycling": -0.008,
+   "light zone": 0.047,
+   "memory": 0.075,
+   "naive": 0.036,
+   "interferon": 0.021
+  }
+ },
+ "programmes": {
+  "n": 4,
+  "resolution": 0.2,
+  "n_clones": 10218,
+  "n_cells": 33177,
+  "n_clones_with_assigned": 10218,
+  "stability": {
+   "P1": 0.799,
+   "P2": 0.76,
+   "P3": 0.333,
+   "P4": 0.062
+  },
+  "n_stable": 2
+ },
+ "label_effects": {
+  "sorted_as:plasma cells": {
+   "label": "sorted_as:plasma cells",
+   "kind": "numeric",
+   "r2": 0.16354154007625926,
+   "null_mean": 0.005977389334912581,
+   "excess_r2": 0.1575641507413467,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 10218,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.4492956161657995,
+     -0.08238229026251702,
+     0.010756756784947474
+    ]
+   },
+   "note": "fraction of the clone's cells sorted as plasma cells"
+  },
+  "tissue:bone marrow": {
+   "label": "tissue:bone marrow",
+   "kind": "numeric",
+   "r2": 0.28427805774326564,
+   "null_mean": 0.000512354848280579,
+   "excess_r2": 0.28376570289498504,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 10218,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.6608665948254838,
+     -0.051587989905690045,
+     -0.16366664257039448
+    ]
+   },
+   "note": "fraction of the clone's cells found in the bone marrow"
+  },
+  "antigen": {
+   "label": "antigen",
+   "kind": "categorical",
+   "r2": 0.004597791977293314,
+   "null_mean": 0.00033037502510116723,
+   "excess_r2": 0.004267416952192147,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 10217,
+   "n_levels": 3,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "SARS-CoV-2 spike": [
+     -0.0004586212373458433,
+     0.08227483755914687,
+     -0.08993428502822179
+    ],
+    "not sorted by antigen": [
+     -0.011498689440851115,
+     -0.09388933565683835,
+     0.08360157077002041
+    ],
+    "tetanus toxoid": [
+     0.0261084673691627,
+     0.04501892826072258,
+     -0.00748839154363346
+    ]
+   },
+   "note": "antigen the clone's antibody was sorted on"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.04806755254753521,
+   "null_mean": 0.0043159981479887225,
+   "excess_r2": 0.04375155439954649,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 9536,
+   "n_levels": 5,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.09168505712924976,
+     -0.06787154193721447,
+     -0.2541668271282975
+    ],
+    "IGHD": [
+     0.0966204774573033,
+     0.03568937819841138,
+     -0.021846387546413475
+    ],
+    "IGHE": [
+     -0.00452559981096085,
+     -0.011902718121799622,
+     0.003357463073894095
+    ],
+    "IGHG": [
+     0.16754556088795944,
+     -0.019659355571456875,
+     0.21035343801033018
+    ],
+    "IGHM": [
+     -0.18177146668795838,
+     0.15476434244929319,
+     0.0921053463393735
+    ]
+   },
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "sorted_as:plasma cells": {
+   "n_clones": 10218,
+   "n_significant_fdr05": 4
+  },
+  "tissue:bone marrow": {
+   "n_clones": 10218,
+   "n_significant_fdr05": 4
+  },
+  "antigen": {
+   "n_clones": 10217,
+   "n_significant_fdr05": 8
+  },
+  "isotype": {
+   "n_clones": 9536,
+   "n_significant_fdr05": 9
+  }
+ },
+ "memory": {
+  "tissue": {
+   "n_clones": 119,
+   "n_pairs": 119,
+   "memory_index": 0.46086177093113767,
+   "memory_index_ci": [
+    0.37874898677773716,
+    0.5429766483759311
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.2773109243697479,
+   "persistence_null": 0.0861344537815126,
+   "levels": [
+    "blood",
+    "bone marrow"
+   ]
+  },
+  "sorted_as": {
+   "n_clones": 116,
+   "n_pairs": 116,
+   "memory_index": 0.004832608831582097,
+   "memory_index_ci": [
+    -0.012576103035858571,
+    0.022313158429093725
+   ],
+   "p_value": 0.2155688622754491,
+   "persistence": 0.008620689655172414,
+   "persistence_null": 0.008706896551724139,
+   "levels": [
+    "antigen-sorted",
+    "memory B cells",
+    "plasma and memory",
+    "plasma cells"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 6456,
+  "median_icc": 0.026018085873682862,
+  "top_genes": [
+   "CH17-132F21.1",
+   "RP11-685N3.1",
+   "RP11-812E19.9",
+   "RP11-731F5.2",
+   "KIAA0125",
+   "MTRNR2L8",
+   "IGJ",
+   "AC079767.4",
+   "JSRP1",
+   "S100A4",
+   "CD1C",
+   "LTB",
+   "HOPX",
+   "CST3",
+   "C1orf162",
+   "RP5-887A10.1",
+   "CTSW",
+   "TIMP1",
+   "FOXP1",
+   "DERL3",
+   "FCER2",
+   "FAIM3",
+   "MZB1",
+   "S100A6",
+   "CD69"
+  ],
+  "receptor_gene_icc": 0.311743487745409,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.1283,
+    "matched_background_median_icc": 0.032,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0358,
+    "matched_background_median_icc": 0.0134,
+    "pvalue_vs_matched": 0.0314
+   },
+   "light zone": {
+    "median_icc": 0.0383,
+    "matched_background_median_icc": 0.0081,
+    "pvalue_vs_matched": 0.0044
+   },
+   "memory": {
+    "median_icc": 0.0516,
+    "matched_background_median_icc": 0.0124,
+    "pvalue_vs_matched": 0.0179
+   },
+   "naive": {
+    "median_icc": 0.0918,
+    "matched_background_median_icc": 0.0059,
+    "pvalue_vs_matched": 0.0001
+   },
+   "interferon": {
+    "median_icc": 0.0138,
+    "matched_background_median_icc": 0.0064,
+    "pvalue_vs_matched": 0.2598
+   }
+  }
+ },
+ "runtime_min": 12.7
+}

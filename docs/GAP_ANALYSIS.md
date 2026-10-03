@@ -96,5 +96,4 @@ reliable each clone's answer is given its size, reports groups of clones only
 when the split between them is real, tests what explains the differences
 between clones with clones as the replicates, and measures how much of a
 clone's state survives over time, across tissues or across a round of
-selection - all from one `threadfin.run()` call on standard AnnData objects,
-for B-cell and T-cell receptors alike.
+selection - all from one `threadfin.run()` call on standard AnnData objects.

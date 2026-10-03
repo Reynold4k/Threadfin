@@ -160,27 +160,6 @@ def test_define_clones_threshold_zero_is_exact_matching():
     assert out.loc[["a0", "a1", "a2"], "clone_id"].nunique() == 3
 
 
-def test_tcr_clones_are_exact_clonotypes():
-    j = "TGTGCCAGCAGCTTAGCGGGACAGGGGAACACTGAAGCTTTCTTT"
-    mut = j[:20] + ("T" if j[20] != "T" else "C") + j[21:]
-    tcr = pd.DataFrame(
-        [("d1", "t1", "TRBV5-1", "TRBJ1-1", j), ("d1", "t2", "TRBV5-1", "TRBJ1-1", j),
-         ("d1", "t3", "TRBV5-1", "TRBJ1-1", mut), ("d1", "t4", "TRBV20-1", "TRBJ2-7", j)],
-        columns=["donor", "cell", "v_call", "j_call", "junction"]).set_index("cell")
-    out = tf.define_clones(tcr, donor_key="donor", verbose=False)
-    assert out.attrs["clone_definition"]["receptor"] == "tcr"      # detected from the V genes
-    assert out.attrs["clone_definition"]["threshold"] == 0         # T-cell receptors do not hypermutate
-    ids = out["clone_id"]
-    assert ids["t1"] == ids["t2"] and ids["t3"] != ids["t1"] and ids["t4"] != ids["t1"]
-    # B-cell relatives with the same mutation distance are still merged
-    b = "TGTGCGAGAGATCGGGGCTACTACTTTGACTACTGG"
-    bcr = pd.DataFrame([("d1", "b1", "IGHV3-23", "IGHJ4", b), ("d1", "b2", "IGHV3-23", "IGHJ4", b[:10] + "T" + b[11:])],
-                       columns=["donor", "cell", "v_call", "j_call", "junction"]).set_index("cell")
-    ob = tf.define_clones(bcr, donor_key="donor", verbose=False)
-    assert ob.attrs["clone_definition"]["receptor"] == "bcr"
-    assert ob["clone_id"]["b1"] == ob["clone_id"]["b2"]
-
-
 def test_find_threshold_bimodal():
     rng = np.random.default_rng(0)
     d = np.concatenate([rng.normal(0.04, 0.02, 400).clip(0.005), rng.normal(0.45, 0.08, 1200)])

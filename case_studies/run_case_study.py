@@ -108,6 +108,30 @@ CONFIGS = {
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["plasma_cell"],
     ),
+    "bone_marrow_pc": dict(
+        title="GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some "
+              "sorted by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, decades old)",
+        batch_key="donor", state_key=None,
+        tests=[("sorted_as", "fraction:plasma cells", "fraction of the clone's cells sorted as plasma cells"),
+               ("tissue", "fraction:bone marrow", "fraction of the clone's cells found in the bone marrow"),
+               ("antigen", "majority", "antigen the clone's antibody was sorted on"),
+               ("isotype", "majority", "heavy-chain isotype")],
+        memory=["tissue", "sorted_as"],
+    ),
+    "flu_lung": dict(
+        title="GSE317692 - influenza A (PR8) infection, mouse lung and mediastinal lymph node at day 20, "
+              "haemagglutinin tetramers and a B-cell alpha-v integrin knockout (15 mice)",
+        batch_key=None, state_key=None,
+        tests=[("ha_binding", "fraction:PR8HA", "fraction of the clone's cells binding the infecting strain's "
+                                                "haemagglutinin"),
+               ("ha_binding", "fraction:both strains", "fraction of the clone's cells binding both strains "
+                                                       "(cross-reactive)"),
+               ("tissue", "fraction:Lung", "fraction of the clone's cells found in the infected lung"),
+               ("mutation_frequency", "mean", "V-region mutation frequency"),
+               ("isotype", "majority", "heavy-chain isotype")],
+        donor_level_tests=[("genotype", "majority", "B-cell alpha-v integrin knockout or control")],
+        memory=["tissue", "ha_binding"],
+    ),
     "mouse_rbd": dict(
         title="Merkenschlager et al. 2025 Nature - RBD protein / mRNA vaccine germinal centres (10 mice)",
         batch_key=None, state_key=None,

@@ -534,6 +534,119 @@ def split_demo_panel(fig, x, y, w, h, letter):
                     fontsize=5, color=INK2, va="center", ha="right")
 
 
+# ------------------------------------------------------------------ overview panels (Figure 1)
+
+
+def _rounded(ax, x, y, w, h, face="#f3f6fb", edge=None, lw=0.7, r=0.02):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}", transform=ax.transAxes,
+                                facecolor=face, edgecolor=edge or face, linewidth=lw, zorder=0))
+
+
+def what_is_a_clone_panel(ax):
+    """One receptor, many cells, scattered over states, tissues and time."""
+    ax.set_axis_off()
+    ax.set_xlim(0, 1), ax.set_ylim(0, 1)
+    rng = np.random.default_rng(7)
+    _rounded(ax, 0.0, 0.30, 1.0, 0.66, "#f7f8fa")
+    # background cells
+    bg = np.column_stack([rng.uniform(0.06, 0.94, 260), rng.uniform(0.38, 0.90, 260)])
+    ax.scatter(bg[:, 0], bg[:, 1], s=2.5, color=LIGHT, linewidths=0, rasterized=True)
+    # three clones, each spread over the same space
+    for col, n, seed in ((BLUE, 11, 1), (ORANGE, 8, 2), (AQUA, 6, 3)):
+        r2 = np.random.default_rng(seed)
+        pts = np.column_stack([r2.uniform(0.08, 0.92, n), r2.uniform(0.40, 0.88, n)])
+        ax.scatter(pts[:, 0], pts[:, 1], s=11, color=col, edgecolors="white", linewidths=0.4, zorder=3)
+    ax.text(0.5, 0.93, "cells, coloured by the clone they belong to", ha="center", va="top", fontsize=5.2,
+            color=INK2)
+    ax.text(0.5, 0.235, "one receptor sequence  =  one family of cells", ha="center", fontsize=5.6, color=INK,
+            style="italic")
+    caption(ax, "Paired sequencing gives every cell a receptor and a transcriptome. The cells of one clone are "
+                "scattered across states, tissues and time points - which is what makes a clone hard to describe "
+                "and worth describing.", y=0.0)
+
+
+def three_settings_panel(fig, x, y, w, h, letter):
+    """The same problem in three places: a cycle, a recall response, and an endpoint."""
+    settings = [
+        ("Germinal centre", "cells cycle between dividing and being selected; there is no first cell and no last",
+         BLUE),
+        ("Recall response", "a clone that was made years ago reappears in blood within days", ORANGE),
+        ("Long-lived plasma cells", "the germinal centre has closed; what is left is the clone's output", AQUA),
+    ]
+    pw = (w - 2 * 5) / 3
+    for k, (title, text, col) in enumerate(settings):
+        ax = panel(fig, x + k * (pw + 5), y, pw, h, letter if k == 0 else None)
+        ax.set_axis_off()
+        ax.set_xlim(0, 1), ax.set_ylim(0, 1)
+        _rounded(ax, 0.0, 0.0, 1.0, 1.0, "#f7f8fa")
+        ax.text(0.5, 0.9, title, ha="center", va="top", fontsize=5.8, color=col, fontweight="bold")
+        rng = np.random.default_rng(k + 10)
+        if k == 0:
+            _ring(ax, 0.5, 0.54, 0.18, 100, 350, col, lw=1.1)
+            _ring(ax, 0.5, 0.54, 0.18, 10, 80, col, lw=1.1)
+            a = np.radians(rng.uniform(0, 360, 9))
+            ax.scatter(0.5 + 0.18 * np.cos(a), 0.54 + 0.18 * np.sin(a), s=8, color=col, edgecolors="white",
+                       linewidths=0.3, zorder=3)
+            ax.text(0.28, 0.54, "divide", fontsize=4.4, color=INK2, ha="right", va="center")
+            ax.text(0.72, 0.54, "select", fontsize=4.4, color=INK2, ha="left", va="center")
+        elif k == 1:
+            ax.annotate("", xy=(0.88, 0.54), xytext=(0.12, 0.54),
+                        arrowprops=dict(arrowstyle="-|>", color=LIGHT, lw=1.4, mutation_scale=7))
+            for xx, n in ((0.2, 1), (0.47, 2), (0.76, 8)):
+                pts = rng.normal([xx, 0.60], [0.015, 0.05], size=(n, 2))
+                ax.scatter(pts[:, 0], pts[:, 1], s=9, color=col, edgecolors="white", linewidths=0.3, zorder=3)
+            ax.text(0.2, 0.47, "first\nexposure", fontsize=4.4, color=INK2, ha="center", va="top",
+                    linespacing=1.1)
+            ax.text(0.76, 0.47, "day 7 after\na boost", fontsize=4.4, color=INK2, ha="center", va="top",
+                    linespacing=1.1)
+        else:
+            ax.add_patch(plt.Rectangle((0.2, 0.36), 0.6, 0.3, facecolor="#eef2f7", edgecolor=col, lw=0.8))
+            pts = rng.uniform([0.24, 0.40], [0.76, 0.62], size=(10, 2))
+            ax.scatter(pts[:, 0], pts[:, 1], s=9, color=col, edgecolors="white", linewidths=0.3, zorder=3)
+            ax.text(0.5, 0.3, "bone marrow", fontsize=4.6, color=INK2, ha="center", va="top")
+        caption(ax, text, fontsize=4.8, y=0.03)
+
+
+def four_questions_panel(fig, x, y, w, h, letter):
+    """What Threadfin answers, each illustrated with a real result from a different dataset."""
+    items = [
+        ("Is state inherited\nwithin clones?", "lymph node after\nmRNA vaccination", 28.8, 14.4, "%"),
+        ("Which clones\nbehave alike?", "mouse germinal\ncentre", None, None, "continuum"),
+        ("What explains the\ndifferences?", "divisions, mouse\ngerminal centre", 17.6, 1.4, "%"),
+        ("Do clones keep\ntheir state?", "months, vaccinated\nlymph node", 26.0, 0.0, "index"),
+    ]
+    pw = (w - 3 * 4) / 4
+    for k, (q, src, obs, null, kind) in enumerate(items):
+        ax = panel(fig, x + k * (pw + 4), y, pw, h, letter if k == 0 else None)
+        ax.set_axis_off()
+        ax.set_xlim(0, 1), ax.set_ylim(0, 1)
+        ax.text(0.5, 0.97, q, ha="center", va="top", fontsize=5.4, color=INK, linespacing=1.2)
+        if kind == "%":
+            ax.add_patch(plt.Rectangle((0.18, 0.33), 0.26, 0.3 * obs / 30, facecolor=BLUE, transform=ax.transAxes))
+            ax.add_patch(plt.Rectangle((0.56, 0.33), 0.26, 0.3 * null / 30, facecolor=GREY, transform=ax.transAxes))
+            ax.text(0.31, 0.30, "measured", ha="center", va="top", fontsize=4.4, color=INK2)
+            ax.text(0.69, 0.30, "shuffled", ha="center", va="top", fontsize=4.4, color=INK2)
+            ax.text(0.31, 0.35 + 0.3 * obs / 30, f"{obs:.0f}%", ha="center", fontsize=5, color=INK)
+        elif kind == "continuum":
+            rng = np.random.default_rng(5)
+            t = rng.uniform(-1, 1, 34)
+            px = 0.5 + 0.16 * t + rng.normal(0, 0.012, 34)
+            py = 0.54 + 0.05 * t + rng.normal(0, 0.022, 34)
+            ax.scatter(px, py, s=7, c=(t + 1) / 2, cmap="Blues", vmin=-0.2, edgecolors="white", linewidths=0.25)
+            ax.text(0.5, 0.33, "no split between\ngroups is significant", ha="center", va="top", fontsize=4.6,
+                    color=INK2, linespacing=1.2)
+        else:
+            ax.plot([0.2, 0.8], [0.55, 0.55], color=LIGHT, lw=1)
+            ax.plot([0.2, 0.2 + 0.6 * obs / 100], [0.55, 0.55], color=BLUE, lw=2.4, solid_capstyle="butt")
+            ax.scatter([0.2 + 0.6 * obs / 100], [0.55], s=14, color=BLUE, edgecolors="white", linewidths=0.4)
+            ax.text(0.2, 0.46, "0", fontsize=4.4, color=INK2, ha="center")
+            ax.text(0.8, 0.46, "1", fontsize=4.4, color=INK2, ha="center")
+            ax.text(0.5, 0.33, "0.26 over months;\n0.0 between tissues", ha="center", va="top", fontsize=4.6,
+                    color=INK2, linespacing=1.2)
+        ax.text(0.5, 0.06, src, ha="center", va="bottom", fontsize=4.6, color=MUTED, linespacing=1.15,
+                style="italic")
+
+
 # ------------------------------------------------------------------ concept panels
 
 
@@ -946,7 +1059,125 @@ def top_clonal_genes_panel(ax, datasets=("ln_vaccine", "flu", "mouse_rbd"), n_to
                 "shuffled clones. Receptor genes are excluded: they are clonal by definition.", y=-0.1)
 
 
+# ------------------------------------------------------------------ infection and non-GC panels
+
+INFECTION_SETS = [("flu_lung", "Influenza infection,\nlung and draining node"), ("ebv", "EBV infection,\ntonsil organoids")]
+NONGC_SETS = [("bone_marrow_pc", "Bone marrow and blood,\nplasma and memory cells"),
+              ("flu", "Blood, influenza\nvaccine"), ("tonsil", "Tonsil, steady state"),
+              ("ln_vaccine", "Lymph node,\nmRNA vaccine")]
+
+
+def coherence_bars(ax, sets, xlabel="B-cell state explained by clone identity (%)"):
+    """Observed versus shuffled, for a chosen group of datasets."""
+    rows = []
+    for ds, name in sets:
+        s = load_summary(ds)
+        if s is None:
+            continue
+        c = s["coherence"]
+        rows.append((name, 100 * c["icc"], 100 * c["null_mean"], c["p_value"], c["n_clones"]))
+    if not rows:
+        missing(ax, "variance explained by clone identity")
+        return
+    y = np.arange(len(rows))[::-1].astype(float)
+    ax.barh(y + 0.18, [r[1] for r in rows], height=0.33, color=BLUE, label="observed")
+    ax.barh(y - 0.18, [r[2] for r in rows], height=0.33, color=GREY, label="clones shuffled within samples")
+    for yy, r in zip(y, rows):
+        ax.text(r[1] + 0.5, yy + 0.18, f"p = {r[3]:.3g},  {r[4]:,} clones", va="center", fontsize=4.6, color=INK2)
+    ax.set_yticks(y, [r[0] for r in rows], fontsize=5)
+    ax.tick_params(axis="y", length=0)
+    ax.spines["left"].set_visible(False)
+    ax.set_xlim(0, max(r[1] for r in rows) * 1.8)
+    ax.set_xlabel(xlabel)
+    ax.legend(loc="lower right", handletextpad=0.3, borderaxespad=0.2, fontsize=5)
+
+
+def label_effects_panel(ax, dataset, pretty, title=None, note=""):
+    """What explains the differences between clones, for one dataset."""
+    t = load_table(dataset, "label_effects.csv")
+    if t is None:
+        missing(ax, "what explains the differences between clones")
+        return
+    rows = [{"label": pretty[r["label"]], "r2": 100 * r["r2"], "null": 100 * r["null_mean"],
+             "p": r["p_value"], "n": int(r["n_clones"]), "donor_level": "donor-level" in str(r.get("note", ""))}
+            for _, r in t.iterrows() if r["label"] in pretty]
+    if not rows:
+        missing(ax, "what explains the differences between clones")
+        return
+    d = pd.DataFrame(rows).sort_values("r2")
+    y = np.arange(len(d)).astype(float)
+    colour = [GREY if r.p >= 0.05 else (YELLOW if r.donor_level else BLUE) for r in d.itertuples()]
+    ax.barh(y, d["r2"], height=0.6, color=colour)
+    ax.barh(y, d["null"], height=0.6, color="none", edgecolor=INK2, linewidth=0.45, linestyle=(0, (2, 1)))
+    for yy, r in zip(y, d.itertuples()):
+        ax.text(r.r2 + max(d["r2"]) * 0.02, yy, f"{r.n:,} clones, p = {r.p:.2g}", va="center", fontsize=4.6,
+                color=INK2)
+    ax.set_yticks(y, d["label"], fontsize=5)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(0, max(d["r2"]) * 1.75)
+    ax.set_xlabel("differences between clones explained (%)")
+    if title:
+        ax.set_title(title, fontsize=5.5, color=INK, pad=3)
+    if note:
+        caption(ax, note, y=-0.26)
+
+
+def memory_comparison_panel(ax):
+    """Where a clone keeps its state, and where it does not."""
+    entries = [("bone_marrow_pc", "tissue", "blood vs bone marrow\n(plasma cells)"),
+               ("bone_marrow_pc", "sorted_as", "plasma-cell vs memory\ncompartment"),
+               ("ln_vaccine", "timepoint", "weeks to months apart\n(lymph node)"),
+               ("ln_vaccine", "tissue", "blood vs lymph node\n(after vaccination)"),
+               ("mouse_rbd", "zone_gate", "dark vs light zone\n(germinal centre)"),
+               ("flu_lung", "ha_binding", "antigen-binding vs not\n(infected lung)")]
+    rows = []
+    for ds, key, label in entries:
+        s = load_summary(ds)
+        m = ((s or {}).get("memory") or {}).get(key)
+        if m:
+            rows.append({"label": label, "m": m["memory_index"], "lo": m["memory_index_ci"][0],
+                         "hi": m["memory_index_ci"][1], "n": m["n_clones"], "p": m["p_value"]})
+    if not rows:
+        missing(ax, "clonal memory")
+        return
+    d = pd.DataFrame(rows).sort_values("m")
+    y = np.arange(len(d)).astype(float)
+    ax.errorbar(d["m"], y, xerr=[d["m"] - d["lo"], d["hi"] - d["m"]], fmt="o", ms=4,
+                color=BLUE, ecolor=INK2, elinewidth=0.7, capsize=2, markeredgecolor="white",
+                markeredgewidth=0.3, linestyle="none")
+    ax.axvline(0, color=MUTED, lw=0.6)
+    ax.set_yticks(y, [f"{r.label}\n({r.n} clones)" for r in d.itertuples()], fontsize=4.8)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(-0.2, 1.0)
+    ax.set_xlabel("clonal memory index")
+    caption(ax, "A clone keeps much of its state when its cells move between blood and bone marrow, but not "
+                "between its plasma-cell and memory compartments: the fate decision, not the journey, is what "
+                "erases the resemblance.", y=-0.42)
+
+
 # ------------------------------------------------------------------ figures
+
+
+def figure_1():
+    fig = new_page("Figure 1", "Clones as the unit of analysis in B-cell immunity",
+                   "A clone is a family of cells with a shared history. Threadfin describes clones, tests what "
+                   "distinguishes them, and asks whether they keep their state.")
+    what_is_a_clone_panel(panel(fig, 0, 8, 56, 46, "a"))
+    three_settings_panel(fig, 66, 8, 117, 42, "b")
+    placeholder(panel(fig, 0, 60, 183, 30, "c"),
+                "Workflow schematic (to draw): paired scRNA-seq + BCR-seq -> clones within each donor -> "
+                "expression embedding without immunoglobulin genes -> each clone described relative to the cells "
+                "it was sampled with, with a reliability that grows with its size -> the four questions below")
+    four_questions_panel(fig, 0, 96, 183, 42, "d")
+    kernel_toy_panel(fig, 14, 148, 72, 46, "e")
+    reliability_panel(panel(fig, 108, 148, 55, 42, "f"))
+    placeholder(panel(fig, 0, 204, 90, 32, "g"),
+                "Clonal memory (schematic): the same clone sampled twice, compared with a random clone of the "
+                "same donor after removing the noise expected from sampling few cells")
+    placeholder(panel(fig, 96, 204, 87, 32, "h"),
+                "Programmes or a continuum (schematic): clones are grouped only when the split between groups is "
+                "better than one continuous spread")
+    save(fig, "Figure_1")
 
 
 def figure_2():
@@ -1025,72 +1256,63 @@ def gc_lineage_panel(ax):
                 "ancestor arose later in their clone's history. Taken within clones.", y=-0.55)
 
 
-def figure_1():
-    fig = new_page("Figure 1", "Reading a germinal centre at the level of clones",
-                   "A clone is a family of cells sampled around a cycle that has no beginning and no end.")
-    gc_cycle_panel(panel(fig, 0, 8, 57, 54, "a"))
-    clone_as_distribution_panel(panel(fig, 63, 8, 57, 54, "b"))
-    clone_relationship_panel(panel(fig, 126, 8, 57, 54, "c"))
-    placeholder(panel(fig, 0, 70, 183, 32, "d"),
-                "Workflow schematic (to draw): paired scRNA-seq + BCR-seq -> clones within each donor (IGHV, IGHJ, "
-                "junction length, data-driven distance threshold) -> expression embedding without immunoglobulin "
-                "genes -> clone profiles relative to the cells sampled with them -> is state inherited within "
-                "clones? -> which clones behave alike (or a continuum)? -> what explains the differences between "
-                "clones? -> do clones keep their state?")
-    kernel_toy_panel(fig, 14, 114, 72, 48, "e")
-    reliability_panel(panel(fig, 108, 114, 55, 42, "f"))
-    placeholder(panel(fig, 0, 174, 90, 36, "g"),
-                "Clonal memory (schematic): the same clone sampled twice, compared with a random clone of the same "
-                "donor after removing the noise expected from sampling few cells")
-    placeholder(panel(fig, 96, 174, 87, 36, "h"),
-                "Programmes or a continuum (schematic): clones are grouped only when the split between groups is "
-                "real; otherwise they vary along a continuum")
-    placeholder(panel(fig, 0, 220, 183, 38, "i"),
-                "Outputs at a glance (to draw): is state inherited within clones | which clones behave alike, or a "
-                "continuum | what explains the differences between clones | do clones keep their state | which "
-                "genes are clonally inherited")
-    save(fig, "Figure_1")
-
-
 def figure_3():
-    fig = new_page("Figure 3", "A vaccinated human lymph node over six months",
-                   "Groups of clones, which of them carry the vaccine-specific antibodies, and how long a clone "
-                   "keeps its state.")
+    fig = new_page("Figure 3", "The same questions under a real infection",
+                   "Influenza A infection of mice, with an antigen probe, two tissues and a genetic "
+                   "perturbation; and Epstein-Barr virus infection of human tonsil organoids.")
     placeholder(panel(fig, 0, 4, 183, 26, "a"),
-                "Study design (to draw): eight donors, two doses of an mRNA vaccine, lymph-node needle aspirates "
-                "and blood from week 0 to month 6; paired single-cell RNA and BCR sequencing")
-    programme_signature_panel(panel(fig, 12, 42, 62, 36, "b"))
-    spike_binding_panel(panel(fig, 110, 42, 58, 32, "c"))
-    memory_over_time_panel(panel(fig, 12, 104, 62, 26, "d"))
-    placeholder(panel(fig, 100, 100, 83, 34, "e"),
-                "Interpretation (to draw): the vaccine-specific response sits in the germinal-centre group of "
-                "clones and in one of the two antibody-secreting groups; the other secreting group and the "
-                "resting group are bystanders")
-    placeholder(panel(fig, 0, 146, 90, 32, "f"),
-                "Clone map coloured by spike binding (to add once the clone map of this dataset is laid out)")
-    placeholder(panel(fig, 96, 146, 87, 32, "g"),
-                "What would settle it (to draw): following the same clones in the same person over time, rather "
-                "than comparing snapshots")
+                "Experimental design (to draw): mice infected intranasally with influenza A; B cells from the "
+                "infected lung and the draining lymph node at day 20; haemagglutinin tetramers of the infecting "
+                "and a heterologous strain; seven of fifteen mice lack B-cell alpha-v integrin")
+    coherence_bars(panel(fig, 20, 40, 62, 26, "b"), INFECTION_SETS)
+    label_effects_panel(panel(fig, 112, 40, 60, 30, "c"), "flu_lung",
+                        {"ha_binding:PR8HA": "binds the infecting strain",
+                         "ha_binding:both strains": "binds both strains",
+                         "tissue:Lung": "found in the infected lung",
+                         "mutation_frequency": "somatic mutation load",
+                         "genotype": "alpha-v integrin knockout"},
+                        title="influenza infection",
+                        note="Yellow: the knockout is a property of the mouse, so it cannot be separated from "
+                             "other differences between mice; it is shown because a perturbation that moves "
+                             "clone-level structure is the strongest test available.")
+    placeholder(panel(fig, 0, 86, 90, 34, "d"),
+                "Clone map of the infected lung and draining node (to add), coloured by where the clone's cells "
+                "were found")
+    memory_comparison_panel(panel(fig, 112, 86, 62, 36, "e"))
+    placeholder(panel(fig, 0, 132, 90, 34, "f"),
+                "Interpretation (to draw): under a real infection the clone-level signal survives, is moved by a "
+                "genetic perturbation of germinal-centre dynamics, and tracks where a clone's cells are rather "
+                "than what its antibody binds")
+    placeholder(panel(fig, 112, 132, 71, 34, "g"),
+                "Malaria time course (to add once converted): the same clones sampled at days 4 to 42 of a live "
+                "infection, which is the only way to watch clonal state over weeks rather than across a gate")
     save(fig, "Figure_3")
 
 
 def figure_4():
-    fig = new_page("Figure 4", "Clone states in human blood, tonsil and organoids",
-                   "The same four questions asked of four more datasets, including two that are reported as "
-                   "exploratory.")
+    fig = new_page("Figure 4", "Clones outside the germinal centre",
+                   "Long-lived plasma cells in human bone marrow, the blood recall response, and steady-state "
+                   "tonsil: what a clone is once the germinal centre has closed.")
     placeholder(panel(fig, 0, 4, 183, 24, "a"),
-                "Datasets (to draw): blood before and 7 days after influenza vaccination; paediatric tonsil; "
-                "blood across COVID-19 severity; tonsil organoids infected with Epstein-Barr virus")
-    programme_signature_panel(panel(fig, 12, 40, 58, 30, "b"), dataset="flu")
-    programme_signature_panel(panel(fig, 110, 40, 58, 22, "c"), dataset="stephenson")
-    label_effects_across(panel(fig, 44, 88, 62, 54, "d"), HUMAN_SETS)
-    placeholder(panel(fig, 0, 156, 90, 34, "e"),
-                "Interpretation (to draw): the day-7 secreting burst comes from class-switched, mutated clones, "
-                "as expected for recall of existing memory; in tonsil the clones form a continuum ordered by "
-                "class switching")
-    placeholder(panel(fig, 96, 156, 87, 34, "f"),
-                "Caveats panel (to draw): pooled donors in the organoid experiment; 83 clones in the COVID-19 "
-                "subset; day 0 and day 7 are different blood draws")
+                "Design (to draw): human bone marrow and blood, plasma cells and memory B cells sorted "
+                "separately, some by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, "
+                "decades old)")
+    coherence_bars(panel(fig, 20, 38, 64, 32, "b"), NONGC_SETS)
+    label_effects_panel(panel(fig, 114, 38, 58, 26, "c"), "bone_marrow_pc",
+                        {"sorted_as:plasma cells": "plasma-cell compartment",
+                         "tissue:bone marrow": "found in the bone marrow",
+                         "antigen": "antigen the antibody binds",
+                         "isotype": "isotype"},
+                        title="bone marrow and blood")
+    memory_comparison_panel(panel(fig, 20, 86, 64, 38, "d"))
+    placeholder(panel(fig, 114, 82, 69, 42, "e"),
+                "Interpretation (to draw): outside the germinal centre, clones do fall into distinct groups - "
+                "secreting, memory and two smaller ones - unlike inside it, where they form a continuum")
+    placeholder(panel(fig, 0, 136, 90, 32, "f"),
+                "Clone map of bone marrow and blood (to add), coloured by compartment")
+    placeholder(panel(fig, 96, 136, 87, 32, "g"),
+                "What would settle it (to draw): following the same clone from a germinal centre into the bone "
+                "marrow, which no snapshot can do")
     save(fig, "Figure_4")
 
 

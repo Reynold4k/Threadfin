@@ -1,0 +1,6 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+ha_binding:PR8HA,numeric,0.01863828902449644,0.014600930064715373,0.004037358959781065,0.26436781609195403,55,,donor,2000,fraction of the clone's cells binding the infecting strain's haemagglutinin
+ha_binding:both strains,numeric,0.006772363064396626,0.017293799180587335,-0.010521436116190708,0.9085457271364318,55,,donor,2000,fraction of the clone's cells binding both strains (cross-reactive)
+tissue:Lung,numeric,0.05798823890847392,0.018094675679338652,0.039893563229135266,0.0024987506246876563,55,,donor,2000,fraction of the clone's cells found in the infected lung
+mutation_frequency,numeric,0.015024437955219537,0.01921995502791356,-0.004195517072694024,0.553223388305847,55,,donor,2000,V-region mutation frequency
+genotype,categorical,0.08359390001426298,0.01830691649104765,0.06528698352321533,0.0014992503748125937,55,2.0,,2000,B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)

@@ -1,0 +1,226 @@
+{
+ "dataset": "flu_lung",
+ "title": "GSE317692 - influenza A (PR8) infection, mouse lung and mediastinal lymph node at day 20, haemagglutinin tetramers and a B-cell alpha-v integrin knockout (15 mice)",
+ "clone_definition": {
+  "threshold": 0.209,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 2115,
+  "n_clones": 1100,
+  "n_expanded": 114
+ },
+ "qc": {
+  "n_cells": 4121,
+  "n_cells_bcr": 2115,
+  "n_clones": 1100,
+  "clones_ge2": 114,
+  "clones_ge3": 79,
+  "clones_ge5": 59,
+  "clones_ge10": 32,
+  "cells_in_clones_ge2": 1129,
+  "largest_clone": 134,
+  "n_donors": 15,
+  "n_samples": 30
+ },
+ "coherence": {
+  "icc": 0.11711515835143906,
+  "null_mean": 0.04402121225437364,
+  "null_q95": 0.05626429694037446,
+  "excess": 0.07309394609706542,
+  "p_value": 0.001996007984031936,
+  "n_clones": 114,
+  "n_cells": 1129,
+  "min_cells_reliability_0.5": 8
+ },
+ "programme_splits": {
+  "n_leiden_communities": 2,
+  "n_merged": 1,
+  "root_pvalue": 0.3551242488507518
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 55,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "ha_binding:PR8HA": {
+   "label": "ha_binding:PR8HA",
+   "kind": "numeric",
+   "r2": 0.01863828902449644,
+   "null_mean": 0.014600930064715373,
+   "excess_r2": 0.004037358959781065,
+   "p_value": 0.26436781609195403,
+   "n_clones": 55,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.06412654371674226,
+     0.12289714585894848,
+     -0.17656512798757645
+    ]
+   },
+   "note": "fraction of the clone's cells binding the infecting strain's haemagglutinin"
+  },
+  "ha_binding:both strains": {
+   "label": "ha_binding:both strains",
+   "kind": "numeric",
+   "r2": 0.006772363064396626,
+   "null_mean": 0.017293799180587335,
+   "excess_r2": -0.010521436116190708,
+   "p_value": 0.9085457271364318,
+   "n_clones": 55,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.09141457140218542,
+     -0.09791323761561092,
+     -0.10119867442350938
+    ]
+   },
+   "note": "fraction of the clone's cells binding both strains (cross-reactive)"
+  },
+  "tissue:Lung": {
+   "label": "tissue:Lung",
+   "kind": "numeric",
+   "r2": 0.05798823890847392,
+   "null_mean": 0.018094675679338652,
+   "excess_r2": 0.039893563229135266,
+   "p_value": 0.0024987506246876563,
+   "n_clones": 55,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.3770697816717767,
+     0.0913779060785284,
+     0.30852628403155835
+    ]
+   },
+   "note": "fraction of the clone's cells found in the infected lung"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.015024437955219537,
+   "null_mean": 0.01921995502791356,
+   "excess_r2": -0.004195517072694024,
+   "p_value": 0.553223388305847,
+   "n_clones": 55,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.004256854256854258,
+     0.09329004329004331,
+     -0.044155844155844164
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "genotype": {
+   "label": "genotype",
+   "kind": "categorical",
+   "r2": 0.08359390001426298,
+   "null_mean": 0.01830691649104765,
+   "excess_r2": 0.06528698352321533,
+   "p_value": 0.0014992503748125937,
+   "n_clones": 55,
+   "n_levels": 2,
+   "strata_key": null,
+   "n_perm": 2000,
+   "axis_correlation": {
+    "Control": [
+     -0.30980861028406365,
+     -0.12144497523135295,
+     0.3767272701054214
+    ],
+    "cKO": [
+     0.30980861028406365,
+     0.12144497523135295,
+     -0.3767272701054214
+    ]
+   },
+   "note": "B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)"
+  }
+ },
+ "programme_associations": {},
+ "memory": {
+  "tissue": {
+   "n_clones": 6,
+   "n_pairs": 6,
+   "memory_index": 0.037713354669446475,
+   "memory_index_ci": [
+    -0.06563088504352323,
+    0.19568256038395204
+   ],
+   "p_value": 0.3393213572854291,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "Lung",
+    "medLN"
+   ]
+  },
+  "ha_binding": {
+   "n_clones": 36,
+   "n_pairs": 50,
+   "memory_index": 0.39903617880468734,
+   "memory_index_ci": [
+    -0.10872102011781251,
+    0.9085610733050634
+   ],
+   "p_value": 0.041916167664670656,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "Cal09HA",
+    "PR8HA",
+    "both strains",
+    "non-binding"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 9550,
+  "median_icc": 0.012873109913378821,
+  "top_genes": [
+   "Gm30211",
+   "Cd55",
+   "Gm43305",
+   "Slc15a2",
+   "Gm56626",
+   "Gsto1",
+   "Ephx1",
+   "Usp54",
+   "Zfp318",
+   "Camk2b",
+   "Ccrl2",
+   "Gm49980",
+   "Il10ra",
+   "Baiap2",
+   "Chd3",
+   "Mpp7",
+   "B3gnt7",
+   "Gm42031",
+   "Il1rap",
+   "Megf9",
+   "Il10rb",
+   "Zeb2",
+   "Parm1",
+   "Zmynd11",
+   "Mid1"
+  ],
+  "receptor_gene_icc": 0.696215115120825,
+  "gene_sets": {}
+ },
+ "runtime_min": 0.8
+}
