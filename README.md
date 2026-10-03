@@ -84,6 +84,9 @@ result = tf.run(adata, bcr="filtered_contig_annotations.csv",
                 time_key="timepoint")                     # optional
 ```
 
+A worked tutorial that runs in about a minute, with no download, is in
+[`examples/tutorial.py`](examples/tutorial.py).
+
 **No data at hand?** Try it on simulated data with a known answer:
 
 ```python

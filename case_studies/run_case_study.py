@@ -108,6 +108,17 @@ CONFIGS = {
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["plasma_cell"],
     ),
+    "malaria": dict(
+        title="GSE286215 - splenic B cells through a Plasmodium infection in mice, days 0 to 14, five "
+              "hashtagged mice per day, with the authors' cell annotation",
+        batch_key=None, state_key="cell_state",
+        tests=[("cell_state", "fraction:GC", "fraction of the clone's cells in a germinal centre"),
+               ("cell_state", "fraction:PB", "fraction of the clone's cells that are plasmablasts"),
+               ("cell_state", "fraction:Memory", "fraction of the clone's cells that are memory cells"),
+               ("mutation_frequency", "mean", "V-region mutation frequency"),
+               ("isotype", "majority", "heavy-chain isotype")],
+        memory=[],
+    ),
     "bone_marrow_pc": dict(
         title="GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some "
               "sorted by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, decades old)",

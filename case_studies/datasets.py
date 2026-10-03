@@ -730,6 +730,66 @@ def _bmpc_donor(name: str) -> str:
 
 
 
+# =========================================================================== malaria time course
+
+_GSE286215 = DATA / "gse286215_malaria"
+
+
+def load_malaria(experiment: str = "experiment1"):
+    """GSE286215: splenic B cells through a Plasmodium infection in mice.
+
+    A time course of a live infection, with five hashtagged mice at each
+    sampling day and the authors' own cell annotation (naive follicular,
+    bystander, activated, germinal centre, plasmablast, memory). Mice are
+    sacrificed at each day, so the same clone cannot be followed through time;
+    what the series shows is how clonal structure develops as the infection
+    runs. Experiment 2 adds later days and an antimalarial-treatment arm.
+    """
+    import anndata as ad
+    import scipy.io
+    import scipy.sparse as sp
+
+    folder = _GSE286215
+    x = scipy.io.mmread(folder / f"{experiment}_counts.mtx").tocsr().T.tocsr()      # cells x genes
+    genes = pd.read_csv(folder / f"{experiment}_genes.csv").iloc[:, 0].astype(str)
+    cells = pd.read_csv(folder / f"{experiment}_barcodes.csv").iloc[:, 0].astype(str)
+    meta = pd.read_csv(folder / f"{experiment}_metadata.csv", index_col=0, low_memory=False)
+    adata = ad.AnnData(X=x.astype(np.float32), obs=pd.DataFrame(index=cells.values),
+                       var=pd.DataFrame(index=genes.values))
+    adata.var_names_make_unique()
+    adata.obs = adata.obs.join(meta)
+    adata.obs["timepoint"] = adata.obs["orig.ident"].astype(str)
+    adata.obs["mouse"] = adata.obs["hash.ID"].astype(str).str.replace("-TotalC", "", regex=False)
+    # mice are sacrificed at each sampling day, so a mouse is a (day, hashtag) pair
+    adata.obs["donor"] = adata.obs["timepoint"] + "_" + adata.obs["mouse"]
+    adata.obs["sample"] = adata.obs["donor"]
+    for col in ("annotation1", "annotation2", "clusters_compare"):
+        if col in adata.obs:
+            adata.obs["cell_state"] = adata.obs[col].astype(str)
+            break
+    if "treatment" in meta.columns:
+        adata.obs["treatment"] = adata.obs["treatment"].astype(str)
+
+    n = "1" if experiment.endswith("1") else "2"
+    bcr = pd.read_csv(folder / f"exp{n}_bcr.tsv.gz", sep="\t", low_memory=False)
+    bcr = bcr.loc[:, ~bcr.columns.duplicated()]
+    prod = bcr["productive"].astype(str).str.upper().isin(("T", "TRUE", "1"))
+    bcr = bcr[prod & bcr["v_call"].astype(str).str.upper().str.startswith("IGH")].copy()
+    bcr["cell"] = bcr["cell_id"].astype(str) + "-1"            # the matrix keeps the 10x suffix
+    count = next((c for c in ("umi_count", "duplicate_count", "consensus_count") if c in bcr.columns), None)
+    if count:
+        bcr = bcr.sort_values(count, ascending=False, kind="mergesort")
+    bcr = bcr.drop_duplicates("cell").set_index("cell")
+    import threadfin as tf
+
+    if {"sequence_alignment", "germline_alignment"} <= set(bcr.columns):
+        bcr["mutation_frequency"] = tf.tl.mutation_frequency(bcr)
+    keep = [c for c in ("v_call", "j_call", "junction", "c_call", "mutation_frequency", "sequence_alignment",
+                        "germline_alignment", "v_sequence_start", "v_sequence_end") if c in bcr.columns]
+    return adata, bcr.loc[bcr.index.isin(adata.obs_names), keep]
+
+
+
 LOADERS = {
     "ln_vaccine": load_ln_vaccine,
     "flu": load_flu,
@@ -741,4 +801,5 @@ LOADERS = {
     "gc_np_pc": load_gc_np_pc,
     "flu_lung": load_flu_lung,
     "bone_marrow_pc": load_bone_marrow_pc,
+    "malaria": load_malaria,
 }
