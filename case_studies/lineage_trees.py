@@ -40,6 +40,13 @@ GROUPS = {
                  "comparisons": [(["mCherry-low"], ["mCherry-high"])]},
     "mouse_rbd": {"column": "division_gate",
                   "comparisons": [(["mCherry-low"], ["mCherry-high"])]},
+    "malaria": {"column": "cell_state",
+                "comparisons": [(["PB"], ["GC"]), (["GC"], ["Activated", "Bystanders"]),
+                                (["Memory"], ["GC", "PB"])]},
+    "malaria_late": {"column": "cell_state", "comparisons": []},
+    "bone_marrow_pc": {"column": "sorted_as",
+                       "comparisons": [(["plasma cells"], ["memory B cells"])]},
+    "flu_lung": {"column": "tissue", "comparisons": [(["Lung"], ["medLN"])]},
 }
 
 
@@ -60,7 +67,8 @@ def _sequences(adata, dataset):
     else:                                                  # AIRR alignments: locate the V region
         need = {"sequence_alignment", "germline_alignment"}
         if not need <= set(bcr.columns):
-            raise KeyError(f"{dataset}: no V-region sequences in adata.obs (need {sorted(need)})")
+            raise SystemExit(f"{dataset}: the deposited contig files carry no V-region sequence "
+                             f"(need {sorted(need)}), so no lineage tree can be built for it")
         win = tf.clones.v_region_windows(bcr, "sequence_alignment", "germline_alignment")
         def cut(col, start_col):
             return pd.Series([v[int(a):int(a + n)] if isinstance(v, str) and np.isfinite(n) else None
@@ -103,6 +111,24 @@ def summarise(dataset: str):
     print(res.round(3).to_string(index=False))
 
 
+def tally(dataset: str):
+    """Commit the per-clone tree outcome, so the figures do not need the trees themselves.
+
+    ``ok`` means a tree was built; ``trivial`` means the clone's cells carry no
+    sequence difference at all, so there is nothing for a tree to resolve.
+    """
+    out = HERE / "results" / dataset / "lineage"
+    status = out / "status.txt"
+    if not status.exists():
+        raise SystemExit(f"{status} not found; run run_gctree.sh first")
+    rows = [line.split() for line in status.read_text().splitlines() if len(line.split()) >= 2]
+    counts = pd.Series([r[1] for r in rows]).value_counts()
+    tab = pd.DataFrame({"dataset": dataset, "outcome": counts.index, "clones": counts.to_numpy()})
+    tab["share"] = tab["clones"] / tab["clones"].sum()
+    tab.to_csv(out / "tree_status.csv", index=False)
+    print(tab.to_string(index=False))
+
+
 if __name__ == "__main__":
     action, dataset = sys.argv[1], sys.argv[2]
-    {"prepare": prepare, "summarise": summarise}[action](dataset)
+    {"prepare": prepare, "summarise": summarise, "tally": tally}[action](dataset)

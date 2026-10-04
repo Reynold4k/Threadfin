@@ -20,7 +20,8 @@ import threadfin as tf
 
 HERE = Path(__file__).resolve().parent
 RES = HERE / "results"
-ORDER = ["ln_vaccine", "mouse_np", "mouse_rbd", "flu", "ebv", "tonsil", "stephenson"]
+ORDER = ["ln_vaccine", "mouse_np", "mouse_rbd", "gc_np_pc", "flu_lung", "malaria", "malaria_late",
+         "bone_marrow_pc", "flu", "ebv", "tonsil", "stephenson"]
 LABELS = {
     "ln_vaccine": "Human lymph node + blood, SARS-CoV-2 mRNA vaccine (Kim 2022)",
     "mouse_np": "Mouse germinal centres, NP-OVA, division reporter (Merkenschlager 2025)",
@@ -29,6 +30,11 @@ LABELS = {
     "ebv": "Human tonsil organoids, EBV infection (Mitul 2026)",
     "tonsil": "Human tonsil (King 2021)",
     "stephenson": "Human blood, COVID-19 (Stephenson 2021, 5,000-cell subset)",
+    "gc_np_pc": "Mouse germinal centres and plasma cells, NP-OVA, sorted zones (ElTanbouly 2023)",
+    "flu_lung": "Mouse influenza infection, lung and draining node, alpha-v integrin knockout",
+    "malaria": "Mouse Plasmodium infection, spleen, days 0-14 (Skinner, Asad 2026)",
+    "malaria_late": "Mouse Plasmodium infection, spleen, days 10-42, antimalarial arm (Skinner, Asad 2026)",
+    "bone_marrow_pc": "Human bone-marrow plasma and memory B cells with blood (GSE253857)",
 }
 
 
@@ -91,10 +97,16 @@ def main():
             ht = pd.read_csv(hpath, index_col=0).sort_values("excess_icc", ascending=False)
             her.append({"dataset": ds, "genes_tested": len(ht), "median_icc": float(ht["icc"].median()),
                         "most_clonal_genes": ", ".join(map(str, ht.index[:15]))})
-            gs = pd.read_csv(RES / ds / "geneset_heritability.csv")
+            gpath = RES / ds / "geneset_heritability.csv"
+            try:
+                gs = pd.read_csv(gpath)
+            except pd.errors.EmptyDataError:           # too few reliable clones for any gene set
+                gs = pd.DataFrame(columns=["gene_set", "n_genes", "median_icc", "matched_background_median_icc"])
             ribo = [g for g in ht.index if str(g).upper().startswith(("RPS", "RPL")) and "-" not in str(g)]
             extra = tf.tl.geneset_heritability(ht, {"translation (ribosomal)": ribo}) if len(ribo) >= 3 else None
             gs = pd.concat([gs, extra], ignore_index=True) if extra is not None else gs
+            if gs.empty:
+                continue
             gs.insert(0, "dataset", ds)
             sets.append(gs.drop(columns=["genes"], errors="ignore"))
 

@@ -119,6 +119,17 @@ CONFIGS = {
                ("isotype", "majority", "heavy-chain isotype")],
         memory=[],
     ),
+    "malaria_late": dict(
+        title="GSE286215 experiment 2 - Plasmodium infection days 10 to 42, with an antimalarial (artesunate) "
+              "arm and naive controls",
+        batch_key=None, state_key="cell_state",
+        tests=[("cell_state", "fraction:GC", "fraction of the clone's cells in a germinal centre"),
+               ("cell_state", "fraction:PB", "fraction of the clone's cells that are plasmablasts"),
+               ("mutation_frequency", "mean", "V-region mutation frequency"),
+               ("isotype", "majority", "heavy-chain isotype")],
+        donor_level_tests=[("treatment", "majority", "antimalarial treatment of the mouse")],
+        memory=[],
+    ),
     "bone_marrow_pc": dict(
         title="GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some "
               "sorted by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, decades old)",

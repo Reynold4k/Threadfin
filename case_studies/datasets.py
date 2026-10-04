@@ -750,10 +750,18 @@ def load_malaria(experiment: str = "experiment1"):
     import scipy.sparse as sp
 
     folder = _GSE286215
-    x = scipy.io.mmread(folder / f"{experiment}_counts.mtx").tocsr().T.tocsr()      # cells x genes
-    genes = pd.read_csv(folder / f"{experiment}_genes.csv").iloc[:, 0].astype(str)
-    cells = pd.read_csv(folder / f"{experiment}_barcodes.csv").iloc[:, 0].astype(str)
-    meta = pd.read_csv(folder / f"{experiment}_metadata.csv", index_col=0, low_memory=False)
+    def find(stem):
+        for suffix in ("", ".gz"):
+            path = folder / f"{experiment}_{stem}{suffix}"
+            if path.exists():
+                return path
+        raise FileNotFoundError(f"{folder}/{experiment}_{stem}: run internal_validation/cluster/"
+                                "convert_malaria.sbatch first")
+
+    x = scipy.io.mmread(find("counts.mtx")).tocsr().T.tocsr()                      # cells x genes
+    genes = pd.read_csv(find("genes.csv")).iloc[:, 0].astype(str)
+    cells = pd.read_csv(find("barcodes.csv")).iloc[:, 0].astype(str)
+    meta = pd.read_csv(find("metadata.csv"), index_col=0, low_memory=False)
     adata = ad.AnnData(X=x.astype(np.float32), obs=pd.DataFrame(index=cells.values),
                        var=pd.DataFrame(index=genes.values))
     adata.var_names_make_unique()
@@ -763,7 +771,7 @@ def load_malaria(experiment: str = "experiment1"):
     # mice are sacrificed at each sampling day, so a mouse is a (day, hashtag) pair
     adata.obs["donor"] = adata.obs["timepoint"] + "_" + adata.obs["mouse"]
     adata.obs["sample"] = adata.obs["donor"]
-    for col in ("annotation1", "annotation2", "clusters_compare"):
+    for col in ("annotation1", "celltype", "annotation2"):
         if col in adata.obs:
             adata.obs["cell_state"] = adata.obs[col].astype(str)
             break
@@ -802,4 +810,5 @@ LOADERS = {
     "flu_lung": load_flu_lung,
     "bone_marrow_pc": load_bone_marrow_pc,
     "malaria": load_malaria,
+    "malaria_late": lambda: load_malaria("experiment2"),
 }

@@ -51,13 +51,19 @@ def write_clone_fastas(cells: pd.DataFrame, out: Path, *, min_cells: int = 3, mi
         name = str(clone).replace("|", "_")
         g = g.assign(fasta_id=[f"c{i + 1}" for i in range(len(g))], file=name)
         seqs = [r["seq"][lo - o:hi - o] for (_, r), o in zip(g.iterrows(), offset)]
+        # IMGT alignments carry gap characters, which PHYLIP rejects; drop any column that is
+        # not a plain base in every sequence of the clone, root included
+        good = [i for i, bases in enumerate(zip(root, *seqs)) if set(bases) <= set("ACGT")]
+        if len(good) < min_length:
+            continue
+        root = "".join(root[i] for i in good)
+        seqs = ["".join(seq[i] for i in good) for seq in seqs]
         with open(out / f"{name}.fasta", "w") as fh:
             fh.write(f">naive\n{root}\n")
             for fid, seq in zip(g["fasta_id"], seqs):
                 fh.write(f">{fid}\n{seq}\n")
-        g["mutations"] = [sum(a != b for a, b in zip(seq, root) if a not in "N-." and b not in "N-.")
-                          for seq in seqs]
-        g["window_length"] = hi - lo
+        g["mutations"] = [sum(a != b for a, b in zip(seq, root)) for seq in seqs]
+        g["window_length"] = len(root)
         keep.append(g.drop(columns=[c for c in ("seq", "germline", "start") if c in g.columns]))
     return pd.concat(keep) if keep else pd.DataFrame()
 
