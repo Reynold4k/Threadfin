@@ -154,22 +154,6 @@
  },
  "programme_associations": {},
  "memory": {
-  "tissue": {
-   "n_clones": 6,
-   "n_pairs": 6,
-   "memory_index": 0.037713354669446475,
-   "memory_index_ci": [
-    -0.06563088504352323,
-    0.19568256038395204
-   ],
-   "p_value": 0.3393213572854291,
-   "persistence": null,
-   "persistence_null": null,
-   "levels": [
-    "Lung",
-    "medLN"
-   ]
-  },
   "ha_binding": {
    "n_clones": 36,
    "n_pairs": 50,

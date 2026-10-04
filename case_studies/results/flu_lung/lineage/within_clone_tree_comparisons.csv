@@ -1,0 +1,3 @@
+comparison,measure,n_clones,mean_difference,median_difference,wilcoxon_p
+Lung vs medLN,depth,24,-1.9376008360996106,-1.6041666666666665,0.001124080526973126
+Lung vs medLN,ancestral,24,0.07035303395597511,0.0,0.45103589747961725

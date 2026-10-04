@@ -1,0 +1,30 @@
+{
+  "mouse_np": {
+    "threshold": 0.161,
+    "method": "density"
+  },
+  "mouse_rbd": {
+    "threshold": 0.14200000000000002,
+    "method": "density"
+  },
+  "flu_lung": {
+    "threshold": 0.209,
+    "method": "density"
+  },
+  "malaria": {
+    "threshold": 0.15,
+    "method": "default"
+  },
+  "bone_marrow_pc": {
+    "threshold": 0.179,
+    "method": "density"
+  },
+  "ln_vaccine": {
+    "threshold": 0.11800000000000001,
+    "method": "density"
+  },
+  "flu": {
+    "threshold": 0.097,
+    "method": "density"
+  }
+}

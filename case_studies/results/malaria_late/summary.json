@@ -1,0 +1,345 @@
+{
+ "dataset": "malaria_late",
+ "title": "GSE286215 experiment 2 - Plasmodium infection days 10 to 42, with an antimalarial (artesunate) arm and naive controls",
+ "clone_definition": {
+  "threshold": 0.066,
+  "threshold_method": "density",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 59922,
+  "n_clones": 58246,
+  "n_expanded": 1183
+ },
+ "qc": {
+  "n_cells": 72359,
+  "n_cells_bcr": 59922,
+  "n_clones": 58246,
+  "clones_ge2": 1183,
+  "clones_ge3": 245,
+  "clones_ge5": 58,
+  "clones_ge10": 3,
+  "cells_in_clones_ge2": 2859,
+  "largest_clone": 13,
+  "n_donors": 42,
+  "n_samples": 42
+ },
+ "coherence": {
+  "icc": 0.429415117453629,
+  "null_mean": 0.014916491808763886,
+  "null_q95": 0.03093394671211319,
+  "excess": 0.4144986256448651,
+  "p_value": 0.001996007984031936,
+  "n_clones": 1183,
+  "n_cells": 2859,
+  "min_cells_reliability_0.5": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 8,
+  "n_merged": 1,
+  "root_pvalue": 3.2224760956862197e-11
+ },
+ "programme_markers": {
+  "P1": [
+   "Mef2b",
+   "Basp1",
+   "Aicda",
+   "Gapdh",
+   "Anp32b",
+   "Hmgb2",
+   "Sypl",
+   "Cfl1",
+   "Smagp",
+   "Hmgn2",
+   "Hmgn1",
+   "Klhl6"
+  ],
+  "P2": [
+   "Edem1",
+   "H13",
+   "Sec11c",
+   "Edem2",
+   "Rexo2",
+   "Xbp1",
+   "Creld2",
+   "Ssr4",
+   "Tmed10",
+   "Pdia4",
+   "Ergic1",
+   "Hsp90b1"
+  ],
+  "P3": [
+   "Cd79a",
+   "Klf2",
+   "Btg1",
+   "Bank1",
+   "Rps27",
+   "Tmsb4x",
+   "H2-DMb2",
+   "Ly6d",
+   "Cd74",
+   "H2-Aa",
+   "Serpinb1a",
+   "Tmsb10"
+  ],
+  "P4": [
+   "Derl3",
+   "Fkbp11",
+   "Slpi",
+   "Tent5c",
+   "Creld2",
+   "Ckap4",
+   "Prdx4",
+   "Dnajc3",
+   "Edem2",
+   "Lman1",
+   "Ssr4",
+   "H13"
+  ],
+  "P5": [
+   "Fcmr",
+   "Plac8",
+   "Rpl36",
+   "Nfatc1",
+   "Rps11",
+   "Ly86",
+   "Rps12",
+   "Rpl32",
+   "Rpl13",
+   "Fcrl5",
+   "Rps7",
+   "Rps5"
+  ],
+  "P6": [
+   "Atp1b1",
+   "Cnn3",
+   "Wls",
+   "Gm45552",
+   "Gm45894",
+   "Pirb",
+   "Dyrk2",
+   "Klhl14",
+   "Rhbdf2",
+   "Bhlhe40",
+   "Dpp4",
+   "Rad52"
+  ],
+  "P7": [
+   "Jchain",
+   "Hsp90b1",
+   "Ssr4",
+   "Pdia4",
+   "Mzb1",
+   "H13",
+   "Sec11c",
+   "Spcs1",
+   "Ppib",
+   "Krtcap2",
+   "Spcs2",
+   "Xbp1"
+  ]
+ },
+ "programme_signatures": {},
+ "programmes": {
+  "n": 7,
+  "resolution": 0.6,
+  "n_clones": 1183,
+  "n_cells": 2859,
+  "n_clones_with_assigned": 1183,
+  "stability": {
+   "P1": 0.49,
+   "P2": 0.692,
+   "P3": 0.45,
+   "P4": 0.167,
+   "P5": 0.807,
+   "P6": 0.272,
+   "P7": 0.077
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "cell_state:GC": {
+   "label": "cell_state:GC",
+   "kind": "numeric",
+   "r2": 0.3043050332157542,
+   "null_mean": 0.038874931363428934,
+   "excess_r2": 0.26543010185232524,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1183,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.8445711535602931,
+     0.3709644808294192,
+     0.03976273051667482
+    ]
+   },
+   "note": "fraction of the clone's cells in a germinal centre"
+  },
+  "cell_state:PB": {
+   "label": "cell_state:PB",
+   "kind": "numeric",
+   "r2": 0.27060395026052647,
+   "null_mean": 0.07205809817595096,
+   "excess_r2": 0.1985458520845755,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1183,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.7836548819505919,
+     0.28776877366122794,
+     0.11419437933822602
+    ]
+   },
+   "note": "fraction of the clone's cells that are plasmablasts"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.1731627148438741,
+   "null_mean": 0.04700106115273114,
+   "excess_r2": 0.12616165369114296,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1183,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.6906405628984287,
+     0.3507592757869496,
+     0.010585623286905906
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.12333469613274037,
+   "null_mean": 0.004629189111069408,
+   "excess_r2": 0.11870550702167096,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1096,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.0014627005181939922,
+     -0.03827859657990693,
+     -0.02365159139796701
+    ],
+    "IGHD": [
+     0.016094337165692363,
+     -0.03854044537897252,
+     -0.0232579887231222
+    ],
+    "IGHG": [
+     -0.21358224015754004,
+     0.5167448935717017,
+     -0.2156675839979004
+    ],
+    "IGHM": [
+     0.21366068736683597,
+     -0.5119229049799353,
+     0.2211706238882836
+    ]
+   },
+   "note": "heavy-chain isotype"
+  },
+  "treatment": {
+   "label": "treatment",
+   "kind": "categorical",
+   "r2": 0.009505545750037411,
+   "null_mean": 0.001697327861838894,
+   "excess_r2": 0.0078082178881985174,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1183,
+   "n_levels": 3,
+   "strata_key": null,
+   "n_perm": 2000,
+   "axis_correlation": {
+    "Artesunate": [
+     -0.02047924104026756,
+     -0.08746212989678719,
+     -0.06281694884915633
+    ],
+    "Naive": [
+     0.012334985029391846,
+     -0.06372600810796665,
+     0.0067514814133160924
+    ],
+    "Saline": [
+     0.017864117932607546,
+     0.09917665472930394,
+     0.06090600207994973
+    ]
+   },
+   "note": "antimalarial treatment of the mouse (donor-level label: not separable from other donor differences)"
+  }
+ },
+ "programme_associations": {
+  "cell_state:GC": {
+   "n_clones": 1183,
+   "n_significant_fdr05": 5
+  },
+  "cell_state:PB": {
+   "n_clones": 1183,
+   "n_significant_fdr05": 7
+  },
+  "mutation_frequency": {
+   "n_clones": 1183,
+   "n_significant_fdr05": 4
+  },
+  "isotype": {
+   "n_clones": 1096,
+   "n_significant_fdr05": 14
+  },
+  "treatment": {
+   "n_clones": 1183,
+   "n_significant_fdr05": 7
+  }
+ },
+ "memory": {},
+ "heritability": {
+  "n_genes": 8895,
+  "median_icc": 0.0342200546262564,
+  "top_genes": [
+   "Fcmr",
+   "Gm30211",
+   "Plac8",
+   "Ly6d",
+   "Gm43305",
+   "Fcrl5",
+   "1810046K07Rik",
+   "Basp1",
+   "Nfatc1",
+   "Jchain",
+   "Eaf2",
+   "Mef2b",
+   "Rgs13",
+   "Klf2",
+   "Ly86",
+   "Scimp",
+   "Slpi",
+   "Top1",
+   "Xbp1",
+   "Blk",
+   "Txn1",
+   "Aicda",
+   "Apoe",
+   "S100a10",
+   "S100a11"
+  ],
+  "receptor_gene_icc": 0.0,
+  "gene_sets": {}
+ },
+ "runtime_min": 4.3
+}

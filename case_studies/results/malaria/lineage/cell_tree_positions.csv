@@ -1,0 +1,4 @@
+clone,group,donor,file,mutations,window_length,depth,ancestral,germline,n_descendant_genotypes
+D14_Hashtag2|C00008,PB,D14_Hashtag2,D14_Hashtag2_C00008,0,278,0.0,False,True,2
+D14_Hashtag2|C00008,GC,D14_Hashtag2,D14_Hashtag2_C00008,2,278,2.0,False,False,0
+D14_Hashtag2|C00008,Atypical,D14_Hashtag2,D14_Hashtag2_C00008,1,278,1.0,False,False,0

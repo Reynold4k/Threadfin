@@ -1,0 +1,275 @@
+{
+ "dataset": "malaria",
+ "title": "GSE286215 - splenic B cells through a Plasmodium infection in mice, days 0 to 14, five hashtagged mice per day, with the authors' cell annotation",
+ "clone_definition": {
+  "threshold": 0.15,
+  "threshold_method": "default",
+  "sequence": "nt",
+  "junction_col": "junction",
+  "donor_key": "donor",
+  "light_chain": false,
+  "n_cells": 21145,
+  "n_clones": 20100,
+  "n_expanded": 801
+ },
+ "qc": {
+  "n_cells": 40623,
+  "n_cells_bcr": 21145,
+  "n_clones": 20100,
+  "clones_ge2": 801,
+  "clones_ge3": 132,
+  "clones_ge5": 30,
+  "clones_ge10": 0,
+  "cells_in_clones_ge2": 1846,
+  "largest_clone": 8,
+  "n_donors": 20,
+  "n_samples": 20
+ },
+ "coherence": {
+  "icc": 0.5944120507268973,
+  "null_mean": 0.0584392514428623,
+  "null_q95": 0.08571569435394367,
+  "excess": 0.535972799284035,
+  "p_value": 0.001996007984031936,
+  "n_clones": 801,
+  "n_cells": 1846,
+  "min_cells_reliability_0.5": 1
+ },
+ "programme_splits": {
+  "n_leiden_communities": 3,
+  "n_merged": 0,
+  "root_pvalue": 2.4888005234584105e-22
+ },
+ "programme_markers": {
+  "P1": [
+   "H2-Aa",
+   "H2-Eb1",
+   "Cd74",
+   "Bank1",
+   "Rps27",
+   "H2-DMb2",
+   "H2-Ab1",
+   "Cd79a",
+   "Btg1",
+   "Tmsb10",
+   "Ly6d",
+   "Tmsb4x"
+  ],
+  "P2": [
+   "Eaf2",
+   "Edem1",
+   "Sec61b",
+   "Rexo2",
+   "Jchain",
+   "Manf",
+   "Mzb1",
+   "Spcs1",
+   "Creld2",
+   "Spcs2",
+   "Txndc11",
+   "H13"
+  ],
+  "P3": [
+   "Apoe",
+   "Rpl36",
+   "Rps11",
+   "Fcmr",
+   "Nfatc1",
+   "Ccdc28b",
+   "Rps10",
+   "Fcrl5",
+   "Rps13",
+   "Rps18",
+   "Plac8",
+   "Emb"
+  ]
+ },
+ "programme_signatures": {},
+ "programmes": {
+  "n": 3,
+  "resolution": 0.2,
+  "n_clones": 801,
+  "n_cells": 1846,
+  "n_clones_with_assigned": 801,
+  "stability": {
+   "P1": 0.814,
+   "P2": 0.84,
+   "P3": 0.133
+  },
+  "n_stable": 2
+ },
+ "label_effects": {
+  "cell_state:GC": {
+   "label": "cell_state:GC",
+   "kind": "numeric",
+   "r2": 0.04387297663506365,
+   "null_mean": 0.00472457603475754,
+   "excess_r2": 0.03914840060030611,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 801,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.06648604688591796,
+     0.3416399870962055,
+     -0.3730839127157807
+    ]
+   },
+   "note": "fraction of the clone's cells in a germinal centre"
+  },
+  "cell_state:PB": {
+   "label": "cell_state:PB",
+   "kind": "numeric",
+   "r2": 0.31930901972628606,
+   "null_mean": 0.11728780613732077,
+   "excess_r2": 0.2020212135889653,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 801,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.7855297064437221,
+     -0.33213310553356346,
+     -0.30050871710837956
+    ]
+   },
+   "note": "fraction of the clone's cells that are plasmablasts"
+  },
+  "cell_state:Memory": {
+   "label": "cell_state:Memory",
+   "kind": "numeric",
+   "r2": 0.03808351129098831,
+   "null_mean": 0.005463522856412425,
+   "excess_r2": 0.032619988434575885,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 801,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.3011872986161012,
+     -0.059902626859879106,
+     0.16689497865766445
+    ]
+   },
+   "note": "fraction of the clone's cells that are memory cells"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.011188098040414764,
+   "null_mean": 0.0030232452580497846,
+   "excess_r2": 0.008164852782364979,
+   "p_value": 0.0029985007496251873,
+   "n_clones": 801,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.09134364259070608,
+     0.20601202437768745,
+     -0.12177832998356257
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.2073713881523131,
+   "null_mean": 0.10248787691878317,
+   "excess_r2": 0.10488351123352993,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 652,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.028734687164127595,
+     0.0664581739026746,
+     0.05894294802897969
+    ],
+    "IGHD": [
+     0.27515672024941595,
+     -0.019577867947580152,
+     0.12829559448197259
+    ],
+    "IGHG": [
+     -0.6206976257365616,
+     -0.27994611530475383,
+     -0.42192047668466687
+    ],
+    "IGHM": [
+     0.5046547588337654,
+     0.28415742267915917,
+     0.36102035104304275
+    ]
+   },
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "cell_state:GC": {
+   "n_clones": 801,
+   "n_significant_fdr05": 2
+  },
+  "cell_state:PB": {
+   "n_clones": 801,
+   "n_significant_fdr05": 3
+  },
+  "cell_state:Memory": {
+   "n_clones": 801,
+   "n_significant_fdr05": 2
+  },
+  "mutation_frequency": {
+   "n_clones": 801,
+   "n_significant_fdr05": 2
+  },
+  "isotype": {
+   "n_clones": 652,
+   "n_significant_fdr05": 8
+  }
+ },
+ "memory": {},
+ "heritability": {
+  "n_genes": 7910,
+  "median_icc": 0.041947926800392984,
+  "top_genes": [
+   "Hist1h2ak",
+   "Hist1h2bn",
+   "Hist1h2ab",
+   "Apoe",
+   "Hist1h1b",
+   "Gm42418",
+   "Ly6c2",
+   "H2-Aa",
+   "Jchain",
+   "Pclaf",
+   "Hist1h2bk",
+   "Slpi",
+   "Stmn1",
+   "Ube2c",
+   "Gm30211",
+   "Hist1h2an",
+   "Rpl13",
+   "Hist1h3c",
+   "Xbp1",
+   "Cd74",
+   "Rpl18a",
+   "Top2a",
+   "Prg2",
+   "Hist1h2ae",
+   "Ly6d"
+  ],
+  "receptor_gene_icc": 0.0,
+  "gene_sets": {}
+ },
+ "runtime_min": 2.0
+}

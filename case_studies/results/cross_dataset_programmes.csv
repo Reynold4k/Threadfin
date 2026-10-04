@@ -1,17 +1,33 @@
 dataset,n_programmes,core_clones,split_test_p_at_root,programme,stability,top_markers,highest_signature
-ln_vaccine,4,4429,1.6372269702038945e-92,P1,0.774,"MS4A1, MARCKSL1, HLA-DRA, ACTB, TCL1A, ACTG1, LRMP, MEF2B",germinal centre
-ln_vaccine,4,4429,1.6372269702038945e-92,P2,0.896,"IGHG1, JCHAIN, TXNDC5, HSP90B1, ITM2C, PPIB, SUB1, MZB1",plasma cell
-ln_vaccine,4,4429,1.6372269702038945e-92,P3,0.555,"SELENOM, DENND6B, CD9, RASSF6, BHLHA15, DNAJB9, VDR, AEBP1",plasma cell
-ln_vaccine,4,4429,1.6372269702038945e-92,P4,0.656,"BANK1, FCMR, RPL34, RPL30, RPS27, RPS14, RPL11, TXNIP",memory
-mouse_np,1,69,0.09964452425182957,continuum,,no distinct programmes: clones vary along a continuum,
-mouse_rbd,1,381,0.5499964845376513,continuum,,no distinct programmes: clones vary along a continuum,
-flu,4,1997,7.695000300498627e-61,P1,0.686,"LTB, RPS18, RPS15A, CD24, RPL11, EEF1A1, RPS8, RPL3",memory
-flu,4,1997,7.695000300498627e-61,P2,0.597,"CD74, RHOB, HLA-DPA1, FGR, HLA-DQA1, HLA-DRB1, CD72, LAPTM5",memory
-flu,4,1997,7.695000300498627e-61,P3,0.666,"TCL1A, RPL18A, BTG1, FCER2, IL4R, CXCR4, CD69, PLPP5",naive
-flu,4,1997,7.695000300498627e-61,P4,0.802,"TXNDC5, MZB1, SRGN, PPIB, HSP90B1, FKBP11, XBP1, SEC11C",plasma cell
-ebv,3,2314,8.788546331982897e-05,P1,0.461,"IFI44L, RPL30, FCMR, RPS27, BTG1, ITM2B, RPL34, IFITM3",interferon
-ebv,3,2314,8.788546331982897e-05,P2,0.388,"SEC11C, CD27, CTSH, CFLAR, MEF2B, ZBTB38, LGALS3, PDIA4",plasma cell
-ebv,3,2314,8.788546331982897e-05,P3,0.152,"TXN, C1QBP, TYMS, LDHB, TUBB, NME2, AHCY, TUBA1B",plasma cell
-tonsil,1,75,0.35770383894138236,continuum,,no distinct programmes: clones vary along a continuum,
-stephenson,2,83,0.009750825892724623,P1,0.751,"HLA-DRA, MS4A1, BANK1, CD74, CXCR4, FCMR, TCL1A, LINC00926",plasma cell
-stephenson,2,83,0.009750825892724623,P2,0.501,"JCHAIN, MZB1, SEC11C, FKBP11, SPCS3, HSP90B1, PPIB, SSR3",plasma cell
+ln_vaccine,4,4429.0,1.6372269702038945e-92,P1,0.774,"MS4A1, MARCKSL1, HLA-DRA, ACTB, TCL1A, ACTG1, LRMP, MEF2B",germinal centre
+ln_vaccine,4,4429.0,1.6372269702038945e-92,P2,0.896,"IGHG1, JCHAIN, TXNDC5, HSP90B1, ITM2C, PPIB, SUB1, MZB1",plasma cell
+ln_vaccine,4,4429.0,1.6372269702038945e-92,P3,0.555,"SELENOM, DENND6B, CD9, RASSF6, BHLHA15, DNAJB9, VDR, AEBP1",plasma cell
+ln_vaccine,4,4429.0,1.6372269702038945e-92,P4,0.656,"BANK1, FCMR, RPL34, RPL30, RPS27, RPS14, RPL11, TXNIP",memory
+mouse_np,1,69.0,0.09964452425182957,continuum,,no distinct programmes: clones vary along a continuum,
+mouse_rbd,1,381.0,0.5499964845376513,continuum,,no distinct programmes: clones vary along a continuum,
+gc_np_pc,0,,,-,,"Only 3 clones reach reliability 0.5 (need 30); too few expanded clones to define programmes. Report the coherence test only, or lower min_reliability.",
+flu_lung,1,55.0,0.3551242488507518,continuum,,no distinct programmes: clones vary along a continuum,
+malaria,3,801.0,2.4888005234584105e-22,P1,0.814,"H2-Aa, H2-Eb1, Cd74, Bank1, Rps27, H2-DMb2, H2-Ab1, Cd79a",
+malaria,3,801.0,2.4888005234584105e-22,P2,0.84,"Eaf2, Edem1, Sec61b, Rexo2, Jchain, Manf, Mzb1, Spcs1",
+malaria,3,801.0,2.4888005234584105e-22,P3,0.133,"Apoe, Rpl36, Rps11, Fcmr, Nfatc1, Ccdc28b, Rps10, Fcrl5",
+malaria_late,7,1183.0,3.2224760956862197e-11,P1,0.49,"Mef2b, Basp1, Aicda, Gapdh, Anp32b, Hmgb2, Sypl, Cfl1",
+malaria_late,7,1183.0,3.2224760956862197e-11,P2,0.692,"Edem1, H13, Sec11c, Edem2, Rexo2, Xbp1, Creld2, Ssr4",
+malaria_late,7,1183.0,3.2224760956862197e-11,P3,0.45,"Cd79a, Klf2, Btg1, Bank1, Rps27, Tmsb4x, H2-DMb2, Ly6d",
+malaria_late,7,1183.0,3.2224760956862197e-11,P4,0.167,"Derl3, Fkbp11, Slpi, Tent5c, Creld2, Ckap4, Prdx4, Dnajc3",
+malaria_late,7,1183.0,3.2224760956862197e-11,P5,0.807,"Fcmr, Plac8, Rpl36, Nfatc1, Rps11, Ly86, Rps12, Rpl32",
+malaria_late,7,1183.0,3.2224760956862197e-11,P6,0.272,"Atp1b1, Cnn3, Wls, Gm45552, Gm45894, Pirb, Dyrk2, Klhl14",
+malaria_late,7,1183.0,3.2224760956862197e-11,P7,0.077,"Jchain, Hsp90b1, Ssr4, Pdia4, Mzb1, H13, Sec11c, Spcs1",
+bone_marrow_pc,4,10218.0,3.450713998096395e-266,P1,0.799,"MZB1, SSR4, DERL3, XBP1, TXNDC5, FKBP11, SEC11C, IGLL5",plasma cell
+bone_marrow_pc,4,10218.0,3.450713998096395e-266,P2,0.76,"HLA-DRA, HLA-DPB1, CD52, HLA-DPA1, MS4A1, HLA-DRB1, LTB, CD37",memory
+bone_marrow_pc,4,10218.0,3.450713998096395e-266,P3,0.333,"COTL1, IRF8, SELL, PTPRC, CORO1A, ITGB2, HLA-DRB1, FAM65B",plasma cell
+bone_marrow_pc,4,10218.0,3.450713998096395e-266,P4,0.062,"RP11-685N3.1, MALAT1, GTSF1, NBPF15, MDN1, BPNT1, CKS1B, RNF146",plasma cell
+flu,4,1997.0,7.695000300498627e-61,P1,0.686,"LTB, RPS18, RPS15A, CD24, RPL11, EEF1A1, RPS8, RPL3",memory
+flu,4,1997.0,7.695000300498627e-61,P2,0.597,"CD74, RHOB, HLA-DPA1, FGR, HLA-DQA1, HLA-DRB1, CD72, LAPTM5",memory
+flu,4,1997.0,7.695000300498627e-61,P3,0.666,"TCL1A, RPL18A, BTG1, FCER2, IL4R, CXCR4, CD69, PLPP5",naive
+flu,4,1997.0,7.695000300498627e-61,P4,0.802,"TXNDC5, MZB1, SRGN, PPIB, HSP90B1, FKBP11, XBP1, SEC11C",plasma cell
+ebv,3,2314.0,8.788546331982897e-05,P1,0.461,"IFI44L, RPL30, FCMR, RPS27, BTG1, ITM2B, RPL34, IFITM3",interferon
+ebv,3,2314.0,8.788546331982897e-05,P2,0.388,"SEC11C, CD27, CTSH, CFLAR, MEF2B, ZBTB38, LGALS3, PDIA4",plasma cell
+ebv,3,2314.0,8.788546331982897e-05,P3,0.152,"TXN, C1QBP, TYMS, LDHB, TUBB, NME2, AHCY, TUBA1B",plasma cell
+tonsil,1,75.0,0.35770383894138236,continuum,,no distinct programmes: clones vary along a continuum,
+stephenson,2,83.0,0.009750825892724623,P1,0.751,"HLA-DRA, MS4A1, BANK1, CD74, CXCR4, FCMR, TCL1A, LINC00926",plasma cell
+stephenson,2,83.0,0.009750825892724623,P2,0.501,"JCHAIN, MZB1, SEC11C, FKBP11, SPCS3, HSP90B1, PPIB, SSR3",plasma cell

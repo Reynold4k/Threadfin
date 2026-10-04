@@ -1,0 +1,3 @@
+dataset,outcome,clones,share
+malaria_late,trivial,140,0.5714285714285714
+malaria_late,ok,105,0.42857142857142855

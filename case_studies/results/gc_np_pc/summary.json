@@ -41,24 +41,7 @@
  },
  "label_effects": {},
  "programme_associations": {},
- "memory": {
-  "plasma_cell": {
-   "n_clones": 5,
-   "n_pairs": 5,
-   "memory_index": -0.08982524554509053,
-   "memory_index_ci": [
-    -0.28942611678031616,
-    0.05911789645632164
-   ],
-   "p_value": 0.9201596806387226,
-   "persistence": null,
-   "persistence_null": null,
-   "levels": [
-    "GC",
-    "PC"
-   ]
-  }
- },
+ "memory": {},
  "heritability": {
   "n_genes": 13774,
   "median_icc": 0.0,

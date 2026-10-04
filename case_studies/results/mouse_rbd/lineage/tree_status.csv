@@ -1,0 +1,4 @@
+dataset,outcome,clones,share
+mouse_rbd,ok,665,0.8796296296296297
+mouse_rbd,trivial,82,0.10846560846560846
+mouse_rbd,dnapars-timeout,9,0.011904761904761904
