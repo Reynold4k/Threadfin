@@ -270,3 +270,14 @@ def test_clonal_memory_runs():
     res = tf.tl.clonal_memory(ad, "timepoint", n_null=50, n_boot=50, verbose=False)
     assert {"memory_index", "memory_index_ci", "p_value", "n_clones", "pairs"} <= set(res)
     assert res["n_clones"] > 10 and res["memory_index_ci"][0] <= res["memory_index"] <= res["memory_index_ci"][1]
+
+
+def test_clonal_memory_declines_on_too_few_clones():
+    """Three clones cannot support an index: the function must refuse, not return a collapsed interval."""
+    import pytest
+
+    ad = tf.sim.simulate_repertoire(n_clones=1500, clone_size_exponent=1.7, n_timepoints=2, random_state=5)
+    tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor",
+                         representation="kernel", verbose=False)
+    with pytest.raises(ValueError, match="no memory index is reported"):
+        tf.tl.clonal_memory(ad, "timepoint", min_pairs=10_000, n_null=10, n_boot=10, verbose=False)

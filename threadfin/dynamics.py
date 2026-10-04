@@ -98,6 +98,7 @@ def clonal_memory(
     order=None,
     programme_key: str = "clone_programme",
     min_cells: int = 3,
+    min_pairs: int = 10,
     n_null: int = 500,
     n_boot: int = 500,
     random_state: int = 0,
@@ -118,6 +119,10 @@ def clonal_memory(
         table); skipped when absent.
     min_cells
         Minimum cells per snapshot.
+    min_pairs
+        Fewest snapshot pairs for which an index is reported. Below this the
+        bootstrap interval collapses and the estimate says nothing, so the
+        function raises instead of returning a number.
     n_null, n_boot
         Random re-pairings for the p-value; bootstrap replicates for the CI.
 
@@ -150,8 +155,9 @@ def clonal_memory(
     pa, pb = np.asarray(pa, dtype=np.int64), np.asarray(pb, dtype=np.int64)
     if pa.size == 0:
         raise ValueError(f"No clone has >= {min_cells} cells at two levels of '{time_key}'.")
-    if pa.size < 10:
-        warnings.warn(f"Only {pa.size} snapshot pairs across '{time_key}'; the estimate is noisy.", stacklevel=2)
+    if pa.size < min_pairs:
+        raise ValueError(f"Only {pa.size} clones have >= {min_cells} cells at two levels of '{time_key}' "
+                         f"(need >= {min_pairs}); no memory index is reported.")
 
     n_cells = snaps["n_cells"].to_numpy(dtype=float)
     noise = sigma2.sum()
