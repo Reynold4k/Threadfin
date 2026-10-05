@@ -1,48 +1,79 @@
-# Figure plan
+# GC-focused figure plan
 
-Five main figures and four supplementary figures, drawn from the committed
-outputs of `case_studies/results/` by `make_figures.py` and
-`make_supplementary.py`. Every page is 183 mm wide (Nature double column) and
-as tall as its content; nothing is hand-placed outside those two scripts.
+The main biological argument concerns captured clone-state organisation in GC
+responses. The strongest non-GC gate validation is in Supplementary 5; five
+further tested datasets have their own [coverage folder](tested_datasets/README.md).
+The layout follows biological questions, actual study design and independent
+measurement, rather than a sequence of statistical tests.
 
-Run both after any case study is re-run:
+Current review outputs (5 October 2026): Figures 1–5 and Supplementary Figures
+1–6 are available. Review the revised [Figure 1 PNG](Figure_1.png) or its
+[PDF](Figure_1.pdf). Figure 6 and Supplementary Figure 7 are planned below;
+their final outputs await the complete RBD native benchmark. NP results are
+already available in the source tables. Pending models are not assigned zero
+performance or included as partial comparisons.
+
+| Main figure | Question and evidence |
+|---|---|
+| 1 | Three panels: **A**, Chen Satoshi’s original GC illustration; **B**, the same conceptual 18 paired cells, allocated to three sequence-defined families of six cells each, progressing from RNA states and BCR sequences to illustrative state-composition rings and a family map; **C**, four visual evidence cards for reporter division gates, same-mouse GC–PB sharing, repeated human capture and clone coherence versus shuffled family identity. BCR sequence calls families; context-adjusted receptor-excluded RNA kernel profiles describe captured family states. The conceptual spaces are not concatenated UMAPs or a learned BCR encoder; family-map proximity denotes state-profile similarity. |
+| 2 | Controlled GC state interpretation. Panel A retains detailed reporter/DOX/FACS design; B uses **GSE246382 NP-OVA d14** from the author’s report Figure 2.11. C/D remain the independent NP reporter cohort, E–G the RBD reporter cohorts. Division occupancy and SHM colour the same reliable-family maps and answer different questions. |
+| 3 | Same-mouse PcAS GC/output-like co-occupancy. Full experimental design, early PB and late GC clone maps, cell context, family overlays and mouse/isotype-preserving null. No consistent GC–PB positive excess after isotype control. |
+| 4 | Repeated human GC capture and author-identified Spike binding. Clear cell/family maps, restored donor-stratified binding odds forest, repeated families, retention and donor-balanced **GC SHM** curves. Binding classification and SHM are separate measurements; neither is quantitative affinity. |
+| 5 | Twelve dataset analyses: biological anchors, observed versus within-library shuffled clonal expression signal, reliable-profile coverage and gene-module contrasts. Analyses from one publication are not counted as independent studies. Module agreement describes expression and is not independent fate validation. |
+| 6 | Task-aware tool comparison and native benchmark: official capabilities, common receptor-excluded input, fixed donor-private families and whole-mouse held-out reporter readout. Different output tasks and missing inputs are not zero performance. Native results are required for rendering; an empty score schema causes an error. |
+
+| Supplementary figure | Evidence |
+|---|---|
+| 1 | Clone sizes, reliability and within-library coherence; low coverage and declined programme inference for GSE246382. |
+| 2 | Division-gate family overlays, separate RBD protein binding/mRNA GC-zone views, measured-label retention and library-stratified associations. |
+| 3 | PcAS treatment, rare GC/memory-like candidates, exact heavy/light matching, denominators and inference limits. |
+| 4 | Human state composition, verified marrow donor/library mapping, descriptive module analysis and established within-family sequence/state null. |
+| 5 | Revised marrow/blood validation: cell and family maps, pure-gate examples, exact productive heavy/light receptor identities across verified donors. |
+| 6 | Author-clone/Threadfin crosswalk, donor programme binding coverage, individual-donor GC SHM curves and descriptive expression signatures. |
+| 7 | Native benchmark family-size sensitivity, independent RBD-probe/GC-zone gate readout, measured execution stages and coverage/fold audits. |
+
+## Reading the concepts and maps
+
+A cell UMAP has one dot per captured cell. A clone UMAP has one dot per
+receptor-defined family with an interpretable expression distribution.
+Neighbouring family dots represent similar captured state distributions;
+they do not establish ancestry between families. A same-donor sequence relation
+supports within-family membership. Reporter/FACS/probe labels supply external
+measurements, whereas gene signatures reuse the expression data.
+
+Figure 1B’s scBCR space is conceptual, not a learned BCR encoder implemented by
+Threadfin. The same 18 illustrative paired cells form three six-cell families
+throughout the panel. The v4 package calls families from sequence within donors
+and then summarises context-adjusted receptor-excluded RNA distributions with a
+kernel profile and reliability. It does not concatenate two UMAPs. Ring charts,
+positions and fractions are illustrative; one family-map point represents one
+family and nearby points have similar captured state profiles. Figure 1A’s
+arrows depict established GC biology, not directions estimated by the package.
+
+## Reproduce and review
 
 ```bash
-python make_figures.py          # Figure_1..5
-python make_supplementary.py    # Supplementary_1..4
+python case_studies/summarize_clonal_information.py
+python case_studies/spike_gc_trends.py
+python paper/figure_plan/make_biology_figures.py  # six main, seven supplements and tested pages
+python paper/figure_plan/make_biology_figures.py --biological-only  # current Figure1–5 / S1–6
+python paper/figure_plan/make_figures.py          # main only; requires completed benchmark scores
+python paper/figure_plan/make_supplementary.py     # supplements only
 ```
 
-## The argument the figures make
+Saved source tables are under `case_studies/results/`. `figure_audit.json`
+records maps, source paths and deterministic clone-example selection. Maps
+reuse saved coordinates. The [Figure 3 review](review/Figure_3_map_reproduction.png)
+and [analysis audit](../../case_studies/results/map_reproduction_audit/REANALYSIS_zh.md)
+explain why swapping early/PB for late/GC changed appearance despite identical
+coordinates. Dense cell clouds are rasterised in PDFs; new diagrams and text
+remain editable vector artwork, while author-supplied Figure 1A is an embedded
+raster original. PNGs are review previews.
 
-| Figure | Question | What it shows |
-|---|---|---|
-| **1** | What is a clone, and what can be measured about one? | The three settings where clones matter, the workflow, the four questions, why a distribution beats a centroid, and how reliability grows with clone size |
-| **2** | Among sorted germinal-centre B cells, where selection is measured, what orders the clones? | A continuum, ordered by division history and zone rather than antigen binding; about half the state survives a round of selection; the mutation tree inside a clone predicts nothing in the two experiments able to detect it |
-| **3** | Does any of it survive a live infection? | Influenza, with a genetic perturbation that moves the measurement; a Plasmodium time course from day 0 to 42, in which clonal structure peaks in week one and the dominant axis shifts from plasmablast fate to germinal centre and mutation load |
-| **4** | What is a clone when no germinal centre is organising it? | Human bone-marrow plasma cells and the extrafollicular first fortnight of infection; where clones form groups and where a continuum across ten datasets (groups appear in samples that span compartments, always with an antibody-secreting group; this is partly built in for sorted bone marrow); how much a clone keeps its state; and the regime where no clone carries any sequence diversity |
-| **5** | Which parts of the B-cell programme are inherited? | Gene sets ranked against genes expressed at the same level |
-
-| Supplementary | Question |
-|---|---|
-| **1** | Are the clones defined correctly, and how big are they? |
-| **2** | Is the comparison fair, and is there enough data? |
-| **3** | The model-antigen germinal centre in detail, including every lineage tree |
-| **4** | What other tools can and cannot do, on the same clones |
-
-## Panels that are drawn rather than computed
-
-All schematics live in `schematics.py` and are vector line art, not images:
-the workflow (Fig. 1c), clonal memory (1g), groups versus continuum (1h), and
-the three experimental designs (2a, 3a, 4a), plus the benchmark design
-(Supplementary 4a). They carry no data and are safe to edit freely.
-
-## Conventions
-
-* Blue is the observed quantity, grey the same quantity with clones shuffled
-  within a sample; a dashed outline marks the shuffled control drawn on top of
-  a bar.
-* Yellow marks a label that is a property of the animal or donor and so cannot
-  be separated from other differences between them.
-* Every panel that reports a test states the number of clones and a p value.
-* Where a dataset is too small to test, the figure says so instead of leaving
-  the panel out.
+Interpretation, methods and revision decisions are in
+[the manuscript](../MANUSCRIPT_draft_v2.md), [legends](../FIGURE_LEGENDS.md),
+[biological inference review](../BIOLOGICAL_INFERENCE_REVIEW_zh.md),
+[Spike audit](../SPIKE_BINDING_AUDIT_zh.md), [method comparison](../METHOD_COMPARISON.md)
+and [revision logic](../REVISION_LOGIC_zh.md). Benchmark configuration and actual
+execution states are in [BENCHMARK_DESIGN](../BENCHMARK_DESIGN.md) and its source
+result tables; a completed encoder alone is not a completed Benisse model.

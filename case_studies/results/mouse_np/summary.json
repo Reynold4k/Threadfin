@@ -38,7 +38,7 @@
  "programme_splits": {
   "n_leiden_communities": 2,
   "n_merged": 1,
-  "root_pvalue": 0.09964452425182957
+  "root_pvalue": 0.0996445242518258
  },
  "programmes": {
   "n": 1,
@@ -49,9 +49,9 @@
   "division_gate:mCherry-low": {
    "label": "division_gate:mCherry-low",
    "kind": "numeric",
-   "r2": 0.17560296508752998,
-   "null_mean": 0.01390396678224748,
-   "excess_r2": 0.1616989983052825,
+   "r2": 0.17560296508753015,
+   "null_mean": 0.01390396678224749,
+   "excess_r2": 0.16169899830528267,
    "p_value": 0.0004997501249375312,
    "n_clones": 69,
    "n_levels": null,
@@ -69,9 +69,9 @@
   "w33l": {
    "label": "w33l",
    "kind": "categorical",
-   "r2": 0.022906325996782027,
-   "null_mean": 0.068627013325713,
-   "excess_r2": -0.045720687328930976,
+   "r2": 0.022906325996782047,
+   "null_mean": 0.06862701332571297,
+   "excess_r2": -0.04572068732893092,
    "p_value": 0.9815092453773113,
    "n_clones": 19,
    "n_levels": 2,
@@ -94,9 +94,9 @@
   "mutation_frequency": {
    "label": "mutation_frequency",
    "kind": "numeric",
-   "r2": 0.020885638131025456,
-   "null_mean": 0.014324802242904486,
-   "excess_r2": 0.00656083588812097,
+   "r2": 0.020885638131025473,
+   "null_mean": 0.014324802242904496,
+   "excess_r2": 0.006560835888120977,
    "p_value": 0.1874062968515742,
    "n_clones": 69,
    "n_levels": null,
@@ -114,9 +114,9 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.05083400449741471,
-   "null_mean": 0.03244797082902672,
-   "excess_r2": 0.018386033668387987,
+   "r2": 0.050834004497414695,
+   "null_mean": 0.03244797082902673,
+   "excess_r2": 0.018386033668387966,
    "p_value": 0.09295352323838081,
    "n_clones": 69,
    "n_levels": 3,
@@ -230,5 +230,110 @@
    }
   }
  },
- "runtime_min": 1.0
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200",
+    "Ighd"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 1.7
 }

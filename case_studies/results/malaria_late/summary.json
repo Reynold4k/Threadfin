@@ -1,6 +1,6 @@
 {
  "dataset": "malaria_late",
- "title": "GSE286215 experiment 2 - Plasmodium infection days 10 to 42, with an antimalarial (artesunate) arm and naive controls",
+ "title": "GSE286215 experiment 2 - terminal splenic sampling at days 10/14/21/28/35/42: three saline, three artesunate+pyrimethamine-treated and one naive mouse per day",
  "clone_definition": {
   "threshold": 0.066,
   "threshold_method": "density",
@@ -140,7 +140,71 @@
    "Xbp1"
   ]
  },
- "programme_signatures": {},
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.093,
+   "germinal centre": 0.564,
+   "dark zone / cycling": 0.653,
+   "light zone": 0.103,
+   "memory": -0.3,
+   "naive": -0.05,
+   "interferon": -0.183
+  },
+  "P2": {
+   "plasma cell": 2.134,
+   "germinal centre": -0.292,
+   "dark zone / cycling": -0.214,
+   "light zone": 0.055,
+   "memory": -0.109,
+   "naive": -0.141,
+   "interferon": -0.067
+  },
+  "P3": {
+   "plasma cell": -0.014,
+   "germinal centre": -0.043,
+   "dark zone / cycling": 0.062,
+   "light zone": 0.134,
+   "memory": 0.2,
+   "naive": 0.11,
+   "interferon": -0.105
+  },
+  "P4": {
+   "plasma cell": 1.125,
+   "germinal centre": 0.006,
+   "dark zone / cycling": 0.172,
+   "light zone": 0.094,
+   "memory": -0.137,
+   "naive": -0.098,
+   "interferon": -0.129
+  },
+  "P5": {
+   "plasma cell": 0.031,
+   "germinal centre": -0.276,
+   "dark zone / cycling": -0.15,
+   "light zone": 0.224,
+   "memory": 0.219,
+   "naive": -0.053,
+   "interferon": -0.124
+  },
+  "P6": {
+   "plasma cell": 1.923,
+   "germinal centre": -0.25,
+   "dark zone / cycling": -0.189,
+   "light zone": 0.049,
+   "memory": -0.123,
+   "naive": -0.127,
+   "interferon": -0.073
+  },
+  "P7": {
+   "plasma cell": 2.212,
+   "germinal centre": -0.314,
+   "dark zone / cycling": -0.18,
+   "light zone": 0.055,
+   "memory": -0.086,
+   "naive": -0.12,
+   "interferon": -0.107
+  }
+ },
  "programmes": {
   "n": 7,
   "resolution": 0.6,
@@ -339,7 +403,147 @@
    "S100a11"
   ],
   "receptor_gene_icc": 0.0,
-  "gene_sets": {}
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.2671,
+    "matched_background_median_icc": 0.0664,
+    "pvalue_vs_matched": 0.0001
+   },
+   "germinal centre": {
+    "median_icc": 0.2776,
+    "matched_background_median_icc": 0.0338,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.2098,
+    "matched_background_median_icc": 0.055,
+    "pvalue_vs_matched": 0.0001
+   },
+   "light zone": {
+    "median_icc": 0.0956,
+    "matched_background_median_icc": 0.0365,
+    "pvalue_vs_matched": 0.0116
+   },
+   "memory": {
+    "median_icc": 0.1571,
+    "matched_background_median_icc": 0.0208,
+    "pvalue_vs_matched": 0.0
+   },
+   "naive": {
+    "median_icc": 0.2317,
+    "matched_background_median_icc": 0.0369,
+    "pvalue_vs_matched": 0.0117
+   },
+   "interferon": {
+    "median_icc": 0.0656,
+    "matched_background_median_icc": 0.0205,
+    "pvalue_vs_matched": 0.0395
+   }
+  }
  },
- "runtime_min": 4.3
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200"
+   ],
+   "n_present": 6,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 7.5
 }

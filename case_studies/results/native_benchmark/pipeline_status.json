@@ -1,0 +1,12 @@
+{
+  "status": "NP completed; RBD native models running",
+  "NP": "all seven representations, 373 common expanded families, seven label-held-out mice",
+  "RBD_native_jobs": [
+    "32288767_2",
+    "32294672_2"
+  ],
+  "automatic_finalization_job": "32296689",
+  "finalization_dependency": "afterok:32294672:32288767",
+  "figure6_included": false,
+  "partial_comparisons_not_rendered": true
+}

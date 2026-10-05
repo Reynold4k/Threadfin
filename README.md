@@ -7,36 +7,34 @@
 [![Python >= 3.10](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org)
 
 A B-cell clone is a family of cells descended from one ancestor that share a
-B-cell receptor. Paired single-cell sequencing tells you, for every cell, which
-clone it belongs to and what it is doing. Threadfin uses the **clone as the
+B-cell receptor. Paired single-cell sequencing supports receptor-based family
+assignment and measures each captured cell's expression state. Threadfin uses the **clone as the
 unit of analysis**.
 
-This matters most where the biology is a cycle. In a germinal centre, B cells
-divide and mutate their receptor, test it, and are then either sent back for
-another round or leave as plasma or memory cells. Nothing in that cycle is a
-beginning or an end, so ordering single cells along a pseudotime asks a
-question the biology does not answer. A clone is different: all of its cells
-descend from one ancestor, so a clone has a history even when its cells do not
-have an order. Threadfin therefore compares clones with one another, and asks
-which clones look as though they were recently selected and which look as
-though they were sent back to divide again.
+In a germinal centre, B cells alternate between selection and division,
+while clonally related cells can occupy different states. Threadfin compares
+the distributions of states captured within sequence-defined families. Measured
+division reporters, sorting gates and antigen probes help interpret those
+distributions. A clone map shows similarities between families' observed
+expression profiles; neighbouring points do not establish shared ancestry,
+future fate or memory-cell re-entry into a GC.
 
 It answers four questions:
 
-1. **Is B-cell state inherited within clones?** How much of the variation in
+1. **Which states recur within clones?** How much of the variation in
    gene expression is explained by which clone a cell belongs to, beyond when
    and where the cells were sampled.
-2. **Which clones behave alike?** Clones are grouped only when the split
-   between groups is real; otherwise they are reported as a continuum.
+2. **Which clones behave alike?** Reliable clones are grouped when matched-null
+   tests and resampling support separation; otherwise they are reported as a continuum.
 3. **What explains the differences between clones?** Clone-level tests against
    anything you measured: antigen binding, isotype, mutation load, division
    history, sort gate, infection, tissue, time.
 4. **Do clones keep their state** over time, across tissues, or across the
    compartments of a germinal centre?
 
-Every result comes with an honest measure of uncertainty, every test counts
-clones rather than cells, and the output is a hypothesis about clones that
-experiments still have to confirm.
+Uncertainty and profile reliability accompany the analysis. Clones supply
+profile units; donor- or mouse-level designs are needed for population and
+treatment claims. The output supports testable biological hypotheses.
 
 ---
 
@@ -122,7 +120,7 @@ print(result.summary())
    split between two states is not mistaken for one sitting in between.
 3. **Coherence test.** The share of transcriptional variance explained by
    clone identity is compared with clones shuffled *within samples*, so
-   differences between samples are never mistaken for clonality.
+   the baseline accounts for differences between sampling contexts.
 4. **Programmes.** Reliable clones are grouped by similarity of their
    profiles. Every split between groups must pass a significance test against
    a single-group model, so clones that only vary along a continuum are
@@ -158,7 +156,7 @@ tf.tl.profile_association(adata, "isotype")               # 5. label vs clone st
 tf.tl.association_test(adata, "isotype")                  #    label vs programmes
 tf.tl.programme_markers(adata)                            #    genes, clones as replicates
 tf.tl.clonal_memory(adata, "timepoint")                   #    memory over time
-tf.tl.gene_heritability(adata)                            #    which genes are clonally inherited
+tf.tl.gene_heritability(adata)                            #    within-clone gene-expression resemblance
 ```
 
 Figures: `tf.pl.clone_map`, `tf.pl.coherence`, `tf.pl.stability`,
@@ -167,43 +165,28 @@ Figures: `tf.pl.clone_map`, `tf.pl.coherence`, `tf.pl.stability`,
 
 ## What Threadfin found in public data
 
-Eight published datasets, human and mouse, were re-analysed with the same
-script (`case_studies/`). A few of the findings:
+The [current manuscript](paper/MANUSCRIPT_draft_v2.md) centres on GC biology:
 
-**Germinal centres have no beginning and no end**, so ordering single cells
-along a pseudotime asks a question the biology does not answer. Comparing
-*clones* works instead, because a clone has a history even when its cells do
-not have an order. In two mouse experiments with a model antigen, where cells
-were sorted by how often they had divided and by germinal-centre zone:
+* **Measured GC division history:** NP-OVA and RBD reporter cohorts show
+  clone-associated state variation, interpreted using division/FACS labels
+  and independently measured BCR mutation load.
+* **Plasmodium GC/output relationships:** some same-mouse families contain
+  GC, plasmablast or memory-like cells, including exact paired heavy/light
+  matches. GC–PB sharing shows no consistent extra enrichment after controlling
+  isotype composition. It supports candidate selection rather than directed
+  fate or memory re-entry claims.
+* **Longitudinal human vaccination:** repeated same-donor GC-containing families
+  test persistence across dates; an expression map alone cannot identify a
+  parent cell.
+* **One non-GC validation:** verified marrow/blood donor identities and pure
+  PC/memory sorts reveal exact heavy/light receptor sharing across gates.
 
-* clone identity explained 9-15% of B-cell state, far more than shuffled
-  clones (p = 0.002), but never most of it: a clone biases what its cells do;
-* clones did **not** fall into distinct programmes - they differ along a
-  continuum;
-* how many times a clone's cells had divided was the strongest explanation of
-  how clones differ (18% and 8%), with the dark/light-zone sort comparable
-  (9%), while antigen binding and mutation load explained much less;
-* about half of what distinguishes a clone was still recognisable when its
-  cells were caught in a different part of the cycle.
-
-**In a vaccinated human lymph node**, spike-binding clones were concentrated in
-the germinal-centre and one antibody-secreting group of clones (odds ratios
-around 3 across donors). Clones kept their state over months (memory index
-0.26), but the same clone's cells in blood and lymph node did not resemble each
-other at all - where a cell is matters more than which clone it came from.
-
-**Seven days after influenza vaccination**, the antibody-secreting burst came
-from class-switched, mutated clones, as expected if it is recall of existing
-memory rather than a new response.
-
-These are associations in observational data: Threadfin produces hypotheses
-about clones that need experiments to confirm. The step-by-step walkthroughs
-are in [`report/PUBLIC_DATASETS_REPORT.md`](report/PUBLIC_DATASETS_REPORT.md)
-and, for the germinal centre,
-[`report/GERMINAL_CENTRE_CASE_STUDIES.md`](report/GERMINAL_CENTRE_CASE_STUDIES.md);
-the analysis code is in [`case_studies/`](case_studies/); how Threadfin relates
-to other tools is in [`docs/GAP_ANALYSIS.md`](docs/GAP_ANALYSIS.md); the
-manuscript figure plan is in [`paper/figure_plan/`](paper/figure_plan/).
+[Main figures and focused supplements](paper/figure_plan/FIGURE_PLAN.md)
+carry these questions. Other [datasets already tested](paper/figure_plan/tested_datasets/)
+are retained as exploratory coverage. The [biological review](paper/BIOLOGICAL_INFERENCE_REVIEW_zh.md)
+explains the evidence, controls and limitations. Earlier reports in `report/`
+record the original analysis and are superseded by the current manuscript
+where sampling identities or interpretations have changed.
 
 ## Upgrading from v3
 

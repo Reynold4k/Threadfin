@@ -1,0 +1,127 @@
+{
+  "map_note": "Saved UMAP coordinates; distances are visualization, not lineage evidence.",
+  "selected_clones": {
+    "malaria_gc_pb": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "D14_Hashtag5|C00001",
+        "D35_Hashtag4|C00001",
+        "D14_Hashtag4|C00002",
+        "D14_Hashtag5|C00004"
+      ]
+    },
+    "human_spike_rings": {
+      "rule": "12 largest reliable spike-positive families",
+      "ids": [
+        "368-07|C00001",
+        "368-07|C00002",
+        "368-07|C00003",
+        "368-10|C00001",
+        "368-02a|C00001",
+        "368-10|C00002",
+        "368-02a|C00002",
+        "368-20|C00001",
+        "368-10|C00003",
+        "368-01a|C00001",
+        "368-07|C00005",
+        "368-02a|C00003"
+      ]
+    },
+    "human_repeated_gc": {
+      "rule": "GC captured at >=3 distinct nonpooled dates; largest total captured sizes",
+      "ids": [
+        "368-07|C00002",
+        "368-07|C00003",
+        "368-10|C00001",
+        "368-10|C00002"
+      ]
+    },
+    "np_division": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "M2|C00001",
+        "M4|C00001",
+        "M7|C00001",
+        "M7|C00002"
+      ]
+    },
+    "rbd_division": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "M1|C00001",
+        "M5|C00001",
+        "M1|C00002",
+        "M1|C00003"
+      ]
+    },
+    "np_direct_fates": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "S1|C00001",
+        "S1|C00002",
+        "S1|C00003",
+        "S1|C00004"
+      ]
+    },
+    "malaria_gc_memory": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "D35_Hashtag4|C00002",
+        "D35_Hashtag3|C00006",
+        "D28_Hashtag5|C00003",
+        "D35_Hashtag4|C00010"
+      ]
+    },
+    "marrow_pure_sort_shared": {
+      "rule": "captured in both pure PC and pure memory sorts; descending combined size",
+      "ids": [
+        "donor 1681|C00001",
+        "donor 1681|C00002",
+        "donor 1681|C00003",
+        "donor 1681|C00004",
+        "donor 1681|C00005"
+      ]
+    }
+  },
+  "sources": {
+    "paper/figure_plan/assets/GC_structure_supplied.png": "Author-original GC schematic by Chen Satoshi; ownership confirmed; inserted without pixel editing.",
+    "case_studies/results/gc_np_pc/cells.csv.gz": 884,
+    "case_studies/results/mouse_rbd/cells.csv.gz": 36188,
+    "case_studies/results/malaria_late/cells.csv.gz": 72359,
+    "case_studies/results/ln_vaccine/cells.csv.gz": 193442,
+    "case_studies/results/clonal_information_summary/dataset_evidence.csv": 12,
+    "case_studies/results/mouse_np/cells.csv.gz": 10109,
+    "case_studies/results/bone_marrow_pc/cells.csv.gz": 115144,
+    "case_studies/results/flu/cells.csv.gz": 123693,
+    "case_studies/results/flu_lung/cells.csv.gz": 4121,
+    "case_studies/results/ebv/cells.csv.gz": 205630,
+    "case_studies/results/tonsil/cells.csv.gz": 22478,
+    "case_studies/results/stephenson/cells.csv.gz": 5000
+  },
+  "outputs": [
+    "Figure_1",
+    "Figure_2",
+    "Figure_3",
+    "Figure_4",
+    "Figure_5",
+    "Supplementary_1",
+    "Supplementary_2",
+    "Supplementary_3",
+    "Supplementary_4",
+    "Supplementary_5",
+    "Supplementary_6"
+  ],
+  "figure1_concept": {
+    "panels": [
+      "original GC art",
+      "traceable paired-cell/family/profile/map example",
+      "four visual evidence cards"
+    ],
+    "illustrative_cells": 18,
+    "families": 3,
+    "cells_per_family": 6,
+    "ring_compositions": "illustrative, not the algorithmic kernel features",
+    "A_asset_sha256": "b08cdbd77e32c7120c03dc885287970ca53146646f7e8cfda2f10210c915d453"
+  },
+  "benchmark_included": false
+}

@@ -73,7 +73,149 @@
    "Gm20811"
   ],
   "receptor_gene_icc": 0.13478123063790526,
-  "gene_sets": {}
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.0571,
+    "matched_background_median_icc": -0.008,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.0323,
+    "matched_background_median_icc": -0.0071,
+    "pvalue_vs_matched": 0.1445
+   },
+   "dark zone / cycling": {
+    "median_icc": -0.0125,
+    "matched_background_median_icc": -0.0084,
+    "pvalue_vs_matched": 0.2039
+   },
+   "light zone": {
+    "median_icc": -0.0201,
+    "matched_background_median_icc": -0.0096,
+    "pvalue_vs_matched": 0.1198
+   },
+   "memory": {
+    "median_icc": -0.009,
+    "matched_background_median_icc": -0.0116,
+    "pvalue_vs_matched": 0.7491
+   },
+   "naive": {
+    "median_icc": -0.0083,
+    "matched_background_median_icc": -0.0112,
+    "pvalue_vs_matched": 0.4322
+   },
+   "interferon": {
+    "median_icc": 0.01,
+    "matched_background_median_icc": -0.0116,
+    "pvalue_vs_matched": 0.1972
+   }
+  }
  },
- "runtime_min": 0.2
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200",
+    "Ighd"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Mx1",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 8,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 0.4
 }

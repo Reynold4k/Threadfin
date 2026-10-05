@@ -22,6 +22,7 @@ step-by-step biological interpretation is in ../report/PUBLIC_DATASETS_REPORT.md
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 import warnings
@@ -109,8 +110,8 @@ CONFIGS = {
         memory=["plasma_cell"],
     ),
     "malaria": dict(
-        title="GSE286215 - splenic B cells through a Plasmodium infection in mice, days 0 to 14, five "
-              "hashtagged mice per day, with the authors' cell annotation",
+        title="GSE286215 - terminal splenic sampling during PcAS infection: day 0 (one naive mouse), "
+              "day 4 (four infected mice), days 7/10/14 (five each); author transcriptomic annotations",
         batch_key=None, state_key="cell_state",
         tests=[("cell_state", "fraction:GC", "fraction of the clone's cells in a germinal centre"),
                ("cell_state", "fraction:PB", "fraction of the clone's cells that are plasmablasts"),
@@ -120,8 +121,8 @@ CONFIGS = {
         memory=[],
     ),
     "malaria_late": dict(
-        title="GSE286215 experiment 2 - Plasmodium infection days 10 to 42, with an antimalarial (artesunate) "
-              "arm and naive controls",
+        title="GSE286215 experiment 2 - terminal splenic sampling at days 10/14/21/28/35/42: "
+              "three saline, three artesunate+pyrimethamine-treated and one naive mouse per day",
         batch_key=None, state_key="cell_state",
         tests=[("cell_state", "fraction:GC", "fraction of the clone's cells in a germinal centre"),
                ("cell_state", "fraction:PB", "fraction of the clone's cells that are plasmablasts"),
@@ -188,7 +189,8 @@ def mouse_case(genes):
 
 
 def gene_sets_for(name):
-    return {k: mouse_case(v) for k, v in GENE_SETS_HUMAN.items()} if name.startswith("mouse") else GENE_SETS_HUMAN
+    mouse_datasets = {"mouse_np", "mouse_rbd", "gc_np_pc", "flu_lung", "malaria", "malaria_late"}
+    return {k: mouse_case(v) for k, v in GENE_SETS_HUMAN.items()} if name in mouse_datasets else GENE_SETS_HUMAN
 
 
 def jsonable(obj):
@@ -273,8 +275,25 @@ def programme_signatures(adata, gene_sets, programme_key="clone_programme"):
     return pd.DataFrame(rows)
 
 
+def clone_gene_scores(adata, gene_sets):
+    """Descriptive expression signatures; these reuse expression and are not external validation."""
+    import scanpy as sc
+
+    tmp = sc.AnnData(X=adata.layers["log_norm"], obs=adata.obs[["clone_id"]].copy(),
+                    var=pd.DataFrame(index=adata.var_names))
+    coverage = {}
+    for name, genes in gene_sets.items():
+        present = [g for g in genes if g in tmp.var_names]
+        coverage[name] = {"genes_present": present, "n_present": len(present), "n_requested": len(genes)}
+        if len(present) >= 3:
+            sc.tl.score_genes(tmp, present, score_name=name, random_state=0)
+    cols = [name for name in gene_sets if name in tmp.obs]
+    scores = tmp.obs.dropna(subset=["clone_id"]).groupby("clone_id", observed=True)[cols].mean()
+    return scores, coverage
+
+
 def main(name: str):
-    out = HERE / "results" / name
+    out = Path(os.environ.get("THREADFIN_RESULTS", HERE / "results")) / name
     (out / "figures").mkdir(parents=True, exist_ok=True)
     t0 = time.time()
 
@@ -438,11 +457,14 @@ def main(name: str):
         if label in adata.obs:
             table[test_name(label, how)] = tf.tl.clone_labels(adata, label, how=how).reindex(table.index)
     table.to_csv(out / "clone_table.csv")
+    scores, coverage = clone_gene_scores(adata, gene_sets_for(name))
+    scores.to_csv(out / "clone_gene_scores.csv")
+    summary["signature_coverage"] = coverage
     figures(adata, state_key, out, has_programmes=prog is not None, gene_sets=gene_sets_for(name))
     cols = [c for c in ("clone_id", "clone_programme", "clone_programme_assigned", state_key, "donor", "sample",
                         "timepoint", "tissue", "isotype", "mutation_frequency", "spike_binding", "gfp",
                         "division_gate", "rbd_bait", "zone_gate", "w33l", "severity", "fate", "compartment",
-                        "n_mutations") if c in adata.obs]
+                        "n_mutations", "treatment", "sorted_as", "antigen", "vaccine", "genotype") if c in adata.obs]
     cells = adata.obs[list(dict.fromkeys(cols))].copy()
     if "X_umap" in adata.obsm:
         cells["umap_1"], cells["umap_2"] = adata.obsm["X_umap"][:, 0], adata.obsm["X_umap"][:, 1]

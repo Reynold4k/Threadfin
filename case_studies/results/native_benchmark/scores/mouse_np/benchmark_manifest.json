@@ -1,0 +1,138 @@
+{
+  "dataset": "mouse_np",
+  "n_common_cells": 3894,
+  "n_common_families": 373,
+  "cell_ids_sha256": "41b68ff297fa6a0530b6daf8219dddc9de30c5a6805d2de03e1ed2bed7fa9065",
+  "family_ids_sha256": "25dd64f812615fd6291d89ec44c6bbed2d07fca44a67037bf77db1d6d59cc13c",
+  "gate_labels_exported_to_models": false,
+  "all_methods_required": true,
+  "unsupervised_scope": "all common cells, transductive, no held-out gate labels",
+  "readout": "complete-geometry linear-kernel ridge; training-only centring and trace scaling; nested whole-mouse alpha CV",
+  "alphas": [
+    0.1,
+    1,
+    10,
+    100,
+    1000
+  ],
+  "fold_min_train": 20,
+  "fold_min_test": 3,
+  "target_definition": "positive fraction among measured cells only; n_measured >= min_cells",
+  "sort_library_scope": "shared sorted sequencing libraries across mouse folds; not an independent-library generalisation test",
+  "versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.1",
+    "anndata": "0.12.19",
+    "clone2vec": "0.1.1"
+  },
+  "native_model_run": {
+    "benisse_commit": "f0ff4c14b92f98ea730a85d2cc537ba56bbdc917",
+    "benisse_encoder_returncode": 0,
+    "benisse_encoder_seconds": 7.559,
+    "benisse_encoder_status": "completed",
+    "benisse_r_returncode": 0,
+    "benisse_r_seconds": 585.961,
+    "benisse_r_status": "completed",
+    "bigcn_adapter_patch": "preserve --num_nodes over upstream newFile toy constant (1494); pass parsed dataset to graphStructure",
+    "bigcn_commit": "5b5e3faac576b01779a4a4a9ee395985dba0fc2a",
+    "bigcn_native_nodes": 2270,
+    "bigcn_returncode": 0,
+    "bigcn_seconds": 3856.463,
+    "bigcn_status": "completed",
+    "created_utc": "2026-10-05T08:56:33Z",
+    "dataset": "mouse_np",
+    "expression_preprocessing": "library-size 1e4; log1p; PCA100; exclude IGH/IGK/IGL genes",
+    "input_status": "ready",
+    "labels_exported": false,
+    "n_cells": 3894,
+    "n_pca": 100,
+    "n_receptor_genes_excluded": 395,
+    "source_benisse": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/competitors/sources/Benisse",
+    "source_bigcn": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/competitors/sources/BiGCN"
+  },
+  "representations": {
+    "Benisse": {
+      "adapter": "classical MDS of native squared latent distances",
+      "n_components": 30,
+      "positive_eigenvalues": [
+        6.319903901932012,
+        6.319903901931998,
+        6.319903901931985,
+        6.3199039019319665,
+        6.319903901931963,
+        6.319903901931958,
+        6.319903901931956,
+        6.319903901931949,
+        6.319903901931946,
+        6.319903901931945,
+        6.319903901931945,
+        6.319903901931939,
+        6.319903901931938,
+        6.319903901931937,
+        6.319903901931936,
+        6.319903901931935,
+        6.319903901931934,
+        6.319903901931931,
+        6.31990390193193,
+        6.319903901931927,
+        6.319903901931925,
+        6.319903901931925,
+        6.319903901931924,
+        6.319903901931918,
+        6.319903901931916,
+        6.319903901931914,
+        6.319903901931911,
+        6.319903901931908,
+        6.319903901931904,
+        6.319903901931904
+      ],
+      "fraction_positive_trace_retained": 0.045804634649433504,
+      "adapter_seconds": 4.337886244058609,
+      "n_native_nodes": 2270,
+      "n_cells": 3894,
+      "n_families": 1536,
+      "performance_adapter": "complete cell-weighted family kernel; no spectral truncation",
+      "spectral_features_used_for_performance": false
+    },
+    "BiGCN": {
+      "n_native_nodes": 2270,
+      "n_cells": 3894,
+      "n_families": 1536,
+      "adapter": "cell-count-weighted native node mean within fixed families"
+    },
+    "RNA_centroid": {
+      "seconds": 0.10399922169744968,
+      "n_families": 373
+    },
+    "Threadfin_mean": {
+      "seconds": 0.8875494953244925,
+      "n_families": 373,
+      "context_key": "donor",
+      "smooth": 0
+    },
+    "Threadfin_kernel": {
+      "seconds": 1.088266396895051,
+      "n_families": 373,
+      "context_key": "donor",
+      "smooth": 15
+    },
+    "clone2vec": {
+      "seconds": 179.3342758063227,
+      "n_families": 373,
+      "version": "0.1.1",
+      "native_parameters": {
+        "k": 15,
+        "z_dim": 30,
+        "max_iter": 500,
+        "early_stopping_patience": 5,
+        "init": "svd"
+      }
+    },
+    "RNA_context_centroid": {
+      "seconds": 0.0945915449410677,
+      "n_families": 373,
+      "context_key": "donor"
+    }
+  }
+}

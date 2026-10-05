@@ -1,0 +1,13 @@
+method,dataset,stage,status,input_cells,runtime_seconds,max_rss_kb,notes
+Benisse,mouse_np,pretrained_encoder,completed,3894,7.559,,Only completed native stages are timed; raw model working folders are excluded from version control.
+Benisse,mouse_np,official_R,completed,3894,585.961,,Only completed native stages are timed; raw model working folders are excluded from version control.
+BiGCN,mouse_np,official_graph_and_training,completed,3894,3856.463,,Only completed native stages are timed; raw model working folders are excluded from version control.
+Threadfin_mean,mouse_np,Threadfin_mean,completed,3894,0.8875494953244925,,Model stage only; no PCA preprocessing or downstream readout.
+Threadfin_kernel,mouse_np,Threadfin_kernel,completed,3894,1.088266396895051,,Model stage only; no PCA preprocessing or downstream readout.
+clone2vec,mouse_np,clone2vec,completed,3894,179.3342758063227,,Model stage only; no PCA preprocessing or downstream readout.
+Benisse,mouse_rbd,pretrained_encoder,completed,16667,6.405,,Only completed native stages are timed; raw model working folders are excluded from version control.
+Benisse,mouse_rbd,official_R,not_finalised,16667,,,Only completed native stages are timed; raw model working folders are excluded from version control.
+BiGCN,mouse_rbd,official_graph_and_training,not_finalised,16667,,,Only completed native stages are timed; raw model working folders are excluded from version control.
+Threadfin_mean,mouse_rbd,Threadfin_mean,completed,16667,3.371087661013007,,Model stage only; no PCA preprocessing or downstream readout.
+Threadfin_kernel,mouse_rbd,Threadfin_kernel,completed,16667,5.612583644688129,,Model stage only; no PCA preprocessing or downstream readout.
+clone2vec,mouse_rbd,clone2vec,completed,16667,218.00063238479197,,Model stage only; no PCA preprocessing or downstream readout.

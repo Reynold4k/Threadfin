@@ -1,0 +1,16 @@
+{
+  "benisse_commit": "f0ff4c14b92f98ea730a85d2cc537ba56bbdc917",
+  "benisse_encoder_returncode": 0,
+  "benisse_encoder_seconds": 6.405,
+  "benisse_encoder_status": "completed",
+  "created_utc": "2026-10-05T08:45:08Z",
+  "dataset": "mouse_rbd",
+  "expression_preprocessing": "library-size 1e4; log1p; PCA100; exclude IGH/IGK/IGL genes",
+  "input_status": "ready",
+  "labels_exported": false,
+  "n_cells": 16667,
+  "n_pca": 100,
+  "n_receptor_genes_excluded": 395,
+  "source_benisse": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/competitors/sources/Benisse",
+  "source_bigcn": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/competitors/sources/BiGCN"
+}

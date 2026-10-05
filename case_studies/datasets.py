@@ -29,6 +29,16 @@ DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "
 # =========================================================================== helpers
 
 
+def spike_binding_status(value):
+    """Preserve unknown calls; FALSE means not author-identified S+.
+
+    This clone-level source label is neither quantitative affinity nor a
+    uniformly tested negative measurement. Strings retain existing table keys.
+    """
+    label = str(value).strip().upper()
+    return 'S+' if label == 'TRUE' else 'S-' if label == 'FALSE' else np.nan
+
+
 def read_mtx_dir(path: Path, prefix: str):
     """10x matrix triplet (``prefix + matrix.mtx.gz`` ...) -> AnnData (cells x features)."""
     import anndata as ad
@@ -207,7 +217,7 @@ def load_ln_vaccine():
         "v_call": heavy["v_call"], "j_call": heavy["j_call"], "junction": heavy["junction"],
         "c_call": heavy["isotype"],
         "author_clone_id": heavy["clone_id"].astype(str),
-        "spike_binding": heavy["s_pos_clone"].map(lambda v: "S+" if str(v).upper() == "TRUE" else "S-"),
+        "spike_binding": heavy["s_pos_clone"].map(spike_binding_status),
         "elisa": heavy["elisa"].map(lambda v: {"TRUE": "ELISA+", "FALSE": "ELISA-"}.get(str(v).upper())),
         "mutation_frequency": pd.to_numeric(heavy["nuc_RS_freq_19_312"], errors="coerce"),
     })
@@ -660,18 +670,42 @@ def _tetramer_call(counts: pd.DataFrame, min_total: int = 3) -> pd.Series:
 # =========================================================================== outside the germinal centre
 
 _GSE253857 = DATA / "gse253857_bmpc"
+_BONE_MARROW_MANIFEST = Path(__file__).with_name("bone_marrow_sample_manifest.tsv")
 
 
-def load_bone_marrow_pc():
+def _bone_marrow_sample_manifest() -> pd.DataFrame:
+    """Exact GEO sample map for the GEX libraries with a paired BCR file.
+
+    GSE253857 file names are not donor identifiers: for example, ``BM_6`` is
+    donor 561.  The manifest was transcribed from the GSE253857 SOFT sample
+    titles, and explicitly marks pooled and mixed-donor/tissue libraries.
+    """
+    required = {"library", "geo_gex", "donor", "design_status", "primary_analysis",
+                "tissue", "sorted_as", "antigen"}
+    manifest = pd.read_csv(_BONE_MARROW_MANIFEST, sep="\t", dtype=str)
+    missing = required - set(manifest.columns)
+    if missing:
+        raise ValueError(f"bone-marrow manifest is missing columns: {sorted(missing)}")
+    if manifest["library"].duplicated().any():
+        raise ValueError("bone-marrow manifest contains duplicate library names")
+    if not manifest["primary_analysis"].isin(("TRUE", "FALSE")).all():
+        raise ValueError("bone-marrow manifest primary_analysis must be TRUE or FALSE")
+    return manifest.set_index("library", verify_integrity=True)
+
+
+def load_bone_marrow_pc(include_pooled: bool = False):
     """GSE253857: human bone-marrow plasma cells and memory B cells, with blood counterparts.
 
     Antibody-secreting cells that reach the bone marrow are the source of
     long-lived serum antibody, and they get there long after any germinal
-    centre has closed. Cells were sorted by compartment (plasma cells, memory
-    B cells) and, in some samples, by what their antibody binds: the spike
-    protein of SARS-CoV-2, reflecting a recent vaccination, or tetanus toxoid,
-    reflecting an immunisation decades earlier. The contrast asks whether
-    clonal structure is a germinal-centre phenomenon or outlives it.
+    centre has closed. The deposited GEX libraries were FACS-sorted by the
+    compartments recorded in ``bone_marrow_sample_manifest.tsv``.
+
+    By default this returns only single-donor, single-tissue libraries. Pooled
+    donor libraries can be retained with ``include_pooled=True`` but receive a
+    library-specific ``pool:<library>`` donor label, never a pseudo-donor ID.
+    Cross-donor and mixed-tissue libraries are always excluded because cells
+    cannot be assigned to their source donor/tissue from the deposited files.
 
     The deposited contig files carry no germline alignment, so mutation load
     is not available for this dataset.
@@ -679,6 +713,7 @@ def load_bone_marrow_pc():
     import anndata as ad
 
     folder = _GSE253857
+    manifest = _bone_marrow_sample_manifest()
     ads, bcrs = [], []
     for h5 in sorted(folder.glob("*.filtered_feature_bc_matrix.h5")):
         name = h5.name.replace(".filtered_feature_bc_matrix.h5", "")
@@ -687,17 +722,23 @@ def load_bone_marrow_pc():
                        == name.replace("-", "_")), None)
         if contig is None:                      # no receptors for this run
             continue
+        if name not in manifest.index:
+            raise KeyError(f"paired bone-marrow library {name!r} is absent from {_BONE_MARROW_MANIFEST}")
+        design = manifest.loc[name]
+        if design["design_status"] in ("mixed_donors", "mixed_tissues"):
+            continue
+        if design["design_status"] == "pooled_donors" and not include_pooled:
+            continue
         a = read_10x_h5(h5)
         a = a[:, a.var["feature_type"] == "Gene Expression"].copy()
         a.obs_names = [f"{name}|{b}" for b in a.obs_names]
-        tissue = "blood" if name.lower().startswith("blood") or "blood" in name.lower() else "bone marrow"
-        sort = _bmpc_sort(name)
         a.obs["sample"] = name
-        a.obs["tissue"] = tissue
-        a.obs["sorted_as"] = sort
-        a.obs["antigen"] = ("SARS-CoV-2 spike" if "spike" in name.lower() else
-                            "tetanus toxoid" if "tetanus" in name.lower() else "not sorted by antigen")
-        a.obs["donor"] = _bmpc_donor(name)
+        a.obs["geo_gex"] = design["geo_gex"]
+        a.obs["tissue"] = design["tissue"]
+        a.obs["sorted_as"] = design["sorted_as"]
+        a.obs["antigen"] = design["antigen"]
+        a.obs["design_status"] = design["design_status"]
+        a.obs["donor"] = _bmpc_donor(name, manifest)
         ads.append(a)
         b = _contigs_heavy(contig)
         b.index = [f"{name}|{i}" for i in b.index]
@@ -708,25 +749,17 @@ def load_bone_marrow_pc():
     return adata, bcr
 
 
-def _bmpc_sort(name: str) -> str:
-    low = name.lower()
-    if "pcs-bmem" in low or "pc_bmem" in low or "pcs_bmem" in low:
-        return "plasma and memory"
-    if "pcs" in low or low.endswith("_pc"):
-        return "plasma cells"
-    if "bmem" in low or "bsm" in low:
-        return "memory B cells"
-    return "antigen-sorted"
-
-
-def _bmpc_donor(name: str) -> str:
-    """Donor id from the sample name; pooled runs are kept as their own group."""
-    import re
-
-    if "pool" in name.lower():
-        return "pooled donors"
-    m = re.findall(r"(\d{3,4}|\d)(?=$|[_-])", name)
-    return f"donor {m[-1]}" if m else "unknown"
+def _bmpc_donor(name: str, manifest: pd.DataFrame | None = None) -> str:
+    """Return a manifest-backed analysis unit; never infer one from a file name."""
+    manifest = _bone_marrow_sample_manifest() if manifest is None else manifest
+    if name not in manifest.index:
+        raise KeyError(f"unknown GSE253857 library {name!r}; add its exact GEO SOFT mapping first")
+    design = manifest.loc[name]
+    if design["design_status"] == "single_donor":
+        return f"donor {design['donor']}"
+    if design["design_status"] == "pooled_donors":
+        return f"pool:{name}"
+    return f"excluded:{name}"
 
 
 

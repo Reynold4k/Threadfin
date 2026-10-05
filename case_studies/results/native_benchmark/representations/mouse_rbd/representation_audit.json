@@ -1,0 +1,35 @@
+{
+  "RNA_centroid": {
+    "seconds": 0.3546040616929531,
+    "n_families": 1414
+  },
+  "Threadfin_mean": {
+    "seconds": 3.371087661013007,
+    "n_families": 1414,
+    "context_key": "donor",
+    "smooth": 0
+  },
+  "Threadfin_kernel": {
+    "seconds": 5.612583644688129,
+    "n_families": 1414,
+    "context_key": "donor",
+    "smooth": 15
+  },
+  "clone2vec": {
+    "seconds": 218.00063238479197,
+    "n_families": 1414,
+    "version": "0.1.1",
+    "native_parameters": {
+      "k": 15,
+      "z_dim": 30,
+      "max_iter": 500,
+      "early_stopping_patience": 5,
+      "init": "svd"
+    }
+  },
+  "RNA_context_centroid": {
+    "seconds": 0.38405810482800007,
+    "n_families": 1414,
+    "context_key": "donor"
+  }
+}

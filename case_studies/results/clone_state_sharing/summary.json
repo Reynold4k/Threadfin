@@ -1,0 +1,56 @@
+{
+  "analysis": "Same-day, same-mouse clone/state occupancy; no directionality, state transition, or GC re-entry is inferred.",
+  "input_cohorts": {
+    "malaria_early": {
+      "cells": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/Threadfin/case_studies/results/malaria/cells.csv.gz",
+      "bcr": "/data/scratch/projects/punim1236/threadfin_data/gse286215_malaria/exp1_bcr.tsv.gz",
+      "metadata": "/data/scratch/projects/punim1236/threadfin_data/gse286215_malaria/experiment1_metadata.csv.gz"
+    },
+    "malaria_late": {
+      "cells": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/Threadfin/case_studies/results/malaria_late/cells.csv.gz",
+      "bcr": "/data/scratch/projects/punim1236/threadfin_data/gse286215_malaria/exp2_bcr.tsv.gz",
+      "metadata": "/data/scratch/projects/punim1236/threadfin_data/gse286215_malaria/experiment2_metadata.csv.gz"
+    }
+  },
+  "clone_keying": "Cohort-qualified analysis; Exp1 and Exp2 are kept independent even when day/donor labels resemble each other.",
+  "primary_clone_definition": "Existing THREADFIN clone_id, within donor; clone size is preserved by cell-label permutations.",
+  "strict_control": "Exact donor + reported IGHV + IGHJ + junction on cells with a single IGH contig. Paired-light strict control uses uniquely observed IGK/IGL sequence only.",
+  "denominator": "Primary joint sharing uses all THREADFIN clones with >=2 BCR-bearing cells. mouse_pair_sharing is a secondary GC-bearing conditional analysis for GC-containing pairs; Memory+PB uses all size-eligible clones.",
+  "permutations": {
+    "n": 1999,
+    "seed": 20261005,
+    "nulls": [
+      "within_mouse",
+      "within_mouse_isotype"
+    ],
+    "preserved": "within-mouse clone sizes and state totals; the second null also preserves state totals within observed isotype strata"
+  },
+  "treatment_evidence": {
+    "malaria_early": {
+      "available": false,
+      "metadata_file": null,
+      "values": []
+    },
+    "malaria_late": {
+      "available": true,
+      "metadata_file": "/data/scratch/projects/punim1236/threadfin_data/gse286215_malaria/experiment2_metadata.csv.gz",
+      "values": [
+        "Artesunate",
+        "Naive",
+        "Saline"
+      ]
+    }
+  },
+  "limitations": [
+    "Each mouse contributes one sampled time point, so co-occurrence cannot establish ancestry, migration, direction, or GC re-entry.",
+    "State labels and receptor recovery are observational and incomplete.",
+    "Strict exact clonotypes are a conservative control, not a replacement for lineage reconstruction."
+  ],
+  "counts": {
+    "cells": 112982,
+    "threadfin_clone_rows": 78346,
+    "strict_igh_rows": 76518,
+    "strict_igh_light_rows": 69260,
+    "selected_shared_clones": 251
+  }
+}

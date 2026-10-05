@@ -1,6 +1,6 @@
 {
  "dataset": "malaria",
- "title": "GSE286215 - splenic B cells through a Plasmodium infection in mice, days 0 to 14, five hashtagged mice per day, with the authors' cell annotation",
+ "title": "GSE286215 - terminal splenic sampling during PcAS infection: day 0 (one naive mouse), day 4 (four infected mice), days 7/10/14 (five each); author transcriptomic annotations",
  "clone_definition": {
   "threshold": 0.15,
   "threshold_method": "default",
@@ -84,7 +84,35 @@
    "Emb"
   ]
  },
- "programme_signatures": {},
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.164,
+   "germinal centre": -0.096,
+   "dark zone / cycling": 0.053,
+   "light zone": 0.153,
+   "memory": 0.246,
+   "naive": 0.334,
+   "interferon": 0.251
+  },
+  "P2": {
+   "plasma cell": 1.877,
+   "germinal centre": -0.119,
+   "dark zone / cycling": 0.166,
+   "light zone": 0.013,
+   "memory": -0.059,
+   "naive": -0.163,
+   "interferon": -0.125
+  },
+  "P3": {
+   "plasma cell": 0.13,
+   "germinal centre": -0.179,
+   "dark zone / cycling": 0.012,
+   "light zone": 0.082,
+   "memory": 0.207,
+   "naive": 0.043,
+   "interferon": 0.076
+  }
+ },
  "programmes": {
   "n": 3,
   "resolution": 0.2,
@@ -269,7 +297,147 @@
    "Ly6d"
   ],
   "receptor_gene_icc": 0.0,
-  "gene_sets": {}
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.3343,
+    "matched_background_median_icc": 0.0967,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.1316,
+    "matched_background_median_icc": 0.0131,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.3077,
+    "matched_background_median_icc": 0.0334,
+    "pvalue_vs_matched": 0.0
+   },
+   "light zone": {
+    "median_icc": 0.1368,
+    "matched_background_median_icc": 0.0435,
+    "pvalue_vs_matched": 0.0073
+   },
+   "memory": {
+    "median_icc": 0.245,
+    "matched_background_median_icc": 0.0538,
+    "pvalue_vs_matched": 0.0007
+   },
+   "naive": {
+    "median_icc": 0.1949,
+    "matched_background_median_icc": 0.0417,
+    "pvalue_vs_matched": 0.0024
+   },
+   "interferon": {
+    "median_icc": 0.1774,
+    "matched_background_median_icc": 0.0234,
+    "pvalue_vs_matched": 0.0014
+   }
+  }
  },
- "runtime_min": 2.0
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200"
+   ],
+   "n_present": 6,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 3.4
 }

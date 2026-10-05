@@ -1,0 +1,3 @@
+# Raw adapters, downloaded models and native training intermediates stay local.
+/mouse_np/
+/mouse_rbd/

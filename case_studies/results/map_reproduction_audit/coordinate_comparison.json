@@ -1,0 +1,33 @@
+{
+  "audit": "Original before GC revision vs completed reruns, matched clone and cell IDs",
+  "comparisons": [
+    {
+      "dataset": "malaria",
+      "n_clones": 801,
+      "same_clone_ids": true,
+      "same_membership": true,
+      "max_clone_umap_coordinate_difference": 0.0,
+      "max_cell_umap_coordinate_difference": 0.0
+    },
+    {
+      "dataset": "malaria_late",
+      "n_clones": 1183,
+      "same_clone_ids": true,
+      "same_membership": true,
+      "max_clone_umap_coordinate_difference": 0.0,
+      "max_cell_umap_coordinate_difference": 0.0
+    }
+  ],
+  "old_main_panel": {
+    "dataset": "malaria",
+    "colour": "cell_state:PB",
+    "size": "1 + 5 * sqrt(n_cells)",
+    "source": "legacy_panels.py:figure_3"
+  },
+  "initial_revised_panel": {
+    "dataset": "malaria_late",
+    "colour": "cell_state:GC",
+    "size": 7
+  },
+  "conclusion": "Map coordinates and memberships did not change. Different cohorts, colour labels and point sizes caused the visual difference."
+}

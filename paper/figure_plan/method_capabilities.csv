@@ -1,0 +1,12 @@
+method,repertoire_workflow,joint_representation,clone_state_analysis,special_focus,source
+Threadfin,Native,Native,Native,Context-aware family distributions,../../threadfin/profiles.py
+Benisse,Clonotype input,Native,Graph output,Expression-informed BCR graph,https://github.com/wooyongc/Benisse
+BiGCN,Clonotype input,Native,Graph output,Dual-graph representation,https://github.com/Lxc417/BiGCN
+CoNGA,Native,Native,Native,Receptor-expression neighbourhoods,https://github.com/phbradley/conga
+Ibex,Via workflow,Via WNN,Via workflow,BCR sequence encoders,https://github.com/BorchLab/Ibex
+Dandelion,Native,Via workflow,Native,VDJ annotation and development,https://github.com/tuonglab/dandelion
+Scirpy,Native,Via workflow,Native,Clonal graph modularity,https://scirpy.scverse.org/en/latest/generated/scirpy.tl.clonotype_modularity.html
+sciCSR,Via workflow,Native,CSR output,Productive / sterile IgH transcripts,https://github.com/Fraternalilab/sciCSR
+scRepertoire,Native,Via Ibex,Native,Pairing and repertoire tracking,https://github.com/BorchLab/scRepertoire
+Platypus,Native,Via workflow,Native,VDJ and GEX repertoire analyses,https://github.com/alexyermanos/Platypus
+clone2vec,Clone input,Expression context,Native,Clone skip-gram representation,https://clone2vec.readthedocs.io/en/latest/
