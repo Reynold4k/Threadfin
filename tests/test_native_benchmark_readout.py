@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import pytest
 
 spec = importlib.util.spec_from_file_location('benchmark_score', Path(__file__).parents[1] / 'case_studies/score_native_benchmark.py')
 benchmark = importlib.util.module_from_spec(spec)
@@ -68,3 +69,58 @@ def test_parallel_model_manifest_updates_preserve_both_completed_stages(tmp_path
         list(pool.map(lambda i:native.stamp(destination,**{f'stage_{i}':'completed'}),range(24)))
     result=json.loads(destination.read_text())
     assert result=={f'stage_{i}':'completed' for i in range(24)}
+
+
+def recovery_module(monkeypatch, tmp_path, manifest):
+    import json
+    directory=Path(__file__).parents[1]/'case_studies'
+    monkeypatch.syspath_prepend(str(directory))
+    recovery_spec=importlib.util.spec_from_file_location('native_recovery',directory/'recover_native_benchmark.py')
+    recovery=importlib.util.module_from_spec(recovery_spec);recovery_spec.loader.exec_module(recovery)
+    monkeypatch.setattr(recovery,'OUT',tmp_path)
+    out=tmp_path/'mouse_rbd';out.mkdir()
+    (out/'run.json').write_text(json.dumps(manifest))
+    return recovery,out
+
+
+def test_completed_native_run_never_launches_recovery(monkeypatch,tmp_path):
+    recovery,_=recovery_module(monkeypatch,tmp_path,{'bigcn_status':'completed'})
+    def refuse(*args,**kwargs):
+        raise AssertionError('Completed model must not launch another command')
+    monkeypatch.setattr(recovery.subprocess,'run',refuse)
+    recovery.recover('mouse_rbd','original')
+
+
+@pytest.mark.parametrize('state',['RUNNING','FAILED'])
+def test_recovery_refuses_duplicate_or_undiagnosed_model_failure(monkeypatch,tmp_path,state):
+    from types import SimpleNamespace
+    recovery,out=recovery_module(monkeypatch,tmp_path,{})
+    calls=[]
+    def status_only(command,**kwargs):
+        calls.append(command)
+        return SimpleNamespace(stdout=f'original|{state}\n')
+    monkeypatch.setattr(recovery.subprocess,'run',status_only)
+    with pytest.raises(RuntimeError,match='diagnose before retrying'):
+        recovery.recover('mouse_rbd','original')
+    assert len(calls)==1 and calls[0][0]=='sacct'
+    assert not (out/'BiGCN_attempt_original_timeout').exists()
+
+
+def test_timeout_recovery_preserves_attempt_and_runs_one_native_model(monkeypatch,tmp_path):
+    import json
+    from types import SimpleNamespace
+    recovery,out=recovery_module(monkeypatch,tmp_path,{})
+    work=out/'BiGCN_official';work.mkdir();(work/'attempt.txt').write_text('preserve original')
+    calls=[]
+    def record(command,**kwargs):
+        calls.append(command)
+        return SimpleNamespace(stdout='original|TIMEOUT\n')
+    monkeypatch.setattr(recovery.subprocess,'run',record)
+    monkeypatch.setenv('SLURM_JOB_ID','retry')
+    recovery.recover('mouse_rbd','original')
+    assert (out/'BiGCN_attempt_original_timeout'/'attempt.txt').read_text()=='preserve original'
+    assert not work.exists()
+    assert len(calls)==2 and calls[1][-4:]==['--stage','bigcn','--python',recovery.sys.executable]
+    manifest=json.loads((out/'run.json').read_text())
+    assert manifest['bigcn_initial_slurm_state']=='TIMEOUT' and manifest['bigcn_attempts']==2
+    assert 'bigcn_status' not in manifest  # a scheduled retry is not a completed model

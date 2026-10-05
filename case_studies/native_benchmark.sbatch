@@ -2,7 +2,7 @@
 #SBATCH --job-name=threadfin_benisse_native
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
-#SBATCH --time=08:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/internal_validation/native_benchmark_%A_%a.out
 #SBATCH --error=/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/internal_validation/native_benchmark_%A_%a.err
 

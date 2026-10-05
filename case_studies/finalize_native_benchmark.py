@@ -34,6 +34,8 @@ def finalize():
         peaks={key:resource_log(f'{prefix}_{job}_{i}.err') for key,prefix,job in [
             ('Benisse','native_benchmark',32294672),('BiGCN','native_benchmark',32288767),
             ('profiles','clone_profiles_benchmark',32295543)]}
+        if source.get('bigcn_resource_log'):
+            peaks['BiGCN']=resource_log(source['bigcn_resource_log'])
         base={'dataset':ds,'input_cells':source['n_cells'],'status':'completed',
               'hardware_scope':'2 CPU threads; separate allocations; not an end-to-end speed ranking'}
         rows.append({**base,'method':'Benisse','stage':'pretrained_encoder',
@@ -44,7 +46,8 @@ def finalize():
                      'version':source['benisse_commit'],'notes':'Full native R graph model with reversible cell aliases; RSS is whole command peak.'})
         rows.append({**base,'method':'BiGCN','stage':'official_graph_and_training','runtime_seconds':source['bigcn_seconds'],
                      'max_rss_kb':peaks['BiGCN'][0] if peaks['BiGCN'] else None,
-                     'version':source['bigcn_commit'],'notes':'Native data_process + graphStructure + main; Benisse encoder and input adapter prep excluded; single upstream run with no fixed seed.'})
+                     'version':source['bigcn_commit'],'notes':'Native data_process + graphStructure + main; Benisse encoder and input adapter prep excluded; single successful upstream run with no fixed seed.' +
+                     (' Initial allocation timed out; same configuration retried with a longer allocation. Failed attempt is recorded separately in the model manifest.' if source.get('bigcn_retry_of') else '')})
         for method in ['Threadfin_mean','Threadfin_kernel','clone2vec']:
             rows.append({**base,'method':method,'stage':method,'runtime_seconds':a[method]['seconds'],
                          'max_rss_kb':peaks['profiles'][1] if method=='clone2vec' and len(peaks['profiles'])>1 else None,

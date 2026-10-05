@@ -6,7 +6,10 @@
     "32294672_2"
   ],
   "automatic_finalization_job": "32296689",
-  "finalization_dependency": "afterok:32294672:32288767",
+  "finalization_dependency": "afterok:32294672:32299120",
   "figure6_included": false,
-  "partial_comparisons_not_rendered": true
+  "partial_comparisons_not_rendered": true,
+  "conditional_recovery_job": "32299120",
+  "recovery_dependency": "afterany:32288767_2",
+  "recovery_rule": "Skip completed original; retry TIMEOUT only using unchanged native configuration and 24h allocation"
 }

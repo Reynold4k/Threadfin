@@ -57,9 +57,16 @@ python case_studies/finalize_native_benchmark.py
 
 HPC templates carry this workspace's allocation paths; edit them for a different
 cluster. Check existing jobs before submitting. In this review iteration, the
-RBD models are jobs `32294672_2` (Benisse) and `32288767_2` (BiGCN);
-`32296689` is queued with `afterok` dependencies to finalize scores and all
-figures automatically. The dependency job generates files; the agent subsequently checks and pushes the completed figures under the existing authorization.
+RBD models are jobs `32294672_2` (Benisse) and `32288767_2` (BiGCN).
+Because the cluster refused to extend the running BiGCN allocation, recovery
+job `32299120` depends on its completion. It skips execution if the original
+model succeeded; only an allocation `TIMEOUT` permits the same configuration
+to run in a 24-hour allocation. Other failure states stop for diagnosis.
+The failed attempt is preserved, recorded separately and is not included as a
+performance result. New native templates request 24 hours.
+`32296689` depends on Benisse and the recovery guard succeeding before it
+finalizes scores and figures. The dependency job generates files; the agent
+subsequently checks and pushes completed figures under the existing authorization.
 `pipeline_status.json` distinguishes the current NP-only completed comparison
 from the final two-dataset result. The biological figures can be regenerated
 independently with `make_biology_figures.py --biological-only`.
