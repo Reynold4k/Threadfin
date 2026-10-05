@@ -72,6 +72,15 @@ def finalize():
         'source_scripts':['native_benchmark.py','score_native_benchmark.py','finalize_native_benchmark.py']},indent=2)+'\n')
     subprocess.run([sys.executable,str(ROOT/'paper/figure_plan/make_biology_figures.py')],cwd=ROOT,check=True)
     print('Complete native benchmark source tables and publication figures regenerated.',flush=True)
+    # The existing queued allocation loads this script at runtime. If the
+    # author's document environment is present, refresh the manuscript only
+    # after the complete saved tables and all planned figures are available.
+    docx_python=INTERNAL/'docx_env/bin/python'
+    template=ROOT.parent.parent/'文献调研/演讲文稿/Progress_Review_Year2_ChenZhu_v5.docx'
+    if docx_python.is_file() and template.is_file():
+        subprocess.run([str(docx_python),str(ROOT/'paper/export_manuscript.py'),
+                        '--template',str(template)],cwd=ROOT,check=True)
+        print('Author-template DOCX and RIS refreshed; visual review remains required.',flush=True)
 
 
 if __name__=='__main__':finalize()

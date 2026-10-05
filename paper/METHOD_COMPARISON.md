@@ -1,11 +1,12 @@
 # 同类工具的任务、成熟证据与比较边界
 
-核查日期：2026-10-05。这里比较的是公开配对 scRNA/scBCR 分析工具，不宣称穷尽所有 V(D)J 重建、序列分析和单细胞整合软件。能力来自下列原始论文与官方代码；**能力表不是实际运行的性能分数**。单个任务没有适用输出，不能计为性能为零。
+核查日期：2026-10-06。这里比较的是公开配对 scRNA/scBCR 分析工具，不宣称穷尽所有 V(D)J 重建、序列分析和单细胞整合软件。能力来自下列原始论文与官方代码；**能力表不是实际运行的性能分数**。单个任务没有适用输出，不能计为性能为零。
 
 | 工具 | 最适合的问题 | 已有验证 / 官方实现 | 与 Threadfin 比较时需要统一的单位 |
 |---|---|---|---|
 | Benisse | 用表达信息细化 BCR clonotype 的潜在距离与网络 | 原文分析 13 个配对数据集，并检验受体与表达距离；官方提供预训练 CDR3 编码器及 R 图学习模型。[原文](https://www.nature.com/articles/s42256-022-00492-6)、[代码](https://github.com/wooyongc/Benisse) | 原生节点为 exact V–CDR3–J clonotype；映射到固定、同鼠 sequence family 后比较，不能把网络边直接当共同祖先。 |
 | BiGCN | 将表达和 BCR 图融合为表示 | 双图模型及公开训练代码。[原文](https://doi.org/10.1002/smtd.202501919)、[代码](https://github.com/Lxc417/BiGCN) | 原生 clonotype 节点、Benisse 的 BCR 编码、crude V/J 图及两套 cosine 图都应保留。 |
+| CoMBCR | paired BCR 与 RNA 的细胞层面 co-learning 表示 | 2026 年已发表；原文包含 Spike-binding 标签任务。[原文](https://academic.oup.com/bioinformatics/article/42/3/btag115/8512509) | 本轮仅检索文献，未运行该模型；不能给它分配性能分数，未来比较应统一细胞、family 聚合及标签持出设计。 |
 | CoNGA | 受体邻域和表达邻域的共同结构 | 原始验证以 T 细胞为主；当前官方支持 `human_ig` / `mouse_ig`，也输出 clonotype 表达和受体降维及邻域关系。[原文](https://doi.org/10.1038/s41587-021-00989-2)、[代码](https://github.com/phbradley/conga) | 配对链、exact clonotype 及 GEX/TCRdist 结构；不能沿用旧稿“没有克隆层面输出”的判断。 |
 | Ibex | 重/轻链 CDR3 的序列表示，并接入表达 WNN | 官方提供 encoder、geometric 和表达相关模型；可进入 Seurat/SCE。[代码](https://github.com/BorchLab/Ibex)、[论文分析代码](https://github.com/ncborcherding/Ibex.manuscript) | 细胞层面的受体表示需要明确后续 WNN 和 family 聚合步骤；不能将仅运行 geometric 编码称作整个联合模型。 |
 | Dandelion | V(D)J 注释、克隆网络及发育关联 | 原文验证 V(D)J 特征空间和发育轨迹，支持 BCR/TCR，包含序列及 GEX 接口。[原文](https://www.nature.com/articles/s41587-023-01734-7)、[代码](https://github.com/tuonglab/dandelion) | 真正的原生 V(D)J feature/pseudobulk 工作流与 clone-state distributions 是不同输出；旧版自制 V/J one-hot 不能标为 Dandelion。 |

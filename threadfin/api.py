@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from ._utils import log
+from ._utils import log, require_complete_groups, require_obs, require_positive_int
 
 # --------------------------------------------------------------------------- reading BCR files
 
@@ -309,17 +309,44 @@ def run(
     from .programmes import find_programmes, programme_composition
     from .stats import association_test, clonal_coherence, profile_association
 
+    # Check user-supplied column names before mutating ``adata`` or entering a
+    # downstream statistical routine.  In particular, a misspelled requested
+    # test label must not be silently reported as a skipped analysis.
+    test_cols = [test] if isinstance(test, str) else list(test or [])
+    require_obs(adata, donor_key, sample_key, state_key, time_key, batch_key, *test_cols,
+                context="threadfin.run()")
+    require_complete_groups(adata, donor_key, sample_key, batch_key, context="threadfin.run()")
+    require_positive_int(n_perm, "n_perm")
+    require_positive_int(n_boot, "n_boot")
+    if representation not in {"mean", "kernel"}:
+        raise ValueError("representation must be 'mean' or 'kernel'.")
+
     # Step 1 - clones from BCR sequences (within each donor)
     if bcr is not None:
+        if not isinstance(bcr, (pd.DataFrame, str, Path)):
+            raise TypeError("bcr must be a per-cell pandas DataFrame or a path to a 10x CSV/AIRR TSV file.")
         table = bcr.copy() if isinstance(bcr, pd.DataFrame) else read_bcr(bcr)
         table.index = table.index.astype(str)
+        if table.index.has_duplicates:
+            raise ValueError(
+                "BCR input has duplicate cell barcodes. Keep one row per cell (for example, "
+                "use threadfin.read_bcr() for a 10x/AIRR contig file) before calling run()."
+            )
         table = table[table.index.isin(adata.obs_names.astype(str))]
         if table.empty:
-            raise ValueError("No BCR barcodes match adata.obs_names; check barcode prefixes/suffixes.")
+            raise ValueError(
+                "No BCR barcodes match adata.obs_names. Check that both use the same barcode "
+                "format; for multi-sample data, pass barcode_prefix/barcode_suffix to read_bcr()."
+            )
         if donor_key is not None:
             table["donor"] = adata.obs[donor_key].astype(str).reindex(table.index).values
         table = define_clones(table, donor_key="donor" if donor_key else None, out_col=clone_key,
                               verbose=verbose)
+        if table[clone_key].notna().sum() == 0:
+            raise ValueError(
+                "Matched BCR barcodes contain no usable heavy-chain clone definition. Each retained "
+                "cell needs heavy-chain V and J calls plus a non-empty junction/CDR3 sequence."
+            )
         attach_bcr(adata, table.drop(columns=["donor"], errors="ignore"), clone_col=clone_key,
                    summarize=False, verbose=verbose)
     elif clone_key not in adata.obs.columns:
@@ -353,7 +380,7 @@ def run(
     tests, profile_tests = {}, {}
     if not programmes.empty:
         composition = programme_composition(adata, state_key) if state_key else None
-    for col in ([test] if isinstance(test, str) else (test or [])):
+    for col in test_cols:
         # does the label explain clone states at all? (needs no programmes)
         try:
             profile_tests[col] = profile_association(adata, col, random_state=random_state, verbose=verbose)

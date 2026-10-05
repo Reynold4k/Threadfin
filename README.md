@@ -47,6 +47,29 @@ pip install "git+https://github.com/Reynold4k/Threadfin.git"
 Python >= 3.10. Scanpy, Leiden and Harmony are installed automatically; no GPU
 and no R are needed.
 
+Clean Linux wheel installations were checked on Python 3.10, 3.11 and 3.12,
+including the full test suite, tutorial and simulated quick start. The legacy
+v3 reclustering repeatability check remains an expected failure on Python 3.12.
+See the [compatibility results](docs/COMPATIBILITY.md) and
+[English input-error guide](docs/TROUBLESHOOTING.md).
+
+## GC manuscript and figures
+
+The [GC manuscript](paper/MANUSCRIPT_draft_v2.md),
+[Figure 1](paper/figure_plan/Figure_1.png),
+[figure legends](paper/FIGURE_LEGENDS.md) and
+[native-method comparison](paper/METHOD_COMPARISON.md) distinguish receptor
+family membership from captured cell-state similarity. Figures 1–5 and
+Supplementary Figures 1–6 are available. The NP native comparison is complete;
+the RBD BiGCN run and Figure 6/S7 remain pending. The manuscript makes this
+status explicit and reports the RNA-centroid baseline's stronger NP readout.
+
+The [manuscript export guide](paper/EXPORT.md) describes template-style DOCX
+and numbered-reference/RIS exports. The
+[literature review and reviewer questions](paper/LITERATURE_REVIEW_REVIEWER_QUESTIONS_2026-10-06.md)
+record scientific improvements for future work. No additional biological
+analyses are required to build those documents.
+
 ## Quick start
 
 ```python

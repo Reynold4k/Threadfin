@@ -42,7 +42,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import codes, get_basis, get_uns, log, modal, require_obs
+from ._utils import codes, get_basis, get_uns, log, modal, require_complete_groups, require_obs
 
 PROFILE_KEY = "profiles"
 
@@ -408,6 +408,12 @@ def clone_profiles(
     ``reliability`` and, when available, ``donor`` and ``n_contexts``.
     Profiles and model parameters go to ``adata.uns['threadfin']['profiles']``.
     """
+    require_obs(adata, clone_key, context="clone profiling")
+    require_complete_groups(adata, context_key, donor_key, context="clone profiling")
+    if representation not in {"mean", "kernel"}:
+        raise ValueError("representation must be 'mean' or 'kernel'.")
+    if min_cells < 1:
+        raise ValueError("min_cells must be at least 1.")
     if smooth is None:
         smooth = 15 if representation == "kernel" else 0
     model = build_model(
@@ -418,7 +424,11 @@ def clone_profiles(
     blup, n_eff, rel = model.group_blups(model.clone_codes, len(model.clone_index))
     keep = n_eff >= min_cells
     if keep.sum() < 3:
-        raise ValueError(f"Only {int(keep.sum())} clones have >= {min_cells} cells.")
+        raise ValueError(
+            f"Only {int(keep.sum())} clones have >= {min_cells} cells; Threadfin needs at least 3 "
+            "expanded clones to estimate clone profiles. Include more BCR-matched cells, lower "
+            "min_cells when scientifically appropriate, or use a larger dataset."
+        )
     ids = pd.Index(model.clone_index[keep].astype(str), name=clone_key)
     feats = blup[keep]
     names = [f"f{j}" for j in range(feats.shape[1])]

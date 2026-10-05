@@ -1,0 +1,92 @@
+{
+  "checked": "2026-10-06",
+  "wheel_sha256": "ba8ff37c2709418ad8b171614af8631ae445680774988183cf58fdde9c67577e",
+  "installed_files_verified_against_source": [
+    "_utils.py",
+    "api.py",
+    "pp.py",
+    "profiles.py"
+  ],
+  "matrix": [
+    {
+      "python": "3.10.22",
+      "packages": {
+        "threadfin": "4.0.0",
+        "numpy": "2.2.6",
+        "pandas": "2.3.3",
+        "scipy": "1.15.3",
+        "scikit-learn": "1.7.2",
+        "anndata": "0.11.4",
+        "scanpy": "1.11.5",
+        "harmonypy": "2.0.2",
+        "igraph": "1.0.0",
+        "leidenalg": "0.12.0",
+        "umap-learn": "0.5.12"
+      },
+      "results": "144 passed, 29 warnings in 147.72s (0:02:27)",
+      "system_site_packages": false,
+      "stages": {
+        "install_wheel": 0,
+        "pip_check": 0,
+        "pytest": 0,
+        "tutorial": 0,
+        "quickstart": 0,
+        "versions": 0
+      }
+    },
+    {
+      "python": "3.11.7",
+      "packages": {
+        "threadfin": "4.0.0",
+        "numpy": "2.4.6",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "1.9.1",
+        "anndata": "0.12.19",
+        "scanpy": "1.11.5",
+        "harmonypy": "2.0.2",
+        "igraph": "1.0.0",
+        "leidenalg": "0.12.0",
+        "umap-learn": "0.5.12"
+      },
+      "results": "144 passed, 30 warnings in 135.54s (0:02:15)",
+      "system_site_packages": false,
+      "stages": {
+        "install_wheel": 0,
+        "pip_check": 0,
+        "pytest": 0,
+        "tutorial": 0,
+        "quickstart": 0,
+        "versions": 0
+      }
+    },
+    {
+      "python": "3.12.15",
+      "packages": {
+        "threadfin": "4.0.0",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.1",
+        "anndata": "0.13.4",
+        "scanpy": "1.12.4",
+        "harmonypy": "2.0.2",
+        "igraph": "1.0.0",
+        "leidenalg": "0.12.0",
+        "umap-learn": "0.5.12"
+      },
+      "results": "143 passed, 1 xfailed, 31 warnings in 138.90s (0:02:18)",
+      "system_site_packages": false,
+      "stages": {
+        "install_wheel": 0,
+        "pip_check": 0,
+        "pytest": 0,
+        "tutorial": 0,
+        "quickstart": 0,
+        "versions": 0
+      }
+    }
+  ],
+  "scope": "Clean Linux environments; no system-site packages; official unit suite and simulated examples. No new biological analysis.",
+  "limitation": "Python 3.12 legacy-v3 repeatability test xfailed; Windows/macOS and Python 3.13+ not tested."
+}

@@ -5,7 +5,7 @@ Chen Zhu
 
 Department of Microbiology and Immunology, Peter Doherty Institute for Infection and Immunity, The University of Melbourne, Melbourne, Australia
 
-Review draft, 6 October 2026. RBD native benchmark and Figure 6/S7 remain pending. Additional authors, corresponding-author details, funding and declarations require author confirmation. This draft follows the formatting and numbered-reference conventions of the supplied progress-review document.
+Draft 3, 6 October 2026. Additional authors, corresponding-author details, funding and declarations require author confirmation. This draft follows the formatting and numbered-reference conventions of the supplied progress-review document.
 
 ## Abstract
 
@@ -36,7 +36,7 @@ experimental testing.
 The GC reaction couples receptor evolution to changing B-cell states. A selected
 light-zone cell can enter a proliferative burst, whereas cells associated with
 antibody-secreting and memory outputs express different programmes. Experimental
-reporters and direct sorting resolve parts of this process (1, 2, 3). An expression
+reporters and direct sorting resolve parts of this process {cite:reporter,output_sort,gc_permissive_selection}. An expression
 snapshot alone, however, does not establish whether a cell will divide again,
 leave the GC or participate in a later recall response.
 
@@ -57,21 +57,21 @@ than inferring ancestors or descendants from transcriptional proximity.
 Existing tools already link repertoire information to expression. Benisse and
 BiGCN learn joint representations; clone2vec summarises whole-clone variation
 from expression neighbourhoods, including sparsely sampled clones
-(4, 5, 6). CoMBCR also co-learns paired receptor and
-expression representations for cell-level functional tasks (7).
+{cite:benisse,bigcn,clone2vec_preprint}. CoMBCR also co-learns paired receptor and
+expression representations for cell-level functional tasks {cite:combcr}.
 Repertoire workflows such as Dandelion,
 Scirpy and Platypus provide complementary annotation and joint analysis
-(8, 9, 10). Threadfin therefore focuses on an auditable GC
+{cite:dandelion,scirpy,platypus}. Threadfin therefore focuses on an auditable GC
 workflow: sequence-defined membership, sampling-adjusted state profiles,
 profile reliability, conditional controls and measurements supplied by the
 original experiments. A clone embedding alone is not the claimed contribution.
 
 Here we concentrate on datasets with strong biological anchors: two GC
-reporter cohorts from a model-antigen/vaccine study (1), a direct GC/plasma-cell
-sort study (2), a time-resolved *Plasmodium* infection with an anti-malarial
-intervention (11), and repeated human GC sampling after mRNA vaccination (12).
+reporter cohorts from a model-antigen/vaccine study {cite:reporter}, a direct GC/plasma-cell
+sort study {cite:output_sort}, a time-resolved *Plasmodium* infection with an anti-malarial
+intervention {cite:malaria}, and repeated human GC sampling after mRNA vaccination {cite:human_gc}.
 One non-GC marrow/blood study checks receptor identity across terminal-state
-sorts (13). Other tested datasets document coverage rather than carrying the
+sorts {cite:marrow}. Other tested datasets document coverage rather than carrying the
 main biological claims. This organisation distinguishes an interpretable
 association from a demonstrated fate mechanism.
 
@@ -116,7 +116,7 @@ future-fate model (Supplementary Figure 1).
 ### In controlled GC models, division-associated state and mutation history are different clone properties
 
 The model-antigen reporter study provides independent measurements of what a
-GC cell recently did (1). The NP-OVA cohort uses a 36-hour H2B-mCherry dilution
+GC cell recently did {cite:reporter}. The NP-OVA cohort uses a 36-hour H2B-mCherry dilution
 window before day-14 lymph-node collection. The two RBD vaccine cohorts add
 antigen-probe binding or light/dark-zone gates. These are separately sequenced
 sort libraries and independent protein/mRNA cohorts, not an unstratified
@@ -163,7 +163,7 @@ bias and within-family mutation history should therefore be reported separately.
 
 ### *Plasmodium* reveals same-mouse GC/output-state relationships, not cross-day cell trajectories
 
-The infection study provides biological complexity and an intervention (11).
+The infection study provides biological complexity and an intervention {cite:malaria}.
 Early samples cover the splenic B-cell landscape. Later samples enrich
 IgD-low B cells and include an IgD-high naive spike-in, with separate infected
 saline, anti-malarial and uninfected mice (Figure 3A). The experiments overlap
@@ -236,7 +236,7 @@ experiments rather than replacing them.
 ### Repeated human GC sampling tests clone persistence over a longer response
 
 The vaccination cohort repeatedly samples draining lymph nodes and blood from
-the same participants (12). This differs from the terminal Plasmodium design:
+the same participants {cite:human_gc}. This differs from the terminal Plasmodium design:
 a BCR family can genuinely be observed at multiple dates in one person.
 Figure 4 shows the study design, captured GC/output compartments and an
 independent spike-positive receptor label on the clone map.
@@ -263,7 +263,7 @@ snapshots (159 families). This shows that family membership and current
 compartment are different pieces of information. It does not establish whether
 a memory cell entered a later GC or whether a particular GC cell produced a
 blood plasmablast. A study with prime/boost and fate mapping can address those
-directions directly (14).
+directions directly {cite:memory_reentry}.
 
 The GC mutation trend is also shown explicitly (Figure 4G). We average within
 family/date SHM, take a median across families for each donor/label, and give each
@@ -308,9 +308,9 @@ sequence/expression representation, clonotype networks, CSR dynamics and whole-c
 state descriptions. We record their native capabilities and published validation
 separately from measured performance. CoNGA, Ibex, scRepertoire and sciCSR
 address distinct receptor/expression or class-switch tasks
-(15, 16, 17, 18). We avoid assigning zero to an inapplicable
-output (Figure 6; [source comparison](METHOD_COMPARISON.md)). Benisse (4), BiGCN (5)
-and clone2vec (6) are run through their official models; encoder-only outputs or
+{cite:conga,ibex,screpertoire2,scicsr}. We avoid assigning zero to an inapplicable
+output (Figure 6; [source comparison](METHOD_COMPARISON.md)). Benisse {cite:benisse}, BiGCN {cite:bigcn}
+and clone2vec {cite:clone2vec_preprint} are run through their official models; encoder-only outputs or
 external proxy implementations are not substituted for these methods.
 
 The controlled readout uses fixed donor-private families and a common
@@ -332,7 +332,7 @@ conditional controls and repeated-state comparisons are distinct outputs.
 The size-threshold sensitivity retains at least five measured cells per family
 (Supplementary Figure 7).
 
-The complete RBD native comparison is still pending. No RBD performance is inferred from NP results or partial representations. Figure 6 and Supplementary Figure 7 await all native outputs and visual review.
+{RBD_BENCHMARK_RESULTS}
 
 The reporter gate is associated with physical sequencing library in these
 experiments. Whole-mouse label holdout retains shared libraries and a
@@ -341,7 +341,7 @@ from all library effects or establish independent-library generalisation.
 
 ### Non-GC tests distinguish receptor identity from terminal-state annotation
 
-Outside the GC-focused argument, the marrow/blood model (13) supplies the
+Outside the GC-focused argument, the marrow/blood model {cite:marrow} supplies the
 clearest measured-gate check (Supplementary Figure 5). A GEO manifest corrects
 donor identities and retains 15 single-donor, single-tissue libraries from seven
 donors, excluding five pooled or mixed libraries. The analysis contains 115,144
@@ -375,7 +375,7 @@ shared clonal organisation. Repeated same-donor capture supports persistence.
 Neither is equivalent to an observed parent–offspring relationship. Memory
 re-entry into GC requires evidence of prior memory identity and later GC
 participation; direct fate mapping and recall experiments illustrate the
-necessary design (14). Plasmodium samples from different terminal mice cannot
+necessary design {cite:memory_reentry}. Plasmodium samples from different terminal mice cannot
 supply that history, however persuasive an embedding may appear.
 
 The package complements receptor annotation, SHM phylogenies and cell-state
@@ -388,7 +388,7 @@ matched competitors and an independent validation cohort; it is not made here.
 
 The closest whole-clone embedding comparator, clone2vec, already supports
 continuous clone descriptions and clone-associated gene analysis
-(6). The incremental contribution claimed here is the
+{cite:clone2vec_preprint}. The incremental contribution claimed here is the
 combination of an explicit receptor-family definition, context-adjusted
 profiles with reliability, matched sampling controls and GC experiments with
 measured biological anchors. This is distinct from claiming a universally
@@ -402,9 +402,9 @@ is incomplete and may depend on cell state. Sparse captured families understate
 phenotypic breadth. Heavy-chain similarity can merge unrelated receptors;
 paired-light and exact-sequence controls reduce one source of uncertainty but
 lose SHM-diverged family members. Alternative family callers and lineage
-models address different assumptions (19, 20, 21, 22).
+models address different assumptions {cite:partis,family_inference_evaluation,igphyml,tribal}.
 Large-scale paired-chain data document chain-mixed groups and naive-like
-pseudo-clonal clusters under heavy-chain-based inference (23);
+pseudo-clonal clusters under heavy-chain-based inference {cite:paired_family_bias};
 exact paired-chain controls cannot establish the sensitivity or specificity of
 every primary family call. Pre-sorting constrains which state combinations
 are observable. Author memory-like annotations are not functional recall
@@ -496,8 +496,8 @@ productive heavy/light pair and compares only verified donor-matched pure gates.
 ### Software implementation and input validation
 
 Threadfin is a Python package using AnnData and Scanpy for expression data and
-preprocessing (24); Harmony is available for a supplied batch variable
-(25). Users may provide a precomputed cell embedding or construct one
+preprocessing {cite:scanpy}; Harmony is available for a supplied batch variable
+{cite:harmony}. Users may provide a precomputed cell embedding or construct one
 from finite non-negative counts while excluding receptor genes. Input checks
 report missing metadata columns, incomplete donor/sample grouping labels,
 invalid matrix dimensions and incompatible BCR barcodes in English, with
@@ -584,52 +584,4 @@ To be confirmed by the authors.
 
 ## References
 
-1. Merkenschlager J, Pyo AGT, Silva Santos GS, Schaefer-Babajew D, Cipolla M, Hartweger H, et al. Regulated somatic hypermutation enhances antibody affinity maturation. Nature. 2025;641(8062):495-502. doi:10.1038/s41586-025-08728-2.
-
-2. ElTanbouly MA, Ramos V, MacLean AJ, Chen ST, Loewe M, Steinbach S, et al. Role of affinity in plasma cell development in the germinal center light zone. J Exp Med. 2024;221(1):e20231838. doi:10.1084/jem.20231838.
-
-3. Nakagawa R, Toboso-Navasa A, Schips M, Young G, Bhaw-Rosun L, Llorian-Sopena M, et al. Permissive selection followed by affinity-based proliferation of GC light zone B cells dictates cell fate and ensures clonal breadth. Proc Natl Acad Sci U S A. 2021;118(2):e2016425118. doi:10.1073/pnas.2016425118.
-
-4. Zhang Z, Chang WY, Wang K, Yang Y, Wang X, Yao C, et al. Interpreting the B-cell receptor repertoire with single-cell gene expression using Benisse. Nat Mach Intell. 2022;4(6):596-604. doi:10.1038/s42256-022-00492-6.
-
-5. Liu X, Huang J, Zhao S, Wang S, Wei G, Liu Y, et al. BiGCN Learns B Cell Functional States by Integrating Single‐Cell Transcriptomes and BCR Repertoires. Small Methods. 2026;10(5):e01919. doi:10.1002/smtd.202501919.
-
-6. Isaev S, Erickson AG, Adameyko I, Kharchenko PV. Clonal embeddings allow exploratory analysis of lineage-resolved single-cell data. bioRxiv [Preprint]. 2026;2026.04.30.720820. doi:10.64898/2026.04.30.720820.
-
-7. Zou Y, Luo J, Li S. CoMBCR: Co-Learning Multi-Modalities of BCRs and gene expressions. Bioinformatics. 2026;42(3):btag115. doi:10.1093/bioinformatics/btag115.
-
-8. Suo C, Polanski K, Dann E, Lindeboom RGH, Vilarrasa-Blasi R, Vento-Tormo R, et al. Dandelion uses the single-cell adaptive immune receptor repertoire to explore lymphocyte developmental origins. Nat Biotechnol. 2024;42(1):40-51. doi:10.1038/s41587-023-01734-7.
-
-9. Sturm G, Szabo T, Fotakis G, Haider M, Rieder D, Trajanoski Z, et al. Scirpy: a Scanpy extension for analyzing single-cell T-cell receptor-sequencing data. Bioinformatics. 2020;36(18):4817-4818. doi:10.1093/bioinformatics/btaa611.
-
-10. Yermanos A, Agrafiotis A, Kuhn R, Robbiani D, Yates J, Papadopoulou C, et al. Platypus: an open-access software for integrating lymphocyte single-cell immune repertoires with transcriptomes. NAR Genom Bioinform. 2021;3(2):lqab023. doi:10.1093/nargab/lqab023.
-
-11. Skinner OP, Asad S, Moreira ML, Lee HJ, Williams CG, Ruan Z, et al. A temporal map of B cell diversification mechanisms in mice. Nat Immunol. 2026;27(7):1502-1516. doi:10.1038/s41590-026-02563-x.
-
-12. Kim W, Zhou JQ, Horvath SC, Schmitz AJ, Sturtz AJ, Lei T, et al. Germinal centre-driven maturation of B cell response to mRNA vaccination. Nature. 2022;604(7904):141-145. doi:10.1038/s41586-022-04527-1.
-
-13. Ferreira-Gomes M, Chen Y, Durek P, Rincon-Arevalo H, Heinrich F, Bauer L, et al. Recruitment of plasma cells from IL-21-dependent and IL-21-independent immune reactions to the bone marrow. Nat Commun. 2024;15(1):4182. doi:10.1038/s41467-024-48570-0.
-
-14. Mesin L, Schiepers A, Ersching J, Barbulescu A, Cavazzoni CB, Angelini A, et al. Restricted Clonality and Limited Germinal Center Reentry Characterize Memory B Cell Reactivation by Boosting. Cell. 2020;180(1):92-106.e11. doi:10.1016/j.cell.2019.11.032.
-
-15. Schattgen SA, Guion K, Crawford JC, Souquette A, Barrio AM, Stubbington MJT, et al. Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA). Nat Biotechnol. 2022;40(1):54-63. doi:10.1038/s41587-021-00989-2.
-
-16. Borcherding N, Sun B, DeNardo D, Brestoff JR. Ibex: Variational autoencoder for single-cell BCR sequencing. bioRxiv [Preprint]. 2022;2022.11.09.515787. doi:10.1101/2022.11.09.515787.
-
-17. Yang Q, Safina KR, Nguyen KDQ, Tuong ZK, Borcherding N. scRepertoire 2: Enhanced and efficient toolkit for single-cell immune profiling. PLoS Comput Biol. 2025;21(6):e1012760. doi:10.1371/journal.pcbi.1012760.
-
-18. Ng JCF, Montamat Garcia G, Stewart AT, Blair P, Mauri C, Dunn-Walters DK, et al. sciCSR infers B cell state transition and predicts class-switch recombination dynamics using single-cell transcriptomic data. Nat Methods. 2024;21(5):823-834. doi:10.1038/s41592-023-02060-1.
-
-19. Ralph DK, Matsen FA. Likelihood-Based Inference of B Cell Clonal Families. PLoS Comput Biol. 2016;12(10):e1005086. doi:10.1371/journal.pcbi.1005086.
-
-20. Balashova D, van Schaik BDC, Stratigopoulou M, Guikema JEJ, Caniels TG, Claireaux M, et al. Systematic evaluation of B-cell clonal family inference approaches. BMC Immunol. 2024;25(1):13. doi:10.1186/s12865-024-00600-8.
-
-21. Hoehn KB, Lunter G, Pybus OG. A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics. 2017;206(1):417-427. doi:10.1534/genetics.116.196303.
-
-22. Weber LL, Reiman D, Roddur MS, Qi Y, El-Kebir M, Khan AA. Isotype-aware inference of B cell clonal lineage trees from single-cell sequencing data. Cell Genomics. 2024;4(9):100637. doi:10.1016/j.xgen.2024.100637.
-
-23. Wang H, Wang K, Xu Q, Cai L, Huang C, Chen L, et al. Large-scale paired chain BCR analysis reveals antibody clonal family inference bias and enhances resolution with machine learning. PLoS Comput Biol. 2026;22(3):e1014077. doi:10.1371/journal.pcbi.1014077.
-
-24. Wolf FA, Angerer P, Theis FJ. SCANPY: large-scale single-cell gene expression data analysis. Genome Biol. 2018;19(1):15. doi:10.1186/s13059-017-1382-0.
-
-25. Korsunsky I, Millard N, Fan J, Slowikowski K, Zhang F, Wei K, et al. Fast, sensitive and accurate integration of single-cell data with Harmony. Nat Methods. 2019;16(12):1289-1296. doi:10.1038/s41592-019-0619-0.
+{REFERENCES}

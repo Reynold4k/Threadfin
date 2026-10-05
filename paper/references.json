@@ -1,0 +1,1499 @@
+{
+  "reporter": {
+    "authors": [
+      {
+        "family": "Merkenschlager",
+        "given": "Julia"
+      },
+      {
+        "family": "Pyo",
+        "given": "Andrew G. T."
+      },
+      {
+        "family": "Silva Santos",
+        "given": "Gabriela S."
+      },
+      {
+        "family": "Schaefer-Babajew",
+        "given": "Dennis"
+      },
+      {
+        "family": "Cipolla",
+        "given": "Melissa"
+      },
+      {
+        "family": "Hartweger",
+        "given": "Harald"
+      },
+      {
+        "family": "Gitlin",
+        "given": "Alexander D."
+      },
+      {
+        "family": "Wingreen",
+        "given": "Ned S."
+      },
+      {
+        "family": "Nussenzweig",
+        "given": "Michel C."
+      }
+    ],
+    "title": "Regulated somatic hypermutation enhances antibody affinity maturation",
+    "journal": "Nature",
+    "journal_abbrev": "Nature",
+    "year": 2025,
+    "volume": "641",
+    "issue": "8062",
+    "pages": "495-502",
+    "doi": "10.1038/s41586-025-08728-2",
+    "url": "https://doi.org/10.1038/s41586-025-08728-2",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "output_sort": {
+    "authors": [
+      {
+        "family": "ElTanbouly",
+        "given": "Mohamed A."
+      },
+      {
+        "family": "Ramos",
+        "given": "Victor"
+      },
+      {
+        "family": "MacLean",
+        "given": "Andrew J."
+      },
+      {
+        "family": "Chen",
+        "given": "Spencer T."
+      },
+      {
+        "family": "Loewe",
+        "given": "Maximilian"
+      },
+      {
+        "family": "Steinbach",
+        "given": "Sandra"
+      },
+      {
+        "family": "Ben Tanfous",
+        "given": "Tarek"
+      },
+      {
+        "family": "Johnson",
+        "given": "Brianna"
+      },
+      {
+        "family": "Cipolla",
+        "given": "Melissa"
+      },
+      {
+        "family": "Gazumyan",
+        "given": "Anna"
+      },
+      {
+        "family": "Oliveira",
+        "given": "Thiago Y."
+      },
+      {
+        "family": "Nussenzweig",
+        "given": "Michel C."
+      }
+    ],
+    "title": "Role of affinity in plasma cell development in the germinal center light zone",
+    "journal": "Journal of Experimental Medicine",
+    "journal_abbrev": "J Exp Med",
+    "year": 2024,
+    "volume": "221",
+    "issue": "1",
+    "pages": "e20231838",
+    "doi": "10.1084/jem.20231838",
+    "url": "https://doi.org/10.1084/jem.20231838",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "malaria": {
+    "authors": [
+      {
+        "family": "Skinner",
+        "given": "Oliver P."
+      },
+      {
+        "family": "Asad",
+        "given": "Saba"
+      },
+      {
+        "family": "Moreira",
+        "given": "Marcela L."
+      },
+      {
+        "family": "Lee",
+        "given": "Hyun Jae"
+      },
+      {
+        "family": "Williams",
+        "given": "Cameron G."
+      },
+      {
+        "family": "Ruan",
+        "given": "Zheng"
+      },
+      {
+        "family": "Lim",
+        "given": "Jorene"
+      },
+      {
+        "family": "Kerr",
+        "given": "Ashlyn S."
+      },
+      {
+        "family": "Li",
+        "given": "Shihan"
+      },
+      {
+        "family": "Zhu",
+        "given": "Chen"
+      },
+      {
+        "family": "Jin",
+        "given": "Wang"
+      },
+      {
+        "family": "Steiner",
+        "given": "Thiago M."
+      },
+      {
+        "family": "Asatsuma",
+        "given": "Takahiro"
+      },
+      {
+        "family": "Wanrooy",
+        "given": "Brooke J."
+      },
+      {
+        "family": "Liu",
+        "given": "Zihan"
+      },
+      {
+        "family": "Tong",
+        "given": "Marcus Z. W."
+      },
+      {
+        "family": "Soon",
+        "given": "Megan S. F."
+      },
+      {
+        "family": "Engel",
+        "given": "Jessica A."
+      },
+      {
+        "family": "Shobhana",
+        "given": "Kalyan"
+      },
+      {
+        "family": "Uldrich",
+        "given": "Adam P."
+      },
+      {
+        "family": "Khoury",
+        "given": "David S."
+      },
+      {
+        "family": "Tuong",
+        "given": "Zewen Kelvin"
+      },
+      {
+        "family": "King",
+        "given": "Hamish W."
+      },
+      {
+        "family": "Haque",
+        "given": "Ashraful"
+      }
+    ],
+    "title": "A temporal map of B cell diversification mechanisms in mice",
+    "journal": "Nature Immunology",
+    "journal_abbrev": "Nat Immunol",
+    "year": 2026,
+    "volume": "27",
+    "issue": "7",
+    "pages": "1502-1516",
+    "doi": "10.1038/s41590-026-02563-x",
+    "url": "https://doi.org/10.1038/s41590-026-02563-x",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "human_gc": {
+    "authors": [
+      {
+        "family": "Kim",
+        "given": "Wooseob"
+      },
+      {
+        "family": "Zhou",
+        "given": "Julian Q."
+      },
+      {
+        "family": "Horvath",
+        "given": "Stephen C."
+      },
+      {
+        "family": "Schmitz",
+        "given": "Aaron J."
+      },
+      {
+        "family": "Sturtz",
+        "given": "Alexandria J."
+      },
+      {
+        "family": "Lei",
+        "given": "Tingting"
+      },
+      {
+        "family": "Liu",
+        "given": "Zhuoming"
+      },
+      {
+        "family": "Kalaidina",
+        "given": "Elizaveta"
+      },
+      {
+        "family": "Thapa",
+        "given": "Mahima"
+      },
+      {
+        "family": "Alsoussi",
+        "given": "Wafaa B."
+      },
+      {
+        "family": "Haile",
+        "given": "Alem"
+      },
+      {
+        "family": "Klebert",
+        "given": "Michael K."
+      },
+      {
+        "family": "Suessen",
+        "given": "Teresa"
+      },
+      {
+        "family": "Parra-Rodriguez",
+        "given": "Luis"
+      },
+      {
+        "family": "Mudd",
+        "given": "Philip A."
+      },
+      {
+        "family": "Whelan",
+        "given": "Sean P. J."
+      },
+      {
+        "family": "Middleton",
+        "given": "William D."
+      },
+      {
+        "family": "Teefey",
+        "given": "Sharlene A."
+      },
+      {
+        "family": "Pusic",
+        "given": "Iskra"
+      },
+      {
+        "family": "O’Halloran",
+        "given": "Jane A."
+      },
+      {
+        "family": "Presti",
+        "given": "Rachel M."
+      },
+      {
+        "family": "Turner",
+        "given": "Jackson S."
+      },
+      {
+        "family": "Ellebedy",
+        "given": "Ali H."
+      }
+    ],
+    "title": "Germinal centre-driven maturation of B cell response to mRNA vaccination",
+    "journal": "Nature",
+    "journal_abbrev": "Nature",
+    "year": 2022,
+    "volume": "604",
+    "issue": "7904",
+    "pages": "141-145",
+    "doi": "10.1038/s41586-022-04527-1",
+    "url": "https://doi.org/10.1038/s41586-022-04527-1",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "marrow": {
+    "authors": [
+      {
+        "family": "Ferreira-Gomes",
+        "given": "Marta"
+      },
+      {
+        "family": "Chen",
+        "given": "Yidan"
+      },
+      {
+        "family": "Durek",
+        "given": "Pawel"
+      },
+      {
+        "family": "Rincon-Arevalo",
+        "given": "Hector"
+      },
+      {
+        "family": "Heinrich",
+        "given": "Frederik"
+      },
+      {
+        "family": "Bauer",
+        "given": "Laura"
+      },
+      {
+        "family": "Szelinski",
+        "given": "Franziska"
+      },
+      {
+        "family": "Guerra",
+        "given": "Gabriela Maria"
+      },
+      {
+        "family": "Stefanski",
+        "given": "Ana-Luisa"
+      },
+      {
+        "family": "Niedobitek",
+        "given": "Antonia"
+      },
+      {
+        "family": "Wiedemann",
+        "given": "Annika"
+      },
+      {
+        "family": "Bondareva",
+        "given": "Marina"
+      },
+      {
+        "family": "Ritter",
+        "given": "Jacob"
+      },
+      {
+        "family": "Lehmann",
+        "given": "Katrin"
+      },
+      {
+        "family": "Hardt",
+        "given": "Sebastian"
+      },
+      {
+        "family": "Hipfl",
+        "given": "Christian"
+      },
+      {
+        "family": "Hein",
+        "given": "Sascha"
+      },
+      {
+        "family": "Hildt",
+        "given": "Eberhard"
+      },
+      {
+        "family": "Matz",
+        "given": "Mareen"
+      },
+      {
+        "family": "Mei",
+        "given": "Henrik E."
+      },
+      {
+        "family": "Cheng",
+        "given": "Qingyu"
+      },
+      {
+        "family": "Dang",
+        "given": "Van Duc"
+      },
+      {
+        "family": "Witkowski",
+        "given": "Mario"
+      },
+      {
+        "family": "Lino",
+        "given": "Andreia C."
+      },
+      {
+        "family": "Kruglov",
+        "given": "Andrey"
+      },
+      {
+        "family": "Melchers",
+        "given": "Fritz"
+      },
+      {
+        "family": "Perka",
+        "given": "Carsten"
+      },
+      {
+        "family": "Schrezenmeier",
+        "given": "Eva V."
+      },
+      {
+        "family": "Hutloff",
+        "given": "Andreas"
+      },
+      {
+        "family": "Radbruch",
+        "given": "Andreas"
+      },
+      {
+        "family": "Dörner",
+        "given": "Thomas"
+      },
+      {
+        "family": "Mashreghi",
+        "given": "Mir-Farzin"
+      }
+    ],
+    "title": "Recruitment of plasma cells from IL-21-dependent and IL-21-independent immune reactions to the bone marrow",
+    "journal": "Nature Communications",
+    "journal_abbrev": "Nat Commun",
+    "year": 2024,
+    "volume": "15",
+    "issue": "1",
+    "pages": "4182",
+    "doi": "10.1038/s41467-024-48570-0",
+    "url": "https://doi.org/10.1038/s41467-024-48570-0",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "memory_reentry": {
+    "authors": [
+      {
+        "family": "Mesin",
+        "given": "Luka"
+      },
+      {
+        "family": "Schiepers",
+        "given": "Ariën"
+      },
+      {
+        "family": "Ersching",
+        "given": "Jonatan"
+      },
+      {
+        "family": "Barbulescu",
+        "given": "Alexandru"
+      },
+      {
+        "family": "Cavazzoni",
+        "given": "Cecília B."
+      },
+      {
+        "family": "Angelini",
+        "given": "Alessandro"
+      },
+      {
+        "family": "Okada",
+        "given": "Takaharu"
+      },
+      {
+        "family": "Kurosaki",
+        "given": "Tomohiro"
+      },
+      {
+        "family": "Victora",
+        "given": "Gabriel D."
+      }
+    ],
+    "title": "Restricted Clonality and Limited Germinal Center Reentry Characterize Memory B Cell Reactivation by Boosting",
+    "journal": "Cell",
+    "journal_abbrev": "Cell",
+    "year": 2020,
+    "volume": "180",
+    "issue": "1",
+    "pages": "92-106.e11",
+    "doi": "10.1016/j.cell.2019.11.032",
+    "url": "https://doi.org/10.1016/j.cell.2019.11.032",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "benisse": {
+    "authors": [
+      {
+        "family": "Zhang",
+        "given": "Ze"
+      },
+      {
+        "family": "Chang",
+        "given": "Woo Yong"
+      },
+      {
+        "family": "Wang",
+        "given": "Kaiwen"
+      },
+      {
+        "family": "Yang",
+        "given": "Yuqiu"
+      },
+      {
+        "family": "Wang",
+        "given": "Xinlei"
+      },
+      {
+        "family": "Yao",
+        "given": "Chen"
+      },
+      {
+        "family": "Wu",
+        "given": "Tuoqi"
+      },
+      {
+        "family": "Wang",
+        "given": "Li"
+      },
+      {
+        "family": "Wang",
+        "given": "Tao"
+      }
+    ],
+    "title": "Interpreting the B-cell receptor repertoire with single-cell gene expression using Benisse",
+    "journal": "Nature Machine Intelligence",
+    "journal_abbrev": "Nat Mach Intell",
+    "year": 2022,
+    "volume": "4",
+    "issue": "6",
+    "pages": "596-604",
+    "doi": "10.1038/s42256-022-00492-6",
+    "url": "https://doi.org/10.1038/s42256-022-00492-6",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "scanpy": {
+    "authors": [
+      {
+        "family": "Wolf",
+        "given": "F. Alexander"
+      },
+      {
+        "family": "Angerer",
+        "given": "Philipp"
+      },
+      {
+        "family": "Theis",
+        "given": "Fabian J."
+      }
+    ],
+    "title": "SCANPY: large-scale single-cell gene expression data analysis",
+    "journal": "Genome Biology",
+    "journal_abbrev": "Genome Biol",
+    "year": 2018,
+    "volume": "19",
+    "issue": "1",
+    "pages": "15",
+    "doi": "10.1186/s13059-017-1382-0",
+    "url": "https://doi.org/10.1186/s13059-017-1382-0",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "harmony": {
+    "authors": [
+      {
+        "family": "Korsunsky",
+        "given": "Ilya"
+      },
+      {
+        "family": "Millard",
+        "given": "Nghia"
+      },
+      {
+        "family": "Fan",
+        "given": "Jean"
+      },
+      {
+        "family": "Slowikowski",
+        "given": "Kamil"
+      },
+      {
+        "family": "Zhang",
+        "given": "Fan"
+      },
+      {
+        "family": "Wei",
+        "given": "Kevin"
+      },
+      {
+        "family": "Baglaenko",
+        "given": "Yuriy"
+      },
+      {
+        "family": "Brenner",
+        "given": "Michael"
+      },
+      {
+        "family": "Loh",
+        "given": "Po-ru"
+      },
+      {
+        "family": "Raychaudhuri",
+        "given": "Soumya"
+      }
+    ],
+    "title": "Fast, sensitive and accurate integration of single-cell data with Harmony",
+    "journal": "Nature Methods",
+    "journal_abbrev": "Nat Methods",
+    "year": 2019,
+    "volume": "16",
+    "issue": "12",
+    "pages": "1289-1296",
+    "doi": "10.1038/s41592-019-0619-0",
+    "url": "https://doi.org/10.1038/s41592-019-0619-0",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "dandelion": {
+    "authors": [
+      {
+        "family": "Suo",
+        "given": "Chenqu"
+      },
+      {
+        "family": "Polanski",
+        "given": "Krzysztof"
+      },
+      {
+        "family": "Dann",
+        "given": "Emma"
+      },
+      {
+        "family": "Lindeboom",
+        "given": "Rik G. H."
+      },
+      {
+        "family": "Vilarrasa-Blasi",
+        "given": "Roser"
+      },
+      {
+        "family": "Vento-Tormo",
+        "given": "Roser"
+      },
+      {
+        "family": "Haniffa",
+        "given": "Muzlifah"
+      },
+      {
+        "family": "Meyer",
+        "given": "Kerstin B."
+      },
+      {
+        "family": "Dratva",
+        "given": "Lisa M."
+      },
+      {
+        "family": "Tuong",
+        "given": "Zewen Kelvin"
+      },
+      {
+        "family": "Clatworthy",
+        "given": "Menna R."
+      },
+      {
+        "family": "Teichmann",
+        "given": "Sarah A."
+      }
+    ],
+    "title": "Dandelion uses the single-cell adaptive immune receptor repertoire to explore lymphocyte developmental origins",
+    "journal": "Nature Biotechnology",
+    "journal_abbrev": "Nat Biotechnol",
+    "year": 2024,
+    "volume": "42",
+    "issue": "1",
+    "pages": "40-51",
+    "doi": "10.1038/s41587-023-01734-7",
+    "url": "https://doi.org/10.1038/s41587-023-01734-7",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "scicsr": {
+    "authors": [
+      {
+        "family": "Ng",
+        "given": "Joseph C. F."
+      },
+      {
+        "family": "Montamat Garcia",
+        "given": "Guillem"
+      },
+      {
+        "family": "Stewart",
+        "given": "Alexander T."
+      },
+      {
+        "family": "Blair",
+        "given": "Paul"
+      },
+      {
+        "family": "Mauri",
+        "given": "Claudia"
+      },
+      {
+        "family": "Dunn-Walters",
+        "given": "Deborah K."
+      },
+      {
+        "family": "Fraternali",
+        "given": "Franca"
+      }
+    ],
+    "title": "sciCSR infers B cell state transition and predicts class-switch recombination dynamics using single-cell transcriptomic data",
+    "journal": "Nature Methods",
+    "journal_abbrev": "Nat Methods",
+    "year": 2024,
+    "volume": "21",
+    "issue": "5",
+    "pages": "823-834",
+    "doi": "10.1038/s41592-023-02060-1",
+    "url": "https://doi.org/10.1038/s41592-023-02060-1",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "scirpy": {
+    "authors": [
+      {
+        "family": "Sturm",
+        "given": "Gregor"
+      },
+      {
+        "family": "Szabo",
+        "given": "Tamas"
+      },
+      {
+        "family": "Fotakis",
+        "given": "Georgios"
+      },
+      {
+        "family": "Haider",
+        "given": "Marlene"
+      },
+      {
+        "family": "Rieder",
+        "given": "Dietmar"
+      },
+      {
+        "family": "Trajanoski",
+        "given": "Zlatko"
+      },
+      {
+        "family": "Finotello",
+        "given": "Francesca"
+      }
+    ],
+    "title": "Scirpy: a Scanpy extension for analyzing single-cell T-cell receptor-sequencing data",
+    "journal": "Bioinformatics",
+    "journal_abbrev": "Bioinformatics",
+    "year": 2020,
+    "volume": "36",
+    "issue": "18",
+    "pages": "4817-4818",
+    "doi": "10.1093/bioinformatics/btaa611",
+    "url": "https://doi.org/10.1093/bioinformatics/btaa611",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "platypus": {
+    "authors": [
+      {
+        "family": "Yermanos",
+        "given": "Alexander"
+      },
+      {
+        "family": "Agrafiotis",
+        "given": "Andreas"
+      },
+      {
+        "family": "Kuhn",
+        "given": "Raphael"
+      },
+      {
+        "family": "Robbiani",
+        "given": "Damiano"
+      },
+      {
+        "family": "Yates",
+        "given": "Josephine"
+      },
+      {
+        "family": "Papadopoulou",
+        "given": "Chrysa"
+      },
+      {
+        "family": "Han",
+        "given": "Jiami"
+      },
+      {
+        "family": "Sandu",
+        "given": "Ioana"
+      },
+      {
+        "family": "Weber",
+        "given": "Cédric"
+      },
+      {
+        "family": "Bieberich",
+        "given": "Florian"
+      },
+      {
+        "family": "Vazquez-Lombardi",
+        "given": "Rodrigo"
+      },
+      {
+        "family": "Dounas",
+        "given": "Andreas"
+      },
+      {
+        "family": "Neumeier",
+        "given": "Daniel"
+      },
+      {
+        "family": "Oxenius",
+        "given": "Annette"
+      },
+      {
+        "family": "Reddy",
+        "given": "Sai T"
+      }
+    ],
+    "title": "Platypus: an open-access software for integrating lymphocyte single-cell immune repertoires with transcriptomes",
+    "journal": "NAR Genomics and Bioinformatics",
+    "journal_abbrev": "NAR Genom Bioinform",
+    "year": 2021,
+    "volume": "3",
+    "issue": "2",
+    "pages": "lqab023",
+    "doi": "10.1093/nargab/lqab023",
+    "url": "https://doi.org/10.1093/nargab/lqab023",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "conga": {
+    "authors": [
+      {
+        "family": "Schattgen",
+        "given": "Stefan A."
+      },
+      {
+        "family": "Guion",
+        "given": "Kate"
+      },
+      {
+        "family": "Crawford",
+        "given": "Jeremy Chase"
+      },
+      {
+        "family": "Souquette",
+        "given": "Aisha"
+      },
+      {
+        "family": "Barrio",
+        "given": "Alvaro Martinez"
+      },
+      {
+        "family": "Stubbington",
+        "given": "Michael J. T."
+      },
+      {
+        "family": "Thomas",
+        "given": "Paul G."
+      },
+      {
+        "family": "Bradley",
+        "given": "Philip"
+      }
+    ],
+    "title": "Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA)",
+    "journal": "Nature Biotechnology",
+    "journal_abbrev": "Nat Biotechnol",
+    "year": 2022,
+    "volume": "40",
+    "issue": "1",
+    "pages": "54-63",
+    "doi": "10.1038/s41587-021-00989-2",
+    "url": "https://doi.org/10.1038/s41587-021-00989-2",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "partis": {
+    "authors": [
+      {
+        "family": "Ralph",
+        "given": "Duncan K."
+      },
+      {
+        "family": "Matsen",
+        "given": "Frederick A."
+      }
+    ],
+    "title": "Likelihood-Based Inference of B Cell Clonal Families",
+    "journal": "PLOS Computational Biology",
+    "journal_abbrev": "PLoS Comput Biol",
+    "year": 2016,
+    "volume": "12",
+    "issue": "10",
+    "pages": "e1005086",
+    "doi": "10.1371/journal.pcbi.1005086",
+    "url": "https://doi.org/10.1371/journal.pcbi.1005086",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "family_inference_evaluation": {
+    "authors": [
+      {
+        "family": "Balashova",
+        "given": "Daria"
+      },
+      {
+        "family": "van Schaik",
+        "given": "Barbera D. C."
+      },
+      {
+        "family": "Stratigopoulou",
+        "given": "Maria"
+      },
+      {
+        "family": "Guikema",
+        "given": "Jeroen E. J."
+      },
+      {
+        "family": "Caniels",
+        "given": "Tom G."
+      },
+      {
+        "family": "Claireaux",
+        "given": "Mathieu"
+      },
+      {
+        "family": "van Gils",
+        "given": "Marit J."
+      },
+      {
+        "family": "Musters",
+        "given": "Anne"
+      },
+      {
+        "family": "Anang",
+        "given": "Dornatien C."
+      },
+      {
+        "family": "de Vries",
+        "given": "Niek"
+      },
+      {
+        "family": "Greiff",
+        "given": "Victor"
+      },
+      {
+        "family": "van Kampen",
+        "given": "Antoine H. C."
+      }
+    ],
+    "title": "Systematic evaluation of B-cell clonal family inference approaches",
+    "journal": "BMC Immunology",
+    "journal_abbrev": "BMC Immunol",
+    "year": 2024,
+    "volume": "25",
+    "issue": "1",
+    "pages": "13",
+    "doi": "10.1186/s12865-024-00600-8",
+    "url": "https://doi.org/10.1186/s12865-024-00600-8",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "igphyml": {
+    "authors": [
+      {
+        "family": "Hoehn",
+        "given": "Kenneth B"
+      },
+      {
+        "family": "Lunter",
+        "given": "Gerton"
+      },
+      {
+        "family": "Pybus",
+        "given": "Oliver G"
+      }
+    ],
+    "title": "A Phylogenetic Codon Substitution Model for Antibody Lineages",
+    "journal": "Genetics",
+    "journal_abbrev": "Genetics",
+    "year": 2017,
+    "volume": "206",
+    "issue": "1",
+    "pages": "417-427",
+    "doi": "10.1534/genetics.116.196303",
+    "url": "https://doi.org/10.1534/genetics.116.196303",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "tribal": {
+    "authors": [
+      {
+        "family": "Weber",
+        "given": "Leah L."
+      },
+      {
+        "family": "Reiman",
+        "given": "Derek"
+      },
+      {
+        "family": "Roddur",
+        "given": "Mrinmoy S."
+      },
+      {
+        "family": "Qi",
+        "given": "Yuanyuan"
+      },
+      {
+        "family": "El-Kebir",
+        "given": "Mohammed"
+      },
+      {
+        "family": "Khan",
+        "given": "Aly A."
+      }
+    ],
+    "title": "Isotype-aware inference of B cell clonal lineage trees from single-cell sequencing data",
+    "journal": "Cell Genomics",
+    "journal_abbrev": "Cell Genomics",
+    "year": 2024,
+    "volume": "4",
+    "issue": "9",
+    "pages": "100637",
+    "doi": "10.1016/j.xgen.2024.100637",
+    "url": "https://doi.org/10.1016/j.xgen.2024.100637",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "gc_affinity_pc": {
+    "authors": [
+      {
+        "family": "ElTanbouly",
+        "given": "Mohamed A."
+      },
+      {
+        "family": "Ramos",
+        "given": "Victor"
+      },
+      {
+        "family": "MacLean",
+        "given": "Andrew J."
+      },
+      {
+        "family": "Chen",
+        "given": "Spencer T."
+      },
+      {
+        "family": "Loewe",
+        "given": "Maximilian"
+      },
+      {
+        "family": "Steinbach",
+        "given": "Sandra"
+      },
+      {
+        "family": "Ben Tanfous",
+        "given": "Tarek"
+      },
+      {
+        "family": "Johnson",
+        "given": "Brianna"
+      },
+      {
+        "family": "Cipolla",
+        "given": "Melissa"
+      },
+      {
+        "family": "Gazumyan",
+        "given": "Anna"
+      },
+      {
+        "family": "Oliveira",
+        "given": "Thiago Y."
+      },
+      {
+        "family": "Nussenzweig",
+        "given": "Michel C."
+      }
+    ],
+    "title": "Role of affinity in plasma cell development in the germinal center light zone",
+    "journal": "Journal of Experimental Medicine",
+    "journal_abbrev": "J Exp Med",
+    "year": 2024,
+    "volume": "221",
+    "issue": "1",
+    "pages": "e20231838",
+    "doi": "10.1084/jem.20231838",
+    "url": "https://doi.org/10.1084/jem.20231838",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "gc_permissive_selection": {
+    "authors": [
+      {
+        "family": "Nakagawa",
+        "given": "Rinako"
+      },
+      {
+        "family": "Toboso-Navasa",
+        "given": "Amparo"
+      },
+      {
+        "family": "Schips",
+        "given": "Marta"
+      },
+      {
+        "family": "Young",
+        "given": "George"
+      },
+      {
+        "family": "Bhaw-Rosun",
+        "given": "Leena"
+      },
+      {
+        "family": "Llorian-Sopena",
+        "given": "Miriam"
+      },
+      {
+        "family": "Chakravarty",
+        "given": "Probir"
+      },
+      {
+        "family": "Sesay",
+        "given": "Abdul Karim"
+      },
+      {
+        "family": "Kassiotis",
+        "given": "George"
+      },
+      {
+        "family": "Meyer-Hermann",
+        "given": "Michael"
+      },
+      {
+        "family": "Calado",
+        "given": "Dinis Pedro"
+      }
+    ],
+    "title": "Permissive selection followed by affinity-based proliferation of GC light zone B cells dictates cell fate and ensures clonal breadth",
+    "journal": "Proceedings of the National Academy of Sciences",
+    "journal_abbrev": "Proc Natl Acad Sci U S A",
+    "year": 2021,
+    "volume": "118",
+    "issue": "2",
+    "pages": "e2016425118",
+    "doi": "10.1073/pnas.2016425118",
+    "url": "https://doi.org/10.1073/pnas.2016425118",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "antibody_feedback": {
+    "authors": [
+      {
+        "family": "Zhang",
+        "given": "Yang"
+      },
+      {
+        "family": "Meyer-Hermann",
+        "given": "Michael"
+      },
+      {
+        "family": "George",
+        "given": "Laura A."
+      },
+      {
+        "family": "Figge",
+        "given": "Marc Thilo"
+      },
+      {
+        "family": "Khan",
+        "given": "Mahmood"
+      },
+      {
+        "family": "Goodall",
+        "given": "Margaret"
+      },
+      {
+        "family": "Young",
+        "given": "Stephen P."
+      },
+      {
+        "family": "Reynolds",
+        "given": "Adam"
+      },
+      {
+        "family": "Falciani",
+        "given": "Francesco"
+      },
+      {
+        "family": "Waisman",
+        "given": "Ari"
+      },
+      {
+        "family": "Notley",
+        "given": "Clare A."
+      },
+      {
+        "family": "Ehrenstein",
+        "given": "Michael R."
+      },
+      {
+        "family": "Kosco-Vilbois",
+        "given": "Marie"
+      },
+      {
+        "family": "Toellner",
+        "given": "Kai-Michael"
+      }
+    ],
+    "title": "Germinal center B cells govern their own fate via antibody feedback",
+    "journal": "Journal of Experimental Medicine",
+    "journal_abbrev": "J Exp Med",
+    "year": 2013,
+    "volume": "210",
+    "issue": "3",
+    "pages": "457-464",
+    "doi": "10.1084/jem.20120150",
+    "url": "https://doi.org/10.1084/jem.20120150",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "clone2vec_preprint": {
+    "authors": [
+      {
+        "family": "Isaev",
+        "given": "Sergey"
+      },
+      {
+        "family": "Erickson",
+        "given": "Alek G"
+      },
+      {
+        "family": "Adameyko",
+        "given": "Igor"
+      },
+      {
+        "family": "Kharchenko",
+        "given": "Peter V"
+      }
+    ],
+    "title": "Clonal embeddings allow exploratory analysis of lineage-resolved single-cell data",
+    "journal": "bioRxiv",
+    "journal_abbrev": "bioRxiv",
+    "year": 2026,
+    "volume": null,
+    "issue": null,
+    "pages": "2026.04.30.720820",
+    "doi": "10.64898/2026.04.30.720820",
+    "url": "https://doi.org/10.64898/2026.04.30.720820",
+    "status": "preprint",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "bigcn": {
+    "authors": [
+      {
+        "family": "Liu",
+        "given": "Xiao"
+      },
+      {
+        "family": "Huang",
+        "given": "Jianghao"
+      },
+      {
+        "family": "Zhao",
+        "given": "Shasha"
+      },
+      {
+        "family": "Wang",
+        "given": "Shuang"
+      },
+      {
+        "family": "Wei",
+        "given": "Guiying"
+      },
+      {
+        "family": "Liu",
+        "given": "Yingbin"
+      },
+      {
+        "family": "Jiao",
+        "given": "Pengfei"
+      },
+      {
+        "family": "Xiang",
+        "given": "Dongxi"
+      }
+    ],
+    "title": "BiGCN Learns B Cell Functional States by Integrating Single‐Cell Transcriptomes and BCR Repertoires",
+    "journal": "Small Methods",
+    "journal_abbrev": "Small Methods",
+    "year": 2026,
+    "volume": "10",
+    "issue": "5",
+    "pages": "e01919",
+    "doi": "10.1002/smtd.202501919",
+    "url": "https://doi.org/10.1002/smtd.202501919",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "ibex": {
+    "authors": [
+      {
+        "family": "Borcherding",
+        "given": "Nicholas"
+      },
+      {
+        "family": "Sun",
+        "given": "Bo"
+      },
+      {
+        "family": "DeNardo",
+        "given": "David"
+      },
+      {
+        "family": "Brestoff",
+        "given": "Jonathan R."
+      }
+    ],
+    "title": "Ibex: Variational autoencoder for single-cell BCR sequencing",
+    "journal": "bioRxiv",
+    "journal_abbrev": "bioRxiv",
+    "year": 2022,
+    "volume": null,
+    "issue": null,
+    "pages": "2022.11.09.515787",
+    "doi": "10.1101/2022.11.09.515787",
+    "url": "https://doi.org/10.1101/2022.11.09.515787",
+    "status": "preprint",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "screpertoire2": {
+    "authors": [
+      {
+        "family": "Yang",
+        "given": "Qile"
+      },
+      {
+        "family": "Safina",
+        "given": "Ksenia R."
+      },
+      {
+        "family": "Nguyen",
+        "given": "Kieu Diem Quynh"
+      },
+      {
+        "family": "Tuong",
+        "given": "Zewen Kelvin"
+      },
+      {
+        "family": "Borcherding",
+        "given": "Nicholas"
+      }
+    ],
+    "title": "scRepertoire 2: Enhanced and efficient toolkit for single-cell immune profiling",
+    "journal": "PLOS Computational Biology",
+    "journal_abbrev": "PLoS Comput Biol",
+    "year": 2025,
+    "volume": "21",
+    "issue": "6",
+    "pages": "e1012760",
+    "doi": "10.1371/journal.pcbi.1012760",
+    "url": "https://doi.org/10.1371/journal.pcbi.1012760",
+    "status": "published",
+    "metadata_source": "Crossref DOI registry, checked 2026-10-06; paper status and evidence checked against original publications/official sources"
+  },
+  "combcr": {
+    "authors": [
+      {
+        "family": "Zou",
+        "given": "Yiping"
+      },
+      {
+        "family": "Luo",
+        "given": "Jiaqi"
+      },
+      {
+        "family": "Li",
+        "given": "Shuaicheng"
+      }
+    ],
+    "title": "CoMBCR: Co-Learning Multi-Modalities of BCRs and gene expressions",
+    "journal": "Bioinformatics",
+    "journal_abbrev": "Bioinformatics",
+    "year": 2026,
+    "volume": "42",
+    "issue": "3",
+    "pages": "btag115",
+    "doi": "10.1093/bioinformatics/btag115",
+    "url": "https://doi.org/10.1093/bioinformatics/btag115",
+    "status": "published",
+    "metadata_source": "Crossref DOI metadata and original publisher page, checked 2026-10-06"
+  },
+  "paired_family_bias": {
+    "authors": [
+      {
+        "family": "Wang",
+        "given": "Hao"
+      },
+      {
+        "family": "Wang",
+        "given": "Kaixuan"
+      },
+      {
+        "family": "Xu",
+        "given": "Qihang"
+      },
+      {
+        "family": "Cai",
+        "given": "Linru"
+      },
+      {
+        "family": "Huang",
+        "given": "Chuanxiang"
+      },
+      {
+        "family": "Chen",
+        "given": "Linlin"
+      },
+      {
+        "family": "Zang",
+        "given": "Yunliang"
+      },
+      {
+        "family": "Hu",
+        "given": "Xihao"
+      },
+      {
+        "family": "Zhang",
+        "given": "Jian"
+      }
+    ],
+    "title": "Large-scale paired chain BCR analysis reveals antibody clonal family inference bias and enhances resolution with machine learning",
+    "journal": "PLOS Computational Biology",
+    "journal_abbrev": "PLoS Comput Biol",
+    "year": 2026,
+    "volume": "22",
+    "issue": "3",
+    "pages": "e1014077",
+    "doi": "10.1371/journal.pcbi.1014077",
+    "url": "https://doi.org/10.1371/journal.pcbi.1014077",
+    "status": "published",
+    "metadata_source": "Crossref DOI metadata and original publisher page, checked 2026-10-06"
+  }
+}
