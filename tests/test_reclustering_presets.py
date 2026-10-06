@@ -72,6 +72,8 @@ def test_display_controls_leave_distance_partition_unchanged(clone_data):
     ({"resolution": 0}, "greater than zero"),
     ({"learning_rate": float("nan")}, "finite number"),
     ({"embedding_mode": "unknown"}, "embedding_mode must"),
+    ({"cluster_on": "unknown"}, "cluster_on must"),
+    ({"cluster_on": "embedding", "embed_clones": False}, "requires embed_clones=True"),
 ])
 def test_invalid_controls_are_rejected_without_mutation(clone_data, kwargs, message):
     with pytest.raises(ValueError, match=message):
@@ -94,3 +96,31 @@ def test_invalid_distances_fail_before_outputs(clone_data):
     with pytest.raises(ValueError, match="finite, non-negative, symmetric"):
         tf.clonotype_recluster(clone_data, basis="X_pca", distances=distances)
     assert "clone_cluster" not in clone_data.obs
+
+
+def test_embedding_partition_matches_notebook_scanpy_graph(clone_data, tmp_path):
+    import scanpy as sc
+
+    result = tf.clonotype_recluster(
+        clone_data, basis="X_pca", preset="continuous", n_neighbors=5,
+        umap_n_neighbors=7, resolution=.3, embedding_mode="distance_profiles",
+        cluster_on="embedding", random_state=123, copy=True,
+    )
+    cm = result.uns["threadfin"]["clone_map"]
+    expected = ad.AnnData(cm[["x", "y"]].to_numpy())
+    sc.pp.neighbors(expected, n_neighbors=5, use_rep="X", random_state=123)
+    sc.tl.leiden(expected, resolution=.3, random_state=123,
+                 flavor="leidenalg", directed=True, n_iterations=-1)
+    np.testing.assert_array_equal(cm.clone_cluster.astype(str), expected.obs.leiden.astype(str))
+    np.testing.assert_array_equal(result.obs.clone_cluster.astype(str),
+                                  result.obs.clone_id.map(cm.clone_cluster).astype(str))
+    config = result.uns["threadfin"]["clonotype_recluster"]
+    assert config["cluster_on"] == "embedding"
+    assert config["graph_method"] == "scanpy_umap_connectivities"
+    assert config["effective_n_neighbors"] == 5
+    assert config["effective_umap_n_neighbors"] == 7
+    path = tmp_path / "notebook_graph.h5ad"
+    result.write_h5ad(path)
+    saved = ad.read_h5ad(path)
+    pd.testing.assert_frame_equal(cm, saved.uns["threadfin"]["clone_map"])
+    assert saved.uns["threadfin"]["clonotype_recluster"]["cluster_on"] == "embedding"

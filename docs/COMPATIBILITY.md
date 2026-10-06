@@ -7,19 +7,21 @@ compared byte-for-byte with the wheel and all three installed copies.
 
 | Python | Full test suite | Dependency check | Tutorial | Simulated quick start |
 |---|---|---|---|---|
-| 3.10.22 | 156 passed | Passed | Passed | Passed |
-| 3.11.7 | 156 passed | Passed | Passed | Passed |
-| 3.12.15 | 155 passed, 1 expected failure | Passed | Passed | Passed |
+| 3.10.22 | 159 passed | Passed | Passed | Passed |
+| 3.11.7 | 159 passed | Passed | Passed | Passed |
+| 3.12.15 | 158 passed, 1 expected failure | Passed | Passed | Passed |
 
 The Python 3.12 expected failure is the existing legacy-v3
 `clonotype_recluster` repeatability check. It is not counted as a passing test.
 The v4 `tf.run` tests and examples passed on all three environments. The suites
-emit 32–34 warnings, including scientific warnings about unstable programme
+emit 33–37 warnings, including scientific warnings about unstable programme
 partitions; those are retained rather than hidden.
 
-All 12 additional preset tests passed. They cover explicit overrides,
+All 15 reclustering-control tests passed. They cover explicit overrides,
 unchanged default partitions, independent display controls, AnnData round-trip
-serialization, missing clone IDs and invalid parameter/distance rejection.
+serialization, missing clone IDs, invalid parameter/distance rejection and
+exact agreement with the historical Scanpy graph/Leiden recipe. The optional
+embedding graph is tested alongside unchanged default distance partitions.
 
 Exact dependency versions, the tested wheel's SHA-256 and stage exit codes are
 in [the verification record](compatibility_results_2026-10-06.json). The same

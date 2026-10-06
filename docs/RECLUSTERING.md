@@ -43,29 +43,39 @@ means at least three cells; use `4` for strictly greater than three.
 
 `embedding_mode="precomputed"` embeds clone distances directly. The optional
 `"distance_profiles"` mode uses each row of the clone distance matrix as
-Euclidean features, matching that particular step of the historical notebook:
+Euclidean features. Pair it with `cluster_on="embedding"` to also use the
+historical notebook's Scanpy neighbour graph on the clone UMAP:
 
 ```python
 tf.clonotype_recluster(
     adata, basis="X_umap", preset="continuous",
-    embedding_mode="distance_profiles", random_state=123,
+    embedding_mode="distance_profiles", cluster_on="embedding",
+    n_neighbors=15, umap_n_neighbors=20, resolution=0.3, random_state=123,
 )
 ```
 
-This does not recreate the historical clone definitions, filtering or Scanpy
-neighbour graph. The archived GSE246382 reference comes from the original report and
+This matches the executed notebook geometry/graph recipe, including Leiden
+resolution 0.3 (the report text says 0.1). It does not recreate its clone
+definitions or filtering. The archived GSE246382 reference comes from the original report and
 is not evidence that a new package run reproduces its coordinates. Current
-Figure 2B instead uses a fresh, audited run on raw GSE246382 RNA with frozen
+Figure 2B uses a fresh, audited run on GSE246382 with frozen
 same-mouse sequence-defined families, retaining 49 families with at least
-three cells. Its continuous preset and seed 123 were fixed before examining
-gates/markers; the three presets and two seeds are saved for comparison. The
+three cells. It averages the saved receptor-excluded cell UMAP, then computes
+new clone coordinates and three Leiden clusters. Colours are `clone_cluster`;
+point area follows captured family size. Historical settings and seed 123
+were fixed before examining gates/markers; presets and both seeds are saved
+for comparison. The
 notebook's executed filtering/resolution also differ from its report methods.
 Figure provenance is recorded in
 [`legacy_gc_provenance.json`](../paper/figure_plan/assets/legacy_gc_provenance.json).
 
-The default Leiden graph always uses the original clone distances. Changing
+The default `cluster_on="distances"` graph uses the original clone distances. Changing
 `min_dist`, `spread`, `learning_rate`, `umap_n_neighbors` or `embedding_mode`
-only changes the display. Measured GC compartments and expression signatures can motivate a
+only changes the display in that mode. Explicit `cluster_on="embedding"`
+requires `embed_clones=True`, and UMAP parameters can affect its clustering.
+Scanpy neighbour counts include self; the default distance-graph count is
+the number of other neighbours. The chosen mode and graph method are saved.
+Measured GC compartments and expression signatures can motivate a
 GC selection/output hypothesis, but cannot measure direction or future fate.
 That interpretation belongs to model-antigen GC studies with supporting
 experimental labels; it does not extend to non-GC samples.
@@ -88,8 +98,10 @@ python paper/figure_plan/gc_reclustering_panels.py
 ```
 
 The script verifies raw-cell/metadata alignment against committed family
-calls, excludes receptor genes from PCA, and uses gates/markers only after
-clustering. [The preset comparison](../paper/figure_plan/review/GSE246382_reclustering_presets.png)
-uses identical families across panels. The primary continuous graph has one
-Leiden partition; the displayed state biases are not validated discrete
-programmes or future fates.
+calls and uses gates/markers only after clustering. The default notebook
+pipeline averages saved receptor-excluded cell coordinates. `--pipeline pca`
+retains the separate PCA/distance-graph analysis. The
+[clone embedding preview](../paper/figure_plan/review/GSE246382_clone_embedding.png)
+shows the primary three-cluster map. [The preset comparison](../paper/figure_plan/review/GSE246382_reclustering_presets.png)
+uses identical families across panels and yields two or four partitions.
+These exploratory partitions are not validated discrete programmes or future fates.

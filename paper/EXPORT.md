@@ -26,7 +26,7 @@ python paper/export_manuscript.py --template /path/to/author-template.docx --all
 The pending export is labelled `REVIEW_PENDING_RBD`. It includes Figures 1–5
 and Supplementary Figures 1–6 and 8, plus explicit placeholders for Figure 6/S7.
 Figure 2B and Supplementary 8B–D use the audited real-data GSE246382
-centroid analysis; Supplementary 8A preserves the historical notebook Top2a
+clone embedding coloured by unsupervised Leiden clone_cluster, with cluster-level marker annotations; Supplementary 8A preserves the historical notebook Top2a
 output separately, with unresolved exact cohort/day attribution. The export checks 12 available images
 (14 once the native benchmark figures are complete).
 Pending native figures are excluded even if stale images exist. Without

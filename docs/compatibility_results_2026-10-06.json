@@ -1,6 +1,6 @@
 {
   "checked": "2026-10-06",
-  "wheel_sha256": "d15b525e642753da37bf3bbb4dfb63c37cdb25a445ebe7feba215370e26da7e4",
+  "wheel_sha256": "5c61176b8268f50bf1411b5c587887b3564a6a8ccba036564c515bf8b1abad07",
   "installed_files_verified_against_source": [
     "_utils.py",
     "api.py",
@@ -26,7 +26,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "156 passed, 32 warnings in 104.58s (0:01:44)",
+      "results": "159 passed, 33 warnings in 39.30s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -52,7 +52,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "156 passed, 33 warnings in 98.49s (0:01:38)",
+      "results": "159 passed, 34 warnings in 37.13s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -78,7 +78,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "155 passed, 1 xfailed, 34 warnings in 98.40s (0:01:38)",
+      "results": "158 passed, 1 xfailed, 37 warnings in 35.24s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -90,6 +90,7 @@
       }
     }
   ],
-  "scope": "Clean Linux installed wheel; full test suite and simulated examples, including reclustering presets. Raw GSE246382 reclustering is audited separately.",
-  "limitation": "Python 3.12 existing legacy repeatability check xfailed. Original orchestration was terminated after complete passing test logs; remaining stages resumed without repeating tests. Windows/macOS and Python3.13+ not tested."
+  "scope": "Clean Linux installed wheel; full test suite and simulated examples, including presets and historical clone-embedding Scanpy/Leiden graph equivalence. Raw GSE246382 clone embedding is audited separately under job 32344499.",
+  "limitation": "Python 3.12 existing legacy repeatability check xfailed. Windows/macOS and Python 3.13+ not tested.",
+  "job_id": "32344702"
 }

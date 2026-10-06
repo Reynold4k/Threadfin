@@ -237,7 +237,12 @@ UMAP/graph overrides and saved effective parameters. See
 remain separate from v4 profile reliability and programme validation.
 
 [Figure 2B](paper/figure_plan/Figure_2.png) now uses audited real GSE246382
-reclustering of 49 same-mouse families, with measured GC/PC gates and Myc RNA.
+clone embedding of 49 same-mouse families, coloured by unsupervised Leiden
+`clone_cluster` with a captured-size legend. The
+[standalone preview](paper/figure_plan/review/GSE246382_clone_embedding.png)
+uses the notebook's distance-row UMAP and Scanpy-graph recipe, available through
+`embedding_mode="distance_profiles", cluster_on="embedding"`. Measured
+GC/PC gates and Myc RNA annotate the resulting three clusters.
 [Supplementary 8](paper/figure_plan/Supplementary_8.png) retains the historical
 Top2a image separately and adds the new cell/marker evidence. The
 [preset comparison](paper/figure_plan/review/GSE246382_reclustering_presets.png)

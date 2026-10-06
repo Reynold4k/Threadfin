@@ -16,7 +16,7 @@ performance or included as partial comparisons.
 | Main figure | Question and evidence |
 |---|---|
 | 1 | Three panels: **A**, Chen Satoshi’s original GC illustration; **B**, the same conceptual 18 paired cells, allocated to three sequence-defined families of six cells each, progressing from RNA states and BCR sequences to illustrative state-composition rings and a family map; **C**, four visual evidence cards for reporter division gates, same-mouse GC–PB sharing, repeated human capture and clone coherence versus shuffled family identity. BCR sequence calls families; context-adjusted receptor-excluded RNA kernel profiles describe captured family states. The conceptual spaces are not concatenated UMAPs or a learned BCR encoder; family-map proximity denotes state-profile similarity. |
-| 2 | Model-antigen GC state nodes. **B** uses new GSE246382 raw-data centroid reclustering of 49 frozen same-mouse sequence-defined families (≥3 cells). Predominant measured gates and mean Myc RNA support selection-associated GC versus PC output state bias. Presets are fixed before label inspection, and the primary graph has one partition. A,C/D retain independent reporter design and NP measurements; E–G show RBD reporter views. No direction or future fate is measured; GC interpretation is not extended to non-GC. |
+| 2 | Model-antigen GC state nodes. **B** shows newly calculated GSE246382 clone embedding of 49 frozen same-mouse sequence-defined families (≥3 cells), coloured by three unsupervised Leiden clone clusters with an actual capture-size legend. Historical distance-row UMAP / Scanpy-graph settings are fixed before label inspection. Measured gates and Myc RNA annotate the GC selection-associated versus output-enriched groups. A,C/D retain independent reporter design and NP measurements; E–G show RBD reporter views. No direction or future fate is measured; GC interpretation is not extended to non-GC. |
 | 3 | Same-mouse PcAS GC/output-like co-occupancy. Full experimental design, early PB and late GC clone maps, cell context, family overlays and mouse/isotype-preserving null. No consistent GC–PB positive excess after isotype control. |
 | 4 | Repeated human GC capture and author-identified Spike binding. Clear cell/family maps, restored donor-stratified binding odds forest, repeated families, retention and donor-balanced **GC SHM** curves. Binding classification and SHM are separate measurements; neither is quantitative affinity. |
 | 5 | Twelve dataset analyses: biological anchors, observed versus within-library shuffled clonal expression signal, reliable-profile coverage and gene-module contrasts. Analyses from one publication are not counted as independent studies. Module agreement describes expression and is not independent fate validation. |
@@ -71,8 +71,8 @@ coordinates. Dense cell clouds are rasterised in PDFs; new diagrams and text
 remain editable vector artwork, while author-supplied Figure 1A is an embedded
 raster original. S8A embeds the unmodified historical Top2a output. Figure 2B
 and S8B–D use audited current GSE246382 data; their parameters and raw/source
-hashes accompany [the new result tables](../../case_studies/results/gc_np_pc_reclustering/summary.json).
-The [three-preset review](review/GSE246382_reclustering_presets.png) and
+hashes accompany [the new result tables](../../case_studies/results/gc_np_pc_clone_embedding/summary.json).
+The [standalone clone embedding](review/GSE246382_clone_embedding.png), [three-preset review](review/GSE246382_reclustering_presets.png) and
 [archived report reference](review/Figure_2_archived_report_reference.png)
 are separate comparison artifacts. PNGs are review previews.
 

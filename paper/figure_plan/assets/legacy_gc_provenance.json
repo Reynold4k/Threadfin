@@ -71,10 +71,11 @@
     "Figure2B": "New raw-data analysis, not any archived asset in this manifest.",
     "dataset": "GSE246382",
     "script": "case_studies/run_gc_reclustering.py",
-    "summary": "case_studies/results/gc_np_pc_reclustering/summary.json",
-    "coordinates": "case_studies/results/gc_np_pc_reclustering/continuous_seed123_clone_map.csv",
-    "job_id": "32343360",
-    "primary": "continuous, seed 123, receptor-excluded PCA; 49 same-mouse sequence-defined families with >=3 cells"
+    "summary": "case_studies/results/gc_np_pc_clone_embedding/summary.json",
+    "coordinates": "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv",
+    "job_id": "32344499",
+    "primary": "Historical cell-UMAP centroid / distance-row UMAP / Scanpy-graph recipe; seed 123; 49 same-mouse sequence-defined families with >=3 cells; three Leiden clusters",
+    "colour": "Unsupervised Leiden clone_cluster; actual captured clone-size legend"
   },
   "historical_report_reference": "paper/figure_plan/review/Figure_2_archived_report_reference.png; original report panels are no longer Figure2B/S8B-D."
 }

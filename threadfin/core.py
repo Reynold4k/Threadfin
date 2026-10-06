@@ -172,6 +172,7 @@ def clonotype_recluster(
     learning_rate: float | None = None,
     umap_n_neighbors: int | None = None,
     embedding_mode: str = "precomputed",
+    cluster_on: str = "distances",
 ):
     """Cluster clonotypes by the transcriptional state of their member cells.
 
@@ -226,15 +227,21 @@ def clonotype_recluster(
         starting point) or ``"discrete"`` (finer local partitions).
         These are exploratory settings, not learned biological categories.
     min_dist, spread, learning_rate
-        UMAP controls; explicit values override the preset. They change the
-        display, not the Leiden partition, which uses the original distances.
+        UMAP controls; explicit values override the preset. They change only
+        the display when ``cluster_on="distances"`` (the default).
     umap_n_neighbors
         Optional UMAP neighbour count independent of the clustering graph.
     embedding_mode
         ``"precomputed"`` embeds clone distances directly (default).
         ``"distance_profiles"`` treats each distance-matrix row as Euclidean
-        features, as in the old notebook. This changes display geometry;
-        it does not reproduce its Scanpy graph or clone definitions.
+        features, as in the old notebook.
+    cluster_on
+        ``"distances"`` builds the existing graph on original clone distances.
+        ``"embedding"`` builds a Scanpy neighbour graph on the resulting
+        two-dimensional clone UMAP, then applies Leiden, as in the historical
+        notebook. In this explicit mode UMAP parameters can change clusters;
+        ``embed_clones=True`` is required. Use ``n_neighbors=15`` and
+        ``umap_n_neighbors=20`` for the notebook's separate neighbour counts.
 
     Returns
     -------
@@ -255,6 +262,10 @@ def clonotype_recluster(
         raise ValueError("umap_n_neighbors must be at least 2.")
     if embedding_mode not in {"precomputed", "distance_profiles"}:
         raise ValueError("embedding_mode must be 'precomputed' or 'distance_profiles'.")
+    if cluster_on not in {"distances", "embedding"}:
+        raise ValueError("cluster_on must be 'distances' or 'embedding'.")
+    if cluster_on == "embedding" and not embed_clones:
+        raise ValueError("cluster_on='embedding' requires embed_clones=True.")
     if not np.isfinite(cdr3_weight) or not 0 <= cdr3_weight <= 1:
         raise ValueError("cdr3_weight must be in [0, 1].")
     if copy:
@@ -318,12 +329,7 @@ def clonotype_recluster(
     graph_k = int(min(n_neighbors, n_clones - 1))
     umap_k = int(min(umap_n_neighbors, n_clones - 1))
 
-    labels = _leiden_on_distances(
-        dist, n_neighbors=graph_k, resolution=resolution, random_state=random_state
-    )
-
     clone_map = centroids.copy()
-    clone_map[key_added] = pd.Categorical(labels)
     clone_map.index.name = clone_key
 
     if embed_clones:
@@ -338,6 +344,22 @@ def clonotype_recluster(
         clone_xy = reducer.fit_transform(dist)
         clone_map["x"] = clone_xy[:, 0]
         clone_map["y"] = clone_xy[:, 1]
+
+    if cluster_on == "embedding":
+        import scanpy as sc
+        from anndata import AnnData
+
+        clone_adata = AnnData(clone_xy)
+        sc.pp.neighbors(clone_adata, n_neighbors=graph_k, use_rep="X",
+                        metric="euclidean", random_state=random_state)
+        sc.tl.leiden(clone_adata, resolution=resolution, random_state=random_state,
+                     flavor="leidenalg", directed=True, n_iterations=-1)
+        labels = clone_adata.obs["leiden"].astype(str).to_numpy()
+    else:
+        labels = _leiden_on_distances(
+            dist, n_neighbors=graph_k, resolution=resolution, random_state=random_state
+        )
+    clone_map[key_added] = pd.Categorical(labels)
 
     # map back to cells (vectorized)
     mapping = clone_map[key_added]
@@ -358,6 +380,8 @@ def clonotype_recluster(
         "umap_n_neighbors": umap_n_neighbors,
         "effective_umap_n_neighbors": umap_k,
         "embedding_mode": embedding_mode,
+        "cluster_on": cluster_on,
+        "graph_method": "scanpy_umap_connectivities" if cluster_on == "embedding" else "self_scaled_gaussian",
         "embed_clones": bool(embed_clones),
         "cdr3_weight": cdr3_weight,
         "random_state": random_state,

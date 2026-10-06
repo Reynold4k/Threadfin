@@ -36,7 +36,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run(output):
+def run(output, pipeline="notebook"):
     output.mkdir(parents=True, exist_ok=True)
     folder = DATA / "gse246382_np_pc"
     files = [folder / name for name in (
@@ -82,11 +82,19 @@ def run(output):
     occupancy = pd.crosstab(data.obs["clone_id"], data.obs["fate"]).reindex(columns=GATES, fill_value=0)
     fractions = occupancy.div(occupancy.sum(axis=1), axis=0)
     rows, partitions = [], {}
-    for preset in tf.reclustering_presets():
+    configurations = {p: {"preset": p} for p in tf.reclustering_presets()}
+    if pipeline == "notebook":
+        configurations["notebook"] = {"preset": "continuous", "resolution": .3}
+    for name_prefix, settings in configurations.items():
         for seed in (123, 7):
+            settings = dict(settings)
+            if pipeline == "notebook":
+                settings.update(n_neighbors=15,
+                                umap_n_neighbors=tf.reclustering_presets()[settings["preset"]]["n_neighbors"],
+                                embedding_mode="distance_profiles", cluster_on="embedding")
             result = tf.clonotype_recluster(
-                data, basis="X_gc_reclustering", min_clone_size=3,
-                preset=preset, random_state=seed, copy=True,
+                data, basis="X_umap" if pipeline == "notebook" else "X_gc_reclustering",
+                min_clone_size=3, random_state=seed, copy=True, **settings,
             )
             cm = result.uns["threadfin"]["clone_map"].copy()
             config = result.uns["threadfin"]["clonotype_recluster"]
@@ -97,30 +105,36 @@ def run(output):
             # Ties are explicitly mixed rather than resolved by column order.
             tied = fractions.reindex(cm.index).eq(cm["gate_purity"], axis=0).sum(axis=1) > 1
             cm.loc[tied, "dominant_gate"] = "mixed"
-            name = f"{preset}_seed{seed}"
+            name = f"{name_prefix}_seed{seed}"
             cm.to_csv(output / (name + "_clone_map.csv"))
             (output / (name + "_parameters.json")).write_text(json.dumps(config, indent=2) + "\n")
             partitions[name] = cm["clone_cluster"].astype(str)
-            rows.append({"preset": preset, "seed": seed, "n_clones": len(cm),
+            rows.append({"preset": name_prefix, "seed": seed, "n_clones": len(cm),
                          "n_clone_clusters": cm.clone_cluster.nunique(),
                          "mean_gate_purity": float(cm.gate_purity.mean()),
                          "gate_partition_ari": adjusted_rand_score(cm.dominant_gate, cm.clone_cluster),
                          "n_cells": int(cm.n_cells.sum())})
     pd.DataFrame(rows).to_csv(output / "preset_summary.csv", index=False)
     stability = {p: adjusted_rand_score(partitions[f"{p}_seed123"], partitions[f"{p}_seed7"])
-                 for p in tf.reclustering_presets()}
-    primary = pd.read_csv(output / "continuous_seed123_clone_map.csv", index_col=0)
+                 for p in configurations}
+    primary_name = "notebook_seed123" if pipeline == "notebook" else "continuous_seed123"
+    primary = pd.read_csv(output / f"{primary_name}_clone_map.csv", index_col=0)
     marker_cols = ["marker:Myc", "marker:GC identity", "marker:Cycling", "marker:Plasma cell"]
     state_summary = primary.groupby("dominant_gate")[marker_cols].mean()
     state_summary.to_csv(output / "clone_marker_by_dominant_gate.csv")
+    primary.groupby("clone_cluster")[marker_cols + ["gate:" + g for g in GATES]].mean().to_csv(
+        output / "clone_cluster_annotations.csv")
     summary = {
         "dataset": "GSE246382", "design": "NP-OVA/Alhydrogel, day 14; FACS GC zones/Myc+ LZ and plasma cells",
         "status": "completed", "job_id": os.environ.get("SLURM_JOB_ID"),
         "n_cells": data.n_obs, "n_cells_with_bcr": int(data.obs.clone_id.notna().sum()),
         "n_donors": data.obs.donor.nunique(), "retained_clones": len(primary),
         "retained_cells": int(primary.n_cells.sum()),
-        "primary": "continuous_seed123", "basis": "receptor-excluded 30-component PCA",
-        "selection": "continuous preset and seed 123 fixed before examining gates/markers; all three presets and both seeds retained",
+        "primary": primary_name,
+        "basis": "frozen receptor-excluded cell UMAP" if pipeline == "notebook" else "receptor-excluded 30-component PCA",
+        "pipeline": pipeline,
+        "selection": "Historical executed notebook geometry/graph settings and seed 123 fixed before examining gates/markers; presets and both seeds retained" if pipeline == "notebook" else "continuous preset and seed 123 fixed before examining gates/markers; all three presets and both seeds retained",
+        "recipe": "Cell UMAP clone centroids -> pairwise Euclidean distance rows -> Euclidean UMAP (20 neighbours, min_dist 0.4) -> Scanpy neighbours (15) -> Leiden (resolution 0.3)" if pipeline == "notebook" else "PCA clone centroids -> distance graph Leiden -> precomputed-distance UMAP",
         "clone_definition": "Committed same-mouse V/J/junction-sequence-defined families; never pooled across mice",
         "source_sha256": {str(p): sha(p) for p in files + [source]},
         "marker_coverage": coverage, "seed_partition_ari": stability,
@@ -139,5 +153,8 @@ def run(output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=ROOT / "case_studies/results/gc_np_pc_reclustering")
-    run(parser.parse_args().output)
+    parser.add_argument("--pipeline", choices=("notebook", "pca"), default="notebook")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    output = args.output or ROOT / ("case_studies/results/gc_np_pc_clone_embedding" if args.pipeline == "notebook" else "case_studies/results/gc_np_pc_reclustering")
+    run(output, args.pipeline)

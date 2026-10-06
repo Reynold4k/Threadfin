@@ -85,6 +85,7 @@
   },
   "sources": {
     "paper/figure_plan/assets/GC_structure_supplied.png": "Author-original GC schematic by Chen Satoshi; ownership confirmed; inserted without pixel editing.",
+    "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv": 49,
     "case_studies/results/mouse_rbd/cells.csv.gz": 36188,
     "case_studies/results/malaria_late/cells.csv.gz": 72359,
     "case_studies/results/ln_vaccine/cells.csv.gz": 193442,
@@ -96,8 +97,7 @@
     "case_studies/results/flu_lung/cells.csv.gz": 4121,
     "case_studies/results/ebv/cells.csv.gz": 205630,
     "case_studies/results/tonsil/cells.csv.gz": 22478,
-    "case_studies/results/stephenson/cells.csv.gz": 5000,
-    "case_studies/results/gc_np_pc_reclustering/continuous_seed123_clone_map.csv": 49
+    "case_studies/results/stephenson/cells.csv.gz": 5000
   },
   "outputs": [
     "Figure_1",
@@ -125,6 +125,14 @@
     "ring_compositions": "illustrative, not the algorithmic kernel features",
     "A_asset_sha256": "b08cdbd77e32c7120c03dc885287970ca53146646f7e8cfda2f10210c915d453"
   },
+  "gc_reclustering": {
+    "primary": "notebook_seed123",
+    "n_clones": 49,
+    "job_id": "32344499",
+    "graph_uses_gate_labels": false,
+    "plot_colors": "Unsupervised Leiden clone_cluster",
+    "parameters": "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_parameters.json"
+  },
   "archived_panels": {
     "legacy_notebook_clone_Top2a.png": {
       "sha256": "a65f7060571cd3ece2752007d4b426348d3b75111ab4b21ffe0bd74cc86e7de6",
@@ -132,19 +140,11 @@
       "new_analysis": false
     }
   },
-  "benchmark_included": false,
-  "gc_reclustering": {
-    "primary": "continuous_seed123",
-    "n_clones": 49,
-    "job_id": "32343360",
-    "graph_uses_gate_labels": false,
-    "plot_colors": "Predominant measured compartment and mean Myc RNA",
-    "parameters": "case_studies/results/gc_np_pc_reclustering/continuous_seed123_parameters.json"
-  },
   "gc_reclustering_tables": {
-    "case_studies/results/gc_np_pc_reclustering/display_marker_means.csv": {
-      "sha256": "17b2d626bb6f3971a8855810116ce4d4c01560594e996fe79101bbe274f836c3",
-      "values": "Mean RNA over clones grouped by predominant measured gate"
+    "case_studies/results/gc_np_pc_clone_embedding/display_marker_means.csv": {
+      "sha256": "9db6c65d8ac28211cd768d75fd27cf88a4bd464ee7e215222a4cfa6be99cd433",
+      "values": "Mean RNA over clones grouped by unsupervised Leiden clone_cluster"
     }
-  }
+  },
+  "benchmark_included": false
 }

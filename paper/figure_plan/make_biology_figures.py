@@ -252,20 +252,20 @@ def figure1():
 def figure2():
     from gc_reclustering_panels import main_node_panel, DATA as GC_DATA
     fig=new_page('Figure 2','Model-antigen GC state nodes and independent reporter measurements',
-                 'Real-data clone reclustering distinguishes selection-associated GC and plasma-cell output state biases.',height=305)
+                 'Clone embedding is coloured by unsupervised Leiden clusters; measured gates and RNA provide GC-state interpretation.',height=305)
     design(p(fig,0,6,183,54,'A','Independent NP-OVA and RBD reporter designs'),'model')
-    b=p(fig,0,78,126,68,'B','NP-OVA day 14: GC and output-associated clone states')
+    b=p(fig,0,78,126,68,'B','NP-OVA day 14: clone embedding and Leiden reclustering')
     cm=main_node_panel(b)
-    AUDIT['sources']['case_studies/results/gc_np_pc_reclustering/continuous_seed123_clone_map.csv']=len(cm)
-    AUDIT['gc_reclustering']={'primary':'continuous_seed123','n_clones':len(cm),
+    AUDIT['sources']['case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv']=len(cm)
+    AUDIT['gc_reclustering']={'primary':'notebook_seed123','n_clones':len(cm),
         'job_id':json.loads((GC_DATA/'summary.json').read_text())['job_id'],
-        'graph_uses_gate_labels':False,'plot_colors':'Predominant measured compartment and mean Myc RNA',
-        'parameters':'case_studies/results/gc_np_pc_reclustering/continuous_seed123_parameters.json'}
+        'graph_uses_gate_labels':False,'plot_colors':'Unsupervised Leiden clone_cluster',
+        'parameters':'case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_parameters.json'}
     state=p(fig,134,78,49,68,None,'Measured compartments\nand marker support (S8B–D)')
     state.set_axis_off()
-    state.text(0,.95,'Myc+ LZ-biased families\nSelection-associated GC state\nHigher mean Myc RNA',va='top',fontsize=7,color=GREEN,linespacing=1.35)
-    state.text(0,.58,'PC-biased families\nPlasma-cell output state\nHigher plasma-cell module',va='top',fontsize=7,color=RED,linespacing=1.35)
-    state.text(0,.21,'LZ/DZ states lie between.\nState biases, not tracked fates;\nno direction assigned.',va='top',fontsize=6.5,color=INK,linespacing=1.4)
+    state.text(0,.95,'Cluster 1: GC selection-associated\n42% Myc+ LZ; 21% DZ\nHigher mean Myc RNA',va='top',fontsize=7,color='#ff7f0e',linespacing=1.35)
+    state.text(0,.58,'Cluster 0: LZ / output-enriched\n47% PC; 48% LZ\nHigher plasma-cell module',va='top',fontsize=7,color='#1f77b4',linespacing=1.35)
+    state.text(0,.21,'Cluster 2: mixed GC / output.\nMean compartment fractions\nover families; no direction\nor future fate assigned.',va='top',fontsize=6.5,color=INK,linespacing=1.3)
     note(b,'GSE246382: 49 same-mouse sequence-defined families / 260 cells; ≥3 cells per family; area follows capture count.',-.10,6)
     np_note=p(fig,0,176,55,33,None,'Separate reporter evidence')
     np_note.set_axis_off()
@@ -673,13 +673,13 @@ def supplementary8():
     c=p(fig,0,116,96,55,'C','GSE246382: mean Myc expression per clone')
     myc_panel(c)
     note(c,'New clone coordinates, same 49 families as Figure 2B.\nMyc is averaged over captured members of each family.',-.25,6)
-    d=p(fig,111,113,72,77,'D','GSE246382: marker expression by captured state bias')
+    d=p(fig,111,113,72,77,'D','GSE246382: marker expression by clone cluster')
     source=markers(d)
     AUDIT.setdefault('gc_reclustering_tables',{})[str(source.relative_to(ROOT))]={
-        'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'values':'Mean RNA over clones grouped by predominant measured gate'}
+        'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'values':'Mean RNA over clones grouped by unsupervised Leiden clone_cluster'}
     e=p(fig,0,222,183,36,'E','Interpret the model-antigen GC nodes within their evidence')
     e.set_axis_off()
-    e.text(0,.95,'New analysis: receptor-excluded PCA → clone centroids → precomputed-distance UMAP; continuous preset, seed 123.\nMyc+ LZ-biased families have higher Myc RNA; PC-biased families have higher plasma-cell expression modules.\nColour indicates captured compartment bias, not a learned fate class. Tied predominant gates are labelled mixed.\nThe primary Leiden graph gives one partition; its separated state biases are not validated discrete programmes.\nA is a separate historical display. B–D do not assign a differentiation direction or extend GC interpretation to non-GC.',
+    e.text(0,.95,'Cell-UMAP clone centroids → distance-row UMAP (20 neighbours, min_dist 0.4) → Scanpy graph (15) → Leiden (0.3).\nFigure 2B colours three unsupervised clone clusters; gate labels and marker values do not enter the graph.\nCluster 1 is enriched for Myc+ LZ / DZ capture; cluster 0 has greater PC capture and plasma-cell-module expression.\nCluster 2 contains mixed GC/output states. Cluster annotations describe captured state biases, not future fates.\nA is a separate historical display. B–D do not assign a differentiation direction or extend GC interpretation to non-GC.',
                va='top',fontsize=6.7,linespacing=1.6)
     save(fig,'Supplementary_8');AUDIT['outputs'].append('Supplementary_8')
 
