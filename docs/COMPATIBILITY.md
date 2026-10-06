@@ -2,20 +2,24 @@
 
 Checked on 6 October 2026 using clean Linux environments without inherited
 system-site packages. Tests imported the installed wheel from `site-packages`
-outside the repository. The four changed input-validation modules were also
+outside the repository. The seven input-validation and reclustering modules were also
 compared byte-for-byte with the wheel and all three installed copies.
 
 | Python | Full test suite | Dependency check | Tutorial | Simulated quick start |
 |---|---|---|---|---|
-| 3.10.22 | 144 passed | Passed | Passed | Passed |
-| 3.11.7 | 144 passed | Passed | Passed | Passed |
-| 3.12.15 | 143 passed, 1 expected failure | Passed | Passed | Passed |
+| 3.10.22 | 156 passed | Passed | Passed | Passed |
+| 3.11.7 | 156 passed | Passed | Passed | Passed |
+| 3.12.15 | 155 passed, 1 expected failure | Passed | Passed | Passed |
 
 The Python 3.12 expected failure is the existing legacy-v3
 `clonotype_recluster` repeatability check. It is not counted as a passing test.
 The v4 `tf.run` tests and examples passed on all three environments. The suites
-emit 29–31 warnings, including scientific warnings about unstable programme
+emit 32–34 warnings, including scientific warnings about unstable programme
 partitions; those are retained rather than hidden.
+
+All 12 additional preset tests passed. They cover explicit overrides,
+unchanged default partitions, independent display controls, AnnData round-trip
+serialization, missing clone IDs and invalid parameter/distance rejection.
 
 Exact dependency versions, the tested wheel's SHA-256 and stage exit codes are
 in [the verification record](compatibility_results_2026-10-06.json). The same

@@ -6,8 +6,8 @@ further tested datasets have their own [coverage folder](tested_datasets/README.
 The layout follows biological questions, actual study design and independent
 measurement, rather than a sequence of statistical tests.
 
-Current review outputs (5 October 2026): Figures 1–5 and Supplementary Figures
-1–6 are available. Review the revised [Figure 1 PNG](Figure_1.png) or its
+Current review outputs (6 October 2026): Figures 1–5 and Supplementary Figures
+1–6 and 8 are available. Review the revised [Figure 1 PNG](Figure_1.png) or its
 [PDF](Figure_1.pdf). Figure 6 and Supplementary Figure 7 are planned below;
 their final outputs await the complete RBD native benchmark. NP results are
 already available in the source tables. Pending models are not assigned zero
@@ -16,7 +16,7 @@ performance or included as partial comparisons.
 | Main figure | Question and evidence |
 |---|---|
 | 1 | Three panels: **A**, Chen Satoshi’s original GC illustration; **B**, the same conceptual 18 paired cells, allocated to three sequence-defined families of six cells each, progressing from RNA states and BCR sequences to illustrative state-composition rings and a family map; **C**, four visual evidence cards for reporter division gates, same-mouse GC–PB sharing, repeated human capture and clone coherence versus shuffled family identity. BCR sequence calls families; context-adjusted receptor-excluded RNA kernel profiles describe captured family states. The conceptual spaces are not concatenated UMAPs or a learned BCR encoder; family-map proximity denotes state-profile similarity. |
-| 2 | Controlled GC state interpretation. Panel A retains detailed reporter/DOX/FACS design; B uses **GSE246382 NP-OVA d14** from the author’s report Figure 2.11. C/D remain the independent NP reporter cohort, E–G the RBD reporter cohorts. Division occupancy and SHM colour the same reliable-family maps and answer different questions. |
+| 2 | Model-antigen GC state nodes. **B** uses new GSE246382 raw-data centroid reclustering of 49 frozen same-mouse sequence-defined families (≥3 cells). Predominant measured gates and mean Myc RNA support selection-associated GC versus PC output state bias. Presets are fixed before label inspection, and the primary graph has one partition. A,C/D retain independent reporter design and NP measurements; E–G show RBD reporter views. No direction or future fate is measured; GC interpretation is not extended to non-GC. |
 | 3 | Same-mouse PcAS GC/output-like co-occupancy. Full experimental design, early PB and late GC clone maps, cell context, family overlays and mouse/isotype-preserving null. No consistent GC–PB positive excess after isotype control. |
 | 4 | Repeated human GC capture and author-identified Spike binding. Clear cell/family maps, restored donor-stratified binding odds forest, repeated families, retention and donor-balanced **GC SHM** curves. Binding classification and SHM are separate measurements; neither is quantitative affinity. |
 | 5 | Twelve dataset analyses: biological anchors, observed versus within-library shuffled clonal expression signal, reliable-profile coverage and gene-module contrasts. Analyses from one publication are not counted as independent studies. Module agreement describes expression and is not independent fate validation. |
@@ -31,6 +31,7 @@ performance or included as partial comparisons.
 | 5 | Revised marrow/blood validation: cell and family maps, pure-gate examples, exact productive heavy/light receptor identities across verified donors. |
 | 6 | Author-clone/Threadfin crosswalk, donor programme binding coverage, individual-donor GC SHM curves and descriptive expression signatures. |
 | 7 | Native benchmark family-size sensitivity, independent RBD-probe/GC-zone gate readout, measured execution stages and coverage/fold audits. |
+| 8 | Original Top2a notebook output (exact cohort/day unresolved), current GSE246382 measured cell gates, new clone-averaged Myc and marker RNA by captured state bias. Public GSE180920 day7/day14 inputs are verified, but its saved image input chain is incomplete. |
 
 ## Reading the concepts and maps
 
@@ -55,8 +56,8 @@ arrows depict established GC biology, not directions estimated by the package.
 ```bash
 python case_studies/summarize_clonal_information.py
 python case_studies/spike_gc_trends.py
-python paper/figure_plan/make_biology_figures.py  # six main, seven supplements and tested pages
-python paper/figure_plan/make_biology_figures.py --biological-only  # current Figure1–5 / S1–6
+python paper/figure_plan/make_biology_figures.py  # six main, eight supplements and tested pages
+python paper/figure_plan/make_biology_figures.py --biological-only  # current Figure1–5 / S1–6,S8
 python paper/figure_plan/make_figures.py          # main only; requires completed benchmark scores
 python paper/figure_plan/make_supplementary.py     # supplements only
 ```
@@ -68,7 +69,12 @@ and [analysis audit](../../case_studies/results/map_reproduction_audit/REANALYSI
 explain why swapping early/PB for late/GC changed appearance despite identical
 coordinates. Dense cell clouds are rasterised in PDFs; new diagrams and text
 remain editable vector artwork, while author-supplied Figure 1A is an embedded
-raster original. PNGs are review previews.
+raster original. S8A embeds the unmodified historical Top2a output. Figure 2B
+and S8B–D use audited current GSE246382 data; their parameters and raw/source
+hashes accompany [the new result tables](../../case_studies/results/gc_np_pc_reclustering/summary.json).
+The [three-preset review](review/GSE246382_reclustering_presets.png) and
+[archived report reference](review/Figure_2_archived_report_reference.png)
+are separate comparison artifacts. PNGs are review previews.
 
 Interpretation, methods and revision decisions are in
 [the manuscript](../MANUSCRIPT_draft_v2.md), [legends](../FIGURE_LEGENDS.md),

@@ -1,0 +1,19 @@
+{
+  "basis": "X_gc_reclustering",
+  "min_clone_size": 3,
+  "n_neighbors": 20,
+  "effective_n_neighbors": 20,
+  "resolution": 0.1,
+  "preset": "continuous",
+  "min_dist": 0.4,
+  "spread": 1.0,
+  "learning_rate": 1.0,
+  "umap_n_neighbors": 20,
+  "effective_umap_n_neighbors": 20,
+  "embedding_mode": "precomputed",
+  "embed_clones": true,
+  "cdr3_weight": 0.0,
+  "random_state": 123,
+  "n_clones_clustered": 49,
+  "n_clone_clusters": 1
+}

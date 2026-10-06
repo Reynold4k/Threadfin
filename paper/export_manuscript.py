@@ -196,7 +196,7 @@ def validate_docx(doc,template,output,order,missing_figures,template_path):
         assert 'Chen Zhu' in xml and 'Peter Doherty Institute' in xml
         assert '{RBD_BENCHMARK_RESULTS}' not in xml and '{cite:' not in xml
         images=[n for n in z.namelist() if n.startswith('word/media/')]
-        assert len(images)==13-len(missing_figures)
+        assert len(images)==14-len(missing_figures)
     return {'template':str(template_path),'template_sha256':hashlib.sha256(template_path.read_bytes()).hexdigest(),
             'output':str(output),'author':'Chen Zhu','styles_preserved':imported,'citation_count':len(order),
             'inline_citations':'parenthetical numbers in first-citation order',
@@ -208,7 +208,7 @@ def validate_docx(doc,template,output,order,missing_figures,template_path):
 
 def export(output,allow_pending=False,template_path=TEMPLATE):
     source,refs,order=render_source(allow_pending)
-    expected=[f'Figure_{i}' for i in range(1,7)]+[f'Supplementary_{i}' for i in range(1,8)]
+    expected=[f'Figure_{i}' for i in range(1,7)]+[f'Supplementary_{i}' for i in range(1,9)]
     missing_figures=[]
     for name in expected:
         unavailable=not (FIGURES/(name+'.png')).exists()
@@ -244,7 +244,7 @@ def export(output,allow_pending=False,template_path=TEMPLATE):
         if not in_references:p.alignment=WD_ALIGN_PARAGRAPH.JUSTIFY
         inline(p,text,italic=in_abstract)
     doc.add_page_break();doc.add_paragraph('Supplementary Information',style='Heading 1')
-    for i in range(1,8):add_figure(doc,f'Supplementary_{i}',caption[f'Supplementary_{i}'],missing_figures)
+    for i in range(1,9):add_figure(doc,f'Supplementary_{i}',caption[f'Supplementary_{i}'],missing_figures)
     output.parent.mkdir(parents=True,exist_ok=True);doc.save(output)
     audit=validate_docx(doc,template,output,order,missing_figures,template_path)
     output.with_suffix('.audit.json').write_text(json.dumps(audit,indent=2)+'\n')

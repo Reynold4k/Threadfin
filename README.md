@@ -60,7 +60,7 @@ The [GC manuscript](paper/MANUSCRIPT_draft_v2.md),
 [figure legends](paper/FIGURE_LEGENDS.md) and
 [native-method comparison](paper/METHOD_COMPARISON.md) distinguish receptor
 family membership from captured cell-state similarity. Figures 1–5 and
-Supplementary Figures 1–6 are available. The NP native comparison is complete;
+Supplementary Figures 1–6 and 8 are available. The NP native comparison is complete;
 the RBD BiGCN run and Figure 6/S7 remain pending. The manuscript makes this
 status explicit and reports the RNA-centroid baseline's stronger NP readout.
 
@@ -227,3 +227,22 @@ A manuscript is in preparation.
 ## License
 
 [MIT](LICENSE) © 2026 Chen Satoshi (Reynold4k)
+
+## Centroid reclustering presets
+
+The legacy `tf.clonotype_recluster` path now accepts `preset="cohesive"`
+(the unchanged default settings), `"continuous"` and `"discrete"`, with explicit
+UMAP/graph overrides and saved effective parameters. See
+[reclustering controls](docs/RECLUSTERING.md). These starting configurations
+remain separate from v4 profile reliability and programme validation.
+
+[Figure 2B](paper/figure_plan/Figure_2.png) now uses audited real GSE246382
+reclustering of 49 same-mouse families, with measured GC/PC gates and Myc RNA.
+[Supplementary 8](paper/figure_plan/Supplementary_8.png) retains the historical
+Top2a image separately and adds the new cell/marker evidence. The
+[preset comparison](paper/figure_plan/review/GSE246382_reclustering_presets.png)
+shows identical families under three fixed settings. These views describe
+model-antigen GC state bias without measuring direction or fate; the GC
+selection/output interpretation does not extend to non-GC data. Source and
+execution limits are in the
+[provenance manifest](paper/figure_plan/assets/legacy_gc_provenance.json).

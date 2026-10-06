@@ -1,11 +1,14 @@
 {
   "checked": "2026-10-06",
-  "wheel_sha256": "ba8ff37c2709418ad8b171614af8631ae445680774988183cf58fdde9c67577e",
+  "wheel_sha256": "d15b525e642753da37bf3bbb4dfb63c37cdb25a445ebe7feba215370e26da7e4",
   "installed_files_verified_against_source": [
     "_utils.py",
     "api.py",
     "pp.py",
-    "profiles.py"
+    "profiles.py",
+    "core.py",
+    "reclustering.py",
+    "__init__.py"
   ],
   "matrix": [
     {
@@ -23,7 +26,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "144 passed, 29 warnings in 147.72s (0:02:27)",
+      "results": "156 passed, 32 warnings in 104.58s (0:01:44)",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -49,7 +52,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "144 passed, 30 warnings in 135.54s (0:02:15)",
+      "results": "156 passed, 33 warnings in 98.49s (0:01:38)",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -75,7 +78,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "143 passed, 1 xfailed, 31 warnings in 138.90s (0:02:18)",
+      "results": "155 passed, 1 xfailed, 34 warnings in 98.40s (0:01:38)",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -87,6 +90,6 @@
       }
     }
   ],
-  "scope": "Clean Linux environments; no system-site packages; official unit suite and simulated examples. No new biological analysis.",
-  "limitation": "Python 3.12 legacy-v3 repeatability test xfailed; Windows/macOS and Python 3.13+ not tested."
+  "scope": "Clean Linux installed wheel; full test suite and simulated examples, including reclustering presets. Raw GSE246382 reclustering is audited separately.",
+  "limitation": "Python 3.12 existing legacy repeatability check xfailed. Original orchestration was terminated after complete passing test logs; remaining stages resumed without repeating tests. Windows/macOS and Python3.13+ not tested."
 }

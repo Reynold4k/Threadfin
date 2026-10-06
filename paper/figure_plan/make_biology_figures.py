@@ -93,7 +93,7 @@ def cell_map(ax, ds, col, palette, title=None, subset=None):
     note(ax, f'{len(d):,} cells; cell UMAP', -.01)
 
 
-def color_map(ax, ds, column, label, vmin=0, vmax=1, cmap='viridis'):
+def color_map(ax, ds, column, label, vmin=0, vmax=1, cmap='viridis', note_y=-.30):
     d = clones(ds).dropna(subset=['x', 'y', column])
     q = d[d.reliability >= .5]
     im = ax.scatter(q.x, q.y, c=q[column], s=1+5*np.sqrt(q.n_cells), cmap=cmap, vmin=vmin, vmax=vmax,
@@ -102,7 +102,7 @@ def color_map(ax, ds, column, label, vmin=0, vmax=1, cmap='viridis'):
     cb = ax.figure.colorbar(im, ax=ax, orientation='horizontal', fraction=.045, pad=.055, aspect=24)
     cb.set_label(label, fontsize=6, labelpad=2)
     cb.ax.tick_params(labelsize=6, length=2)
-    note(ax, f'{len(q):,} reliable clones; clone UMAP', -.30)
+    note(ax, f'{len(q):,} reliable clones; clone UMAP', note_y)
     return q
 
 
@@ -250,26 +250,44 @@ def figure1():
 
 
 def figure2():
-    fig=new_page('Figure 2','Interpreting clone state in experimentally measured GC selection',
-                 'NP-OVA and RBD models: clone position is state similarity, not ancestry or a future fate.',height=297)
-    design(p(fig,0,6,183,68,'A','Reporter mechanism and experimental gates retain the original biological design'),'model')
-    for y,ds,title in [(105,'mouse_np','NP-OVA'),(177,'mouse_rbd','RBD vaccines')]:
+    from gc_reclustering_panels import main_node_panel, DATA as GC_DATA
+    fig=new_page('Figure 2','Model-antigen GC state nodes and independent reporter measurements',
+                 'Real-data clone reclustering distinguishes selection-associated GC and plasma-cell output state biases.',height=305)
+    design(p(fig,0,6,183,54,'A','Independent NP-OVA and RBD reporter designs'),'model')
+    b=p(fig,0,78,126,68,'B','NP-OVA day 14: GC and output-associated clone states')
+    cm=main_node_panel(b)
+    AUDIT['sources']['case_studies/results/gc_np_pc_reclustering/continuous_seed123_clone_map.csv']=len(cm)
+    AUDIT['gc_reclustering']={'primary':'continuous_seed123','n_clones':len(cm),
+        'job_id':json.loads((GC_DATA/'summary.json').read_text())['job_id'],
+        'graph_uses_gate_labels':False,'plot_colors':'Predominant measured compartment and mean Myc RNA',
+        'parameters':'case_studies/results/gc_np_pc_reclustering/continuous_seed123_parameters.json'}
+    state=p(fig,134,78,49,68,None,'Measured compartments\nand marker support (S8B–D)')
+    state.set_axis_off()
+    state.text(0,.95,'Myc+ LZ-biased families\nSelection-associated GC state\nHigher mean Myc RNA',va='top',fontsize=7,color=GREEN,linespacing=1.35)
+    state.text(0,.58,'PC-biased families\nPlasma-cell output state\nHigher plasma-cell module',va='top',fontsize=7,color=RED,linespacing=1.35)
+    state.text(0,.21,'LZ/DZ states lie between.\nState biases, not tracked fates;\nno direction assigned.',va='top',fontsize=6.5,color=INK,linespacing=1.4)
+    note(b,'GSE246382: 49 same-mouse sequence-defined families / 260 cells; ≥3 cells per family; area follows capture count.',-.10,6)
+    np_note=p(fig,0,176,55,33,None,'Separate reporter evidence')
+    np_note.set_axis_off()
+    np_note.text(0,.95,'NP-OVA division reporter\n36-hour H2B-mCherry window\n\nC: measured division bias\nD: receptor mutation history\n\nIndependent of the B cohort.',va='top',fontsize=6.8,linespacing=1.4)
+    for y,ds,title in [(176,'mouse_np','NP-OVA'),(235,'mouse_rbd','RBD')]:
         col='division_gate:mCherry-low'
-        if ds=='mouse_np':
-            a=p(fig,0,y,55,47,'B','NP-OVA d14: measured\nGC and output gates')
-            pal={'dark zone':BLUE,'light zone':GOLD,'Myc+ light zone':GREEN,'plasma cell':RED}
-            cell_map(a,'gc_np_pc','fate',pal)
-            legend(a,{'DZ':BLUE,'LZ':GOLD,'Myc+ LZ':GREEN,'PC':RED},ncol=2,y=-.13)
-        else:
-            a=p(fig,0,y,55,47,'E',f'{title}: cell division gate')
+        if ds=='mouse_rbd':
+            a=p(fig,0,y,55,31,'E',f'{title}: cell division gate')
             cell_map(a,ds,'division_gate',{'mCherry-high':GOLD,'mCherry-low':BLUE})
-        b=p(fig,64,y,53,47,'C' if ds=='mouse_np' else 'F','Which clones favour\nmore divisions?')
-        color_map(b,ds,col,'Fraction mCherry-low (≥6 divisions)')
-        c=p(fig,129,y,54,47,'D' if ds=='mouse_np' else 'G','Does mutation load explain\nthe same map?')
-        color_map(c,ds,'mutation_frequency','Mean V mutation frequency (clipped)',vmax=.03,cmap='magma')
-    h=p(fig,0,256,183,10,'H','How to read the three views')
-    h.set_axis_off();note(h,'B: GSE246382, independent NP-OVA output-sort study (Smart-seq2 / TRUST4); C/D: NP-OVA division reporter.\nE–G: RBD reporter cohorts. Clone maps compare state distributions; their coordinates are not lineage trees.',.5,6.2)
+        b=p(fig,64,y,53,31,'C' if ds=='mouse_np' else 'F',f'{title}: division-associated\nclone-state bias')
+        color_map(b,ds,col,'Fraction mCherry-low (≥6 divisions)',note_y=-.50)
+        c=p(fig,129,y,54,31,'D' if ds=='mouse_np' else 'G',f'{title}: mutation history\non the same clone map')
+        color_map(c,ds,'mutation_frequency','Mean V mutation frequency (clipped)',vmax=.03,cmap='magma',note_y=-.50)
     save(fig,'Figure_2');AUDIT['outputs'].append('Figure_2')
+
+
+def archived_panel(ax,name):
+    """Embed an unmodified author-supplied scientific panel and record its hash."""
+    asset=HERE/'assets'/name
+    ax.imshow(plt.imread(asset));ax.set_axis_off()
+    AUDIT.setdefault('archived_panels',{})[name]={'sha256':hashlib.sha256(asset.read_bytes()).hexdigest(),
+        'source_manifest':'assets/legacy_gc_provenance.json','new_analysis':False}
 
 
 def share_plot(ax):
@@ -642,15 +660,39 @@ def supplementary7():
     AUDIT['outputs'].append('Supplementary_7')
 
 
+def supplementary8():
+    from gc_reclustering_panels import cell_gates, myc_panel, markers, DATA as GC_DATA
+    fig=new_page('Supplementary Figure 8','Historical Top2a display and current model-antigen GC state evidence',
+                 'A is an archived output; B–D are audited real-data GSE246382 views with measured gates and descriptive RNA.',height=297)
+    a=p(fig,0,8,96,79,'A','Top2a on the historical clone map')
+    archived_panel(a,'legacy_notebook_clone_Top2a.png')
+    note(a,'Notebook cell 33 output; cohort and sampling day unresolved.',-.04,6)
+    b=p(fig,106,8,77,58,'B','GSE246382: measured cell compartments')
+    cell_gates(b)
+    note(b,'884 cells; saved cell UMAP, measured FACS gates.\nThese cells supply the frozen same-mouse families in Figure 2B.',-.18,6)
+    c=p(fig,0,116,96,55,'C','GSE246382: mean Myc expression per clone')
+    myc_panel(c)
+    note(c,'New clone coordinates, same 49 families as Figure 2B.\nMyc is averaged over captured members of each family.',-.25,6)
+    d=p(fig,111,113,72,77,'D','GSE246382: marker expression by captured state bias')
+    source=markers(d)
+    AUDIT.setdefault('gc_reclustering_tables',{})[str(source.relative_to(ROOT))]={
+        'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'values':'Mean RNA over clones grouped by predominant measured gate'}
+    e=p(fig,0,222,183,36,'E','Interpret the model-antigen GC nodes within their evidence')
+    e.set_axis_off()
+    e.text(0,.95,'New analysis: receptor-excluded PCA → clone centroids → precomputed-distance UMAP; continuous preset, seed 123.\nMyc+ LZ-biased families have higher Myc RNA; PC-biased families have higher plasma-cell expression modules.\nColour indicates captured compartment bias, not a learned fate class. Tied predominant gates are labelled mixed.\nThe primary Leiden graph gives one partition; its separated state biases are not validated discrete programmes.\nA is a separate historical display. B–D do not assign a differentiation direction or extend GC interpretation to non-GC.',
+               va='top',fontsize=6.7,linespacing=1.6)
+    save(fig,'Supplementary_8');AUDIT['outputs'].append('Supplementary_8')
+
+
 def main(biological_only=False):
     main_figures=[figure1,figure2,figure3,figure4,figure5]+([] if biological_only else [figure6])
-    supplements=[supplementary1,supplementary2,supplementary3,supplementary4,supplementary5,supplementary6]+([] if biological_only else [supplementary7])
+    supplements=[supplementary1,supplementary2,supplementary3,supplementary4,supplementary5,supplementary6]+([] if biological_only else [supplementary7])+[supplementary8]
     for f in main_figures+supplements+[tested_datasets]:f()
-    AUDIT['outputs']=[f'Figure_{i}' for i in range(1,6 if biological_only else 7)]+[f'Supplementary_{i}' for i in range(1,7 if biological_only else 8)]
+    AUDIT['outputs']=[f'Figure_{i}' for i in range(1,6 if biological_only else 7)]+[f'Supplementary_{i}' for i in range(1,7 if biological_only else 8)]+['Supplementary_8']
     AUDIT['benchmark_included']=not biological_only
     (HERE/'figure_audit.json').write_text(json.dumps(AUDIT,indent=2))
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument('--biological-only',action='store_true',help='Reproduce Figure1-5/S1-6 while native benchmark jobs are pending.')
+    parser.add_argument('--biological-only',action='store_true',help='Reproduce Figure1-5/S1-6/S8 while native benchmark jobs are pending.')
     main(parser.parse_args().biological_only)

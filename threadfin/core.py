@@ -19,20 +19,15 @@ import warnings
 import numpy as np
 import pandas as pd
 
+from ._utils import get_basis, require_positive_int
+from .reclustering import _resolve_parameters
+
 _CLONE_INFO_KEY = "threadfin_clones"
 _CLONE_MAP_KEY = "threadfin"
 
 
 def _get_matrix(adata, basis: str) -> np.ndarray:
-    if basis == "X":
-        x = adata.X
-        return x.toarray() if hasattr(x, "toarray") else np.asarray(x)
-    if basis not in adata.obsm:
-        raise KeyError(
-            f"'{basis}' not found in adata.obsm. Run an embedding first "
-            "(e.g. sc.tl.umap) or pass basis='X' / another key."
-        )
-    return np.asarray(adata.obsm[basis])
+    return get_basis(adata, basis)
 
 
 def clone_centroids(
@@ -71,9 +66,11 @@ def clone_centroids(
             "first (threadfin.attach_bcr) or provide your own clone column."
         )
 
+    require_positive_int(min_clone_size, "min_clone_size")
     coords = _get_matrix(adata, basis)
     clones = adata.obs[clone_key]
-    valid = clones.notna()
+    placeholders = clones.astype("string").str.strip().str.lower().isin(["", "nan", "none", "<na>"])
+    valid = clones.notna() & ~placeholders
     if valid.sum() == 0:
         raise ValueError(f"All values in adata.obs['{clone_key}'] are missing.")
 
@@ -160,14 +157,21 @@ def clonotype_recluster(
     clone_key: str = "clone_id",
     basis: str = "X_umap",
     min_clone_size: int = 3,
-    n_neighbors: int = 20,
-    resolution: float = 0.3,
+    n_neighbors: int | None = None,
+    resolution: float | None = None,
     cdr3_weight: float = 0.0,
     distances: np.ndarray | None = None,
     embed_clones: bool = True,
     random_state: int = 0,
     key_added: str = "clone_cluster",
     copy: bool = False,
+    *,
+    preset: str = "cohesive",
+    min_dist: float | None = None,
+    spread: float | None = None,
+    learning_rate: float | None = None,
+    umap_n_neighbors: int | None = None,
+    embedding_mode: str = "precomputed",
 ):
     """Cluster clonotypes by the transcriptional state of their member cells.
 
@@ -183,8 +187,9 @@ def clonotype_recluster(
     clone_key
         ``obs`` column holding the clonotype id.
     basis
-        Embedding used for centroids (``"X_umap"`` reproduces the original
-        manuscript; ``"X_pca"`` is more robust on noisy data). ``"joint"``
+        Embedding used for centroids (``"X_umap"`` uses cell-map coordinates;
+        ``"X_pca"`` avoids averaging a nonlinear display). This alone does
+        not reproduce the historical notebook pipeline. ``"joint"``
         uses the coupled GEX+BCR embedding in
         ``adata.uns['threadfin']['joint']``, computing it with default
         parameters via :func:`threadfin.integrate.joint_embedding` if absent.
@@ -192,9 +197,11 @@ def clonotype_recluster(
         Clonotypes with fewer cells are excluded from clustering (their cells
         receive ``NaN``). Singletons are mostly uninformative.
     n_neighbors
-        k for the clonotype kNN graph.
+        k for the clonotype kNN graph and, unless overridden, UMAP.
+        ``None`` uses the preset. Counts are capped at the number of clones
+        minus one; requested and effective settings are saved.
     resolution
-        Leiden resolution (higher = more clone clusters).
+        Leiden resolution (higher = more clone clusters); ``None`` uses the preset.
     cdr3_weight
         In ``[0, 1]``. If > 0, the transcriptional distance between clones is
         blended with their consensus-CDR3 Hamming distance:
@@ -214,6 +221,20 @@ def clonotype_recluster(
         Name of the ``obs`` column receiving the clone cluster label.
     copy
         Return a copy of ``adata`` instead of modifying in place.
+    preset
+        ``"cohesive"`` (legacy defaults), ``"continuous"`` (report-style
+        starting point) or ``"discrete"`` (finer local partitions).
+        These are exploratory settings, not learned biological categories.
+    min_dist, spread, learning_rate
+        UMAP controls; explicit values override the preset. They change the
+        display, not the Leiden partition, which uses the original distances.
+    umap_n_neighbors
+        Optional UMAP neighbour count independent of the clustering graph.
+    embedding_mode
+        ``"precomputed"`` embeds clone distances directly (default).
+        ``"distance_profiles"`` treats each distance-matrix row as Euclidean
+        features, as in the old notebook. This changes display geometry;
+        it does not reproduce its Scanpy graph or clone definitions.
 
     Returns
     -------
@@ -221,6 +242,21 @@ def clonotype_recluster(
     ``adata.uns['threadfin']['clone_map']`` (one row per clonotype: size,
     centroid, clone-cluster label, and embedding coordinates).
     """
+    settings = _resolve_parameters(
+        preset, n_neighbors=n_neighbors, resolution=resolution, min_dist=min_dist,
+        spread=spread, learning_rate=learning_rate,
+    )
+    n_neighbors, resolution = settings["n_neighbors"], settings["resolution"]
+    require_positive_int(min_clone_size, "min_clone_size")
+    if umap_n_neighbors is None:
+        umap_n_neighbors = n_neighbors
+    require_positive_int(umap_n_neighbors, "umap_n_neighbors")
+    if umap_n_neighbors < 2:
+        raise ValueError("umap_n_neighbors must be at least 2.")
+    if embedding_mode not in {"precomputed", "distance_profiles"}:
+        raise ValueError("embedding_mode must be 'precomputed' or 'distance_profiles'.")
+    if not np.isfinite(cdr3_weight) or not 0 <= cdr3_weight <= 1:
+        raise ValueError("cdr3_weight must be in [0, 1].")
     if copy:
         adata = adata.copy()
 
@@ -275,8 +311,15 @@ def clonotype_recluster(
     else:
         dist = d_gex
 
+    if (not np.isfinite(dist).all() or (dist < 0).any()
+            or not np.allclose(dist, dist.T) or not np.allclose(np.diag(dist), 0)):
+        raise ValueError("Clone distances must be finite, non-negative, symmetric, with a zero diagonal.")
+
+    graph_k = int(min(n_neighbors, n_clones - 1))
+    umap_k = int(min(umap_n_neighbors, n_clones - 1))
+
     labels = _leiden_on_distances(
-        dist, n_neighbors=n_neighbors, resolution=resolution, random_state=random_state
+        dist, n_neighbors=graph_k, resolution=resolution, random_state=random_state
     )
 
     clone_map = centroids.copy()
@@ -286,9 +329,11 @@ def clonotype_recluster(
     if embed_clones:
         import umap
 
-        k = int(min(n_neighbors, n_clones - 1))
         reducer = umap.UMAP(
-            n_neighbors=k, metric="precomputed", random_state=random_state
+            n_neighbors=umap_k,
+            metric="precomputed" if embedding_mode == "precomputed" else "euclidean",
+            min_dist=settings["min_dist"], spread=settings["spread"],
+            learning_rate=settings["learning_rate"], random_state=random_state,
         )
         clone_xy = reducer.fit_transform(dist)
         clone_map["x"] = clone_xy[:, 0]
@@ -304,7 +349,16 @@ def clonotype_recluster(
         "basis": basis,
         "min_clone_size": min_clone_size,
         "n_neighbors": n_neighbors,
+        "effective_n_neighbors": graph_k,
         "resolution": resolution,
+        "preset": preset,
+        "min_dist": settings["min_dist"],
+        "spread": settings["spread"],
+        "learning_rate": settings["learning_rate"],
+        "umap_n_neighbors": umap_n_neighbors,
+        "effective_umap_n_neighbors": umap_k,
+        "embedding_mode": embedding_mode,
+        "embed_clones": bool(embed_clones),
         "cdr3_weight": cdr3_weight,
         "random_state": random_state,
         "n_clones_clustered": int(n_clones),
