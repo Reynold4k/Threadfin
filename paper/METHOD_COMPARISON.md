@@ -1,6 +1,6 @@
 # 同类工具的任务、成熟证据与比较边界
 
-核查日期：2026-10-06。这里比较的是公开配对 scRNA/scBCR 分析工具，不宣称穷尽所有 V(D)J 重建、序列分析和单细胞整合软件。能力来自下列原始论文与官方代码；**能力表不是实际运行的性能分数**。单个任务没有适用输出，不能计为性能为零。
+核查日期：2026-10-08。这里比较的是公开配对 scRNA/scBCR 分析工具，不宣称穷尽所有 V(D)J 重建、序列分析和单细胞整合软件。能力来自下列原始论文与官方代码；**能力表不是实际运行的性能分数**。单个任务没有适用输出，不能计为性能为零。
 
 | 工具 | 最适合的问题 | 已有验证 / 官方实现 | 与 Threadfin 比较时需要统一的单位 |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | scRepertoire | 克隆配对、扩增、跨样本追踪及 Seurat/SCE 整合 | 第 2 版含实际速度/内存评估及应用实例，可衔接 Ibex 等工具。[原文](https://pmc.ncbi.nlm.nih.gov/articles/PMC12204475/)、[官方](https://github.com/BorchLab/scRepertoire) | annotation/sequence-clustering 与 joint latent learning 不同；“整合”也包括可靠的 metadata 接入。 |
 | Platypus | 受体特征、转录状态、SHM 和 repertoire 的统一工作流 | 原文有 COVID-19 配对数据应用。[原文](https://pmc.ncbi.nlm.nih.gov/articles/PMC8046018/)、[代码](https://github.com/alexyermanos/Platypus) | 统一输入、QC 与克隆定义后比较实际共同输出；不因没有本包特定 profile 统计量而认定不能整合。 |
 | clone2vec | 由表达邻域学习整个 clone 的表示 | 原生 skip-gram clone embedding；主要面向与 RNA 配对的 lineage tracing，不是专门的 BCR ancestry caller。[官方文档](https://clone2vec.readthedocs.io/en/latest/) | 可接收固定 BCR family 标签比较 clone representation；其原始条码来源与 BCR 推断家族要明确区分。 |
+| Clonotrace | 平滑的整克隆状态分布、最优传输距离、重复时间观察和状态内候选基因 | v1 preprint；人工谱系条码与 TCR 应用。[预印本](https://doi.org/10.1101/2025.09.01.673503)、[官方代码](https://github.com/yuntianf/Clonotrace) | 固定相同细胞和家族、同一时间信息及预测端点；比较完整原生流程。本文新 Figure 4/5 运行的是 Threadfin，不能称为 Clonotrace 性能对照。 |
 | Threadfin | family 内捕获状态分布、可靠性、上下文条件检验、重复采样状态保持 | 本稿的 reporter / GC infection / repeated human GC / pure-gate validation，并报告低覆盖和阴性结果 | sequence-only family、context-centred kernel distribution、reliability；未来命运、GC 再进入和定量 affinity 不属于已验证输出。 |
 
 ## 公平比较的关键决定
@@ -27,3 +28,5 @@
 6. 无直接 fate tracing 的公开数据不能评价真实 GC 再进入或最终分化准确率；本稿 benchmark 评价的是捕获状态解释力。
 
 Figure 6 借鉴 [Yan 等的 benchmark 论文](https://www.nature.com/articles/s43588-026-00977-z) 的任务分解、数据集概览、性能与适用性并列呈现方式。其空间配准指标不适用于 BCR，因此不移植其排行榜或数值。
+
+用户提供的《Threadfin与Clonotrace_大白话与六项开发方向》记载了一个固定版本、302 家族、10 项预设比较的实验，未显示 Threadfin 显著优越。用户确认原始输出来自另一台机器，无需追索；该报告仅作参考，不替代本仓库的可复现 benchmark。后续比较保留 RNA 均值，分别评价预测、分布误差、区间覆盖率、局部状态解释和总计算成本；不能用不同抽样次数推断普遍速度优势。

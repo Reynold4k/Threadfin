@@ -1,0 +1,938 @@
+{
+  "status": "passed",
+  "datasets": [
+    {
+      "dataset": "bone_marrow_pc",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "a50fa4532b275a0638f66265ff5c1c789be212df6853979c6f28b3df8b7abb42",
+      "rerun_summary_sha256": "295d8b901649a482b7d89d6ba439e93bd0ac96eaec0cde0ac51a120e8d2541d3",
+      "old_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 9783,
+        "n_cells": 31863,
+        "n_clones_with_assigned": 9783,
+        "stability": {
+          "P1": 0.803,
+          "P2": 0.75,
+          "P3": 0.283
+        },
+        "n_stable": 2
+      },
+      "new_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 9783,
+        "n_cells": 31863,
+        "n_clones_with_assigned": 9783,
+        "stability": {
+          "P1": 0.8,
+          "P2": 0.749,
+          "P3": 0.28
+        },
+        "n_stable": 1
+      },
+      "old_memory": {
+        "tissue": {
+          "n_clones": 109,
+          "n_pairs": 109,
+          "memory_index": 0.42063447856551106,
+          "memory_index_ci": [
+            0.32169200582860047,
+            0.5048890682220638
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.25688073394495414,
+          "persistence_null": 0.09981651376146788,
+          "levels": [
+            "blood",
+            "bone marrow"
+          ]
+        },
+        "sorted_as": {
+          "n_clones": 133,
+          "n_pairs": 133,
+          "memory_index": 0.05790015784729596,
+          "memory_index_ci": [
+            0.03066653580220312,
+            0.08658270610099654
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.06766917293233082,
+          "persistence_null": 0.05090225563909774,
+          "levels": [
+            "antigen-specific B cells",
+            "memory B cells",
+            "plasma cells",
+            "plasma cells and memory B cells",
+            "plasmablasts and memory B cells"
+          ]
+        }
+      },
+      "new_memory": {
+        "tissue": {
+          "n_clones": 109,
+          "n_pairs": 109,
+          "memory_index": 0.4039529315084357,
+          "memory_index_ci": [
+            0.3050406026071661,
+            0.4922851964070353
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.25688073394495414,
+          "persistence_null": 0.10211009174311926,
+          "levels": [
+            "blood",
+            "bone marrow"
+          ]
+        },
+        "sorted_as": {
+          "n_clones": 133,
+          "n_pairs": 133,
+          "memory_index": 0.055367036194295505,
+          "memory_index_ci": [
+            0.02773954275142176,
+            0.08518307676345904
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.06766917293233082,
+          "persistence_null": 0.04962406015037593,
+          "levels": [
+            "antigen-specific B cells",
+            "memory B cells",
+            "plasma cells",
+            "plasma cells and memory B cells",
+            "plasmablasts and memory B cells"
+          ]
+        }
+      },
+      "old_min_cells": 2,
+      "new_min_cells": 2
+    },
+    {
+      "dataset": "ebv",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "2ef45d11d3e7dddcc6e4a54f0c2f026c186a6c71cc3882bda1232b99f2f69994",
+      "rerun_summary_sha256": "493e6479137351e8705a45d4b29004b0214c69e5581aa6a9c7107986f91a575b",
+      "old_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 2314,
+        "n_cells": 37350,
+        "n_clones_with_assigned": 6499,
+        "stability": {
+          "P1": 0.461,
+          "P2": 0.388,
+          "P3": 0.152
+        },
+        "n_stable": 0
+      },
+      "new_programmes": {
+        "n": 2,
+        "resolution": 0.2,
+        "n_clones": 2314,
+        "n_cells": 37350,
+        "n_clones_with_assigned": 6604,
+        "stability": {
+          "P1": 0.726,
+          "P2": 0.559
+        },
+        "n_stable": 0
+      },
+      "old_memory": {
+        "timepoint": {
+          "n_clones": 85,
+          "n_pairs": 134,
+          "memory_index": 0.30754719509352746,
+          "memory_index_ci": [
+            0.21418568331570106,
+            0.4011606868459734
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.7761194029850746,
+          "persistence_null": 0.4287313432835822,
+          "levels": [
+            "d0",
+            "d4",
+            "d7",
+            "d14",
+            "d21"
+          ]
+        },
+        "gfp": {
+          "n_clones": 1355,
+          "n_pairs": 1355,
+          "memory_index": 0.3291713034033873,
+          "memory_index_ci": [
+            0.30789409344484825,
+            0.3538795412656638
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.46420664206642065,
+          "persistence_null": 0.25903321033210336,
+          "levels": [
+            "GFP+",
+            "GFP-"
+          ]
+        }
+      },
+      "new_memory": {
+        "timepoint": {
+          "n_clones": 85,
+          "n_pairs": 134,
+          "memory_index": 0.3096009418322426,
+          "memory_index_ci": [
+            0.22569415462200343,
+            0.3961645283414831
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.8955223880597015,
+          "persistence_null": 0.5119402985074628,
+          "levels": [
+            "d0",
+            "d4",
+            "d7",
+            "d14",
+            "d21"
+          ]
+        },
+        "gfp": {
+          "n_clones": 1355,
+          "n_pairs": 1355,
+          "memory_index": 0.3560298598557611,
+          "memory_index_ci": [
+            0.3359833253889491,
+            0.38081252828658824
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.8125461254612546,
+          "persistence_null": 0.5347084870848708,
+          "levels": [
+            "GFP+",
+            "GFP-"
+          ]
+        }
+      },
+      "old_min_cells": 6,
+      "new_min_cells": 5
+    },
+    {
+      "dataset": "flu",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "b1bf49a7e34f7cd710f7f4a6803a1d5ec80f35b2eca6130faafd3ed7720fddf2",
+      "rerun_summary_sha256": "e37373713032486debc12cee9c4f4768337a9416a3bb5f044663d89b529b9622",
+      "old_programmes": {
+        "n": 4,
+        "resolution": 0.2,
+        "n_clones": 1997,
+        "n_cells": 5335,
+        "n_clones_with_assigned": 1997,
+        "stability": {
+          "P1": 0.686,
+          "P2": 0.597,
+          "P3": 0.666,
+          "P4": 0.802
+        },
+        "n_stable": 1
+      },
+      "new_programmes": {
+        "n": 4,
+        "resolution": 0.2,
+        "n_clones": 1997,
+        "n_cells": 5335,
+        "n_clones_with_assigned": 1997,
+        "stability": {
+          "P1": 0.841,
+          "P2": 0.808,
+          "P3": 0.912,
+          "P4": 0.841
+        },
+        "n_stable": 4
+      },
+      "old_memory": {
+        "timepoint": {
+          "n_clones": 21,
+          "n_pairs": 21,
+          "memory_index": 0.9988358561350467,
+          "memory_index_ci": [
+            0.9400584336449286,
+            1.0538425891340364
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.9523809523809523,
+          "persistence_null": 0.490952380952381,
+          "levels": [
+            "d0",
+            "d7"
+          ]
+        }
+      },
+      "new_memory": {
+        "timepoint": {
+          "n_clones": 21,
+          "n_pairs": 21,
+          "memory_index": 1.0018696844527832,
+          "memory_index_ci": [
+            0.944963714828259,
+            1.0603914282246827
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.9523809523809523,
+          "persistence_null": 0.5152380952380952,
+          "levels": [
+            "d0",
+            "d7"
+          ]
+        }
+      },
+      "old_min_cells": 1,
+      "new_min_cells": 1
+    },
+    {
+      "dataset": "flu_lung",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "effc6bc6a018443fe999d54ba1defc4dfb8ee20663963d741e8c51e1b5b6b1a8",
+      "rerun_summary_sha256": "d8c1c13e4f93ed141ca2dd76121297bdb3922171bc59a3304d1bb38ad744697f",
+      "old_programmes": {
+        "n": 1,
+        "n_clones": 55,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "new_programmes": {
+        "n": 1,
+        "n_clones": 55,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "old_memory": {
+        "ha_binding": {
+          "n_clones": 36,
+          "n_pairs": 50,
+          "memory_index": 0.39903617880468734,
+          "memory_index_ci": [
+            -0.10872102011781251,
+            0.9085610733050634
+          ],
+          "p_value": 0.041916167664670656,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "Cal09HA",
+            "PR8HA",
+            "both strains",
+            "non-binding"
+          ]
+        }
+      },
+      "new_memory": {
+        "ha_binding": {
+          "n_clones": 36,
+          "n_pairs": 47,
+          "memory_index": 0.31835308883001834,
+          "memory_index_ci": [
+            -0.356445435107711,
+            0.8262718002521466
+          ],
+          "p_value": 0.1497005988023952,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "Cal09HA",
+            "PR8HA",
+            "both strains",
+            "non-binding"
+          ]
+        }
+      },
+      "old_min_cells": 8,
+      "new_min_cells": 5
+    },
+    {
+      "dataset": "gc_np_pc",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "2c3af44baf70701720132c39943282fddbea6474b20e27887b28dff6c24b1eba",
+      "rerun_summary_sha256": "1b2a59ca46691fe7c9d5ae2d795baa465013da954081a950ef269aa0f9ccc0f5",
+      "old_programmes": {
+        "n": 0,
+        "note": "Only 3 clones reach reliability 0.5 (need 30); too few expanded clones to define programmes. Report the coherence test only, or lower min_reliability."
+      },
+      "new_programmes": {
+        "n": 0,
+        "note": "Only 3 clones reach reliability 0.5 (need 30); too few expanded clones to define programmes. Report the coherence test only, or lower min_reliability."
+      },
+      "old_memory": {},
+      "new_memory": {},
+      "old_min_cells": 23,
+      "new_min_cells": 8
+    },
+    {
+      "dataset": "ln_vaccine",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "8e45657a3b488f399e7d7d3bed5f85b003251d44e94acb2e294cc80277485339",
+      "rerun_summary_sha256": "e53b1703a3868a69ff3a314b477a27d628912edaa84c631f6cf15c30bf9e59be",
+      "old_programmes": {
+        "n": 4,
+        "resolution": 0.4,
+        "n_clones": 4429,
+        "n_cells": 59845,
+        "n_clones_with_assigned": 8375,
+        "stability": {
+          "P1": 0.774,
+          "P2": 0.896,
+          "P3": 0.555,
+          "P4": 0.656
+        },
+        "n_stable": 2
+      },
+      "new_programmes": {
+        "n": 4,
+        "resolution": 0.2,
+        "n_clones": 4429,
+        "n_cells": 59845,
+        "n_clones_with_assigned": 8355,
+        "stability": {
+          "P1": 0.74,
+          "P2": 0.906,
+          "P3": 0.546,
+          "P4": 0.786
+        },
+        "n_stable": 2
+      },
+      "old_memory": {
+        "timepoint": {
+          "n_clones": 420,
+          "n_pairs": 503,
+          "memory_index": 0.2599828900545247,
+          "memory_index_ci": [
+            0.2009944598066403,
+            0.3129664207326655
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.5168986083499006,
+          "persistence_null": 0.3794433399602386,
+          "levels": [
+            "d28",
+            "d28+d35",
+            "d35",
+            "d60",
+            "d110",
+            "d201"
+          ]
+        },
+        "tissue": {
+          "n_clones": 159,
+          "n_pairs": 159,
+          "memory_index": -0.008253989064895384,
+          "memory_index_ci": [
+            -0.028966843241174704,
+            0.012157218954262394
+          ],
+          "p_value": 0.7385229540918163,
+          "persistence": 0.012578616352201259,
+          "persistence_null": 0.013962264150943395,
+          "levels": [
+            "LN",
+            "blood"
+          ]
+        }
+      },
+      "new_memory": {
+        "timepoint": {
+          "n_clones": 420,
+          "n_pairs": 503,
+          "memory_index": 0.2548173210349379,
+          "memory_index_ci": [
+            0.19542607502322065,
+            0.30935538276207497
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": 0.4831013916500994,
+          "persistence_null": 0.34900596421471186,
+          "levels": [
+            "d28",
+            "d28+d35",
+            "d35",
+            "d60",
+            "d110",
+            "d201"
+          ]
+        },
+        "tissue": {
+          "n_clones": 159,
+          "n_pairs": 159,
+          "memory_index": -0.011069118246957332,
+          "memory_index_ci": [
+            -0.029546034451217684,
+            0.005700985523720343
+          ],
+          "p_value": 0.8622754491017964,
+          "persistence": 0.012578616352201259,
+          "persistence_null": 0.012893081761006288,
+          "levels": [
+            "LN",
+            "blood"
+          ]
+        }
+      },
+      "old_min_cells": 3,
+      "new_min_cells": 2
+    },
+    {
+      "dataset": "malaria",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "4c376c5cf569e7e5f00a0b29a2dbe1303748d1aeca743894cae4b8fda72ddab1",
+      "rerun_summary_sha256": "d0506a4cf505cbdc72b25061a52a1a94a96bdc09845f9a7ae91f46f18c1c05bf",
+      "old_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 801,
+        "n_cells": 1846,
+        "n_clones_with_assigned": 801,
+        "stability": {
+          "P1": 0.814,
+          "P2": 0.84,
+          "P3": 0.133
+        },
+        "n_stable": 2
+      },
+      "new_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 801,
+        "n_cells": 1846,
+        "n_clones_with_assigned": 801,
+        "stability": {
+          "P1": 0.879,
+          "P2": 0.803,
+          "P3": 0.518
+        },
+        "n_stable": 2
+      },
+      "old_memory": {},
+      "new_memory": {},
+      "old_min_cells": 1,
+      "new_min_cells": 1
+    },
+    {
+      "dataset": "malaria_late",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "b32203096d6b4a47850055296170e8d0bcc49aebb6247d86db52b273f2c2eb11",
+      "rerun_summary_sha256": "afc55fc483d1ab8408bac1f632b2a69b4fa0a84032d2701e34e8386fe0ccdccb",
+      "old_programmes": {
+        "n": 7,
+        "resolution": 0.6,
+        "n_clones": 1183,
+        "n_cells": 2859,
+        "n_clones_with_assigned": 1183,
+        "stability": {
+          "P1": 0.49,
+          "P2": 0.692,
+          "P3": 0.45,
+          "P4": 0.167,
+          "P5": 0.807,
+          "P6": 0.272,
+          "P7": 0.077
+        },
+        "n_stable": 1
+      },
+      "new_programmes": {
+        "n": 3,
+        "resolution": 0.2,
+        "n_clones": 1183,
+        "n_cells": 2859,
+        "n_clones_with_assigned": 1183,
+        "stability": {
+          "P1": 0.8,
+          "P2": 0.703,
+          "P3": 0.792
+        },
+        "n_stable": 2
+      },
+      "old_memory": {},
+      "new_memory": {},
+      "old_min_cells": 2,
+      "new_min_cells": 2
+    },
+    {
+      "dataset": "mouse_np",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "e0af0e256d8b7f3d2b0434fb0c22967a89deca511423cb59efd6db991ae5efe6",
+      "rerun_summary_sha256": "6b226aed1a54624e97aaa445587ff14ed7c28c3d3af92f44ef13717fe410e520",
+      "old_programmes": {
+        "n": 1,
+        "n_clones": 69,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "new_programmes": {
+        "n": 1,
+        "n_clones": 69,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "old_memory": {
+        "division_gate": {
+          "n_clones": 70,
+          "n_pairs": 70,
+          "memory_index": 0.27758472174465265,
+          "memory_index_ci": [
+            0.030420745083560755,
+            0.4949617565401331
+          ],
+          "p_value": 0.015968063872255488,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "mCherry-high",
+            "mCherry-low"
+          ]
+        }
+      },
+      "new_memory": {
+        "division_gate": {
+          "n_clones": 70,
+          "n_pairs": 70,
+          "memory_index": 0.31631901691777553,
+          "memory_index_ci": [
+            0.06300416439953922,
+            0.5660939215641162
+          ],
+          "p_value": 0.005988023952095809,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "mCherry-high",
+            "mCherry-low"
+          ]
+        }
+      },
+      "old_min_cells": 10,
+      "new_min_cells": 10
+    },
+    {
+      "dataset": "mouse_rbd",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "d550794be708122bb7e8bc759d2307e1a112114483e9893142ef55211f940fbf",
+      "rerun_summary_sha256": "d0330a4aaaef878c81c8097d31db64c34bb0403f677ff476ab4e1bf08f0c960c",
+      "old_programmes": {
+        "n": 1,
+        "n_clones": 381,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "new_programmes": {
+        "n": 1,
+        "n_clones": 381,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "old_memory": {
+        "division_gate": {
+          "n_clones": 173,
+          "n_pairs": 173,
+          "memory_index": 0.4703064305333109,
+          "memory_index_ci": [
+            0.3447771417744971,
+            0.5999505293348516
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "mCherry-high",
+            "mCherry-low"
+          ]
+        },
+        "rbd_bait": {
+          "n_clones": 105,
+          "n_pairs": 105,
+          "memory_index": 0.493961308560516,
+          "memory_index_ci": [
+            0.33448549806415817,
+            0.6543504415667614
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "RBD+",
+            "RBD-"
+          ]
+        },
+        "zone_gate": {
+          "n_clones": 57,
+          "n_pairs": 57,
+          "memory_index": 0.5331095897248088,
+          "memory_index_ci": [
+            0.3230052471172644,
+            0.7252343665106
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "DZ",
+            "LZ"
+          ]
+        }
+      },
+      "new_memory": {
+        "division_gate": {
+          "n_clones": 173,
+          "n_pairs": 173,
+          "memory_index": 0.473453728404449,
+          "memory_index_ci": [
+            0.3475016479594484,
+            0.6083808993761556
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "mCherry-high",
+            "mCherry-low"
+          ]
+        },
+        "rbd_bait": {
+          "n_clones": 105,
+          "n_pairs": 105,
+          "memory_index": 0.5314968815310207,
+          "memory_index_ci": [
+            0.39263406280733837,
+            0.6780460217892815
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "RBD+",
+            "RBD-"
+          ]
+        },
+        "zone_gate": {
+          "n_clones": 57,
+          "n_pairs": 57,
+          "memory_index": 0.5128497558606075,
+          "memory_index_ci": [
+            0.32171997509205313,
+            0.7205435631505508
+          ],
+          "p_value": 0.001996007984031936,
+          "persistence": null,
+          "persistence_null": null,
+          "levels": [
+            "DZ",
+            "LZ"
+          ]
+        }
+      },
+      "old_min_cells": 6,
+      "new_min_cells": 6
+    },
+    {
+      "dataset": "stephenson",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "baa58662737d501d57ca25ff5621daeb38fa091aa1315eb4d05f0d807efea658",
+      "rerun_summary_sha256": "045991cfe7175a0d23ca9abcaac2306fb14f0a2798a862509517d3959f8706b3",
+      "old_programmes": {
+        "n": 2,
+        "resolution": 0.6,
+        "n_clones": 83,
+        "n_cells": 326,
+        "n_clones_with_assigned": 83,
+        "stability": {
+          "P1": 0.751,
+          "P2": 0.501
+        },
+        "n_stable": 1
+      },
+      "new_programmes": {
+        "n": 2,
+        "resolution": 0.6,
+        "n_clones": 83,
+        "n_cells": 326,
+        "n_clones_with_assigned": 83,
+        "stability": {
+          "P1": 0.899,
+          "P2": 0.856
+        },
+        "n_stable": 2
+      },
+      "old_memory": {},
+      "new_memory": {},
+      "old_min_cells": 2,
+      "new_min_cells": 1
+    },
+    {
+      "dataset": "tonsil",
+      "identities_equal": true,
+      "capture_counts_equal": true,
+      "reliable_family_set_equal": true,
+      "preserved_coordinates": {
+        "clone_table.csv": [
+          "x",
+          "y"
+        ],
+        "cells.csv.gz": [
+          "umap_1",
+          "umap_2"
+        ]
+      },
+      "original_summary_sha256": "5884ba343a3902f0914e2d955a49a09c86d12b541d0cca3e5bcfa598a768c289",
+      "rerun_summary_sha256": "a0ff7d3e47f657607cc840d0e3eb90ba4333886e3b289ea4d4e7031ceb16873d",
+      "old_programmes": {
+        "n": 1,
+        "n_clones": 75,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "new_programmes": {
+        "n": 1,
+        "n_clones": 75,
+        "note": "no distinct programmes: clones vary along a continuum"
+      },
+      "old_memory": {},
+      "new_memory": {},
+      "old_min_cells": 6,
+      "new_min_cells": 5
+    }
+  ],
+  "note": "Published maps retain their previous display coordinates after identity, capture and eligibility checks. Fresh diagnostic PNGs use rerun coordinates. Statistical estimates and programme annotations come from the corrected algorithms.",
+  "retained_independent_annotations": {
+    "ebv": [
+      "gfp"
+    ],
+    "flu": [
+      "timepoint"
+    ],
+    "ln_vaccine": [
+      "tissue"
+    ]
+  }
+}

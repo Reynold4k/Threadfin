@@ -5,35 +5,11 @@ Chen Zhu
 
 Department of Microbiology and Immunology, Peter Doherty Institute for Infection and Immunity, The University of Melbourne, Melbourne, Australia
 
-Review draft, 6 October 2026. RBD native benchmark and Figure 6/S7 remain pending. Additional authors, corresponding-author details, funding and declarations require author confirmation. This draft follows the formatting and numbered-reference conventions of the supplied progress-review document.
+Draft 5, 9 October 2026. Additional authors, corresponding-author details, funding and declarations require author confirmation. This draft follows the formatting and numbered-reference conventions of the supplied progress-review document.
 
 ## Abstract
 
-Germinal-centre B cells repeatedly alternate between selection and division,
-while related cells may occupy different expression states. Paired single-cell
-RNA and B-cell receptor sequencing records both receptor similarity and
-current state, but these measurements need not describe the same biology.
-Threadfin compares the distributions of states occupied by BCR-defined clones,
-allowing clone-level biases to be interpreted without equating an expression
-map with a lineage tree. Real-data reclustering of 49 same-mouse NP-OVA families
-distinguishes Myc-positive light-zone-associated GC state bias from
-plasma-cell output-associated bias. Measured gates and RNA markers anchor
-the interpretation without assigning future fate. In NP-OVA and RBD division-reporter experiments,
-clone profiles vary continuously and are associated most strongly with measured
-division history; BCR mutation load provides different information. In
-*Plasmodium* infection, same-mouse clones co-occupy author-annotated GC,
-plasmablast and memory-like states. We evaluate that co-occupancy against
-mouse-, clone-size- and isotype-preserving controls and conservative exact
-heavy/light receptor matching. Shared-state families are observed, but GC–PB
-co-occupancy does not show consistent enrichment beyond isotype-preserving
-expectations. A longitudinal human vaccination cohort adds
-repeat GC-containing clone sampling, while one marrow/blood model detects
-identical heavy/light receptors across pure plasma-cell and memory-cell sorts.
-These analyses distinguish clonal membership, phenotypic breadth and state
-persistence. They prioritise biologically interpretable clone relationships;
-future cell fate and memory GC re-entry remain hypotheses requiring direct
-experimental testing. The selection/output interpretation is restricted to
-model-antigen GC responses and is not transferred to non-GC samples.
+Germinal-centre B cells can share a receptor family while occupying different expression states. Threadfin summarises these captured state distributions using receptor-excluded expression profiles, context adjustment and sampling-dependent shrinkage. Applications to model-antigen and Plasmodium responses distinguish clone membership, state occupancy and measured division history without equating an expression map with a lineage tree. We then test the framework beyond BCR-defined families. In lineage-barcoded mouse haematopoiesis, a separate day-2 expression model predicts later observed state composition for 172 eligible barcodes, with modest improvements over RNA means on some endpoints. Longitudinal profiles of 124,534 cells with unambiguous paired TCRs from ten patients retain same-clone state similarity relative to patient-, interval- and capture-matched comparisons. Independent reporter readouts favour simple RNA means over Threadfin on the division endpoint, whereas disjoint-cell validation shows that shrinkage reduces low-capture profile estimation error by 27% when two cells are sampled. These complementary tests support sampling-aware descriptions of clone-state distributions and identify where additional representation complexity helps. They do not establish BCR differentiation direction, complete developmental potential or clinical response prediction.
 
 ## Introduction
 
@@ -98,16 +74,32 @@ relationship; it does not identify which cell produced the other. A reliable
 state-retention estimate requires separate snapshots of the same donor's
 family. We use different experiments for these different questions.
 
-The three panels of Figure 1 provide a continuous reading of those records.
-Panel A sets the GC selection, expansion and output compartments. Panel B
-follows the same illustrative cells: colour identifies cell state, receptor
-sequence defines family membership, and a family profile retains the mixture
-of states occupied by its members. One point in the clone map represents one
-family; neighbouring points have similar captured RNA-state distributions.
-The state-composition rings are teaching diagrams, rather than the numerical
-kernel features. Panel C connects four possible uses to their experimental
-anchors: division reporters, same-mouse GC/output co-occupancy, repeated
-same-donor capture and a family-label shuffle control.
+Figure 1 makes this integration explicit in one concept diagram. A compact
+three-cluster scRNA-seq map describes cellular expression states, while membrane
+BCR, paired heavy/light contigs and separately rooted receptor-family trees
+illustrate the sequence information. RNA-cluster colours and receptor-family
+colours encode different memberships; they are not matched one-to-one. Both
+measurements connect through the extended fin filaments of a cartoon
+threadfin fish, which represents integrated clone embeddings. Its double-peak
+sketch illustrates RNA distributions; the Fréchet-mean label describes the
+unshrunk mean of RNA feature vectors under squared feature-space distance.
+The implemented profiles additionally use context adjustment, reliability-dependent
+shrinkage and projection; this is not an optimal-transport solver.
+Two further filaments connect to complementary patterns. The upper pseudo-UMAP links
+cycling, selection-associated and output-like family states, motivating the
+model-antigen GC analysis in Figure 2. A gold outline highlights the selection
+node. Its dashed return to cycling marks a recycling hypothesis; snapshots
+alone cannot distinguish progression from return. The lower, more linear map
+uses a vivid blue–teal–amber–rose gradient to illustrate continuous
+cycling-to-output profile variation, motivating
+Figure 3's maturation questions without transferring a selection-node
+interpretation to infection data. All clone dots are circles, with synthetic
+captured-cell counts controlling their area. Larger central dots are a
+compositional choice, not a rule connecting UMAP centrality to clone size.
+Every coordinate, count and tree branch is illustrative: the studies are not
+pooled, and no phylogeny or temporal trajectory is estimated by this diagram.
+The default numerical profiles use RNA kernel features with context adjustment
+and reliability-dependent shrinkage.
 
 Profile reliability prevents very small repertoires from yielding unsupported
 programme claims. The direct NP-OVA GC/plasma-cell dataset contains 884
@@ -115,44 +107,56 @@ captured cells, 762 with a called receptor, and 388 cells in 113 expanded
 clones. Only three profiles reach reliability 0.5. Its coherence test is not
 significant (p=0.224), and programme inference is declined. The direct sort
 labels remain useful for descriptive clone examples, without validating a
-future-fate model (Supplementary Figure 1). The centroid-based exploration shown next uses 49 of these same-mouse
-families with at least three captured cells. Descriptive state bias in that
+future-fate model (Supplementary Figure 1). The centroid-based exploration shown next uses 377 donor-restricted
+V–D–J receptor groups with at least one captured cell from the same cohort.
+Descriptive state bias in that
 map is kept separate from reliability-filtered programme inference.
 
 ### In controlled GC models, clone reclustering distinguishes captured GC and output state biases
 
 The independent day-14 NP-OVA GC/output-sort dataset, GSE246382, samples
 light-zone, dark-zone, Myc-positive light-zone and plasma-cell compartments
-(2). Figure 2B shows newly calculated clone embedding and
-unsupervised Leiden reclustering, following the geometry/graph steps executed
-in the author's earlier notebook. Raw counts
-are aligned to the frozen donor-restricted, sequence-defined family calls.
-One point represents one of 49 families with at least three cells, covering
-260 captured cells across the original 11-mouse experiment. Clone centres
-are means of the saved receptor-excluded cell UMAP. Euclidean UMAP embeds
-the rows of their pairwise distance matrix (20 neighbours, min_dist 0.4,
-seed 123), followed by a Scanpy graph on clone coordinates (15 neighbours)
-and Leiden at resolution 0.3. Colours represent the resulting clone_cluster,
-and point area follows captured clone size. These historical settings are
-fixed before inspecting gates or markers. Three alternative presets and
-seeds 123/7 are retained for review.
+(2). Figure 2B shows a newly calculated reconstruction of the
+historical clone-embedding workflow. Its 377 points are donor-restricted
+productive IGH V–D–J receptor groups, retaining at least one captured cell
+and covering 762 receptor-called cells from 11 mice. This historical-style
+receptor grouping differs from the 487 stricter same-mouse V/J/junction-sequence
+families used by the main case-study pipeline: 83 of the 377 V–D–J groups
+contain more than one distinct junction nucleotide sequence. Accordingly,
+these points are receptor groups and are not assumed to be individual
+sequence-defined clonal lineages.
 
-The primary embedding yields three clone clusters with identical membership
-at seeds 123 and 7. Post-clustering annotation distinguishes GC and output
-biases (Supplementary Figure 8B–D). Cluster 1 has mean family-level capture
-fractions of 42% Myc-positive LZ and 21% DZ, with mean clone-averaged Myc RNA
-of 0.816 log-normalised units. Cluster 0 has 47% PC and 48% LZ capture,
-lower Myc RNA (0.292) and higher plasma-cell-module expression. Cluster 2
-contains mixed GC/output states. These observations identify a
-selection-associated GC state group and a contrasting output-enriched group,
-while retaining their within-group mixtures. They do not show that one clone
-traversed a selection junction and subsequently took one of two fates.
-The continuous preset yields two partitions and the cohesive/discrete presets
-four; none constitutes validated programme inference in this sparsely
-sampled dataset. The cluster map and its post hoc marker interpretation remain
-distinct from the v4 reliability/coherence results.
-This model-antigen GC application is not used to assign selection nodes or
-GC output routes in non-GC data.
+The cell UMAP is reconstructed from the notebook code; group centres are
+means of those cell coordinates, accumulated in float64 by the package. Euclidean UMAP embeds the rows of their
+pairwise distance matrix (40 neighbours, min_dist 0.65, seed 123), followed
+by a Scanpy graph on group coordinates (15 neighbours) and Leiden at
+resolution 0.3 (seed 0). Colours denote clone_cluster and point area is
+proportional to captured cell count. This display was chosen through an
+exploratory comparison of inputs and layout parameters. It retains one
+15-neighbour graph component and six Leiden groups across seven UMAP seeds
+(0/1/7/42/99/123/2024), with median pairwise adjusted Rand index 0.877
+(range minimum 0.701). The minimum local neighbourhood trustworthiness across those seeds is
+approximately 0.994. It is not the most stable tested configuration: the
+historical 20-neighbour/min_dist 0.4 donor-restricted V–D–J control has
+median adjusted Rand index 0.989. All 164 computed maps and the seed
+comparisons are retained; no cluster-count target was used as a success criterion.
+
+Post-clustering annotation identifies captured GC and output-associated
+states (Supplementary Figure 8B–E). Clusters 0 and 1 have mean group-level
+LZ fractions of 65% and 74%, respectively, with DZ fractions of about 26%.
+Cluster 3 has 80% Myc-positive-LZ capture and the highest group-averaged Myc
+RNA (1.36 log-normalised units); cluster 2 has 97% plasma-cell capture and
+higher Prdm1/Xbp1/Jchain expression. Cluster 5 mixes Myc-positive-LZ (50%)
+and plasma-cell (29%) capture, while the larger receptor groups in cluster 4
+collect cells across all four measured compartments. These observations
+support descriptive GC-state annotations, including a selection-associated
+Myc-positive-LZ region. The RNA markers reuse the expression measurements
+and are not independent validation. Neither the two-dimensional connections
+nor these annotations establish a temporal junction, two future fates or
+co-occupancy by one verified sequence-defined clone. This exploratory map is
+separate from v4 reliability-filtered programme inference and its non-significant
+coherence result in this sparsely sampled dataset. Selection/output
+interpretation is restricted to this model-antigen GC application.
 
 The original notebook also preserves a Top2a-coloured clone map
 (Supplementary Figure 8A). Public GSE180920 day-7/day-14 count and metadata
@@ -164,15 +168,56 @@ output and excluded from GSE246382 biological conclusions. The archived
 report fork remains an accessible reference, not the source of the new
 Figure 2B points or marker values.
 
-The model-antigen reporter study provides independent measurements of what a
-GC cell recently did (1). The NP-OVA cohort uses a 36-hour
-H2B-mCherry dilution window before day-14 lymph-node collection. The two RBD
-vaccine cohorts add antigen-probe binding or light/dark-zone gates. These are
-separately sequenced sort libraries and independent protein/mRNA cohorts
-(Figure 2A). Reporter maps compare the fraction captured in the mCherry-low
-gate with V-region mutation frequency on the same saved family coordinates
-(Figure 2C–G); their coordinates are not aligned to the independent
-GSE246382 map.
+The model-antigen reporter study, GSE287123, provides independent measurements
+of recent GC-cell division history (1). The NP-OVA cohort uses a
+36-hour H2B-mCherry dilution window before day-14 lymph-node collection. The
+two RBD vaccine cohorts add antigen-probe binding or light/dark-zone gates.
+These are separately sequenced sort libraries and independent protein/mRNA
+cohorts (Figure 2A). The RBD cell map supplies measured-gate context
+(Figure 2C); the corresponding family maps show mCherry-low fraction and
+V-region mutation frequency on the same saved coordinates (Figure 2D,E).
+These 381 reliable families use donor-private IGH junction sequence similarity,
+rather than the broader V–D–J grouping used in the independent GSE246382
+reconstruction. The kernel-profile UMAP retains 15 neighbours, min_dist 0.1,
+spread 1 and seed 0; the two studies' coordinates are not aligned.
+
+Reconstruction reproduced the RBD default coordinates to within 4.8×10⁻⁷.
+Across 85 UMAP settings, the linear association of map coordinates with the
+measured division fraction remained modest but stable (R²=0.142–0.170).
+SHM had a weaker global linear association (R²=0.008–0.040), while local
+association was still detectable under 70 of the 85 configurations at
+nominal p≤0.05. A weak global SHM gradient is therefore not evidence that
+mutation history is unrelated to expression state. These exploratory
+donor-stratified permutation tests are not corrected for parameter selection
+and do not resolve gate-specific library effects. The maps illustrate
+biological associations, without establishing an advantage over simpler
+family expression summaries.
+
+The biological interpretation depends on the timescale of each measurement.
+H2B-mCherry dilution reports recent division over the 36-hour observation
+window, whereas V-region mutation frequency measures accumulated sequence
+divergence. The original reporter study identified mutation-free expansion
+and regulated mutation per division using additional sequence and experimental
+evidence (1). Our two colour overlays do not estimate that rate.
+They show that captured proliferative state and accumulated receptor history
+provide partly distinct information, without identifying a new mechanism.
+
+We tested this interpretation outside the two-dimensional map. Among all
+1,414 expanded RBD families, median capture was three cells; the 381 families
+displayed after reliability filtering had a median of eleven. Conditioning on
+mouse, capture size and the additional binding/zone gate retained a positive
+dark-zone/cycling RNA association with division fraction in nine of ten mice
+(median partial rank correlation 0.320; Supplementary Figure 16). This module
+reuses the RNA input and the association was weaker in the mRNA arm.
+For 218 families with at least two cells in each division gate within the same
+additional sort gate, we compared mean SHM between the low and high mCherry
+fractions. The equal-mouse difference was +0.083 percentage points in the
+protein arm and −0.050 percentage points in the mRNA arm, with descriptive
+mouse-bootstrap intervals spanning zero in both arms. These data do not establish
+absence of a relationship, but do not support a consistent monotonic SHM
+increase with recent division. Intermediate mCherry cells were not sampled
+in this comparison, so captured gate fractions are not in-vivo population
+proportions. Division gate and sequencing library remain confounded.
 
 Clone identity explains 9.3% and 14.5% of expression variation in the NP-OVA
 and RBD datasets, compared with within-library shuffled values of 3.5% and
@@ -192,7 +237,7 @@ member of the family will divide or return to selection.
 
 Related cells can occupy both division gates or both GC zones
 (Supplementary Figure 2). In RBD experiments, clone-state retention is 0.47
-across division gates, 0.49 across probe-binding status and 0.53 across LZ/DZ
+across division gates, 0.53 across probe-binding status and 0.51 across LZ/DZ
 sorts. These are cross-gate comparisons of the captured family; they do not
 observe a round trip of one cell through the selection cycle.
 
@@ -223,6 +268,37 @@ Across the later experiment, the corresponding family counts are 145, 33 and
 The very sparse early GC/memory-like overlap limits claims about early-memory
 relationships to the GC.
 
+The early-infection clone map (Figure 3B) shows PB-biased profiles, while
+the enlarged later-infection map (Figure 3C) displays GC-, PB- and
+memory-enriched family regions against the cell-state context in Figure 3D.
+The later display retains the selected 50-neighbour, min_dist 0.5 UMAP;
+neighbourhoods represent profile similarity rather than ancestors or
+descendants. Pure-state family clustering is an expected consequence of
+shared expression, rather than an independent biological discovery.
+
+Within 329 early families whose captured cells are all annotated PB,
+distance from the two-dimensional centre of GC-enriched families is
+negatively associated with the dark-zone/cycling module score (Figure 3E).
+Of ten mice with at least five such families, all ten show a negative
+within-mouse correlation (median Spearman ρ=−0.596). Day 7 contributes only
+one family, compared with 227 at day 10 and 101 at day 14. This check
+supports within-annotation variation beyond a pooled difference between
+dates. Because the module and embedding reuse RNA, the relationship is
+descriptive: it does not independently establish maturation time, a GC
+origin or recent GC output. A threshold on two-dimensional distance is
+not treated as a validated origin classifier.
+
+Later-infection samples continue to contain GC-enriched families through
+day 42 (Figure 3F). The fraction of reliable families with at least 50% GC
+cells is calculated separately for each mouse and treatment arm, using
+1,174 families from 36 infected mice. This denominator excludes the nine
+families from four naive control mice retained in the 1,183-family display
+in Figure 3C. Points are mice and lines connect group medians; the analysis
+describes captured repertoire composition. Different terminal mice and
+different early/later sampling regimes preclude interpreting these maps
+as persistence of the same family across days, directed GC output or a
+causal treatment response.
+
 Conservative sequence matching asks how much of this observation depends on
 merging similar heavy-chain sequences into one family. Exact heavy/light
 receptor groups observed in both states provide an identity-consistency check;
@@ -238,8 +314,10 @@ within each observed heavy-chain isotype. This tests whether family membership
 adds state-association information beyond those measured sampling properties.
 GC-bearing conditional fractions and a three-cell minimum are secondary
 sensitivity analyses. Mice, rather than their cells, supply biological replicate
-estimates. Figure 3F shows per-mouse deviations from the isotype-preserving
-null with a fixed all-family denominator; its evidence is association, without assigning an output direction.
+estimates. The accompanying source analyses retain per-mouse deviations
+from the isotype-preserving null with a fixed all-family denominator;
+these tests are distinct from the reliable-family composition displayed
+in Figure 3F and do not assign an output direction.
 
 The choice of sampling control changes the biological reading. In the late
 saline arm, 132 of 868 expanded families jointly contain GC and PB cells.
@@ -269,80 +347,81 @@ same sequence-defined family, survive stricter sequence matching and exceed
 an appropriately constrained sampling expectation. Only the latter tests add
 evidence about clonal organisation. None establishes memory GC re-entry.
 
-The treatment arm is shown by day and mouse in Supplementary Figure 3.
+The treatment arms are shown by day and mouse in Figure 3F and Supplementary Figure 3.
 Differences are interpreted within the late experiment, with three infected
 mice per arm/day. Uninfected controls and naive spike-in cells are not treated
 as additional infected replicates. The dataset does not supply clone-specific
 future outcomes or affinity measurements; it prioritises families for such
 experiments rather than replacing them.
 
-### Repeated human GC sampling tests clone persistence over a longer response
+### Lineage barcodes test early-state associations with later observations
 
-The vaccination cohort repeatedly samples draining lymph nodes and blood from
-the same participants (12). This differs from the terminal Plasmodium design:
-a BCR family can genuinely be observed at multiple dates in one person.
-Figure 4 shows the study design, captured GC/output compartments and an
-independent spike-positive receptor label on the clone map.
+To separate clone-state visualisation from temporal validation, we reanalysed
+the public in-vitro LARRY data used by Clonotrace
+(14, 15). The 130,887-cell input contains 49,302 cells with
+a unique lineage barcode. We estimated 7,575 expanded clone-day profiles in a
+common receptor-excluded RNA space. Figure 4B shows the author-provided SPRING
+cell landscape: a force-directed display of a cell-neighbour graph
+(16). Figure 4C summarises each clone-day cell distribution as a
+Threadfin profile, with the same author state labels used for biological
+interpretation. The comparison makes the change of analysis unit explicit:
+from individual cell states to the state composition of many sampled clones.
+Barcode-colouring on SPRING can already reveal where a clone's cells lie;
+the paired maps demonstrate interpretability, not an advantage over SPRING.
+The quantitative tests below assess whether estimated clone profiles add value
+over simple summaries. Lines connect the same known barcode across measured
+days; their direction is supplied by sampling dates and known barcode identity.
 
-GC-dominated and antibody-secreting profiles are distinct in this dataset.
-The restored binding-enrichment plot compares author-identified Spike-positive
-families within expression programmes against other families from the same donor
-(Figure 4D). It reports binding-label odds rather than quantitative affinity.
-The sequence crosswalk maps every Threadfin family to one author clone, with
-623 author clones subdivided into multiple Threadfin families. Labels propagated
-into such subdivisions are not new independent binding experiments
-(Supplementary Figure 6). Two of four candidate programmes meet bootstrap
-stability 0.75; programme names are not treated as guaranteed discrete fates.
+For prediction, we built a second expression representation using day-2 cells
+only. Neither future cells nor their state annotations entered that
+representation. Among 1,401 expanded day-2 barcodes, 172 also had at least four
+day-6 cells and were eligible for the fixed comparison. The later target was the
+observed fraction of cells in each author-annotated state, not a complete
+assessment of developmental potential. All methods used the same three repeated
+five-fold barcode partitions and training-fold-only ridge tuning.
 
-Individual families with GC cells at three or more non-pooled dates illustrate
-repeated GC-containing membership. We select these examples by measured
-presence and captured size, not by a visually interesting UMAP location.
-Bars display the recorded cells, including dates without captured members;
-absence in a sample is not proof of biological extinction.
+The median fold R² for day-6 neutrophil fractions was 0.199 for Threadfin kernel
+profiles, 0.163 for RNA means and 0.110 for concatenated RNA means and
+variances; corresponding monocyte values were 0.163, 0.099 and 0.058
+(Figure 4D,E). The mean-plus-variance baseline adds a simple measure of
+within-clone spread using the same 30 early-cell PCs and identical readout folds. Absolute-error differences were smaller: for monocyte
+fractions, kernel-profile MAE was 0.227 versus 0.225 for RNA means. Thus early
+profiles contain information about later captured composition, but the added
+value over a simple RNA mean is modest and depends on the endpoint. Adding
+per-PC variance alone did not improve this baseline; that result does not isolate
+the contribution of the kernel from shrinkage, smoothing or regularisation. Repeated
+folds are not independent biological replicates, and eligibility selects a small
+subset of the observed early barcodes.
 
-The existing clone-state retention estimate is 0.26 across dates (420 families;
-95% interval 0.20–0.31), compared with approximately zero across LN/blood
-snapshots (159 families). This shows that family membership and current
-compartment are different pieces of information. It does not establish whether
-a memory cell entered a later GC or whether a particular GC cell produced a
-blood plasmablast. A study with prime/boost and fate mapping can address those
-directions directly (14).
+### Longitudinal paired TCRs distinguish clone identity from changing state
 
-The GC mutation trend is also shown explicitly (Figure 4G). We average within
-family/date SHM, take a median across families for each donor/label, and give each
-donor equal weight. Only donors represented in both label groups at that date
-contribute (1, 1, 8, 6 and 4 donors at the five dates, respectively); the shaded
-range is the donor interquartile range. The first two points therefore have no
-across-donor replication. Later samples
-have different captured families and sometimes different donors, so the curve
-is not a paired estimate of maturation within the same family. The comparison
-group is not identified as Spike-positive, rather than uniformly assayed
-negative. The source paper includes functional antibody experiments, but our
-current paired-cell input does not supply a quantitative affinity for every
-Threadfin family. Neither binary binding labels nor SHM estimate affinity.
+We next analysed all ten public processed patient objects in GSE266219
+(17, 15). This analysis tests generality of the representation;
+it does not reconstruct the eight-patient clinical-response selection in the
+Clonotrace paper. Of 195,685 exported TCR-annotated cells, 124,534 had exactly
+one TRA and one TRB CDR3 amino-acid sequence. Exact paired sequences within
+patients define biological clones, with separate profiles for each observed
+cycle. Patient-level centring retains temporal variation; cycle is not removed
+as a nuisance covariate.
 
-### Receptor-defined families explain expression organisation across tested models
+The analysis produced 10,428 expanded clone-cycle profiles (Figure 5A–C).
+Expression-module colours describe a cytotoxic-to-memory-associated continuum,
+using the same expression measurements that constructed the profiles. These
+colours are descriptive rather than independent validation. Original cycle
+labels, including cycles 3, 5 and 7 where present, were retained.
 
-Across twelve dataset analyses, clone identity is associated with more expression
-variation than the 95th percentile of a within-library shuffled baseline in eleven
-analyses (Figure 5B). The direct NP–OVA PC/GC dataset is the exception
-(p=0.224). These are separate dataset analyses, not twelve independent studies:
-the two reporter cohorts share a publication, and the two infection datasets
-are separate experiments from one study. The comparison excludes receptor genes
-from the expression embedding and preserves library composition and family sizes
-under shuffle. It measures captured clonal expression organisation, rather than
-antigen specificity, future fate or a benefit over another integration method.
-
-The biological interpretation depends on the experimental anchor and sampled
-repertoire (Figure 5A,C). Only 3 of 113 expanded families in the direct PC/GC
-study reach profile reliability 0.5, compared with 69 of 373 NP reporter families,
-381 of 1,414 RBD reporter families and 4,429 of 8,435 human vaccination families.
-Library-stratified signal does not guarantee that individual profiles are
-informative enough for programme inference. Clonal resemblance of GC, cycling,
-light-zone, antibody-secreting, memory-associated and interferon modules varies
-between models (Figure 5D). Those modules reuse the profile-building expression
-matrix; expression-matched gene backgrounds aid interpretation but do not turn
-module agreement into independent biological validation.
+For 29 eligible patient–adjacent-observed-cycle comparisons, we compared the
+same biological clones with different target clones within patient, interval
+and target capture-count bin. All methods used identical pairs with at least
+four cells at both dates. The median across patient-level median same/null
+distance ratios was 0.608 for kernel profiles, 0.637 for Threadfin mean profiles
+and 0.660 for RNA means (Figure 5D). Each representation retained same-clone
+similarity, with no basis for calling this signal unique to Threadfin.
+Within-clone module changes varied across patients and intervals (Figure 5E).
+These observations support longitudinal state descriptions, but expansion,
+contraction and migration can also change the captured blood distribution.
+An audited clinical-response mapping is required before testing treatment
+response associations.
 
 ### Captured-state readout differs from repertoire-network refinement
 
@@ -351,8 +430,8 @@ sequence/expression representation, clonotype networks, CSR dynamics and whole-c
 state descriptions. We record their native capabilities and published validation
 separately from measured performance. CoNGA, Ibex, scRepertoire and sciCSR
 address distinct receptor/expression or class-switch tasks
-(15, 16, 17, 18). We avoid assigning zero to an inapplicable
-output (Figure 6; [source comparison](METHOD_COMPARISON.md)). Benisse (4), BiGCN (5)
+(18, 19, 20, 21). We avoid assigning zero to an inapplicable
+output ([source comparison](METHOD_COMPARISON.md)). Benisse (4), BiGCN (5)
 and clone2vec (6) are run through their official models; encoder-only outputs or
 external proxy implementations are not substituted for these methods.
 
@@ -369,23 +448,102 @@ families across seven mice. Median mouse-wise absolute error in gate fraction
 is 0.197 for Threadfin mean profiles and 0.207 for kernel profiles, versus 0.314
 for the training-mean control. Raw and donor-centred RNA centroids achieve 0.161
 and 0.165, respectively; clone2vec, BiGCN and Benisse achieve 0.238, 0.291 and
-0.314. Thus this readout does not demonstrate that Threadfin is the most accurate
-representation. It tests one captured-state summary; profile reliability,
-conditional controls and repeated-state comparisons are distinct outputs.
+0.314. These measurements evaluate a specific captured-state readout. Ordinary RNA
+means outperform Threadfin on the primary division endpoint, and sequence-native
+tools need not be optimal for this task. The comparison does not establish a
+universal method ranking. Profile reliability and repeated-state comparisons
+require separate validation.
 The size-threshold sensitivity retains at least five measured cells per family
 (Supplementary Figure 7).
 
-The complete RBD native comparison is still pending. No RBD performance is inferred from NP results or partial representations. Figure 6 and Supplementary Figure 7 await all native outputs and visual review.
+The completed RBD comparison retains 1,414 reporter-eligible families across 10 label-held-out mice. Median mouse-wise absolute error is 0.225 for Threadfin mean profiles and 0.235 for kernel profiles; raw and donor-centred RNA means yield 0.201 and 0.214. Benisse, BiGCN and clone2vec yield 0.337, 0.324 and 0.237, respectively, compared with 0.334 for the training-mean control. These values describe the prespecified captured reporter-fraction readout, not an overall tool ranking.
 
 The reporter gate is associated with physical sequencing library in these
 experiments. Whole-mouse label holdout retains shared libraries and a
 transductive representation; the comparison cannot separate reporter biology
 from all library effects or establish independent-library generalisation.
 
+We therefore also tested the sampling estimator without a biological-label
+prediction task. Calibration and evaluation used disjoint LARRY biological
+barcodes, with 250 evaluation clone-day-well profiles and disjoint reference
+cells. At 2, 4 and 8 query cells, shrinkage reduced pooled kernel-mean squared
+error by 27.2%, 14.2% and 6.5%, respectively (Figure 6E,F). This is evidence
+for denoising under this sampling design, not for absolute calibration of the
+reliability number or for improved fate prediction. Smoothing was disabled;
+the shared RNA preprocessing remains transductive.
+
+### Repeated human GC sampling tests clone persistence over a longer response
+
+The vaccination cohort repeatedly samples draining lymph nodes and blood from
+the same participants (12). This differs from the terminal Plasmodium design:
+a BCR family can genuinely be observed at multiple dates in one person.
+Supplementary Figure 9 shows the study design, captured GC/output compartments and an
+independent spike-positive receptor label on the clone map.
+
+GC-dominated and antibody-secreting profiles are distinct in this dataset.
+The restored binding-enrichment plot compares author-identified Spike-positive
+families within expression programmes against other families from the same donor
+(Supplementary Figure 9D). It reports binding-label odds rather than quantitative affinity.
+The sequence crosswalk maps every Threadfin family to one author clone, with
+623 author clones subdivided into multiple Threadfin families. Labels propagated
+into such subdivisions are not new independent binding experiments
+(Supplementary Figure 6). Two of four candidate programmes meet bootstrap
+stability 0.75; programme names are not treated as guaranteed discrete fates.
+
+Individual families with GC cells at three or more non-pooled dates illustrate
+repeated GC-containing membership. We select these examples by measured
+presence and captured size, not by a visually interesting UMAP location.
+Bars display the recorded cells, including dates without captured members;
+absence in a sample is not proof of biological extinction.
+
+The corrected clone-state retention estimate is 0.25 across dates (420 families;
+95% interval 0.20–0.31), compared with approximately zero across LN/blood
+snapshots (159 families). This shows that family membership and current
+compartment are different pieces of information. It does not establish whether
+a memory cell entered a later GC or whether a particular GC cell produced a
+blood plasmablast. A study with prime/boost and fate mapping can address those
+directions directly (22).
+
+The GC mutation trend is also shown explicitly (Supplementary Figure 9G). We average within
+family/date SHM, take a median across families for each donor/label, and give each
+donor equal weight. Only donors represented in both label groups at that date
+contribute (1, 1, 8, 6 and 4 donors at the five dates, respectively); the shaded
+range is the donor interquartile range. The first two points therefore have no
+across-donor replication. Later samples
+have different captured families and sometimes different donors, so the curve
+is not a paired estimate of maturation within the same family. The comparison
+group is not identified as Spike-positive, rather than uniformly assayed
+negative. The source paper includes functional antibody experiments, but our
+current paired-cell input does not supply a quantitative affinity for every
+Threadfin family. Neither binary binding labels nor SHM estimate affinity.
+
+### Receptor-defined families explain expression organisation across tested models
+
+Across twelve dataset analyses, clone identity is associated with more expression
+variation than the 95th percentile of a within-library shuffled baseline in eleven
+analyses (Supplementary Figure 15B). The direct NP–OVA PC/GC dataset is the exception
+(p=0.224). These are separate dataset analyses, not twelve independent studies:
+the two reporter cohorts share a publication, and the two infection datasets
+are separate experiments from one study. The comparison excludes receptor genes
+from the expression embedding and preserves library composition and family sizes
+under shuffle. It measures captured clonal expression organisation, rather than
+antigen specificity, future fate or a benefit over another integration method.
+
+The biological interpretation depends on the experimental anchor and sampled
+repertoire (Supplementary Figure 15A,C). Only 3 of 113 expanded families in the direct PC/GC
+study reach profile reliability 0.5, compared with 69 of 373 NP reporter families,
+381 of 1,414 RBD reporter families and 4,429 of 8,435 human vaccination families.
+Library-stratified signal does not guarantee that individual profiles are
+informative enough for programme inference. Clonal resemblance of GC, cycling,
+light-zone, antibody-secreting, memory-associated and interferon modules varies
+between models (Supplementary Figure 15D). Those modules reuse the profile-building expression
+matrix; expression-matched gene backgrounds aid interpretation but do not turn
+module agreement into independent biological validation.
+
 ### Non-GC tests distinguish receptor identity from terminal-state annotation
 
 Outside the GC-focused argument, the marrow/blood model (13) supplies the
-clearest measured-gate check (Supplementary Figure 5). A GEO manifest corrects
+clearest measured-gate check (Supplementary Figures 5 and 14). A GEO manifest corrects
 donor identities and retains 15 single-donor, single-tissue libraries from seven
 donors, excluding five pooled or mixed libraries. The analysis contains 115,144
 cells, 78,883 paired receptor records and 9,783 expanded families. Within pure
@@ -394,9 +552,9 @@ receptors are shared in 225/862 eligible repeated-receptor groups for donor 1681
 and 31/677 for donor 1684; marrow PC–blood memory sharing is 124/1,012 and
 115/934. These are identities across captured gates, without implying
 transdifferentiation or a direction of differentiation. Influenza blood, influenza
-lung, EBV blood, tonsil and COVID-19 blood data provide additional tested coverage
+lung, EBV-infected tonsil organoids, tonsil and COVID-19 blood data provide additional tested coverage
 (1,997, 114, 6,923, 670 and 83 expanded families, respectively). Their clonal
-expression signal is included in Figure 5, whereas individual maps remain in the
+expression signal is included in Supplementary Figure 15, whereas individual maps remain in the
 separate tested-dataset folder. Exploratory transcriptomic states and variable
 sampling designs in those datasets do not establish independent fate mechanisms.
 Thus one non-GC anchor supports interpretation of common receptor identity,
@@ -407,10 +565,11 @@ while the remaining analyses document where the workflow has been tested.
 Threadfin's useful biological output is a description of clone-level state
 bias and breadth, anchored to separately established sequence membership and
 experimental labels. The reporter models show that expression distributions
-record division-associated GC state beyond a family-average receptor history.
+record division-associated GC state alongside a family-average receptor history.
 The infection model asks which GC/output-like states are co-observed in the
-same mouse's families. The human cohort adds repeat GC membership, while the
-single non-GC validation shows that common receptor identity can coexist with
+same mouse's families. Lineage barcodes test early-to-later state associations, paired TCRs test
+longitudinal state retention, and the human GC cohort adds repeated membership.
+The marrow validation shows that common receptor identity can coexist with
 distinct measured terminal-state gates.
 
 These are different strengths of inference. Co-observed related cells support
@@ -418,7 +577,7 @@ shared clonal organisation. Repeated same-donor capture supports persistence.
 Neither is equivalent to an observed parent–offspring relationship. Memory
 re-entry into GC requires evidence of prior memory identity and later GC
 participation; direct fate mapping and recall experiments illustrate the
-necessary design (14). Plasmodium samples from different terminal mice cannot
+necessary design (22). Plasmodium samples from different terminal mice cannot
 supply that history, however persuasive an embedding may appear.
 
 The package complements receptor annotation, SHM phylogenies and cell-state
@@ -429,9 +588,13 @@ claiming that no other combined workflow could calculate an occupancy table.
 A claim of superior future-fate prediction would require a held-out outcome,
 matched competitors and an independent validation cohort; it is not made here.
 
-The closest whole-clone embedding comparator, clone2vec, already supports
-continuous clone descriptions and clone-associated gene analysis
-(6). The incremental contribution claimed here is the
+Existing whole-clone methods, including clone2vec and the Clonotrace
+preprint, already support continuous clone descriptions and clone-associated
+gene analysis (6, 15). Clonotrace compares smoothed
+clone densities and relates clone profiles to measured temporal observations.
+Using its public datasets does not by itself reproduce its method or establish
+a direct performance comparison. Our Figure 4 contrasts cell and Threadfin
+clone representations; neither panel is an official Clonotrace output. The incremental contribution claimed here is the
 combination of an explicit receptor-family definition, context-adjusted
 profiles with reliability, matched sampling controls and GC experiments with
 measured biological anchors. This is distinct from claiming a universally
@@ -459,9 +622,9 @@ is incomplete and may depend on cell state. Sparse captured families understate
 phenotypic breadth. Heavy-chain similarity can merge unrelated receptors;
 paired-light and exact-sequence controls reduce one source of uncertainty but
 lose SHM-diverged family members. Alternative family callers and lineage
-models address different assumptions (19, 20, 21, 22).
+models address different assumptions (23, 24, 25, 26).
 Large-scale paired-chain data document chain-mixed groups and naive-like
-pseudo-clonal clusters under heavy-chain-based inference (23);
+pseudo-clonal clusters under heavy-chain-based inference (27);
 exact paired-chain controls cannot establish the sensitivity or specificity of
 every primary family call. Pre-sorting constrains which state combinations
 are observable. Author memory-like annotations are not functional recall
@@ -511,26 +674,41 @@ distance is not used as evidence of ancestry or a future fate.
 
 ### Model-antigen centroid reclustering and historical provenance
 
-`case_studies/run_gc_reclustering.py` aligns the GSE246382 MTX/features/barcodes
+`case_studies/reproduce_gc_legacy_embedding.py` reconstructs the legacy-input
+comparison; `case_studies/run_gc_reclustering.py` retains the earlier restricted
+49-family control. Both align the GSE246382 MTX/features/barcodes
 and deposited mouse/compartment metadata to the frozen 884-cell table and its
 same-mouse sequence-defined family calls. Cell identities, mouse labels,
 compartments and the original at-least-500-expressed-gene QC are checked.
 Raw counts and source-table hashes accompany the results. Threadfin constructs
 a receptor-excluded 3,000-HVG, 30-component PCA from log-normalised counts
 for the separately retained PCA analysis. The primary clone-embedding run
-instead averages the saved receptor-excluded cell UMAP within families
-with at least three cells. It follows notebook cell 27: pairwise Euclidean
+instead reconstructs the notebook's executed cell pipeline (normalise to
+10,000 counts, log1p, flag 5,500 highly variable genes without subsetting,
+regress total counts and mitochondrial percentage, scale, PCA with the Scanpy
+default highly-variable mask, 15-neighbour graph on 40 components, UMAP
+min_dist 0.5, seed 0) and groups deposited productive TRUST4 IGH calls into
+donor-restricted V–D–J receptor groups retained at at least one captured cell
+(377 groups, 762 cells). These groups can merge distinct junctions within a
+mouse; pooled cross-mouse V–D–J groups are diagnostic controls only. It follows notebook cell 27: pairwise Euclidean
 centroid distances, UMAP on distance-matrix rows as Euclidean features
-(20 neighbours, min_dist 0.4, spread 1, learning_rate 1, seed 123), then
-Scanpy neighbours on clone UMAP (15) and Leiden (resolution 0.3).
-No gate labels, Myc values or signatures enter the graph. All three presets,
-the historical recipe and seeds 123/7 are saved with requested/effective
-parameters, source hashes and package versions. New clone coordinates are
-computed; Supplementary Figure 8B reuses the saved cell coordinates with
-actual measured gates. Current donor-restricted family definitions and the
-at-least-three-cell filter differ from the executed historical notebook,
-which retained groups with at least one cell; its original coordinates
-and six clusters are not reproduced or assumed.
+(40 neighbours, min_dist 0.65, spread 1, learning_rate 1, seed 123), then
+Scanpy neighbours on clone UMAP (15) and Leiden (resolution 0.3, seed 0).
+Gate labels and post hoc marker summaries are not supplied as clustering
+covariates. Marker genes can contribute to the underlying RNA embedding. The full parameter
+grid (10–80 UMAP neighbours × min_dist 0.1–0.85), seven seeds, three family
+definitions, two cell bases and the all-genes sensitivity run are saved with
+requested/effective parameters, source hashes and package versions. Selection
+is exploratory and considers layout continuity and local fidelity; it is not
+an optimisation for six groups or maximal seed stability. Median adjusted
+Rand index is 0.877 for the display and 0.989 for the historical k=20,
+min_dist=0.4 donor-restricted V–D–J control across seven seeds.
+New clone coordinates are
+computed; Supplementary Figure 8B reuses the reconstructed cell coordinates with
+actual measured gates. The original notebook's processed objects and IgBLAST
+tables are absent, so deposited TRUST4 calls serve as an independently recorded
+receptor-call source; exact reproduction of the historical coordinates is not
+claimed, and cross-mouse pooled VDJ groupings are reported as diagnostics only.
 
 `tf.clonotype_recluster` provides cohesive (20 neighbours, resolution 0.3,
 min_dist 0.1), continuous (20, 0.1, 0.4) and discrete (10, 0.8, 0.05)
@@ -541,7 +719,8 @@ precomputed; display controls leave that partition unchanged. The primary
 figure explicitly uses embedding_mode="distance_profiles" and
 cluster_on="embedding" to match the notebook geometry and Scanpy graph.
 In this mode, display parameters can affect the clustering; the graph and
-UMAP neighbour counts are specified independently. Presets are not learned
+UMAP neighbour counts are specified independently; cluster_random_state=0
+separates graph/Leiden randomness from UMAP random_state=123. Presets are not learned
 biological classes and do not
 force a desired topology. The default filter is at least three cells;
 strictly greater than three requires min_clone_size=4. Centroid exploration
@@ -575,8 +754,10 @@ represented as a verified present-package rerun.
 Measured reporter/probe/FACS labels are compared with profiles separately from
 expression signatures. Within-library label checks address pre-sorted sampling
 in the reporter cohorts. Programme splitting is tested against a single-group
-model; bootstrap stability is reported rather than treating every clustering
-as a stable biological category. Clone-state retention compares separate
+model. Its Gaussian null does not repeat the complete community, tree and
+resolution selection, so its split p-values are approximate and do not establish
+family-wise error control. Bootstrap stability is reported rather than treating
+every clustering as a stable biological category. Clone-state retention compares separate
 same-family snapshots against same-donor random-family comparisons, correcting
 sampling noise. Its intervals resample clones and do not replace donor-level
 population uncertainty. Full existing algorithms are specified in
@@ -587,6 +768,111 @@ coverage recorded; this is not a curated, gene-by-gene orthologue analysis.
 Coverage is recorded for each signature. Clone-averaged scores and programme
 scores reuse normalised expression and are descriptive; their agreement with an
 expression-derived programme is not counted as independent validation.
+
+### Conditional biological interpretation of Figure 2
+
+We audited all 1,414 expanded RBD families and the 381 reliability-filtered
+displayed families from the committed cell and family tables. Within each mouse,
+we computed Spearman correlations of division fraction with RNA modules or mean
+V mutation frequency. Partial rank correlations residualized both ranked
+variables against ranked log capture count and the additional measured gate
+fraction (RBD binding in the protein arm, DZ in the mRNA arm). At least eight
+families and variation in both measurements were required. For paired SHM,
+we retained family-by-additional-gate strata with at least two measured cells
+in each mCherry extreme. We averaged stratum differences within family and
+family differences within mouse; uncertainty was described by 10,000 mouse
+bootstrap resamples within each arm (seed 20261008). The five mice per arm
+limit interval precision. These exploratory tests do not remove physical-library
+confounding or estimate mutation per division.
+
+### Public lineage-barcode and longitudinal TCR validation
+
+For GSE140802/GSM4185642, author-normalised cell-by-gene expression, lineage
+membership and row-matched metadata were downloaded from GEO. Input dimensions
+were 130,887 cells by 25,289 genes; 49,302 cells had exactly one of 5,864 barcode
+labels, with no ambiguous multi-barcode rows. The expression matrix contains
+normalised positive values, not raw integer UMI counts. We rescaled total
+expression to 10,000 per cell, applied log1p, selected 3,000 receptor-excluded
+variable genes, scaled with clipping at 10 and computed 30 PCs with seed 0.
+The descriptive all-time map uses barcode-labelled cells and no context
+subtraction. Each barcode-day is a distinct profile, requiring at least two
+cells. Kernel profiles use 256 random Fourier features, median-distance
+bandwidth, 15-neighbour smoothing and 30-component profile reduction; mean
+profiles are unsmoothed. UMAP uses 15 neighbours, min_dist 0.3 and seed 0.
+Author SPRING coordinates are used only for the cell-context panel.
+
+The prediction model is independently preprocessed from day-2 cells only,
+including unlabelled cells as expression context. Barcode-level targets are
+day-6 state fractions for barcodes with at least two early and four later cells.
+Unsupervised early PCA and profiles are transductive across the eligible
+barcodes; no day-6 cells or labels enter them. Three five-fold outer partitions
+(seeds 100–102) hold out biological barcode identities from the supervised
+readout. A StandardScaler–ridge pipeline is tuned over alpha 0.1, 1, 10 and 100
+using three training-only inner folds. Predictions are clipped to [0,1] and
+normalised to sum to one. RNA means, concatenated means and population
+variances of the same 30 PCs (ddof=0), log capture count, Threadfin mean/kernel
+profiles and training-fold outcome means use identical outer partitions.
+Saved tables contain each out-of-fold prediction and fold assignment.
+
+For the shrinkage check, biological barcodes are deterministically split by
+SHA256 parity into calibration and evaluation sets. Calibration cells alone
+determine the PCA-space centring, kernel bandwidth, feature centring and
+variance components; the common descriptive RNA PCA remains transductive.
+The 256-feature kernel is unsmoothed. Evaluation units are barcode-day-well
+profiles with at least 16 cells. For each of 20 random splits, one half provides
+the disjoint reference mean, while 2, 4 or 8 cells from the other half provide
+the unshrunk mean and the shrunken estimate. Error is the mean squared difference
+across kernel features. Reported error reduction is one minus the ratio of
+pooled mean shrunken to unshrunk error; it is not the average of per-profile
+ratios. Shared barcodes across dates/wells are not independent biological
+replicates, and this test does not calibrate the absolute reliability scale.
+
+For GSE266219, all ten official processed patient objects were downloaded and
+exported from Seurat with explicit cell-name alignment and the intersection
+of 17,178 gene symbols. Temporary inspection files are excluded by the exact
+filename pattern. Only cells with one TRA and one TRB CDR3 amino-acid sequence
+enter the analysis. Canonical paired-chain strings are patient-private clone
+identifiers; author clonotype IDs are audited but do not define cross-cycle
+identity. Original PtCycle labels provide the cycle numbers. Receptor-excluded
+30-PC RNA preprocessing uses the same normalisation settings and no Harmony;
+profiles are centred by patient, with cycle preserved. Cell UMAP displays a
+deterministic sample of 30,000 analysed cells. Mean per-gene z scores define
+cytotoxic (NKG7, PRF1, GZMB, GNLY, CTSW), memory (IL7R, CCR7, TCF7, LEF1, LTB),
+activation (IFNG, FOS, EGR1, CD69, TNFRSF9) and cycling (MKI67, TOP2A, TYMS,
+STMN1) modules; these are expression descriptions.
+
+Longitudinal comparisons require at least four captured cells per clone-cycle.
+For each patient's consecutive observed cycles, target identities are permuted
+200 times within floor(log2 target cell count) bins, using derangements without
+fixed points. Singleton bins are excluded. Distances are Euclidean distances
+in each method's feature space, not UMAP distances; method comparisons retain
+exactly the same clone pairs. Ratios compare the median observed same-clone
+distance with the median permuted median distance. Figure 5D first takes the
+median across eligible intervals within each patient. No response categories
+are inferred from patient numbers.
+
+### Display-parameter and within-state analyses
+
+The RBD parameter audit reconstructs the family features before comparing 85
+UMAP settings. Global linear R² fits each readout to an intercept and the two
+map coordinates. The local readout averages the ten nearest labelled families,
+excluding the focal family. The saved field `knn_r2` is a legacy name for
+explained variance, calculated as one minus residual variance divided by
+readout variance; unlike standard predictive R², it does not penalise mean
+prediction bias. Local excess is observed explained variance minus its mean
+under 200 donor-stratified label permutations. These exploratory tests are
+not held-out-mouse predictions and do not adjust for choosing among display
+parameters. Pair-distance faithfulness is a Spearman correlation over sampled
+family pairs in the feature space and the two-dimensional map.
+
+For Figure 3E, pure-PB families contain only PB-labelled captured cells.
+Euclidean distance uses their saved early-map coordinates and the mean
+coordinates of reliable families with GC fraction at least 0.5. Within-mouse
+Spearman correlations are summarised for mice with at least five pure-PB
+families. Figure 3F uses the same 0.5 GC-fraction threshold without any
+coordinate-distance rule, dividing by all reliable families in each infected
+mouse and displaying treatment arms separately. The figure script regenerates
+the family- and mouse-level source tables with the normal drawing workflow.
 
 ### Same-mouse state sharing
 
@@ -614,8 +900,8 @@ productive heavy/light pair and compares only verified donor-matched pure gates.
 ### Software implementation and input validation
 
 Threadfin is a Python package using AnnData and Scanpy for expression data and
-preprocessing (24); Harmony is available for a supplied batch variable
-(25). Users may provide a precomputed cell embedding or construct one
+preprocessing (28); Harmony is available for a supplied batch variable
+(29). Users may provide a precomputed cell embedding or construct one
 from finite non-negative counts while excluding receptor genes. Input checks
 report missing metadata columns, incomplete donor/sample grouping labels,
 invalid matrix dimensions and incompatible BCR barcodes in English, with
@@ -728,26 +1014,34 @@ To be confirmed by the authors.
 
 13. Ferreira-Gomes M, Chen Y, Durek P, Rincon-Arevalo H, Heinrich F, Bauer L, et al. Recruitment of plasma cells from IL-21-dependent and IL-21-independent immune reactions to the bone marrow. Nat Commun. 2024;15(1):4182. doi:10.1038/s41467-024-48570-0.
 
-14. Mesin L, Schiepers A, Ersching J, Barbulescu A, Cavazzoni CB, Angelini A, et al. Restricted Clonality and Limited Germinal Center Reentry Characterize Memory B Cell Reactivation by Boosting. Cell. 2020;180(1):92-106.e11. doi:10.1016/j.cell.2019.11.032.
+14. Weinreb C, Rodriguez-Fraticelli A, Camargo FD, Klein AM. Lineage tracing on transcriptional landscapes links state to fate during differentiation. Science. 2020;367(6479):eaaw3381. doi:10.1126/science.aaw3381.
 
-15. Schattgen SA, Guion K, Crawford JC, Souquette A, Barrio AM, Stubbington MJT, et al. Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA). Nat Biotechnol. 2022;40(1):54-63. doi:10.1038/s41587-021-00989-2.
+15. Fu Y, Mathew D, Wang M, Chen XE, Lin KZ, Schaff D, et al. Deciphering Cell Fate and Clonal Dynamics via Integrative Single-Cell Lineage Modeling. bioRxiv [Preprint]. 2025. doi:10.1101/2025.09.01.673503.
 
-16. Borcherding N, Sun B, DeNardo D, Brestoff JR. Ibex: Variational autoencoder for single-cell BCR sequencing. bioRxiv [Preprint]. 2022;2022.11.09.515787. doi:10.1101/2022.11.09.515787.
+16. Weinreb C, Wolock S, Klein AM. SPRING: a kinetic interface for visualizing high dimensional single-cell expression data. Bioinformatics. 2018;34(7):1246–1248. doi:10.1093/bioinformatics/btx792.
 
-17. Yang Q, Safina KR, Nguyen KDQ, Tuong ZK, Borcherding N. scRepertoire 2: Enhanced and efficient toolkit for single-cell immune profiling. PLoS Comput Biol. 2025;21(6):e1012760. doi:10.1371/journal.pcbi.1012760.
+17. Mathew D, Marmarelis ME, Foley C, Bauml JM, Ye D, Ghinnagow R, et al. Combined JAK inhibition and PD-1 immunotherapy for non-small cell lung cancer patients. Science. 2024;384(6702):eadf1329. doi:10.1126/science.adf1329.
 
-18. Ng JCF, Montamat Garcia G, Stewart AT, Blair P, Mauri C, Dunn-Walters DK, et al. sciCSR infers B cell state transition and predicts class-switch recombination dynamics using single-cell transcriptomic data. Nat Methods. 2024;21(5):823-834. doi:10.1038/s41592-023-02060-1.
+18. Schattgen SA, Guion K, Crawford JC, Souquette A, Barrio AM, Stubbington MJT, et al. Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA). Nat Biotechnol. 2022;40(1):54-63. doi:10.1038/s41587-021-00989-2.
 
-19. Ralph DK, Matsen FA. Likelihood-Based Inference of B Cell Clonal Families. PLoS Comput Biol. 2016;12(10):e1005086. doi:10.1371/journal.pcbi.1005086.
+19. Borcherding N, Sun B, DeNardo D, Brestoff JR. Ibex: Variational autoencoder for single-cell BCR sequencing. bioRxiv [Preprint]. 2022;2022.11.09.515787. doi:10.1101/2022.11.09.515787.
 
-20. Balashova D, van Schaik BDC, Stratigopoulou M, Guikema JEJ, Caniels TG, Claireaux M, et al. Systematic evaluation of B-cell clonal family inference approaches. BMC Immunol. 2024;25(1):13. doi:10.1186/s12865-024-00600-8.
+20. Yang Q, Safina KR, Nguyen KDQ, Tuong ZK, Borcherding N. scRepertoire 2: Enhanced and efficient toolkit for single-cell immune profiling. PLoS Comput Biol. 2025;21(6):e1012760. doi:10.1371/journal.pcbi.1012760.
 
-21. Hoehn KB, Lunter G, Pybus OG. A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics. 2017;206(1):417-427. doi:10.1534/genetics.116.196303.
+21. Ng JCF, Montamat Garcia G, Stewart AT, Blair P, Mauri C, Dunn-Walters DK, et al. sciCSR infers B cell state transition and predicts class-switch recombination dynamics using single-cell transcriptomic data. Nat Methods. 2024;21(5):823-834. doi:10.1038/s41592-023-02060-1.
 
-22. Weber LL, Reiman D, Roddur MS, Qi Y, El-Kebir M, Khan AA. Isotype-aware inference of B cell clonal lineage trees from single-cell sequencing data. Cell Genomics. 2024;4(9):100637. doi:10.1016/j.xgen.2024.100637.
+22. Mesin L, Schiepers A, Ersching J, Barbulescu A, Cavazzoni CB, Angelini A, et al. Restricted Clonality and Limited Germinal Center Reentry Characterize Memory B Cell Reactivation by Boosting. Cell. 2020;180(1):92-106.e11. doi:10.1016/j.cell.2019.11.032.
 
-23. Wang H, Wang K, Xu Q, Cai L, Huang C, Chen L, et al. Large-scale paired chain BCR analysis reveals antibody clonal family inference bias and enhances resolution with machine learning. PLoS Comput Biol. 2026;22(3):e1014077. doi:10.1371/journal.pcbi.1014077.
+23. Ralph DK, Matsen FA. Likelihood-Based Inference of B Cell Clonal Families. PLoS Comput Biol. 2016;12(10):e1005086. doi:10.1371/journal.pcbi.1005086.
 
-24. Wolf FA, Angerer P, Theis FJ. SCANPY: large-scale single-cell gene expression data analysis. Genome Biol. 2018;19(1):15. doi:10.1186/s13059-017-1382-0.
+24. Balashova D, van Schaik BDC, Stratigopoulou M, Guikema JEJ, Caniels TG, Claireaux M, et al. Systematic evaluation of B-cell clonal family inference approaches. BMC Immunol. 2024;25(1):13. doi:10.1186/s12865-024-00600-8.
 
-25. Korsunsky I, Millard N, Fan J, Slowikowski K, Zhang F, Wei K, et al. Fast, sensitive and accurate integration of single-cell data with Harmony. Nat Methods. 2019;16(12):1289-1296. doi:10.1038/s41592-019-0619-0.
+25. Hoehn KB, Lunter G, Pybus OG. A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics. 2017;206(1):417-427. doi:10.1534/genetics.116.196303.
+
+26. Weber LL, Reiman D, Roddur MS, Qi Y, El-Kebir M, Khan AA. Isotype-aware inference of B cell clonal lineage trees from single-cell sequencing data. Cell Genomics. 2024;4(9):100637. doi:10.1016/j.xgen.2024.100637.
+
+27. Wang H, Wang K, Xu Q, Cai L, Huang C, Chen L, et al. Large-scale paired chain BCR analysis reveals antibody clonal family inference bias and enhances resolution with machine learning. PLoS Comput Biol. 2026;22(3):e1014077. doi:10.1371/journal.pcbi.1014077.
+
+28. Wolf FA, Angerer P, Theis FJ. SCANPY: large-scale single-cell gene expression data analysis. Genome Biol. 2018;19(1):15. doi:10.1186/s13059-017-1382-0.
+
+29. Korsunsky I, Millard N, Fan J, Slowikowski K, Zhang F, Wei K, et al. Fast, sensitive and accurate integration of single-cell data with Harmony. Nat Methods. 2019;16(12):1289-1296. doi:10.1038/s41592-019-0619-0.

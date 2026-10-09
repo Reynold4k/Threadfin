@@ -1,0 +1,59 @@
+{
+  "status": "complete",
+  "sources": {
+    "case_studies/results/mouse_rbd/cells.csv.gz": "7c0f283e9c6818e744c136c440c7a90d0528bdc23d24debf69a1ad026718661b",
+    "case_studies/results/mouse_rbd/clone_table.csv": "5492e3689b95c7bff3f910b134fdfec8dfc92efb9e440e539d99635591c04c6f",
+    "case_studies/results/mouse_rbd/clone_gene_scores.csv": "5dc06e211493e0b74ec1ef2a95aa769009c3daf04a8e76bda5416b519496bf99"
+  },
+  "n_receptor_called_cells": 16667,
+  "n_expanded_families": 1414,
+  "n_plotted_families": 381,
+  "capture_summary": {
+    "all_expanded": {
+      "n_families": 1414,
+      "median_cells": 3.0,
+      "n_both_gates": 651,
+      "n_mRNA": 308
+    },
+    "plotted_reliable": {
+      "n_families": 381,
+      "median_cells": 11.0,
+      "n_both_gates": 317,
+      "n_mRNA": 87
+    }
+  },
+  "paired_same_family_other_gate": {
+    "n_strata": 258,
+    "n_families": 218,
+    "arm_summary": {
+      "RBD protein": {
+        "n_mice": 5,
+        "n_families": 185,
+        "equal_mouse_mean_delta": 0.0008258770881916691,
+        "mouse_bootstrap_95_interval": [
+          -0.000214382989214283,
+          0.001866137165597621
+        ],
+        "two_sided_wilcoxon_mouse_p": 0.3125
+      },
+      "mRNA": {
+        "n_mice": 5,
+        "n_families": 33,
+        "equal_mouse_mean_delta": -0.0005020757186148696,
+        "mouse_bootstrap_95_interval": [
+          -0.0034731008009783668,
+          0.002463809434108277
+        ],
+        "two_sided_wilcoxon_mouse_p": 0.8125
+      }
+    }
+  },
+  "limitations": [
+    "mCherry records recent divisions; mean V mutation frequency is accumulated divergence, not mutations per division.",
+    "Only extreme mCherry gates are sampled; fractions do not estimate in-vivo GC occupancy without sampling weights.",
+    "Additional FACS gate and donor are matched, but division gate and physical library are confounded.",
+    "Gene modules reuse the RNA used to construct profiles.",
+    "The ten mice belong to two experimental arms; bootstrap intervals with five mice/arm are descriptive.",
+    "Reliability-based display filtering is not independent biological validation; all expanded families remain in the audit."
+  ]
+}

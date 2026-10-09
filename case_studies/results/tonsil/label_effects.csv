@@ -1,2 +1,2 @@
 label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
-isotype,categorical,0.12710378761016136,0.040662185807205556,0.0864416018029558,0.0004997501249375312,73,4,donor,2000,heavy-chain isotype
+isotype,categorical,0.12710377151934155,0.040662184764980534,0.086441586754361,0.0004997501249375312,73,4,donor,2000,heavy-chain isotype

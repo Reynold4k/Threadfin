@@ -1,0 +1,26 @@
+{
+  "n_barcodes": 172,
+  "n_early_cells": 402,
+  "n_late_cells": 2286,
+  "early_day": 2,
+  "outcome_day": 6,
+  "min_early_cells": 2,
+  "min_late_cells": 4,
+  "fold_unit": "lineage barcode, 3 repeats x 5 folds",
+  "preprocessing": "Day-2 cells only; transductive unsupervised PCA/profiles; no day-6 cells",
+  "readout": "nested 3-fold ridge tuning within each outer training set; same folds for every method",
+  "methods": [
+    "Training_mean",
+    "RNA_mean",
+    "RNA_mean_variance",
+    "Size_only",
+    "Threadfin_mean",
+    "Threadfin_kernel"
+  ],
+  "RNA_mean_variance": "Concatenated day-2 PC means and per-PC population variances (ddof=0); same ridge grid.",
+  "limits": [
+    "Replicate folds are correlated, not independent biological replicates.",
+    "Later RNA-defined states are observed clone composition, not experimentally assayed fate potency.",
+    "No independent-donor validation is available in this in-vitro experiment."
+  ]
+}

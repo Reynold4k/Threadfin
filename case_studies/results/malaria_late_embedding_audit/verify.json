@@ -1,0 +1,19 @@
+{
+ "default_config": {
+  "n_neighbors": 15,
+  "min_dist": 0.1,
+  "spread": 1.0,
+  "random_state": 0
+ },
+ "reproduction_axis_corr": {
+  "x": 0.9898771760633575,
+  "y": 0.9781820947799676
+ },
+ "n_reliable_clones": 1183,
+ "feature_shape": [
+  1183,
+  30
+ ],
+ "n_parameter_sets": 85,
+ "note": "day and treated are donor-level: their permutation null is unstratified."
+}

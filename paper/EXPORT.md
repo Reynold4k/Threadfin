@@ -23,30 +23,30 @@ python -m pip install python-docx Pillow
 python paper/export_manuscript.py --template /path/to/author-template.docx --allow-pending
 ```
 
-The pending export is labelled `REVIEW_PENDING_RBD`. It includes Figures 1–5
-and Supplementary Figures 1–6 and 8, plus explicit placeholders for Figure 6/S7.
-Figure 2B and Supplementary 8B–D use the audited real-data GSE246382
-clone embedding coloured by unsupervised Leiden clone_cluster, with cluster-level marker annotations; Supplementary 8A preserves the historical notebook Top2a
-output separately, with unresolved exact cohort/day attribution. The export checks 12 available images
-(14 once the native benchmark figures are complete).
-Pending native figures are excluded even if stale images exist. Without
-`--allow-pending`, export refuses incomplete native results or missing figures:
+The native benchmark and external public-data reanalyses are complete. The
+current export requires six main figures and sixteen supplementary figures
+(22 verified images), including the Figure 2 biological audit. Source Figure 4B
+is the LARRY author cell layout, while 4C is a new Threadfin clone-day layout.
+Figure 2B retains the distinct historical V–D–J grouping and its stated limits.
 
-```bash
+~~~bash
 python paper/export_manuscript.py --template /path/to/author-template.docx
-```
+~~~
 
 Outputs are the DOCX, a matching `.ris`, an `.audit.json`, and the rendered
 `MANUSCRIPT_draft_v2.md`. The audit checks exact template styles, author text,
 image count and unresolved reference/result placeholders. Native RBD numbers
 are read only from the completed saved source summary, with all eight
 comparators and consistent mouse/family coverage. Export never runs a new
-biological analysis. On the current HPC workspace, the existing dependent
-finalization job also refreshes the DOCX/RIS after its complete tables and all
-planned figures are saved. This uses the author's document environment and
-template only when both are present; it does not submit another model run.
+biological analysis.
+
+The verified 9 October 2026 delivery is saved under paper/release:
+Threadfin_MANUSCRIPT_GC_2026-10-09.docx, its matching RIS and its original
+export audit. This copy has the same bytes as the workspace export named in
+the audit. All 22 embedded images match the current figure-source hashes,
+and 29 reference records are resolved. Figure 4E includes six methods/controls,
+including RNA mean plus variance.
 
 OOXML validation does not verify Word pagination. Review the rendered pages
-before submission, and visually review the new Figure 6/S7 after the native
-benchmark finishes. The current HPC environment has no installed Word or
+before submission, and visually review any regenerated source figures. The current HPC environment has no installed Word or
 LibreOffice renderer; the document's audit records that remaining check.

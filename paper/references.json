@@ -1495,5 +1495,217 @@
     "url": "https://doi.org/10.1371/journal.pcbi.1014077",
     "status": "published",
     "metadata_source": "Crossref DOI metadata and original publisher page, checked 2026-10-06"
+  },
+  "clonotrace": {
+    "authors": [
+      {
+        "family": "Fu",
+        "given": "Yuntian"
+      },
+      {
+        "family": "Mathew",
+        "given": "Divij"
+      },
+      {
+        "family": "Wang",
+        "given": "Mingshuang"
+      },
+      {
+        "family": "Chen",
+        "given": "Xinyi E."
+      },
+      {
+        "family": "Lin",
+        "given": "Kevin Z."
+      },
+      {
+        "family": "Schaff",
+        "given": "Dylan"
+      },
+      {
+        "family": "Shaffer",
+        "given": "Sydney M."
+      },
+      {
+        "family": "Pardoll",
+        "given": "Drew M."
+      },
+      {
+        "family": "Jackson",
+        "given": "Christina"
+      },
+      {
+        "family": "Zhang",
+        "given": "Nancy R."
+      }
+    ],
+    "title": "Deciphering Cell Fate and Clonal Dynamics via Integrative Single-Cell Lineage Modeling",
+    "journal": "bioRxiv",
+    "journal_abbrev": "bioRxiv",
+    "year": 2025,
+    "doi": "10.1101/2025.09.01.673503",
+    "url": "https://doi.org/10.1101/2025.09.01.673503",
+    "status": "preprint",
+    "volume": "",
+    "issue": "",
+    "pages": ""
+  },
+  "weinreb2020": {
+    "authors": [
+      {
+        "family": "Weinreb",
+        "given": "Caleb"
+      },
+      {
+        "family": "Rodriguez-Fraticelli",
+        "given": "Alejo"
+      },
+      {
+        "family": "Camargo",
+        "given": "Fernando D."
+      },
+      {
+        "family": "Klein",
+        "given": "Allon M."
+      }
+    ],
+    "title": "Lineage tracing on transcriptional landscapes links state to fate during differentiation",
+    "journal": "Science",
+    "journal_abbrev": "Science",
+    "year": 2020,
+    "doi": "10.1126/science.aaw3381",
+    "url": "https://doi.org/10.1126/science.aaw3381",
+    "status": "published",
+    "volume": "367",
+    "issue": "6479",
+    "pages": "eaaw3381"
+  },
+  "mathew2024": {
+    "authors": [
+      {
+        "family": "Mathew",
+        "given": "Divij"
+      },
+      {
+        "family": "Marmarelis",
+        "given": "Melina E."
+      },
+      {
+        "family": "Foley",
+        "given": "Caitlin"
+      },
+      {
+        "family": "Bauml",
+        "given": "Joshua M."
+      },
+      {
+        "family": "Ye",
+        "given": "Darwin"
+      },
+      {
+        "family": "Ghinnagow",
+        "given": "Reem"
+      },
+      {
+        "family": "Ngiow",
+        "given": "Shin Foong"
+      },
+      {
+        "family": "Klapholz",
+        "given": "Max"
+      },
+      {
+        "family": "Jun",
+        "given": "Soyeong"
+      },
+      {
+        "family": "Zhang",
+        "given": "Zhaojun"
+      },
+      {
+        "family": "Zorc",
+        "given": "Robert"
+      },
+      {
+        "family": "Davis",
+        "given": "Christiana W."
+      },
+      {
+        "family": "Diehn",
+        "given": "Maximillian"
+      },
+      {
+        "family": "Giles",
+        "given": "Josephine R."
+      },
+      {
+        "family": "Huang",
+        "given": "Alexander C."
+      },
+      {
+        "family": "Hwang",
+        "given": "Wei-Ting"
+      },
+      {
+        "family": "Zhang",
+        "given": "Nancy R."
+      },
+      {
+        "family": "Schoenfeld",
+        "given": "Adam J."
+      },
+      {
+        "family": "Carpenter",
+        "given": "Erica L."
+      },
+      {
+        "family": "Langer",
+        "given": "Corey J."
+      },
+      {
+        "family": "Wherry",
+        "given": "E. John"
+      },
+      {
+        "family": "Minn",
+        "given": "Andy J."
+      }
+    ],
+    "title": "Combined JAK inhibition and PD-1 immunotherapy for non-small cell lung cancer patients",
+    "journal": "Science",
+    "journal_abbrev": "Science",
+    "year": 2024,
+    "doi": "10.1126/science.adf1329",
+    "url": "https://doi.org/10.1126/science.adf1329",
+    "status": "published",
+    "volume": "384",
+    "issue": "6702",
+    "pages": "eadf1329"
+  },
+  "spring2018": {
+    "authors": [
+      {
+        "family": "Weinreb",
+        "given": "Caleb"
+      },
+      {
+        "family": "Wolock",
+        "given": "Samuel"
+      },
+      {
+        "family": "Klein",
+        "given": "Allon M."
+      }
+    ],
+    "title": "SPRING: a kinetic interface for visualizing high dimensional single-cell expression data",
+    "journal": "Bioinformatics",
+    "journal_abbrev": "Bioinformatics",
+    "year": 2018,
+    "doi": "10.1093/bioinformatics/btx792",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6030950/",
+    "status": "published",
+    "volume": "34",
+    "issue": "7",
+    "pages": "1246–1248"
   }
 }

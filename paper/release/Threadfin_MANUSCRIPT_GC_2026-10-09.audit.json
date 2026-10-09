@@ -1,0 +1,133 @@
+{
+  "template": "/data/scratch/projects/punim1236/AAA_Chen_is_here/\u6587\u732e\u8c03\u7814/\u6f14\u8bb2\u6587\u7a3f/Progress_Review_Year2_ChenZhu_v5.docx",
+  "template_sha256": "ecc7335af5119cdb56702eda6a6c3e13d9684769d34e257e3883bae77d10ac8e",
+  "output": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/Threadfin_MANUSCRIPT_GC_2026-10-09.docx",
+  "author": "Chen Zhu",
+  "styles_preserved": [
+    "a1",
+    "1",
+    "21",
+    "31",
+    "FigureLegend",
+    "EndNoteBibliography"
+  ],
+  "citation_count": 29,
+  "inline_citations": "parenthetical numbers in first-citation order",
+  "reference_management": "static Word citations plus EndNote-importable RIS; no fabricated EndNote fields",
+  "figure_images": 22,
+  "pending_native_benchmark": false,
+  "verified_figure_media": {
+    "Figure_1": {
+      "source": "paper/figure_plan/Figure_1.png",
+      "sha256": "d305855ba695afbfcfdb9d29d82edb7ca880af1d942fc916a824d383a861ce7d",
+      "docx_media": "word/media/image1.png"
+    },
+    "Figure_2": {
+      "source": "paper/figure_plan/Figure_2.png",
+      "sha256": "257ea466f65f4ac6bc9e8ed109930ce81890f131bc8adb31de98162461b10408",
+      "docx_media": "word/media/image2.png"
+    },
+    "Figure_3": {
+      "source": "paper/figure_plan/Figure_3.png",
+      "sha256": "5fec4dd8e89c9386a1d1e3ad08a89a2cf1e11bf58c860974d738b03467738fe3",
+      "docx_media": "word/media/image3.png"
+    },
+    "Figure_4": {
+      "source": "paper/figure_plan/Figure_4.png",
+      "sha256": "b0d5cb8cb9b9b7726d4515e3b4d386cee159568c92a94025a535a87318821b95",
+      "docx_media": "word/media/image4.png"
+    },
+    "Figure_5": {
+      "source": "paper/figure_plan/Figure_5.png",
+      "sha256": "2478eb7d75c96ef4b0484f116f349686831f2f329e2443c1086fe4b7e5956164",
+      "docx_media": "word/media/image5.png"
+    },
+    "Figure_6": {
+      "source": "paper/figure_plan/Figure_6.png",
+      "sha256": "14bbdeeb9bb3cb022cd9d0d8cdc3435ee5bb8513c200c01cbabe609a9df6583e",
+      "docx_media": "word/media/image6.png"
+    },
+    "Supplementary_1": {
+      "source": "paper/figure_plan/Supplementary_1.png",
+      "sha256": "f5b3a1f33d8152a00d75aefcc271373cbe04101866b564995a3069fe5805b2a0",
+      "docx_media": "word/media/image7.png"
+    },
+    "Supplementary_2": {
+      "source": "paper/figure_plan/Supplementary_2.png",
+      "sha256": "6e3ae6afc06b8eb67f6a58cd4a15dd6d6e02102b0df40207dd74a34a88658218",
+      "docx_media": "word/media/image8.png"
+    },
+    "Supplementary_3": {
+      "source": "paper/figure_plan/Supplementary_3.png",
+      "sha256": "04a37de8d5a195d0fb4e569b6fa894f656552df66c5d5cb095fc5bc35f6c20b1",
+      "docx_media": "word/media/image9.png"
+    },
+    "Supplementary_4": {
+      "source": "paper/figure_plan/Supplementary_4.png",
+      "sha256": "e5607ac1c485a229b2c493cb80c2e0ebe19084e22d86632d39ca00fe9e015914",
+      "docx_media": "word/media/image10.png"
+    },
+    "Supplementary_5": {
+      "source": "paper/figure_plan/Supplementary_5.png",
+      "sha256": "1e20e7bd44f9647525dee24f6a2d6e5fe8c6a37d43fdcce71b605e2af6bbe1a6",
+      "docx_media": "word/media/image11.png"
+    },
+    "Supplementary_6": {
+      "source": "paper/figure_plan/Supplementary_6.png",
+      "sha256": "264b730ca73482ba19ef55c0ef0dccc98e9f97d3fff0678951e84b47f28fec0b",
+      "docx_media": "word/media/image12.png"
+    },
+    "Supplementary_7": {
+      "source": "paper/figure_plan/Supplementary_7.png",
+      "sha256": "d330b2cc214b388eeb467d988dce60718cddcc0a33326847d77d3fe70ee7bdc6",
+      "docx_media": "word/media/image13.png"
+    },
+    "Supplementary_8": {
+      "source": "paper/figure_plan/Supplementary_8.png",
+      "sha256": "4126ac74e6d682e3efff93daceaa7e5adff6984b587a7e451c19b5120a9f1ef8",
+      "docx_media": "word/media/image14.png"
+    },
+    "Supplementary_9": {
+      "source": "paper/figure_plan/Supplementary_9.png",
+      "sha256": "5edbf4002c736c35e327ece3f93225d9640ef5a224689fbe5872dd9142a9d07b",
+      "docx_media": "word/media/image15.png"
+    },
+    "Supplementary_10": {
+      "source": "paper/figure_plan/Supplementary_10.png",
+      "sha256": "d8a4f6a5af6d9a920b43639b0822949a6bf45d88730f500122640f8fde58281d",
+      "docx_media": "word/media/image16.png"
+    },
+    "Supplementary_11": {
+      "source": "paper/figure_plan/Supplementary_11.png",
+      "sha256": "2bc1b7a0df00ed54cffb064eea971f754901deab7295d86c21516b97eed8d46a",
+      "docx_media": "word/media/image17.png"
+    },
+    "Supplementary_12": {
+      "source": "paper/figure_plan/Supplementary_12.png",
+      "sha256": "f8a0b068c5c1422c7ef0375b5e8b5e539659d8e2bb52b63c54ca4e0dfaa66575",
+      "docx_media": "word/media/image18.png"
+    },
+    "Supplementary_13": {
+      "source": "paper/figure_plan/Supplementary_13.png",
+      "sha256": "6a4aeac65cb9248f4914321bf2a15e28b514df06136875027fc79172c52c4d0d",
+      "docx_media": "word/media/image19.png"
+    },
+    "Supplementary_14": {
+      "source": "paper/figure_plan/Supplementary_14.png",
+      "sha256": "b1e62c1a363541463a39d11703ca4288dda9d433fd20f3a7f6b9d022b0a58b71",
+      "docx_media": "word/media/image20.png"
+    },
+    "Supplementary_15": {
+      "source": "paper/figure_plan/Supplementary_15.png",
+      "sha256": "37da55c2ab522fb6948c2d695b655dc115c5149cd4c495f4b1dfcdceff72457d",
+      "docx_media": "word/media/image21.png"
+    },
+    "Supplementary_16": {
+      "source": "paper/figure_plan/Supplementary_16.png",
+      "sha256": "b6e012638e76373d50600e6a46fc1befd9cb3cfe0515801d991a1507c0594125",
+      "docx_media": "word/media/image22.png"
+    }
+  },
+  "missing_figures": [],
+  "validation": "OOXML/styles/media/reference checks; Word pagination requires visual review"
+}

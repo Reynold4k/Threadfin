@@ -20,7 +20,7 @@ MODELS = {
     'bone_marrow_pc': ('Marrow / blood', 'Non-GC anchor', 'Pure PC / memory gates; exact H+L'),
     'flu': ('Influenza blood', 'Tested coverage', 'Exploratory expression states'),
     'flu_lung': ('Influenza lung', 'Tested coverage', 'Exploratory expression states'),
-    'ebv': ('EBV blood', 'Tested coverage', 'Exploratory expression states'),
+    'ebv': ('EBV organoids', 'Tested coverage', 'Measured GFP status in infected tonsil organoids'),
     'tonsil': ('Tonsil', 'Tested coverage', 'Exploratory expression states'),
     'stephenson': ('COVID blood', 'Tested coverage', 'Exploratory expression states'),
 }
@@ -60,7 +60,7 @@ def main():
         'coherence': 'Receptor-excluded expression PCs; context-centred clones; clone identities shuffled within sample/library, preserving each clone size and the cells of each library.',
         'interpretation': 'An excess shows within-library clonal expression resemblance; it does not isolate antigen specificity, establish lineage direction, or predict fate.',
         'modules': 'Median gene-level excess ICC relative to an expression-matched background, not a fate prediction. Mouse symbols are case-corrected, not curated orthologue translations.',
-        'excluded_module_output': 'flu_lung: earlier output lacks corrected mouse-symbol coverage.',
+        'excluded_module_output': 'None in the 2026-10-09 rerun; datasets lacking signature coverage are skipped explicitly.',
         'independence': 'malaria and malaria_late are separate experiments in one publication; mouse_np and mouse_rbd are separate cohorts in one publication. Twelve analyses are not twelve independent publications.'
     }, indent=2))
 

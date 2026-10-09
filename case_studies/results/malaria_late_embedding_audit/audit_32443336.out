@@ -1,0 +1,17 @@
+[     11s] loading malaria_late
+[threadfin] define_clones: 59922 cells -> 58246 clones (1183 with >= 2 cells); nt Hamming threshold 0.066 (density).
+[threadfin] attached BCR: 59922/72359 cells, 58246 clones.
+[     64s] 72359 cells; expression embedding + family profiles
+[    128s] features (1183, 30) for 1183 reliable clones
+[    140s] default-config reproduction corr: {'x': 0.9898771760633575, 'y': 0.9781820947799676}
+[    140s] sweep: 85 parameter sets
+[    163s] 10/85 done
+[    187s] 20/85 done
+[    216s] 30/85 done
+[    246s] 40/85 done
+[    281s] 50/85 done
+[    321s] 60/85 done
+[    348s] 70/85 done
+[    374s] 80/85 done
+[    393s] galleries written
+[    393s] done -> /data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late_embedding_audit

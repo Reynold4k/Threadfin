@@ -1,0 +1,22 @@
+{
+ "name": "k50_md0.5_seed0",
+ "parameters": {
+  "n_neighbors": 50,
+  "min_dist": 0.5,
+  "spread": 1.0,
+  "random_state": 0
+ },
+ "features": "threadfin clone_profiles kernel representation on 1,183 reliability>=0.5 clones; rebuilt identical to run_case_study.py (malaria_late_embedding_audit.py)",
+ "selection_rule": "most continuous among the most faithful configurations (Spearman pairwise-distance correlation with the family feature space); every label association robust across all 85 swept parameter sets (sweep.csv)",
+ "faithfulness": 0.855936397596863,
+ "committed_config": {
+  "n_neighbors": 15,
+  "min_dist": 0.1,
+  "spread": 1.0,
+  "random_state": 0
+ },
+ "committed_faithfulness": 0.7636279839445584,
+ "n_clones": 1183,
+ "coordinates_sha256": "2e7dfa0acddb79139d9fa6d4dfbf912139baad3d2c0d8ac6d5f91a2513f868d9",
+ "arm_annotation": "GC arm top-decile fraction GC centroid; PB arm top-decile fraction PB; Memory arm top-decile fraction Memory (computed in make_biology_figures.figure3)"
+}

@@ -11,13 +11,25 @@ from matplotlib.lines import Line2D
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parents[1] / 'case_studies/results/gc_np_pc_clone_embedding'
+AUDIT_DATA = HERE.parents[1] / 'case_studies/results/gc_legacy_parameter_audit'
 COLORS = {'light zone': '#d9a643', 'Myc+ light zone': '#4b9a8b',
           'dark zone': '#3478ad', 'plasma cell': '#c65359', 'mixed': '#9da4ab'}
 LABELS = {'light zone': 'LZ', 'Myc+ light zone': 'Myc+ LZ',
           'dark zone': 'DZ', 'plasma cell': 'PC', 'mixed': 'Mixed'}
 
 
-def table(preset='notebook', seed=123):
+def selection():
+    return json.loads((AUDIT_DATA / 'selected.json').read_text())
+
+
+def table(preset=None, seed=123):
+    if preset is None:
+        chosen = selection()
+        path = AUDIT_DATA / 'maps' / (chosen['name'] + '.csv')
+        import hashlib
+        if hashlib.sha256(path.read_bytes()).hexdigest() != chosen['coordinates_sha256']:
+            raise RuntimeError('Selected clone coordinates changed after audit.')
+        return pd.read_csv(path, index_col=0)
     summary = json.loads((DATA / 'summary.json').read_text())
     if summary['status'] != 'completed':
         raise RuntimeError('Real GSE246382 reclustering is incomplete.')
@@ -26,13 +38,14 @@ def table(preset='notebook', seed=123):
 
 def axes_style(ax):
     ax.set_aspect('equal', adjustable='box')
-    ax.margins(.12)
+    ax.margins(.055)
     ax.set_xticks([]); ax.set_yticks([])
     for spine in ax.spines.values(): spine.set_visible(False)
 
 
 def scatter(ax, tab, color='gate', size_factor=1):
-    sizes = size_factor * (12 + 3 * tab.n_cells)
+    # Marker AREA is directly proportional to actual captured cells.
+    sizes = size_factor * 5 * tab.n_cells
     if color in {'gate', 'cluster'}:
         categories = COLORS if color == 'gate' else cluster_colors(tab)
         values = tab.dominant_gate if color == 'gate' else tab.clone_cluster.astype(str)
@@ -54,19 +67,20 @@ def cluster_colors(tab):
     return {label: plt.get_cmap('tab10')(int(label) % 10) for label in labels}
 
 
-def clone_legends(ax, tab, fontsize=6, size_factor=1):
+def clone_legends(ax, tab, fontsize=6, size_factor=1, separate=False):
     handles = [Line2D([], [], color=color, marker='o', ls='', markersize=4,
                       label=label) for label, color in cluster_colors(tab).items()]
+    x = 0 if separate else 1.02
     first = ax.legend(handles=handles, title='clone_cluster', frameon=False,
-                      loc='upper left', bbox_to_anchor=(1.02, 1), fontsize=fontsize,
+                      loc='upper left', bbox_to_anchor=(x, 1), fontsize=fontsize,
                       title_fontsize=fontsize, borderaxespad=0, handletextpad=.5)
     ax.add_artist(first)
-    counts = sorted(set([int(tab.n_cells.min()), 6, 12, int(tab.n_cells.max())]))
+    counts = sorted(set([int(tab.n_cells.min()), 3, 10, int(tab.n_cells.max())]))
     counts = [n for n in counts if tab.n_cells.min() <= n <= tab.n_cells.max()]
-    handles = [ax.scatter([], [], s=size_factor * (12 + 3 * n), color='#444444',
+    handles = [ax.scatter([], [], s=size_factor * 5 * n, color='#444444',
                           edgecolor='white', linewidth=.35, label=str(n)) for n in counts]
-    ax.legend(handles=handles, title='Clone size (cells)', frameon=False,
-              loc='upper left', bbox_to_anchor=(1.02, .48), fontsize=fontsize,
+    ax.legend(handles=handles, title='Captured cells', frameon=False,
+              loc='upper left', bbox_to_anchor=(x, .40), fontsize=fontsize,
               title_fontsize=fontsize, borderaxespad=0, labelspacing=.9)
 
 
@@ -78,14 +92,13 @@ def gate_legend(ax, tab, y=-.05, size=6):
               ncol=3, fontsize=size, handletextpad=.3, columnspacing=.8, borderaxespad=0)
 
 
-def main_node_panel(ax):
+def main_node_panel(ax, legend_ax):
     tab = table()
-    ax.set_axis_off()
-    inner = ax.inset_axes([.035, .09, .72, .84])
-    scatter(inner, tab, 'cluster', size_factor=1.4)
-    inner.set_xlabel('UMAP 1', fontsize=6, labelpad=2)
-    inner.set_ylabel('UMAP 2', fontsize=6, labelpad=2)
-    clone_legends(inner, tab, size_factor=1.4)
+    scatter(ax, tab, 'cluster', size_factor=1.2)
+    ax.set_xlabel('Clone UMAP 1', fontsize=6, labelpad=2)
+    ax.set_ylabel('Clone UMAP 2', fontsize=6, labelpad=2)
+    legend_ax.set_axis_off()
+    clone_legends(legend_ax, tab, size_factor=1.2, separate=True, fontsize=6.5)
     return tab
 
 
@@ -93,6 +106,8 @@ def myc_panel(ax):
     ax.set_axis_off()
     inner = ax.inset_axes([0, .13, 1, .85])
     tab = table(); im = scatter(inner, tab, 'marker:Myc')
+    inner.set_xlabel('Clone UMAP 1', fontsize=5.5, labelpad=1.5)
+    inner.set_ylabel('Clone UMAP 2', fontsize=5.5, labelpad=1.5)
     cb = ax.figure.colorbar(im, ax=inner, orientation='horizontal', fraction=.04, pad=.08, aspect=28)
     cb.set_label('Mean log-normalised Myc RNA', fontsize=6)
     return tab
@@ -101,10 +116,12 @@ def myc_panel(ax):
 def cell_gates(ax):
     ax.set_axis_off()
     inner = ax.inset_axes([0, .02, 1, .96])
-    cells = pd.read_csv(DATA / 'cells.csv.gz', index_col=0)
+    cells = pd.read_csv(AUDIT_DATA / 'cells.csv.gz', index_col=0)
+    basis = selection()['basis']
+    xy = ['legacy_umap_1', 'legacy_umap_2'] if basis == 'legacy' else ['umap_1', 'umap_2']
     for state, col in COLORS.items():
         q = cells[cells.fate.eq(state)]
-        if len(q): inner.scatter(q.umap_1, q.umap_2, s=1, color=col, alpha=.65, linewidths=0, rasterized=True)
+        if len(q): inner.scatter(q[xy[0]], q[xy[1]], s=1, color=col, alpha=.65, linewidths=0, rasterized=True)
     axes_style(inner)
     handles = [Line2D([], [], color=COLORS[s], marker='o', ls='', markersize=4, label=LABELS[s]) for s in COLORS if s != 'mixed']
     ax.legend(handles=handles, frameon=False, loc='upper left', bbox_to_anchor=(0, -.03), ncol=4, fontsize=6,
@@ -119,7 +136,7 @@ def markers(ax):
     means = tab.groupby('clone_cluster')[['marker:' + g for g in genes]].mean()
     order = sorted(means.index, key=int)
     means = means.reindex(order).T
-    source = DATA / 'display_marker_means.csv'; means.to_csv(source)
+    source = AUDIT_DATA / 'display_marker_means.csv'; means.to_csv(source)
     im = ax.imshow(means.to_numpy(), aspect='auto', cmap='viridis', vmin=0)
     ax.set_xticks(range(len(order)), order, fontsize=6)
     ax.set_xlabel('clone_cluster', fontsize=6)
@@ -134,6 +151,25 @@ def markers(ax):
     return source
 
 
+def gate_composition(ax):
+    tab = table()
+    cols = ['gate:' + s for s in COLORS if s != 'mixed']
+    means = tab.groupby('clone_cluster')[cols].mean()
+    bottom = np.zeros(len(means))
+    for name in COLORS:
+        if name == 'mixed': continue
+        values = means['gate:' + name].to_numpy()
+        ax.bar(means.index.astype(str), values, bottom=bottom, color=COLORS[name], width=.75,
+               linewidth=.5, edgecolor='white', label=LABELS[name])
+        bottom += values
+    ax.set_ylim(0, 1); ax.set_yticks([0, .5, 1], ['0', '0.5', '1'])
+    ax.set_ylabel('Mean family-level fraction', fontsize=6.5)
+    ax.set_xlabel('clone_cluster', fontsize=6.5)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend(loc='upper center', bbox_to_anchor=(.5, -.25), ncol=4, fontsize=6,
+              frameon=False, columnspacing=.8, handlelength=1)
+
+
 def review():
     out = HERE / 'review'; out.mkdir(exist_ok=True)
     tab = table()
@@ -142,10 +178,36 @@ def review():
     ax.set_xlabel('UMAP 1'); ax.set_ylabel('UMAP 2')
     ax.set_title('GSE246382 · clone embedding', fontsize=12)
     clone_legends(ax, tab, fontsize=9, size_factor=3)
-    fig.text(.08, .025, '49 same-mouse families · ≥3 cells/family · unsupervised Leiden · seed 123', fontsize=9)
+    chosen = selection()
+    unit = 'same-mouse V–D–J groups' if chosen['definition'] == 'donor_vdj' else 'same-mouse sequence families'
+    fig.text(.08, .025, f'{len(tab)} {unit} · {int(tab.n_cells.sum())} cells · ≥1 cell/group · seed 123', fontsize=8.5)
     fig.subplots_adjust(left=.1, right=.74, bottom=.12, top=.9)
-    fig.savefig(out / 'GSE246382_clone_embedding.png', dpi=250)
-    fig.savefig(out / 'GSE246382_clone_embedding.pdf'); plt.close(fig)
+    fig.savefig(out / 'GSE246382_selected_clone_embedding.png', dpi=250)
+    fig.savefig(out / 'GSE246382_selected_clone_embedding.pdf'); plt.close(fig)
+    selected = table()
+    stability = pd.read_csv(AUDIT_DATA / 'seed_stability.csv')
+    row = stability[(stability.basis == chosen['basis']) & (stability.definition == chosen['definition'])
+                    & (stability.min_clone_size == chosen['min_clone_size'])
+                    & (stability.umap_k == chosen['umap_k']) & (stability.min_dist == chosen['min_dist'])
+                    & (stability.resolution == chosen['resolution'])].iloc[0]
+    maps = [chosen['name'].replace('seed123', 'seed'+str(seed)) for seed in (123,7,0,1,42,99,2024)]
+    fig, axes = plt.subplots(2, 4, figsize=(12, 7))
+    for ax, name in zip(axes.flat, maps):
+        tab = pd.read_csv(AUDIT_DATA / 'maps' / (name + '.csv'), index_col=0)
+        # Colours transfer the primary partition by family ID solely to compare layouts.
+        tab['clone_cluster'] = selected.clone_cluster.reindex(tab.index)
+        scatter(ax, tab, 'cluster', size_factor=1.4)
+        ax.set_title('UMAP seed ' + name.rsplit('seed', 1)[1], fontsize=10)
+    axes.flat[-1].set_axis_off()
+    axes.flat[-1].text(.05,.8,'Same input groups and parameters\nSeven UMAP seeds; graph/Leiden seed 0\n\nColours follow seed-123 membership\nfor visual comparison.\n\nIndependent Leiden agreement:\n'
+                       f'median ARI {row.ari_median:.3f}; minimum {row.ari_min:.3f}.\nExact branch shape is not invariant.',
+                       transform=axes.flat[-1].transAxes,fontsize=9,va='top',linespacing=1.7)
+    fig.suptitle('Selected parameters: layouts across all seven seeds', fontsize=12)
+    fig.text(.5, .015, 'Coordinates and independent partitions for every run: case_studies/results/gc_legacy_parameter_audit/maps/', ha='center', fontsize=8)
+    fig.subplots_adjust(left=.02, right=.98, bottom=.07, top=.9, wspace=.10,hspace=.20)
+    fig.savefig(out / 'GSE246382_selected_seed_comparison.png', dpi=200)
+    fig.savefig(out / 'GSE246382_selected_seed_comparison.pdf'); plt.close(fig)
+    # Preserve the earlier 49-family preset comparison as a labelled control.
     fig, axes = plt.subplots(3, 3, figsize=(10.5, 9.2))
     for j, preset in enumerate(('cohesive', 'continuous', 'discrete')):
         tab = table(preset)

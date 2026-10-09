@@ -31,6 +31,6 @@ Shape resemblance to report Figure 2.7 is supporting context, not an ID-level ma
 Supplementary Figure 8A therefore preserves the image as a historical output
 with unresolved exact cohort/day attribution. It is excluded from GSE246382
 state/fate claims. Current Figure 2B instead comes from a new audited
-GSE246382 raw-RNA run using frozen same-mouse sequence-defined families.
+GSE246382 raw-RNA run using donor-restricted V–D–J receptor groups, with stricter sequence-family controls retained in the reconstruction audit.
 Original source image hashes and the separate new-analysis paths are in
 [the provenance manifest](figure_plan/assets/legacy_gc_provenance.json).

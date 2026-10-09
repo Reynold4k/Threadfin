@@ -244,11 +244,11 @@ def missing(ax, what):
 INTERNAL = ROOT.parent / "internal_validation" / "figures"   # kept out of the repository
 
 
-def save(fig, name, folder=None):
+def save(fig, name, folder=None, *, dpi=200):
     out = Path(folder or HERE)
     out.mkdir(parents=True, exist_ok=True)
     fig.savefig(out / f"{name}.pdf")
-    fig.savefig(out / f"{name}.png", dpi=200)
+    fig.savefig(out / f"{name}.png", dpi=dpi)
     plt.close(fig)
     print("wrote", out / name)
 

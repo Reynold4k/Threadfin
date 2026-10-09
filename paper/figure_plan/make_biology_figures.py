@@ -79,6 +79,38 @@ def map_axis(ax):
     for s in ax.spines.values(): s.set_visible(False)
 
 
+def clone_axis(ax):
+    """Corner axes marking a clone-profile map, to distinguish it from cell UMAPs."""
+    ax.annotate('', xy=(.15, .03), xytext=(.02, .03), xycoords='axes fraction',
+                arrowprops=dict(arrowstyle='-', color=INK, lw=.7, shrinkA=0, shrinkB=0))
+    ax.annotate('', xy=(.02, .15), xytext=(.02, .03), xycoords='axes fraction',
+                arrowprops=dict(arrowstyle='-', color=INK, lw=.7, shrinkA=0, shrinkB=0))
+    box = dict(boxstyle='round,pad=.12', facecolor='white', edgecolor='none', alpha=.75)
+    ax.text(.16, .03, 'Clone UMAP 1', transform=ax.transAxes, fontsize=5.2, va='center', color=INK, bbox=box)
+    ax.text(.035, .16, 'Clone UMAP 2', transform=ax.transAxes, fontsize=5.2, va='bottom',
+            rotation=90, color=INK, bbox=box)
+
+
+def arm_labels(ax, t, xcol, ycol, mem_col, push=.34, pos=None):
+    """State-arm labels pulled outside the map with leader lines."""
+    specs = [('cell_state:GC', 'GC arm'), ('cell_state:PB', 'PB arm'), (mem_col, 'Memory arm')]
+    cx0, cy0 = t[xcol].mean(), t[ycol].mean()
+    span = max(t[xcol].max() - t[xcol].min(), t[ycol].max() - t[ycol].min())
+    for col, lab_ in specs:
+        v = t[col]
+        hi = t[v >= v.quantile(.9)]
+        cx, cy = hi[xcol].mean(), hi[ycol].mean()
+        if pos and lab_ in pos:
+            tx, ty = pos[lab_]
+        else:
+            dx, dy = cx - cx0, cy - cy0
+            n = np.hypot(dx, dy) or 1
+            tx, ty = cx + dx / n * span * push, cy + dy / n * span * push
+        ax.annotate(lab_, xy=(cx, cy), xytext=(tx, ty), fontsize=5.6, color=INK, ha='center', va='center',
+                    arrowprops=dict(arrowstyle='-', color=GREY, lw=.7, shrinkA=2, shrinkB=2),
+                    bbox=dict(boxstyle='round,pad=.2', facecolor='white', edgecolor=GREY, alpha=.9, lw=.6))
+
+
 def cell_map(ax, ds, col, palette, title=None, subset=None):
     d = cells(ds) if subset is None else subset
     d = d.dropna(subset=['umap_1', 'umap_2'])
@@ -93,12 +125,15 @@ def cell_map(ax, ds, col, palette, title=None, subset=None):
     note(ax, f'{len(d):,} cells; cell UMAP', -.01)
 
 
-def color_map(ax, ds, column, label, vmin=0, vmax=1, cmap='viridis', note_y=-.30):
+def color_map(ax, ds, column, label, vmin=0, vmax=1, cmap='viridis', note_y=-.30, coords=None):
     d = clones(ds).dropna(subset=['x', 'y', column])
-    q = d[d.reliability >= .5]
+    q = d[d.reliability >= .5].copy()
+    if coords is not None:
+        co = coords.reindex(q.index)
+        q['x'], q['y'] = co['x'], co['y']
     im = ax.scatter(q.x, q.y, c=q[column], s=1+5*np.sqrt(q.n_cells), cmap=cmap, vmin=vmin, vmax=vmax,
                     edgecolors='white', linewidths=.18, alpha=.9, rasterized=True)
-    map_axis(ax)
+    map_axis(ax); clone_axis(ax)
     cb = ax.figure.colorbar(im, ax=ax, orientation='horizontal', fraction=.045, pad=.055, aspect=24)
     cb.set_label(label, fontsize=6, labelpad=2)
     cb.ax.tick_params(labelsize=6, length=2)
@@ -128,7 +163,7 @@ def annotated_clone_map(ax, ds, column, palette):
               'plasma cells':'PC sort','memory B cells':'Memory sort'}.get(key,key)
         ax.text(q.x.median(),q.y.median(),text,fontsize=5.4,color=INK,ha='center',va='center',
                 bbox=dict(boxstyle='round,pad=.2',facecolor='white',edgecolor=color,alpha=.9,lw=.6))
-    map_axis(ax)
+    map_axis(ax); clone_axis(ax)
     labels={('PC sort' if k=='plasma cells' else 'Memory sort' if k=='memory B cells' else k):v for k,v in palette.items()}
     legend(ax,labels,ncol=2,y=-.08)
     text=f'{len(t):,} reliable clones; size reflects capture count.'
@@ -234,51 +269,64 @@ def memory_dots(ax, ds, keys, labels):
 
 
 def figure1():
-    from clone_concept import integration_story, capabilities_story
-    fig=new_page('Figure 1','Threadfin links BCR families to captured germinal-centre states',height=304)
-    a=panel(fig,0,2,183,85,'A',letter_dx=-3)
-    asset=HERE/'assets/GC_structure_supplied.png'
-    a.imshow(plt.imread(asset));a.set_axis_off()
-    AUDIT['sources'][str(asset.relative_to(ROOT))]='Author-original GC schematic by Chen Satoshi; ownership confirmed; inserted without pixel editing.'
-    AUDIT['figure1_concept']={'panels':['original GC art','traceable paired-cell/family/profile/map example','four visual evidence cards'],
-                             'illustrative_cells':18,'families':3,'cells_per_family':6,
-                             'ring_compositions':'illustrative, not the algorithmic kernel features',
-                             'A_asset_sha256':hashlib.sha256(asset.read_bytes()).hexdigest()}
-    b=panel(fig,0,94,183,112,'B',letter_dx=-3);integration_story(b)
-    c=panel(fig,0,227,183,55,'C',letter_dx=-3);capabilities_story(c)
-    save(fig,'Figure_1');AUDIT['outputs'].append('Figure_1')
+    from figure1_overview import draw, manifest
+    fig=new_page('Figure 1','Threadfin connects receptor identity to B-cell state relationships',
+                 'Integrating paired scRNA-seq and scBCR-seq to resolve clone-state organisation.',height=212)
+    draw(panel(fig,0,8,183,183))
+    AUDIT['sources'].pop('paper/figure_plan/assets/GC_structure_supplied.png',None)
+    AUDIT['figure1_concept']=manifest()
+    AUDIT['figure1_concept']['source']='paper/figure_plan/figure1_overview.py'
+    AUDIT['figure1_concept']['source_sha256']=hashlib.sha256((HERE/'figure1_overview.py').read_bytes()).hexdigest()
+    save(fig,'Figure_1',dpi=300);AUDIT['outputs'].append('Figure_1')
+    AUDIT['figure1_concept']['outputs']={suffix:hashlib.sha256((HERE/('Figure_1.'+suffix)).read_bytes()).hexdigest()
+                                       for suffix in ('png','pdf')}
 
 
 def figure2():
-    from gc_reclustering_panels import main_node_panel, DATA as GC_DATA
+    from gc_reclustering_panels import main_node_panel, selection, AUDIT_DATA as GC_DATA
     fig=new_page('Figure 2','Model-antigen GC state nodes and independent reporter measurements',
-                 'Clone embedding is coloured by unsupervised Leiden clusters; measured gates and RNA provide GC-state interpretation.',height=305)
+                 'Reconstructed clone embedding; Leiden colours, captured-cell sizes and measured GC-state context.',height=294)
     design(p(fig,0,6,183,54,'A','Independent NP-OVA and RBD reporter designs'),'model')
-    b=p(fig,0,78,126,68,'B','NP-OVA day 14: clone embedding and Leiden reclustering')
-    cm=main_node_panel(b)
-    AUDIT['sources']['case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv']=len(cm)
-    AUDIT['gc_reclustering']={'primary':'notebook_seed123','n_clones':len(cm),
-        'job_id':json.loads((GC_DATA/'summary.json').read_text())['job_id'],
+    b=p(fig,0,78,141,80,'B','NP-OVA day 14: clone embedding and Leiden reclustering')
+    legend_ax=p(fig,151,80,32,78,None,'')
+    cm=main_node_panel(b,legend_ax)
+    chosen=selection()
+    source=GC_DATA/'maps'/(chosen['name']+'.csv')
+    AUDIT['sources'][str(source.relative_to(ROOT))]=len(cm)
+    AUDIT['gc_reclustering']={'primary':chosen['name'],'n_clones':len(cm),
+        'n_cells':int(cm.n_cells.sum()),'coordinates_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
+        'job_id':chosen['job_id'],'selection_manifest':str((GC_DATA/'selected.json').relative_to(ROOT)),
         'graph_uses_gate_labels':False,'plot_colors':'Unsupervised Leiden clone_cluster',
-        'parameters':'case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_parameters.json'}
-    state=p(fig,134,78,49,68,None,'Measured compartments\nand marker support (S8B–D)')
-    state.set_axis_off()
-    state.text(0,.95,'Cluster 1: GC selection-associated\n42% Myc+ LZ; 21% DZ\nHigher mean Myc RNA',va='top',fontsize=7,color='#ff7f0e',linespacing=1.35)
-    state.text(0,.58,'Cluster 0: LZ / output-enriched\n47% PC; 48% LZ\nHigher plasma-cell module',va='top',fontsize=7,color='#1f77b4',linespacing=1.35)
-    state.text(0,.21,'Cluster 2: mixed GC / output.\nMean compartment fractions\nover families; no direction\nor future fate assigned.',va='top',fontsize=6.5,color=INK,linespacing=1.3)
-    note(b,'GSE246382: 49 same-mouse sequence-defined families / 260 cells; ≥3 cells per family; area follows capture count.',-.10,6)
-    np_note=p(fig,0,176,55,33,None,'Separate reporter evidence')
-    np_note.set_axis_off()
-    np_note.text(0,.95,'NP-OVA division reporter\n36-hour H2B-mCherry window\n\nC: measured division bias\nD: receptor mutation history\n\nIndependent of the B cohort.',va='top',fontsize=6.8,linespacing=1.4)
-    for y,ds,title in [(176,'mouse_np','NP-OVA'),(235,'mouse_rbd','RBD')]:
-        col='division_gate:mCherry-low'
-        if ds=='mouse_rbd':
-            a=p(fig,0,y,55,31,'E',f'{title}: cell division gate')
-            cell_map(a,ds,'division_gate',{'mCherry-high':GOLD,'mCherry-low':BLUE})
-        b=p(fig,64,y,53,31,'C' if ds=='mouse_np' else 'F',f'{title}: division-associated\nclone-state bias')
-        color_map(b,ds,col,'Fraction mCherry-low (≥6 divisions)',note_y=-.50)
-        c=p(fig,129,y,54,31,'D' if ds=='mouse_np' else 'G',f'{title}: mutation history\non the same clone map')
-        color_map(c,ds,'mutation_frequency','Mean V mutation frequency (clipped)',vmax=.03,cmap='magma',note_y=-.50)
+        'size_encoding':'Area = 6 square points per captured cell',
+        'parameters':str(source.with_suffix('.json').relative_to(ROOT))}
+    footer=p(fig,0,166,183,6,None,'');footer.set_axis_off()
+    footer.text(0,.8,f'GSE246382: {len(cm)} same-mouse V–D–J receptor groups / {int(cm.n_cells.sum())} cells; ≥1 cell/group. '
+                'Measured context: S8B–E.',fontsize=6,va='top')
+    # Featured row: measured division and mutation history in the RBD model.
+    a=p(fig,0,182,57,62,'C','RBD: measured division history per cell\n(mCherry-low = ≥6 divisions / 36 h)')
+    cell_map(a,'mouse_rbd','division_gate',{'mCherry-high':GOLD,'mCherry-low':BLUE})
+    legend(a,{'mCherry-high':GOLD,'mCherry-low':BLUE},ncol=2,y=-.12)
+    b=p(fig,63,182,57,62,'D','RBD: division history per clone family\n(fraction of family mCherry-low)')
+    q_div=color_map(b,'mouse_rbd','division_gate:mCherry-low','Fraction mCherry-low (≥6 divisions)',note_y=-.30)
+    c=p(fig,126,182,57,62,'E','RBD: V-region mutation history\non the same clone map')
+    q_mut=color_map(c,'mouse_rbd','mutation_frequency','Mean V mutation frequency (clipped)',vmax=.03,cmap='magma',note_y=-.30)
+    assert q_div.index.equals(q_mut.index) and len(q_div)==381
+    assert np.array_equal(q_div[['x','y']].to_numpy(),q_mut[['x','y']].to_numpy())
+    reporter_source=DATA/'mouse_rbd/clone_table.csv'
+    AUDIT['figure2_reporter_review']={
+        'accession':'GSE287123','n_reliable_families':len(q_div),
+        'family_definition':'Donor-private IGH V/J and nucleotide-junction sequence families',
+        'coordinates_source':str(reporter_source.relative_to(ROOT)),
+        'source_sha256':hashlib.sha256(reporter_source.read_bytes()).hexdigest(),
+        'same_coordinates_in_D_and_E':True,
+        'parameters':{'n_neighbors':15,'min_dist':.1,'spread':1.,'random_state':0},
+        'size_encoding':'Area in square points = 1 + 5 * sqrt(captured cells)',
+        'parameter_review':'case_studies/results/mouse_rbd_embedding_audit/review/review_summary.json',
+        'inference_limit':'Measured-gate association; no temporal fate or comparative method superiority'}
+    footer2=p(fig,0,268,183,6,None,'');footer2.set_axis_off()
+    footer2.text(0,.8,'GSE287123 RBD arms: 10 H2B-mCherry mice (5 protein, 5 mRNA), 36,188 cells; LZ/DZ sorts in the mRNA arm only.\n'
+                 'D/E: 381 reliable sequence-defined IGH families; UMAP k=15, min_dist=0.1, spread=1, seed=0. Parameter audit: S11.',
+                 fontsize=6,va='top')
     save(fig,'Figure_2');AUDIT['outputs'].append('Figure_2')
 
 
@@ -333,16 +381,12 @@ def treatment_plot(ax):
 
 
 def figure3():
-    fig=new_page('Figure 3','Clonal co-occupancy of GC and output-like states in Plasmodium',
-                 'Same-mouse clone membership tests shared ancestry; independent terminal samples define the time course.',height=297)
-    design(p(fig,0,6,183,68,'A','Infection, sample preparation and treatment are represented explicitly'),'malaria')
-    b=p(fig,0,104,54,47,'B','Early infection:\nPB-biased clone profiles');color_map(b,'malaria','cell_state:PB','Fraction PB cells')
-    c=p(fig,65,104,53,47,'C','Later infection:\nGC-biased clone profiles');color_map(c,'malaria_late','cell_state:GC','Fraction GC cells')
-    d=p(fig,129,104,54,47,'D','Cell states underlying\nthe later clone map');cell_map(d,'malaria_late','cell_state',{'GC':BLUE,'PB':RED,'Memory':GREEN})
-    legend(d,{'GC':BLUE,'PB':RED,'Memory-like':GREEN,'Other':GREY},ncol=2,y=-.14)
-    e=p(fig,0,191,86,58,'E','Co-observed cells of individual GC–PB clones')
-    clone_gallery(e,'malaria_late','cell_state',{'GC':BLUE,'PB':RED,'Memory':GREEN},'malaria_gc_pb',require=['GC','PB'])
-    f=p(fig,103,191,80,45,'F','Is shared occupancy more than\nexpected from isotype composition?');share_plot(f)
+    from types import SimpleNamespace
+    from figure3_infection import draw
+    fig=new_page('Figure 3','Clone-state variation across Plasmodium infection',
+                 'Receptor-defined families resolve captured state mixtures and variation within a shared cell annotation.',
+                 height=354)
+    draw(fig, SimpleNamespace(**globals()))
     save(fig,'Figure_3');AUDIT['outputs'].append('Figure_3')
 
 
@@ -367,8 +411,8 @@ def lineage_presence(ax):
     note(ax,'Captured state fractions per date; counts above bars; NA = no captured family cells.\nBars show repeated membership, without assigning parent–offspring direction.',-.14)
 
 
-def figure4():
-    fig=new_page('Figure 4','Testing GC clone persistence and compartment bias in humans',
+def supplementary9():
+    fig=new_page('Supplementary Figure 9','Human GC clone persistence and compartment bias',
                  'Repeat sampling, author-identified binding labels and mutation history provide different measurements.',height=367)
     design(p(fig,0,6,183,52,'A','Repeated lymph-node aspiration and blood sampling after mRNA vaccination'),'human')
     b=p(fig,0,86,54,53,'B','GC and output compartments');cell_map(b,'ln_vaccine','state',{'GC':BLUE,'LNPC':GOLD,'PB':RED,'RMB':GREEN})
@@ -384,7 +428,289 @@ def figure4():
     gc_shm_curve(g)
     h=p(fig,129,280,54,43,'H','What does this comparison measure?')
     h.set_axis_off();h.text(0,.98,'Threadfin: sequence-defined families\nRNA: captured family state profiles\nS+: authors’ binding classification\nSHM: V-region mutation frequency\n\nThese are associated measurements.\nSHM and binary binding are not affinity.\nEarly dates: one nonpooled donor.',va='top',fontsize=6,linespacing=1.5)
-    save(fig,'Figure_4');AUDIT['outputs'].append('Figure_4')
+    save(fig,'Supplementary_9');AUDIT['outputs'].append('Supplementary_9')
+
+
+def supplementary10():
+    fig=new_page('Supplementary Figure 10','Cell-level context of the exploratory non-GC datasets',
+                 'Family-level maps carry cell-level maps beside them; the exploratory cohorts quantified in S14 are shown here.',height=190)
+    specs=[('ebv','gfp',{'GFP+':GREEN,'GFP-':GREY},'A','EBV organoids: measured GFP per cell'),
+           ('flu','timepoint',{'d0':GREY,'d7':BLUE},'B','Influenza blood: sampling day'),
+           ('flu_lung','tissue',{'medLN':BLUE,'Lung':GOLD},'C','Influenza lung: tissue of capture'),
+           ('tonsil','state',{'GC':BLUE,'DZ GC':VIOLET,'Cycling B':GOLD,'MBC':GREEN,'MBC FCRL4+':GREEN,'Plasmablast':RED},'D','Tonsil: author cell states'),
+           ('stephenson','state',{'Plasmablast':RED,'Plasma_cell_IgG':RED,'Plasma_cell_IgA':RED,'B_switched_memory':GREEN,'B_non-switched_memory':GREEN},'E','COVID blood: author cell states')]
+    for (ds,col,pal,letter,title),(x,y) in zip(specs,[(0,8),(65,8),(129,8),(0,86),(65,86)]):
+        a=p(fig,x,y,54,52,letter,title)
+        cell_map(a,ds,col,pal)
+        legend(a,dict(pal),ncol=2,y=-.28)
+    save(fig,'Supplementary_10');AUDIT['outputs'].append('Supplementary_10')
+
+
+def supplementary11():
+    audit_dir=DATA/'mouse_rbd_embedding_audit'
+    ver=json.loads((audit_dir/'verify.json').read_text())
+    fig=new_page('Supplementary Figure 11','RBD clone map: measured-anchored zone axis and parameter robustness',
+                 'Programme scores reuse expression and are descriptive; sort gates and division history are measured.',height=214)
+    t=clones('mouse_rbd');t=t[t.reliability>=.5]
+    g=pd.read_csv(DATA/'mouse_rbd/clone_gene_scores.csv',index_col=0)
+    d=t.join(g)
+    # A/B: programme-score axis on the clone map (expression-derived, descriptive)
+    for x,col,letter,title in [(0,'dark zone / cycling','A','Dark-zone / cycling\nprogramme score'),
+                               (65,'light zone','B','Light-zone programme score\n(incl. Myc)')]:
+        a=p(fig,x,8,55,55,letter,title)
+        im=a.scatter(d.x,d.y,c=d[col],s=1+5*np.sqrt(d.n_cells),cmap='viridis',
+                     edgecolors='white',linewidths=.18,alpha=.9,rasterized=True)
+        map_axis(a); clone_axis(a)
+        cb=fig.colorbar(im,ax=a,orientation='horizontal',fraction=.045,pad=.055,aspect=24)
+        cb.set_label('Family programme score',fontsize=6,labelpad=2);cb.ax.tick_params(labelsize=6,length=2)
+        note(a,f'{len(d):,} reliable clones; clone UMAP',-.30)
+    # C: measured zone gate over the same map
+    c=p(fig,129,8,54,55,'C','Measured DZ sort fraction\n(mRNA arm only)')
+    c.scatter(d.x,d.y,s=1+5*np.sqrt(d.n_cells),color='#e1e4e8',linewidths=0,rasterized=True)
+    z=d.dropna(subset=['zone_gate:DZ'])
+    im=c.scatter(z.x,z.y,c=z['zone_gate:DZ'],s=1+5*np.sqrt(z.n_cells),cmap='plasma',vmin=0,vmax=1,
+                 edgecolors='white',linewidths=.18,alpha=.95,rasterized=True)
+    map_axis(c); clone_axis(c)
+    cb=fig.colorbar(im,ax=c,orientation='horizontal',fraction=.045,pad=.055,aspect=24)
+    cb.set_label('Fraction of family sorted DZ',fontsize=6,labelpad=2);cb.ax.tick_params(labelsize=6,length=2)
+    note(c,f'Grey: all {len(d):,} reliable clones; colour: {len(z)} clones\nwith zone-gated cells (5 mRNA-arm mice).',-.30)
+    # D: parameter audit of map association
+    sw=pd.read_csv(audit_dir/'sweep.csv')
+    dd=p(fig,0,100,104,58,'D','Map associations across 85 embedding\nparameter sets')
+    order=[('division_gate:mCherry-low','Division\n(measured)'),('zone_gate:DZ','DZ sort\n(measured)'),
+           ('LZ minus DZ','LZ–DZ axis\n(RNA)'),('rbd_bait:RBD+','RBD bait\n(measured)'),('mutation_frequency','SHM\n(measured)')]
+    for i,(var,lab_) in enumerate(order):
+        zz=sw[sw.variable.eq(var)]
+        dd.scatter(i-.17+np.linspace(-.09,.09,len(zz)),zz.excess,s=5,color=BLUE,alpha=.65,linewidths=0)
+        dd.scatter(i+.17+np.linspace(-.09,.09,len(zz)),zz.lin_r2,s=5,color=GOLD,alpha=.65,linewidths=0)
+        dd.plot([i-.3,i-.04],[zz.excess.median()]*2,color=BLUE,lw=1.6)
+        dd.plot([i+.04,i+.3],[zz.lin_r2.median()]*2,color=GOLD,lw=1.6)
+    dd.axhline(0,color=GREY,lw=.8,ls='--');dd.set_ylim(-.05,.9)
+    dd.set_xticks(range(len(order)),[l for _,l in order],fontsize=5.8)
+    dd.set_ylabel('Association with\nmap position',fontsize=5.8)
+    legend(dd,{'Local structure (excess kNN EV vs donor null)':BLUE,'Linear gradient (R² of value ~ x+y)':GOLD},ncol=1,y=1.0)
+    nsets=sw.groupby(['n_neighbors','min_dist','spread','random_state']).ngroups
+    note(dd,f'{nsets} UMAP parameter sets (n_neighbors/min_dist/spread/seed), map rebuilt from committed\nfamily features each time; bars = median. SHM: linear R² ≤ 0.04 in all sets.',-.30,5.6)
+    # E: the measured division gradient tracks the programme axis
+    at=ver['axis_alignment']
+    e=p(fig,116,100,67,58,'E','The measured division gradient tracks\nthe DZ–LZ programme axis')
+    arm=np.where(d.donor.str[1:].astype(int)<=5,'RBD protein arm','mRNA arm')
+    axv=d['light zone']-d['dark zone / cycling']
+    for label,col in [('RBD protein arm',GOLD),('mRNA arm',BLUE)]:
+        m=arm==label
+        e.scatter(axv[m],d['division_gate:mCherry-low'][m],s=6,color=col,alpha=.6,linewidths=0,rasterized=True)
+    e.set_xlabel('LZ − DZ programme score (family)',fontsize=5.8)
+    e.set_ylabel('Fraction mCherry-low\n(≥6 divisions)',fontsize=5.8)
+    legend(e,{'RBD protein arm':GOLD,'mRNA arm':BLUE},ncol=2,y=-.30)
+    note(e,f"r = {at['corr_lz_minus_dz_vs_mcherry_low']:.2f}; donor-stratified permutation "
+           f"p = {at['p_value_two_sided']:.3f}; n = {at['n_clones']} families.",-.52,5.6)
+    save(fig,'Supplementary_11');AUDIT['outputs'].append('Supplementary_11')
+
+
+def supplementary12():
+    audit_dir=DATA/'malaria_late_embedding_audit'
+    fig=new_page('Supplementary Figure 12','The later-infection clone map encodes the infection time course',
+                 'Terminal samples; day is a donor-level label (unstratified null); LZ score is expression-derived (descriptive). '
+                 'Clone map: UMAP k=50, min_dist 0.5 (see D).',height=318)
+    t=clones('malaria_late');t=t[t.reliability>=.5].copy()
+    mal_sel=json.loads((DATA/'malaria_late_embedding_audit'/'selected.json').read_text())
+    mal_map=pd.read_csv(DATA/'malaria_late_embedding_audit'/'maps'/(mal_sel['name']+'.csv'),index_col=0)
+    t['x'],t['y']=mal_map.reindex(t.index).x,mal_map.reindex(t.index).y
+    t['day']=pd.to_numeric(t.donor.astype(str).str.extract(r'D(\d+)')[0])
+    c=cells('malaria_late')
+    mem=pd.crosstab(c.clone_id,c.cell_state,normalize='index')['Memory']
+    t['cell_state:Memory']=mem.reindex(t.index)
+    days=[10,14,21,28,35,42]
+    # A: clone map coloured by sampling day
+    a=p(fig,0,8,57,55,'A','Later-infection clone map\ncoloured by sampling day')
+    im=a.scatter(t.x,t.y,c=t.day,s=1+5*np.sqrt(t.n_cells),cmap='plasma',vmin=10,vmax=42,
+                 edgecolors='white',linewidths=.18,alpha=.9,rasterized=True)
+    map_axis(a); clone_axis(a)
+    cb=fig.colorbar(im,ax=a,orientation='horizontal',fraction=.045,pad=.055,aspect=24)
+    cb.set_label('Sampling day',fontsize=6,labelpad=2);cb.ax.tick_params(labelsize=6,length=2)
+    note(a,f'{len(t):,} reliable clones; clone UMAP',-.30)
+    arm_labels(a,t,'x','y','cell_state:Memory',pos={'GC arm':(-1.2,9.8),'PB arm':(16.3,4.1),'Memory arm':(-1.2,-1.6)})
+    # B: composition turnover across the time course
+    b=p(fig,65,8,53,55,'B','Reliable-clone composition\nacross the time course')
+    gday=t.groupby('day')[['cell_state:GC','cell_state:PB','cell_state:Memory']].mean().reindex(days)
+    for col,lab_,colr in [('cell_state:GC','GC',BLUE),('cell_state:PB','PB',RED),('cell_state:Memory','Memory',GREEN)]:
+        b.plot(days,gday[col],marker='o',ms=3.4,color=colr,lw=1.4,label=lab_)
+    b.set_xticks(days);b.set_xlabel('Day after infection',fontsize=5.8);b.set_ylabel('Mean fraction of family cells',fontsize=5.8)
+    b.set_ylim(-.03,.95)
+    legend(b,{'GC':BLUE,'PB':RED,'Memory':GREEN},ncol=3,y=-.30)
+    note(b,'Means over reliable clones sampled per day, including controls.\nTerminal samples; per-mouse infected summaries in S13.',-.52,5.6)
+    # C: day structure within state strata
+    from scipy.spatial import cKDTree
+    cc=p(fig,129,8,54,55,'C','Day structure persists\nwithin state strata')
+    xy=t[['x','y']].to_numpy();v=t.day.to_numpy(float)
+    rng=np.random.default_rng(0)
+    def day_assoc(mask):
+        q=np.flatnonzero(mask)
+        idx=cKDTree(xy[q]).query(xy[q],k=11)[1][:,1:]
+        vv=v[q]
+        obs=1-((vv-vv[idx].mean(axis=1)).var()/vv.var())
+        null=np.empty(300)
+        for bi in range(300):
+            vp=rng.permutation(vv);null[bi]=1-((vp-vp[idx].mean(axis=1)).var()/vp.var())
+        return obs-null.mean(),(1+(null>=obs).sum())/301,len(q)
+    strata=[('All',np.ones(len(t),bool)),('GC-rich',(t['cell_state:GC']>=.5).to_numpy()),
+            ('PB-rich',(t['cell_state:PB']>=.5).to_numpy()),
+            ('Neither',((t['cell_state:GC']<.2)&(t['cell_state:PB']<.2)).to_numpy())]
+    vals=[day_assoc(m) for _,m in strata]
+    cc.bar(range(4),[x[0] for x in vals],color=[INK,BLUE,RED,GREY],width=.62)
+    for i,(excess,pv,n) in enumerate(vals):
+        cc.text(i,vals[i][0]+.02,f'{excess:.2f}',ha='center',fontsize=5.6)
+        cc.text(i,-.13,f'n={n}',ha='center',fontsize=5.2,color=INK)
+    cc.set_xticks(range(4),[s for s,_ in strata],fontsize=5.8);cc.set_ylim(-.16,.85)
+    cc.axhline(0,color=GREY,lw=.8,ls='--')
+    cc.set_ylabel('Day association\n(excess kNN EV)',fontsize=5.8)
+    note(cc,'All strata p=0.003 (300 permutations). Donor-level label;\nunstratified null; state strata defined by family fractions.',-.34,5.6)
+    # D: parameter audit
+    sw=pd.read_csv(audit_dir/'sweep.csv')
+    dd=p(fig,0,108,104,58,'D','Map associations across 85 embedding\nparameter sets')
+    order=[('cell_state:GC','GC\nfraction'),('cell_state:PB','PB\nfraction'),('cell_state:Memory','Memory\nfraction'),
+           ('mutation_frequency','SHM'),('day','Day\n(donor-level)'),('treated','Treatment\n(donor-level)')]
+    for i,(var,lab_) in enumerate(order):
+        zz=sw[sw.variable.eq(var)]
+        dd.scatter(i-.17+np.linspace(-.09,.09,len(zz)),zz.excess,s=5,color=BLUE,alpha=.65,linewidths=0)
+        dd.scatter(i+.17+np.linspace(-.09,.09,len(zz)),zz.lin_r2,s=5,color=GOLD,alpha=.65,linewidths=0)
+        dd.plot([i-.3,i-.04],[zz.excess.median()]*2,color=BLUE,lw=1.6)
+        dd.plot([i+.04,i+.3],[zz.lin_r2.median()]*2,color=GOLD,lw=1.6)
+    dd.axhline(0,color=GREY,lw=.8,ls='--');dd.set_ylim(-.05,.95)
+    dd.set_xticks(range(len(order)),[l for _,l in order],fontsize=5.6)
+    dd.set_ylabel('Association with\nmap position',fontsize=5.8)
+    legend(dd,{'Local structure (excess kNN EV vs null)':BLUE,'Linear gradient (R² of value ~ x+y)':GOLD},ncol=1,y=1.0)
+    note(dd,'85 UMAP parameter sets (n_neighbors/min_dist/spread/seed), map rebuilt from committed\nfamily features each time; bars = median.',-.30,5.6)
+    # E: SHM accumulates over the chronic infection
+    e=p(fig,116,108,67,58,'E','V-region mutation burden\nacross sampled infection dates')
+    shm=t.mutation_frequency*100
+    e.scatter(t.day+np.linspace(-1.4,1.4,len(t)),shm,s=5,color=GREY,alpha=.5,linewidths=0,rasterized=True)
+    med=shm.groupby(t.day).median().reindex(days)
+    e.plot(days,med,color=RED,lw=1.6,marker='o',ms=3.6)
+    e.set_xticks(days);e.set_xlabel('Day after infection',fontsize=5.8)
+    e.set_ylabel('Family SHM (%)',fontsize=5.8);e.set_ylim(-.08,4.2)
+    note(e,'Red: median per day. Median family SHM rises 0.07% (d10) to\n2.50% (d42); map gradient linear R² = 0.50 (panel D, SHM gold).',-.30,5.6)
+    # F: LZ-programme families at the base of the GC arm (Figure 3C selection zone)
+    gsc=pd.read_csv(DATA/'malaria_late'/'clone_gene_scores.csv',index_col=0)
+    lz=gsc['light zone'].reindex(t.index)
+    g2=p(fig,0,202,90,58,'F','LZ-programme families sit at the\nbase of the GC arm')
+    im=g2.scatter(t.x,t.y,c=lz,s=1+5*np.sqrt(t.n_cells),cmap='viridis',edgecolors='white',linewidths=.18,alpha=.9,rasterized=True)
+    hi=lz>=lz.quantile(.95)
+    g2.scatter(t.x[hi],t.y[hi],s=16+5*np.sqrt(t.n_cells[hi]),facecolors='none',edgecolors=RED,linewidths=.6,rasterized=True)
+    map_axis(g2); clone_axis(g2)
+    arm_labels(g2,t,'x','y','cell_state:Memory',pos={'GC arm':(-1.2,9.8),'PB arm':(16.3,4.1),'Memory arm':(-1.2,-1.6)})
+    cb=fig.colorbar(im,ax=g2,orientation='horizontal',fraction=.045,pad=.055,aspect=24)
+    cb.set_label('Family LZ programme score (incl. Myc)',fontsize=6,labelpad=2);cb.ax.tick_params(labelsize=6,length=2)
+    note(g2,'Expression-derived, descriptive. Red rings: top 5% LZ families.',-.30,5.6)
+    # G: programme coherence above matched background (moved from the main figure)
+    g3=p(fig,100,202,83,58,'G','GC and output programmes are\nclonally coherent above background')
+    gg=pd.read_csv(DATA/'clonal_information_summary'/'module_evidence.csv')
+    sets=['germinal centre','dark zone / cycling','plasma cell','memory']
+    zz=gg[gg.dataset.isin(['malaria','malaria_late'])&gg.gene_set.isin(sets)].copy()
+    zz['excess']=100*(zz.median_icc-zz.matched_background_median_icc)
+    mm=zz.pivot(index='gene_set',columns='dataset',values='excess').reindex(sets)
+    x=np.arange(len(sets))
+    g3.bar(x-.17,mm.malaria,width=.34,color=GOLD,label='Early')
+    g3.bar(x+.17,mm.malaria_late,width=.34,color=BLUE,label='Later')
+    for i,s in enumerate(sets):
+        for dx,ds_ in [(-.17,'malaria'),(.17,'malaria_late')]:
+            g3.text(i+dx,mm.loc[s,ds_]+.6,f'{mm.loc[s,ds_]:.0f}',ha='center',fontsize=5.4)
+    g3.set_xticks(x,['GC','Cycling','PC','Memory'],fontsize=5.8)
+    g3.set_ylabel('Clonal resemblance above\nmatched genes (pp)',fontsize=5.8)
+    g3.legend(frameon=False,fontsize=5.6,loc='upper right')
+    note(g3,'Family-level expression resemblance of each programme versus\nexpression-matched background genes (both infection cohorts).',-.34,5.6)
+    save(fig,'Supplementary_12');AUDIT['outputs'].append('Supplementary_12')
+
+
+def supplementary13():
+    from types import SimpleNamespace
+    from malaria_three_arms import draw
+    fig=new_page('Supplementary Figure 13','Three state-enriched regions in the later-infection family map',
+                 'GC, plasmablast and memory occupancy shown separately on identical clone coordinates.',height=250)
+    draw(fig,SimpleNamespace(**globals()))
+    save(fig,'Supplementary_13');AUDIT['outputs'].append('Supplementary_13')
+
+
+def supplementary14():
+    """Non-GC validation: pure-gate receptor identity and explanatory power outside the GC."""
+    fig=new_page('Supplementary Figure 14','Receptor identity and expression across additional B-cell systems',
+                 'Pure marrow/blood gates, exact receptor identity and additional B-cell datasets test the same framework.',height=320)
+    summary_t=pd.read_csv(DATA/'clonal_information_summary/dataset_evidence.csv')
+    nongc=summary_t[summary_t.evidence_tier.ne('GC anchors')].reset_index(drop=True)
+    # A: quantitative overview of the six non-GC analyses
+    a=p(fig,0,6,183,42,'A','Marrow/blood validation and five additional datasets')
+    a.set_xlim(0,183);a.set_ylim(len(nongc)-.3,-1.3);a.set_axis_off()
+    maxfam=nongc.expanded_clones.max()
+    for i,r in nongc.iterrows():
+        col=VIOLET if r.evidence_tier=='Non-GC anchor' else GREY
+        a.text(0,i,r.label,fontsize=6,va='center',color=INK)
+        w=95*np.log10(r.expanded_clones)/np.log10(maxfam)
+        a.add_patch(FancyBboxPatch((40,i-.30),w,.60,boxstyle='round,pad=.02',fc=col+'33',ec='none'))
+        a.text(40+w+2,i,f'{r.expanded_clones:,} families · {r.n_donors} donors · {r.n_cells:,} cells',fontsize=5.6,va='center',color=INK)
+    a.text(40,-1.05,'Expanded families (≥2 captured cells; log-scaled bar)',fontsize=5.6,color=INK)
+    # B: marrow cell map by measured sort gate
+    b=p(fig,0,56,88,62,'B','Marrow/blood cells by measured sort gate')
+    cell_map(b,'bone_marrow_pc','sorted_as',{'plasma cells':RED,'memory B cells':GREEN,'plasma cells and memory B cells':GOLD,'plasmablasts and memory B cells':VIOLET})
+    legend(b,{'PC':RED,'Memory':GREEN,'Comb. BM':GOLD,'Comb. blood':VIOLET},ncol=4,y=-.07)
+    note(b,'Pure gates are measured, not inferred.',-.14,5.8)
+    # C: marrow family map by plasma-cell capture fraction
+    c=p(fig,95,56,88,62,'C','Families by plasma-cell capture')
+    color_map(c,'bone_marrow_pc','sorted_as:plasma cells','Fraction of family in pure PC sort',note_y=-.22)
+    # D: exact heavy+light receptor identity across pure gates
+    d=p(fig,30,150,58,56,'D','Identical H+L receptors across pure gates')
+    t=pd.read_csv(DATA/'bone_marrow_pure_gate_check/donor_validation.csv')
+    q=t[t.receptor_definition.eq('exact_IGH_plus_light')].copy()
+    q['comparison']=q.left_source+'_vs_'+q.right_source
+    comps=['PC_BM_vs_Memory_BM','PC_BM_vs_Memory_blood','Memory_BM_vs_Memory_blood']
+    labels=['PC + memory (BM)','PC (BM) + memory (blood)','Memory (BM) + memory (blood)']
+    for donor,dx,col in [('1681',-.17,BLUE),('1684',.17,GOLD)]:
+        z=q[q.donor.astype(str).eq(donor)].set_index('comparison')
+        vals=[z.loc[key,'shared_groups'] for key in comps]
+        frac=[z.loc[key,'shared_groups']/z.loc[key,'eligible_groups_ge2_cells'] for key in comps]
+        d.barh(np.arange(3)+dx,vals,height=.30,color=col)
+        for i,(v,fr) in enumerate(zip(vals,frac)):
+            if v>=80:
+                d.text(v-4,i+dx,f'{int(v)} ({100*fr:.0f}%)',va='center',ha='right',fontsize=5.5,color='white',fontweight='bold')
+            else:
+                d.text(v+3,i+dx,f'{int(v)} ({100*fr:.0f}%)',va='center',fontsize=5.5)
+            d.text(3,i+dx,donor,va='center',fontsize=4.8,color='white',fontweight='bold')
+    d.set_yticks(range(3),labels,fontsize=5.4);d.set_xlim(0,315)
+    d.set_xlabel('Exact H+L receptor groups shared across gates',fontsize=5.8)
+    # E: non-GC explanatory power vs shuffle
+    e=p(fig,95,150,88,56,'E','Clonal expression signal\nexceeds the library baseline')
+    y=np.arange(len(nongc));cols=[VIOLET if x=='Non-GC anchor' else GREY for x in nongc.evidence_tier]
+    for i,r in nongc.iterrows():
+        e.plot([100*r.shuffled,100*r.observed],[i,i],color=cols[i],lw=1.2)
+        e.plot([100*r.shuffled,100*r.shuffled_q95],[i,i],color=INK,lw=.7)
+        e.text(100*r.observed+1.2,i,f'{100*r.observed:.0f}%',va='center',fontsize=5.4,color=cols[i])
+    e.scatter(100*nongc.shuffled,y,marker='o',s=17,facecolors='white',edgecolors=INK,lw=.7,zorder=3,label='Shuffled mean')
+    e.scatter(100*nongc.observed,y,s=21,c=cols,edgecolors='white',lw=.3,zorder=4,label='Observed')
+    e.set_yticks(y,nongc.label,fontsize=5.8);e.invert_yaxis();e.set_xlim(0,68)
+    e.set_xlabel('Expression variation associated with clone identity (%)',fontsize=5.8)
+    e.legend(loc='upper left',bbox_to_anchor=(0,-.20),ncol=2,frameon=False,fontsize=5.6)
+    # F: non-GC module resemblance
+    gdf=pd.read_csv(DATA/'clonal_information_summary/module_evidence.csv')
+    nds=['bone_marrow_pc','flu','ebv','tonsil','stephenson']
+    sets=['plasma cell','memory','interferon']
+    z=gdf[gdf.dataset.isin(nds)&gdf.gene_set.isin(sets)].copy()
+    z['contrast']=100*(z.median_icc-z.matched_background_median_icc)
+    mm=z.pivot(index='dataset',columns='gene_set',values='contrast').reindex(index=nds,columns=sets)
+    f=p(fig,14,228,76,50,'F','Gene modules show clone-associated expression')
+    im=f.imshow(mm.to_numpy(),cmap='RdBu_r',vmin=-30,vmax=30,aspect='auto',interpolation='nearest')
+    f.set_yticks(range(len(nds)),['Marrow / blood','Influenza blood','EBV organoids','Tonsil','COVID blood'],fontsize=5.8)
+    f.set_xticks(range(3),['PC','Memory','IFN'],fontsize=5.8)
+    cb=fig.colorbar(im,ax=f,orientation='horizontal',fraction=.07,pad=.26,aspect=26)
+    cb.set_label('Clonal resemblance above matched genes (pp)',fontsize=5.6);cb.ax.tick_params(labelsize=5.4,length=2)
+    # G: measured non-GC binding label on an exploratory family map
+    g=p(fig,95,228,88,50,'G','EBV organoids: measured GFP status')
+    color_map(g,'ebv','gfp','Fraction GFP+ cells per family',note_y=-.32)
+    save(fig,'Supplementary_14');AUDIT['outputs'].append('Supplementary_14')
+
+
+def figure4():
+    from external_validation_figures import draw_larry
+    import sys
+    draw_larry(sys.modules[__name__])
 
 
 def binding_enrichment(ax):
@@ -485,64 +811,77 @@ def supplementary5():
     save(fig,'Supplementary_5');AUDIT['outputs'].append('Supplementary_5')
 
 
-def figure5():
-    """Separate multi-study clonal expression signal from biological validation."""
+def supplementary15():
+    """Quantify, dataset by dataset, how much expression organisation receptor-defined families explain."""
     folder=DATA/'clonal_information_summary'
     t=pd.read_csv(folder/'dataset_evidence.csv')
     g=pd.read_csv(folder/'module_evidence.csv')
-    fig=new_page('Figure 5','What receptor-defined families add to the captured expression landscape',
-                 'Twelve dataset analyses contribute different evidence; expression resemblance alone does not validate fate.',height=312)
-    a=p(fig,0,6,183,51,'A','Biological anchors determine the question each model can answer')
-    sk.canvas(a,183,51)
-    from concept_figure import bcell, BLUE as CB, GREEN as CG, RED as CR
-    entries=[(0,36,'Model antigens','NP-OVA / RBD','Division / GC gates',CB),
-             (39,36,'Infection','PcAS early / late','Same-mouse states',CR),
-             (78,33,'Human vaccine','Repeated LN samples','Persistence / binding',CG),
-             (114,32,'Non-GC anchor','Marrow / blood','Pure PC / memory',VIOLET),
-             (149,34,'Tested coverage','Five further datasets','Exploratory states',GREY)]
-    for x,w,title,body,evidence,col in entries:
-        a.add_patch(FancyBboxPatch((x,5),w,42,boxstyle='round,pad=.25,rounding_size=1.4',fc=col+'0d',ec=col,lw=.7))
-        bcell(a,x+w/2,37,3,col)
-        a.text(x+w/2,27,title,ha='center',fontsize=6.4,fontweight='bold',color=INK)
-        a.text(x+w/2,18,body,ha='center',fontsize=5.7,color=INK)
-        a.text(x+w/2,10,evidence,ha='center',fontsize=5.4,color=INK)
-    b=p(fig,29,78,91,87,'B','Do related cells resemble each other beyond the library baseline?')
+    fig=new_page('Supplementary Figure 15','Quantifying what receptor-defined families explain across twelve analyses',
+                 'Sampling, clonal expression signal, module resemblance and their limits; every value is computed.',height=314)
+    # A: sampling and reliable coverage, quantitative
+    a=p(fig,29,8,124,76,'A','Captured sampling decides how many families can be interpreted')
     y=np.arange(len(t));cols=[BLUE if x=='GC anchors' else VIOLET if x=='Non-GC anchor' else GREY for x in t.evidence_tier]
+    a.barh(y,t.expanded_clones,color='#e3e6ea',height=.72)
+    a.barh(y,t.reliable_profiles,color=cols,height=.72)
+    for i,r in t.iterrows():
+        a.text(r.expanded_clones*1.12,i,f'{r.reliable_profiles/max(r.expanded_clones,1)*100:.0f}%',va='center',fontsize=5.4,color=INK)
+    a.set_yticks(y,t.label,fontsize=6);a.invert_yaxis();a.set_xscale('log');a.set_xlim(1,4e4)
+    a.set_xlabel('Families (log scale): expanded, light; reliable, solid',fontsize=6)
+    a.text(.99,.02,'% = reliable (profile reliability ≥0.5)\nof expanded (≥2 captured cells)',transform=a.transAxes,ha='right',va='bottom',fontsize=5.6,color=INK)
+    # B: observed vs shuffled clonal expression signal
+    b=p(fig,29,100,124,72,'B','Do related cells resemble each other beyond the library baseline?')
     for i,r in t.iterrows():
         b.plot([100*r.shuffled,100*r.observed],[i,i],color=cols[i],lw=1.2)
         b.plot([100*r.shuffled,100*r.shuffled_q95],[i,i],color=INK,lw=.7)
+        b.text(100*r.observed+1.2,i,f'{100*r.observed:.0f}%',va='center',fontsize=5.4,color=cols[i])
     b.scatter(100*t.shuffled,y,marker='o',s=19,facecolors='white',edgecolors=INK,lw=.7,zorder=3,label='Shuffled mean')
     b.scatter(100*t.observed,y,s=23,c=cols,edgecolors='white',lw=.3,zorder=4,label='Observed')
-    b.set_yticks(y,t.label);b.invert_yaxis();b.set_xlim(0,65)
-    b.set_xlabel('Expression variation associated with clone identity (%)')
+    b.scatter([100*t.observed[t.p_value>0.05].iloc[0]],[t.index[t.p_value>0.05][0]],s=44,facecolors='none',edgecolors=INK,lw=.8,zorder=5,label='Not significant')
+    b.set_yticks(y,t.label,fontsize=6);b.invert_yaxis();b.set_xlim(0,72)
+    b.set_xlabel('Expression variation associated with clone identity (%)',fontsize=6)
     b.axhline(5.5,color='#dde1e5',lw=.6);b.axhline(6.5,color='#dde1e5',lw=.6)
-    b.legend(loc='upper left',bbox_to_anchor=(0,-.26),ncol=2,frameon=False)
-    note(b,'500 within-library shuffles preserve clone sizes and library composition.\nShort black segment: shuffled mean to 95th percentile. NP PC/GC: p = 0.224.',-.44,5.8)
-    c=p(fig,139,78,44,87,'C','Captured profiles')
-    c.set_title('Captured profiles',loc='left',pad=21)
-    c.set_xlim(0,1);c.set_ylim(len(t)-.5,-.5);c.set_axis_off()
-    c.text(.03,-.95,'Expanded',fontsize=5.8);c.text(.60,-.95,'Reliable',fontsize=5.8)
-    for i,r in t.iterrows():
-        c.text(.17,i,f'{r.expanded_clones:,}',ha='center',va='center',fontsize=6.2,color=cols[i])
-        c.text(.79,i,f'{r.reliable_profiles:,}',ha='center',va='center',fontsize=6.2,color=cols[i])
-    note(c,'Expanded: ≥2 captured cells.\nReliable: profile reliability ≥0.5.\nSmall profiles can restrict interpretation.',-.19,5.7)
+    b.legend(loc='upper left',bbox_to_anchor=(0,-.20),ncol=3,frameon=False,fontsize=5.8)
+    note(b,'500 within-library shuffles; black segment: shuffled mean–95th percentile.',-.36,5.8)
+    # C: module-level clonal resemblance
     ds=t.dataset.iloc[:7].tolist();sets=['germinal centre','dark zone / cycling','light zone','plasma cell','memory','interferon']
     q=g[g.dataset.isin(ds)].copy()
     q['contrast']=100*(q.median_icc-q.matched_background_median_icc)
     m=q.pivot(index='dataset',columns='gene_set',values='contrast').reindex(index=ds,columns=sets)
-    d=p(fig,29,223,91,43,'D','Which expression programmes are more similar within families?')
-    im=d.imshow(m.to_numpy(),cmap='RdBu_r',vmin=-30,vmax=30,aspect='auto',interpolation='nearest')
-    d.set_yticks(range(7),t.label.iloc[:7],fontsize=5.8)
-    d.set_xticks(range(6),['GC','Cycling','LZ','PC','Memory','IFN'],fontsize=5.8)
-    cb=fig.colorbar(im,ax=d,orientation='horizontal',fraction=.07,pad=.24,aspect=28)
+    c=p(fig,29,216,88,52,'C','Which expression programmes are more similar within families?')
+    im=c.imshow(m.to_numpy(),cmap='RdBu_r',vmin=-30,vmax=30,aspect='auto',interpolation='nearest')
+    c.set_yticks(range(7),t.label.iloc[:7],fontsize=5.8)
+    c.set_xticks(range(6),['GC','Cycling','LZ','PC','Memory','IFN'],fontsize=5.8)
+    cb=fig.colorbar(im,ax=c,orientation='horizontal',fraction=.07,pad=.24,aspect=28)
     cb.set_label('Clonal resemblance above expression-matched genes (percentage points)',fontsize=5.8)
     cb.ax.tick_params(labelsize=5.5,length=2)
-    e=p(fig,138,223,45,43,'E','Read the evidence at its\nexperimental resolution')
-    e.set_axis_off()
-    e.text(0,.98,'Reporter → recent divisions\n\nSame mouse → state co-occupancy\n\nSame donor, repeat dates → persistence\n\nPure gates + H/L → receptor identity',va='top',fontsize=5.9,linespacing=1.25,color=INK)
-    note(e,'No panel measures future fate,\nGC re-entry or binding affinity.',-.28,5.7)
+    # D: what determines detectable explanatory power
+    d=p(fig,131,216,52,52,'D','Detectable signal grows with captured sampling')
+    for tier,col,mk in [('GC anchors',BLUE,'o'),('Non-GC anchor',VIOLET,'s'),('Tested coverage',GREY,'^')]:
+        z=t[t.evidence_tier.eq(tier)]
+        d.scatter(z.cells_in_expanded,100*z.excess,s=14+55*np.sqrt(z.reliable_profiles/t.reliable_profiles.max()),
+                  color=col,marker=mk,alpha=.85,edgecolors='white',lw=.4,label=tier.replace('Tested coverage','Further coverage'))
+    lab={'mouse_np':('NP-OVA',.55,1.5,'right'),'mouse_rbd':('RBD',.55,-3.5,'right'),
+         'gc_np_pc':('NP PC/GC',1.2,-3.5,'left'),'malaria':('PcAS early',.8,2.5,'right'),
+         'malaria_late':('PcAS late',1.25,1.5,'left'),'ln_vaccine':('Human GC',.7,3.5,'right'),
+         'bone_marrow_pc':('Marrow',.75,-4.5,'right'),'flu':('Flu blood',1.2,2.0,'left'),
+         'flu_lung':('Flu lung',1.25,1.5,'left'),'ebv':('EBV',1.25,-4.0,'left'),
+         'tonsil':('Tonsil',1.25,1.5,'left'),'stephenson':('COVID',1.25,1.5,'left')}
+    for i,r in t.iterrows():
+        name,fx,fy,ha=lab[r.dataset]
+        d.text(r.cells_in_expanded*fx if ha=='left' else r.cells_in_expanded*fx,100*r.excess+fy,name,fontsize=4.9,va='center',ha=ha,color=INK)
+    d.set_xscale('log');d.set_xlim(2e2,3e5);d.set_ylim(-6,66)
+    d.set_xlabel('Captured cells in expanded families (log)',fontsize=5.8)
+    d.set_ylabel('Excess clonal expression\nvariation (%)',fontsize=5.8)
+    d.legend(frameon=False,fontsize=5.4,loc='lower right',handletextpad=.1,borderaxespad=0)
+    note(d,'Point size: reliable profiles. Open ring in B marks the one\nunderpowered analysis (NP-OVA PC/GC, p = 0.224).',-.42,5.6)
     AUDIT['sources'][str((folder/'dataset_evidence.csv').relative_to(ROOT))]=len(t)
-    save(fig,'Figure_5');AUDIT['outputs'].append('Figure_5')
+    save(fig,'Supplementary_15');AUDIT['outputs'].append('Supplementary_15')
+
+
+def figure5():
+    from external_validation_figures import draw_nsclc
+    import sys
+    draw_nsclc(sys.modules[__name__])
 
 
 def supplementary1():
@@ -585,7 +924,7 @@ def supplementary2():
 
 
 def supplementary3():
-    fig=new_page('Supplementary Figure 3','Plasmodium sharing controls and candidate selection',height=280)
+    fig=new_page('Supplementary Figure 3','Plasmodium sharing controls and candidate selection',height=463)
     a=p(fig,0,9,87,62,'A','Treatment and GC–output sharing');treatment_plot(a)
     b=p(fig,104,9,79,62,'B','GC–memory examples')
     clone_gallery(b,'malaria_late','cell_state',{'GC':BLUE,'PB':RED,'Memory':GREEN},'malaria_gc_memory',require=['GC','Memory'])
@@ -605,6 +944,21 @@ def supplementary3():
     d.set_axis_off();d.text(0,.97,'Supported\nSame-mouse clone membership\nGC / output state occupancy\nDay- and treatment-associated differences\n\nRequires additional evidence\nMemory re-entry into GC\nParent–offspring direction\nFuture PC or memory fate\nAntigen affinity / functional protection',va='top',fontsize=7,linespacing=1.45)
     e=p(fig,0,226,183,22,'E','Predeclared candidate rule')
     e.set_axis_off();e.text(0,.95,'Examples require both displayed states within one mouse and one time point, then rank by captured size.\nExact IGH and paired-light controls test whether sharing survives conservative sequence matching.\nThe supplement reports clone-size sensitivity and conditional nulls; illustrative examples are not independent validation.',va='top',fontsize=6.8,linespacing=1.6)
+    f=p(fig,0,258,87,62,'F','Is shared occupancy more than\nexpected from isotype composition?');share_plot(f)
+    g=p(fig,104,258,79,62,'G','Co-observed cells of individual GC–PB clones')
+    clone_gallery(g,'malaria_late','cell_state',{'GC':BLUE,'PB':RED,'Memory':GREEN},'malaria_gc_pb',require=['GC','PB'])
+    # H/I: the early-infection clone map (Figure 3B) gets its cell-level context here.
+    h=p(fig,0,368,54,52,'H','Cell states underlying\nthe early clone map')
+    cell_map(h,'malaria','cell_state',{'GC':BLUE,'PB':RED,'Memory':GREEN})
+    legend(h,{'GC':BLUE,'PB':RED,'Memory':GREEN,'Other':GREY},ncol=2,y=-.20)
+    i=p(fig,65,368,53,52,'I','Early families by sampling day')
+    cl=clones('malaria').dropna(subset=['x','y']);cl=cl[cl.reliability>=.5]
+    day=cl.donor.str.extract(r'D(\d+)_')[0].astype(float)
+    for dy,col in [(7,GREY),(10,GOLD),(14,BLUE)]:
+        q=cl[day.eq(dy)]
+        i.scatter(q.x,q.y,s=1+5*np.sqrt(q.n_cells),color=col,alpha=.75,edgecolors='white',linewidths=.18,rasterized=True)
+    map_axis(i); clone_axis(i); note(i,f'{len(cl):,} reliable clones; clone UMAP',-.14)
+    legend(i,{'Day 7':GREY,'Day 10':GOLD,'Day 14':BLUE},ncol=3,y=-.32)
     save(fig,'Supplementary_3')
 
 
@@ -649,50 +1003,76 @@ def tested_datasets():
 
 
 def figure6():
-    from benchmark_figure import draw
-    draw(new_page,p,save)
-    AUDIT['outputs'].append('Figure_6')
+    from external_validation_figures import draw_benchmark
+    import sys
+    draw_benchmark(sys.modules[__name__])
 
 
 def supplementary7():
     from benchmark_figure import supplementary
-    supplementary(new_page,p,save)
+    supplementary(new_page,p,lambda f,n: save(f,n))
     AUDIT['outputs'].append('Supplementary_7')
 
 
 def supplementary8():
-    from gc_reclustering_panels import cell_gates, myc_panel, markers, DATA as GC_DATA
+    from gc_reclustering_panels import cell_gates, myc_panel, markers, gate_composition, selection
+    chosen=selection()
     fig=new_page('Supplementary Figure 8','Historical Top2a display and current model-antigen GC state evidence',
-                 'A is an archived output; B–D are audited real-data GSE246382 views with measured gates and descriptive RNA.',height=297)
+                 'A is an archived output; B–E show reconstructed GSE246382 geometry, measured gates and descriptive RNA.',height=310)
     a=p(fig,0,8,96,79,'A','Top2a on the historical clone map')
     archived_panel(a,'legacy_notebook_clone_Top2a.png')
     note(a,'Notebook cell 33 output; cohort and sampling day unresolved.',-.04,6)
     b=p(fig,106,8,77,58,'B','GSE246382: measured cell compartments')
     cell_gates(b)
-    note(b,'884 cells; saved cell UMAP, measured FACS gates.\nThese cells supply the frozen same-mouse families in Figure 2B.',-.18,6)
-    c=p(fig,0,116,96,55,'C','GSE246382: mean Myc expression per clone')
+    note(b,'884 cells; RNA UMAP reconstructed from notebook code.\nFACS gates are measured; 762 cells have called receptors.',-.18,6)
+    c=p(fig,0,116,96,55,'C','GSE246382: mean Myc RNA per receptor group')
     myc_panel(c)
-    note(c,'New clone coordinates, same 49 families as Figure 2B.\nMyc is averaged over captured members of each family.',-.25,6)
+    note(c,f'New coordinates, same {chosen["n_points"]} V–D–J groups as Figure 2B.\nMyc is averaged over captured members of each group.',-.25,6)
     d=p(fig,111,113,72,77,'D','GSE246382: marker expression by clone cluster')
     source=markers(d)
     AUDIT.setdefault('gc_reclustering_tables',{})[str(source.relative_to(ROOT))]={
         'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'values':'Mean RNA over clones grouped by unsupervised Leiden clone_cluster'}
-    e=p(fig,0,222,183,36,'E','Interpret the model-antigen GC nodes within their evidence')
-    e.set_axis_off()
-    e.text(0,.95,'Cell-UMAP clone centroids → distance-row UMAP (20 neighbours, min_dist 0.4) → Scanpy graph (15) → Leiden (0.3).\nFigure 2B colours three unsupervised clone clusters; gate labels and marker values do not enter the graph.\nCluster 1 is enriched for Myc+ LZ / DZ capture; cluster 0 has greater PC capture and plasma-cell-module expression.\nCluster 2 contains mixed GC/output states. Cluster annotations describe captured state biases, not future fates.\nA is a separate historical display. B–D do not assign a differentiation direction or extend GC interpretation to non-GC.',
-               va='top',fontsize=6.7,linespacing=1.6)
+    e=p(fig,0,226,96,42,'E','Measured compartment composition by clone cluster')
+    gate_composition(e)
+    f=p(fig,111,219,72,59,'F','Scope of the reconstruction'); f.set_axis_off()
+    f.text(0,.98,f'{chosen["n_points"]} same-mouse V–D–J groups; ≥1 cell.\n'
+           f'UMAP k={chosen["umap_k"]}, min_dist={chosen["min_dist"]}; seed 123.\n'
+           'Scanpy graph k=15; Leiden r=0.3, seed 0.\n\n'
+           'Gates and markers annotate captured states.\n'
+           'They do not assign direction or future fate.\n'
+           'V–D–J groups can merge distinct junctions.\n'
+           'The 2D branch shape is parameter-dependent.\n\n'
+           'Selection/output interpretation is restricted\n'
+           'to this model-antigen GC application.\n'
+           'A remains a separate historical display.',
+           va='top',fontsize=6.4,linespacing=1.5)
     save(fig,'Supplementary_8');AUDIT['outputs'].append('Supplementary_8')
+
+
+def supplementary16():
+    from external_validation_figures import draw_reporter_audit
+    import sys
+    draw_reporter_audit(sys.modules[__name__])
 
 
 def main(biological_only=False):
     main_figures=[figure1,figure2,figure3,figure4,figure5]+([] if biological_only else [figure6])
-    supplements=[supplementary1,supplementary2,supplementary3,supplementary4,supplementary5,supplementary6]+([] if biological_only else [supplementary7])+[supplementary8]
+    supplements=[supplementary1,supplementary2,supplementary3,supplementary4,supplementary5,supplementary6]+([] if biological_only else [supplementary7])+[supplementary8,supplementary9,supplementary10,supplementary11,supplementary12,supplementary13,supplementary14,supplementary15,supplementary16]
     for f in main_figures+supplements+[tested_datasets]:f()
-    AUDIT['outputs']=[f'Figure_{i}' for i in range(1,6 if biological_only else 7)]+[f'Supplementary_{i}' for i in range(1,7 if biological_only else 8)]+['Supplementary_8']
+    AUDIT['outputs']=[f'Figure_{i}' for i in range(1,6 if biological_only else 7)]+[f'Supplementary_{i}' for i in range(1,7 if biological_only else 8)]+['Supplementary_8','Supplementary_9','Supplementary_10','Supplementary_11','Supplementary_12','Supplementary_13','Supplementary_14','Supplementary_15','Supplementary_16']
     AUDIT['benchmark_included']=not biological_only
     (HERE/'figure_audit.json').write_text(json.dumps(AUDIT,indent=2))
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--biological-only',action='store_true',help='Reproduce Figure1-5/S1-6/S8 while native benchmark jobs are pending.')
-    main(parser.parse_args().biological_only)
+    parser.add_argument('--gc-only',action='store_true',help='Refresh Figure2/S8 and their audit entries only.')
+    args=parser.parse_args()
+    if args.gc_only:
+        audit_path=HERE/'figure_audit.json'
+        if audit_path.exists(): AUDIT=json.loads(audit_path.read_text())
+        figure2(); supplementary8()
+        AUDIT['outputs']=list(dict.fromkeys(AUDIT['outputs']))
+        audit_path.write_text(json.dumps(AUDIT,indent=2)+'\n')
+    else:
+        main(args.biological_only)

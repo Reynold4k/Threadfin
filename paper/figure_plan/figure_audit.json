@@ -1,41 +1,6 @@
 {
   "map_note": "Saved UMAP coordinates; distances are visualization, not lineage evidence.",
   "selected_clones": {
-    "malaria_gc_pb": {
-      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
-      "ids": [
-        "D14_Hashtag5|C00001",
-        "D35_Hashtag4|C00001",
-        "D14_Hashtag4|C00002",
-        "D14_Hashtag5|C00004"
-      ]
-    },
-    "human_spike_rings": {
-      "rule": "12 largest reliable spike-positive families",
-      "ids": [
-        "368-07|C00001",
-        "368-07|C00002",
-        "368-07|C00003",
-        "368-10|C00001",
-        "368-02a|C00001",
-        "368-10|C00002",
-        "368-02a|C00002",
-        "368-20|C00001",
-        "368-10|C00003",
-        "368-01a|C00001",
-        "368-07|C00005",
-        "368-02a|C00003"
-      ]
-    },
-    "human_repeated_gc": {
-      "rule": "GC captured at >=3 distinct nonpooled dates; largest total captured sizes",
-      "ids": [
-        "368-07|C00002",
-        "368-07|C00003",
-        "368-10|C00001",
-        "368-10|C00002"
-      ]
-    },
     "np_division": {
       "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
       "ids": [
@@ -72,6 +37,15 @@
         "D35_Hashtag4|C00010"
       ]
     },
+    "malaria_gc_pb": {
+      "rule": ">=2 displayed labels; descending captured size; clone-ID tie order",
+      "ids": [
+        "D14_Hashtag5|C00001",
+        "D35_Hashtag4|C00001",
+        "D14_Hashtag4|C00002",
+        "D14_Hashtag5|C00004"
+      ]
+    },
     "marrow_pure_sort_shared": {
       "rule": "captured in both pure PC and pure memory sorts; descending combined size",
       "ids": [
@@ -81,23 +55,50 @@
         "donor 1681|C00004",
         "donor 1681|C00005"
       ]
+    },
+    "human_spike_rings": {
+      "rule": "12 largest reliable spike-positive families",
+      "ids": [
+        "368-07|C00001",
+        "368-07|C00002",
+        "368-07|C00003",
+        "368-10|C00001",
+        "368-02a|C00001",
+        "368-10|C00002",
+        "368-02a|C00002",
+        "368-20|C00001",
+        "368-10|C00003",
+        "368-01a|C00001",
+        "368-07|C00005",
+        "368-02a|C00003"
+      ]
+    },
+    "human_repeated_gc": {
+      "rule": "GC captured at >=3 distinct nonpooled dates; largest total captured sizes",
+      "ids": [
+        "368-07|C00002",
+        "368-07|C00003",
+        "368-10|C00001",
+        "368-10|C00002"
+      ]
     }
   },
   "sources": {
-    "paper/figure_plan/assets/GC_structure_supplied.png": "Author-original GC schematic by Chen Satoshi; ownership confirmed; inserted without pixel editing.",
-    "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv": 49,
+    "case_studies/results/gc_legacy_parameter_audit/maps/legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123.csv": 377,
     "case_studies/results/mouse_rbd/cells.csv.gz": 36188,
     "case_studies/results/malaria_late/cells.csv.gz": 72359,
-    "case_studies/results/ln_vaccine/cells.csv.gz": 193442,
-    "case_studies/results/clonal_information_summary/dataset_evidence.csv": 12,
+    "case_studies/results/malaria_late_embedding_audit/maps/k50_md0.5_seed0.csv": 1183,
     "case_studies/results/mouse_np/cells.csv.gz": 10109,
     "case_studies/results/gc_np_pc/cells.csv.gz": 884,
+    "case_studies/results/malaria/cells.csv.gz": 40623,
     "case_studies/results/bone_marrow_pc/cells.csv.gz": 115144,
+    "case_studies/results/ln_vaccine/cells.csv.gz": 193442,
+    "case_studies/results/ebv/cells.csv.gz": 205630,
     "case_studies/results/flu/cells.csv.gz": 123693,
     "case_studies/results/flu_lung/cells.csv.gz": 4121,
-    "case_studies/results/ebv/cells.csv.gz": 205630,
     "case_studies/results/tonsil/cells.csv.gz": 22478,
-    "case_studies/results/stephenson/cells.csv.gz": 5000
+    "case_studies/results/stephenson/cells.csv.gz": 5000,
+    "case_studies/results/clonal_information_summary/dataset_evidence.csv": 12
   },
   "outputs": [
     "Figure_1",
@@ -105,33 +106,229 @@
     "Figure_3",
     "Figure_4",
     "Figure_5",
+    "Figure_6",
     "Supplementary_1",
     "Supplementary_2",
     "Supplementary_3",
     "Supplementary_4",
     "Supplementary_5",
     "Supplementary_6",
-    "Supplementary_8"
+    "Supplementary_7",
+    "Supplementary_8",
+    "Supplementary_9",
+    "Supplementary_10",
+    "Supplementary_11",
+    "Supplementary_12",
+    "Supplementary_13",
+    "Supplementary_14",
+    "Supplementary_15",
+    "Supplementary_16"
   ],
   "figure1_concept": {
-    "panels": [
-      "original GC art",
-      "traceable paired-cell/family/profile/map example",
-      "four visual evidence cards"
+    "artwork": "Vector scientific diagrams with an approved AI-generated raster fish; synthetic pseudo-UMAP, not an experimental result",
+    "layout": "Paired inputs and transparent Threadfin fish at left; functional GC-node and cycling/output-gradient maps at right",
+    "primary_landscape_width_fraction": 0.6721311475409836,
+    "seed": 8126,
+    "background_families": 535,
+    "continuum_families": 245,
+    "illustrative_rna_cells": 620,
+    "illustrative_rna_clusters": 3,
+    "receptor_sequence_trees": 3,
+    "receptor_tree_colours": [
+      "#7865A8",
+      "#C4805B",
+      "#448F85"
     ],
-    "illustrative_cells": 18,
-    "families": 3,
-    "cells_per_family": 6,
-    "ring_compositions": "illustrative, not the algorithmic kernel features",
-    "A_asset_sha256": "b08cdbd77e32c7120c03dc885287970ca53146646f7e8cfda2f10210c915d453"
+    "state_order": [
+      "GC cycling",
+      "Selection-associated",
+      "Output-like",
+      "Memory-like"
+    ],
+    "size": "Area proportional to synthetic captured-cell count for every clone point",
+    "colour": "Upper map: dominant captured RNA state. Lower map: vivid blue/teal/amber/rose continuous programme balance. Receptor-tree colours identify separate families, not RNA states.",
+    "continuum_palette": [
+      "#225CC5",
+      "#13A9B8",
+      "#F2A12C",
+      "#DC405C"
+    ],
+    "shape": "All clone dots are circles; no timepoint marker shapes",
+    "central_expansion": "Some central profiles are larger by illustrative design only; empirical size uses captured cells, not map location",
+    "dot_area_points_squared_per_cell": 0.78,
+    "bcr_input": "Original membrane-Ig and H/L V(D)J-contig glyphs; grouping uses IGH with optional light-chain refinement",
+    "receptor_tree_scope": "Illustrative within-family sequence relationships; no common root across families, measured phylogeny or inferred output trajectory",
+    "workflow_topology": {
+      "input_sources": 2,
+      "shared_input_filaments": 1,
+      "output_filaments": 2,
+      "workflow_arrowheads": 0,
+      "integration_glyph": "approved threadfin fish cartoon PNG"
+    },
+    "fin_extensions": "Four tapered vector ribbons with pale gold/blue-green shading; overlapping pixel anchors and tangent-matched cubic joins extend the approved illustration organically",
+    "fish_asset": {
+      "path": "paper/figure_plan/assets/threadfin_fish_cartoon.png",
+      "sha256": "6c9e6add4b63a3b2ef1dfd740fc6fa6dc60f2ec133fa0d3d413dca4776c45b58",
+      "placement_left_top_width_mm": [
+        0,
+        132,
+        83
+      ],
+      "provenance": "Built-in image generation from the user-supplied fish reference; user approved",
+      "rendering": "Original RGBA pixels embedded at natural aspect ratio; vector fin extensions overlap the existing tips; source PNG unchanged"
+    },
+    "fish_reference": "User-supplied 9df853968acdacd99d25b52a2e3fd48f.png",
+    "algorithm_glyph": "The unshrunk mean of RNA kernel feature vectors is a squared-distance Frechet mean in feature space; final profiles also use context adjustment, shrinkage and projection. No optimal-transport solver is claimed.",
+    "selection_emphasis": "Gold outline and aligned annotation identify a conceptual node; the outline is not a confidence region",
+    "visual_references": [
+      {
+        "paper": "Dandelion, Nature Biotechnology (2024), Fig. 1",
+        "url": "https://www.nature.com/articles/s41587-023-01734-7",
+        "motif": "Paired measurements, V(D)J segments and clone-network abstraction"
+      },
+      {
+        "paper": "scRepertoire 2, PLOS Computational Biology (2025), Fig. 1",
+        "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012760",
+        "motif": "Membrane BCR on a B cell, contigs and receptor-based grouping"
+      }
+    ],
+    "asset_reuse": "Approved generated fish PNG embedded; no article artwork embedded",
+    "continuum_interpretation": "Idealised GC/cycling to output-associated profile variation; no imposed selection node or inferred temporal trajectory",
+    "default_profile": "Context-centred and shrunken kernel mean embedding; mean option remains available",
+    "dashed_arrow": "Candidate selection-to-cycling return; requires directional lineage/time evidence",
+    "biological_scope": "GC-specific hypothesis; not memory-to-GC re-entry, demonstrated fate or between-family ancestry",
+    "study_scope": "Fig. 2 model-antigen selection context and Fig. 3 infection population / output-gradient questions; studies not pooled",
+    "implementation_anchors": [
+      "threadfin/api.py:run",
+      "threadfin/profiles.py:build_model",
+      "threadfin/profiles.py:clone_profiles",
+      "threadfin/programmes.py:find_programmes"
+    ],
+    "source": "paper/figure_plan/figure1_overview.py",
+    "source_sha256": "426b86a035754d61795e937e13c681dc177a99485431ae84ad2a04d470f2da90",
+    "outputs": {
+      "png": "d305855ba695afbfcfdb9d29d82edb7ca880af1d942fc916a824d383a861ce7d",
+      "pdf": "b2b5e222b67436ce3e7b4da5ef2232b5d2022e26d9cc20324a23de9119ec8b3b"
+    }
   },
   "gc_reclustering": {
-    "primary": "notebook_seed123",
-    "n_clones": 49,
-    "job_id": "32344499",
+    "primary": "legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123",
+    "n_clones": 377,
+    "n_cells": 762,
+    "coordinates_sha256": "be7cd509b773e17d5c0ca4e6273679c124244d4f869f4f95ddae67cd8dc0fa78",
+    "job_id": "32345448",
+    "selection_manifest": "case_studies/results/gc_legacy_parameter_audit/selected.json",
     "graph_uses_gate_labels": false,
     "plot_colors": "Unsupervised Leiden clone_cluster",
-    "parameters": "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_parameters.json"
+    "size_encoding": "Area = 6 square points per captured cell",
+    "parameters": "case_studies/results/gc_legacy_parameter_audit/maps/legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123.json"
+  },
+  "figure2_reporter_review": {
+    "accession": "GSE287123",
+    "n_reliable_families": 381,
+    "family_definition": "Donor-private IGH V/J and nucleotide-junction sequence families",
+    "coordinates_source": "case_studies/results/mouse_rbd/clone_table.csv",
+    "source_sha256": "5492e3689b95c7bff3f910b134fdfec8dfc92efb9e440e539d99635591c04c6f",
+    "same_coordinates_in_D_and_E": true,
+    "parameters": {
+      "n_neighbors": 15,
+      "min_dist": 0.1,
+      "spread": 1.0,
+      "random_state": 0
+    },
+    "size_encoding": "Area in square points = 1 + 5 * sqrt(captured cells)",
+    "parameter_review": "case_studies/results/mouse_rbd_embedding_audit/review/review_summary.json",
+    "inference_limit": "Measured-gate association; no temporal fate or comparative method superiority"
+  },
+  "figure3_review": {
+    "pure_pb_families": 329,
+    "pure_pb_mice": 11,
+    "within_mouse_min_families": 5,
+    "within_mouse_eligible_mice": 10,
+    "within_mouse_negative_correlations": 10,
+    "median_within_mouse_rho": -0.59562774069403,
+    "gc_reference_families": 66,
+    "gc_reference_rule": "reliable early families with GC fraction >=0.5; mean saved 2D coordinates",
+    "panel_E_limit": "Descriptive RNA-derived association in a 2D display; not independent validation of maturation or GC origin",
+    "panel_F_mice": 36,
+    "panel_F_reliable_families": 1174,
+    "panel_F_denominator": "all reliable families within each mouse, separately by treatment",
+    "panel_F_gc_rule": "captured GC fraction >=0.5; no UMAP-distance classification",
+    "panel_F_limit": "Different terminal mice at each day; changing captured repertoires, not tracked families or causal treatment effects",
+    "selected_map": "case_studies/results/malaria_late_embedding_audit/maps/k50_md0.5_seed0.csv",
+    "coordinates_sha256": "2e7dfa0acddb79139d9fa6d4dfbf912139baad3d2c0d8ac6d5f91a2513f868d9",
+    "map_parameters": {
+      "n_neighbors": 50,
+      "min_dist": 0.5,
+      "spread": 1.0,
+      "random_state": 0
+    },
+    "layout_mm": {
+      "A": [
+        0,
+        5,
+        183,
+        38
+      ],
+      "B": [
+        0,
+        53,
+        85,
+        61
+      ],
+      "C": [
+        21.5,
+        139,
+        140,
+        88
+      ],
+      "D": [
+        111,
+        53,
+        72,
+        61
+      ],
+      "E": [
+        9,
+        259,
+        79,
+        47
+      ],
+      "F": [
+        112,
+        259,
+        71,
+        47
+      ]
+    },
+    "source_tables": "case_studies/results/figure23_review/"
+  },
+  "Figure_4": {
+    "source_files": {
+      "case_studies/results/clonotrace_larry/summary.json": "7557967db3f88cdb29c969a46f24c1dc15f74e219575724715f852ea04237ce1",
+      "case_studies/results/clonotrace_larry/clone_umap_kernel.csv.gz": "ce373432ca4866122b5ff739b5ff5bb5df7bce5f74814aa23cba450ce42265dd",
+      "case_studies/results/clonotrace_larry/future_scores.csv": "611556053a220c1e99e4a510a38aac9d98f37faa151caf883c22bb0c59d80614",
+      "case_studies/results/clonotrace_larry/future_predictions.csv.gz": "83779efb811e54c5c82a2b429e010cc73400481be89dbbfd2e7476a5bf05557e"
+    },
+    "inference": "Quantitative tests use feature coordinates or held-out predictions, not UMAP geometry."
+  },
+  "Figure_5": {
+    "source_files": {
+      "case_studies/results/clonotrace_nsclc/summary.json": "912f0c1dbf8d95e92c571cf70b5fa8120998e46efe115f37a8b26fb42c2fd88f",
+      "case_studies/results/clonotrace_nsclc/clone_umap_kernel.csv.gz": "67cc1a04628ca3dfd53ed2a3b30c870e76ed0f8a4c5e44b6c084984ad8303eb8",
+      "case_studies/results/clonotrace_nsclc/longitudinal_distance_comparison.csv": "596585582415026d0835a9c74ac064004eabf18fdec3b5e8811da56d1ff624d9",
+      "case_studies/results/clonotrace_nsclc/longitudinal_module_changes.csv.gz": "867206ae7831dcbcea44bb2fe8dbed4c69dcb760b30a87f7f8a4d77c79f8302d"
+    },
+    "inference": "Quantitative tests use feature coordinates or held-out predictions, not UMAP geometry."
+  },
+  "Figure_6": {
+    "source_files": {
+      "case_studies/results/native_benchmark/heldout_scores.csv": "0fb9771209c8e50dcda6c580955aca9229ef418d1bcebdecd48a53723315861a",
+      "case_studies/results/native_benchmark/readout_summary.csv": "018e5fff058f2bd0b444432274599487aa70117dc00ccea5428d374fc2463c4b",
+      "case_studies/results/clonotrace_larry/split_sample_errors.csv.gz": "37f641787176d632d90182a066c68e8102eeafcd03e0bf24155c0a70c6dbcf8f",
+      "case_studies/results/clonotrace_larry/split_sample_audit.json": "9e9f526c2691167bdfe83586ffd5d226f9c13dcd81ff5d2a1fa80fce06a9512e"
+    },
+    "inference": "Quantitative tests use feature coordinates or held-out predictions, not UMAP geometry."
   },
   "archived_panels": {
     "legacy_notebook_clone_Top2a.png": {
@@ -141,10 +338,29 @@
     }
   },
   "gc_reclustering_tables": {
-    "case_studies/results/gc_np_pc_clone_embedding/display_marker_means.csv": {
-      "sha256": "9db6c65d8ac28211cd768d75fd27cf88a4bd464ee7e215222a4cfa6be99cd433",
+    "case_studies/results/gc_legacy_parameter_audit/display_marker_means.csv": {
+      "sha256": "1f682e7db4b3e10eeeb72cd1fc944a13d91aa9e355353f7930d340ca73b19e96",
       "values": "Mean RNA over clones grouped by unsupervised Leiden clone_cluster"
     }
   },
-  "benchmark_included": false
+  "malaria_three_arms": {
+    "source": "case_studies/results/malaria_late_embedding_audit/maps/k50_md0.5_seed0.csv",
+    "coordinates_sha256": "2e7dfa0acddb79139d9fa6d4dfbf912139baad3d2c0d8ac6d5f91a2513f868d9",
+    "n_families_per_map": 1183,
+    "n_infected_mice": 36,
+    "n_infected_families": 1174,
+    "all_maps_share_coordinates": true,
+    "fraction_definition": "Fraction of captured cells per family; equal-family average within mouse",
+    "source_tables": "case_studies/results/figure23_review/supp13_*.csv"
+  },
+  "Supplementary_16": {
+    "source_files": {
+      "case_studies/results/figure2_biology/summary.json": "c0565396f3591cb0f9a9c967a56165a1c0968f30c994c109a1cdb7ec1ded383d",
+      "case_studies/results/figure2_biology/within_mouse_associations.csv": "51b7645b590ca10bbb4df44dabf40cdfaa738d09daf7757369d3f3ae226615fb",
+      "case_studies/results/figure2_biology/paired_shm_by_mouse.csv": "1c2e594f07e8c673ca4a3a701ee82a33ec12859eaa5427f6b0d31ebdb17d8b77",
+      "case_studies/results/figure2_biology/coverage_by_mouse.csv": "732aa597bafedba3f4c6d969f75a79815f58f5b1249432fb11b7251f84607988"
+    },
+    "inference": "Quantitative tests use feature coordinates or held-out predictions, not UMAP geometry."
+  },
+  "benchmark_included": true
 }

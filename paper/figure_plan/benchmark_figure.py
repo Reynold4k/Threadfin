@@ -28,84 +28,141 @@ def draw(new_page,p,save):
         present=set(scores.loc[scores.dataset.eq(ds),'method'])
         if present != set(METHODS):
             raise ValueError(f'{ds}: incomplete native comparison: {set(METHODS)-present}')
-    cap=pd.read_csv(HERE/'method_capabilities.csv')
+    readouts=pd.read_csv(folder/'readout_summary.csv')
+    cap=pd.read_csv(HERE/'method_capabilities.csv').set_index('method')
     fig=new_page('Figure 6','Comparing methods at the task they actually perform',
-                 'Published capabilities and measured reporter interpretation are shown separately.',height=334)
-    a=p(fig,0,7,183,42,'A','One common biological readout; native methods keep their own representation')
-    sk.canvas(a,183,42)
-    stages=[(0,28,'GC reporters','NP-OVA / RBD',BLUE),(37,29,'Paired input','RNA + BCR',GREEN),
-            (76,29,'Representation','Native output',RED),(115,29,'Fixed families','Same mice',BLUE),
-            (154,29,'Mouse readout','Labels held out',GREEN)]
+                 'Published capabilities and measured reporter interpretation are shown separately.',height=288)
+    a=p(fig,0,7,183,46,'A','What Threadfin does')
+    sk.canvas(a,183,46)
+    stages=[(0,44,'Paired input','RNA + BCR per cell',BLUE),
+            (51,40,'Donor-private families','defined by receptor sequence',GREEN),
+            (98,42,'Profiles + reliability','context-adjusted, sampling-aware',RED),
+            (147,36,'Family-level readouts','maps · gates · sharing',BLUE)]
     for x,w,t,sub,col in stages:
-        a.add_patch(FancyBboxPatch((x,5),w,32,boxstyle='round,pad=.2,rounding_size=1.5',fc=col+'0c',ec=col,lw=.7))
-        if x==0:
-            sk.mouse(a,x+w/2-3,29,.8,color=col)
-            sk.syringe(a,x+w/2+8,30,.6,color=col)
-        elif x==37:
-            # A count/PC matrix and receptor records: no gate input to models.
-            for row in range(3):
-                for column in range(5):
-                    a.add_patch(Rectangle((x+6+column*1.8,26+row*1.6),1.5,1.3,fc=BLUE if (row+column)%3 else '#ddd9ef',ec='none'))
-            for row in range(3):
-                a.plot([x+18,x+24],[27+row*1.6]*2,color=RED,lw=.7)
-        elif x==76:
-            coords=np.array([[8,27],[13,32],[19,29],[22,33],[16,25]])+[x,0]
-            for i,j in [(0,1),(1,2),(2,3),(2,4)]:a.plot(coords[[i,j],0],coords[[i,j],1],color=GREY,lw=.7)
-            a.scatter(coords[:,0],coords[:,1],s=15,c=[BLUE,GREEN,RED,BLUE,GREEN],linewidths=0)
-        elif x==115:
-            family_profile(a,x+9,29,[.6,.2,.1,.1],r=3.1,label='A')
-            family_profile(a,x+21,29,[.1,.1,.7,.1],r=3.1,label='B')
-        else:
-            for i in range(3):sk.mouse(a,x+6+i*7,29,.5,color=BLUE if i==2 else GREY)
-        a.text(x+w/2,19,t,ha='center',fontsize=6.2,color=INK)
-        a.text(x+w/2,11,sub,ha='center',fontsize=5.4,color=INK)
-        if x<154:sk.arrow(a,x+w+1,21,x+w+7,21,color=GREY,head=1.7)
-    b=p(fig,23,83,160,81,'B','Capabilities from papers and official implementations')
-    b.set_xlim(0,4.4);b.set_ylim(len(cap)-.5,-1.5);b.set_axis_off()
-    columns=['repertoire_workflow','joint_representation','clone_state_analysis']
-    for j,label in enumerate(['Repertoire','Joint representation','Clone/state analysis','Specialised strength']):
-        b.text(j*.93,-1.1,label,fontsize=6.1,color=INK)
-    for i,r in cap.iterrows():
-        b.text(-.60,i,r.method,fontsize=6,va='center',color=BLUE if r.method=='Threadfin' else INK)
-        for j,key in enumerate(columns):
-            val=r[key];col=BLUE if val=='Native' else GREEN if val.startswith('Via') else GREY
-            b.add_patch(FancyBboxPatch((j*.93,i-.35),.84,.68,boxstyle='round,pad=.02',fc=col+'18',ec='none'))
-            b.text(j*.93+.42,i,val,ha='center',va='center',fontsize=5.5,color=INK)
-        b.text(2.8,i,r.special_focus,va='center',fontsize=5.4,color=INK)
-    b.text(-.6,len(cap)+.35,'Native and workflow outputs are different tasks; this table is not a performance ranking.',fontsize=5.7,color=INK)
-    c=p(fig,31,201,71,91,'C','How accurately can each representation\nread captured division-gate occupancy?')
-    d=p(fig,121,201,62,81,'D','Which families enter the comparison?')
-    c.set_axis_off();d.set_axis_off()
-    # Two dataset-specific readouts; no pooled cell replicate or omitted zero.
+        a.add_patch(FancyBboxPatch((x,4),w,34,boxstyle='round,pad=.2,rounding_size=1.5',fc=col+'0c',ec=col,lw=.7))
+        a.text(x+w/2,12.5,t,ha='center',fontsize=6.2,color=INK,fontweight='bold')
+        a.text(x+w/2,7.5,sub,ha='center',fontsize=5.2,color=INK)
+    # stage 1 icon: count matrix + receptor record
+    for row in range(3):
+        for column in range(4):
+            a.add_patch(Rectangle((8+column*2.0,17+row*2.0),1.6,1.5,fc=BLUE if (row+column)%3 else '#ddd9ef',ec='none'))
+    for row in range(3):
+        a.plot([30,36],[18+row*2.0]*2,color=RED,lw=.8)
+    a.text(33,24.5,'VDJ',ha='center',fontsize=4.6,color=RED)
+    # stage 2 icon: three sequence-defined families
+    family_profile(a,60,25,[.6,.2,.1,.1],r=3.2,label='A')
+    family_profile(a,71,25,[.1,.1,.7,.1],r=3.2,label='B')
+    family_profile(a,82,25,[.2,.5,.1,.2],r=3.2,label='C')
+    # stage 3 icon: one family profile + context neighbourhood + reliability gauge
+    family_profile(a,108,25,[.3,.4,.2,.1],r=3.4,label='')
+    rng=np.random.default_rng(2)
+    a.scatter(116+rng.uniform(0,9,10),20+rng.uniform(0,10,10),s=2.5,color=GREY,linewidths=0)
+    a.add_patch(Rectangle((128,19),2.2,12,fc='white',ec=INK,lw=.5))
+    a.add_patch(Rectangle((128,19),2.2,9,fc=RED,ec='none'))
+    a.text(129.1,32.5,'rel.',fontsize=4.4,color=INK)
+    # stage 4 icon: mini clone map + gate bars
+    pts=np.array([[151,22],[154,27],[157,21],[160,26],[163,22],[166,27],[169,23]])
+    a.scatter(pts[:,0],pts[:,1],s=6,c=[BLUE,BLUE,RED,RED,RED,GREEN,GREEN],linewidths=0)
+    a.bar([174,177],[5,8],width=2.2,bottom=19,color=[GREY,RED])
+    for x in [44,91,140]:
+        sk.arrow(a,x+2,21,x+7,21,color=GREY,head=1.7)
+    # B: capability matrix in three tiers — shared, subset-native, Threadfin-only.
+    b=p(fig,0,56,183,119,'B','Which capabilities are shared, native in a subset, or unique to Threadfin')
+    b.set_xlim(0,183);b.set_ylim(119,0);b.set_axis_off()
+    order=['Threadfin','Benisse','BiGCN','CoNGA','sciCSR','clone2vec','Ibex','Dandelion','Scirpy','scRepertoire','Platypus']
+    N,V,X='native','via','none'
+    def mrep(m):return N if cap.loc[m,'repertoire_workflow']=='Native' else V
+    def mjoint(m):return N if cap.loc[m,'joint_representation'] in ('Native','Expression context') else V
+    def mstate(m):return N if cap.loc[m,'clone_state_analysis'] in ('Native','CSR output') else V
+    def tf_only(m):return N if m=='Threadfin' else X
+    bands=[('Shared by all compared tools',
+            [('VDJ import and clonotype grouping',mrep),
+             ('Joint receptor–expression representation',mjoint),
+             ('Clone-state or trajectory analysis',mstate)]),
+           ('Native in a subset of tools',
+            [('Pretrained deep receptor-sequence encoder',lambda m:N if m in ('Benisse','BiGCN','Ibex') else X),
+             ('Native joint receptor–expression model',lambda m:mjoint(m) if mjoint(m)==N else X)]),
+           ('Unique to Threadfin',
+            [('Donor-private family definitions',tf_only),
+             ('Sampling-aware reliability per family',tf_only),
+             ('Context-adjusted profiles, receptor genes excluded',tf_only),
+             ('Held-out prediction of measured family biology ‡',tf_only)])]
+    x0=69.;dx=10.1;centres=[x0+j*dx for j in range(len(order))]
+    b.add_patch(Rectangle((centres[0]-dx/2,22),dx,90,fc=BLUE+'14',ec='none',zorder=0))
+    for j,m in enumerate(order):
+        b.text(centres[j],21,m,rotation=38,ha='left',va='top',fontsize=5.2,
+               color=BLUE if m=='Threadfin' else INK,fontweight='bold' if m=='Threadfin' else 'normal')
+    y=25.
+    for band,rows in bands:
+        b.text(2,y,band,fontsize=6.0,color=INK,fontweight='bold',va='center')
+        b.plot([2,181],[y+2.8]*2,color='#e3e6ea',lw=.6,zorder=0)
+        y+=7.5
+        for label,state in rows:
+            b.text(63,y,label,fontsize=5.6,color=INK,ha='right',va='center')
+            for j,m in enumerate(order):
+                st=state(m)
+                if st==N:b.scatter(centres[j],y,marker='o',s=22,color=BLUE,zorder=3)
+                elif st==V:b.scatter(centres[j],y,marker='o',s=22,facecolors='none',edgecolors=GREEN,linewidths=1.1,zorder=3)
+                else:b.text(centres[j],y,'—',ha='center',va='center',fontsize=6,color=GREY)
+            y+=6.8
+        y+=2.0
+    b.scatter([3],[114.5],marker='o',s=20,color=BLUE)
+    b.text(5.5,114.5,'native',fontsize=5.4,va='center',color=INK)
+    b.scatter([17],[114.5],marker='o',s=20,facecolors='none',edgecolors=GREEN,linewidths=1.1)
+    b.text(19.5,114.5,'via workflow',fontsize=5.4,va='center',color=INK)
+    b.text(34,114.5,'— none reported',fontsize=5.4,va='center',color=GREY)
+    b.text(181,114.5,'‡ quantified in panels C and D',fontsize=5.4,va='center',ha='right',color=INK)
+    # C: measured reporter interpretation, held-out mice.
+    c=p(fig,10,183,88,95,'C','Held-out gate fractions predicted from family profiles')
+    c.set_axis_off()
     targets={'mouse_np':'division_gate:mCherry-low','mouse_rbd':'division_gate:mCherry-low'}
-    for k,(ds,target) in enumerate(targets.items()):
+    stats={}
+    for ds,target in targets.items():
         q=scores[(scores.dataset.eq(ds)) & scores.target.eq(target)].copy()
         if 'status' in q:q=q[q.status.eq('completed')]
         if q.empty:raise ValueError(f'Missing completed reporter scores for {ds}')
-        ax=c.inset_axes([0,.57 if k==0 else .04,1,.36])
-        rng=np.random.default_rng(0)
-        for i,method in enumerate(METHODS):
-            v=100*q.loc[q.method.eq(method),'mae'].dropna()
-            ax.scatter(v,np.full(len(v),i)+rng.uniform(-.12,.12,len(v)),s=10,
-                       color=BLUE if method.startswith('Threadfin') else GREY if method=='Training_mean' else RED,alpha=.7)
-            if len(v):ax.plot([v.median()],[i],marker='|',ms=8,color=INK)
-        ax.set_yticks(range(len(METHODS)),[NAMES[m] for m in METHODS],fontsize=5.5);ax.invert_yaxis()
-        ax.set_title('NP-OVA' if ds=='mouse_np' else 'RBD',loc='right',fontsize=5.9)
-        ax.tick_params(labelsize=5.2);ax.set_xlabel('Gate-fraction MAE (percentage points; lower is better)',fontsize=5.5)
-    # Coverage must be actual family coverage, never unique CDR3 / cell count.
-    d.text(0,.98,'Expanded-family feature coverage',fontsize=5.8,color=INK)
-    for x,ds,lab in [(.69,'mouse_np','NP-OVA'),(.96,'mouse_rbd','RBD')]:
-        d.text(x,.89,lab,ha='right',fontsize=5.5,color=INK)
-        for i,method in enumerate(METHODS):
-            q=scores[scores.dataset.eq(ds) & scores.method.eq(method)]
-            d.text(x,.82-i*.045,f'{100*q.coverage.iloc[0]:.0f}%',ha='right',fontsize=5.6,color=INK)
-    for i,method in enumerate(METHODS):d.text(0,.82-i*.045,NAMES[method],fontsize=5.6,color=INK)
-    counts=scores.groupby('dataset').n_common_families.first()
-    d.text(0,.38,f'Common expanded families:\nNP-OVA: {counts.mouse_np:,}; RBD: {counts.mouse_rbd:,}',fontsize=6.1,color=INK,linespacing=1.5)
-    d.text(0,.22,'Same family membership and label denominators.\nUnmeasured gates stay missing.\nNo 2D UMAP coordinates enter the readout.',fontsize=5.7,color=INK,linespacing=1.6)
-    d.text(0,.01,'Biological scope\nCaptured division-gate composition\nfrom label-blind, transductive representations.\nThe comparison does not measure future fate.',fontsize=5.7,color=INK,linespacing=1.6)
-    c.text(0,-.14,'Dots: label-held-out mice; bars: medians. Native model input excludes gates.\nTraining-only kernel centring/scaling and nested mouse-wise ridge selection.',transform=c.transAxes,fontsize=5.4,color=INK)
-    d.text(0,-.15,'Size sensitivity, additional RBD gates and measured costs: Supplementary 7.\nCapabilities without a comparable output are not assigned zero scores.',transform=d.transAxes,fontsize=5.4,color=INK)
+        stats[ds]=q
+    order_m=sorted(METHODS,key=lambda m:100*np.median([stats[ds].loc[stats[ds].method.eq(m),'mae'].median() for ds in targets]))
+    ax=c.inset_axes([.27,.13,.71,.74])
+    dcols={'mouse_np':BLUE,'mouse_rbd':RED}
+    for i,m in enumerate(order_m):
+        for ds,marker in [('mouse_np','o'),('mouse_rbd','s')]:
+            v=100*stats[ds].loc[stats[ds].method.eq(m),'mae'].dropna()
+            col=INK if m.startswith('Threadfin') else GREY if m=='Training_mean' else dcols[ds]
+            ax.errorbar(v.median(),i+( -.12 if ds=='mouse_np' else .12),
+                        xerr=[[v.median()-v.quantile(.25)],[v.quantile(.75)-v.median()]],
+                        fmt=marker,ms=3.6,color=col,lw=.9,capsize=1.8,zorder=3)
+    for ds,ls,ytxt in [('mouse_np','-',-.9),('mouse_rbd','--',-2.1)]:
+        chance=100*stats[ds].loc[stats[ds].method.eq('Training_mean'),'mae'].median()
+        ax.axvline(chance,color=GREY,lw=.9,ls=ls,zorder=1)
+        ax.text(chance,ytxt,'chance\nNP-OVA' if ds=='mouse_np' else 'chance\nRBD',fontsize=5.0,color=INK,ha='center',va='bottom')
+    ax.set_yticks(range(len(order_m)),[NAMES[m] for m in order_m],fontsize=5.8)
+    for i,m in enumerate(order_m):
+        if m.startswith('Threadfin'):
+            ax.get_yticklabels()[i].set_fontweight('bold')
+    ax.invert_yaxis();ax.tick_params(labelsize=5.4)
+    ax.set_xticks([15,20,25,30,35])
+    ax.set_xlabel('Gate-fraction MAE (percentage points; lower is better)',fontsize=5.8)
+    from matplotlib.lines import Line2D
+    ax.legend(handles=[Line2D([],[],marker='o',ls='',color=dcols['mouse_np'],label='NP-OVA'),
+                       Line2D([],[],marker='s',ls='',color=dcols['mouse_rbd'],label='RBD'),
+                       Line2D([],[],color=GREY,lw=.9,ls='-',label='Chance = training mean')],
+              loc='lower left',bbox_to_anchor=(.01,.02),fontsize=5.4,frameon=False)
+    # D: held-out R² across every readout; same method order and row alignment as C.
+    d=p(fig,106,183,77,95,'D','What carries the held-out signal')
+    d.set_axis_off()
+    ax2=d.inset_axes([.06,.13,.90,.74])
+    for i,m in enumerate(order_m):
+        vals=readouts.loc[readouts.method.eq(m),'median_r2'].to_numpy()
+        col=INK if m.startswith('Threadfin') else GREY
+        ax2.scatter(vals,i+np.linspace(-.22,.22,len(vals)),s=7,color=col,alpha=.75,linewidths=0,zorder=3)
+        ax2.plot([np.median(vals)],[i],marker='|',ms=8,mew=1.3,color=INK if m.startswith('Threadfin') else '#6b7480',zorder=4)
+    ax2.axvline(0,color=GREY,lw=.9,ls='--',zorder=1)
+    ax2.text(0,-.9,'chance',fontsize=5.0,color=INK,ha='center',va='bottom')
+    ax2.set_yticks([]);ax2.invert_yaxis();ax2.set_xlim(-.32,.85)
+    ax2.spines['left'].set_visible(False)
+    ax2.set_xlabel('Held-out R² across 8 readouts (tick: median)',fontsize=5.8)
+    ax2.tick_params(labelsize=5.4)
     save(fig,'Figure_6')
 
 

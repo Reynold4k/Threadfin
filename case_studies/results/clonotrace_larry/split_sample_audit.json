@@ -1,0 +1,11 @@
+{
+  "n_calibration_profiles": 6089,
+  "n_evaluation_profiles": 250,
+  "n_evaluation_rows": 15000,
+  "kernel_bandwidth": 19.16588020324707,
+  "n_features": 256,
+  "smoothing": 0,
+  "variance_components_from": "disjoint calibration profiles",
+  "reference": "disjoint half of each evaluation clone-day-well",
+  "limits": "Same-experiment split-cell denoising check, not a calibration of absolute reliability or future fate."
+}

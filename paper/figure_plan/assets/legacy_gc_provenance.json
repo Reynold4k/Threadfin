@@ -68,14 +68,16 @@
     "GC selection/output interpretation is restricted to model-antigen GC, not non-GC samples."
   ],
   "current_main_figure": {
-    "Figure2B": "New raw-data analysis, not any archived asset in this manifest.",
+    "Figure2B": "New computation from public counts/TRUST4, not a report screenshot",
     "dataset": "GSE246382",
-    "script": "case_studies/run_gc_reclustering.py",
-    "summary": "case_studies/results/gc_np_pc_clone_embedding/summary.json",
-    "coordinates": "case_studies/results/gc_np_pc_clone_embedding/notebook_seed123_clone_map.csv",
-    "job_id": "32344499",
-    "primary": "Historical cell-UMAP centroid / distance-row UMAP / Scanpy-graph recipe; seed 123; 49 same-mouse sequence-defined families with >=3 cells; three Leiden clusters",
-    "colour": "Unsupervised Leiden clone_cluster; actual captured clone-size legend"
+    "script": "case_studies/reproduce_gc_legacy_embedding.py",
+    "summary": "case_studies/results/gc_legacy_parameter_audit/selected.json",
+    "coordinates": "case_studies/results/gc_legacy_parameter_audit/maps/legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123.csv",
+    "job_id": "32345448",
+    "extended_audit_job_id": "32345955",
+    "primary": "377 same-mouse V-D-J receptor groups, >=1 cell; groups can merge distinct junctions. UMAP k40/min_dist0.65/seed123; Scanpy k15 and Leiden r0.3/seed0. Six clusters descriptive only.",
+    "colour": "Unsupervised clone_cluster; area proportional to captured cells",
+    "source_differences": "Original bigplasma.h5ad/result_df.csv/IgBLAST table absent. No missing-receptor nan group created. Notebook PCA automatically uses marked HVGs; explicit all-gene sensitivity retained."
   },
   "historical_report_reference": "paper/figure_plan/review/Figure_2_archived_report_reference.png; original report panels are no longer Figure2B/S8B-D."
 }

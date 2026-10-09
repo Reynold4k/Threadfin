@@ -27,6 +27,10 @@ ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT.parent
 PAPER = ROOT / 'paper'
 FIGURES = PAPER / 'figure_plan'
+SUPPLEMENT_COUNT = 16
+
+def expected_figures():
+    return [f'Figure_{i}' for i in range(1,7)]+[f'Supplementary_{i}' for i in range(1,SUPPLEMENT_COUNT+1)]
 TEMPLATE = PROJECT.parent / '文献调研/演讲文稿/Progress_Review_Year2_ChenZhu_v5.docx'
 BENCH = ROOT / 'case_studies/results/native_benchmark'
 
@@ -143,7 +147,7 @@ def fresh_template(template):
 
 def add_figure(doc,name,legend,missing_figures):
     doc.add_page_break()
-    image=FIGURES/(name+'.png')
+    image=figure_image(name)
     if name in missing_figures:
         doc.add_paragraph(name.replace('_',' ')+' — awaiting complete native benchmark',style='Heading 2')
     else:
@@ -157,6 +161,10 @@ def add_figure(doc,name,legend,missing_figures):
     paragraph=doc.add_paragraph(style='FigureLegend')
     paragraph.add_run(legend['title']+'. ').bold=True
     inline(paragraph,legend['body'])
+
+
+def figure_image(name):
+    return FIGURES/(name+'.png')
 
 
 def legends():
@@ -196,27 +204,37 @@ def validate_docx(doc,template,output,order,missing_figures,template_path):
         assert 'Chen Zhu' in xml and 'Peter Doherty Institute' in xml
         assert '{RBD_BENCHMARK_RESULTS}' not in xml and '{cite:' not in xml
         images=[n for n in z.namelist() if n.startswith('word/media/')]
-        assert len(images)==14-len(missing_figures)
+        assert len(images)==len(expected_figures())-len(missing_figures)
+        media_hashes={hashlib.sha256(z.read(n)).hexdigest():n for n in images}
+        figure_media={}
+        expected=expected_figures()
+        for name in expected:
+            if name in missing_figures: continue
+            source=figure_image(name);digest=hashlib.sha256(source.read_bytes()).hexdigest()
+            assert digest in media_hashes, f'Stale or missing embedded figure: {name}'
+            figure_media[name]={'source':str(source.relative_to(ROOT)),'sha256':digest,'docx_media':media_hashes[digest]}
     return {'template':str(template_path),'template_sha256':hashlib.sha256(template_path.read_bytes()).hexdigest(),
             'output':str(output),'author':'Chen Zhu','styles_preserved':imported,'citation_count':len(order),
             'inline_citations':'parenthetical numbers in first-citation order',
             'reference_management':'static Word citations plus EndNote-importable RIS; no fabricated EndNote fields',
             'figure_images':len(images),'pending_native_benchmark':not native_completed(),
+            'verified_figure_media':figure_media,
             'missing_figures':missing_figures,
             'validation':'OOXML/styles/media/reference checks; Word pagination requires visual review'}
 
 
 def export(output,allow_pending=False,template_path=TEMPLATE):
     source,refs,order=render_source(allow_pending)
-    expected=[f'Figure_{i}' for i in range(1,7)]+[f'Supplementary_{i}' for i in range(1,9)]
+    expected=expected_figures()
     missing_figures=[]
     for name in expected:
-        unavailable=not (FIGURES/(name+'.png')).exists()
+        unavailable=not figure_image(name).exists()
         if name in {'Figure_6','Supplementary_7'} and not native_completed():unavailable=True
         if unavailable:
             if not allow_pending or name not in {'Figure_6','Supplementary_7'}:raise FileNotFoundError(name)
             missing_figures.append(name)
     doc,template=fresh_template(template_path);caption=legends()
+    assert set(caption)==set(expected), 'Figure legends and expected media disagree'
     groups=re.split(r'(?:\n\s*){2,}',source.strip())
     main_index=0;in_results=False;in_references=False;in_abstract=False
     def finish_section():
@@ -228,7 +246,7 @@ def export(output,allow_pending=False,template_path=TEMPLATE):
         if text.startswith('### '):
             finish_section();main_index=0
             if in_results:
-                titles=['Clone interpretation','In controlled GC models','*Plasmodium* reveals','Repeated human GC','Receptor-defined families','Captured-state readout']
+                titles=['Clone interpretation','In controlled GC models','*Plasmodium* reveals','Lineage barcodes test','Longitudinal paired TCRs','Captured-state readout']
                 for i,title in enumerate(titles,1):
                     if text[4:].startswith(title):main_index=i
             p=doc.add_paragraph(style='Heading 3');inline(p,text[4:]);continue
@@ -244,7 +262,7 @@ def export(output,allow_pending=False,template_path=TEMPLATE):
         if not in_references:p.alignment=WD_ALIGN_PARAGRAPH.JUSTIFY
         inline(p,text,italic=in_abstract)
     doc.add_page_break();doc.add_paragraph('Supplementary Information',style='Heading 1')
-    for i in range(1,9):add_figure(doc,f'Supplementary_{i}',caption[f'Supplementary_{i}'],missing_figures)
+    for i in range(1,SUPPLEMENT_COUNT+1):add_figure(doc,f'Supplementary_{i}',caption[f'Supplementary_{i}'],missing_figures)
     output.parent.mkdir(parents=True,exist_ok=True);doc.save(output)
     audit=validate_docx(doc,template,output,order,missing_figures,template_path)
     output.with_suffix('.audit.json').write_text(json.dumps(audit,indent=2)+'\n')
@@ -259,6 +277,6 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path)
     parser.add_argument('--template',type=Path,default=TEMPLATE)
     args=parser.parse_args()
-    output=args.output or PROJECT/('Threadfin_MANUSCRIPT_GC_2026-10-06'+
+    output=args.output or PROJECT/('Threadfin_MANUSCRIPT_GC_2026-10-09'+
         ('_REVIEW_PENDING_RBD' if args.allow_pending and not native_completed() else '')+'.docx')
     export(output,args.allow_pending,args.template)

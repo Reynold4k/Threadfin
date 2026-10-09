@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "checks": {
+    "twelve_case_identity_capture_and_eligibility": true,
+    "mouse_np_common_coverage_and_current_input_hash": true,
+    "mouse_np_predictions_preserved": {
+      "n_predictions": 1492,
+      "maximum_absolute_prediction_difference": 0.0
+    },
+    "mouse_rbd_common_coverage_and_current_input_hash": true,
+    "mouse_rbd_predictions_preserved": {
+      "n_predictions": 5656,
+      "maximum_absolute_prediction_difference": 0.0
+    },
+    "larry_original_five_methods_preserved": {
+      "n_predictions": 28380,
+      "maximum_absolute_prediction_difference": 0.0
+    },
+    "simulation_retains_pure_state_bias_and_credible_undercoverage": true,
+    "larry_reference_scope_and_evaluation_denominators": true
+  },
+  "source_sha256": {
+    "threadfin/density.py": "2fdbf8bd7ea71bd5a14ed4fa77d9a9986c3f184728da6bb7aa86143501c0d5d8",
+    "threadfin/expression.py": "dd50214690876b3432dcf1c23822768b38209107c1380177011d6520a54a51d1",
+    "threadfin/profiles.py": "a79befc96cf774ac5bd62c52f77c9b607b80041da223f9ca508bedfef8f24809",
+    "threadfin/dynamics.py": "4ae1eaf757f15eda3f59dfee22313712f7db44471d1a4bffc4ed574db22db78a",
+    "threadfin/programmes.py": "49facb7aea63086b786277129c198c548bfbbd8cdf7c2ae04924023600cc76c9",
+    "case_studies/validate_density_model.py": "a0c217b83c1575855e93e40fedd8c2c1bb7faa2525470456049b38136c9eb017",
+    "case_studies/validate_density_reporter.py": "e9e4fb8d79e6f369d101880561a830acdecd9d7a926520dbfe111d228534550e",
+    "case_studies/benchmark_representation_runtime.py": "b534c52a661d8fc8b7dea282a0f1f817595b71f0a4b0c35c7c59a93c33890c28",
+    "case_studies/integrate_algorithm_revision.py": "b8f0a16d1d6a25f5e44d359fe68bf63146433bf9a62326e4bb7a16f964396fcb"
+  },
+  "limits": [
+    "Consistency checks are not independent biological validation.",
+    "Simulation coverage is conditional on fixed well-separated regions and independent sampling.",
+    "The official Clonotrace implementation is not a comparator here."
+  ]
+}

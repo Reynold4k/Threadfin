@@ -1,0 +1,167 @@
+{
+  "scope": "Read-only review of existing sweep, gallery coordinates, and committed clone table; no RNA reprocessing.",
+  "family_definition": "Same-donor IGH families defined from heavy-chain V, J and nucleotide junction sequence similarity; not pooled V-D-J combination groups.",
+  "n_reliable_families": 381,
+  "metric_definitions": {
+    "lin_r2": "In-sample OLS R\u00b2 for value ~ 1 + x + y",
+    "legacy_knn_r2": "Actually explained variance EV = 1 - Var(y - prediction) / Var(y); legacy field name retained in original sweep.csv",
+    "excess": "Observed EV minus mean EV across 200 donor-stratified permutations; not R\u00b2",
+    "knn_loo_standard_r2": "1 - mean((y - prediction)^2) / Var(y), recomputed for the three displayed settings; no new permutation test",
+    "neighbour_readout": "Mean of 10 nearest labelled families, excluding self; family leave-one-out, not held-out-mouse prediction",
+    "faithfulness": "Spearman correlation of pair distances in features and 2D, sampled anew for each setting; not local neighbour preservation"
+  },
+  "parameter_decision": {
+    "primary": {
+      "key": "default",
+      "n_neighbors": 15,
+      "min_dist": 0.1,
+      "spread": 1.0,
+      "random_state": 0,
+      "decision": "primary_retained"
+    },
+    "rationale": "Retain the previously used Figure 2 setting because label conclusions are stable across the scan; geometry-led alternatives are sensitivity displays, not post hoc label optimisation.",
+    "sensitivity_settings": [
+      {
+        "key": "geometry_sensitivity",
+        "n_neighbors": 15,
+        "min_dist": 0.9,
+        "spread": 1.0,
+        "random_state": 0,
+        "decision": "sensitivity_high_geometry_faithfulness"
+      },
+      {
+        "key": "continuous_sensitivity",
+        "n_neighbors": 50,
+        "min_dist": 0.5,
+        "spread": 1.0,
+        "random_state": 0,
+        "decision": "sensitivity_continuous_layout"
+      }
+    ],
+    "inference_note": "Programme scores reuse RNA used to form family features and are descriptive. Measured labels are external, but gate-specific libraries remain a potential confound. Nominal p-values across this exploratory scan are not selection-adjusted confirmation tests."
+  },
+  "exact_default_coordinate_reproduction": {
+    "x_correlation": 0.9999999999999946,
+    "y_correlation": 0.9999999999999986,
+    "max_abs_x_difference": 4.732666010198727e-07,
+    "max_abs_y_difference": 1.189575193905057e-07
+  },
+  "all_85_setting_ranges_and_seed_robustness": {
+    "division_gate:mCherry-low": {
+      "n_parameter_sets": 85,
+      "faithfulness": {
+        "min": 0.6887505911027516,
+        "max": 0.7860991330904618,
+        "median": 0.7510934627640425
+      },
+      "lin_r2": {
+        "min": 0.1423658576590822,
+        "max": 0.1701522115513415,
+        "median": 0.1607358038343561
+      },
+      "excess_explained_variance": {
+        "min": 0.2124718696730533,
+        "max": 0.2820557534825999,
+        "median": 0.2439832383805957
+      },
+      "nominal_p_le_0_05": 85,
+      "seed_0_1_robustness": {
+        "lin_r2": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": -0.00014305761413915818,
+          "median_absolute_difference": 0.002018909689119233,
+          "min_difference": -0.012653277416371789,
+          "max_difference": 0.017838542907450405
+        },
+        "excess": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": -0.005623993369849048,
+          "median_absolute_difference": 0.012291021320767481,
+          "min_difference": -0.056915197910437726,
+          "max_difference": 0.04245250044882193
+        }
+      }
+    },
+    "zone_gate:DZ": {
+      "n_parameter_sets": 85,
+      "faithfulness": {
+        "min": 0.6887505911027516,
+        "max": 0.7860991330904618,
+        "median": 0.7510934627640425
+      },
+      "lin_r2": {
+        "min": 0.0571694560679217,
+        "max": 0.192388458447785,
+        "median": 0.1447073890018698
+      },
+      "excess_explained_variance": {
+        "min": 0.0659726241541144,
+        "max": 0.2863955917958642,
+        "median": 0.1937476701199986
+      },
+      "nominal_p_le_0_05": 81,
+      "seed_0_1_robustness": {
+        "lin_r2": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": 0.004268778126338538,
+          "median_absolute_difference": 0.009618416217522158,
+          "min_difference": -0.09127661158009351,
+          "max_difference": 0.0736986941922472
+        },
+        "excess": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": -0.0008027064584900379,
+          "median_absolute_difference": 0.018486711130328348,
+          "min_difference": -0.08575910622827271,
+          "max_difference": 0.1164908001446816
+        }
+      }
+    },
+    "mutation_frequency": {
+      "n_parameter_sets": 85,
+      "faithfulness": {
+        "min": 0.6887505911027516,
+        "max": 0.7860991330904618,
+        "median": 0.7510934627640425
+      },
+      "lin_r2": {
+        "min": 0.0084747184409128,
+        "max": 0.0397518581472134,
+        "median": 0.0330416007575017
+      },
+      "excess_explained_variance": {
+        "min": 0.0139598374376918,
+        "max": 0.1578616855256942,
+        "median": 0.0848997769898635
+      },
+      "nominal_p_le_0_05": 70,
+      "seed_0_1_robustness": {
+        "lin_r2": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": 0.000440649429309551,
+          "median_absolute_difference": 0.003245581192857304,
+          "min_difference": -0.0277429883062119,
+          "max_difference": 0.0146186751477984
+        },
+        "excess": {
+          "n_paired_settings": 42,
+          "median_seed1_minus_seed0": -0.004327017361515806,
+          "median_absolute_difference": 0.03032075093852095,
+          "min_difference": -0.1074752107101504,
+          "max_difference": 0.1193970244632892
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "results/mouse_rbd_embedding_audit/sweep.csv": "3a9bceb6734afcc5bb9a5ca4d3713b436d94044bfd4703501815223764968bfa",
+    "results/mouse_rbd_embedding_audit/gallery_coords.csv.gz": "81c5957e5487cedc7f0bf4d1871d858985e160bdc67af7cc6492a20c697ef861",
+    "results/mouse_rbd/clone_table.csv": "9e79dc0f03c1d880727d3ba5e05676ce0bd510aa0015950a6a584573968c4640"
+  },
+  "outputs": [
+    "parameter_comparison.csv",
+    "parameter_comparison.png",
+    "parameter_comparison.pdf",
+    "review_summary.json"
+  ]
+}

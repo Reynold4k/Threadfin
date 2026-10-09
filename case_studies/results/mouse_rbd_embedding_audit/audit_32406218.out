@@ -1,0 +1,17 @@
+[     12s] loading mouse_rbd
+[threadfin] define_clones: 16667 cells -> 6121 clones (1414 with >= 2 cells); nt Hamming threshold 0.142 (density).
+[threadfin] attached BCR: 16667/36188 cells, 6121 clones.
+[     57s] 36188 cells; building expression embedding and family profiles
+[     76s] features (381, 30) for 381 reliable clones
+[     86s] default-config reproduction corr: {'x': 1.0, 'y': 0.9999999999999999}
+[     86s] axis alignment: r=-0.440 p=0.004975124378109453
+[     86s] sweep: 85 parameter sets
+[     91s] 10/85 done
+[     98s] 20/85 done
+[    105s] 30/85 done
+[    113s] 40/85 done
+[    122s] 50/85 done
+[    133s] 60/85 done
+[    140s] 70/85 done
+[    147s] 80/85 done
+[    151s] done -> /data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/mouse_rbd_embedding_audit/sweep.csv

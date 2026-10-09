@@ -26,19 +26,19 @@
   "n_samples": 29
  },
  "coherence": {
-  "icc": 0.34622681346688366,
-  "null_mean": 0.02342827356636153,
-  "null_q95": 0.043594269974017844,
-  "excess": 0.32279853990052215,
+  "icc": 0.34622686484114656,
+  "null_mean": 0.02342825732348928,
+  "null_q95": 0.04359421907146108,
+  "excess": 0.32279860751765727,
   "p_value": 0.001996007984031936,
   "n_clones": 83,
   "n_cells": 326,
-  "min_cells_reliability_0.5": 2
+  "min_cells_reliability_0.5": 1
  },
  "programme_splits": {
   "n_leiden_communities": 3,
   "n_merged": 1,
-  "root_pvalue": 0.009750825892724623
+  "root_pvalue": 0.009750818034816392
  },
  "programme_markers": {
   "P1": [
@@ -97,18 +97,18 @@
   "n_cells": 326,
   "n_clones_with_assigned": 83,
   "stability": {
-   "P1": 0.751,
-   "P2": 0.501
+   "P1": 0.899,
+   "P2": 0.856
   },
-  "n_stable": 1
+  "n_stable": 2
  },
  "label_effects": {
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.20973467151892794,
-   "null_mean": 0.05923658954865521,
-   "excess_r2": 0.15049808197027273,
+   "r2": 0.20973469831911912,
+   "null_mean": 0.05923658983386861,
+   "excess_r2": 0.1504981084852505,
    "p_value": 0.0004997501249375312,
    "n_clones": 81,
    "n_levels": 4,
@@ -141,9 +141,9 @@
   "mutation_frequency": {
    "label": "mutation_frequency",
    "kind": "numeric",
-   "r2": 0.09120420458656849,
-   "null_mean": 0.021903476774023246,
-   "excess_r2": 0.06930072781254523,
+   "r2": 0.09120422297159582,
+   "null_mean": 0.021903479147620895,
+   "excess_r2": 0.06930074382397493,
    "p_value": 0.0004997501249375312,
    "n_clones": 83,
    "n_levels": null,
@@ -161,9 +161,9 @@
   "severity": {
    "label": "severity",
    "kind": "categorical",
-   "r2": 0.18405151196165398,
-   "null_mean": 0.04865920220080007,
-   "excess_r2": 0.13539230976085392,
+   "r2": 0.18405153412497852,
+   "null_mean": 0.048659201961553565,
+   "excess_r2": 0.13539233216342494,
    "p_value": 0.0009995002498750624,
    "n_clones": 83,
    "n_levels": 5,
@@ -278,5 +278,119 @@
    }
   }
  },
- "runtime_min": 0.6
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "PRDM1",
+    "XBP1",
+    "IRF4",
+    "JCHAIN",
+    "MZB1",
+    "SDC1",
+    "TNFRSF17",
+    "DERL3",
+    "FKBP11",
+    "SSR4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "BCL6",
+    "AICDA",
+    "RGS13",
+    "MEF2B",
+    "S1PR2",
+    "LMO2",
+    "MYBL1",
+    "GCSAM",
+    "ELL3",
+    "SERPINA9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "CXCR4",
+    "MKI67",
+    "TOP2A",
+    "AURKB",
+    "CCNB1",
+    "HMGB2",
+    "TUBB",
+    "STMN1",
+    "FOXP1",
+    "AICDA"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "CD83",
+    "CD86",
+    "MYC",
+    "NFKBIA",
+    "BATF",
+    "EGR2",
+    "IL4I1",
+    "CCL22",
+    "BCL2A1",
+    "NME1"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "CD27",
+    "CCR6",
+    "GPR183",
+    "TNFRSF13B",
+    "SELL",
+    "CD44",
+    "S1PR1",
+    "KLF2",
+    "ZBTB32",
+    "FCRL4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "TCL1A",
+    "FCER2",
+    "IL4R",
+    "BACH2",
+    "SELL",
+    "PLPP5",
+    "YBX3",
+    "BTG1",
+    "CD200",
+    "IGHD"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "ISG15",
+    "IFIT1",
+    "IFIT3",
+    "MX1",
+    "IFI44L",
+    "OAS1",
+    "IFI6",
+    "XAF1",
+    "STAT1",
+    "IRF7"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 0.9
 }

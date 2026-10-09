@@ -33,7 +33,7 @@
   "p_value": 0.22355289421157684,
   "n_clones": 113,
   "n_cells": 388,
-  "min_cells_reliability_0.5": 23
+  "min_cells_reliability_0.5": 8
  },
  "programmes": {
   "n": 0,
@@ -217,5 +217,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 0.4
+ "runtime_min": 0.3
 }

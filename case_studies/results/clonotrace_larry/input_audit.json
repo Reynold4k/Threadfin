@@ -1,0 +1,27 @@
+{
+  "n_input_cells": 130887,
+  "n_barcodes": 5864,
+  "n_unique_barcode_cells": 49302,
+  "n_ambiguous_barcode_cells": 0,
+  "n_unlabelled_cells": 81585,
+  "state_counts": {
+    "Undifferentiated": 72193,
+    "Neutrophil": 22237,
+    "Monocyte": 19182,
+    "Baso": 10155,
+    "Mast": 2584,
+    "Meg": 2096,
+    "Lymphoid": 857,
+    "Erythroid": 686,
+    "Eos": 555,
+    "Ccr7_DC": 241,
+    "pDC": 101
+  },
+  "time_counts": {
+    "6": 54140,
+    "4": 48498,
+    "2": 28249
+  },
+  "input_expression": "Author total-count-normalised UMI values; not raw integer counts",
+  "source_manifest": "/data/scratch/projects/punim1236/threadfin_data/gse140802_larry/sources.json"
+}
