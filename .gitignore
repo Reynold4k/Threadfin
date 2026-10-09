@@ -25,3 +25,10 @@ case_studies/logs/
 threadfin_summary.txt
 threadfin_overview.png
 tutorial_overview.png
+
+# private material that must never be published
+paper/MAIT/
+paper/figure_plan/report/
+paper/*.full.pdf
+paper/*.docx
+promprt/

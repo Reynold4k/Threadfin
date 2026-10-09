@@ -19,7 +19,7 @@ The v3 functions (``clonotype_recluster``, ``joint_embedding``, ...) remain
 importable for backward compatibility.
 """
 
-from . import plotting, pp, reclustering, simulate, tl
+from . import phylo, plotting, pp, reclustering, simulate, tl
 from .api import ThreadfinResult, read_bcr, run
 from .density import DensityResult, StateDensityModel
 from .clones import define_clones
@@ -38,7 +38,7 @@ from .programs import community_markers, community_score  # noqa: E402
 from .reclustering import reclustering_presets  # noqa: E402
 from .specificity import annotate_specificity, specificity_enrichment  # noqa: E402
 
-__version__ = "4.1.0"
+__version__ = "4.2.0"
 __all__ = [
     "ThreadfinResult",
     "DensityResult",
@@ -46,6 +46,7 @@ __all__ = [
     "attach_bcr",
     "build_clone_key",
     "define_clones",
+    "phylo",
     "pl",
     "pp",
     "read_10x_vdj",

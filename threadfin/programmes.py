@@ -150,21 +150,79 @@ def _two_means_index(x: np.ndarray, rng, extra_split=None, n_random: int = 2, n_
     return float(best / tss) if np.isfinite(best) else 1.0
 
 
-def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, return_null: bool = False) -> dict:
+def _two_means_labels(x: np.ndarray, rng, extra_split=None, n_random: int = 2, n_iter: int = 30):
+    """The labelling attaining the smallest 2-means cluster index (same starts as :func:`_two_means_index`)."""
+    xc = x - x.mean(axis=0)
+    tss = float(np.einsum("ij,ij->", xc, xc))
+    if xc.shape[0] < 3 or tss <= 0:
+        return None
+    _, _, vt = np.linalg.svd(xc, full_matrices=False)
+    starts = [xc @ vt[0] > 0]
+    for _ in range(n_random):
+        a, b = rng.choice(xc.shape[0], size=2, replace=False)
+        starts.append(((xc - xc[a]) ** 2).sum(1) < ((xc - xc[b]) ** 2).sum(1))
+    if extra_split is not None:
+        starts.append(np.asarray(extra_split, dtype=bool))
+    best, best_lab = np.inf, None
+    for lab in starts:
+        for _ in range(n_iter):
+            if lab.all() or not lab.any():
+                break
+            c1, c0 = xc[lab].mean(axis=0), xc[~lab].mean(axis=0)
+            new = xc @ (c1 - c0) > 0.5 * (c1 @ c1 - c0 @ c0)
+            if np.array_equal(new, lab):
+                break
+            lab = new
+        if lab.all() or not lab.any():
+            continue
+        wss = tss - lab.sum() * np.sum(xc[lab].mean(0) ** 2) - (~lab).sum() * np.sum(xc[~lab].mean(0) ** 2)
+        if wss < best:
+            best, best_lab = wss, lab.copy()
+    return best_lab
+
+
+def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, return_null: bool = False,
+               null: str = "total") -> dict:
     """Is ``x`` (clones x features) better described by two clusters than by one Gaussian?
 
-    The 2-means cluster index of ``x`` is compared with its distribution in
-    ``n_null`` samples from a Gaussian with the mean and covariance of ``x``.
-    The p-value uses a normal fit to the null indices (so that it can be
-    smaller than ``1 / n_null``); the empirical p-value is also returned
-    (and, with ``return_null``, the null indices themselves).
+    The 2-means cluster index of ``x`` is compared with its distribution in ``n_null`` Gaussian samples.
+    ``null`` chooses that Gaussian's covariance. **Both options have been calibrated on real clone profiles
+    with a planted two-group structure; the measured numbers are quoted below, and neither setting is satisfactory:**
+
+    ``"total"`` (default)
+        the sample covariance of ``x`` itself (SigClust-style). Valid but very conservative: the false-positive
+        rate at zero separation is 0 of 30 simulations, and so is the detection rate for two groups separated by
+        four within-group standard deviations. A split inflates the covariance along the splitting direction and
+        the null inherits that inflation, so the test partly cancels itself. **A non-significant result from
+        this test is therefore not evidence of a continuum.**
+    ``"within"``
+        the covariance pooled *within* the two candidate groups. **Invalid — do not use for inference.** It was
+        tried as a fix and measured: on mouse_rbd clone profiles it reports a split in 30 of 30 simulations with
+        *no* planted structure (false-positive rate 1.0), because removing the candidate split from the
+        covariance estimate is circular. Kept only so that the calibration can be reproduced.
+
+    The p-value uses a normal fit to the null indices (so that it can be smaller than ``1 / n_null``); the
+    empirical p-value is also returned (and, with ``return_null``, the null indices themselves).
     """
     from scipy.stats import norm
 
+    if null not in ("within", "total"):
+        raise ValueError("null must be 'within' or 'total'.")
     rng = np.random.default_rng(random_state)
     x = np.asarray(x, dtype=float)
     observed = _two_means_index(x, rng, extra_split=split)
-    cov = np.atleast_2d(np.cov(x, rowvar=False))
+    if null == "within":
+        lab = _two_means_labels(x, rng, extra_split=split)
+        if lab is None or lab.all() or not lab.any():
+            cov = np.atleast_2d(np.cov(x, rowvar=False))
+        else:
+            centred = x.copy()
+            centred[lab] -= x[lab].mean(axis=0)
+            centred[~lab] -= x[~lab].mean(axis=0)
+            dof = max(x.shape[0] - 2, 1)
+            cov = np.atleast_2d(centred.T @ centred / dof)
+    else:
+        cov = np.atleast_2d(np.cov(x, rowvar=False))
     w, v = np.linalg.eigh(cov)
     root = v * np.sqrt(np.clip(w, 0, None))
     null = np.array([_two_means_index(rng.standard_normal(x.shape) @ root.T, rng) for _ in range(n_null)])
@@ -180,7 +238,7 @@ def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, 
     return out
 
 
-def _merge_by_split_test(feats, labels, alpha, n_null, rng):
+def _merge_by_split_test(feats, labels, alpha, n_null, rng, null="total"):
     """Test the community tree top-down and merge communities below non-significant nodes.
 
     Returns ``(merged_labels, tests)`` with merged labels ``0..K-1`` and one
@@ -203,7 +261,7 @@ def _merge_by_split_test(feats, labels, alpha, n_null, rng):
         a = [names[i] for i in node.left.pre_order()]
         b = [names[i] for i in node.right.pre_order()]
         inside = np.isin(labels, a + b)
-        res = split_test(feats[inside], np.isin(labels[inside], a), n_null=n_null,
+        res = split_test(feats[inside], np.isin(labels[inside], a), n_null=n_null, null=null,
                          random_state=int(rng.integers(2**31)))
         level = alpha * (inside.sum() - 1) / (total - 1)
         rows.append({"communities_left": [int(c) for c in a], "communities_right": [int(c) for c in b],
@@ -267,6 +325,7 @@ def find_programmes(
     test_splits: bool = True,
     alpha: float = 0.05,
     n_null: int = 100,
+    split_null: str = "total",
     assign_remaining: bool = True,
     min_posterior: float = 0.7,
     embed: bool = True,
@@ -410,14 +469,14 @@ def find_programmes(
     ref = ref[keep_mask]
     split_tests = pd.DataFrame()
     if test_splits:
-        ref, split_tests = _merge_by_split_test(feats, ref, alpha, n_null, rng)
+        ref, split_tests = _merge_by_split_test(feats, ref, alpha, n_null, rng, split_null)
         if boot_graphs:
             # stability of the final programmes: repeat Leiden *and* the split test in every bootstrap
             jac_mean = np.zeros(int(ref.max()) + 1)
             agree = np.zeros(ref.size)
             for b, (bf, bg) in enumerate(zip(boot_feats, boot_graphs)):
                 bl = leiden(bg, chosen, seed=random_state + b + 1)[keep_mask]
-                bl, _ = _merge_by_split_test(bf[keep_mask], bl, alpha, max(n_null // 4, 20), rng)
+                bl, _ = _merge_by_split_test(bf[keep_mask], bl, alpha, max(n_null // 4, 20), rng, split_null)
                 jac, ok = jaccard_match(ref, bl)
                 jac_mean += jac
                 agree += ok
@@ -487,6 +546,7 @@ def find_programmes(
         "params": {
             "resolution": chosen, "auto": auto, "n_neighbors": int(n_neighbors),
             "test_splits": bool(test_splits), "alpha": float(alpha), "n_null": int(n_null),
+            "split_null": str(split_null),
             "min_reliability": float(min_reliability), "n_boot": int(n_boot),
             "stability_threshold": float(stability_threshold), "key_added": key_added,
             "min_programme_size": int(min_programme_size),

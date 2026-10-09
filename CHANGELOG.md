@@ -1,5 +1,35 @@
 # Changelog
 
+## 4.2.0 — 2026-10-10
+
+### New analysis: heritability of cell state along the receptor lineage tree
+
+- `threadfin.tl.lineage_forest` and `threadfin.tl.lineage_heritability` (module `threadfin.phylo`) ask, inside
+  a clone, whether cells that are close relatives on the somatic-hypermutation lineage tree occupy more similar
+  transcriptional states than distant relatives of the same clone sampled in the same block.
+- The estimator is a phylogenetic mixed model fitted by REML and pooled over the whole forest, which makes it
+  usable in the regime an immune repertoire produces: thousands of trees of two to eight cells, nested in
+  animals and sort gates. Each clone x block unit gets a free intercept, so clone-wide and block-wide state
+  cannot contribute; the cell's root-to-tip mutation depth is a fixed effect, which separates "more mutated
+  cells differ" from "relatives resemble each other".
+- Four kinship kernels (exponential in tree distance, identical genotype, identical mutated genotype,
+  Brownian), a profile-likelihood interval, a boundary likelihood-ratio test and a Freedman-Lane permutation
+  score test that stays valid when units differ in variance.
+- `simulate_lineage_trait` and `lineage_power` plant a component of known size on the real trees and report
+  bias, type I error and power, so that a null result can be stated as "a heritability above x would have been
+  detected".
+
+### Calibration of the clonal-programme split test
+
+- `split_test` now takes `null=`, and its documentation reports measured behaviour for both settings. The
+  shipped default (`"total"`, unchanged) is valid but conservative: with a two-group structure planted in real
+  clone profiles it detected nothing up to a separation of four within-group standard deviations. An
+  alternative that estimates the null covariance within the candidate groups (`"within"`) was implemented,
+  measured to have a false-positive rate of 1.0 at zero separation, and is therefore documented as invalid and
+  left non-default.
+- Consequence for users: a non-significant split from `find_programmes` is **not** evidence that clones form a
+  continuum. The documentation now says so.
+
 ## 4.1.0 — 2026-10-09
 
 ### New optional analyses

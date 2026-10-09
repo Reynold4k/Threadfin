@@ -13,12 +13,15 @@ need finer control:
    label explain how clones differ (works without distinct programmes)
 6. :func:`clonal_memory` - do clones keep their programme over time/tissue?
 7. :func:`gene_heritability` - which genes are clonally inherited?
+8. :func:`lineage_forest` + :func:`lineage_heritability` - inside a clone, do cells that are close
+   relatives on the receptor lineage tree share transcriptional state?
 """
 
 from .clones import define_clones, find_threshold, mutation_frequency
 from .density import clone_densities
 from .dynamics import clonal_memory
 from .heritability import gene_heritability, geneset_heritability
+from .phylo import lineage_forest, lineage_heritability
 from .profiles import clone_profiles
 from .programmes import find_programmes, programme_composition, programme_markers
 from .stats import association_test, clonal_coherence, clone_labels, profile_association
@@ -35,6 +38,8 @@ __all__ = [
     "find_threshold",
     "gene_heritability",
     "geneset_heritability",
+    "lineage_forest",
+    "lineage_heritability",
     "mutation_frequency",
     "profile_association",
     "programme_composition",

@@ -127,6 +127,38 @@ how much they exceed shuffled clones, and gene sets (for example plasma-cell
 or germinal-centre genes) are compared with genes of similar expression level,
 because highly expressed genes are measured more precisely.
 
+## 9. Heritability along the receptor lineage tree (`lineage_heritability`)
+
+Clone profiles describe how clones differ from each other. This asks the complementary question inside a
+clone: after removing everything a clone's cells share, do cells that sit close together on the clone's
+somatic-hypermutation tree still resemble each other?
+
+For a state feature `y`, cell `i` of clone `c` sampled in block `b`:
+
+    y_i = mu_{c,b} + x_i' beta + g_i + e_i,    g ~ N(0, sigma_g^2 K),  e ~ N(0, sigma_e^2 I)
+
+`mu_{c,b}` is a free intercept per clone x block unit, so no clone-wide or block-wide difference can
+contribute. `x_i` holds cell covariates, and the cell's root-to-tip mutation depth is one of them by default:
+distance on a tree grows with depth, so without that term a state that simply varies with mutation load is
+reported as heritability. `K` is a kinship kernel built from the tree — `exp(-d/l)` in mutations, identical
+genotype, identical mutated genotype, or Brownian.
+
+`h2 = sigma_g^2 / (sigma_g^2 + sigma_e^2)` is the share of within-unit variation structured by the lineage.
+Each unit is projected onto its Helmert contrasts and rotated into the eigenbasis of the projected kernel, so
+the restricted likelihood is a sum over rows and is maximised by a one-dimensional search; the interval comes
+from the profile likelihood and the p-value from permuting the null residuals inside each unit (Freedman-Lane),
+which stays valid when units differ in variance.
+
+Because `h2` is a variance share and not a test statistic, `lineage_power` plants a component of known size on
+the same trees and reports what the data could have detected.
+
+### A note on counting programmes
+
+`find_programmes` reports one programme when no split is significant. The split test is conservative: with a
+two-group structure planted in real clone profiles it did not detect a separation of four within-group
+standard deviations. **A single programme is therefore not evidence of a continuum**; it means the data did not
+pass a demanding test. See `split_test` for the measured calibration of both available nulls.
+
 ## References
 
 * Anderson MJ. A new method for non-parametric multivariate analysis of variance. *Austral Ecol* 2001;26:32-46.
