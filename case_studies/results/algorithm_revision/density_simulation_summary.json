@@ -1,0 +1,26 @@
+{
+  "random_seed": 1729,
+  "n_reference_clones": 200,
+  "reference_cells_per_clone": 80,
+  "evaluation_clones_per_regime": 500,
+  "n_states": 4,
+  "query_sizes": [
+    1,
+    2,
+    5,
+    10,
+    30,
+    100
+  ],
+  "reference_sha256": "6bcbb756e18a53fe5291ab6e1c375db6ee585d1e6d531956b60c6499bff8c42f",
+  "automatic_prior_strength": 2.0,
+  "minimum_simultaneous_sampling_coverage": 0.978,
+  "minimum_marginal_credible_coverage": 0.0,
+  "limits": [
+    "Known, well-separated regions; does not validate arbitrary manifolds or donor/capture effects.",
+    "Posterior intervals are conditional and can under-cover under prior misspecification.",
+    "Pure-state empirical proportions are exact; shrinkage then adds bias.",
+    "No comparison with official Clonotrace is made by this experiment.",
+    "Sampling intervals assume independent multinomial draws conditional on a fixed reference."
+  ]
+}

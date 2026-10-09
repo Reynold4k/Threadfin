@@ -1,0 +1,26 @@
+{
+ "default_config": {
+  "n_neighbors": 15,
+  "min_dist": 0.1,
+  "spread": 1.0,
+  "random_state": 0
+ },
+ "reproduction_axis_corr": {
+  "x": 1.0,
+  "y": 0.9999999999999999
+ },
+ "n_reliable_clones": 381,
+ "feature_shape": [
+  381,
+  30
+ ],
+ "axis_alignment": {
+  "corr_lz_minus_dz_vs_mcherry_low": -0.43979581286177327,
+  "null_mean_abs": 0.06218041717761144,
+  "p_value_two_sided": 0.004975124378109453,
+  "n_clones": 381
+ },
+ "n_parameter_sets": 85,
+ "n_perm": 200,
+ "k_nn": 10
+}

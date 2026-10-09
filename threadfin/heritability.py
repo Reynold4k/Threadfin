@@ -1,11 +1,11 @@
-"""Gene-level clonal heritability: which genes are clonally inherited?
+"""Gene-level clonal ICC: which genes vary consistently with clone identity?
 
 For every gene, the same one-way random-effects model as
 :mod:`threadfin.profiles` is fitted to its context-centred log expression:
 the gene's clonal ICC is the fraction of its (within-context) variance that
 is explained by clone identity. Genes that define a stable, inherited fate
 (for example a plasma-cell commitment programme) are expected to have high
-ICC; genes that every clone cycles through (for example dark-zone / light-zone
+ICC; this is a hypothesis, not evidence of inherited fate. Genes that every clone cycles through (for example dark-zone / light-zone
 germinal-centre programmes, or the cell cycle) are expected to have low ICC
 even when they are highly variable. Significance comes from shuffling clone
 labels among cells within strata, exactly as in
@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import bh_fdr, codes, get_uns, log, permute_within, require_obs
+from ._utils import bh_fdr, codes, get_uns, log, permute_within, require_obs, require_complete_groups, require_positive_int
 from .profiles import variance_components
 
 
@@ -73,6 +73,10 @@ def gene_heritability(
     datasets nearly every gene passes FDR < 0.05; interpret ``excess_icc``.
     Also stored in ``adata.uns['threadfin']['gene_heritability']``.
     """
+    require_positive_int(n_perm, "n_perm")
+    require_positive_int(chunk_size, "chunk_size")
+    if not 0 <= min_frac_expressed <= 1:
+        raise ValueError("min_frac_expressed must be between 0 and 1.")
     prof = get_uns(adata).get("profiles", {})
     params = prof.get("params", {})
     clone_key = clone_key or params.get("clone_key", "clone_id")
@@ -81,10 +85,13 @@ def gene_heritability(
     strata_key = strata_key or context_key
     require_obs(adata, clone_key, context_key, strata_key, context="gene heritability")
 
+    require_complete_groups(adata, context_key, strata_key, context="gene heritability")
     x = adata.layers[layer] if layer is not None else adata.X
     if sp.issparse(x):
         x = x.tocsc()
     clone_codes, _ = codes(adata.obs[clone_key])
+    if not (clone_codes >= 0).any():
+        raise ValueError("Too few cells in clones with >= 2 cells.")
     sizes = np.bincount(clone_codes[clone_codes >= 0])
     in_multi = (clone_codes >= 0) & (sizes[np.maximum(clone_codes, 0)] >= 2)
     cells = np.flatnonzero(in_multi)
@@ -146,6 +153,8 @@ def gene_heritability(
             "null_mean": null_sum / max(n_perm, 1),
             "pvalue": (1 + exceed) / (n_perm + 1),
         }, index=var_names[cols]))
+    if not rows:
+        raise ValueError("No genes remain after expression and receptor filtering.")
     out = pd.concat(rows)
     out["fdr"] = bh_fdr(out["pvalue"].to_numpy())
     # effect size: clonal ICC beyond what sample structure alone produces; with tens of

@@ -1,0 +1,37 @@
+{
+  "mean": {
+    "icc": 0.7113528690214617,
+    "n_profiles": 1401,
+    "n_reliable": 1401,
+    "parameters": {
+      "clone_key": "barcode",
+      "basis": "X_threadfin",
+      "context_key": null,
+      "representation": "mean",
+      "n_features": 256,
+      "smooth": 0,
+      "random_state": 0,
+      "donor_key": null,
+      "min_cells": 2,
+      "n_components": 30
+    }
+  },
+  "kernel": {
+    "icc": 0.7409702887211166,
+    "n_profiles": 1401,
+    "n_reliable": 1401,
+    "parameters": {
+      "clone_key": "barcode",
+      "basis": "X_threadfin",
+      "context_key": null,
+      "representation": "kernel",
+      "n_features": 256,
+      "smooth": 15,
+      "random_state": 0,
+      "bandwidth": 13.86300795443447,
+      "donor_key": null,
+      "min_cells": 2,
+      "n_components": 30
+    }
+  }
+}

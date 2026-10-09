@@ -4,65 +4,59 @@
 
 | dataset | description | cells | cells_with_BCR | clones | expanded_clones | clones_ge10_cells | variance_explained_by_clone | shuffled_within_samples | excess | p_value | cells_per_clone_for_reliable_profile |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| ln_vaccine | Human lymph node + blood, SARS-CoV-2 mRNA vaccine (Kim 2022) | 193442 | 153049 | 93627 | 8435 | 1262 | 0.288 | 0.144 | 0.143 | 0.002 | 3 |
+| ln_vaccine | Human lymph node + blood, SARS-CoV-2 mRNA vaccine (Kim 2022) | 193442 | 153049 | 93627 | 8435 | 1262 | 0.288 | 0.144 | 0.143 | 0.002 | 2 |
 | mouse_np | Mouse germinal centres, NP-OVA, division reporter (Merkenschlager 2025) | 10109 | 3894 | 1536 | 373 | 80 | 0.0928 | 0.0347 | 0.0581 | 0.002 | 10 |
 | mouse_rbd | Mouse germinal centres, RBD protein/mRNA, bait and zone sorts (Merkenschlager 2025) | 36188 | 16667 | 6121 | 1414 | 222 | 0.145 | 0.046 | 0.0991 | 0.002 | 6 |
-| gc_np_pc | Mouse germinal centres and plasma cells, NP-OVA, sorted zones (ElTanbouly 2023) | 884 | 762 | 487 | 113 | 3 | 0.0426 | 0.0277 | 0.0149 | 0.224 | 23 |
-| flu_lung | Mouse influenza infection, lung and draining node, alpha-v integrin knockout | 4121 | 2115 | 1100 | 114 | 32 | 0.117 | 0.044 | 0.0731 | 0.002 | 8 |
+| gc_np_pc | Mouse germinal centres and plasma cells, NP-OVA, sorted zones (ElTanbouly 2023) | 884 | 762 | 487 | 113 | 3 | 0.0426 | 0.0277 | 0.0149 | 0.224 | 8 |
+| flu_lung | Mouse influenza infection, lung and draining node, alpha-v integrin knockout | 4121 | 2115 | 1100 | 114 | 32 | 0.117 | 0.044 | 0.0731 | 0.002 | 5 |
 | malaria | Mouse Plasmodium infection, spleen, days 0-14 (Skinner, Asad 2026) | 40623 | 21145 | 20100 | 801 | 0 | 0.594 | 0.0584 | 0.536 | 0.002 | 1 |
 | malaria_late | Mouse Plasmodium infection, spleen, days 10-42, antimalarial arm (Skinner, Asad 2026) | 72359 | 59922 | 58246 | 1183 | 3 | 0.429 | 0.0149 | 0.414 | 0.002 | 2 |
-| bone_marrow_pc | Human bone-marrow plasma and memory B cells with blood (GSE253857) | 124738 | 83655 | 60696 | 10218 | 234 | 0.402 | 0.24 | 0.162 | 0.002 | 2 |
+| bone_marrow_pc | Human bone-marrow plasma and memory B cells with blood (GSE253857) | 115144 | 78883 | 56803 | 9783 | 224 | 0.367 | 0.212 | 0.156 | 0.002 | 2 |
 | flu | Human blood, influenza vaccine, day 0 and day 7 (Wang 2023) | 123693 | 84038 | 80700 | 1997 | 31 | 0.558 | 0.0304 | 0.528 | 0.002 | 1 |
-| ebv | Human tonsil organoids, EBV infection (Mitul 2026) | 205630 | 123369 | 79856 | 6923 | 1256 | 0.157 | 0.042 | 0.115 | 0.002 | 6 |
-| tonsil | Human tonsil (King 2021) | 22478 | 11570 | 10179 | 670 | 16 | 0.166 | 0.0259 | 0.141 | 0.002 | 6 |
-| stephenson | Human blood, COVID-19 (Stephenson 2021, 5,000-cell subset) | 5000 | 5000 | 4757 | 83 | 5 | 0.346 | 0.0234 | 0.323 | 0.002 | 2 |
+| ebv | Human tonsil organoids, EBV infection (Mitul 2026) | 205630 | 123369 | 79856 | 6923 | 1256 | 0.157 | 0.042 | 0.115 | 0.002 | 5 |
+| tonsil | Human tonsil (King 2021) | 22478 | 11570 | 10179 | 670 | 16 | 0.166 | 0.0259 | 0.141 | 0.002 | 5 |
+| stephenson | Human blood, COVID-19 (Stephenson 2021, 5,000-cell subset) | 5000 | 5000 | 4757 | 83 | 5 | 0.346 | 0.0234 | 0.323 | 0.002 | 1 |
 
 ## programmes
 
 | dataset | n_programmes | core_clones | split_test_p_at_root | programme | stability | top_markers | highest_signature |
 |---|---|---|---|---|---|---|---|
-| ln_vaccine | 4 | 4.43e+03 | 1.64e-92 | P1 | 0.774 | MS4A1, MARCKSL1, HLA-DRA, ACTB, TCL1A, ACTG1, LRMP, MEF2B | germinal centre |
-| ln_vaccine | 4 | 4.43e+03 | 1.64e-92 | P2 | 0.896 | IGHG1, JCHAIN, TXNDC5, HSP90B1, ITM2C, PPIB, SUB1, MZB1 | plasma cell |
-| ln_vaccine | 4 | 4.43e+03 | 1.64e-92 | P3 | 0.555 | SELENOM, DENND6B, CD9, RASSF6, BHLHA15, DNAJB9, VDR, AEBP1 | plasma cell |
-| ln_vaccine | 4 | 4.43e+03 | 1.64e-92 | P4 | 0.656 | BANK1, FCMR, RPL34, RPL30, RPS27, RPS14, RPL11, TXNIP | memory |
+| ln_vaccine | 4 | 4.43e+03 | 1.53e-92 | P1 | 0.74 | MS4A1, ACTB, MARCKSL1, HLA-DRA, ACTG1, TCL1A, HMGN2, LRMP | germinal centre |
+| ln_vaccine | 4 | 4.43e+03 | 1.53e-92 | P2 | 0.906 | IGHG1, JCHAIN, TXNDC5, HSP90B1, ITM2C, PPIB, SUB1, MZB1 | plasma cell |
+| ln_vaccine | 4 | 4.43e+03 | 1.53e-92 | P3 | 0.546 | RASSF6, DENND6B, SELENOM, CD9, VDR, AEBP1, BHLHA15, ETV7 | plasma cell |
+| ln_vaccine | 4 | 4.43e+03 | 1.53e-92 | P4 | 0.786 | BANK1, RPS27, RPL30, RNASET2, FCMR, HLA-E, RPL34, IFITM2 | memory |
 | mouse_np | 1 | 69 | 0.0996 | continuum |  | no distinct programmes: clones vary along a continuum |  |
 | mouse_rbd | 1 | 381 | 0.55 | continuum |  | no distinct programmes: clones vary along a continuum |  |
 | gc_np_pc | 0 |  |  | - |  | Only 3 clones reach reliability 0.5 (need 30); too few expanded clones to define programmes. Report the coherence test only, or lower min_reliability. |  |
 | flu_lung | 1 | 55 | 0.355 | continuum |  | no distinct programmes: clones vary along a continuum |  |
-| malaria | 3 | 801 | 2.49e-22 | P1 | 0.814 | H2-Aa, H2-Eb1, Cd74, Bank1, Rps27, H2-DMb2, H2-Ab1, Cd79a |  |
-| malaria | 3 | 801 | 2.49e-22 | P2 | 0.84 | Eaf2, Edem1, Sec61b, Rexo2, Jchain, Manf, Mzb1, Spcs1 |  |
-| malaria | 3 | 801 | 2.49e-22 | P3 | 0.133 | Apoe, Rpl36, Rps11, Fcmr, Nfatc1, Ccdc28b, Rps10, Fcrl5 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P1 | 0.49 | Mef2b, Basp1, Aicda, Gapdh, Anp32b, Hmgb2, Sypl, Cfl1 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P2 | 0.692 | Edem1, H13, Sec11c, Edem2, Rexo2, Xbp1, Creld2, Ssr4 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P3 | 0.45 | Cd79a, Klf2, Btg1, Bank1, Rps27, Tmsb4x, H2-DMb2, Ly6d |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P4 | 0.167 | Derl3, Fkbp11, Slpi, Tent5c, Creld2, Ckap4, Prdx4, Dnajc3 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P5 | 0.807 | Fcmr, Plac8, Rpl36, Nfatc1, Rps11, Ly86, Rps12, Rpl32 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P6 | 0.272 | Atp1b1, Cnn3, Wls, Gm45552, Gm45894, Pirb, Dyrk2, Klhl14 |  |
-| malaria_late | 7 | 1.18e+03 | 3.22e-11 | P7 | 0.077 | Jchain, Hsp90b1, Ssr4, Pdia4, Mzb1, H13, Sec11c, Spcs1 |  |
-| bone_marrow_pc | 4 | 10,218 | 3.45e-266 | P1 | 0.799 | MZB1, SSR4, DERL3, XBP1, TXNDC5, FKBP11, SEC11C, IGLL5 | plasma cell |
-| bone_marrow_pc | 4 | 10,218 | 3.45e-266 | P2 | 0.76 | HLA-DRA, HLA-DPB1, CD52, HLA-DPA1, MS4A1, HLA-DRB1, LTB, CD37 | memory |
-| bone_marrow_pc | 4 | 10,218 | 3.45e-266 | P3 | 0.333 | COTL1, IRF8, SELL, PTPRC, CORO1A, ITGB2, HLA-DRB1, FAM65B | plasma cell |
-| bone_marrow_pc | 4 | 10,218 | 3.45e-266 | P4 | 0.062 | RP11-685N3.1, MALAT1, GTSF1, NBPF15, MDN1, BPNT1, CKS1B, RNF146 | plasma cell |
-| flu | 4 | 2e+03 | 7.7e-61 | P1 | 0.686 | LTB, RPS18, RPS15A, CD24, RPL11, EEF1A1, RPS8, RPL3 | memory |
-| flu | 4 | 2e+03 | 7.7e-61 | P2 | 0.597 | CD74, RHOB, HLA-DPA1, FGR, HLA-DQA1, HLA-DRB1, CD72, LAPTM5 | memory |
-| flu | 4 | 2e+03 | 7.7e-61 | P3 | 0.666 | TCL1A, RPL18A, BTG1, FCER2, IL4R, CXCR4, CD69, PLPP5 | naive |
-| flu | 4 | 2e+03 | 7.7e-61 | P4 | 0.802 | TXNDC5, MZB1, SRGN, PPIB, HSP90B1, FKBP11, XBP1, SEC11C | plasma cell |
-| ebv | 3 | 2.31e+03 | 8.79e-05 | P1 | 0.461 | IFI44L, RPL30, FCMR, RPS27, BTG1, ITM2B, RPL34, IFITM3 | interferon |
-| ebv | 3 | 2.31e+03 | 8.79e-05 | P2 | 0.388 | SEC11C, CD27, CTSH, CFLAR, MEF2B, ZBTB38, LGALS3, PDIA4 | plasma cell |
-| ebv | 3 | 2.31e+03 | 8.79e-05 | P3 | 0.152 | TXN, C1QBP, TYMS, LDHB, TUBB, NME2, AHCY, TUBA1B | plasma cell |
+| malaria | 3 | 801 | 2.49e-22 | P1 | 0.879 | H2-Aa, H2-Eb1, Cd74, Bank1, Rps27, H2-DMb2, H2-Ab1, Cd79a | naive |
+| malaria | 3 | 801 | 2.49e-22 | P2 | 0.803 | Eaf2, Edem1, Sec61b, Rexo2, Jchain, Manf, Mzb1, Spcs1 | plasma cell |
+| malaria | 3 | 801 | 2.49e-22 | P3 | 0.518 | Apoe, Rpl36, Rps11, Fcmr, Nfatc1, Ccdc28b, Rps10, Fcrl5 | memory |
+| malaria_late | 3 | 1.18e+03 | 3.19e-11 | P1 | 0.8 | Edem2, H13, Ssr4, Edem1, Sec11c, Rexo2, Xbp1, Creld2 | plasma cell |
+| malaria_late | 3 | 1.18e+03 | 3.19e-11 | P2 | 0.703 | Hmgb2, Gapdh, Basp1, Anp32b, Mef2b, Aicda, Cfl1, Hmgn1 | dark zone / cycling |
+| malaria_late | 3 | 1.18e+03 | 3.19e-11 | P3 | 0.792 | Rps27, Klf2, Ly6d, Rps9, Cd79a, Ly6e, Rps7, Rpl37a | memory |
+| bone_marrow_pc | 3 | 9.78e+03 | 4.11e-233 | P1 | 0.8 | SSR4, MZB1, DERL3, TXNDC5, XBP1, FKBP11, HSP90B1, SEC11C | plasma cell |
+| bone_marrow_pc | 3 | 9.78e+03 | 4.11e-233 | P2 | 0.749 | HLA-DRA, HLA-DPB1, CD52, HLA-DPA1, MS4A1, LTB, HLA-DRB1, CD37 | light zone |
+| bone_marrow_pc | 3 | 9.78e+03 | 4.11e-233 | P3 | 0.28 | LTB, STK38L, ABCC1, MS4A1, HLA-DRA, HLA-DPB1, PACSIN2, STMN1 | plasma cell |
+| flu | 4 | 2e+03 | 9.49e-61 | P1 | 0.841 | LTB, RPS18, RPS15A, CD24, EEF1A1, COTL1, RPL11, RPS8 | memory |
+| flu | 4 | 2e+03 | 9.49e-61 | P2 | 0.808 | CD74, RHOB, HLA-DPA1, HLA-DRB1, FGR, HLA-DQA1, CD72, HLA-DRB5 | memory |
+| flu | 4 | 2e+03 | 9.49e-61 | P3 | 0.912 | TCL1A, RPL18A, BTG1, IL4R, FCER2, CXCR4, CD69, CD37 | naive |
+| flu | 4 | 2e+03 | 9.49e-61 | P4 | 0.841 | MZB1, TXNDC5, PPIB, FKBP11, HSP90B1, TNFRSF17, SEC11C, XBP1 | plasma cell |
+| ebv | 2 | 2.31e+03 | 8.18e-05 | P1 | 0.726 | PLAC8, RPS12, TCL1A, NIBAN3, RPLP2, RPL37, IGHD, RPL19 | interferon |
+| ebv | 2 | 2.31e+03 | 8.18e-05 | P2 | 0.559 | SEC11C, CD27, CTSH, CFLAR, MEF2B, PDIA4, ZBTB38, LINC03034 | plasma cell |
 | tonsil | 1 | 75 | 0.358 | continuum |  | no distinct programmes: clones vary along a continuum |  |
-| stephenson | 2 | 83 | 0.00975 | P1 | 0.751 | HLA-DRA, MS4A1, BANK1, CD74, CXCR4, FCMR, TCL1A, LINC00926 | plasma cell |
-| stephenson | 2 | 83 | 0.00975 | P2 | 0.501 | JCHAIN, MZB1, SEC11C, FKBP11, SPCS3, HSP90B1, PPIB, SSR3 | plasma cell |
+| stephenson | 2 | 83 | 0.00975 | P1 | 0.899 | HLA-DRA, MS4A1, BANK1, CD74, CXCR4, FCMR, TCL1A, LINC00926 | plasma cell |
+| stephenson | 2 | 83 | 0.00975 | P2 | 0.856 | JCHAIN, MZB1, SEC11C, FKBP11, SPCS3, HSP90B1, PPIB, SSR3 | plasma cell |
 
 ## label_effects
 
 | dataset | label | kind | n_clones | explained | shuffled | excess | p_value | note |
 |---|---|---|---|---|---|---|---|---|
 | ln_vaccine | spike_binding | categorical | 4429 | 0.11 | 0.000427 | 0.109 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) |
-| ln_vaccine | elisa | categorical | 1943 | 0.0243 | 0.000558 | 0.0237 | 0.0005 | ELISA of the clone's expressed mAb |
+| ln_vaccine | elisa | categorical | 1943 | 0.0242 | 0.000558 | 0.0237 | 0.0005 | ELISA of the clone's expressed mAb |
 | ln_vaccine | isotype | categorical | 4381 | 0.0429 | 0.00108 | 0.0418 | 0.0005 | heavy-chain isotype |
 | ln_vaccine | mutation_frequency | numeric | 4429 | 0.0328 | 0.00118 | 0.0316 | 0.0005 | V-region mutation frequency |
-| ln_vaccine | tissue | numeric | 4429 | 0.445 | 0.0035 | 0.442 | 0.0005 | fraction of the clone's cells sampled in blood |
+| ln_vaccine | tissue:blood | numeric | 4429 | 0.445 | 0.0035 | 0.441 | 0.0005 | fraction of the clone's cells sampled in blood |
 | mouse_np | division_gate:mCherry-low | numeric | 69 | 0.176 | 0.0139 | 0.162 | 0.0005 | fraction of the clone's cells that divided most (mCherry-low gate) |
 | mouse_np | w33l | categorical | 19 | 0.0229 | 0.0686 | -0.0457 | 0.982 | VH186.2 W33L high-affinity mutation (IGHV1-72 clones) |
 | mouse_np | mutation_frequency | numeric | 69 | 0.0209 | 0.0143 | 0.00656 | 0.187 | V-region mutation frequency |
@@ -82,20 +76,20 @@
 | malaria | cell_state:Memory | numeric | 801 | 0.0381 | 0.00546 | 0.0326 | 0.0005 | fraction of the clone's cells that are memory cells |
 | malaria | mutation_frequency | numeric | 801 | 0.0112 | 0.00302 | 0.00816 | 0.003 | V-region mutation frequency |
 | malaria | isotype | categorical | 652 | 0.207 | 0.102 | 0.105 | 0.0005 | heavy-chain isotype |
-| malaria_late | cell_state:GC | numeric | 1183 | 0.304 | 0.0389 | 0.265 | 0.0005 | fraction of the clone's cells in a germinal centre |
-| malaria_late | cell_state:PB | numeric | 1183 | 0.271 | 0.0721 | 0.199 | 0.0005 | fraction of the clone's cells that are plasmablasts |
+| malaria_late | cell_state:GC | numeric | 1183 | 0.304 | 0.0389 | 0.266 | 0.0005 | fraction of the clone's cells in a germinal centre |
+| malaria_late | cell_state:PB | numeric | 1183 | 0.271 | 0.072 | 0.199 | 0.0005 | fraction of the clone's cells that are plasmablasts |
 | malaria_late | mutation_frequency | numeric | 1183 | 0.173 | 0.047 | 0.126 | 0.0005 | V-region mutation frequency |
 | malaria_late | isotype | categorical | 1096 | 0.123 | 0.00463 | 0.119 | 0.0005 | heavy-chain isotype |
-| malaria_late | treatment | categorical | 1183 | 0.00951 | 0.0017 | 0.00781 | 0.0005 | antimalarial treatment of the mouse (donor-level label: not separable from other donor differences) |
-| bone_marrow_pc | sorted_as:plasma cells | numeric | 10218 | 0.164 | 0.00598 | 0.158 | 0.0005 | fraction of the clone's cells sorted as plasma cells |
-| bone_marrow_pc | tissue:bone marrow | numeric | 10218 | 0.284 | 0.000512 | 0.284 | 0.0005 | fraction of the clone's cells found in the bone marrow |
-| bone_marrow_pc | antigen | categorical | 10217 | 0.0046 | 0.00033 | 0.00427 | 0.0005 | antigen the clone's antibody was sorted on |
-| bone_marrow_pc | isotype | categorical | 9536 | 0.0481 | 0.00432 | 0.0438 | 0.0005 | heavy-chain isotype |
-| flu | isotype | categorical | 1721 | 0.151 | 0.00495 | 0.146 | 0.0005 | heavy-chain isotype |
-| flu | mutation_frequency | numeric | 1996 | 0.0906 | 0.00493 | 0.0856 | 0.0005 | V-region mutation frequency |
-| flu | timepoint | numeric | 1997 | 0.0606 | 0.00472 | 0.0559 | 0.0005 | fraction of the clone's cells sampled at day 7 |
-| flu | age_group | categorical | 1997 | 0.00606 | 0.000495 | 0.00556 | 0.0005 | donor age group (donor-level label: not separable from other donor differences) |
-| ebv | gfp | numeric | 2303 | 0.0954 | 0.000431 | 0.095 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ |
+| malaria_late | treatment | categorical | 1183 | 0.00952 | 0.0017 | 0.00782 | 0.0005 | antimalarial treatment of the mouse (donor-level label: not separable from other donor differences) |
+| bone_marrow_pc | sorted_as:plasma cells | numeric | 9783 | 0.214 | 0.0137 | 0.2 | 0.0005 | fraction of the clone's cells sorted as plasma cells |
+| bone_marrow_pc | tissue:bone marrow | numeric | 9783 | 0.332 | 0.00983 | 0.322 | 0.0005 | fraction of the clone's cells found in the bone marrow |
+| bone_marrow_pc | antigen | categorical | 9782 | 0.003 | 0.00114 | 0.00186 | 0.0005 | antigen the clone's antibody was sorted on |
+| bone_marrow_pc | isotype | categorical | 9124 | 0.0391 | 0.00634 | 0.0328 | 0.0005 | heavy-chain isotype |
+| flu | isotype | categorical | 1721 | 0.151 | 0.00496 | 0.146 | 0.0005 | heavy-chain isotype |
+| flu | mutation_frequency | numeric | 1995 | 0.0801 | 0.00424 | 0.0758 | 0.0005 | V-region mutation frequency |
+| flu | timepoint:d7 | numeric | 1997 | 0.0606 | 0.00472 | 0.0558 | 0.0005 | fraction of the clone's cells sampled at day 7 |
+| flu | age_group | categorical | 1997 | 0.00608 | 0.000495 | 0.00559 | 0.0005 | donor age group (donor-level label: not separable from other donor differences) |
+| ebv | gfp:GFP+ | numeric | 2303 | 0.0954 | 0.000432 | 0.095 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ |
 | ebv | isotype | categorical | 2309 | 0.143 | 0.00129 | 0.141 | 0.0005 | heavy-chain isotype |
 | tonsil | isotype | categorical | 73 | 0.127 | 0.0407 | 0.0864 | 0.0005 | heavy-chain isotype |
 | stephenson | isotype | categorical | 81 | 0.21 | 0.0592 | 0.15 | 0.0005 | heavy-chain isotype |
@@ -106,34 +100,37 @@
 
 | dataset | label | programme | level | n_clones_programme | n_clones_level | observed | expected | frac_in_programme | frac_elsewhere | odds_ratio | ci_low | ci_high | pvalue | fdr | note | how | strata | programmes | median_in_programme | median_elsewhere | rank_effect |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ln_vaccine | spike_binding | P1 | S+ | 1901 | 1.46e+03 | 932 | 656 | 0.49 | 0.211 | 3.2 | 2.8 | 3.64 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P1 | S- | 1901 | 2.96e+03 | 969 | 1.25e+03 | 0.51 | 0.789 | 0.313 | 0.275 | 0.357 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P2 | S+ | 1427 | 1.46e+03 | 32 | 420 | 0.0224 | 0.477 | 0.0255 | 0.0177 | 0.0367 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P2 | S- | 1427 | 2.96e+03 | 1.4e+03 | 1.01e+03 | 0.978 | 0.523 | 39.2 | 27.2 | 56.4 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P3 | S+ | 861 | 1.46e+03 | 500 | 311 | 0.581 | 0.27 | 3.48 | 2.96 | 4.08 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P3 | S- | 861 | 2.96e+03 | 361 | 550 | 0.419 | 0.73 | 0.288 | 0.245 | 0.338 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P4 | S+ | 240 | 1.46e+03 | 1 | 78.1 | 0.00417 | 0.349 | 0.00907 | 0.00139 | 0.0592 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | spike_binding | P4 | S- | 240 | 2.96e+03 | 239 | 162 | 0.996 | 0.651 | 110 | 16.9 | 720 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
-| ln_vaccine | elisa | P1 | ELISA+ | 1324 | 1.38e+03 | 875 | 940 | 0.661 | 0.819 | 0.427 | 0.337 | 0.542 | 0.0005 | 0.001 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
-| ln_vaccine | elisa | P1 | ELISA- | 1324 | 561 | 449 | 384 | 0.339 | 0.181 | 2.34 | 1.85 | 2.97 | 0.0005 | 0.001 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
-| ln_vaccine | elisa | P3 | ELISA+ | 589 | 1.38e+03 | 483 | 421 | 0.82 | 0.664 | 2.33 | 1.83 | 2.97 | 0.0005 | 0.001 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
-| ln_vaccine | elisa | P3 | ELISA- | 589 | 561 | 106 | 168 | 0.18 | 0.336 | 0.429 | 0.336 | 0.546 | 0.0005 | 0.001 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P2 | IGHA | 1417 | 387 | 151 | 125 | 0.107 | 0.0796 | 1.41 | 1.13 | 1.75 | 0.0025 | 0.005 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P2 | IGHG | 1417 | 3.57e+03 | 1.22e+03 | 1.18e+03 | 0.863 | 0.792 | 1.43 | 1.19 | 1.72 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P2 | IGHM | 1417 | 421 | 43 | 112 | 0.0303 | 0.128 | 0.264 | 0.19 | 0.366 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P3 | IGHA | 854 | 387 | 50 | 75.8 | 0.0585 | 0.0955 | 0.566 | 0.413 | 0.776 | 0.001 | 0.00228 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P3 | IGHG | 854 | 3.57e+03 | 796 | 682 | 0.932 | 0.787 | 4.55 | 3.42 | 6.05 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P3 | IGHM | 854 | 421 | 7 | 95.3 | 0.0082 | 0.117 | 0.0454 | 0.0211 | 0.0974 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P4 | IGHG | 237 | 3.57e+03 | 24 | 185 | 0.101 | 0.856 | 0.0205 | 0.0132 | 0.0318 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | isotype | P4 | IGHM | 237 | 421 | 191 | 27.3 | 0.806 | 0.0555 | 65.3 | 45.5 | 93.8 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ln_vaccine | mutation_frequency | P1 |  | 1901 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0242 | 0.0131 | 0.306 |
-| ln_vaccine | mutation_frequency | P2 |  | 1427 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.00655 | 0.0239 | -0.541 |
-| ln_vaccine | mutation_frequency | P3 |  | 861 |  |  |  |  |  |  |  |  | 0.0165 | 0.0165 | V-region mutation frequency | mean | donor | core | 0.02 | 0.0183 | 0.109 |
-| ln_vaccine | mutation_frequency | P4 |  | 240 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0432 | 0.0181 | 0.507 |
-| ln_vaccine | tissue | P1 |  | 1901 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 1 | -0.616 |
-| ln_vaccine | tissue | P2 |  | 1427 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 1 | 0 | 0.988 |
-| ln_vaccine | tissue | P3 |  | 861 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 0 | -0.304 |
-| ln_vaccine | tissue | P4 |  | 240 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 0 | -0.337 |
+| ln_vaccine | spike_binding | P1 | S+ | 1596 | 1.46e+03 | 757 | 551 | 0.474 | 0.25 | 2.48 | 2.18 | 2.83 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P1 | S- | 1596 | 2.96e+03 | 839 | 1.05e+03 | 0.526 | 0.75 | 0.402 | 0.353 | 0.459 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P2 | S+ | 1425 | 1.46e+03 | 32 | 419 | 0.0225 | 0.477 | 0.0256 | 0.0178 | 0.0368 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P2 | S- | 1425 | 2.96e+03 | 1.39e+03 | 1.01e+03 | 0.978 | 0.523 | 39.1 | 27.2 | 56.2 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P3 | S+ | 1131 | 1.46e+03 | 675 | 398 | 0.597 | 0.24 | 4.4 | 3.8 | 5.1 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P3 | S- | 1131 | 2.96e+03 | 456 | 733 | 0.403 | 0.76 | 0.227 | 0.196 | 0.263 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P4 | S+ | 277 | 1.46e+03 | 1 | 96.4 | 0.00361 | 0.353 | 0.00734 | 0.00115 | 0.0469 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | spike_binding | P4 | S- | 277 | 2.96e+03 | 276 | 181 | 0.996 | 0.647 | 136 | 21.3 | 869 | 0.0005 | 0.0005 | spike binding of the clone (probe sorting / mAb ELISA) | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P1 | ELISA+ | 1094 | 1.38e+03 | 708 | 776 | 0.647 | 0.794 | 0.479 | 0.389 | 0.591 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P1 | ELISA- | 1094 | 561 | 386 | 318 | 0.353 | 0.206 | 2.09 | 1.69 | 2.57 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P3 | ELISA+ | 795 | 1.38e+03 | 650 | 567 | 0.818 | 0.638 | 2.53 | 2.03 | 3.15 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P3 | ELISA- | 795 | 561 | 145 | 228 | 0.182 | 0.362 | 0.395 | 0.318 | 0.492 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P4 | ELISA+ | 25 | 1.38e+03 | 1 | 17.8 | 0.04 | 0.72 | 0.0169 | 0.00244 | 0.117 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | elisa | P4 | ELISA- | 25 | 561 | 24 | 7.23 | 0.96 | 0.28 | 59.2 | 8.53 | 410 | 0.0005 | 0.000666 | ELISA of the clone's expressed mAb | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P1 | IGHM | 1571 | 421 | 135 | 159 | 0.0859 | 0.102 | 0.755 | 0.608 | 0.937 | 0.009 | 0.016 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P2 | IGHA | 1415 | 387 | 150 | 125 | 0.106 | 0.0799 | 1.39 | 1.12 | 1.74 | 0.0035 | 0.008 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P2 | IGHG | 1415 | 3.57e+03 | 1.22e+03 | 1.18e+03 | 0.864 | 0.792 | 1.44 | 1.2 | 1.73 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P2 | IGHM | 1415 | 421 | 43 | 112 | 0.0304 | 0.127 | 0.265 | 0.19 | 0.368 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P3 | IGHA | 1121 | 387 | 78 | 99.4 | 0.0696 | 0.0948 | 0.705 | 0.543 | 0.915 | 0.0085 | 0.016 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P3 | IGHG | 1121 | 3.57e+03 | 1.02e+03 | 902 | 0.913 | 0.781 | 3.28 | 2.62 | 4.12 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P3 | IGHM | 1121 | 421 | 18 | 119 | 0.0161 | 0.124 | 0.0989 | 0.0614 | 0.159 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P4 | IGHG | 274 | 3.57e+03 | 27 | 216 | 0.0985 | 0.863 | 0.0183 | 0.012 | 0.0278 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | isotype | P4 | IGHM | 274 | 421 | 225 | 31.6 | 0.821 | 0.0477 | 83.6 | 58.6 | 119 | 0.0005 | 0.00133 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ln_vaccine | mutation_frequency | P1 |  | 1596 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | V-region mutation frequency | mean | donor | core | 0.0254 | 0.0143 | 0.326 |
+| ln_vaccine | mutation_frequency | P2 |  | 1425 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | V-region mutation frequency | mean | donor | core | 0.00655 | 0.0239 | -0.543 |
+| ln_vaccine | mutation_frequency | P3 |  | 1131 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | V-region mutation frequency | mean | donor | core | 0.0204 | 0.0177 | 0.119 |
+| ln_vaccine | mutation_frequency | P4 |  | 277 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | V-region mutation frequency | mean | donor | core | 0.0389 | 0.0183 | 0.356 |
+| ln_vaccine | tissue:blood | P1 |  | 1596 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 0.6 | -0.556 |
+| ln_vaccine | tissue:blood | P2 |  | 1425 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 1 | 0 | 0.988 |
+| ln_vaccine | tissue:blood | P3 |  | 1131 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 0 | -0.351 |
+| ln_vaccine | tissue:blood | P4 |  | 277 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells sampled in blood | fraction:blood | donor | core | 0 | 0 | -0.355 |
 | malaria | cell_state:GC | P1 |  | 395 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0 | -0.123 |
 | malaria | cell_state:GC | P2 |  | 380 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0 | 0.135 |
 | malaria | cell_state:PB | P1 |  | 395 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 1 | -0.758 |
@@ -151,108 +148,80 @@
 | malaria | isotype | P2 | IGHM | 344 | 280 | 51 | 68.3 | 0.148 | 0.744 | 0.335 | 0.206 | 0.545 | 0.0005 | 0.000857 | heavy-chain isotype | majority | donor | core |  |  |  |
 | malaria | isotype | P3 | IGHG | 26 | 335 | 0 | 6.62 | 0 | 0.535 | 0 |  |  | 0.0005 | 0.000857 | heavy-chain isotype | majority | donor | core |  |  |  |
 | malaria | isotype | P3 | IGHM | 26 | 280 | 26 | 17.5 | 1 | 0.406 |  |  |  | 0.0005 | 0.000857 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | cell_state:GC | P1 |  | 392 |  |  |  |  |  |  |  |  | 0.0005 | 0.0007 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 1 | 0 | 0.979 |
-| malaria_late | cell_state:GC | P2 |  | 232 |  |  |  |  |  |  |  |  | 0.0005 | 0.0007 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0.5 | -0.613 |
-| malaria_late | cell_state:GC | P3 |  | 195 |  |  |  |  |  |  |  |  | 0.0005 | 0.0007 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0.5 | -0.255 |
-| malaria_late | cell_state:GC | P5 |  | 115 |  |  |  |  |  |  |  |  | 0.0005 | 0.0007 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0.5 | -0.553 |
-| malaria_late | cell_state:GC | P7 |  | 25 |  |  |  |  |  |  |  |  | 0.0005 | 0.0007 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0.333 | -0.519 |
-| malaria_late | cell_state:PB | P1 |  | 392 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 0.5 | -0.602 |
-| malaria_late | cell_state:PB | P2 |  | 232 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 1 | 0 | 0.885 |
-| malaria_late | cell_state:PB | P3 |  | 195 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 0.25 | -0.479 |
-| malaria_late | cell_state:PB | P4 |  | 139 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0.5 | 0 | 0.344 |
-| malaria_late | cell_state:PB | P5 |  | 115 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 0 | -0.435 |
-| malaria_late | cell_state:PB | P6 |  | 85 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 1 | 0 | 0.709 |
-| malaria_late | cell_state:PB | P7 |  | 25 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 1 | 0 | 0.729 |
-| malaria_late | mutation_frequency | P1 |  | 392 |  |  |  |  |  |  |  |  | 0.0005 | 0.00117 | V-region mutation frequency | mean | donor | core | 0.0242 | 0 | 0.821 |
-| malaria_late | mutation_frequency | P2 |  | 232 |  |  |  |  |  |  |  |  | 0.0005 | 0.00117 | V-region mutation frequency | mean | donor | core | 0 | 0.00933 | -0.638 |
-| malaria_late | mutation_frequency | P4 |  | 139 |  |  |  |  |  |  |  |  | 0.0095 | 0.0166 | V-region mutation frequency | mean | donor | core | 0.0056 | 0.0037 | 0.108 |
-| malaria_late | mutation_frequency | P5 |  | 115 |  |  |  |  |  |  |  |  | 0.0005 | 0.00117 | V-region mutation frequency | mean | donor | core | 0 | 0.00716 | -0.537 |
-| malaria_late | isotype | P1 | IGHG | 376 | 817 | 362 | 278 | 0.963 | 0.632 | 27.1 | 14 | 52.1 | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P1 | IGHM | 376 | 275 | 13 | 95.3 | 0.0346 | 0.364 | 0.0354 | 0.0179 | 0.0702 | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P2 | IGHG | 203 | 817 | 172 | 161 | 0.847 | 0.722 | 2.13 | 1.27 | 3.55 | 0.0015 | 0.0042 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P2 | IGHM | 203 | 275 | 31 | 42.2 | 0.153 | 0.273 | 0.471 | 0.282 | 0.785 | 0.0015 | 0.0042 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P3 | IGHG | 170 | 817 | 71 | 117 | 0.418 | 0.806 | 0.168 | 0.112 | 0.25 | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P3 | IGHM | 170 | 275 | 96 | 51.9 | 0.565 | 0.193 | 5.48 | 3.68 | 8.15 | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P4 | IGHG | 132 | 817 | 114 | 104 | 0.864 | 0.729 | 1.99 | 1.16 | 3.43 | 0.0125 | 0.0292 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P4 | IGHM | 132 | 275 | 18 | 28.2 | 0.136 | 0.267 | 0.508 | 0.295 | 0.875 | 0.012 | 0.0292 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P5 | IGHG | 112 | 817 | 0 | 69.5 | 0 | 0.83 | 0 |  |  | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P5 | IGHM | 112 | 275 | 112 | 41.9 | 1 | 0.166 |  |  |  | 0.0005 | 0.00233 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P6 | IGHG | 80 | 817 | 75 | 68.1 | 0.938 | 0.73 | 5.31 | 1.61 | 17.6 | 0.001 | 0.0035 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P6 | IGHM | 80 | 275 | 5 | 11.9 | 0.0625 | 0.266 | 0.188 | 0.0569 | 0.623 | 0.001 | 0.0035 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P7 | IGHG | 23 | 817 | 23 | 19.4 | 1 | 0.74 |  |  |  | 0.023 | 0.046 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | isotype | P7 | IGHM | 23 | 275 | 0 | 3.59 | 0 | 0.256 | 0 |  |  | 0.022 | 0.046 | heavy-chain isotype | majority | donor | core |  |  |  |
-| malaria_late | treatment | P3 | Naive | 195 | 9 | 8 | 1.48 | 0.041 | 0.00101 | 42.2 | 5.25 | 340 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P4 | Artesunate | 139 | 306 | 12 | 36 | 0.0863 | 0.282 | 0.241 | 0.131 | 0.442 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P4 | Saline | 139 | 868 | 127 | 102 | 0.914 | 0.71 | 4.33 | 2.36 | 7.94 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P5 | Artesunate | 115 | 306 | 65 | 29.7 | 0.565 | 0.226 | 4.46 | 3 | 6.63 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P5 | Saline | 115 | 868 | 50 | 84.4 | 0.435 | 0.766 | 0.235 | 0.158 | 0.349 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P6 | Artesunate | 85 | 306 | 4 | 22 | 0.0471 | 0.275 | 0.13 | 0.0473 | 0.358 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| malaria_late | treatment | P6 | Saline | 85 | 868 | 81 | 62.4 | 0.953 | 0.717 | 8 | 2.91 | 22 | 0.0005 | 0.0015 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
-| bone_marrow_pc | sorted_as:plasma cells | P1 |  | 4600 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0 | 0 | 0.218 |
-| bone_marrow_pc | sorted_as:plasma cells | P2 |  | 2978 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0 | 0.333 | -0.513 |
-| bone_marrow_pc | sorted_as:plasma cells | P3 |  | 2612 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0.5 | 0 | 0.278 |
-| bone_marrow_pc | sorted_as:plasma cells | P4 |  | 28 |  |  |  |  |  |  |  |  | 0.0015 | 0.0015 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0 | 0 | -0.384 |
-| bone_marrow_pc | tissue:bone marrow | P1 |  | 4600 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 1 | 0.5 | 0.63 |
-| bone_marrow_pc | tissue:bone marrow | P2 |  | 2978 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 0.286 | 1 | -0.668 |
-| bone_marrow_pc | tissue:bone marrow | P3 |  | 2612 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 0.667 | 1 | -0.102 |
-| bone_marrow_pc | tissue:bone marrow | P4 |  | 28 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 1 | 1 | 0.441 |
-| bone_marrow_pc | antigen | P1 | tetanus toxoid | 4599 | 19 | 18 | 11.2 | 0.00391 | 0.000178 | 18.1 | 2.08 | 158 | 0.0005 | 0.0012 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P2 | SARS-CoV-2 spike | 2978 | 73 | 3 | 12.9 | 0.00101 | 0.00967 | 0.221 | 0.0756 | 0.646 | 0.001 | 0.00171 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P2 | not sorted by antigen | 2978 | 10,125 | 2.97e+03 | 2.96e+03 | 0.999 | 0.988 | 4.6 | 1.77 | 12 | 0.0005 | 0.0012 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P3 | SARS-CoV-2 spike | 2612 | 73 | 5 | 16.7 | 0.00191 | 0.00894 | 0.246 | 0.0999 | 0.607 | 0.001 | 0.00171 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P3 | not sorted by antigen | 2612 | 10,125 | 2.61e+03 | 2.59e+03 | 0.998 | 0.989 | 5.25 | 2.14 | 12.9 | 0.0005 | 0.0012 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P3 | tetanus toxoid | 2612 | 19 | 0 | 4.35 | 0 | 0.0025 | 0 |  |  | 0.0315 | 0.0472 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P4 | SARS-CoV-2 spike | 28 | 73 | 23 | 0.132 | 0.821 | 0.00491 | 3.77e+03 | 1.13e+03 | 12,507 | 0.0005 | 0.0012 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | antigen | P4 | not sorted by antigen | 28 | 10,125 | 5 | 27.9 | 0.179 | 0.993 | 0.000564 | 0.000182 | 0.00174 | 0.0005 | 0.0012 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P1 | IGHA | 4330 | 4.37e+03 | 1.74e+03 | 1.84e+03 | 0.401 | 0.506 | 0.823 | 0.755 | 0.898 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P1 | IGHD | 4330 | 93 | 81 | 38.5 | 0.0187 | 0.00231 | 6.58 | 3.82 | 11.4 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P1 | IGHG | 4330 | 4.37e+03 | 2.33e+03 | 2.03e+03 | 0.538 | 0.393 | 1.76 | 1.62 | 1.92 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P1 | IGHM | 4330 | 695 | 182 | 422 | 0.042 | 0.0985 | 0.169 | 0.139 | 0.206 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P2 | IGHA | 2801 | 4.37e+03 | 1.5e+03 | 1.39e+03 | 0.536 | 0.427 | 1.27 | 1.16 | 1.39 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P2 | IGHD | 2801 | 93 | 1 | 28.3 | 0.000357 | 0.0137 | 0.0309 | 0.005 | 0.191 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P2 | IGHG | 2801 | 4.37e+03 | 933 | 1.25e+03 | 0.333 | 0.511 | 0.486 | 0.441 | 0.534 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P2 | IGHM | 2801 | 695 | 367 | 127 | 0.131 | 0.0487 | 9.28 | 7.58 | 11.4 | 0.0005 | 0.00125 | heavy-chain isotype | majority | donor | core |  |  |  |
-| bone_marrow_pc | isotype | P3 | IGHD | 2377 | 93 | 11 | 25.7 | 0.00463 | 0.0115 | 0.359 | 0.193 | 0.667 | 0.0015 | 0.00333 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P1 | IGHA | 719 | 281 | 151 | 131 | 0.21 | 0.13 | 1.48 | 1.13 | 1.96 | 0.0045 | 0.00514 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P1 | IGHD | 719 | 70 | 8 | 19.9 | 0.0111 | 0.0619 | 0.316 | 0.153 | 0.651 | 0.001 | 0.00145 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P1 | IGHG | 719 | 234 | 59 | 95.5 | 0.0821 | 0.175 | 0.444 | 0.326 | 0.606 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P1 | IGHM | 719 | 1.14e+03 | 501 | 472 | 0.697 | 0.634 | 1.41 | 1.14 | 1.75 | 0.0015 | 0.002 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P2 | IGHA | 371 | 281 | 23 | 48.9 | 0.062 | 0.191 | 0.312 | 0.194 | 0.502 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P2 | IGHG | 371 | 234 | 34 | 53.3 | 0.0916 | 0.148 | 0.457 | 0.299 | 0.696 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P2 | IGHM | 371 | 1.14e+03 | 292 | 248 | 0.787 | 0.625 | 2.57 | 1.9 | 3.48 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P3 | IGHA | 293 | 281 | 2 | 37.8 | 0.00683 | 0.195 | 0.0348 | 0.00864 | 0.14 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P3 | IGHD | 293 | 70 | 29 | 19 | 0.099 | 0.0287 | 2.05 | 1.23 | 3.41 | 0.0045 | 0.00514 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P3 | IGHG | 293 | 234 | 3 | 24.5 | 0.0102 | 0.162 | 0.0927 | 0.0297 | 0.289 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P3 | IGHM | 293 | 1.14e+03 | 259 | 212 | 0.884 | 0.614 | 3.81 | 2.6 | 5.6 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P4 | IGHA | 338 | 281 | 105 | 63.1 | 0.311 | 0.127 | 3.11 | 2.26 | 4.28 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P4 | IGHG | 338 | 234 | 138 | 60.6 | 0.408 | 0.0694 | 10.3 | 7.03 | 15 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | isotype | P4 | IGHM | 338 | 1.14e+03 | 84 | 204 | 0.249 | 0.761 | 0.0832 | 0.0599 | 0.116 | 0.0005 | 0.0008 | heavy-chain isotype | majority | donor | core |  |  |  |
-| flu | mutation_frequency | P1 |  | 785 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0424 | 0.0189 | 0.384 |
-| flu | mutation_frequency | P3 |  | 403 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0 | 0.0384 | -0.903 |
-| flu | mutation_frequency | P4 |  | 362 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0584 | 0.0229 | 0.527 |
-| flu | timepoint | P2 |  | 446 |  |  |  |  |  |  |  |  | 0.001 | 0.00133 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 0.5 | 0.4 | 0.126 |
-| flu | timepoint | P3 |  | 403 |  |  |  |  |  |  |  |  | 0.0005 | 0.001 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 0 | 0.5 | -0.471 |
-| flu | timepoint | P4 |  | 363 |  |  |  |  |  |  |  |  | 0.0005 | 0.001 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 1 | 0.333 | 0.357 |
-| flu | age_group | P1 | older | 785 | 1.11e+03 | 391 | 435 | 0.498 | 0.591 | 0.687 | 0.574 | 0.824 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
-| flu | age_group | P1 | young | 785 | 890 | 394 | 350 | 0.502 | 0.409 | 1.45 | 1.21 | 1.74 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
-| flu | age_group | P2 | older | 446 | 1.11e+03 | 215 | 247 | 0.482 | 0.575 | 0.688 | 0.557 | 0.849 | 0.0015 | 0.002 | donor age group | majority |  | core |  |  |  |
-| flu | age_group | P2 | young | 446 | 890 | 231 | 199 | 0.518 | 0.425 | 1.45 | 1.18 | 1.8 | 0.0015 | 0.002 | donor age group | majority |  | core |  |  |  |
-| flu | age_group | P3 | older | 403 | 1.11e+03 | 284 | 223 | 0.705 | 0.516 | 2.24 | 1.77 | 2.83 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
-| flu | age_group | P3 | young | 403 | 890 | 119 | 180 | 0.295 | 0.484 | 0.447 | 0.353 | 0.566 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
-| ebv | gfp | P1 |  | 1063 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ | fraction:GFP+ | donor | core | 0.5 | 0.75 | -0.511 |
-| ebv | gfp | P2 |  | 889 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ | fraction:GFP+ | donor | core | 0.72 | 0.571 | 0.277 |
-| ebv | gfp | P3 |  | 351 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ | fraction:GFP+ | donor | core | 0.787 | 0.6 | 0.474 |
-| ebv | isotype | P1 | IGHA | 1065 | 218 | 9 | 101 | 0.00845 | 0.168 | 0.0422 | 0.0215 | 0.0827 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P1 | IGHD | 1065 | 10 | 0 | 4.61 | 0 | 0.00804 | 0 |  |  | 0.0045 | 0.0054 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P1 | IGHG | 1065 | 555 | 43 | 256 | 0.0404 | 0.412 | 0.0602 | 0.0434 | 0.0833 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P1 | IGHM | 1065 | 1.53e+03 | 1.01e+03 | 704 | 0.951 | 0.412 | 27.8 | 20.6 | 37.5 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P2 | IGHA | 893 | 218 | 188 | 84.3 | 0.211 | 0.0212 | 12.3 | 8.29 | 18.3 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P2 | IGHD | 893 | 10 | 9 | 3.87 | 0.0101 | 0.000706 | 14.4 | 1.82 | 114 | 0.003 | 0.004 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P2 | IGHG | 893 | 555 | 456 | 215 | 0.511 | 0.0699 | 13.9 | 10.9 | 17.7 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P2 | IGHM | 893 | 1.53e+03 | 240 | 590 | 0.269 | 0.908 | 0.0372 | 0.0294 | 0.0469 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P3 | IGHA | 351 | 218 | 21 | 33.1 | 0.0598 | 0.101 | 0.569 | 0.357 | 0.906 | 0.019 | 0.0207 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P3 | IGHG | 351 | 555 | 56 | 84.4 | 0.16 | 0.255 | 0.555 | 0.41 | 0.752 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
-| ebv | isotype | P3 | IGHM | 351 | 1.53e+03 | 273 | 232 | 0.778 | 0.64 | 1.97 | 1.51 | 2.57 | 0.0005 | 0.00075 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | cell_state:GC | P1 |  | 471 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 1 | -0.548 |
+| malaria_late | cell_state:GC | P2 |  | 430 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 1 | 0 | 0.958 |
+| malaria_late | cell_state:GC | P3 |  | 282 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells in a germinal centre | fraction:GC | donor | core | 0 | 0.5 | -0.498 |
+| malaria_late | cell_state:PB | P1 |  | 471 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 1 | 0 | 0.975 |
+| malaria_late | cell_state:PB | P2 |  | 430 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 0.5 | -0.601 |
+| malaria_late | cell_state:PB | P3 |  | 282 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's cells that are plasmablasts | fraction:PB | donor | core | 0 | 0.5 | -0.52 |
+| malaria_late | mutation_frequency | P1 |  | 471 |  |  |  |  |  |  |  |  | 0.0015 | 0.0015 | V-region mutation frequency | mean | donor | core | 0 | 0.0148 | -0.491 |
+| malaria_late | mutation_frequency | P2 |  | 430 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | V-region mutation frequency | mean | donor | core | 0.024 | 0 | 0.822 |
+| malaria_late | mutation_frequency | P3 |  | 282 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | V-region mutation frequency | mean | donor | core | 0 | 0.00871 | -0.4 |
+| malaria_late | isotype | P1 | IGHG | 430 | 817 | 376 | 346 | 0.874 | 0.662 | 3.67 | 2.38 | 5.65 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | isotype | P1 | IGHM | 430 | 275 | 54 | 84.3 | 0.126 | 0.332 | 0.275 | 0.178 | 0.424 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | isotype | P2 | IGHG | 408 | 817 | 392 | 303 | 0.961 | 0.618 | 28.4 | 15 | 53.6 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | isotype | P2 | IGHM | 408 | 275 | 15 | 102 | 0.0368 | 0.378 | 0.0338 | 0.0174 | 0.0656 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | isotype | P3 | IGHG | 258 | 817 | 49 | 168 | 0.19 | 0.916 | 0.017 | 0.0103 | 0.0278 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | isotype | P3 | IGHM | 258 | 275 | 206 | 88.5 | 0.798 | 0.0823 | 61 | 36.8 | 101 | 0.0005 | 0.001 | heavy-chain isotype | majority | donor | core |  |  |  |
+| malaria_late | treatment | P1 | Artesunate | 471 | 306 | 89 | 122 | 0.189 | 0.305 | 0.531 | 0.401 | 0.704 | 0.0005 | 0.0009 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
+| malaria_late | treatment | P1 | Saline | 471 | 868 | 381 | 346 | 0.809 | 0.684 | 1.96 | 1.48 | 2.58 | 0.0005 | 0.0009 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
+| malaria_late | treatment | P3 | Artesunate | 282 | 306 | 116 | 72.9 | 0.411 | 0.211 | 2.61 | 1.96 | 3.48 | 0.0005 | 0.0009 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
+| malaria_late | treatment | P3 | Naive | 282 | 9 | 8 | 2.15 | 0.0284 | 0.00111 | 26.3 | 3.27 | 211 | 0.0005 | 0.0009 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
+| malaria_late | treatment | P3 | Saline | 282 | 868 | 158 | 207 | 0.56 | 0.788 | 0.343 | 0.258 | 0.455 | 0.0005 | 0.0009 | antimalarial treatment of the mouse | majority |  | core |  |  |  |
+| bone_marrow_pc | sorted_as:plasma cells | P2 |  | 2883 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0 | 0.4 | -0.537 |
+| bone_marrow_pc | sorted_as:plasma cells | P3 |  | 2334 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells sorted as plasma cells | fraction:plasma cells | donor | core | 0.5 | 0 | 0.3 |
+| bone_marrow_pc | tissue:bone marrow | P1 |  | 4566 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 1 | 0.5 | 0.653 |
+| bone_marrow_pc | tissue:bone marrow | P2 |  | 2883 |  |  |  |  |  |  |  |  | 0.0005 | 0.00075 | fraction of the clone's cells found in the bone marrow | fraction:bone marrow | donor | core | 0.333 | 1 | -0.691 |
+| bone_marrow_pc | antigen | P1 | SARS-CoV-2 spike | 4565 | 56 | 30 | 47 | 0.00657 | 0.00498 | 0.251 | 0.152 | 0.414 | 0.0005 | 0.00112 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
+| bone_marrow_pc | antigen | P1 | not antigen sorted | 4565 | 9.72e+03 | 4.52e+03 | 4.51e+03 | 0.991 | 0.995 | 2.99 | 1.85 | 4.81 | 0.0005 | 0.00112 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
+| bone_marrow_pc | antigen | P2 | SARS-CoV-2 spike | 2883 | 56 | 22 | 2.16 | 0.00763 | 0.00493 | 23.6 | 12.6 | 44.3 | 0.0005 | 0.00112 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
+| bone_marrow_pc | antigen | P2 | not antigen sorted | 2883 | 9.72e+03 | 2.86e+03 | 2.88e+03 | 0.992 | 0.994 | 0.0552 | 0.03 | 0.102 | 0.0005 | 0.00112 | antigen the clone's antibody was sorted on | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P1 | IGHD | 4292 | 92 | 83 | 37.9 | 0.0193 | 0.00186 | 8.52 | 4.66 | 15.6 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P1 | IGHG | 4292 | 4.26e+03 | 2.28e+03 | 2.19e+03 | 0.531 | 0.411 | 1.22 | 1.11 | 1.34 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P1 | IGHM | 4292 | 545 | 203 | 357 | 0.0473 | 0.0708 | 0.217 | 0.175 | 0.268 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P2 | IGHA | 2708 | 4.22e+03 | 1.51e+03 | 1.44e+03 | 0.556 | 0.423 | 1.17 | 1.06 | 1.29 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P2 | IGHD | 2708 | 92 | 0 | 29.8 | 0 | 0.0143 | 0 |  |  | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P2 | IGHG | 2708 | 4.26e+03 | 948 | 1.14e+03 | 0.35 | 0.517 | 0.616 | 0.558 | 0.68 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P2 | IGHM | 2708 | 545 | 253 | 94 | 0.0934 | 0.0455 | 8.14 | 6.42 | 10.3 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P3 | IGHA | 2124 | 4.22e+03 | 989 | 1.08e+03 | 0.466 | 0.462 | 0.791 | 0.715 | 0.875 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P3 | IGHD | 2124 | 92 | 9 | 24.3 | 0.00424 | 0.0119 | 0.315 | 0.161 | 0.615 | 0.001 | 0.0015 | heavy-chain isotype | majority | donor | core |  |  |  |
+| bone_marrow_pc | isotype | P3 | IGHG | 2124 | 4.26e+03 | 1.04e+03 | 928 | 0.488 | 0.461 | 1.33 | 1.2 | 1.47 | 0.0005 | 0.000833 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P1 | IGHA | 744 | 281 | 154 | 136 | 0.207 | 0.13 | 1.42 | 1.08 | 1.88 | 0.0085 | 0.00971 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P1 | IGHD | 744 | 70 | 8 | 20.9 | 0.0108 | 0.0635 | 0.295 | 0.143 | 0.607 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P1 | IGHG | 744 | 234 | 65 | 99.1 | 0.0874 | 0.173 | 0.478 | 0.353 | 0.646 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P1 | IGHM | 744 | 1.14e+03 | 517 | 488 | 0.695 | 0.634 | 1.41 | 1.14 | 1.75 | 0.0015 | 0.002 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P2 | IGHA | 376 | 281 | 22 | 48 | 0.0585 | 0.193 | 0.304 | 0.187 | 0.493 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P2 | IGHG | 376 | 234 | 29 | 51.9 | 0.0771 | 0.152 | 0.383 | 0.247 | 0.596 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P2 | IGHM | 376 | 1.14e+03 | 302 | 254 | 0.803 | 0.62 | 2.8 | 2.06 | 3.8 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P3 | IGHA | 286 | 281 | 2 | 36.7 | 0.00699 | 0.194 | 0.0361 | 0.00895 | 0.146 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P3 | IGHD | 286 | 70 | 29 | 18.7 | 0.101 | 0.0286 | 2.11 | 1.27 | 3.52 | 0.0025 | 0.00308 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P3 | IGHG | 286 | 234 | 2 | 23.6 | 0.00699 | 0.162 | 0.062 | 0.0153 | 0.251 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P3 | IGHM | 286 | 1.14e+03 | 253 | 207 | 0.885 | 0.615 | 3.79 | 2.57 | 5.6 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P4 | IGHA | 315 | 281 | 103 | 60.1 | 0.327 | 0.127 | 3.37 | 2.42 | 4.69 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P4 | IGHG | 315 | 234 | 138 | 59.4 | 0.438 | 0.0683 | 11 | 7.48 | 16.2 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | isotype | P4 | IGHM | 315 | 1.14e+03 | 64 | 187 | 0.203 | 0.762 | 0.0565 | 0.0387 | 0.0827 | 0.0005 | 0.000727 | heavy-chain isotype | majority | donor | core |  |  |  |
+| flu | mutation_frequency | P1 |  | 814 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0457 | 0.0188 | 0.38 |
+| flu | mutation_frequency | P3 |  | 394 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0 | 0.0409 | -0.905 |
+| flu | mutation_frequency | P4 |  | 335 |  |  |  |  |  |  |  |  | 0.0005 | 0.000666 | V-region mutation frequency | mean | donor | core | 0.0663 | 0.0252 | 0.57 |
+| flu | timepoint:d7 | P2 |  | 452 |  |  |  |  |  |  |  |  | 0.0065 | 0.00866 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 0.5 | 0.444 | 0.12 |
+| flu | timepoint:d7 | P3 |  | 394 |  |  |  |  |  |  |  |  | 0.0005 | 0.001 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 0 | 0.5 | -0.462 |
+| flu | timepoint:d7 | P4 |  | 336 |  |  |  |  |  |  |  |  | 0.0005 | 0.001 | fraction of the clone's cells sampled at day 7 | fraction:d7 | donor | core | 1 | 0.333 | 0.401 |
+| flu | age_group | P1 | older | 815 | 1.11e+03 | 403 | 452 | 0.494 | 0.596 | 0.664 | 0.555 | 0.795 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
+| flu | age_group | P1 | young | 815 | 890 | 412 | 363 | 0.506 | 0.404 | 1.51 | 1.26 | 1.8 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
+| flu | age_group | P2 | older | 452 | 1.11e+03 | 227 | 251 | 0.502 | 0.57 | 0.762 | 0.618 | 0.941 | 0.013 | 0.0173 | donor age group | majority |  | core |  |  |  |
+| flu | age_group | P2 | young | 452 | 890 | 225 | 201 | 0.498 | 0.43 | 1.31 | 1.06 | 1.62 | 0.013 | 0.0173 | donor age group | majority |  | core |  |  |  |
+| flu | age_group | P3 | older | 394 | 1.11e+03 | 278 | 218 | 0.706 | 0.517 | 2.24 | 1.76 | 2.84 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
+| flu | age_group | P3 | young | 394 | 890 | 116 | 176 | 0.294 | 0.483 | 0.447 | 0.352 | 0.567 | 0.0005 | 0.001 | donor age group | majority |  | core |  |  |  |
+| ebv | gfp:GFP+ | P1 |  | 1416 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ | fraction:GFP+ | donor | core | 0.571 | 0.73 | -0.282 |
+| ebv | gfp:GFP+ | P2 |  | 887 |  |  |  |  |  |  |  |  | 0.0005 | 0.0005 | fraction of the clone's d14/d21 cells that are EBV-GFP+ | fraction:GFP+ | donor | core | 0.73 | 0.571 | 0.282 |
+| ebv | isotype | P1 | IGHA | 1418 | 218 | 25 | 134 | 0.0176 | 0.217 | 0.0649 | 0.0424 | 0.0994 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P1 | IGHD | 1418 | 10 | 2 | 6.14 | 0.00141 | 0.00898 | 0.156 | 0.033 | 0.736 | 0.0095 | 0.0095 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P1 | IGHG | 1418 | 555 | 87 | 341 | 0.0614 | 0.525 | 0.0591 | 0.0458 | 0.0761 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P1 | IGHM | 1418 | 1.53e+03 | 1.3e+03 | 937 | 0.92 | 0.249 | 34.5 | 27 | 44 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P2 | IGHA | 891 | 218 | 193 | 84.1 | 0.217 | 0.0176 | 15.4 | 10.1 | 23.6 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P2 | IGHD | 891 | 10 | 8 | 3.86 | 0.00898 | 0.00141 | 6.41 | 1.36 | 30.3 | 0.0095 | 0.0095 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P2 | IGHG | 891 | 555 | 468 | 214 | 0.525 | 0.0614 | 16.9 | 13.1 | 21.8 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
+| ebv | isotype | P2 | IGHM | 891 | 1.53e+03 | 222 | 589 | 0.249 | 0.92 | 0.029 | 0.0227 | 0.037 | 0.0005 | 0.000666 | heavy-chain isotype | majority | donor | core |  |  |  |
 | stephenson | isotype | P1 | IGHM | 56 | 18 | 18 | 15 | 0.321 | 0 |  |  |  | 0.0065 | 0.026 | heavy-chain isotype | majority | donor | core |  |  |  |
 | stephenson | isotype | P2 | IGHM | 25 | 18 | 0 | 3.02 | 0 | 0.321 | 0 |  |  | 0.0065 | 0.026 | heavy-chain isotype | majority | donor | core |  |  |  |
 | stephenson | mutation_frequency | P1 |  | 56 |  |  |  |  |  |  |  |  | 0.0285 | 0.0285 | V-region mutation frequency | mean | donor | core | 0.0224 | 0.0361 | -0.272 |
@@ -264,18 +233,18 @@
 
 | dataset | across | levels | n_clones | memory_index | ci_low | ci_high | p_value |
 |---|---|---|---|---|---|---|---|
-| ln_vaccine | timepoint | d28 vs d28+d35 vs d35 vs d60 vs d110 vs d201 | 420 | 0.26 | 0.201 | 0.313 | 0.002 |
-| ln_vaccine | tissue | LN vs blood | 159 | -0.00825 | -0.029 | 0.0122 | 0.739 |
-| mouse_np | division_gate | mCherry-high vs mCherry-low | 70 | 0.278 | 0.0304 | 0.495 | 0.016 |
-| mouse_rbd | division_gate | mCherry-high vs mCherry-low | 173 | 0.47 | 0.345 | 0.6 | 0.002 |
-| mouse_rbd | rbd_bait | RBD+ vs RBD- | 105 | 0.494 | 0.334 | 0.654 | 0.002 |
-| mouse_rbd | zone_gate | DZ vs LZ | 57 | 0.533 | 0.323 | 0.725 | 0.002 |
-| flu_lung | ha_binding | Cal09HA vs PR8HA vs both strains vs non-binding | 36 | 0.399 | -0.109 | 0.909 | 0.0419 |
-| bone_marrow_pc | tissue | blood vs bone marrow | 119 | 0.461 | 0.379 | 0.543 | 0.002 |
-| bone_marrow_pc | sorted_as | antigen-sorted vs memory B cells vs plasma and memory vs plasma cells | 116 | 0.00483 | -0.0126 | 0.0223 | 0.216 |
-| flu | timepoint | d0 vs d7 | 21 | 0.999 | 0.94 | 1.05 | 0.002 |
-| ebv | timepoint | d0 vs d4 vs d7 vs d14 vs d21 | 85 | 0.308 | 0.214 | 0.401 | 0.002 |
-| ebv | gfp | GFP+ vs GFP- | 1355 | 0.329 | 0.308 | 0.354 | 0.002 |
+| ln_vaccine | timepoint | d28 vs d28+d35 vs d35 vs d60 vs d110 vs d201 | 420 | 0.255 | 0.195 | 0.309 | 0.002 |
+| ln_vaccine | tissue | LN vs blood | 159 | -0.0111 | -0.0295 | 0.0057 | 0.862 |
+| mouse_np | division_gate | mCherry-high vs mCherry-low | 70 | 0.316 | 0.063 | 0.566 | 0.00599 |
+| mouse_rbd | division_gate | mCherry-high vs mCherry-low | 173 | 0.473 | 0.348 | 0.608 | 0.002 |
+| mouse_rbd | rbd_bait | RBD+ vs RBD- | 105 | 0.531 | 0.393 | 0.678 | 0.002 |
+| mouse_rbd | zone_gate | DZ vs LZ | 57 | 0.513 | 0.322 | 0.721 | 0.002 |
+| flu_lung | ha_binding | Cal09HA vs PR8HA vs both strains vs non-binding | 36 | 0.318 | -0.356 | 0.826 | 0.15 |
+| bone_marrow_pc | tissue | blood vs bone marrow | 109 | 0.404 | 0.305 | 0.492 | 0.002 |
+| bone_marrow_pc | sorted_as | antigen-specific B cells vs memory B cells vs plasma cells vs plasma cells and memory B cells vs plasmablasts and memory B cells | 133 | 0.0554 | 0.0277 | 0.0852 | 0.002 |
+| flu | timepoint | d0 vs d7 | 21 | 1 | 0.945 | 1.06 | 0.002 |
+| ebv | timepoint | d0 vs d4 vs d7 vs d14 vs d21 | 85 | 0.31 | 0.226 | 0.396 | 0.002 |
+| ebv | gfp | GFP+ vs GFP- | 1355 | 0.356 | 0.336 | 0.381 | 0.002 |
 
 ## heritability
 
@@ -288,7 +257,7 @@
 | flu_lung | 9550 | 0.0129 | Gm30211, Cd55, Gm43305, Slc15a2, Gm56626, Gsto1, Ephx1, Usp54, Zfp318, Camk2b, Ccrl2, Gm49980, Il10ra, Baiap2, Chd3 |
 | malaria | 7910 | 0.0419 | Hist1h2ak, Hist1h2bn, Hist1h2ab, Apoe, Hist1h1b, Gm42418, Ly6c2, H2-Aa, Jchain, Pclaf, Hist1h2bk, Slpi, Stmn1, Ube2c, Gm30211 |
 | malaria_late | 8895 | 0.0342 | Fcmr, Gm30211, Plac8, Ly6d, Gm43305, Fcrl5, 1810046K07Rik, Basp1, Nfatc1, Jchain, Eaf2, Mef2b, Rgs13, Klf2, Ly86 |
-| bone_marrow_pc | 6456 | 0.026 | CH17-132F21.1, RP11-685N3.1, RP11-812E19.9, RP11-731F5.2, KIAA0125, MTRNR2L8, IGJ, AC079767.4, JSRP1, S100A4, CD1C, LTB, HOPX, CST3, C1orf162 |
+| bone_marrow_pc | 6391 | 0.0253 | CH17-132F21.1, RP11-685N3.1, RP11-731F5.2, RP11-812E19.9, KIAA0125, IGJ, AC079767.4, CD1C, S100A4, JSRP1, HOPX, LTB, CST3, C1orf162, RP5-887A10.1 |
 | flu | 7240 | 0.0535 | AC233755.1, TXNDC5, JCHAIN, TCL1A, LTB, MZB1, TNFRSF17, CD38, FKBP11, CD74, HLA-DRA, CD37, RPS27, FAM30A, SEC11C |
 | ebv | 10953 | 0.0193 | ENSG00000275063, IFI27, ENSG00000290104, ATF5, GTSF1, TCL1A, RPS26, PLAC8, FAM30A, HLA-DQA2, ENSG00000243276, CTSH, LAMP5, CD27, MGST1 |
 | tonsil | 8974 | 0.0163 | FAM30A, GAPDH, GTSF1, ACTG1, ACTB, COTL1, RPL28, METAP2, CFL1, XBP1, PFN1, PPIA, SSR4, HMGN1, CORO1A |
@@ -322,17 +291,45 @@
 | mouse_rbd | naive | 5 | excess_icc | 0.0528 | 0.0253 | 1 | 0.0794 | 0.0794 |
 | mouse_rbd | interferon | 4 | excess_icc | 0.0753 | 0.0147 | 1 | 0.000201 | 0.000471 |
 | mouse_rbd | translation (ribosomal) | 90 | excess_icc | 0.056 | 0.0376 | 0.944 | 1.8e-08 | 1.8e-08 |
+| gc_np_pc | plasma cell | 9 | excess_icc | 0.0571 | -0.00801 | 0 | 3.93e-05 | 0.000275 |
+| gc_np_pc | germinal centre | 7 | excess_icc | 0.0323 | -0.0071 | 0 | 0.144 | 0.285 |
+| gc_np_pc | dark zone / cycling | 9 | excess_icc | -0.0125 | -0.0084 | 0 | 0.204 | 0.285 |
+| gc_np_pc | light zone | 6 | excess_icc | -0.0201 | -0.00961 | 0 | 0.12 | 0.285 |
+| gc_np_pc | memory | 3 | excess_icc | -0.00897 | -0.0116 | 0 | 0.749 | 0.749 |
+| gc_np_pc | naive | 5 | excess_icc | -0.00828 | -0.0112 | 0 | 0.432 | 0.504 |
+| gc_np_pc | interferon | 4 | excess_icc | 0.00998 | -0.0116 | 0 | 0.197 | 0.285 |
 | gc_np_pc | translation (ribosomal) | 88 | excess_icc | -0.00753 | -0.00744 | 0 | 0.516 | 0.516 |
+| flu_lung | plasma cell | 7 | excess_icc | 0.0544 | 0.0101 | 0 | 0.0029 | 0.0203 |
+| flu_lung | germinal centre | 9 | excess_icc | 0.0231 | 0.0164 | 0 | 0.893 | 0.991 |
+| flu_lung | dark zone / cycling | 9 | excess_icc | 0.05 | 0.021 | 0 | 0.0076 | 0.0266 |
+| flu_lung | light zone | 8 | excess_icc | 0.0117 | 0.0103 | 0 | 0.991 | 0.991 |
+| flu_lung | memory | 7 | excess_icc | 0.0154 | 0.00175 | 0 | 0.0849 | 0.198 |
+| flu_lung | naive | 5 | excess_icc | 0.0204 | 0.0146 | 0 | 0.118 | 0.207 |
+| flu_lung | interferon | 3 | excess_icc | -0.00303 | -0.000593 | 0 | 0.726 | 0.991 |
 | flu_lung | translation (ribosomal) | 90 | excess_icc | 0.0487 | 0.0232 | 0 | 2.09e-13 | 2.09e-13 |
+| malaria | plasma cell | 10 | excess_icc | 0.334 | 0.0967 | 1 | 4.36e-05 | 0.000102 |
+| malaria | germinal centre | 7 | excess_icc | 0.132 | 0.0131 | 0.714 | 6.73e-08 | 4.71e-07 |
+| malaria | dark zone / cycling | 9 | excess_icc | 0.308 | 0.0334 | 1 | 6.84e-06 | 2.39e-05 |
+| malaria | light zone | 7 | excess_icc | 0.137 | 0.0435 | 0.571 | 0.00729 | 0.00729 |
+| malaria | memory | 7 | excess_icc | 0.245 | 0.0538 | 1 | 0.000736 | 0.00129 |
+| malaria | naive | 6 | excess_icc | 0.195 | 0.0417 | 1 | 0.00244 | 0.00285 |
+| malaria | interferon | 5 | excess_icc | 0.177 | 0.0234 | 0.8 | 0.00141 | 0.00198 |
 | malaria | translation (ribosomal) | 89 | excess_icc | 0.241 | 0.0966 | 0.91 | 2.15e-17 | 2.15e-17 |
+| malaria_late | plasma cell | 10 | excess_icc | 0.267 | 0.0664 | 0.9 | 0.000114 | 0.0002 |
+| malaria_late | germinal centre | 9 | excess_icc | 0.278 | 0.0338 | 1 | 9.07e-07 | 3.17e-06 |
+| malaria_late | dark zone / cycling | 9 | excess_icc | 0.21 | 0.055 | 1 | 8.7e-05 | 0.0002 |
+| malaria_late | light zone | 7 | excess_icc | 0.0956 | 0.0365 | 0.857 | 0.0116 | 0.0136 |
+| malaria_late | memory | 8 | excess_icc | 0.157 | 0.0208 | 1 | 7.19e-07 | 3.17e-06 |
+| malaria_late | naive | 6 | excess_icc | 0.232 | 0.0369 | 0.667 | 0.0117 | 0.0136 |
+| malaria_late | interferon | 4 | excess_icc | 0.0656 | 0.0205 | 0.5 | 0.0395 | 0.0395 |
 | malaria_late | translation (ribosomal) | 89 | excess_icc | 0.196 | 0.0885 | 0.91 | 2.21e-15 | 2.21e-15 |
-| bone_marrow_pc | plasma cell | 9 | excess_icc | 0.128 | 0.032 | 1 | 1.58e-05 | 9.46e-05 |
-| bone_marrow_pc | dark zone / cycling | 5 | excess_icc | 0.0358 | 0.0134 | 0.8 | 0.0314 | 0.0377 |
-| bone_marrow_pc | light zone | 5 | excess_icc | 0.0383 | 0.00813 | 1 | 0.00439 | 0.00879 |
-| bone_marrow_pc | memory | 8 | excess_icc | 0.0516 | 0.0124 | 0.875 | 0.0179 | 0.0268 |
-| bone_marrow_pc | naive | 5 | excess_icc | 0.0918 | 0.00591 | 1 | 0.000143 | 0.000429 |
-| bone_marrow_pc | interferon | 7 | excess_icc | 0.0138 | 0.00637 | 0.429 | 0.26 | 0.26 |
-| bone_marrow_pc | translation (ribosomal) | 89 | excess_icc | 0.0386 | 0.0223 | 0.899 | 4.72e-05 | 4.72e-05 |
+| bone_marrow_pc | plasma cell | 9 | excess_icc | 0.105 | 0.025 | 1 | 1.87e-05 | 0.000112 |
+| bone_marrow_pc | dark zone / cycling | 5 | excess_icc | 0.0206 | 0.00882 | 0.8 | 0.0595 | 0.0714 |
+| bone_marrow_pc | light zone | 5 | excess_icc | 0.0439 | 0.00778 | 1 | 0.0012 | 0.0024 |
+| bone_marrow_pc | memory | 8 | excess_icc | 0.0515 | 0.00966 | 0.875 | 0.0156 | 0.0234 |
+| bone_marrow_pc | naive | 5 | excess_icc | 0.0844 | 0.00655 | 1 | 0.000359 | 0.00108 |
+| bone_marrow_pc | interferon | 7 | excess_icc | 0.0129 | 0.00523 | 0.286 | 0.0938 | 0.0938 |
+| bone_marrow_pc | translation (ribosomal) | 89 | excess_icc | 0.0355 | 0.021 | 0.865 | 0.000168 | 0.000168 |
 | flu | plasma cell | 10 | excess_icc | 0.353 | 0.0556 | 1 | 1.23e-06 | 7.41e-06 |
 | flu | dark zone / cycling | 5 | excess_icc | 0.0758 | 0.0735 | 1 | 0.614 | 0.614 |
 | flu | light zone | 7 | excess_icc | 0.134 | 0.0425 | 0.714 | 0.0832 | 0.0998 |

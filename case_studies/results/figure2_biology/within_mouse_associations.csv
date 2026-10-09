@@ -1,0 +1,58 @@
+scope,arm,donor,variable,n_families,spearman_rho,partial_rank_rho
+all_expanded,RBD protein,M1,mutation_frequency,302,0.05044549005661246,0.0004121272458190917
+all_expanded,RBD protein,M1,dark zone / cycling,302,0.5649114165919461,0.5537051316677942
+all_expanded,RBD protein,M1,light zone,302,-0.47972604249734413,-0.4586267346148552
+all_expanded,mRNA,M10,mutation_frequency,66,0.16709620386528196,0.1575947348173045
+all_expanded,mRNA,M10,dark zone / cycling,66,0.15960344793026537,0.1312871958282286
+all_expanded,mRNA,M10,light zone,66,-0.27206462591397756,-0.1954225688113062
+all_expanded,RBD protein,M2,mutation_frequency,187,0.22155965589313492,0.11521995420415035
+all_expanded,RBD protein,M2,dark zone / cycling,187,0.44539572368177743,0.3927451414747687
+all_expanded,RBD protein,M2,light zone,187,-0.2743937398429861,-0.24882146568248423
+all_expanded,RBD protein,M3,mutation_frequency,236,-0.09450242239847624,-0.06617437851959179
+all_expanded,RBD protein,M3,dark zone / cycling,236,0.5561628829284508,0.5742897786885695
+all_expanded,RBD protein,M3,light zone,236,-0.3722175259890264,-0.3753163942813516
+all_expanded,RBD protein,M4,mutation_frequency,264,0.020508362171890324,0.02664165714303416
+all_expanded,RBD protein,M4,dark zone / cycling,264,0.48191886148880686,0.4857344593059246
+all_expanded,RBD protein,M4,light zone,264,-0.3386196099649412,-0.2896601900945276
+all_expanded,RBD protein,M5,mutation_frequency,117,0.06995606988403899,0.044052867700657486
+all_expanded,RBD protein,M5,dark zone / cycling,117,0.5464832317117573,0.5304306393190463
+all_expanded,RBD protein,M5,light zone,117,-0.3925440220121744,-0.37055827366352484
+all_expanded,mRNA,M6,mutation_frequency,42,0.24465243649737345,0.15944940237484195
+all_expanded,mRNA,M6,dark zone / cycling,42,0.31248276586831736,0.24700967453549943
+all_expanded,mRNA,M6,light zone,42,-0.16005623827277107,-0.12809699348612807
+all_expanded,mRNA,M7,mutation_frequency,63,0.3235462317894239,0.1651262752064648
+all_expanded,mRNA,M7,dark zone / cycling,63,0.32313100970847064,0.1751826867397484
+all_expanded,mRNA,M7,light zone,63,-0.2346665176872536,-0.08834160841113559
+all_expanded,mRNA,M8,mutation_frequency,47,0.14677140239232986,0.21310844350626088
+all_expanded,mRNA,M8,dark zone / cycling,47,-0.07088781976860362,-0.07780734136694618
+all_expanded,mRNA,M8,light zone,47,0.1558920933014723,0.09988748146070668
+all_expanded,mRNA,M9,mutation_frequency,90,0.003965428939089036,-0.012770472266977044
+all_expanded,mRNA,M9,dark zone / cycling,90,0.2178633467989147,0.2132430852548132
+all_expanded,mRNA,M9,light zone,90,-0.17158552360875515,-0.1782614587522307
+plotted_reliable,RBD protein,M1,mutation_frequency,79,-0.1250587707268385,-0.16376597745387508
+plotted_reliable,RBD protein,M1,dark zone / cycling,79,0.5606006922860478,0.5793477434288136
+plotted_reliable,RBD protein,M1,light zone,79,-0.520452443989706,-0.4979869265411915
+plotted_reliable,mRNA,M10,mutation_frequency,23,0.28083295626107097,0.2954562831637972
+plotted_reliable,mRNA,M10,dark zone / cycling,23,0.11193694552910413,0.10925179178995612
+plotted_reliable,mRNA,M10,light zone,23,-0.4536913367462804,-0.4542917564185482
+plotted_reliable,RBD protein,M2,mutation_frequency,57,-0.08297378288541533,-0.20616491147574986
+plotted_reliable,RBD protein,M2,dark zone / cycling,57,0.3086307026880443,0.3468706407290525
+plotted_reliable,RBD protein,M2,light zone,57,-0.25867366231180006,-0.26476492572562565
+plotted_reliable,RBD protein,M3,mutation_frequency,52,-0.3586359112085983,-0.4742261605403435
+plotted_reliable,RBD protein,M3,dark zone / cycling,52,0.20201299306992754,0.09136041493547767
+plotted_reliable,RBD protein,M3,light zone,52,-0.2139363324112666,-0.21523447445024538
+plotted_reliable,RBD protein,M4,mutation_frequency,78,-0.2086177278886147,-0.18004757594083154
+plotted_reliable,RBD protein,M4,dark zone / cycling,78,0.3411872879141061,0.3573170534461604
+plotted_reliable,RBD protein,M4,light zone,78,-0.42415007004761396,-0.40765091020883726
+plotted_reliable,RBD protein,M5,mutation_frequency,28,-0.18777429918188787,-0.255149098314092
+plotted_reliable,RBD protein,M5,dark zone / cycling,28,0.6583534957466948,0.7040476762236572
+plotted_reliable,RBD protein,M5,light zone,28,-0.6586275812986293,-0.7007864785920496
+plotted_reliable,mRNA,M7,mutation_frequency,17,-0.265193819877369,-0.2873340858781154
+plotted_reliable,mRNA,M7,dark zone / cycling,17,0.15960739159286097,0.15194382088934347
+plotted_reliable,mRNA,M7,light zone,17,0.16574613742335562,0.12722028246352124
+plotted_reliable,mRNA,M8,mutation_frequency,14,0.6092774613241176,0.45254410695400066
+plotted_reliable,mRNA,M8,dark zone / cycling,14,-0.013245162202698207,0.14334479406963208
+plotted_reliable,mRNA,M8,light zone,14,-0.2053000141418222,0.21755776512621697
+plotted_reliable,mRNA,M9,mutation_frequency,27,-0.04684343188003674,-0.009624499557225842
+plotted_reliable,mRNA,M9,dark zone / cycling,27,0.27089063567468613,0.3710008249276429
+plotted_reliable,mRNA,M9,light zone,27,-0.2376071446020285,-0.34692756761995364

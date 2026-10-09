@@ -1,0 +1,21 @@
+library	geo_gex	donor	design_status	primary_analysis	tissue	sorted_as	antigen
+BM_6_PC_Bmem	GSM8028856	561	single_donor	TRUE	bone marrow	plasma cells and memory B cells	not antigen sorted
+BM_Bsm_2	GSM8028805	1681	single_donor	TRUE	bone marrow	memory B cells	not antigen sorted
+BM_Bsm_3	GSM8028814	1684	single_donor	TRUE	bone marrow	memory B cells	not antigen sorted
+BM_PCs-Bmem_2	GSM8028826	553	single_donor	TRUE	bone marrow	plasma cells and memory B cells	not antigen sorted
+BM_PCs-Bmem_3_555	GSM8028835	555	single_donor	TRUE	bone marrow	plasma cells and memory B cells	not antigen sorted
+BM_PCs-Bmem_3_556-blood555	GSM8028838	556;555	mixed_donors	FALSE	bone marrow (donor 556); blood (donor 555)	plasma cells and memory B cells	not antigen sorted
+BM_PCs_2	GSM8028802	1681	single_donor	TRUE	bone marrow	plasma cells	not antigen sorted
+BM_PCs_3	GSM8028811	1684	single_donor	TRUE	bone marrow	plasma cells	not antigen sorted
+BM_PCs_Bmem_4	GSM8028847	558	single_donor	TRUE	bone marrow	plasma cells and memory B cells	not antigen sorted
+BM_PCs_Bmem_5	GSM8028853	559	single_donor	TRUE	bone marrow	plasma cells and memory B cells	not antigen sorted
+BM_Spike_2	GSM8028823	553	single_donor	TRUE	bone marrow	antigen-specific B cells	SARS-CoV-2 spike
+BM_Spike_3	GSM8028829	555;556	pooled_donors	FALSE	bone marrow	antigen-specific B cells	SARS-CoV-2 spike
+BM_Spike_4	GSM8028841	558	single_donor	TRUE	bone marrow	antigen-specific B cells	SARS-CoV-2 spike
+BM_Spike_Pool1	GSM8028820	546;547;548	pooled_donors	FALSE	bone marrow	antigen-specific B cells	SARS-CoV-2 spike
+BM_Tetanus_3	GSM8028832	555;556	pooled_donors	FALSE	bone marrow	antigen-specific B cells	tetanus toxoid
+BM_Tetanus_4	GSM8028844	558	single_donor	TRUE	bone marrow	antigen-specific B cells	tetanus toxoid
+BM_blood_Spike_5	GSM8028850	559	mixed_tissues	FALSE	bone marrow and blood	antigen-specific B cells	SARS-CoV-2 spike
+Blood6_PCs_Bmem	GSM8028859	561	single_donor	TRUE	blood	plasmablasts and memory B cells	not antigen sorted
+Blood_Bsm_2	GSM8028808	1681	single_donor	TRUE	blood	memory B cells	not antigen sorted
+Blood_Bsm_3	GSM8028817	1684	single_donor	TRUE	blood	memory B cells	not antigen sorted

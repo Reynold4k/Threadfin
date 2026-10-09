@@ -1,0 +1,21 @@
+[     8s] loading mouse_rbd
+[threadfin] define_clones: 16667 cells -> 6121 clones (1414 with >= 2 cells); nt Hamming threshold 0.142 (density).
+[threadfin] attached BCR: 16667/36188 cells, 6121 clones.
+[    53s] expression embedding + family profiles
+[    72s] 381 reliable clones; running 12 UMAP configurations
+[    81s]   k=5 md=0.0 done
+[    81s]   k=5 md=0.1 done
+[    82s]   k=5 md=0.5 done
+[    82s]   k=5 md=0.9 done
+[    83s]   k=15 md=0.0 done
+[    83s]   k=15 md=0.1 done
+[    84s]   k=15 md=0.5 done
+[    84s]   k=15 md=0.9 done
+[    85s]   k=50 md=0.0 done
+[    86s]   k=50 md=0.1 done
+[    87s]   k=50 md=0.5 done
+[    88s]   k=50 md=0.9 done
+[    88s] gallery_division.png written
+[    89s] gallery_mutation.png written
+[    89s] gallery_lzdz.png written
+[    89s] done

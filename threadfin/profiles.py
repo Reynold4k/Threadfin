@@ -37,12 +37,14 @@ one-way design (Searle, Casella & McCulloch 1992, ch. 3).
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import json
+import hashlib
 
 import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import codes, get_basis, get_uns, log, modal, require_obs
+from ._utils import codes, get_basis, get_uns, log, modal, require_complete_groups, require_obs, require_positive_int
 
 PROFILE_KEY = "profiles"
 
@@ -88,15 +90,30 @@ class VarianceComponents:
         return lam @ w
 
     def min_cells_for(self, target: float = 0.5) -> int:
-        """Smallest clone size whose reliability reaches ``target``."""
-        rho = self.icc
-        if rho <= 0:
-            return np.iinfo(np.int32).max
-        if rho >= 1:
-            return 1
-        # Spearman-Brown: R(n) = n*rho / (1 + (n - 1)*rho), solved for n.
-        n = target * (1 - rho) / (rho * (1 - target))
-        return int(max(1, np.ceil(n - 1e-9)))
+        """Smallest size reaching the actual feature-weighted reliability.
+
+        The pooled-ICC Spearman–Brown shortcut is not valid when features
+        have different noise-to-signal ratios. Return int32 max if no
+        finite supported size reaches the target.
+        """
+        if not np.isfinite(target) or not 0 < target < 1:
+            raise ValueError("target must be finite and strictly between 0 and 1.")
+        limit = int(np.iinfo(np.int32).max)
+        if self.tau2.sum() <= 0:
+            return limit
+        hi = 1
+        while self.reliability([hi])[0] < target and hi < limit:
+            hi = min(2 * hi, limit)
+        if self.reliability([hi])[0] < target:
+            return limit
+        lo = 1
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if self.reliability([mid])[0] >= target:
+                hi = mid
+            else:
+                lo = mid + 1
+        return lo
 
     def as_dict(self) -> dict:
         """Plain dict (numpy arrays) suitable for ``adata.uns``."""
@@ -284,6 +301,14 @@ class ProfileModel:
         return blup, n_eff, self.vc.reliability(n_eff)
 
 
+def _input_fingerprint(adata, basis, clone_key, context_key, donor_key=None):
+    """Bind saved projections to their cells, groups and numeric coordinates."""
+    digest = hashlib.sha256(np.ascontiguousarray(get_basis(adata, basis)).tobytes())
+    columns = list(dict.fromkeys([clone_key] + [k for k in (context_key, donor_key) if k]))
+    digest.update(pd.util.hash_pandas_object(adata.obs[columns], index=True).to_numpy().tobytes())
+    return digest.hexdigest()
+
+
 def build_model(
     adata,
     *,
@@ -295,9 +320,14 @@ def build_model(
     bandwidth: float | str = "median",
     smooth: int = 0,
     random_state: int = 0,
+    feature_rng_state: str | None = None,
 ) -> ProfileModel:
     """Build the profile model: features, context centring, variance components."""
     require_obs(adata, clone_key, context_key, context="clone profiles")
+    require_complete_groups(adata, context_key, context="clone profiles")
+    require_positive_int(n_features, "n_features")
+    if isinstance(smooth, (bool, np.bool_)) or not isinstance(smooth, (int, np.integer)) or smooth < 0:
+        raise ValueError("smooth must be a non-negative integer.")
     x = get_basis(adata, basis)
     finite = np.isfinite(x).all(axis=1)
     if not finite.all():
@@ -308,6 +338,7 @@ def build_model(
         "context_key": context_key,
         "representation": representation,
         "n_features": int(n_features),
+        "input_sha256": _input_fingerprint(adata, basis, clone_key, context_key),
         "smooth": int(smooth),
         "random_state": int(random_state),
     }
@@ -337,6 +368,13 @@ def build_model(
     #    context-centred position, then centre again so that a clone's profile
     #    is the difference between its own cell distribution and its context's
     if representation == "kernel":
+        if not np.isfinite(float(bandwidth)) or float(bandwidth) <= 0:
+            raise ValueError("bandwidth must be finite and positive.")
+        if feature_rng_state is not None:
+            rng.bit_generator.state = json.loads(feature_rng_state)
+        # Bandwidth estimation consumes RNG draws. Retain the exact subsequent
+        # state so bootstrap/snapshot features share the fitted RFF coordinates.
+        params["feature_rng_state"] = json.dumps(rng.bit_generator.state, sort_keys=True)
         feats, bw = _random_fourier_features(resid, n_features, float(bandwidth), rng)
         params["bandwidth"] = bw
         resid = _center_by(feats, ctx, finite)
@@ -408,6 +446,19 @@ def clone_profiles(
     ``reliability`` and, when available, ``donor`` and ``n_contexts``.
     Profiles and model parameters go to ``adata.uns['threadfin']['profiles']``.
     """
+    require_obs(adata, clone_key, context="clone profiling")
+    require_complete_groups(adata, context_key, donor_key, context="clone profiling")
+    if representation not in {"mean", "kernel"}:
+        raise ValueError("representation must be 'mean' or 'kernel'.")
+    require_positive_int(min_cells, "min_cells")
+    require_positive_int(n_components, "n_components")
+    labels = pd.Index(pd.unique(adata.obs[clone_key].dropna()))
+    if not labels.astype(str).is_unique:
+        raise ValueError("clone ids must remain unique when converted to strings.")
+    if donor_key is not None:
+        groups = adata.obs.dropna(subset=[clone_key]).groupby(clone_key, observed=True)[donor_key].nunique()
+        if groups.gt(1).any():
+            raise ValueError("A clone id occurs in multiple donors. Use donor-private clone ids.")
     if smooth is None:
         smooth = 15 if representation == "kernel" else 0
     model = build_model(
@@ -418,7 +469,11 @@ def clone_profiles(
     blup, n_eff, rel = model.group_blups(model.clone_codes, len(model.clone_index))
     keep = n_eff >= min_cells
     if keep.sum() < 3:
-        raise ValueError(f"Only {int(keep.sum())} clones have >= {min_cells} cells.")
+        raise ValueError(
+            f"Only {int(keep.sum())} clones have >= {min_cells} cells; Threadfin needs at least 3 "
+            "expanded clones to estimate clone profiles. Include more BCR-matched cells, lower "
+            "min_cells when scientifically appropriate, or use a larger dataset."
+        )
     ids = pd.Index(model.clone_index[keep].astype(str), name=clone_key)
     feats = blup[keep]
     names = [f"f{j}" for j in range(feats.shape[1])]
@@ -450,7 +505,8 @@ def clone_profiles(
         "clone_table": table,
         "variance_components": vc.as_dict(),
         "params": {**model.params, "donor_key": donor_key, "min_cells": int(min_cells),
-                   "n_components": int(n_components)},
+                   "n_components": int(n_components),
+                   "input_sha256": _input_fingerprint(adata, basis, clone_key, context_key, donor_key)},
         "reduction": reduction,
     }
     log(
@@ -470,19 +526,52 @@ def get_profiles(adata) -> dict:
     return prof
 
 
-def model_from_adata(adata, *, unsmoothed: bool = False, representation: str | None = None) -> ProfileModel:
-    """Rebuild the :class:`ProfileModel` used by :func:`clone_profiles`.
+def _feature_rng_state(adata) -> str:
+    """Recover old serialized models by matching their stored features.
 
-    ``unsmoothed=True`` skips neighbour averaging and ``representation``
-    overrides the stored representation; both are used by statistics that
-    must treat cells as independent draws (coherence, memory).
+    Version 4.0 did not store the RNG state after bandwidth estimation.
+    Its numeric/median/local paths can be tested against the saved projection.
+    Refuse a mismatch instead of silently projecting a different feature map.
     """
+    prof = get_profiles(adata)
+    p = prof["params"]
+    if p.get("feature_rng_state") is not None:
+        return p["feature_rng_state"]
+    for bandwidth in (p.get("bandwidth", "median"), "median", "local"):
+        model = build_model(
+            adata, clone_key=p["clone_key"], basis=p["basis"], context_key=p.get("context_key"),
+            representation="kernel", n_features=p["n_features"], bandwidth=bandwidth,
+            smooth=p.get("smooth", 0), random_state=p["random_state"],
+        )
+        if not np.isclose(model.params["bandwidth"], p.get("bandwidth", model.params["bandwidth"])):
+            continue
+        blup, _, _ = model.group_blups(model.clone_codes, len(model.clone_index))
+        index = pd.Index(model.clone_index.astype(str)).get_indexer(prof["features"].index)
+        if np.any(index < 0):
+            break
+        projected = project_features(adata, blup[index])
+        if np.allclose(projected, prof["features"].to_numpy(), rtol=1e-7, atol=1e-9):
+            p["feature_rng_state"] = model.params["feature_rng_state"]
+            return p["feature_rng_state"]
+    raise ValueError("Stored kernel features cannot be reproduced from the current cells and settings. "
+                     "Rerun clone_profiles before bootstrap or snapshot analysis.")
+
+
+def model_from_adata(adata, *, unsmoothed: bool = False, representation: str | None = None) -> ProfileModel:
+    """Rebuild the fitted feature map; optionally omit smoothing for statistics."""
     p = get_profiles(adata)["params"]
+    if p.get("input_sha256") is not None:
+        current = _input_fingerprint(adata, p["basis"], p["clone_key"], p.get("context_key"), p.get("donor_key"))
+        if current != p["input_sha256"]:
+            raise ValueError("Cells, clone/context labels or embedding changed since clone_profiles; "
+                             "refit profiles before downstream analysis.")
+    rep = representation or p["representation"]
+    state = _feature_rng_state(adata) if rep == "kernel" and p["representation"] == "kernel" else None
     return build_model(
-        adata, clone_key=p["clone_key"], basis=p["basis"], context_key=p["context_key"],
-        representation=representation or p["representation"], n_features=p["n_features"],
+        adata, clone_key=p["clone_key"], basis=p["basis"], context_key=p.get("context_key"),
+        representation=rep, n_features=p["n_features"],
         bandwidth=p.get("bandwidth", "median"), smooth=0 if unsmoothed else p.get("smooth", 0),
-        random_state=p["random_state"],
+        random_state=p["random_state"], feature_rng_state=state,
     )
 
 

@@ -1,0 +1,13 @@
+donor,left_source,right_source,receptor_definition,left_unique_heavy_light_cells,right_unique_heavy_light_cells,eligible_groups_ge2_cells,shared_groups,shared_left_cells,shared_right_cells
+1681,PC_BM,Memory_BM,exact_IGH,6131,4966,960,259,498,298
+1681,PC_BM,Memory_BM,exact_IGH_plus_light,6131,4966,862,225,432,257
+1681,PC_BM,Memory_blood,exact_IGH,6131,5775,1129,163,241,216
+1681,PC_BM,Memory_blood,exact_IGH_plus_light,6131,5775,1012,124,173,162
+1681,Memory_BM,Memory_blood,exact_IGH,4966,5775,763,274,306,389
+1681,Memory_BM,Memory_blood,exact_IGH_plus_light,4966,5775,666,223,250,304
+1684,PC_BM,Memory_BM,exact_IGH,6370,2520,734,43,79,45
+1684,PC_BM,Memory_BM,exact_IGH_plus_light,6370,2520,677,31,57,32
+1684,PC_BM,Memory_blood,exact_IGH,6370,5742,1018,141,204,168
+1684,PC_BM,Memory_blood,exact_IGH_plus_light,6370,5742,934,115,161,140
+1684,Memory_BM,Memory_blood,exact_IGH,2520,5742,437,95,103,136
+1684,Memory_BM,Memory_blood,exact_IGH_plus_light,2520,5742,397,79,86,118

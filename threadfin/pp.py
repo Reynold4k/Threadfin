@@ -16,8 +16,10 @@ import re
 
 import numpy as np
 import pandas as pd
+import scipy.sparse as sp
 
-from ._utils import log
+from ._utils import log, require_complete_groups, require_positive_int
+from .expression import FrozenExpressionModel
 
 # V/D/J segments (incl. orphons such as IGKV1OR1-1 and Roman-numeral
 # pseudogenes such as IGHVII-1-1) for human (IGHV1-2) and mouse (Ighv1-72).
@@ -130,7 +132,26 @@ def prepare_embedding(
     """
     import scanpy as sc
 
+    require_complete_groups(adata, batch_key, context="prepare_embedding")
+    require_positive_int(n_comps, "n_comps")
+    if counts_layer is not None and counts_layer not in adata.layers:
+        raise KeyError(
+            f"counts_layer '{counts_layer}' is not in adata.layers. Store raw counts there or omit "
+            "counts_layer to use adata.X."
+        )
+    if adata.n_obs < 2 or adata.n_vars < 2:
+        raise ValueError(
+            "prepare_embedding needs at least 2 cells and 2 genes. Supply a larger expression matrix "
+            "or pass a precomputed embedding to threadfin.run(basis=...)."
+        )
+
     counts = adata.layers[counts_layer] if counts_layer else adata.X
+    values = counts.data if sp.issparse(counts) else np.asarray(counts)
+    if not np.isfinite(values).all() or np.any(values < 0):
+        raise ValueError(
+            "Counts contain NaN, infinite, or negative values. Use finite non-negative raw counts, "
+            "or pass a precomputed embedding with threadfin.run(basis=...)."
+        )
     tmp = sc.AnnData(X=counts.copy(), obs=adata.obs[[]].copy(), var=adata.var[[]].copy())
     if batch_key is not None:
         tmp.obs[batch_key] = adata.obs[batch_key].astype(str).values
@@ -141,6 +162,11 @@ def prepare_embedding(
     receptor = ig_gene_mask(tmp.var_names, constant=True, tr_genes=True)
     adata.var["threadfin_receptor_gene"] = receptor
     pool = tmp[:, ~receptor] if exclude_receptor_genes else tmp
+    if pool.n_vars == 0:
+        raise ValueError(
+            "No genes remain after receptor-gene exclusion. Provide non-receptor expression genes, "
+            "set exclude_receptor_genes=False, or pass a precomputed embedding."
+        )
     hv = sc.pp.highly_variable_genes(
         pool, n_top_genes=n_top_genes, batch_key=batch_key, flavor="seurat", inplace=False
     )
@@ -155,8 +181,23 @@ def prepare_embedding(
     )
 
     sub = tmp[:, hvg.values].copy()
+    if sub.n_vars == 0:
+        raise ValueError(
+            "No highly variable genes were selected. Check that counts vary across cells, or pass a "
+            "precomputed embedding to threadfin.run(basis=...)."
+        )
     sc.pp.scale(sub, max_value=10)
-    sc.tl.pca(sub, n_comps=n_comps, random_state=random_state)
+    # ARPACK requires fewer components than both axes.  Capping here lets a
+    # legitimately small pilot dataset use the same workflow without claiming
+    # nonexistent PCA dimensions.
+    max_comps = min(sub.n_obs - 1, sub.n_vars - 1)
+    if max_comps < 1:
+        raise ValueError(
+            "The selected expression matrix has fewer than two independent dimensions. "
+            "Provide more variable genes/cells or pass a precomputed embedding."
+        )
+    n_comps_used = min(int(n_comps), max_comps)
+    sc.tl.pca(sub, n_comps=n_comps_used, random_state=random_state)
     adata.obsm["X_pca"] = sub.obsm["X_pca"]
     adata.uns["threadfin_pca_variance_ratio"] = sub.uns["pca"]["variance_ratio"]
 
@@ -178,7 +219,7 @@ def prepare_embedding(
     adata.uns.setdefault("threadfin", {})["prepare_embedding"] = {
         "batch_key": batch_key,
         "n_top_genes": int(n_top_genes),
-        "n_comps": int(n_comps),
+        "n_comps": int(n_comps_used),
         "exclude_receptor_genes": bool(exclude_receptor_genes),
         "integrate": integrate if batch_key is not None else None,
         "key_added": key_added,

@@ -1,6 +1,6 @@
 {
  "dataset": "malaria",
- "title": "GSE286215 - splenic B cells through a Plasmodium infection in mice, days 0 to 14, five hashtagged mice per day, with the authors' cell annotation",
+ "title": "GSE286215 - terminal splenic sampling during PcAS infection: day 0 (one naive mouse), day 4 (four infected mice), days 7/10/14 (five each); author transcriptomic annotations",
  "clone_definition": {
   "threshold": 0.15,
   "threshold_method": "default",
@@ -26,10 +26,10 @@
   "n_samples": 20
  },
  "coherence": {
-  "icc": 0.5944120507268973,
-  "null_mean": 0.0584392514428623,
-  "null_q95": 0.08571569435394367,
-  "excess": 0.535972799284035,
+  "icc": 0.5944120507268962,
+  "null_mean": 0.05843925144286324,
+  "null_q95": 0.08571569435389445,
+  "excess": 0.535972799284033,
   "p_value": 0.001996007984031936,
   "n_clones": 801,
   "n_cells": 1846,
@@ -38,7 +38,7 @@
  "programme_splits": {
   "n_leiden_communities": 3,
   "n_merged": 0,
-  "root_pvalue": 2.4888005234584105e-22
+  "root_pvalue": 2.4888005234567667e-22
  },
  "programme_markers": {
   "P1": [
@@ -84,7 +84,35 @@
    "Emb"
   ]
  },
- "programme_signatures": {},
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.164,
+   "germinal centre": -0.096,
+   "dark zone / cycling": 0.053,
+   "light zone": 0.153,
+   "memory": 0.246,
+   "naive": 0.334,
+   "interferon": 0.251
+  },
+  "P2": {
+   "plasma cell": 1.877,
+   "germinal centre": -0.119,
+   "dark zone / cycling": 0.166,
+   "light zone": 0.013,
+   "memory": -0.059,
+   "naive": -0.163,
+   "interferon": -0.125
+  },
+  "P3": {
+   "plasma cell": 0.13,
+   "germinal centre": -0.179,
+   "dark zone / cycling": 0.012,
+   "light zone": 0.082,
+   "memory": 0.207,
+   "naive": 0.043,
+   "interferon": 0.076
+  }
+ },
  "programmes": {
   "n": 3,
   "resolution": 0.2,
@@ -92,9 +120,9 @@
   "n_cells": 1846,
   "n_clones_with_assigned": 801,
   "stability": {
-   "P1": 0.814,
-   "P2": 0.84,
-   "P3": 0.133
+   "P1": 0.879,
+   "P2": 0.803,
+   "P3": 0.518
   },
   "n_stable": 2
  },
@@ -102,9 +130,9 @@
   "cell_state:GC": {
    "label": "cell_state:GC",
    "kind": "numeric",
-   "r2": 0.04387297663506365,
-   "null_mean": 0.00472457603475754,
-   "excess_r2": 0.03914840060030611,
+   "r2": 0.043872976635062975,
+   "null_mean": 0.0047245760347575366,
+   "excess_r2": 0.03914840060030544,
    "p_value": 0.0004997501249375312,
    "n_clones": 801,
    "n_levels": null,
@@ -114,7 +142,7 @@
     "label": [
      -0.06648604688591796,
      0.3416399870962055,
-     -0.3730839127157807
+     0.3730839127157807
     ]
    },
    "note": "fraction of the clone's cells in a germinal centre"
@@ -122,9 +150,9 @@
   "cell_state:PB": {
    "label": "cell_state:PB",
    "kind": "numeric",
-   "r2": 0.31930901972628606,
-   "null_mean": 0.11728780613732077,
-   "excess_r2": 0.2020212135889653,
+   "r2": 0.31930901972628833,
+   "null_mean": 0.11728780613732158,
+   "excess_r2": 0.20202121358896674,
    "p_value": 0.0004997501249375312,
    "n_clones": 801,
    "n_levels": null,
@@ -134,7 +162,7 @@
     "label": [
      -0.7855297064437221,
      -0.33213310553356346,
-     -0.30050871710837956
+     0.30050871710837956
     ]
    },
    "note": "fraction of the clone's cells that are plasmablasts"
@@ -142,9 +170,9 @@
   "cell_state:Memory": {
    "label": "cell_state:Memory",
    "kind": "numeric",
-   "r2": 0.03808351129098831,
-   "null_mean": 0.005463522856412425,
-   "excess_r2": 0.032619988434575885,
+   "r2": 0.03808351129098862,
+   "null_mean": 0.005463522856412331,
+   "excess_r2": 0.032619988434576294,
    "p_value": 0.0004997501249375312,
    "n_clones": 801,
    "n_levels": null,
@@ -154,7 +182,7 @@
     "label": [
      0.3011872986161012,
      -0.059902626859879106,
-     0.16689497865766445
+     -0.16689497865766445
     ]
    },
    "note": "fraction of the clone's cells that are memory cells"
@@ -162,9 +190,9 @@
   "mutation_frequency": {
    "label": "mutation_frequency",
    "kind": "numeric",
-   "r2": 0.011188098040414764,
-   "null_mean": 0.0030232452580497846,
-   "excess_r2": 0.008164852782364979,
+   "r2": 0.011188098040414481,
+   "null_mean": 0.0030232452580497594,
+   "excess_r2": 0.008164852782364722,
    "p_value": 0.0029985007496251873,
    "n_clones": 801,
    "n_levels": null,
@@ -174,7 +202,7 @@
     "label": [
      -0.09134364259070608,
      0.20601202437768745,
-     -0.12177832998356257
+     0.12177832998356257
     ]
    },
    "note": "V-region mutation frequency"
@@ -182,9 +210,9 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.2073713881523131,
-   "null_mean": 0.10248787691878317,
-   "excess_r2": 0.10488351123352993,
+   "r2": 0.2073713881523151,
+   "null_mean": 0.10248787691878385,
+   "excess_r2": 0.10488351123353125,
    "p_value": 0.0004997501249375312,
    "n_clones": 652,
    "n_levels": 4,
@@ -269,7 +297,147 @@
    "Ly6d"
   ],
   "receptor_gene_icc": 0.0,
-  "gene_sets": {}
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.3343,
+    "matched_background_median_icc": 0.0967,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.1316,
+    "matched_background_median_icc": 0.0131,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.3077,
+    "matched_background_median_icc": 0.0334,
+    "pvalue_vs_matched": 0.0
+   },
+   "light zone": {
+    "median_icc": 0.1368,
+    "matched_background_median_icc": 0.0435,
+    "pvalue_vs_matched": 0.0073
+   },
+   "memory": {
+    "median_icc": 0.245,
+    "matched_background_median_icc": 0.0538,
+    "pvalue_vs_matched": 0.0007
+   },
+   "naive": {
+    "median_icc": 0.1949,
+    "matched_background_median_icc": 0.0417,
+    "pvalue_vs_matched": 0.0024
+   },
+   "interferon": {
+    "median_icc": 0.1774,
+    "matched_background_median_icc": 0.0234,
+    "pvalue_vs_matched": 0.0014
+   }
+  }
  },
- "runtime_min": 2.0
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200"
+   ],
+   "n_present": 6,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 3.8
 }

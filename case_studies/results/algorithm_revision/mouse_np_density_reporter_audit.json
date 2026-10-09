@@ -1,0 +1,102 @@
+{
+  "dataset": "mouse_np",
+  "target": "captured mCherry-low division-gate fraction",
+  "fold_unit": "whole mouse",
+  "rna_training_scope": "normalization per cell; HVGs/scaling/clipping/PCA fitted only on training mice",
+  "density_training_scope": "regions and clone-balanced reference fitted only on training mice",
+  "readout_model": "training-fold StandardScaler + Ridge(alpha=10); all include log1p(n_cells)",
+  "hyperparameters_selected_on_test": false,
+  "clones_source_sha256": "6d792fc49e15c8ae703c407c9fa6a5781ed6bfd9324ca7ad07856d69cd4465bc",
+  "folds": [
+    {
+      "heldout_mouse": "M1",
+      "n_train_cells": 8414,
+      "n_test_cells": 1695,
+      "n_train_clones": 309,
+      "n_test_clones": 64,
+      "gene_count": 2000,
+      "genes_sha256": "81875871a703c8c5f2c488c310eb4e5ae3da08f7211341bb10a8ea04a418bfd3",
+      "pca_sha256": "3670bf5e920c8f567b6158ad367798da0795e41a50828ceccce538d97cf1c868",
+      "density_reference_sha256": "9b09a39e0d56862104d9f9aa9c7899b0ba1d48869959898a188ed39be6d88e86",
+      "elapsed_seconds": 6.473310713656247
+    },
+    {
+      "heldout_mouse": "M2",
+      "n_train_cells": 8926,
+      "n_test_cells": 1183,
+      "n_train_clones": 337,
+      "n_test_clones": 36,
+      "gene_count": 2000,
+      "genes_sha256": "1e633cc3dde84c275bb80f4dbcd8dd11105b4dd46058c8114054e115ce73d905",
+      "pca_sha256": "1efc373975d9524b91450691bd242e908f1d54b220b226bd70b381e90b23405d",
+      "density_reference_sha256": "868b2c6b1b20c79ab533bec95e5a747bc39f9e47f9144df7d0d2cfca96a22173",
+      "elapsed_seconds": 3.634626716375351
+    },
+    {
+      "heldout_mouse": "M3",
+      "n_train_cells": 8086,
+      "n_test_cells": 2023,
+      "n_train_clones": 299,
+      "n_test_clones": 74,
+      "gene_count": 2000,
+      "genes_sha256": "b7239a0fa1cdeb1ac4c445647b78ad544ab1bc9c2903a9ea32a9d9f466cdcb77",
+      "pca_sha256": "5b8bf671759f039ed9b067f384b5a35544f89d380dc3b1b1fce16cb6a2d5a7d3",
+      "density_reference_sha256": "88fb866a8405c670b5e252b93ec2afdcb39901ac6f674c056a2125c5b8854230",
+      "elapsed_seconds": 3.2212736550718546
+    },
+    {
+      "heldout_mouse": "M4",
+      "n_train_cells": 8641,
+      "n_test_cells": 1468,
+      "n_train_clones": 331,
+      "n_test_clones": 42,
+      "gene_count": 2000,
+      "genes_sha256": "7f74584b39a00430ab7be77e66405c87667550dcdbe68b6df3a378d25fe04eaa",
+      "pca_sha256": "2f19b1c5b8b1a337f2878d6823530e3a1b8d428bf26ca8505497fe234ad205db",
+      "density_reference_sha256": "fe71f0a40aff8a57fbf3a4ad16c1886762d4c5dd47a1081704bd5856751576c9",
+      "elapsed_seconds": 3.9774489998817444
+    },
+    {
+      "heldout_mouse": "M5",
+      "n_train_cells": 9757,
+      "n_test_cells": 352,
+      "n_train_clones": 357,
+      "n_test_clones": 16,
+      "gene_count": 2000,
+      "genes_sha256": "7009e76ed8c6a573b7f3a0de8006774d9b96283586cd648147d8bbfabb0a78be",
+      "pca_sha256": "855633061253aae46a9f043fe660e5fe54b6549cf79688ac5806811c564a0032",
+      "density_reference_sha256": "8b7c6222e9619a6eeb6b769c9fa027c409639ec58d1d0c1244070d090d12b3c7",
+      "elapsed_seconds": 3.8644142411649227
+    },
+    {
+      "heldout_mouse": "M6",
+      "n_train_cells": 9257,
+      "n_test_cells": 852,
+      "n_train_clones": 326,
+      "n_test_clones": 47,
+      "gene_count": 2000,
+      "genes_sha256": "ba724eddc1be98c4cdb118a60e612804ee1fcba14f3f49aa67eb225b37573a31",
+      "pca_sha256": "f2747b3d98191f29c1aae1ddeaaf1ed71e8234c0a87b0ea3793fbd0fb77fb990",
+      "density_reference_sha256": "09e011f831bafc8c487ca2cde7e2606f290a90b149c42c11be5161132ee51b75",
+      "elapsed_seconds": 3.6524431006982923
+    },
+    {
+      "heldout_mouse": "M7",
+      "n_train_cells": 7573,
+      "n_test_cells": 2536,
+      "n_train_clones": 279,
+      "n_test_clones": 94,
+      "gene_count": 2000,
+      "genes_sha256": "8b17fea3b3d6f4d968d86c46ebd14ada2fd5dc197a99872086325146702924d3",
+      "pca_sha256": "eb6efdab4fb4abde0b0036c0d51815d4985a8f2178c3df4a96687698b06900fe",
+      "density_reference_sha256": "b65c8fdaa9aa192b0f17d1ab57b8f5a853b19995b26b8bb5d9db23acd44d2ff6",
+      "elapsed_seconds": 2.896019237115979
+    }
+  ],
+  "limitations": [
+    "Reporter gates were physically sorted into separate libraries; gate/library confounding remains.",
+    "No affinity, mutation-rate or fate prediction is implied.",
+    "Fixed model settings; no claim that these are optimised settings for each baseline.",
+    "Clonotrace is not included in this new validation."
+  ]
+}

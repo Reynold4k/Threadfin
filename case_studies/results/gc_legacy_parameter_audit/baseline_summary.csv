@@ -1,0 +1,15 @@
+name,basis,definition,min_clone_size,umap_k,min_dist,resolution,seed,n_points,n_cells,n_clusters,n_graph_components,trustworthiness_centroids,trustworthiness_distance_profiles,max_group_cells,multi_donor_groups,diagnostic_only,job_id
+current__donor_sequence__min1__k20_md0.40_r0.30_seed123,current,donor_sequence,1,20,0.4,0.3,123,487,762,10,2,0.995344927826566,0.9982118321317129,24,0,False,32345445
+current__donor_sequence__min3__k20_md0.40_r0.30_seed123,current,donor_sequence,3,20,0.4,0.3,123,49,260,3,2,0.9495583307950046,0.9526043253122144,24,0,False,32345445
+current__donor_vdj__min1__k20_md0.40_r0.30_seed123,current,donor_vdj,1,20,0.4,0.3,123,377,762,9,2,0.9948424447208251,0.9978515689490077,46,0,False,32345445
+current__donor_vdj__min3__k20_md0.40_r0.30_seed123,current,donor_vdj,3,20,0.4,0.3,123,52,392,3,1,0.9662802950474183,0.9841412012644889,46,0,False,32345445
+current__pooled_vdj__min1__k20_md0.40_r0.30_seed123,current,pooled_vdj,1,20,0.4,0.3,123,217,762,7,2,0.992711346925707,0.9966701352757544,191,61,True,32345445
+current__pooled_vdj__min3__k20_md0.40_r0.30_seed123,current,pooled_vdj,3,20,0.4,0.3,123,44,564,3,1,0.9511164274322169,0.9555023923444976,191,42,True,32345445
+current__pooled_all_heavy__min1__k20_md0.40_r0.30_seed123,current,pooled_all_heavy,1,20,0.4,0.3,123,240,788,6,2,0.9932145508537491,0.9968596881959911,192,63,True,32345445
+legacy__donor_sequence__min1__k20_md0.40_r0.30_seed123,legacy,donor_sequence,1,20,0.4,0.3,123,487,762,8,2,0.9958758037718758,0.9985672010992049,24,0,False,32345445
+legacy__donor_sequence__min3__k20_md0.40_r0.30_seed123,legacy,donor_sequence,3,20,0.4,0.3,123,49,260,3,1,0.9518732866280841,0.96356990557417,24,0,False,32345445
+legacy__donor_vdj__min1__k20_md0.40_r0.30_seed123,legacy,donor_vdj,1,20,0.4,0.3,123,377,762,6,1,0.9937161326773575,0.9976042939270869,46,0,False,32345445
+legacy__donor_vdj__min3__k20_md0.40_r0.30_seed123,legacy,donor_vdj,3,20,0.4,0.3,123,52,392,3,1,0.9550579557428872,0.977186512118019,46,0,False,32345445
+legacy__pooled_vdj__min1__k20_md0.40_r0.30_seed123,legacy,pooled_vdj,1,20,0.4,0.3,123,217,762,6,2,0.9906095985180272,0.9968485208859819,191,61,True,32345445
+legacy__pooled_vdj__min3__k20_md0.40_r0.30_seed123,legacy,pooled_vdj,3,20,0.4,0.3,123,44,564,2,1,0.9278309409888357,0.9414673046251993,191,42,True,32345445
+legacy__pooled_all_heavy__min1__k20_md0.40_r0.30_seed123,legacy,pooled_all_heavy,1,20,0.4,0.3,123,240,788,6,1,0.9903192279138827,0.9963233110616184,192,63,True,32345445

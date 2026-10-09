@@ -1,0 +1,84 @@
+{
+  "Benisse": {
+    "adapter": "classical MDS of native squared latent distances",
+    "n_components": 30,
+    "positive_eigenvalues": [
+      6.319903901932011,
+      6.319903901932008,
+      6.319903901931975,
+      6.3199039019319745,
+      6.319903901931969,
+      6.319903901931967,
+      6.319903901931965,
+      6.319903901931965,
+      6.319903901931965,
+      6.319903901931962,
+      6.3199039019319585,
+      6.3199039019319585,
+      6.319903901931956,
+      6.31990390193195,
+      6.319903901931947,
+      6.319903901931945,
+      6.319903901931945,
+      6.319903901931943,
+      6.319903901931943,
+      6.3199039019319425,
+      6.319903901931942,
+      6.31990390193194,
+      6.319903901931938,
+      6.319903901931938,
+      6.319903901931936,
+      6.319903901931935,
+      6.3199039019319345,
+      6.319903901931933,
+      6.31990390193193,
+      6.319903901931929
+    ],
+    "fraction_positive_trace_retained": 0.045804634649433594,
+    "adapter_seconds": 4.265522954985499,
+    "n_native_nodes": 2270,
+    "n_cells": 3894,
+    "n_families": 1536,
+    "performance_adapter": "complete cell-weighted family kernel; no spectral truncation",
+    "spectral_features_used_for_performance": false
+  },
+  "BiGCN": {
+    "n_native_nodes": 2270,
+    "n_cells": 3894,
+    "n_families": 1536,
+    "adapter": "cell-count-weighted native node mean within fixed families"
+  },
+  "RNA_centroid": {
+    "seconds": 0.10399922169744968,
+    "n_families": 373
+  },
+  "Threadfin_mean": {
+    "seconds": 0.8875494953244925,
+    "n_families": 373,
+    "context_key": "donor",
+    "smooth": 0
+  },
+  "Threadfin_kernel": {
+    "seconds": 1.088266396895051,
+    "n_families": 373,
+    "context_key": "donor",
+    "smooth": 15
+  },
+  "clone2vec": {
+    "seconds": 179.3342758063227,
+    "n_families": 373,
+    "version": "0.1.1",
+    "native_parameters": {
+      "k": 15,
+      "z_dim": 30,
+      "max_iter": 500,
+      "early_stopping_patience": 5,
+      "init": "svd"
+    }
+  },
+  "RNA_context_centroid": {
+    "seconds": 0.0945915449410677,
+    "n_families": 373,
+    "context_key": "donor"
+  }
+}

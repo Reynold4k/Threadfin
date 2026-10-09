@@ -1,0 +1,90 @@
+{
+  "dataset": "GSE246382",
+  "design": "NP-OVA/Alhydrogel, day 14; FACS GC zones/Myc+ LZ and plasma cells",
+  "status": "completed",
+  "job_id": "32343360",
+  "n_cells": 884,
+  "n_cells_with_bcr": 762,
+  "n_donors": 11,
+  "retained_clones": 49,
+  "retained_cells": 260,
+  "primary": "continuous_seed123",
+  "basis": "receptor-excluded 30-component PCA",
+  "selection": "continuous preset and seed 123 fixed before examining gates/markers; all three presets and both seeds retained",
+  "clone_definition": "Committed same-mouse V/J/junction-sequence-defined families; never pooled across mice",
+  "source_sha256": {
+    "/data/scratch/projects/punim1236/threadfin_data/gse246382_np_pc/GSE246382_umiDedup-Exact.mtx.gz": "e1645f0bd32651db88cfc9c53fb7cc375a131240dac36a221257cc285cb9cb4d",
+    "/data/scratch/projects/punim1236/threadfin_data/gse246382_np_pc/GSE246382_features.tsv.gz": "a94b8823dbd4c4182d8774d9d6ad041c39bd82cfa9619f098804663bb70470e0",
+    "/data/scratch/projects/punim1236/threadfin_data/gse246382_np_pc/GSE246382_barcodes.tsv.gz": "32f88f866e6faf1eadcac00a3f5bd6cd8505a3b7a93c86e15814b46862e7c52d",
+    "/data/scratch/projects/punim1236/threadfin_data/gse246382_np_pc/cell_metadata.csv": "33db110732bc79a679e4e112472b3d2898c953cdaf9e8f1a964bc94b5aab9f8c",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/Threadfin/case_studies/results/gc_np_pc/cells.csv.gz": "acb6a37091fc9a205261578f4c056aec3d05ddde96328fa3e17d7ca01225071c"
+  },
+  "marker_coverage": {
+    "GC identity": {
+      "requested": [
+        "Bcl6",
+        "Aicda",
+        "Rgs13",
+        "S1pr2"
+      ],
+      "present": [
+        "Bcl6",
+        "Aicda",
+        "Rgs13",
+        "S1pr2"
+      ]
+    },
+    "Cycling": {
+      "requested": [
+        "Top2a",
+        "Mki67",
+        "Ube2c",
+        "Stmn1"
+      ],
+      "present": [
+        "Top2a",
+        "Mki67",
+        "Ube2c",
+        "Stmn1"
+      ]
+    },
+    "Plasma cell": {
+      "requested": [
+        "Prdm1",
+        "Xbp1",
+        "Sdc1",
+        "Jchain",
+        "Mzb1",
+        "Irf4"
+      ],
+      "present": [
+        "Prdm1",
+        "Xbp1",
+        "Sdc1",
+        "Jchain",
+        "Mzb1",
+        "Irf4"
+      ]
+    }
+  },
+  "seed_partition_ari": {
+    "cohesive": 1.0,
+    "continuous": 1.0,
+    "discrete": 1.0
+  },
+  "versions": {
+    "threadfin": "4.0.0",
+    "numpy": "2.4.6",
+    "scanpy": "1.11.5",
+    "umap-learn": "0.5.12",
+    "leidenalg": "0.12.0"
+  },
+  "limitations": [
+    "Exploratory centroid reclustering; not v4 reliability-filtered programme inference.",
+    "Dominant-gate and marker summaries describe captured cells, not future fate.",
+    "Only 49 same-mouse families have >=3 cells; capture limits state-mixture resolution.",
+    "The existing v4 coherence p=0.224 and three reliable profiles remain unchanged.",
+    "MYC-related gate is a measured selection-associated state, not a temporally traced selection event.",
+    "GC interpretation is restricted to this model-antigen GC dataset, not non-GC."
+  ]
+}

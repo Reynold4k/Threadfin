@@ -28,6 +28,29 @@ def require_obs(adata, *cols: str, context: str | None = None) -> None:
             raise KeyError(f"'{col}' not found in adata.obs{hint}.")
 
 
+def require_complete_groups(adata, *cols: str, context: str | None = None) -> None:
+    """Require grouping columns to have a non-empty label for every cell."""
+    require_obs(adata, *cols, context=context)
+    for col in cols:
+        if col is None:
+            continue
+        values = adata.obs[col]
+        blank = values.astype("string").str.strip().eq("").fillna(False)
+        bad = values.isna() | blank
+        if bad.any():
+            hint = f" for {context}" if context else ""
+            raise ValueError(
+                f"Grouping column '{col}' has {int(bad.sum())} missing or blank value(s){hint}. "
+                "Every cell needs a donor/sample/batch label; fill or remove those cells before analysis."
+            )
+
+
+def require_positive_int(value, name: str) -> None:
+    """Require a positive integer, rejecting bools and truncating floats."""
+    if isinstance(value, (bool, np.bool_)) or not isinstance(value, (int, np.integer)) or value < 1:
+        raise ValueError(f"{name} must be a positive integer.")
+
+
 def get_basis(adata, basis: str, dtype=np.float64) -> np.ndarray:
     """Dense cell x feature matrix from ``obsm[basis]`` (or ``X`` / a layer).
 
@@ -49,7 +72,21 @@ def get_basis(adata, basis: str, dtype=np.float64) -> np.ndarray:
         x = adata.obsm[basis]
     if sp.issparse(x):
         x = x.toarray()
-    return np.asarray(x, dtype=dtype)
+    x = np.asarray(x, dtype=dtype)
+    if x.ndim != 2:
+        raise ValueError(
+            f"'{basis}' must be a two-dimensional cell-by-feature matrix; got an array with {x.ndim} dimensions."
+        )
+    if x.shape[0] != adata.n_obs:
+        raise ValueError(
+            f"'{basis}' has {x.shape[0]} rows but adata has {adata.n_obs} cells. "
+            "Provide one embedding row per cell."
+        )
+    if x.shape[1] == 0:
+        raise ValueError(f"'{basis}' has no features. Compute or provide a non-empty embedding.")
+    if not np.isfinite(x).all():
+        raise ValueError(f"'{basis}' contains NaN or infinite values. Recompute or clean the embedding first.")
+    return x
 
 
 def codes(values: pd.Series | np.ndarray) -> tuple[np.ndarray, pd.Index]:

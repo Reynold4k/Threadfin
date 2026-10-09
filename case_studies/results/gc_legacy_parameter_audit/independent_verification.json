@@ -1,0 +1,10 @@
+{
+  "job_id": "32370571",
+  "name": "legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123",
+  "method": "Independent pandas means -> scipy Euclidean distance rows -> umap.UMAP -> Scanpy neighbours/Leiden; no Threadfin reclustering call",
+  "input_dtype": "float64, matching threadfin._utils.get_basis",
+  "coordinates_allclose": true,
+  "partition_ari": 1.0,
+  "max_absolute_coordinate_difference": 4.7656249968497377e-07,
+  "not_claimed": "Equivalence to unavailable historical processed objects or IgBLAST receptor calls"
+}

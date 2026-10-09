@@ -3,8 +3,9 @@
 Implements the "Coupled Laplacian" principle of docs/DESIGN_V2.md: instead of
 Benisse's ADMM on dense matrices, the coupled clone graph
 ``W = (1 - lam) * W_gex + lam * W_bcr`` (each row-normalized) is embedded
-directly with normalized-Laplacian eigenmaps, giving (scaled) commute-time
-geometry at O(n*k*m) cost on sparse graphs.
+directly with row-normalized Laplacian eigenvectors. These coordinates are
+not commute-time distances. Graph storage is sparse; neighbour search and
+the small-graph eigensolver fallback have separate computational costs.
 """
 
 from __future__ import annotations

@@ -1,0 +1,9 @@
+dataset,method,n_expanded_families,n_complete_families,coverage,n_common_families,native_dimensions
+mouse_rbd,RNA_centroid,1414,1414,1.0,1414,100
+mouse_rbd,RNA_context_centroid,1414,1414,1.0,1414,100
+mouse_rbd,Threadfin_mean,1414,1414,1.0,1414,100
+mouse_rbd,Threadfin_kernel,1414,1414,1.0,1414,30
+mouse_rbd,Benisse,1414,1414,1.0,1414,full kernel
+mouse_rbd,BiGCN,1414,1414,1.0,1414,40
+mouse_rbd,clone2vec,1414,1414,1.0,1414,30
+mouse_rbd,Training_mean,1414,1414,1.0,1414,0

@@ -19,8 +19,9 @@ The v3 functions (``clonotype_recluster``, ``joint_embedding``, ...) remain
 importable for backward compatibility.
 """
 
-from . import plotting, pp, simulate, tl
+from . import plotting, pp, reclustering, simulate, tl
 from .api import ThreadfinResult, read_bcr, run
+from .density import DensityResult, StateDensityModel
 from .clones import define_clones
 from .io import attach_bcr, build_clone_key, read_10x_vdj, read_airr
 
@@ -34,11 +35,14 @@ from .core import bcr_reclustering, clonal_pseudotime, clone_centroids, clonotyp
 from .integrate import integration_diagnostics, joint_embedding  # noqa: E402
 from .migration import clone_distribution, expansion_index, migration_index, transition_index  # noqa: E402
 from .programs import community_markers, community_score  # noqa: E402
+from .reclustering import reclustering_presets  # noqa: E402
 from .specificity import annotate_specificity, specificity_enrichment  # noqa: E402
 
-__version__ = "4.0.0"
+__version__ = "4.1.0"
 __all__ = [
     "ThreadfinResult",
+    "DensityResult",
+    "StateDensityModel",
     "attach_bcr",
     "build_clone_key",
     "define_clones",
@@ -47,6 +51,8 @@ __all__ = [
     "read_10x_vdj",
     "read_airr",
     "read_bcr",
+    "reclustering",
+    "reclustering_presets",
     "run",
     "sim",
     "tl",

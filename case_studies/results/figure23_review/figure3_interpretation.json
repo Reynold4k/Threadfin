@@ -1,0 +1,16 @@
+{
+  "pure_pb_families": 329,
+  "pure_pb_mice": 11,
+  "within_mouse_min_families": 5,
+  "within_mouse_eligible_mice": 10,
+  "within_mouse_negative_correlations": 10,
+  "median_within_mouse_rho": -0.59562774069403,
+  "gc_reference_families": 66,
+  "gc_reference_rule": "reliable early families with GC fraction >=0.5; mean saved 2D coordinates",
+  "panel_E_limit": "Descriptive RNA-derived association in a 2D display; not independent validation of maturation or GC origin",
+  "panel_F_mice": 36,
+  "panel_F_reliable_families": 1174,
+  "panel_F_denominator": "all reliable families within each mouse, separately by treatment",
+  "panel_F_gc_rule": "captured GC fraction >=0.5; no UMAP-distance classification",
+  "panel_F_limit": "Different terminal mice at each day; changing captured repertoires, not tracked families or causal treatment effects"
+}

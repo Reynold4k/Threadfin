@@ -1,0 +1,49 @@
+{
+  "script_sha256": "477e08d9a76200c159b5d537e0798b28181f5166f13164d29268acbd3b7cb8bf",
+  "core_sha256": "a5ac0bd971673fdc7c12e42c4e77eeac087e1a48bcaffbddce9d439305061ef8",
+  "unique_computed_maps": 164,
+  "selected_coordinate_sha256": "be7cd509b773e17d5c0ca4e6273679c124244d4f869f4f95ddae67cd8dc0fa78",
+  "audit_jobs": [
+    "32345445",
+    "32345446",
+    "32345447",
+    "32345448",
+    "32345955",
+    "32345957",
+    "32370571"
+  ],
+  "note": "Historical-style receptor grouping is descriptive; strict sequence families and pooled groups retained as controls.",
+  "failed_verification_attempt": {
+    "job_id": "32370281",
+    "reason": "Independent verifier initially averaged float32, whereas the package deliberately casts to float64; centroids differed by at most 5.57e-7, sufficient to change the UMAP solution. Corrected verifier passes. No saved biological coordinates were changed."
+  },
+  "independent_verification": {
+    "job_id": "32370571",
+    "name": "legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123",
+    "method": "Independent pandas means -> scipy Euclidean distance rows -> umap.UMAP -> Scanpy neighbours/Leiden; no Threadfin reclustering call",
+    "input_dtype": "float64, matching threadfin._utils.get_basis",
+    "coordinates_allclose": true,
+    "partition_ari": 1.0,
+    "max_absolute_coordinate_difference": 4.7656249968497377e-07,
+    "not_claimed": "Equivalence to unavailable historical processed objects or IgBLAST receptor calls"
+  },
+  "python": "3.11.7 (main, Dec 15 2023, 18:12:31) [GCC 11.2.0]",
+  "versions": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.2",
+    "scipy": "1.13.1",
+    "scikit-learn": "1.4.2",
+    "anndata": "0.10.8",
+    "scanpy": "1.10.1",
+    "umap-learn": "0.5.5",
+    "numba": "0.59.1",
+    "matplotlib": "3.8.4",
+    "igraph": "0.11.4",
+    "leidenalg": "0.10.2",
+    "harmonypy": "0.0.9"
+  },
+  "selected_annotations_verified_against_cells": true,
+  "annotation_summary": "selected_cluster_annotations.csv",
+  "superseded_annotation_summary": "cluster_annotation_summary.csv (not used for the current figure or manuscript)",
+  "annotation_sha256": "9e5e5fd31c9e9c2f28e1c370432ba1c6cfe163ebd2ab4f2f09059df3109bf3c9"
+}

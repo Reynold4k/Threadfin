@@ -16,10 +16,12 @@ continuously without forming groups. Two safeguards address this:
    (same mean and covariance). The statistic is the 2-means cluster index
    (within / total sum of squares, as in SigClust, Liu et al. 2008); the
    null distribution comes from re-clustering Gaussian samples, so the test
-   accounts for the fact that the clusters were found in the same data. A
+   repeats the 2-means search, but does not repeat the full data-dependent
+   Leiden/tree/resolution selection. This is an approximate diagnostic. A
    node is split only if p <= alpha * (n_node - 1) / (n_all - 1), with
-   n the number of clones, which controls the family-wise error along the
-   tree (Meinshausen 2008; the same rule as sc-SHC, Grabski et al. 2023). Communities below a non-significant
+   n the number of clones. This allocation follows hierarchical-testing
+   work (Meinshausen 2008; sc-SHC, Grabski et al. 2023), but this implementation
+   does not establish family-wise error control for the selected tree. Communities below a non-significant
    node are merged. When even the root is not significant, the clones form
    a single programme: they differ (see the coherence test) but along a
    continuum rather than in distinct groups.
@@ -167,8 +169,10 @@ def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, 
     root = v * np.sqrt(np.clip(w, 0, None))
     null = np.array([_two_means_index(rng.standard_normal(x.shape) @ root.T, rng) for _ in range(n_null)])
     sd = float(null.std(ddof=1)) if n_null > 1 else np.nan
-    p_norm = float(norm.cdf((observed - null.mean()) / sd)) if sd and sd > 0 else float(observed < null.mean())
+    p_norm = float(norm.cdf((observed - null.mean()) / sd)) if np.isfinite(sd) and sd > 0 else float("nan")
     p_emp = float((1 + np.sum(null <= observed)) / (n_null + 1))
+    if not np.isfinite(p_norm):
+        p_norm = p_emp  # A degenerate null must not turn identical data into p=0.
     out = {"cluster_index": observed, "null_mean": float(null.mean()), "null_sd": sd,
            "pvalue": p_norm, "pvalue_empirical": p_emp}
     if return_null:
@@ -299,7 +303,7 @@ def find_programmes(
     test_splits, alpha, n_null
         Merge communities that are not significantly better described as two
         groups than as one Gaussian (see the module docstring); ``alpha`` is
-        the family-wise error along the community tree and ``n_null`` the
+        a nominal hierarchical threshold (not a validated family-wise error guarantee) and ``n_null`` the
         number of Gaussian null samples per test. The node tests are stored
         in ``adata.uns['threadfin']['programmes']['split_tests']``. A single
         programme means "no distinct programmes".

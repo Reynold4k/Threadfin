@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checks": {
+    "larry_profile_identity_and_coverage": true,
+    "larry_common_barcode_folds_and_training_only_baseline": true,
+    "larry_split_coverage_and_disjoint_barcode_allocation": true,
+    "nsclc_patient_identity_cycles_and_common_method_pairs": true,
+    "figure2_audit_denominators": true,
+    "analysis_and_export_syntax": true
+  },
+  "source_hashes": {
+    "case_studies/reanalyse_clonotrace_larry.py": "c7a66a1bcab9dc551c1c78b57465e8560e8e5401afc9f9190d4a0ecd1c7f4570",
+    "case_studies/reanalyse_clonotrace_nsclc.py": "adcf1fc3e596e9b5d290e6b2c79b0b14ffe13e48d2953a68bdb0070a3b2eebd9",
+    "case_studies/review_figure2_biology.py": "d578e11564dabd1ddad1ff15ece32be410418ecbfbc81007de6e1217ec2f1437",
+    "paper/figure_plan/external_validation_figures.py": "b4376d0c80187fa81d4674181779580ab79b578933ae9807e76e5c879bb26210",
+    "paper/export_manuscript.py": "6fc666936f51d9552920b19af31d29960a5f6a9844a5da693fc990ee106eb455"
+  },
+  "limits": [
+    "Checks validate saved identities/coverage and readout consistency, not clinical causality.",
+    "Unsupervised PCA/profiles remain transductive within the stated input time window.",
+    "Visual source figures and DOCX media are checked separately."
+  ]
+}

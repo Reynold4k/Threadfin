@@ -1,0 +1,18 @@
+{
+  "status": "completed",
+  "datasets": [
+    "mouse_np",
+    "mouse_rbd"
+  ],
+  "no_partial_comparisons": true,
+  "models": 7,
+  "comparators_including_intercept": 8,
+  "primary_threshold": 2,
+  "sensitivity_threshold": 5,
+  "readout_scope": "label-held-out transductive; whole-mouse folds",
+  "source_scripts": [
+    "native_benchmark.py",
+    "score_native_benchmark.py",
+    "finalize_native_benchmark.py"
+  ]
+}

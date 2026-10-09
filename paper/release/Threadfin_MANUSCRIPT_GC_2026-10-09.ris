@@ -1,0 +1,629 @@
+TY  - JOUR
+AU  - Merkenschlager, Julia
+AU  - Pyo, Andrew G. T.
+AU  - Silva Santos, Gabriela S.
+AU  - Schaefer-Babajew, Dennis
+AU  - Cipolla, Melissa
+AU  - Hartweger, Harald
+AU  - Gitlin, Alexander D.
+AU  - Wingreen, Ned S.
+AU  - Nussenzweig, Michel C.
+TI  - Regulated somatic hypermutation enhances antibody affinity maturation
+JO  - Nature
+JA  - Nature
+PY  - 2025
+VL  - 641
+IS  - 8062
+SP  - 495-502
+DO  - 10.1038/s41586-025-08728-2
+UR  - https://doi.org/10.1038/s41586-025-08728-2
+ER  -
+
+TY  - JOUR
+AU  - ElTanbouly, Mohamed A.
+AU  - Ramos, Victor
+AU  - MacLean, Andrew J.
+AU  - Chen, Spencer T.
+AU  - Loewe, Maximilian
+AU  - Steinbach, Sandra
+AU  - Ben Tanfous, Tarek
+AU  - Johnson, Brianna
+AU  - Cipolla, Melissa
+AU  - Gazumyan, Anna
+AU  - Oliveira, Thiago Y.
+AU  - Nussenzweig, Michel C.
+TI  - Role of affinity in plasma cell development in the germinal center light zone
+JO  - Journal of Experimental Medicine
+JA  - J Exp Med
+PY  - 2024
+VL  - 221
+IS  - 1
+SP  - e20231838
+DO  - 10.1084/jem.20231838
+UR  - https://doi.org/10.1084/jem.20231838
+ER  -
+
+TY  - JOUR
+AU  - Nakagawa, Rinako
+AU  - Toboso-Navasa, Amparo
+AU  - Schips, Marta
+AU  - Young, George
+AU  - Bhaw-Rosun, Leena
+AU  - Llorian-Sopena, Miriam
+AU  - Chakravarty, Probir
+AU  - Sesay, Abdul Karim
+AU  - Kassiotis, George
+AU  - Meyer-Hermann, Michael
+AU  - Calado, Dinis Pedro
+TI  - Permissive selection followed by affinity-based proliferation of GC light zone B cells dictates cell fate and ensures clonal breadth
+JO  - Proceedings of the National Academy of Sciences
+JA  - Proc Natl Acad Sci U S A
+PY  - 2021
+VL  - 118
+IS  - 2
+SP  - e2016425118
+DO  - 10.1073/pnas.2016425118
+UR  - https://doi.org/10.1073/pnas.2016425118
+ER  -
+
+TY  - JOUR
+AU  - Zhang, Ze
+AU  - Chang, Woo Yong
+AU  - Wang, Kaiwen
+AU  - Yang, Yuqiu
+AU  - Wang, Xinlei
+AU  - Yao, Chen
+AU  - Wu, Tuoqi
+AU  - Wang, Li
+AU  - Wang, Tao
+TI  - Interpreting the B-cell receptor repertoire with single-cell gene expression using Benisse
+JO  - Nature Machine Intelligence
+JA  - Nat Mach Intell
+PY  - 2022
+VL  - 4
+IS  - 6
+SP  - 596-604
+DO  - 10.1038/s42256-022-00492-6
+UR  - https://doi.org/10.1038/s42256-022-00492-6
+ER  -
+
+TY  - JOUR
+AU  - Liu, Xiao
+AU  - Huang, Jianghao
+AU  - Zhao, Shasha
+AU  - Wang, Shuang
+AU  - Wei, Guiying
+AU  - Liu, Yingbin
+AU  - Jiao, Pengfei
+AU  - Xiang, Dongxi
+TI  - BiGCN Learns B Cell Functional States by Integrating Single‐Cell Transcriptomes and BCR Repertoires
+JO  - Small Methods
+JA  - Small Methods
+PY  - 2026
+VL  - 10
+IS  - 5
+SP  - e01919
+DO  - 10.1002/smtd.202501919
+UR  - https://doi.org/10.1002/smtd.202501919
+ER  -
+
+TY  - UNPB
+AU  - Isaev, Sergey
+AU  - Erickson, Alek G
+AU  - Adameyko, Igor
+AU  - Kharchenko, Peter V
+TI  - Clonal embeddings allow exploratory analysis of lineage-resolved single-cell data
+JO  - bioRxiv
+JA  - bioRxiv
+PY  - 2026
+SP  - 2026.04.30.720820
+DO  - 10.64898/2026.04.30.720820
+UR  - https://doi.org/10.64898/2026.04.30.720820
+N1  - Preprint; not peer reviewed
+ER  -
+
+TY  - JOUR
+AU  - Zou, Yiping
+AU  - Luo, Jiaqi
+AU  - Li, Shuaicheng
+TI  - CoMBCR: Co-Learning Multi-Modalities of BCRs and gene expressions
+JO  - Bioinformatics
+JA  - Bioinformatics
+PY  - 2026
+VL  - 42
+IS  - 3
+SP  - btag115
+DO  - 10.1093/bioinformatics/btag115
+UR  - https://doi.org/10.1093/bioinformatics/btag115
+ER  -
+
+TY  - JOUR
+AU  - Suo, Chenqu
+AU  - Polanski, Krzysztof
+AU  - Dann, Emma
+AU  - Lindeboom, Rik G. H.
+AU  - Vilarrasa-Blasi, Roser
+AU  - Vento-Tormo, Roser
+AU  - Haniffa, Muzlifah
+AU  - Meyer, Kerstin B.
+AU  - Dratva, Lisa M.
+AU  - Tuong, Zewen Kelvin
+AU  - Clatworthy, Menna R.
+AU  - Teichmann, Sarah A.
+TI  - Dandelion uses the single-cell adaptive immune receptor repertoire to explore lymphocyte developmental origins
+JO  - Nature Biotechnology
+JA  - Nat Biotechnol
+PY  - 2024
+VL  - 42
+IS  - 1
+SP  - 40-51
+DO  - 10.1038/s41587-023-01734-7
+UR  - https://doi.org/10.1038/s41587-023-01734-7
+ER  -
+
+TY  - JOUR
+AU  - Sturm, Gregor
+AU  - Szabo, Tamas
+AU  - Fotakis, Georgios
+AU  - Haider, Marlene
+AU  - Rieder, Dietmar
+AU  - Trajanoski, Zlatko
+AU  - Finotello, Francesca
+TI  - Scirpy: a Scanpy extension for analyzing single-cell T-cell receptor-sequencing data
+JO  - Bioinformatics
+JA  - Bioinformatics
+PY  - 2020
+VL  - 36
+IS  - 18
+SP  - 4817-4818
+DO  - 10.1093/bioinformatics/btaa611
+UR  - https://doi.org/10.1093/bioinformatics/btaa611
+ER  -
+
+TY  - JOUR
+AU  - Yermanos, Alexander
+AU  - Agrafiotis, Andreas
+AU  - Kuhn, Raphael
+AU  - Robbiani, Damiano
+AU  - Yates, Josephine
+AU  - Papadopoulou, Chrysa
+AU  - Han, Jiami
+AU  - Sandu, Ioana
+AU  - Weber, Cédric
+AU  - Bieberich, Florian
+AU  - Vazquez-Lombardi, Rodrigo
+AU  - Dounas, Andreas
+AU  - Neumeier, Daniel
+AU  - Oxenius, Annette
+AU  - Reddy, Sai T
+TI  - Platypus: an open-access software for integrating lymphocyte single-cell immune repertoires with transcriptomes
+JO  - NAR Genomics and Bioinformatics
+JA  - NAR Genom Bioinform
+PY  - 2021
+VL  - 3
+IS  - 2
+SP  - lqab023
+DO  - 10.1093/nargab/lqab023
+UR  - https://doi.org/10.1093/nargab/lqab023
+ER  -
+
+TY  - JOUR
+AU  - Skinner, Oliver P.
+AU  - Asad, Saba
+AU  - Moreira, Marcela L.
+AU  - Lee, Hyun Jae
+AU  - Williams, Cameron G.
+AU  - Ruan, Zheng
+AU  - Lim, Jorene
+AU  - Kerr, Ashlyn S.
+AU  - Li, Shihan
+AU  - Zhu, Chen
+AU  - Jin, Wang
+AU  - Steiner, Thiago M.
+AU  - Asatsuma, Takahiro
+AU  - Wanrooy, Brooke J.
+AU  - Liu, Zihan
+AU  - Tong, Marcus Z. W.
+AU  - Soon, Megan S. F.
+AU  - Engel, Jessica A.
+AU  - Shobhana, Kalyan
+AU  - Uldrich, Adam P.
+AU  - Khoury, David S.
+AU  - Tuong, Zewen Kelvin
+AU  - King, Hamish W.
+AU  - Haque, Ashraful
+TI  - A temporal map of B cell diversification mechanisms in mice
+JO  - Nature Immunology
+JA  - Nat Immunol
+PY  - 2026
+VL  - 27
+IS  - 7
+SP  - 1502-1516
+DO  - 10.1038/s41590-026-02563-x
+UR  - https://doi.org/10.1038/s41590-026-02563-x
+ER  -
+
+TY  - JOUR
+AU  - Kim, Wooseob
+AU  - Zhou, Julian Q.
+AU  - Horvath, Stephen C.
+AU  - Schmitz, Aaron J.
+AU  - Sturtz, Alexandria J.
+AU  - Lei, Tingting
+AU  - Liu, Zhuoming
+AU  - Kalaidina, Elizaveta
+AU  - Thapa, Mahima
+AU  - Alsoussi, Wafaa B.
+AU  - Haile, Alem
+AU  - Klebert, Michael K.
+AU  - Suessen, Teresa
+AU  - Parra-Rodriguez, Luis
+AU  - Mudd, Philip A.
+AU  - Whelan, Sean P. J.
+AU  - Middleton, William D.
+AU  - Teefey, Sharlene A.
+AU  - Pusic, Iskra
+AU  - O’Halloran, Jane A.
+AU  - Presti, Rachel M.
+AU  - Turner, Jackson S.
+AU  - Ellebedy, Ali H.
+TI  - Germinal centre-driven maturation of B cell response to mRNA vaccination
+JO  - Nature
+JA  - Nature
+PY  - 2022
+VL  - 604
+IS  - 7904
+SP  - 141-145
+DO  - 10.1038/s41586-022-04527-1
+UR  - https://doi.org/10.1038/s41586-022-04527-1
+ER  -
+
+TY  - JOUR
+AU  - Ferreira-Gomes, Marta
+AU  - Chen, Yidan
+AU  - Durek, Pawel
+AU  - Rincon-Arevalo, Hector
+AU  - Heinrich, Frederik
+AU  - Bauer, Laura
+AU  - Szelinski, Franziska
+AU  - Guerra, Gabriela Maria
+AU  - Stefanski, Ana-Luisa
+AU  - Niedobitek, Antonia
+AU  - Wiedemann, Annika
+AU  - Bondareva, Marina
+AU  - Ritter, Jacob
+AU  - Lehmann, Katrin
+AU  - Hardt, Sebastian
+AU  - Hipfl, Christian
+AU  - Hein, Sascha
+AU  - Hildt, Eberhard
+AU  - Matz, Mareen
+AU  - Mei, Henrik E.
+AU  - Cheng, Qingyu
+AU  - Dang, Van Duc
+AU  - Witkowski, Mario
+AU  - Lino, Andreia C.
+AU  - Kruglov, Andrey
+AU  - Melchers, Fritz
+AU  - Perka, Carsten
+AU  - Schrezenmeier, Eva V.
+AU  - Hutloff, Andreas
+AU  - Radbruch, Andreas
+AU  - Dörner, Thomas
+AU  - Mashreghi, Mir-Farzin
+TI  - Recruitment of plasma cells from IL-21-dependent and IL-21-independent immune reactions to the bone marrow
+JO  - Nature Communications
+JA  - Nat Commun
+PY  - 2024
+VL  - 15
+IS  - 1
+SP  - 4182
+DO  - 10.1038/s41467-024-48570-0
+UR  - https://doi.org/10.1038/s41467-024-48570-0
+ER  -
+
+TY  - JOUR
+AU  - Weinreb, Caleb
+AU  - Rodriguez-Fraticelli, Alejo
+AU  - Camargo, Fernando D.
+AU  - Klein, Allon M.
+TI  - Lineage tracing on transcriptional landscapes links state to fate during differentiation
+JO  - Science
+JA  - Science
+PY  - 2020
+VL  - 367
+IS  - 6479
+SP  - eaaw3381
+DO  - 10.1126/science.aaw3381
+UR  - https://doi.org/10.1126/science.aaw3381
+ER  -
+
+TY  - UNPB
+AU  - Fu, Yuntian
+AU  - Mathew, Divij
+AU  - Wang, Mingshuang
+AU  - Chen, Xinyi E.
+AU  - Lin, Kevin Z.
+AU  - Schaff, Dylan
+AU  - Shaffer, Sydney M.
+AU  - Pardoll, Drew M.
+AU  - Jackson, Christina
+AU  - Zhang, Nancy R.
+TI  - Deciphering Cell Fate and Clonal Dynamics via Integrative Single-Cell Lineage Modeling
+JO  - bioRxiv
+JA  - bioRxiv
+PY  - 2025
+DO  - 10.1101/2025.09.01.673503
+UR  - https://doi.org/10.1101/2025.09.01.673503
+N1  - Preprint; not peer reviewed
+ER  -
+
+TY  - JOUR
+AU  - Weinreb, Caleb
+AU  - Wolock, Samuel
+AU  - Klein, Allon M.
+TI  - SPRING: a kinetic interface for visualizing high dimensional single-cell expression data
+JO  - Bioinformatics
+JA  - Bioinformatics
+PY  - 2018
+VL  - 34
+IS  - 7
+SP  - 1246–1248
+DO  - 10.1093/bioinformatics/btx792
+UR  - https://pmc.ncbi.nlm.nih.gov/articles/PMC6030950/
+ER  -
+
+TY  - JOUR
+AU  - Mathew, Divij
+AU  - Marmarelis, Melina E.
+AU  - Foley, Caitlin
+AU  - Bauml, Joshua M.
+AU  - Ye, Darwin
+AU  - Ghinnagow, Reem
+AU  - Ngiow, Shin Foong
+AU  - Klapholz, Max
+AU  - Jun, Soyeong
+AU  - Zhang, Zhaojun
+AU  - Zorc, Robert
+AU  - Davis, Christiana W.
+AU  - Diehn, Maximillian
+AU  - Giles, Josephine R.
+AU  - Huang, Alexander C.
+AU  - Hwang, Wei-Ting
+AU  - Zhang, Nancy R.
+AU  - Schoenfeld, Adam J.
+AU  - Carpenter, Erica L.
+AU  - Langer, Corey J.
+AU  - Wherry, E. John
+AU  - Minn, Andy J.
+TI  - Combined JAK inhibition and PD-1 immunotherapy for non-small cell lung cancer patients
+JO  - Science
+JA  - Science
+PY  - 2024
+VL  - 384
+IS  - 6702
+SP  - eadf1329
+DO  - 10.1126/science.adf1329
+UR  - https://doi.org/10.1126/science.adf1329
+ER  -
+
+TY  - JOUR
+AU  - Schattgen, Stefan A.
+AU  - Guion, Kate
+AU  - Crawford, Jeremy Chase
+AU  - Souquette, Aisha
+AU  - Barrio, Alvaro Martinez
+AU  - Stubbington, Michael J. T.
+AU  - Thomas, Paul G.
+AU  - Bradley, Philip
+TI  - Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA)
+JO  - Nature Biotechnology
+JA  - Nat Biotechnol
+PY  - 2022
+VL  - 40
+IS  - 1
+SP  - 54-63
+DO  - 10.1038/s41587-021-00989-2
+UR  - https://doi.org/10.1038/s41587-021-00989-2
+ER  -
+
+TY  - UNPB
+AU  - Borcherding, Nicholas
+AU  - Sun, Bo
+AU  - DeNardo, David
+AU  - Brestoff, Jonathan R.
+TI  - Ibex: Variational autoencoder for single-cell BCR sequencing
+JO  - bioRxiv
+JA  - bioRxiv
+PY  - 2022
+SP  - 2022.11.09.515787
+DO  - 10.1101/2022.11.09.515787
+UR  - https://doi.org/10.1101/2022.11.09.515787
+N1  - Preprint; not peer reviewed
+ER  -
+
+TY  - JOUR
+AU  - Yang, Qile
+AU  - Safina, Ksenia R.
+AU  - Nguyen, Kieu Diem Quynh
+AU  - Tuong, Zewen Kelvin
+AU  - Borcherding, Nicholas
+TI  - scRepertoire 2: Enhanced and efficient toolkit for single-cell immune profiling
+JO  - PLOS Computational Biology
+JA  - PLoS Comput Biol
+PY  - 2025
+VL  - 21
+IS  - 6
+SP  - e1012760
+DO  - 10.1371/journal.pcbi.1012760
+UR  - https://doi.org/10.1371/journal.pcbi.1012760
+ER  -
+
+TY  - JOUR
+AU  - Ng, Joseph C. F.
+AU  - Montamat Garcia, Guillem
+AU  - Stewart, Alexander T.
+AU  - Blair, Paul
+AU  - Mauri, Claudia
+AU  - Dunn-Walters, Deborah K.
+AU  - Fraternali, Franca
+TI  - sciCSR infers B cell state transition and predicts class-switch recombination dynamics using single-cell transcriptomic data
+JO  - Nature Methods
+JA  - Nat Methods
+PY  - 2024
+VL  - 21
+IS  - 5
+SP  - 823-834
+DO  - 10.1038/s41592-023-02060-1
+UR  - https://doi.org/10.1038/s41592-023-02060-1
+ER  -
+
+TY  - JOUR
+AU  - Mesin, Luka
+AU  - Schiepers, Ariën
+AU  - Ersching, Jonatan
+AU  - Barbulescu, Alexandru
+AU  - Cavazzoni, Cecília B.
+AU  - Angelini, Alessandro
+AU  - Okada, Takaharu
+AU  - Kurosaki, Tomohiro
+AU  - Victora, Gabriel D.
+TI  - Restricted Clonality and Limited Germinal Center Reentry Characterize Memory B Cell Reactivation by Boosting
+JO  - Cell
+JA  - Cell
+PY  - 2020
+VL  - 180
+IS  - 1
+SP  - 92-106.e11
+DO  - 10.1016/j.cell.2019.11.032
+UR  - https://doi.org/10.1016/j.cell.2019.11.032
+ER  -
+
+TY  - JOUR
+AU  - Ralph, Duncan K.
+AU  - Matsen, Frederick A.
+TI  - Likelihood-Based Inference of B Cell Clonal Families
+JO  - PLOS Computational Biology
+JA  - PLoS Comput Biol
+PY  - 2016
+VL  - 12
+IS  - 10
+SP  - e1005086
+DO  - 10.1371/journal.pcbi.1005086
+UR  - https://doi.org/10.1371/journal.pcbi.1005086
+ER  -
+
+TY  - JOUR
+AU  - Balashova, Daria
+AU  - van Schaik, Barbera D. C.
+AU  - Stratigopoulou, Maria
+AU  - Guikema, Jeroen E. J.
+AU  - Caniels, Tom G.
+AU  - Claireaux, Mathieu
+AU  - van Gils, Marit J.
+AU  - Musters, Anne
+AU  - Anang, Dornatien C.
+AU  - de Vries, Niek
+AU  - Greiff, Victor
+AU  - van Kampen, Antoine H. C.
+TI  - Systematic evaluation of B-cell clonal family inference approaches
+JO  - BMC Immunology
+JA  - BMC Immunol
+PY  - 2024
+VL  - 25
+IS  - 1
+SP  - 13
+DO  - 10.1186/s12865-024-00600-8
+UR  - https://doi.org/10.1186/s12865-024-00600-8
+ER  -
+
+TY  - JOUR
+AU  - Hoehn, Kenneth B
+AU  - Lunter, Gerton
+AU  - Pybus, Oliver G
+TI  - A Phylogenetic Codon Substitution Model for Antibody Lineages
+JO  - Genetics
+JA  - Genetics
+PY  - 2017
+VL  - 206
+IS  - 1
+SP  - 417-427
+DO  - 10.1534/genetics.116.196303
+UR  - https://doi.org/10.1534/genetics.116.196303
+ER  -
+
+TY  - JOUR
+AU  - Weber, Leah L.
+AU  - Reiman, Derek
+AU  - Roddur, Mrinmoy S.
+AU  - Qi, Yuanyuan
+AU  - El-Kebir, Mohammed
+AU  - Khan, Aly A.
+TI  - Isotype-aware inference of B cell clonal lineage trees from single-cell sequencing data
+JO  - Cell Genomics
+JA  - Cell Genomics
+PY  - 2024
+VL  - 4
+IS  - 9
+SP  - 100637
+DO  - 10.1016/j.xgen.2024.100637
+UR  - https://doi.org/10.1016/j.xgen.2024.100637
+ER  -
+
+TY  - JOUR
+AU  - Wang, Hao
+AU  - Wang, Kaixuan
+AU  - Xu, Qihang
+AU  - Cai, Linru
+AU  - Huang, Chuanxiang
+AU  - Chen, Linlin
+AU  - Zang, Yunliang
+AU  - Hu, Xihao
+AU  - Zhang, Jian
+TI  - Large-scale paired chain BCR analysis reveals antibody clonal family inference bias and enhances resolution with machine learning
+JO  - PLOS Computational Biology
+JA  - PLoS Comput Biol
+PY  - 2026
+VL  - 22
+IS  - 3
+SP  - e1014077
+DO  - 10.1371/journal.pcbi.1014077
+UR  - https://doi.org/10.1371/journal.pcbi.1014077
+ER  -
+
+TY  - JOUR
+AU  - Wolf, F. Alexander
+AU  - Angerer, Philipp
+AU  - Theis, Fabian J.
+TI  - SCANPY: large-scale single-cell gene expression data analysis
+JO  - Genome Biology
+JA  - Genome Biol
+PY  - 2018
+VL  - 19
+IS  - 1
+SP  - 15
+DO  - 10.1186/s13059-017-1382-0
+UR  - https://doi.org/10.1186/s13059-017-1382-0
+ER  -
+
+TY  - JOUR
+AU  - Korsunsky, Ilya
+AU  - Millard, Nghia
+AU  - Fan, Jean
+AU  - Slowikowski, Kamil
+AU  - Zhang, Fan
+AU  - Wei, Kevin
+AU  - Baglaenko, Yuriy
+AU  - Brenner, Michael
+AU  - Loh, Po-ru
+AU  - Raychaudhuri, Soumya
+TI  - Fast, sensitive and accurate integration of single-cell data with Harmony
+JO  - Nature Methods
+JA  - Nat Methods
+PY  - 2019
+VL  - 16
+IS  - 12
+SP  - 1289-1296
+DO  - 10.1038/s41592-019-0619-0
+UR  - https://doi.org/10.1038/s41592-019-0619-0
+ER  -

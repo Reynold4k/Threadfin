@@ -1,6 +1,6 @@
 """STARTRAC-style clonal dynamics indices: migration, transition, expansion.
 
-Clean clone-level re-implementation of the STARTRAC indices (Zhang et al.,
+Legacy clone-sharing summaries inspired by the STARTRAC indices (Zhang et al.,
 *Nature* 2018, doi:10.1038/s41586-018-0694-x) for paired scRNA-seq +
 scBCR-seq data: pairwise group migration (STARTRAC-migr), state transition
 (STARTRAC-tran) and per-group clonal expansion (STARTRAC-expa).
@@ -74,13 +74,12 @@ def migration_index(
         \\mathrm{migr}(g_1, g_2) = \\sum_c p_{c,g_1} \\cdot p_{c,g_2}
 
     where ``p[c, g]`` is the fraction of clone ``c``'s cells in group ``g``
-    (see :func:`clone_distribution`). Re-implementation of the STARTRAC-migr
+    (see :func:`clone_distribution`). Clone-balanced overlap analogue of the STARTRAC-migr
     index (Zhang et al., *Nature* 2018) at clone level.
 
-    Interpretation caveats: the index conflates *clone sharing* (clones
-    present in both groups) with *clone size* — a single large clone spread
-    across two groups raises migr(g1, g2) more than many small shared clones.
-    It is also sensitive to ``min_clone_size`` and to uneven cell sampling
+    Every retained clone has total weight one regardless of size. The sum
+    increases with the number of retained clones, and is not a movement
+    probability. It is sensitive to ``min_clone_size`` and uneven cell sampling
     between groups; compare values only within one dataset, not across
     cohorts.
 
@@ -112,7 +111,8 @@ def transition_index(
     where ``p[c, s]`` is the fraction of clone ``c``'s cells in state ``s``.
     High off-diagonal values indicate clones spanning both states (STARTRAC,
     Zhang et al., *Nature* 2018). The same caveats apply: the index mixes
-    clone sharing with clone size and is sensitive to ``min_clone_size``.
+    the number of retained clones with their state overlap and is sensitive
+    to ``min_clone_size``; it does not infer direction or transition rates.
 
     Returns
     -------

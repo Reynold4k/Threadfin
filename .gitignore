@@ -13,6 +13,7 @@ data/
 *.h5
 manuscript.ipynb
 .coverage
+internal_validation/
 
 # lineage-tree working files: regenerate with case_studies/lineage_trees.py + run_gctree.sh
 case_studies/results/*/lineage/trees/

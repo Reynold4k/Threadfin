@@ -1,0 +1,84 @@
+{
+  "RNA_centroid": {
+    "seconds": 0.3546040616929531,
+    "n_families": 1414
+  },
+  "Threadfin_mean": {
+    "seconds": 3.371087661013007,
+    "n_families": 1414,
+    "context_key": "donor",
+    "smooth": 0
+  },
+  "Threadfin_kernel": {
+    "seconds": 5.612583644688129,
+    "n_families": 1414,
+    "context_key": "donor",
+    "smooth": 15
+  },
+  "clone2vec": {
+    "seconds": 218.00063238479197,
+    "n_families": 1414,
+    "version": "0.1.1",
+    "native_parameters": {
+      "k": 15,
+      "z_dim": 30,
+      "max_iter": 500,
+      "early_stopping_patience": 5,
+      "init": "svd"
+    }
+  },
+  "RNA_context_centroid": {
+    "seconds": 0.38405810482800007,
+    "n_families": 1414,
+    "context_key": "donor"
+  },
+  "Benisse": {
+    "adapter": "classical MDS of native squared latent distances",
+    "n_components": 30,
+    "positive_eigenvalues": [
+      6.319903901931978,
+      6.319903901931971,
+      6.319903901931969,
+      6.319903901931958,
+      6.319903901931949,
+      6.319903901931947,
+      6.319903901931945,
+      6.319903901931944,
+      6.319903901931943,
+      6.319903901931943,
+      6.319903901931941,
+      6.319903901931941,
+      6.319903901931936,
+      6.3199039019319345,
+      6.319903901931931,
+      6.319903901931929,
+      6.319903901931929,
+      6.319903901931929,
+      6.319903901931923,
+      6.319903901931907,
+      6.319903901931905,
+      6.3199039019319025,
+      6.31990390193189,
+      6.319903901931881,
+      6.319903901931872,
+      6.316584971104356,
+      6.0763122036889285,
+      6.076312203688827,
+      6.076312203688806,
+      6.076312203688773
+    ],
+    "fraction_positive_trace_retained": 0.023267153337236772,
+    "adapter_seconds": 46.5611325064674,
+    "n_native_nodes": 8471,
+    "n_cells": 16667,
+    "n_families": 6121,
+    "performance_adapter": "complete cell-weighted family kernel; no spectral truncation",
+    "spectral_features_used_for_performance": false
+  },
+  "BiGCN": {
+    "n_native_nodes": 8471,
+    "n_cells": 16667,
+    "n_families": 6121,
+    "adapter": "cell-count-weighted native node mean within fixed families"
+  }
+}

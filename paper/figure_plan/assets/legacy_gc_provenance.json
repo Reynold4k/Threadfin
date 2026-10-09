@@ -1,0 +1,83 @@
+{
+  "report": "ZHU_Chen_47074350_BIOX7023_Report.pdf",
+  "report_figure": "2.11",
+  "report_pdf_page": 45,
+  "notebook_commit": "57a956597df762968ca9fe542449b73c95d0f42a",
+  "notebook_url": "https://github.com/Reynold4k/Threadfin/blob/57a956597df762968ca9fe542449b73c95d0f42a/manuscript.ipynb",
+  "assets": [
+    {
+      "file": "GSE246382_report_clone_clusters.png",
+      "sha256": "58dae1e9388a92bca412f8d9eb343c4aa1b329cd640df6a75ddd42da919dc0d4",
+      "source": "report_figure211_original_assets/xref146.png",
+      "dataset": "GSE246382",
+      "sampling_day": 14
+    },
+    {
+      "file": "GSE246382_report_cell_clusters.png",
+      "sha256": "5e75ce8856163b8e5cadb111b4190cb678056b1045e41af9d44efe8b315d44bf",
+      "source": "report_figure211_original_assets/xref297.png",
+      "dataset": "GSE246382",
+      "sampling_day": 14
+    },
+    {
+      "file": "GSE246382_report_clone_Myc.png",
+      "sha256": "78332084d8efeff17ee390ff7045f5bc94a7f0f30c3928b47b1266a057c9a48a",
+      "source": "report_figure211_original_assets/xref144.png",
+      "dataset": "GSE246382",
+      "sampling_day": 14
+    },
+    {
+      "file": "GSE246382_report_signatures.png",
+      "sha256": "72c051f34632c75a5fadf753d1cb8c2b0f99f44591168387daaaa77926a7d584",
+      "source": "report_figure211_original_assets/xref147.png",
+      "dataset": "GSE246382",
+      "sampling_day": 14
+    },
+    {
+      "file": "legacy_notebook_clone_Top2a.png",
+      "sha256": "a65f7060571cd3ece2752007d4b426348d3b75111ab4b21ffe0bd74cc86e7de6",
+      "source": "legacy_figure211_saved_outputs/cell33_output0.png",
+      "dataset": "unresolved",
+      "sampling_day": null
+    }
+  ],
+  "reuse": "Original saved raster panels; no biological rerun, coordinate reconstruction, or point editing.",
+  "Top2a_provenance": "Saved cell 33 output 0; non-sequential execution and cross-dataset variables prevent definitive cohort/day attribution. Shape resembles report GSE180920 clone maps; this is not a verified input chain. Official GSE180920 day7/day14 RNA counts and metadata were downloaded and their cell IDs verified in order. Top2a is present. The notebook contains explicit two-timepoint concatenation. This supports a plausible dataset identity but does not recover the saved image input chain or establish its actual timepoint pool.",
+  "report_methods": {
+    "min_clone_size_text": "greater than 3",
+    "umap_n_neighbors": 20,
+    "min_dist": 0.4,
+    "metric": "euclidean",
+    "leiden_resolution": 0.1,
+    "umap_learn_version": "0.5.5"
+  },
+  "executed_notebook_cell27": {
+    "min_clone_size": 1,
+    "umap_n_neighbors": 20,
+    "min_dist": 0.4,
+    "metric": "euclidean on distance-matrix rows",
+    "learning_rate": 1,
+    "random_state": 123,
+    "leiden_resolution": 0.3,
+    "cluster_graph": "Scanpy neighbours of two-dimensional clone UMAP"
+  },
+  "limitations": [
+    "Clone identities/filtering differ from the current donor-restricted v4 families.",
+    "Historical marker scores reuse RNA and do not independently validate future fate.",
+    "A spatial junction does not measure selection or temporal direction.",
+    "GC selection/output interpretation is restricted to model-antigen GC, not non-GC samples."
+  ],
+  "current_main_figure": {
+    "Figure2B": "New computation from public counts/TRUST4, not a report screenshot",
+    "dataset": "GSE246382",
+    "script": "case_studies/reproduce_gc_legacy_embedding.py",
+    "summary": "case_studies/results/gc_legacy_parameter_audit/selected.json",
+    "coordinates": "case_studies/results/gc_legacy_parameter_audit/maps/legacy__donor_vdj__min1__k40_md0.65_r0.30_seed123.csv",
+    "job_id": "32345448",
+    "extended_audit_job_id": "32345955",
+    "primary": "377 same-mouse V-D-J receptor groups, >=1 cell; groups can merge distinct junctions. UMAP k40/min_dist0.65/seed123; Scanpy k15 and Leiden r0.3/seed0. Six clusters descriptive only.",
+    "colour": "Unsupervised clone_cluster; area proportional to captured cells",
+    "source_differences": "Original bigplasma.h5ad/result_df.csv/IgBLAST table absent. No missing-receptor nan group created. Notebook PCA automatically uses marked HVGs; explicit all-gene sensitivity retained."
+  },
+  "historical_report_reference": "paper/figure_plan/review/Figure_2_archived_report_reference.png; original report panels are no longer Figure2B/S8B-D."
+}
