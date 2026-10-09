@@ -43,7 +43,12 @@ rotated into the eigenbasis of ``P' K P``. In that basis the covariance is diago
 ``sigma_e^2 (1 + lambda d)``, so the restricted (REML) likelihood of ``lambda = h2 / (1 - h2)``,
 pooled over thousands of small trees, is a sum over rows and is maximised by a 1-D search.
 ``h2`` comes with a profile-likelihood interval and an asymptotic boundary likelihood-ratio test
-(``0.5 chi2_0 + 0.5 chi2_1``). The primary test is the REML score statistic
+(``0.5 chi2_0 + 0.5 chi2_1``). **Both are likelihood-based and both have been measured to fail on real
+repertoire data**: with per-unit heteroscedastic residuals the boundary LRT rejects 32-38% of the time at a
+nominal 5%, and with heavy-tailed residuals 16-23%; the interval's coverage is 0.65-0.87 instead of 0.95.
+Use ``p_lrt`` and ``h2_lo``/``h2_hi`` as rough diagnostics only, and quote the permutation p-value and a
+bootstrap over clones (and over donors) for any reported interval. The primary test is the REML score
+statistic
 ``Q = sum_i d_i r_i^2 / sum_i r_i^2`` of the null residuals ``r``, with a Freedman-Lane permutation
 null: residuals of the null model are permuted among the cells of each unit, which keeps every
 unit's tree, its covariates and its set of residual states, and destroys only which cell sits where.
@@ -187,8 +192,14 @@ def lineage_forest(clones, pairs, *, blocks=None, depth=None, min_cells: int = 2
         distance ``d`` (mutations between the two cells' genotypes) and, optionally, ``shared``
         (mutations from the root to their common ancestor). Pairs across clones are ignored.
     blocks
-        Sampling block per row (mouse, library, sort gate...). Units are clone x block. Default: one
-        block, i.e. units are whole clones.
+        Sampling block per row. Units are clone x block. Default: one block, i.e. units are whole clones.
+
+        **Use the finest separately processed unit — the library or sort gate, not the animal.** A clone x
+        gate interaction (one clone behaving differently in two sorted gates of the same animal, which
+        physical sorting all but guarantees) is *not* removed by fitting the gate as a fixed effect. On real
+        germinal-centre trees that omitted interaction, with no lineage component present at all, produced
+        h2 = 0.09-0.16 and rejected 49-88% of the time. Blocking by animal when gates are nested inside
+        animals is therefore not a valid test of lineage heritability.
     depth
         Root-to-tip depth per row. If omitted it is taken from ``pairs`` columns ``depth_i`` and
         ``depth_j``.
@@ -399,12 +410,27 @@ def _fit_h2(z, X, d):
     l0 = float(ll[0])
     lrt = max(0.0, 2 * (l_hat - l0))
     p_lrt = 0.5 * stats.chi2.sf(lrt, 1) if lrt > 0 else 1.0
-    # profile interval: grid points within the chi2_1 0.95 cut-off, linearly interpolated at the edges
+    # Profile interval: the two points where 2 (l_hat - l(h)) crosses the chi2_1 0.95 cut-off, found by
+    # linear interpolation *between* grid points. Snapping to the grid instead (as an earlier version did)
+    # makes the interval a staircase and destroys its coverage even when the model is correct.
     fine = np.unique(np.r_[_H_GRID, h_hat])
     llf = np.array([_reml_profile(z, X, d, h / (1 - h)) for h in fine])
-    inside = 2 * (l_hat - llf) <= stats.chi2.ppf(0.95, 1)
-    lo = float(fine[inside].min()) if inside.any() else float("nan")
-    hi = float(fine[inside].max()) if inside.any() else float("nan")
+    drop = 2 * (l_hat - llf)
+    cut = stats.chi2.ppf(0.95, 1)
+    inside = drop <= cut
+
+    def cross(i, j):
+        """Linear interpolation of the cut-off crossing between grid points i (inside) and j (outside)."""
+        x0, x1, y0, y1 = fine[i], fine[j], drop[i], drop[j]
+        return float(x0 + (x1 - x0) * (cut - y0) / (y1 - y0)) if y1 != y0 else float(x0)
+
+    if not inside.any():
+        lo = hi = float("nan")
+    else:
+        idx = np.flatnonzero(inside)
+        first, last = int(idx[0]), int(idx[-1])
+        lo = float(fine[first]) if first == 0 else cross(first, first - 1)
+        hi = float(fine[last]) if last == fine.size - 1 else cross(last, last + 1)
     return float(h_hat), lo, hi, float(lrt), float(p_lrt)
 
 
