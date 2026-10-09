@@ -71,11 +71,13 @@ permutation p-value (Phipson & Smyth 2010).
 clones and grouped by Leiden community detection (Traag et al. 2019). Two
 safeguards keep the groups meaningful:
 
-* **Only real splits are kept.** Community detection always returns groups,
+* **Approximate split diagnostics.** Community detection always returns groups,
   even when clones vary continuously. Every split is therefore tested
   against a single-group model fitted to the same clones (a Gaussian
   cluster-index test, Liu et al. 2008, applied along the tree of groups with
-  family-wise error control as in sc-SHC, Grabski et al. 2023). Groups that
+  a hierarchical threshold allocation inspired by sc-SHC, Grabski et al. 2023).
+  The full selected Leiden/tree/resolution process is not repeated in the null;
+  normal-tail calibration is approximate, so FWER control is not established. Groups that
   are not significantly separated are merged. If no split survives, Threadfin
   reports a **continuum**: clones differ, but not as distinct groups.
 * **Stability.** The cells are resampled 30-50 times and the whole procedure
@@ -140,3 +142,9 @@ because highly expressed genes are measured more precisely.
 * Rahimi A, Recht B. Random features for large-scale kernel machines. *NeurIPS* 2007.
 * Searle SR, Casella G, McCulloch CE. *Variance Components*. Wiley, 1992.
 * Traag VA, Waltman L, van Eck NJ. From Louvain to Leiden: guaranteeing well-connected communities. *Sci Rep* 2019;9:5233.
+
+## Optional frozen-reference state distributions
+
+See [STATE_DENSITY.md](STATE_DENSITY.md) for the separate region-count model,
+conditional credible intervals, exact sampling intervals, regional annotation
+and train-only RNA projection. The default mean/kernel workflow remains intact.

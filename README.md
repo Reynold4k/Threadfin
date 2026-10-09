@@ -251,3 +251,14 @@ model-antigen GC state bias without measuring direction or fate; the GC
 selection/output interpretation does not extend to non-GC data. Source and
 execution limits are in the
 [provenance manifest](paper/figure_plan/assets/legacy_gc_provenance.json).
+
+## Optional sampling-aware clone composition
+
+Threadfin 4.1 adds frozen-reference state distributions and train-only RNA
+projection. It also fixes kernel feature reconstruction used by programme
+bootstraps and snapshot analysis. Existing mean/kernel profile defaults remain
+available. See [the API and its limitations](docs/STATE_DENSITY.md) and
+[the algorithm review and validation](docs/ALGORITHM_REVIEW_2026-10-09_zh.md).
+
+New comparisons retain negative results: simple RNA means often predict the
+held-out division reporter better, and shrinkage can bias pure-state clones.

@@ -1,15 +1,56 @@
 {
   "checked": "2026-10-06",
-  "wheel_sha256": "5c61176b8268f50bf1411b5c587887b3564a6a8ccba036564c515bf8b1abad07",
+  "wheel_sha256": "4fe0b8b96b221d79162cfd5be67d6d904ad062276657b6773aa12a69b74d8e97",
   "installed_files_verified_against_source": [
+    "__init__.py",
     "_utils.py",
     "api.py",
+    "bcrgraph.py",
+    "clones.py",
+    "core.py",
+    "dynamics.py",
+    "heritability.py",
+    "integrate.py",
+    "io.py",
+    "metrics.py",
+    "migration.py",
+    "plotting.py",
     "pp.py",
     "profiles.py",
-    "core.py",
+    "programmes.py",
+    "programs.py",
     "reclustering.py",
-    "__init__.py"
+    "sequence.py",
+    "simulate.py",
+    "specificity.py",
+    "stats.py",
+    "tl.py"
   ],
+  "source_sha256": {
+    "threadfin/__init__.py": "79aec3b6c9b7e5bd354ddb844609fadcd8e9b0cfe45a47e587ae840f0697ba97",
+    "threadfin/_utils.py": "9d0af89a87822cd2f9bbfc23e880fb8382c7af8b00549b36fa597e47c170ffb6",
+    "threadfin/api.py": "61803ec00d6c96e2cc5d7360eb23e5605650bd3b52176d7f324a56762dacda91",
+    "threadfin/bcrgraph.py": "3939039ebfeedf42cc453cf6d33d837cfe2a87a3d8e8976c432956fe7d6d24a9",
+    "threadfin/clones.py": "9431eeab13647e1436b53939240cd00c6cde9002b1ce719e6b95f420b9fdf9ba",
+    "threadfin/core.py": "a5ac0bd971673fdc7c12e42c4e77eeac087e1a48bcaffbddce9d439305061ef8",
+    "threadfin/dynamics.py": "e314389245fe6bc8a36b4d686c0f05905f16b2d8e429d16a701cbc381a8d165d",
+    "threadfin/heritability.py": "dbb6920d9f1fbc314cbe54fee7c33572d61e1bc69815a276a36c8d34712f2586",
+    "threadfin/integrate.py": "9b95785512b7c8d21b9ae42e9931a39b3cedd84f58ee900c6352440be183604a",
+    "threadfin/io.py": "e336fb5a90bad40e93e7cc7122404eb1dca02805aa1a99d1d4daef4bc0b0b871",
+    "threadfin/metrics.py": "b5a6154c6665e391b98239430c316f7798d0525f51040da19ad12fc7bc6ff1a8",
+    "threadfin/migration.py": "81303a2918cf6c0b758fadb41de8d548d47ae48aee7bbaeb43658c6d9393e555",
+    "threadfin/plotting.py": "88404633fba3a03bf3eecc7642f488495eceb89ecf8ce30b96defa4f9dfaae7f",
+    "threadfin/pp.py": "1caee7b12f7d561eabbd303231f08f23f184f55802de4c945ce08c29894c275b",
+    "threadfin/profiles.py": "9bcb7493a61054c9c38c3c8187921a9c14ab6f57736e24691956c07b8970255f",
+    "threadfin/programmes.py": "defbe27507ee296b09e6d3111670b57e9409448126ac68f6109df2003ed82dbe",
+    "threadfin/programs.py": "9506657c594afd8cee73ef5c858942b6209a76526c36cbb358f62fd772220ab7",
+    "threadfin/reclustering.py": "f01f9afbedad8f56fc0eb86f4dca8a4fdf2edb271a91364926a5bd0e7dbf94b1",
+    "threadfin/sequence.py": "ec10c74de2af9dce51182c73c6736c257cc69c15f1979a1506b370ed0a979753",
+    "threadfin/simulate.py": "b0340bc4857a2576c1a494ea4c1630c7d50bbc61183d1e99b81e9d1dca292432",
+    "threadfin/specificity.py": "058931627ed58bbeb150fd3179207f4aa8b9c7d653bb074e3718da22ececa233",
+    "threadfin/stats.py": "38fc06a4d59d98f54111291002820d0223e95a40b8721478371801987fe214a8",
+    "threadfin/tl.py": "05e19c807f183fe171a4a13ae84dd0c39969095eb3073cb2403cbe5a1e3a627b"
+  },
   "matrix": [
     {
       "python": "3.10.22",
@@ -26,7 +67,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "159 passed, 33 warnings in 39.30s",
+      "results": "161 passed, 33 warnings in 30.59s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -52,7 +93,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "159 passed, 34 warnings in 37.13s",
+      "results": "161 passed, 34 warnings in 29.25s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -78,7 +119,7 @@
         "leidenalg": "0.12.0",
         "umap-learn": "0.5.12"
       },
-      "results": "158 passed, 1 xfailed, 37 warnings in 35.24s",
+      "results": "160 passed, 1 xfailed, 37 warnings in 29.14s",
       "system_site_packages": false,
       "stages": {
         "install_wheel": 0,
@@ -90,7 +131,7 @@
       }
     }
   ],
-  "scope": "Clean Linux installed wheel; full test suite and simulated examples, including presets and historical clone-embedding Scanpy/Leiden graph equivalence. Raw GSE246382 clone embedding is audited separately under job 32344499.",
+  "scope": "Rebuilt clean Linux installed wheel; full tests and simulated examples, including independent UMAP/graph-Leiden seeds and Scanpy recipe equivalence. All package Python files match source, wheel and installed copies byte-for-byte. GSE246382 biological reconstruction has a separate parameter audit.",
   "limitation": "Python 3.12 existing legacy repeatability check xfailed. Windows/macOS and Python 3.13+ not tested.",
-  "job_id": "32344702"
+  "job_id": "32345957"
 }

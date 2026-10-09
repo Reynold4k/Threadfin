@@ -1,0 +1,207 @@
+{
+  "date": "2026-10-09",
+  "version": "4.1.0",
+  "wheel_sha256": "ededc8c33c38ececf1a70d9d923d7a39c6e6b2d56eb749c7d4eed8545276f808",
+  "platform": "Linux HPC, isolated pre-existing clean venvs without system site packages",
+  "installed_outside_repository": true,
+  "module_hashes": {
+    "threadfin/__init__.py": "e2831c8ceb30fd3b3d2616b06c0a2b75044e86011ae938d56f78f437adf736a0",
+    "threadfin/_utils.py": "9d0af89a87822cd2f9bbfc23e880fb8382c7af8b00549b36fa597e47c170ffb6",
+    "threadfin/api.py": "b602dd380900cc294b0b3c1546e0081a5697b23a45383dd97b047e3e80b7a892",
+    "threadfin/bcrgraph.py": "3939039ebfeedf42cc453cf6d33d837cfe2a87a3d8e8976c432956fe7d6d24a9",
+    "threadfin/clones.py": "661b95300f3b6c507ba59fd5d3d57250388061044a27937cc2cb976f3db1e66a",
+    "threadfin/core.py": "9a94156bfe9cf9ff84a0ac2dd90f993eab8f4cfe0b16174a37ab9a3cb3da9248",
+    "threadfin/density.py": "2fdbf8bd7ea71bd5a14ed4fa77d9a9986c3f184728da6bb7aa86143501c0d5d8",
+    "threadfin/dynamics.py": "4ae1eaf757f15eda3f59dfee22313712f7db44471d1a4bffc4ed574db22db78a",
+    "threadfin/expression.py": "dd50214690876b3432dcf1c23822768b38209107c1380177011d6520a54a51d1",
+    "threadfin/heritability.py": "88afd2162782240844a77f246466f78f418c93afcb4c655cb007237abbe77e0d",
+    "threadfin/integrate.py": "3934c3c9a625abf3114c35ecdc5576caff26b0348bcac8062e7bfdaa1e9bd1c1",
+    "threadfin/io.py": "e336fb5a90bad40e93e7cc7122404eb1dca02805aa1a99d1d4daef4bc0b0b871",
+    "threadfin/metrics.py": "d90547e8c30f0cd3018c1d6b86aa1d3c8959e41a5965c11f92c256e038cca482",
+    "threadfin/migration.py": "2d1bf80bf0428e951d46ae12901aed8236b9fefd67df87110b6e4ded5304e9a9",
+    "threadfin/plotting.py": "88404633fba3a03bf3eecc7642f488495eceb89ecf8ce30b96defa4f9dfaae7f",
+    "threadfin/pp.py": "9a67f2a8f027c87ec86bce1c5b67ff9c76dc653807bf2b9457a0f1d08eddccb8",
+    "threadfin/profiles.py": "a79befc96cf774ac5bd62c52f77c9b607b80041da223f9ca508bedfef8f24809",
+    "threadfin/programmes.py": "49facb7aea63086b786277129c198c548bfbbd8cdf7c2ae04924023600cc76c9",
+    "threadfin/programs.py": "9506657c594afd8cee73ef5c858942b6209a76526c36cbb358f62fd772220ab7",
+    "threadfin/reclustering.py": "f01f9afbedad8f56fc0eb86f4dca8a4fdf2edb271a91364926a5bd0e7dbf94b1",
+    "threadfin/sequence.py": "a975d00ddb3d4cae993f7a10e48da02afe616005a40eb2b1ef7e24b76d70772b",
+    "threadfin/simulate.py": "b0340bc4857a2576c1a494ea4c1630c7d50bbc61183d1e99b81e9d1dca292432",
+    "threadfin/specificity.py": "058931627ed58bbeb150fd3179207f4aa8b9c7d653bb074e3718da22ececa233",
+    "threadfin/stats.py": "809cf3b022c233415e205631689beaaba19004532be948fe0111c7417799bcc0",
+    "threadfin/tl.py": "139c4f6a3fd8d347b9df3c70d55406f3a96409500f9b100543a1d5c30231f2ea"
+  },
+  "environments": [
+    {
+      "requested_python": "310",
+      "versions": {
+        "python": "3.10.22 (main, Oct  3 2026, 01:32:06) [Clang 22.1.3 ]",
+        "threadfin_file": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/compatibility/py310/lib/python3.10/site-packages/threadfin/__init__.py",
+        "packages": {
+          "threadfin": "4.1.0",
+          "numpy": "2.2.6",
+          "pandas": "2.3.3",
+          "scipy": "1.15.3",
+          "scikit-learn": "1.7.2",
+          "anndata": "0.11.4",
+          "scanpy": "1.11.5",
+          "harmonypy": "2.0.2",
+          "igraph": "1.0.0",
+          "leidenalg": "0.12.0",
+          "umap-learn": "0.5.12"
+        }
+      },
+      "test_summary": "198 passed, 33 warnings in 41.29s",
+      "stages": [
+        {
+          "stage": "install_wheel",
+          "returncode": 0,
+          "seconds": 1.62
+        },
+        {
+          "stage": "pip_check",
+          "returncode": 0,
+          "seconds": 0.42
+        },
+        {
+          "stage": "pytest",
+          "returncode": 0,
+          "seconds": 48.25
+        },
+        {
+          "stage": "tutorial",
+          "returncode": 0,
+          "seconds": 51.49
+        },
+        {
+          "stage": "quickstart",
+          "returncode": 0,
+          "seconds": 35.19
+        },
+        {
+          "stage": "versions",
+          "returncode": 0,
+          "seconds": 1.71
+        }
+      ],
+      "all_modules_equal_to_source_and_wheel": true
+    },
+    {
+      "requested_python": "311",
+      "versions": {
+        "python": "3.11.7 (main, Dec 15 2023, 18:12:31) [GCC 11.2.0]",
+        "threadfin_file": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/compatibility/py311/lib/python3.11/site-packages/threadfin/__init__.py",
+        "packages": {
+          "threadfin": "4.1.0",
+          "numpy": "2.4.6",
+          "pandas": "2.3.3",
+          "scipy": "1.17.1",
+          "scikit-learn": "1.9.1",
+          "anndata": "0.12.19",
+          "scanpy": "1.11.5",
+          "harmonypy": "2.0.2",
+          "igraph": "1.0.0",
+          "leidenalg": "0.12.0",
+          "umap-learn": "0.5.12"
+        }
+      },
+      "test_summary": "198 passed, 34 warnings in 38.29s",
+      "stages": [
+        {
+          "stage": "install_wheel",
+          "returncode": 0,
+          "seconds": 0.86
+        },
+        {
+          "stage": "pip_check",
+          "returncode": 0,
+          "seconds": 0.6
+        },
+        {
+          "stage": "pytest",
+          "returncode": 0,
+          "seconds": 45.96
+        },
+        {
+          "stage": "tutorial",
+          "returncode": 0,
+          "seconds": 49.34
+        },
+        {
+          "stage": "quickstart",
+          "returncode": 0,
+          "seconds": 34.78
+        },
+        {
+          "stage": "versions",
+          "returncode": 0,
+          "seconds": 2.99
+        }
+      ],
+      "all_modules_equal_to_source_and_wheel": true
+    },
+    {
+      "requested_python": "312",
+      "versions": {
+        "python": "3.12.15 (main, Oct  3 2026, 01:03:07) [Clang 22.1.3 ]",
+        "threadfin_file": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/compatibility/py312/lib/python3.12/site-packages/threadfin/__init__.py",
+        "packages": {
+          "threadfin": "4.1.0",
+          "numpy": "2.5.3",
+          "pandas": "3.0.6",
+          "scipy": "1.18.1",
+          "scikit-learn": "1.9.1",
+          "anndata": "0.13.4",
+          "scanpy": "1.12.4",
+          "harmonypy": "2.0.2",
+          "igraph": "1.0.0",
+          "leidenalg": "0.12.0",
+          "umap-learn": "0.5.12"
+        }
+      },
+      "test_summary": "197 passed, 1 xfailed, 37 warnings in 38.22s",
+      "stages": [
+        {
+          "stage": "install_wheel",
+          "returncode": 0,
+          "seconds": 1.59
+        },
+        {
+          "stage": "pip_check",
+          "returncode": 0,
+          "seconds": 0.4
+        },
+        {
+          "stage": "pytest",
+          "returncode": 0,
+          "seconds": 46.21
+        },
+        {
+          "stage": "tutorial",
+          "returncode": 0,
+          "seconds": 48.52
+        },
+        {
+          "stage": "quickstart",
+          "returncode": 0,
+          "seconds": 35.4
+        },
+        {
+          "stage": "versions",
+          "returncode": 0,
+          "seconds": 2.75
+        }
+      ],
+      "all_modules_equal_to_source_and_wheel": true
+    }
+  ],
+  "source_suite": {
+    "result": "198 passed, 33 warnings",
+    "job_id": "32593135"
+  },
+  "limitations": [
+    "Python 3.12 has one existing legacy-v3 repeatability xfail; not a passing test.",
+    "No Windows/macOS, Python 3.13+ or minimum dependency version claim.",
+    "Tutorial/quickstart use simulated inputs; real-data verification is recorded separately."
+  ]
+}

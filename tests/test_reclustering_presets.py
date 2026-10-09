@@ -74,6 +74,8 @@ def test_display_controls_leave_distance_partition_unchanged(clone_data):
     ({"embedding_mode": "unknown"}, "embedding_mode must"),
     ({"cluster_on": "unknown"}, "cluster_on must"),
     ({"cluster_on": "embedding", "embed_clones": False}, "requires embed_clones=True"),
+    ({"cluster_random_state": -1}, "non-negative integer"),
+    ({"cluster_random_state": 1.5}, "non-negative integer"),
 ])
 def test_invalid_controls_are_rejected_without_mutation(clone_data, kwargs, message):
     with pytest.raises(ValueError, match=message):
@@ -104,18 +106,20 @@ def test_embedding_partition_matches_notebook_scanpy_graph(clone_data, tmp_path)
     result = tf.clonotype_recluster(
         clone_data, basis="X_pca", preset="continuous", n_neighbors=5,
         umap_n_neighbors=7, resolution=.3, embedding_mode="distance_profiles",
-        cluster_on="embedding", random_state=123, copy=True,
+        cluster_on="embedding", random_state=123, cluster_random_state=0, copy=True,
     )
     cm = result.uns["threadfin"]["clone_map"]
     expected = ad.AnnData(cm[["x", "y"]].to_numpy())
-    sc.pp.neighbors(expected, n_neighbors=5, use_rep="X", random_state=123)
-    sc.tl.leiden(expected, resolution=.3, random_state=123,
+    sc.pp.neighbors(expected, n_neighbors=5, use_rep="X", random_state=0)
+    sc.tl.leiden(expected, resolution=.3, random_state=0,
                  flavor="leidenalg", directed=True, n_iterations=-1)
     np.testing.assert_array_equal(cm.clone_cluster.astype(str), expected.obs.leiden.astype(str))
     np.testing.assert_array_equal(result.obs.clone_cluster.astype(str),
                                   result.obs.clone_id.map(cm.clone_cluster).astype(str))
     config = result.uns["threadfin"]["clonotype_recluster"]
     assert config["cluster_on"] == "embedding"
+    assert config["cluster_random_state"] == 0
+    assert config["random_state"] == 123
     assert config["graph_method"] == "scanpy_umap_connectivities"
     assert config["effective_n_neighbors"] == 5
     assert config["effective_umap_n_neighbors"] == 7

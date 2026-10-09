@@ -1,15 +1,38 @@
 # Verified compatibility
 
+## Version 4.1.0 — 9 October 2026
+
+The final 4.1.0 wheel was installed into the three isolated Linux environments
+and tested from outside the repository. All 25 package modules matched the
+source, wheel and installed copies byte-for-byte. This check found and fixed
+an older AnnData serialization case in which an absent None-valued context
+parameter prevented model reconstruction.
+
+| Python | Installed-wheel full suite | Dependency check | Tutorial | Simulated quick start |
+|---|---|---|---|---|
+| 3.10.22 | 198 passed | Passed | Passed | Passed |
+| 3.11.7 | 198 passed | Passed | Passed | Passed |
+| 3.12.15 | 197 passed, 1 expected failure | Passed | Passed | Passed |
+
+The separate current-development-environment suite also passed all 198 tests.
+The Python 3.12 expected failure remains the legacy-v3 repeatability check,
+not a passing test or a new state-density failure. Scientific warnings were
+retained (33–37 per installed suite).
+See [the 4.1.0 verification record](compatibility_results_2026-10-09.json)
+for hashes, dependencies and every stage exit code.
+
+## Historical check — 6 October 2026
+
 Checked on 6 October 2026 using clean Linux environments without inherited
 system-site packages. Tests imported the installed wheel from `site-packages`
-outside the repository. The seven input-validation and reclustering modules were also
+outside the repository. All 23 package Python modules were also
 compared byte-for-byte with the wheel and all three installed copies.
 
 | Python | Full test suite | Dependency check | Tutorial | Simulated quick start |
 |---|---|---|---|---|
-| 3.10.22 | 159 passed | Passed | Passed | Passed |
-| 3.11.7 | 159 passed | Passed | Passed | Passed |
-| 3.12.15 | 158 passed, 1 expected failure | Passed | Passed | Passed |
+| 3.10.22 | 161 passed | Passed | Passed | Passed |
+| 3.11.7 | 161 passed | Passed | Passed | Passed |
+| 3.12.15 | 160 passed, 1 expected failure | Passed | Passed | Passed |
 
 The Python 3.12 expected failure is the existing legacy-v3
 `clonotype_recluster` repeatability check. It is not counted as a passing test.
@@ -17,10 +40,11 @@ The v4 `tf.run` tests and examples passed on all three environments. The suites
 emit 33–37 warnings, including scientific warnings about unstable programme
 partitions; those are retained rather than hidden.
 
-All 15 reclustering-control tests passed. They cover explicit overrides,
+All 17 reclustering-control tests passed. They cover explicit overrides,
 unchanged default partitions, independent display controls, AnnData round-trip
 serialization, missing clone IDs, invalid parameter/distance rejection and
-exact agreement with the historical Scanpy graph/Leiden recipe. The optional
+exact agreement with the historical Scanpy graph/Leiden recipe, including
+independent UMAP and graph/Leiden random seeds. The optional
 embedding graph is tested alongside unchanged default distance partitions.
 
 Exact dependency versions, the tested wheel's SHA-256 and stage exit codes are

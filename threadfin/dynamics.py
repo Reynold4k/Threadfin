@@ -41,7 +41,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ._utils import codes, get_uns, log, require_obs
+from ._utils import codes, get_uns, log, require_obs, require_positive_int
 from .profiles import get_profiles, model_from_adata, variance_components
 
 MEMORY_KEY = "memory"
@@ -135,6 +135,8 @@ def clonal_memory(
     ``transitions_expected`` tables. Stored in
     ``adata.uns['threadfin']['memory'][time_key]``.
     """
+    for name, value in [("min_cells", min_cells), ("min_pairs", min_pairs), ("n_null", n_null), ("n_boot", n_boot)]:
+        require_positive_int(value, name)
     prof = get_profiles(adata)
     clone_key = prof["params"]["clone_key"]
     require_obs(adata, time_key)
@@ -171,19 +173,17 @@ def clonal_memory(
     pools: dict = {}
     for i in range(len(snaps)):
         pools.setdefault((d_arr[i], t_arr[i]), []).append(i)
-    by_time: dict = {}
-    for i in range(len(snaps)):
-        by_time.setdefault(t_arr[i], []).append(i)
     cands = []
     for a, b in zip(pa, pb):
         pool = np.asarray(pools[(d_arr[b], t_arr[b])])
         pool = pool[c_arr[pool] != c_arr[a]]
-        if pool.size == 0:
-            pool = np.asarray(by_time[t_arr[b]])
-            pool = pool[c_arr[pool] != c_arr[a]]
         cands.append(pool)
     usable = np.array([c.size > 0 for c in cands])
+    n_unmatched = int((~usable).sum())
     pa, pb = pa[usable], pb[usable]
+    if pa.size < min_pairs:
+        raise ValueError(f"Only {pa.size} snapshot pairs have another clone from the same donor "
+                         f"and target time (need >= {min_pairs}); no memory index is reported.")
     cands = [c for c, u in zip(cands, usable) if u]
 
     d_same = corrected_sqdist(pa, pb)
@@ -199,6 +199,9 @@ def clonal_memory(
         if r < 50:
             d_random_all.append(dr)
     d_random = np.mean(d_random_all, axis=0)  # per-pair expected distance to a random clone
+    if not np.isfinite(d_random).all() or d_random.mean() <= 0:
+        raise ValueError("Noise-corrected matched-clone distance is non-positive; "
+                         "the memory ratio is not identifiable for these samples.")
     mem = 1.0 - d_same.mean() / d_random.mean()
     p_value = (1 + int((null_stats <= d_same.mean()).sum())) / (n_null + 1)
 
@@ -208,8 +211,14 @@ def clonal_memory(
     boots = np.empty(n_boot)
     for r in range(n_boot):
         w = np.bincount(rng.integers(0, uniq.size, size=uniq.size), minlength=uniq.size)[inv]
-        boots[r] = 1.0 - np.sum(w * d_same) / np.sum(w * d_random)
-    ci = (float(np.quantile(boots, 0.025)), float(np.quantile(boots, 0.975)))
+        denom = np.sum(w * d_random)
+        boots[r] = 1.0 - np.sum(w * d_same) / denom if denom > 0 else np.nan
+    identifiable = np.isfinite(boots)
+    # Dropping undefined ratios would produce a falsely reassuring conditional CI.
+    ci = (float(np.quantile(boots, 0.025)), float(np.quantile(boots, 0.975))) if identifiable.all() else (np.nan, np.nan)
+    if not identifiable.all():
+        warnings.warn("Some clone bootstraps have non-positive corrected null distance; "
+                      "the memory-index interval is undefined.", stacklevel=2)
 
     pairs = pd.DataFrame({
         "clone": clones_of_pairs, "earlier": [levels[t] for t in t_arr[pa]],
@@ -218,7 +227,9 @@ def clonal_memory(
     })
     res = {
         "time_key": time_key, "levels": levels, "n_clones": int(uniq.size), "n_pairs": int(pa.size),
+        "n_unmatched_pairs": n_unmatched, "null_matching": "same donor and target time; no cross-donor fallback",
         "memory_index": float(mem), "memory_index_ci": ci, "p_value": float(p_value),
+        "bootstrap_identifiable_fraction": float(identifiable.mean()),
         "mean_change": float(d_same.mean()), "mean_change_random": float(d_random.mean()),
         "pairs": pairs,
     }

@@ -17,7 +17,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from ._utils import bh_fdr, codes, get_uns, log, perm_pvalue, permute_within, require_obs
+from ._utils import bh_fdr, codes, get_uns, log, perm_pvalue, permute_within, require_obs, require_complete_groups, require_positive_int
 from .profiles import get_profiles, model_from_adata, variance_components
 
 
@@ -56,6 +56,7 @@ def clonal_coherence(
     ``excess`` (observed - null mean), ``p_value`` and bookkeeping; also stored
     in ``adata.uns['threadfin']['coherence']``.
     """
+    require_positive_int(n_perm, "n_perm")
     prof = get_profiles(adata)
     # the ICC is always measured on unsmoothed cells in the embedding itself, so it reads
     # as "share of transcriptional variance explained by clone" whatever the profile type
@@ -63,7 +64,7 @@ def clonal_coherence(
     strata_key = strata_key or prof["params"].get("context_key")
     strata = None
     if strata_key is not None:
-        require_obs(adata, strata_key)
+        require_complete_groups(adata, strata_key, context="coherence permutations")
         strata, _ = codes(adata.obs[strata_key])
 
     observed = model.vc.icc
@@ -232,6 +233,7 @@ def association_test(
     how, min_frac
         Passed to :func:`clone_labels`.
     """
+    require_positive_int(n_perm, "n_perm")
     prof = get_profiles(adata)
     clone_key = clone_key or prof["params"]["clone_key"]
     if strata_key == "auto":
@@ -311,6 +313,7 @@ def profile_association(
     """
     from scipy.stats import spearmanr
 
+    require_positive_int(n_perm, "n_perm")
     prof = get_profiles(adata)
     table = prof["clone_table"]
     clone_key = clone_key or prof["params"]["clone_key"]
@@ -324,6 +327,8 @@ def profile_association(
     x = prof["features"].loc[use].to_numpy(dtype=float)
     x = x - x.mean(axis=0)
     total = float(np.einsum("ij,ij->", x, x))
+    if not np.isfinite(total) or total <= 0:
+        raise ValueError("Clone profiles have no finite between-clone variation to explain.")
     y = labels.loc[use]
     strata = (codes(table.loc[use, strata_key].astype(str))[0] if strata_key is not None
               else np.zeros(use.size, dtype=np.int64))

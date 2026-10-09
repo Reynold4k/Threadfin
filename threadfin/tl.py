@@ -16,6 +16,7 @@ need finer control:
 """
 
 from .clones import define_clones, find_threshold, mutation_frequency
+from .density import clone_densities
 from .dynamics import clonal_memory
 from .heritability import gene_heritability, geneset_heritability
 from .profiles import clone_profiles
@@ -28,6 +29,7 @@ __all__ = [
     "clonal_memory",
     "clone_labels",
     "clone_profiles",
+    "clone_densities",
     "define_clones",
     "find_programmes",
     "find_threshold",

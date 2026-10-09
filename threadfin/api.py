@@ -53,6 +53,7 @@ def _read_airr_cells(path) -> pd.DataFrame:
     count_col = next((c for c in ("umi_count", "duplicate_count", "consensus_count") if c in tab.columns), None)
     if count_col is not None:
         tab = tab.sort_values(count_col, ascending=False, kind="mergesort")
+    locus = locus.reindex(tab.index)  # UMI sorting changes row order; keep chain labels aligned.
     keep = [c for c in ("v_call", "d_call", "j_call", "c_call", "junction", "junction_aa", "cdr3",
                         "cdr3_aa", "clone_id", "mutation_frequency") if c in tab.columns]
     heavy = tab[locus.str.upper().eq("IGH").to_numpy()].drop_duplicates("cell_id").set_index("cell_id")[keep]

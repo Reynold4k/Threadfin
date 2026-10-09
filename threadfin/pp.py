@@ -19,6 +19,7 @@ import pandas as pd
 import scipy.sparse as sp
 
 from ._utils import log, require_complete_groups, require_positive_int
+from .expression import FrozenExpressionModel
 
 # V/D/J segments (incl. orphons such as IGKV1OR1-1 and Roman-numeral
 # pseudogenes such as IGHVII-1-1) for human (IGHV1-2) and mouse (Ighv1-72).

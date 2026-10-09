@@ -175,6 +175,16 @@ def define_clones(
     from scipy.sparse import coo_matrix
     from scipy.sparse.csgraph import connected_components
 
+    if not bcr.index.is_unique:
+        raise ValueError("bcr must contain one row per cell with unique barcodes.")
+    if donor_key is not None:
+        if donor_key not in bcr:
+            raise KeyError(f"Missing donor column: {donor_key}")
+        donor_values = bcr[donor_key]
+        if (donor_values.isna() | donor_values.astype("string").str.strip().eq("").fillna(False)).any():
+            raise ValueError("Every BCR cell needs a non-missing donor label; clones cannot pool unknown donors.")
+    if threshold != "auto" and (not np.isfinite(float(threshold)) or not 0 <= float(threshold) <= 1):
+        raise ValueError("threshold must be 'auto' or a finite number between 0 and 1.")
     out = bcr.copy()
     if junction_col is None:
         junction_col = next((c for c in ("junction", "cdr3_nt", "junction_aa", "cdr3") if c in out.columns), None)

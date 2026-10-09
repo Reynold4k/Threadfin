@@ -149,9 +149,12 @@ def _nw_score(a: str, b: str) -> float:
             _parasail.nw(a, b, -_GAP_OPEN, -_GAP_EXTEND, _PARASAIL_MATRIX).score
         )
     n, m = len(a), len(b)
-    M = np.zeros((n + 1, m + 1))
+    M = np.full((n + 1, m + 1), -np.inf)
+    M[0, 0] = 0.0
     Ix = np.full((n + 1, m + 1), -np.inf)
     Iy = np.full((n + 1, m + 1), -np.inf)
+    Ix[1:, 0] = _GAP_OPEN + np.arange(n) * _GAP_EXTEND
+    Iy[0, 1:] = _GAP_OPEN + np.arange(m) * _GAP_EXTEND
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             Ix[i, j] = max(M[i - 1, j] + _GAP_OPEN, Ix[i - 1, j] + _GAP_EXTEND)

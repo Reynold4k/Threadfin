@@ -97,10 +97,10 @@ def state_enrichment(
     """Fisher-exact enrichment of transcriptional states in clone clusters.
 
     For every (clone cluster, state) pair, tests whether cells of that state
-    are over-represented in the cluster. This is the quantitative evidence
-    that clone clusters correspond to biologically meaningful cell states,
-    and is more informative than global agreement scores when states are
-    imbalanced (e.g. a small plasmablast state among many B-cell cells).
+    are over-represented in the cluster. This legacy calculation treats cells
+    as independent and reuses expression-derived labels. Interpret it as a
+    descriptive enrichment, not independent biological validation; use
+    threadfin.tl.association_test for clone-level stratified comparisons.
 
     Returns
     -------

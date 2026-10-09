@@ -81,12 +81,10 @@ def clone_centroids(
     if weight_col is not None:
         if weight_col not in adata.obs.columns:
             raise KeyError(f"'{weight_col}' not found in adata.obs.")
-        w = np.nan_to_num(
-            pd.to_numeric(adata.obs[weight_col], errors="coerce").to_numpy(
-                dtype=float
-            )[valid.to_numpy()],
-            nan=0.0,
-        )
+        w = pd.to_numeric(adata.obs[weight_col], errors="coerce").to_numpy(dtype=float)[valid.to_numpy()]
+        w = np.where(np.isnan(w), 0.0, w)
+        if not np.isfinite(w).all() or (w < 0).any():
+            raise ValueError("Cell weights must be non-negative and finite (missing weights count as zero).")
         coord_cols = [c for c in df.columns if c != "clone"]
         weighted = df[coord_cols].multiply(w, axis=0)
         weighted["clone"] = df["clone"]
@@ -98,7 +96,7 @@ def clone_centroids(
         centroids = df.groupby("clone").mean()
     centroids.columns = [f"{basis}_{i}" for i in range(centroids.shape[1])]
     centroids = centroids.join(sizes)
-    centroids = centroids[centroids["n_cells"] >= min_clone_size]
+    centroids = centroids[(centroids["n_cells"] >= min_clone_size) & centroids.notna().all(axis=1)]
     if len(centroids) == 0:
         raise ValueError(
             f"No clones with >= {min_clone_size} cells. Lower min_clone_size."
@@ -173,6 +171,7 @@ def clonotype_recluster(
     umap_n_neighbors: int | None = None,
     embedding_mode: str = "precomputed",
     cluster_on: str = "distances",
+    cluster_random_state: int | None = None,
 ):
     """Cluster clonotypes by the transcriptional state of their member cells.
 
@@ -217,7 +216,7 @@ def clonotype_recluster(
         If ``True``, compute a UMAP of the clonotype centroids (stored in the
         clone map as ``x``/``y``) for visualization.
     random_state
-        Seed for Leiden/UMAP reproducibility.
+        UMAP seed and, unless overridden, neighbour-graph/Leiden seed.
     key_added
         Name of the ``obs`` column receiving the clone cluster label.
     copy
@@ -242,6 +241,9 @@ def clonotype_recluster(
         notebook. In this explicit mode UMAP parameters can change clusters;
         ``embed_clones=True`` is required. Use ``n_neighbors=15`` and
         ``umap_n_neighbors=20`` for the notebook's separate neighbour counts.
+    cluster_random_state
+        Optional independent graph/Leiden seed. ``None`` uses ``random_state``.
+        The historical notebook uses UMAP seed 123 and Scanpy's default seed 0.
 
     Returns
     -------
@@ -266,6 +268,12 @@ def clonotype_recluster(
         raise ValueError("cluster_on must be 'distances' or 'embedding'.")
     if cluster_on == "embedding" and not embed_clones:
         raise ValueError("cluster_on='embedding' requires embed_clones=True.")
+    if cluster_random_state is None:
+        cluster_random_state = random_state
+    elif (isinstance(cluster_random_state, (bool, np.bool_))
+          or not isinstance(cluster_random_state, (int, np.integer))
+          or cluster_random_state < 0):
+        raise ValueError("cluster_random_state must be a non-negative integer.")
     if not np.isfinite(cdr3_weight) or not 0 <= cdr3_weight <= 1:
         raise ValueError("cdr3_weight must be in [0, 1].")
     if copy:
@@ -351,13 +359,13 @@ def clonotype_recluster(
 
         clone_adata = AnnData(clone_xy)
         sc.pp.neighbors(clone_adata, n_neighbors=graph_k, use_rep="X",
-                        metric="euclidean", random_state=random_state)
-        sc.tl.leiden(clone_adata, resolution=resolution, random_state=random_state,
+                        metric="euclidean", random_state=cluster_random_state)
+        sc.tl.leiden(clone_adata, resolution=resolution, random_state=cluster_random_state,
                      flavor="leidenalg", directed=True, n_iterations=-1)
         labels = clone_adata.obs["leiden"].astype(str).to_numpy()
     else:
         labels = _leiden_on_distances(
-            dist, n_neighbors=graph_k, resolution=resolution, random_state=random_state
+            dist, n_neighbors=graph_k, resolution=resolution, random_state=cluster_random_state
         )
     clone_map[key_added] = pd.Categorical(labels)
 
@@ -385,6 +393,7 @@ def clonotype_recluster(
         "embed_clones": bool(embed_clones),
         "cdr3_weight": cdr3_weight,
         "random_state": random_state,
+        "cluster_random_state": cluster_random_state,
         "n_clones_clustered": int(n_clones),
         "n_clone_clusters": int(len(set(labels))),
     }
