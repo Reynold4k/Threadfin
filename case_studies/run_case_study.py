@@ -3,7 +3,7 @@
 
 Usage:
     python run_case_study.py <dataset>
-    # ln_vaccine | flu | tonsil | ebv | stephenson | mouse_np | mouse_rbd
+    # ln_vaccine | flu | tonsil | ebv | mouse_np | mouse_rbd
 
 For one dataset, this script asks the questions Threadfin is built for:
 
@@ -56,6 +56,11 @@ CONFIGS = {
                ("mutation_frequency", "mean", "V-region mutation frequency"),
                ("tissue", "fraction:blood", "fraction of the clone's cells sampled in blood")],
         memory=["timepoint", "tissue"],
+        map_params=dict(map_n_neighbors=50, map_min_dist=0.3),
+        # 11,141 clones at min_cells 2 crowd the panel and most of them hold exactly two cells;
+        # requiring ten leaves 1,243 well-sampled clones and the GC / plasma cell / plasmablast
+        # gradient reads cleanly. Chosen from ln_vaccine_min10_gallery.png.
+        min_cells=10,
     ),
     "flu": dict(
         title="Wang et al. 2023 - seasonal influenza vaccine, PBMC B cells (6 donors, d0 + d7)",
@@ -79,14 +84,6 @@ CONFIGS = {
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["timepoint", "gfp"],
     ),
-    "stephenson": dict(
-        title="Stephenson et al. 2021 Nat Med - COVID-19 PBMC, 5k BCR+ B-lineage cells",
-        batch_key="donor", state_key="state",
-        tests=[("isotype", "majority", "heavy-chain isotype"),
-               ("mutation_frequency", "mean", "V-region mutation frequency")],
-        donor_level_tests=[("severity", "majority", "clinical severity of the donor")],
-        memory=[],
-    ),
     "mouse_np": dict(
         title="Merkenschlager et al. 2025 Nature - NP-OVA germinal centres, H2B-mCherry division reporter (7 mice)",
         batch_key=None, state_key=None,
@@ -95,6 +92,7 @@ CONFIGS = {
                ("mutation_frequency", "mean", "V-region mutation frequency"),
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["division_gate"],
+        map_params=dict(map_n_neighbors=15, map_min_dist=0.1),
     ),
     "gc_np_pc": dict(
         title="ElTanbouly et al. 2023 J Exp Med - NP-OVA day 14, sorted GC B cells (DZ, LZ, Myc+ LZ) and plasma cells, "
@@ -108,6 +106,7 @@ CONFIGS = {
                ("mutation_frequency", "mean", "V-region mutation frequency"),
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["plasma_cell"],
+        map_params=dict(map_n_neighbors=50, map_min_dist=0.8),
     ),
     "malaria": dict(
         title="GSE286215 - terminal splenic sampling during PcAS infection: day 0 (one naive mouse), "
@@ -130,6 +129,7 @@ CONFIGS = {
                ("isotype", "majority", "heavy-chain isotype")],
         donor_level_tests=[("treatment", "majority", "antimalarial treatment of the mouse")],
         memory=[],
+        map_params=dict(map_n_neighbors=200, map_min_dist=0.1),
     ),
     "bone_marrow_pc": dict(
         title="GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some "
@@ -164,6 +164,43 @@ CONFIGS = {
                ("mutation_frequency", "mean", "V-region mutation frequency"),
                ("isotype", "majority", "heavy-chain isotype")],
         memory=["division_gate", "rbd_bait", "zone_gate"],
+        map_params=dict(map_n_neighbors=30, map_min_dist=0.8),
+    ),
+    "gut_gc_reporter": dict(
+        title="Siniscalco et al. 2025 Immunity - oral NP-OVA / OVA + cholera toxin, gut-draining lymphoid "
+              "tissue of S1PR2-CreERT2 GC fate-reporter mice (3 mice, MLN/PP/LP, GC/nonGC sorts)",
+        batch_key=None, state_key="celltype",
+        tests=[("gc_sort", "fraction:GC", "fraction of the clone's cells sorted GC-derived (tdTomato+ fate, "
+                                          "measured FACS gate)"),
+               ("celltype", "fraction:plasma", "fraction of the clone's cells annotated plasma (RNA-derived)"),
+               ("celltype", "fraction:GC_Bcell", "fraction of the clone's cells annotated GC B (RNA-derived)"),
+               ("isotype", "majority", "heavy-chain isotype (sequential IgG1 -> IgA switching is the paper's "
+                                       "central claim)"),
+               ("mutation_frequency", "mean", "V-region mutation frequency"),
+               ("tissue", "fraction:LP", "fraction of the clone's cells sampled in the lamina propria")],
+        memory=["tissue", "gc_sort"],
+        map_params=dict(map_n_neighbors=30, map_min_dist=0.3),
+    ),
+    "covid_bcell": dict(
+        title="Dugan et al. 2021 Immunity - COVID-19 multi-antigen bait-sorted B cells "
+              "(38 patients, acute + convalescent; oligo-tagged spike/RBD/NP/ORF8 and HCoV probes)",
+        batch_key="donor", state_key=None,
+        tests=[("antigen_call", "majority", "dominant SARS-CoV-2 antigen bait of the clone (measured "
+                                            "oligo-probe counts)"),
+               ("isotype", "majority", "heavy-chain isotype")],
+        donor_level_tests=[("disease_state", "majority", "acute vs convalescent sampling")],
+        memory=["visit"],
+        map_params=dict(map_n_neighbors=30, map_min_dist=0.3),
+    ),
+    "spont_gc": dict(
+        title="Castrillon et al. 2023 eLife - AID-EYFP+ (GC-experienced) spleen B cells from spontaneous-GC "
+              "autoimmune chimeras vs NP-CGG-immunised controls (8 mice)",
+        batch_key=None, state_key=None,
+        tests=[("isotype", "majority", "heavy-chain isotype"),
+               ("mutation_frequency", "mean", "V-region mutation frequency")],
+        donor_level_tests=[("condition", "majority", "autoimmune chimera vs NP-CGG immunised")],
+        memory=[],
+        map_params=dict(map_n_neighbors=30, map_min_dist=0.3),
     ),
 }
 
@@ -189,7 +226,8 @@ def mouse_case(genes):
 
 
 def gene_sets_for(name):
-    mouse_datasets = {"mouse_np", "mouse_rbd", "gc_np_pc", "flu_lung", "malaria", "malaria_late"}
+    mouse_datasets = {"mouse_np", "mouse_rbd", "gc_np_pc", "flu_lung", "malaria", "malaria_late",
+                      "gut_gc_reporter", "spont_gc"}
     return {k: mouse_case(v) for k, v in GENE_SETS_HUMAN.items()} if name in mouse_datasets else GENE_SETS_HUMAN
 
 
@@ -217,7 +255,7 @@ def leiden_states(adata, basis="X_threadfin", resolution=1.0):
 
 
 def prepare(name: str, stamp=print, summary: dict | None = None):
-    """Load a dataset, define clones within donors, build the expression embedding and cell states.
+    """Load a dataset, attach its Dandelion clone ids, build the embedding and cell states.
 
     Returns ``(adata, cfg, state_key, summary)``.
     """
@@ -230,9 +268,27 @@ def prepare(name: str, stamp=print, summary: dict | None = None):
     bcr["isotype"] = tf.clones.isotype_class(bcr["c_call"]).values
     bcr["donor"] = adata.obs["donor"].astype(str).reindex(bcr.index).values
 
-    # 2. clones, within donors
-    bcr = tf.define_clones(bcr, donor_key="donor", out_col="clone_id")
-    summary["clone_definition"] = dict(bcr.attrs["clone_definition"])
+    # 2. clones, within donors. Threadfin's clone definition is Dandelion's paired
+    # heavy + light definition, precomputed per dataset by `dandelion_clones.py`
+    # (which runs in its own environment); the precomputed ids are an *input*, so
+    # they live beside the code rather than in whatever THREADFIN_RESULTS points at.
+    # There is no fallback to the old heavy-chain-only caller.
+    ddl_ids = HERE / "results" / "dandelion_clones" / f"{name}.csv"
+    if not ddl_ids.exists():
+        raise FileNotFoundError(
+            f"{ddl_ids} not found: define clones for {name!r} first with "
+            "case_studies/dandelion_clones.py (run in the dandelion environment). "
+            "Threadfin's clone definition is Dandelion's paired heavy + light definition; "
+            "the old heavy-chain-only fallback has been removed.")
+    ids = pd.read_csv(ddl_ids).set_index("cell")["clone_id"]
+    meta = json.loads((ddl_ids.with_suffix(".json")).read_text())
+    bcr["clone_id"] = ids.reindex(bcr.index).values
+    before = len(bcr)
+    bcr = bcr[bcr["clone_id"].notna()]
+    summary["clone_definition"] = meta | {"source": "dandelion", "cells_dropped": before - len(bcr)}
+    stamp(f"clones from Dandelion (light chain {'used' if meta['use_light_chain'] else 'absent'}): "
+          f"{bcr['clone_id'].nunique()} clones over {len(bcr)} cells "
+          f"({before - len(bcr)} cells had no paired call)")
     tf.attach_bcr(adata, bcr.drop(columns=["donor", "author_clone_id"], errors="ignore"), clone_col="clone_id",
                   summarize=False)
     for col in [c for c in bcr.columns if c not in ("clone_id", "donor", "v_call", "j_call", "junction",
@@ -306,8 +362,9 @@ def main(name: str):
     tf.pl.set_style()
 
     # Q1. does clone identity shape cell state?
+    min_cells = cfg.get("min_cells", 2)
     tf.tl.clone_profiles(adata, basis="X_threadfin", context_key=context_key, donor_key="donor",
-                         representation="mean", verbose=False)
+                         representation="mean", min_cells=min_cells, verbose=False)
     coh = tf.tl.clonal_coherence(adata, strata_key="sample", n_perm=500, verbose=True)
     vc = adata.uns["threadfin"]["profiles"]["variance_components"]
     summary["coherence"] = {k: coh[k] for k in ("icc", "null_mean", "null_q95", "excess", "p_value",
@@ -321,7 +378,23 @@ def main(name: str):
 
     # Q2. which clones behave alike?
     tf.tl.clone_profiles(adata, basis="X_threadfin", context_key=context_key, donor_key="donor",
-                         representation="kernel", verbose=True)
+                         representation="kernel", min_cells=min_cells, verbose=True)
+    # The clone map is the package's primary output and must not depend on programmes being
+    # definable: gc_np_pc reaches reliability 0.5 in only 7 clones, so find_programmes raises and the
+    # dataset silently ended up with no map at all. Lay out every profiled clone first, unfiltered.
+    # These are the layouts of the published figures: per-dataset settings picked from a parameter
+    # sweep (2026-10-11), and otherwise the fixed default of Threadfin 4.2 (50 / 0.8). Pass "auto" to
+    # let tl.tune_clone_map choose instead. Display only: the programme graph keeps its own n_neighbors.
+    mp = cfg.get("map_params", {})
+    try:
+        tf.tl.embed_clones(adata, n_neighbors=mp.get("map_n_neighbors", 50),
+                           min_dist=mp.get("map_min_dist", 0.8), min_reliability=0.0, verbose=True)
+        mp = adata.uns["threadfin"]["profiles"]["map_params"]
+        # tables (layouts tried, search record) stay in the AnnData; the summary keeps the scalars
+        summary["clone_map"] = {k: v for k, v in mp.items() if k not in ("attempts", "tuning")} | {"min_cells": min_cells}
+    except ValueError as e:
+        summary["clone_map"] = {"error": str(e)}
+        stamp(f"clone map not built: {e}")
     try:
         prog = tf.tl.find_programmes(adata, n_boot=50, verbose=True)
     except ValueError as e:
@@ -332,8 +405,8 @@ def main(name: str):
         progs = adata.uns["threadfin"]["programmes"]
         splits = progs["split_tests"]
         summary["programme_splits"] = {
-            "n_leiden_communities": int(len(splits["communities_left"].iloc[0]) +
-                                        len(splits["communities_right"].iloc[0])) if not splits.empty else 1,
+            "n_leiden_communities": int(splits["n_communities_left"].iloc[0] +
+                                        splits["n_communities_right"].iloc[0]) if not splits.empty else 1,
             "n_merged": int((~splits["split"]).sum()) if not splits.empty else 0,
             "root_pvalue": float(splits["pvalue"].iloc[0]) if not splits.empty else None,
         }

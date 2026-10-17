@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import bh_fdr, codes, get_uns, log, permute_within, require_obs, require_complete_groups, require_positive_int
+from ._utils import bh_fdr, codes, get_uns, h5ad_safe, log, permute_within, require_obs, require_complete_groups, require_positive_int
 from .profiles import variance_components
 
 
@@ -168,7 +168,7 @@ def gene_heritability(
                                       .icc_per_feature))
     out = out.sort_values("excess_icc", ascending=False)
     out.index.name = "gene"
-    get_uns(adata)["gene_heritability"] = out
+    get_uns(adata)["gene_heritability"] = h5ad_safe(out)
     get_uns(adata)["gene_heritability_receptor_icc"] = control_icc
     log(
         f"gene heritability: {out.shape[0]} genes, {cells.size} cells in "

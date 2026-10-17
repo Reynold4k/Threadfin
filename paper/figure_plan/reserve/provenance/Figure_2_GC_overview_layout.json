@@ -1,0 +1,699 @@
+{
+  "date": "2026-10-16",
+  "tight_crop": true,
+  "random_draw_order_seed": 20261016,
+  "texts": [
+    {
+      "text": "Cell population included",
+      "font_pt": 7.0
+    },
+    {
+      "text": "Shown in",
+      "font_pt": 7.0
+    },
+    {
+      "text": "Model antigen",
+      "font_pt": 7.3
+    },
+    {
+      "text": "NP\u2013CGG \u00b7 GSE305877",
+      "font_pt": 6.9
+    },
+    {
+      "text": "WT day 14 \u00b7 1 identifiable mouse \u00b7 13,727 QC cells \u00b7 NP+ B220+ sort",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "B; S1 (1)",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Oral OVA + CT \u00b7 GSE284622",
+      "font_pt": 6.9
+    },
+    {
+      "text": "3 reporter mice \u00b7 16,619 cells \u00b7 GC-fate sort (tdTomato)",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Fig. 3",
+      "font_pt": 6.0
+    },
+    {
+      "text": "NP\u2013OVA \u00b7 GSE287123",
+      "font_pt": 6.9
+    },
+    {
+      "text": "7 mice \u00b7 10,109 cells \u00b7 36 h H2B-mCherry division reporter",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "S1 (2)",
+      "font_pt": 6.0
+    },
+    {
+      "text": "RBD protein / mRNA \u00b7 GSE287123",
+      "font_pt": 6.9
+    },
+    {
+      "text": "10 mice \u00b7 36,188 cells \u00b7 division, bait OR LZ/DZ gates",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Fig. 4; S1 (2)",
+      "font_pt": 6.0
+    },
+    {
+      "text": "NP\u2013OVA \u00b7 GSE246382",
+      "font_pt": 6.9
+    },
+    {
+      "text": "11 mice \u00b7 884 cells \u00b7 day 14 \u00b7 Smart-seq2 \u00b7 GC/PC gates; W33L",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "S1 (1)",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Plasmodium infection",
+      "font_pt": 7.3
+    },
+    {
+      "text": "P. chabaudi AS \u00b7 experiment 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "20 mice \u00b7 40,623 cells \u00b7 days 0\u201314 \u00b7 spleen",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "\u2014",
+      "font_pt": 6.0
+    },
+    {
+      "text": "P. chabaudi AS \u00b7 experiment 2 \u00b7 GSE286215",
+      "font_pt": 6.9
+    },
+    {
+      "text": "42 mice \u00b7 72,359 cells \u00b7 days 10\u201342 \u00b7 treated / saline / naive",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "B\u2013D",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Human vaccination",
+      "font_pt": 7.3
+    },
+    {
+      "text": "BNT162b2 \u00b7 GSE195673",
+      "font_pt": 6.9
+    },
+    {
+      "text": "8 participants \u00b7 193,442 cells \u00b7 days 28\u2013201 \u00b7 LN FNA + blood",
+      "font_pt": 5.9
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.0
+    },
+    {
+      "text": "PC",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Mem",
+      "font_pt": 6.0
+    },
+    {
+      "text": "B; S2; S6",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Paired scRNA + BCR datasets; profiles use recurrent captured clones. Population chips describe study coverage.",
+      "font_pt": 6.3
+    },
+    {
+      "text": "508 profiles",
+      "font_pt": 6.4
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "NP\u2013CGG, WT day 14\nGSE305877",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.5
+    },
+    {
+      "text": "1,015 profiles",
+      "font_pt": 6.4
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Plasmodium, days 10\u201342\nGSE286215",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P4",
+      "font_pt": 6.5
+    },
+    {
+      "text": "1,243 profiles",
+      "font_pt": 6.4
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Human vaccination, LN + blood\nGSE195673",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.5
+    },
+    {
+      "text": "P4",
+      "font_pt": 6.5
+    },
+    {
+      "text": "830",
+      "font_pt": 6.6
+    },
+    {
+      "text": "112",
+      "font_pt": 6.6
+    },
+    {
+      "text": "43",
+      "font_pt": 6.6
+    },
+    {
+      "text": "30",
+      "font_pt": 6.6
+    },
+    {
+      "text": "Captured cells per profile",
+      "font_pt": 6.9
+    },
+    {
+      "text": "2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "3",
+      "font_pt": 6.3
+    },
+    {
+      "text": "4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "\u22655",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Number of clones",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "200",
+      "font_pt": 6.3
+    },
+    {
+      "text": "400",
+      "font_pt": 6.3
+    },
+    {
+      "text": "600",
+      "font_pt": 6.3
+    },
+    {
+      "text": "800",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1000",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Plasmodium | Profile sampling",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.451",
+      "font_pt": 6.8
+    },
+    {
+      "text": "0.015\n95th: 0.032",
+      "font_pt": 6.2
+    },
+    {
+      "text": "P = 0.002",
+      "font_pt": 6.5
+    },
+    {
+      "text": "Observed",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Shuffled",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Clonal ICC",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.1",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.3",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.5",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.6",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Clonal coherence vs shuffle",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.77",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.73",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.28",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.69",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Mean bootstrap Jaccard",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.6",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.8",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1.2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Programme bootstrap stability",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Plasmodium | RNA states",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back (3.2% of cells)",
+      "font_pt": 7.4
+    },
+    {
+      "text": "389",
+      "font_pt": 5.9
+    },
+    {
+      "text": "250",
+      "font_pt": 5.9
+    },
+    {
+      "text": "193",
+      "font_pt": 5.9
+    },
+    {
+      "text": "183",
+      "font_pt": 5.9
+    },
+    {
+      "text": "Programme",
+      "font_pt": 6.9
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Mean within-clone fraction (%)",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "50",
+      "font_pt": 6.3
+    },
+    {
+      "text": "100",
+      "font_pt": 6.3
+    },
+    {
+      "text": "RNA-state mix | each clone equal",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Follicular Naive",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Immature",
+      "font_pt": 6.1
+    },
+    {
+      "text": "GC",
+      "font_pt": 6.1
+    },
+    {
+      "text": "PB",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Activated",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Precursor",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Bystander",
+      "font_pt": 6.1
+    },
+    {
+      "text": "MZ",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Memory",
+      "font_pt": 6.1
+    },
+    {
+      "text": "Atypical",
+      "font_pt": 6.1
+    },
+    {
+      "text": "B1",
+      "font_pt": 6.1
+    },
+    {
+      "text": "A",
+      "font_pt": 10.0
+    },
+    {
+      "text": "B",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Programme labels are local to each dataset; colour is not a shared cell fate. Point area increases with captured clone size (capped).",
+      "font_pt": 6.4
+    },
+    {
+      "text": "C",
+      "font_pt": 9.5
+    },
+    {
+      "text": "1,015 profiles; 830 contain two cells.",
+      "font_pt": 6.3
+    },
+    {
+      "text": "500 shuffles within sampled mouse.",
+      "font_pt": 6.3
+    },
+    {
+      "text": "50 resamples; dashed line = 0.75.",
+      "font_pt": 6.3
+    },
+    {
+      "text": "D",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Map-back: 2,350 / 72,359 cells; grey = cells outside the displayed profiles. Numbers above composition bars are clones.",
+      "font_pt": 6.1
+    }
+  ]
+}

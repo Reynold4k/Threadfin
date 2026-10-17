@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-16",
+  "preserved_exactly": {
+    "Figure_1.png": true,
+    "Figure_1.pdf": true,
+    "Figure_3_clone_states.png": true,
+    "Figure_3_clone_states.pdf": true,
+    "Figure_4_measured_biology.png": true,
+    "Figure_4_measured_biology.pdf": true,
+    "Supplementary_clones_on_cells.png": true,
+    "Supplementary_clones_on_cells.pdf": true,
+    "Figure_clone_states_combined_v6.png": true,
+    "Figure_clone_states_combined_v6.pdf": true
+  },
+  "new_outputs": {
+    "Figure_2_GC_overview": {
+      "png_sha256": "ccea59117cf099c0e266e3898c0de8085789e2bff214f654ac0e8ea0a8d4303b",
+      "pdf_sha256": "0b5a8bec0bb213495edbc7c4bb5955c12fac52bcf30f33b2f809827f846eb63e",
+      "pixels": [
+        4986,
+        7263
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ]
+    },
+    "Supplementary_model_antigen_NP": {
+      "png_sha256": "7291e4a7cd8fc28ae8a36bdee876aa605e7f20eaa4df4201e41e251aa647e2ff",
+      "pdf_sha256": "90e169470b9a2faa8b825f633646fd405dcb0f70d2561c743743846d78aec086",
+      "pixels": [
+        4840,
+        6459
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ]
+    },
+    "Supplementary_model_antigen_reporters": {
+      "png_sha256": "3bc39aa1d839718af7d26d510be6d53cec52db0cdfda0cc4a0aa4af898ac4919",
+      "pdf_sha256": "733fbb4a5255401ea1adfe14cae2c4ab8b4e1400f73ffbbd8f2fa1817e98f3ec",
+      "pixels": [
+        4831,
+        6554
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ]
+    },
+    "Supplementary_clone_compartments": {
+      "png_sha256": "626495761c16d3a8de4c285f8ac70410f6c9fff1fcf3f57cb112215664e050f2",
+      "pdf_sha256": "f8f387aff0c59e9f9fbe7e389805620a2d12a1f9a8007177bcf9a703222ed81b",
+      "pixels": [
+        4784,
+        1951
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ]
+    }
+  },
+  "np_cells": 13727,
+  "np_profiles": 508,
+  "np_mapped_cells": 3182,
+  "np_clone_cell_count_join": "passed",
+  "plasmodium_clone_weighted_fractions_sum_to_one": true,
+  "old_S2_png_pdf_untouched": true,
+  "model_supplement_panels": 32,
+  "model_supplement_scrna_umaps": 23,
+  "local_markdown_links": "passed",
+  "new_candidate_scope": "one identifiable WT mouse; pooled replicates excluded",
+  "plot_data": "Source coordinates/labels retained; only rendering order shuffled for categorical overlays.",
+  "pdf_text_boundary_check": "passed for all four new plates",
+  "outer_protective_padding_mm": 0.762
+}

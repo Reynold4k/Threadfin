@@ -17,6 +17,7 @@ and checksums are in ``download.sh``, ``datasets_manifest.tsv`` and ``md5_manife
 from __future__ import annotations
 
 import os
+import re
 import tarfile
 from pathlib import Path
 
@@ -336,36 +337,64 @@ def load_ebv():
     return adata, bcr.loc[bcr.index.isin(adata.obs_names), ["v_call", "j_call", "cdr3_nt", "c_call"]]
 
 
-def load_stephenson():
-    """Stephenson et al. 2021 Nat Med: COVID-19 PBMC, 5k BCR+ B-lineage cells (scirpy subset)."""
-    import awkward as ak
-    import mudata as md
+# =========================================================================== gut GC (Siniscalco 2025)
 
-    m = md.read_h5mu(DATA / "stephenson2021_5k.h5mu")
-    gex = m["gex"]
-    adata = gex[:, gex.var["feature_types"] == "Gene Expression"].copy()  # drop 192 CITE-seq antibody tags
-    adata.X = adata.layers["raw"].copy()
-    del adata.layers["raw"]
-    adata.obsm.clear()
-    obs = adata.obs
-    obs["donor"] = obs["patient_id"].astype(str)
-    obs["sample"] = obs["sample_id"].astype(str)
-    obs["state"] = obs["full_clustering"].astype(str)
-    obs["severity"] = obs["Status_on_day_collection_summary"].astype(str)
-    obs["site"] = obs["Site"].astype(str)
-    adata.obs = obs[["donor", "sample", "state", "severity", "site"]].copy()
-    a = m["airr"].obsm["airr"]
-    prod = ak.fill_none(a["productive"], False)
-    first = ak.firsts(a[(a["locus"] == "IGH") & prod])
-    bcr = pd.DataFrame({k: ak.to_list(first[k]) for k in ("v_call", "j_call", "junction", "c_call", "mu_freq")},
-                       index=m["airr"].obs_names.astype(str)).rename(columns={"mu_freq": "mutation_frequency"})
-    bcr["mutation_frequency"] = pd.to_numeric(bcr["mutation_frequency"], errors="coerce")
-    bcr = bcr.dropna(subset=["v_call", "junction"])
-    return adata, bcr[bcr.index.isin(adata.obs_names)]
+_GSE284622 = DATA / "gse284622_gut_gc"
+
+
+def _gse284622_airr() -> pd.DataFrame:
+    """Contig-level AIRR of the three reporter mice (mouse2/3/4), cell keyed to the GEX names."""
+    frames = []
+    for m in ("mouse2", "mouse3", "mouse4"):
+        f = _GSE284622 / f"GSE284621_{m}_airr_rearrangement.tsv.gz"
+        t = pd.read_csv(f, sep="\t", low_memory=False)
+        t["barcode_plain"] = (t["cell_id"].astype(str)
+                              .str.replace(r"-\d+$", "", regex=True).str.replace(r"-1$", "", regex=True))
+        t["cell"] = t["sample_id"].astype(str) + "_" + t["barcode_plain"]
+        frames.append(t)
+    return pd.concat(frames, ignore_index=True)
+
+
+def load_gut_gc_reporter():
+    """Siniscalco et al. 2025 Immunity: oral NP-OVA / OVA + cholera toxin, gut-draining
+    lymphoid tissues (MLN, PP, LP) of S1PR2-CreERT2 Rosa-lsl-tdTomato GC fate-reporter mice.
+
+    Every library was FACS-sorted into GC-derived (tdTomato+) and non-GC-derived fractions -
+    a measured fate label. The authors' cell annotation (B_cell / GC_Bcell / plasma) is
+    transcriptome-derived and stays descriptive; the GC sort and the isotype are measured.
+    """
+    d = _GSE284622 / "gex_reporter"
+    a = read_mtx_dir(d, prefix="")
+    a = a[:, a.var["feature_type"] == "Gene Expression"].copy()
+    meta = pd.read_csv(d / "metadata.csv.gz", low_memory=False).set_index("cell")
+    meta.index = meta.index.astype(str)
+    shared = a.obs_names.intersection(meta.index)
+    a = a[shared].copy()
+    meta = meta.loc[shared]
+    a.obs["donor"] = "mouse" + meta["mouse"].astype(int).astype(str)
+    a.obs["sample"] = meta["sample_id"].astype(str)
+    a.obs["tissue"] = meta["tissue"].astype(str)
+    a.obs["gc_sort"] = meta["gc"].astype(str)                      # measured: GC / nonGC FACS sort
+    a.obs["celltype"] = meta["celltype"].astype(str)               # author RNA annotation
+    a.obs["isotype_author"] = meta["isotype"].astype(str)
+    a.obs["mu_freq_author"] = pd.to_numeric(meta["mu_freq"], errors="coerce").values
+
+    t = _gse284622_airr()
+    prod = t["productive"].astype(str).str.upper().isin(("T", "TRUE", "1"))
+    bcr = t[prod & t["locus"].eq("IGH")].copy()
+    bcr = bcr.sort_values("duplicate_count", ascending=False, kind="mergesort")
+    bcr = bcr.drop_duplicates("cell").set_index("cell")
+    bcr.index = bcr.index.astype(str)
+    import threadfin as tf
+
+    bcr["mutation_frequency"] = tf.tl.mutation_frequency(bcr)
+    bcr["author_clone_id"] = bcr["subject_id"].astype(str) + "|" + bcr["clone_id"].astype(str)
+    keep = ["v_call", "j_call", "junction", "c_call", "author_clone_id", "mutation_frequency",
+            "sequence_alignment", "germline_alignment", "v_sequence_start", "v_sequence_end"]
+    return a, bcr.loc[bcr.index.isin(a.obs_names), keep]
 
 
 # =========================================================================== mouse GC (Merkenschlager 2025)
-
 _GSE287123 = DATA / "gse287123_np" / "extracted"
 
 
@@ -831,12 +860,167 @@ def load_malaria(experiment: str = "experiment1"):
 
 
 
+# =========================================================================== COVID-19 multi-antigen baits (Dugan 2021)
+
+_GSE171703 = DATA / "gse171703_covid_bcell"
+
+
+def _covid_probe_name(feature: str):
+    """Harmonise the study's three probe-panel generations to (target, virus) names.
+
+    Returns e.g. ``spike_sars2`` / ``np_229e`` / ``orf8_sars2`` for antigen probes,
+    ``hashtag_<donor>`` for hashtags, ``cite_<protein>`` for CITE-seq antibodies, and None for
+    everything else (controls: empty/IFN/HA/H1/PUUV probes are dropped here).
+    """
+    f = feature.upper()
+    if "HASHTAG" in f:
+        return "hashtag_" + feature.split("-")[-1]
+    toks = set(re.split(r"[^A-Z0-9]+", f))
+    if "IFN" in toks or "EMPTY" in toks or "PUUV" in f or "HANTA" in f or "H1" in toks or "HA" in toks:
+        return None
+    if "SPIKE" in toks:
+        antigen = "spike"
+    elif "RBD" in toks:
+        antigen = "rbd"
+    elif "NP" in toks:
+        antigen = "np"
+    elif "ORF8" in toks or "ORF8A" in toks or "OFR7" in toks:
+        antigen = "orf8"
+    elif "COCKTAIL" in toks or "END" in toks:
+        return "hcov_cocktail"
+    elif toks & {"CD62L", "CD27", "CD73", "CD80", "CD86", "CD19", "CD20", "CD38", "CD138"} or "HLA-DR" in f:
+        return "cite_" + feature.split("-")[-1].lower()
+    else:
+        return None
+    if "229E" in toks or "NL63" in toks:
+        virus = "229e"
+    elif "HKU1" in toks or "OC43" in toks:
+        virus = "hku1"
+    else:
+        virus = "sars2"                       # the SARS-CoV-2 baits carry no virus token in two panel generations
+    return f"{antigen}_{virus}"
+
+
+def load_covid_bcell():
+    """Dugan et al. 2021 Immunity: 38 COVID-19 patients, oligo-tagged multi-antigen bait
+    sorting (SARS-CoV-2 spike/RBD/NP/ORF8, endemic-HCoV probes), acute + convalescent.
+
+    Measured per-cell labels: antigen-bait probe counts (``obs`` columns
+    ``probe_<target>_<virus>``, harmonised names) and ``antigen_call`` - the dominant
+    SARS-CoV-2 bait of the cell (heuristic: >= 2 UMIs and the maximum among the four
+    SARS-CoV-2 baits). R* tags are acute samples, S* convalescent; ``*v2`` is the
+    donor's second convalescent visit. R125 is a hashtag pool (donors R1/R2/R5
+    demultiplexed); R478910 pools five acute donors without hashtags and stays a
+    single donor unit.
+    """
+    import anndata as ad
+
+    ads, bcrs = [], []
+    mats = sorted(_GSE171703.glob("GSM*_*_matrix.mtx.gz"))
+    for mat in mats:
+        gsm, tag = mat.name.split("_")[:2]
+        a = read_mtx_dir(_GSE171703, prefix=f"{gsm}_{tag}_")
+        capture = a.var["feature_type"].eq("Antibody Capture")
+        probes = None
+        if capture.any():
+            cap = a[:, capture].to_df()
+            harmonised = {}
+            for c in cap.columns:
+                name = _covid_probe_name(c)
+                if name:
+                    harmonised.setdefault(name, []).append(cap[c])
+            probes = pd.DataFrame({k: pd.concat(v, axis=1).sum(axis=1) if len(v) > 1 else v[0]
+                                   for k, v in harmonised.items()}, index=a.obs_names)
+        a = a[:, ~capture].copy()
+        a.obs_names = [f"{tag}|{b}" for b in a.obs_names]
+        a.obs["donor"] = tag.removesuffix("v2")
+        a.obs["sample"] = tag
+        a.obs["visit"] = "v2" if tag.endswith("v2") else "v1"
+        a.obs["disease_state"] = "Acute" if tag.startswith("R") else "Convalescent"
+        if probes is not None:
+            probes.index = a.obs_names
+            ht_cols = [c for c in probes.columns if c.startswith("hashtag_")]
+            if ht_cols:
+                ht = demux_hashtags(probes[ht_cols].rename(
+                    columns={c: c.removeprefix("hashtag_") for c in ht_cols}))
+                a.obs["donor"] = np.where(ht.isin(["negative", "doublet"]), a.obs["donor"],
+                                          ht.astype(str))
+                probes = probes.drop(columns=ht_cols)
+            for c in probes.columns:
+                a.obs[f"probe_{c}"] = probes[c].values
+            sars2 = [c for c in ("spike_sars2", "rbd_sars2", "np_sars2", "orf8_sars2") if c in probes.columns]
+            if sars2:
+                lx = np.log1p(probes[sars2])
+                top = lx.idxmax(axis=1)
+                call = top.where(lx.max(axis=1) >= np.log1p(2), "none")
+                a.obs["antigen_call"] = call.str.replace("_sars2", "", regex=False).values
+        ads.append(a)
+        csv = _GSE171703 / f"{gsm}_{tag}_filtered_contig_annotations.csv.gz"
+        import threadfin as tf
+        b = tf.read_10x_vdj(str(csv))
+        b.index = [f"{tag}|{x}" for x in b.index]
+        if "raw_clonotype_id" in getattr(b, "columns", []):
+            b["author_clone_id"] = tag + "|" + b["raw_clonotype_id"].astype(str)
+        bcrs.append(b)
+    adata = ad.concat(ads, join="outer", fill_value=0)
+    bcr = pd.concat(bcrs)
+    keep = [c for c in ("v_call", "j_call", "junction", "cdr3_nt", "c_call", "author_clone_id")
+            if c in bcr.columns]
+    return adata, bcr.loc[bcr.index.isin(adata.obs_names), keep]
+
+
+# =========================================================================== spontaneous-GC fate reporter (Castrillon 2023)
+
+_GSE203132 = DATA / "gse203132_spontaneous_gc"
+_SPONT_MICE = {"M11": ("female", "immunized"), "M13": ("female", "autoimmune"),
+               "M14": ("male", "immunized"), "M17": ("male", "autoimmune"),
+               "M21": ("female", "autoimmune"), "M23": ("male", "immunized"),
+               "M24": ("male", "autoimmune"), "M34": ("female", "autoimmune")}
+
+
+def load_spont_gc():
+    """Castrillon et al. 2023 eLife: spleen AID-EYFP+ (GC-experienced, fate-reporter
+    sorted) B cells from spontaneous-GC autoimmune chimeras (5 mice) and NP-CGG
+    immunised controls (3 mice). Every cell carries the measured GC-experience label;
+    condition (autoimmune vs immunised) is the donor-level experimental variable.
+    """
+    import anndata as ad
+
+    ads = []
+    for mat in sorted(_GSE203132.glob("GSM*_M*_matrix.mtx.gz")):
+        gsm, mid = mat.name.split("_")[:2]
+        a = read_mtx_dir(_GSE203132, prefix=f"{gsm}_{mid}_")
+        a.obs_names = [f"{mid}|{b}" for b in a.obs_names]
+        sex, condition = _SPONT_MICE[mid]
+        a.obs["donor"] = mid
+        a.obs["sample"] = mid
+        a.obs["sex"] = sex
+        a.obs["condition"] = condition
+        ads.append(a)
+    adata = ad.concat(ads, join="outer", fill_value=0)
+
+    t = pd.read_csv(_GSE203132 / "GSE203132_10X_clone-pass_germ-pass.tsv.gz", sep="\t", low_memory=False)
+    t = t.loc[:, ~t.columns.duplicated()]
+    prod = t["productive"].astype(str).str.upper().isin(("T", "TRUE", "1"))
+    bcr = t[prod & t["locus"].eq("IGH")].copy()
+    bcr = bcr.sort_values("umi_count", ascending=False, kind="mergesort")
+    bcr["cell"] = bcr["mid"].astype(str) + "|" + bcr["barcode_10x"].astype(str)
+    bcr = bcr.drop_duplicates("cell").set_index("cell")
+    import threadfin as tf
+
+    bcr["mutation_frequency"] = tf.tl.mutation_frequency(bcr)
+    bcr["author_clone_id"] = bcr["mid"].astype(str) + "|" + bcr["clone_id"].astype(str)
+    keep = ["v_call", "j_call", "junction", "c_call", "author_clone_id", "mutation_frequency",
+            "sequence_alignment", "germline_alignment", "v_sequence_start", "v_sequence_end"]
+    return adata, bcr.loc[bcr.index.isin(adata.obs_names), keep]
+
+
+
 LOADERS = {
     "ln_vaccine": load_ln_vaccine,
     "flu": load_flu,
     "tonsil": load_tonsil,
     "ebv": load_ebv,
-    "stephenson": load_stephenson,
     "mouse_np": load_mouse_np,
     "mouse_rbd": load_mouse_rbd,
     "gc_np_pc": load_gc_np_pc,
@@ -844,4 +1028,7 @@ LOADERS = {
     "bone_marrow_pc": load_bone_marrow_pc,
     "malaria": load_malaria,
     "malaria_late": lambda: load_malaria("experiment2"),
+    "gut_gc_reporter": load_gut_gc_reporter,
+    "covid_bcell": load_covid_bcell,
+    "spont_gc": load_spont_gc,
 }

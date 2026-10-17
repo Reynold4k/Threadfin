@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-16",
+  "scope": "method demonstration",
+  "B_datasets": [
+    "np_cgg_wt_d14",
+    "malaria_late",
+    "ln_vaccine"
+  ],
+  "C": {
+    "icc": 0.4506687254853261,
+    "null_mean": 0.015054663669207076,
+    "null_q95": 0.031973100442478204,
+    "excess": 0.435614061816119,
+    "p_value": 0.001996007984031936,
+    "n_clones": 1015,
+    "n_cells": 2350,
+    "min_cells_reliability_0.5": 1
+  },
+  "stability": {
+    "P1": 0.77336522429294,
+    "P2": 0.7330530878959651,
+    "P3": 0.2830213055502901,
+    "P4": 0.6890455764756495
+  },
+  "D_weighting": "Each clone is normalised to state fractions; clone fractions averaged equally within programme.",
+  "D_cells": 72359,
+  "D_profiles": 1015,
+  "D_mapped_cells": 2350,
+  "moved_C": "Supplementary_clone_compartments",
+  "fixed_coordinates": true
+}

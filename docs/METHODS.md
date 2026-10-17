@@ -4,22 +4,22 @@ This page describes each step of `threadfin.run()` and the matching
 functions in `threadfin.tl`, with the defaults and the reasoning behind them.
 References are listed at the end.
 
-## 1. Clones (`define_clones`)
+## 1. Clones (`define_clones_dandelion`)
 
-A clone is the family of B cells descended from one V(D)J recombination event. Clones are defined from heavy-chain sequences **within each donor**
-(two people never share a clone). Two cells can belong to the same clone only
-if they use the same IGHV and IGHJ genes and their junctions have the same
-length; within such a group, junctions that differ by less than a threshold
-(fraction of differing nucleotides) are joined, and chains of such links form
-one clone (single linkage), so that hypermutated relatives stay together
-(Gupta et al. 2017).
+A clone is the family of B cells descended from one V(D)J recombination event — one
+rearrangement of the heavy **and** the light chain. Threadfin delegates clone calling to
+**Dandelion** (a maintained, cited implementation of the paired definition;
+sc-dandelion), through :func:`threadfin.define_clones_dandelion`: contig-level AIRR tables
+are grouped within each donor with ``dandelion.tl.find_clones`` (default junction identity
+0.85), and the composite heavy+light clone id is returned per cell. Because Dandelion pins
+older plotting libraries, it is an optional dependency — run it in its own environment, or
+install ``sc-dandelion``; the rest of Threadfin never needs it.
 
-The threshold is read from the data: the distance of every junction to its
-closest relative has two peaks, one for clonal relatives near zero and one
-for unrelated sequences, and the threshold is placed at the valley between
-them (as in the SHazaM toolkit). Values outside the usual range (0.02-0.25)
-are not accepted; the default 0.15 is used and reported instead. Light chains
-can optionally split heavy-chain clones (`light_chain=True`).
+(Threadfin's earlier built-in caller grouped cells by the heavy chain alone with a
+data-driven Hamming threshold, light chains only as an optional post-hoc split. It is
+deprecated: two cells whose heavy chains are similar but whose light chains are unrelated
+are not the same clone, and roughly a quarter of analysable multi-cell clones are lost under
+the stricter paired definition — a reported, intended cost.)
 
 ## 2. Expression embedding (`threadfin.pp.prepare_embedding`)
 
@@ -47,8 +47,10 @@ noise. From it Threadfin obtains
 * a **shrunken profile** for each clone: small clones are pulled towards their
   sample's average, large clones keep their own;
 * a **reliability** for each clone, which grows with the number of cells
-  sampled (Spearman-Brown); clones with reliability >= 0.5 ("core" clones)
-  are used to define programmes.
+  sampled (Spearman-Brown). Reliability sets how strongly a clone takes part
+  in defining programmes; no clone is excluded for low reliability. A clone
+  needs at least two cells, because a single cell cannot show whether cells
+  of the same clone share a state.
 
 By default for programmes (`representation="kernel"`), a clone's profile
 describes the **whole distribution** of its cells, not only their average
@@ -65,10 +67,67 @@ differences between samples cannot create apparent clonality. The result is
 reported as the variance explained by clone, the shuffled value and a
 permutation p-value (Phipson & Smyth 2010).
 
-## 5. Clonal programmes (`find_programmes`)
+## 5. The clone map (`embed_clones`, `tune_clone_map`)
 
-*Which clones behave alike?* Core clones are connected to their most similar
-clones and grouped by Leiden community detection (Traag et al. 2019). Two
+*How are clones related to one another?* Every clone with a profile is placed on a two-dimensional
+map with UMAP (McInnes et al. 2018), one point per clone. Clones whose cells are distributed alike sit
+close together, so continuous transitions between clones, for example from germinal-centre clones to
+plasma-cell clones, appear as paths. The map is a display: profiles, coherence, programmes and all tests
+are computed in profile space and do not depend on it. No clone is removed for low reliability.
+
+Two UMAP settings decide what the map looks like: the number of neighbours each clone is tied to
+(`n_neighbors`) and how closely clones may pack (`min_dist`). Too few neighbours or too little spacing
+breaks a continuum of clones into islands; too many neighbours smooth away local structure. Because the
+best values depend on the number of clones and on how they are distributed, Threadfin chooses them for
+each dataset by default (`n_neighbors="auto"`, `min_dist="auto"`); numbers set them by hand.
+
+**What is optimised.** Each candidate layout is scored, without any annotation, on
+
+* *coherence*: the fraction of clones in the largest connected piece of the map, where two clones are
+  connected when they lie within 1.5 *D*/√*N* of each other (*D*, extent of the map; *N*, number of
+  clones). At Scanpy's default point size this is about the distance at which drawn points touch, so a
+  piece is what a reader sees as one island;
+* *local fidelity*: the fraction of each clone's 30 nearest neighbours in profile space that remain among
+  its 30 nearest neighbours on the map;
+* *global fidelity*: the Spearman correlation between profile-space and map distances over random pairs
+  of clones (both fidelity measures as in Kobak & Berens 2019).
+
+The score is the mean of the two fidelities minus 5 × the shortfall of coherence below a target. The
+target comes from the profiles themselves: the fraction of clones in the largest connected component of
+the mutual 15-nearest-neighbour graph of profiles (the graph scale used for programmes), capped at 0.99.
+A map is therefore not allowed to be more fragmented than the profiles, while a small group of clones
+that is genuinely separate in profile space may stay apart.
+
+**How settings are searched.** A UMAP layout is random, and the settings that are most faithful in one
+layout are often those closest to breaking apart in another. The search is therefore built on the worst
+case. (i) Clones are laid out at every combination of six neighbour counts (10, 18, 32, 56, 100, 180; at
+most half the number of clones) and four `min_dist` values (0.3, 0.55, 0.8, 0.95), each with two random
+seeds shared by all settings; a setting is credited with its mean fidelity and its lowest coherence.
+(ii) Scores are averaged with those of neighbouring settings (Gaussian weights), so that settings
+surrounded by good settings are preferred. (iii) The best settings are laid out with four more seeds.
+(iv) Among the settings that held together in all six layouts, the best smoothed score wins; ties go to
+the more coherent setting. (v) If no setting held together, the most coherent settings seen are
+confirmed as well and, if necessary, laid out with weaker repulsion between clones (UMAP
+`repulsion_strength` 0.5, then 0.25), which moves UMAP towards more continuous layouts (Böhm, Berens &
+Kobak 2022). During the search, layouts use 200 optimisation epochs. Above 3,000 clones the search runs
+on a random subset, `n_neighbors` is scaled to the full data in proportion to the number of clones, and
+the best settings are confirmed again on all clones before one is chosen.
+Finally, the map that is returned is laid out at UMAP's default settings and checked: if it falls short
+of the target, two further seeds and then the next confirmed settings are tried, and the most coherent
+layout is kept.
+
+Everything the search did is stored in `adata.uns['threadfin']['profiles']['map_params']`: the chosen
+settings, the quality of the returned map, every layout scored and every candidate confirmed.
+`tl.map_quality` scores any map, including one made by hand. An alternative search, `method="adam"`,
+follows a stochastic gradient instead of the ladder (Adam, Kingma & Ba 2015, with simultaneous-
+perturbation gradient estimates, Spall 1992) and ends with the same confirmation and checks.
+
+## 6. Clonal programmes (`find_programmes`)
+
+*Which clones behave alike?* Clones are connected to their 15 most similar
+clones, with each connection weighted by the reliability of the two clones,
+and grouped by Leiden community detection (Traag et al. 2019); the resolution
+is the finest one whose programmes are stable under resampling. Two
 safeguards keep the groups meaningful:
 
 * **Approximate split diagnostics.** Community detection always returns groups,
@@ -85,12 +144,13 @@ safeguards keep the groups meaningful:
   Jaccard overlap; Hennig 2007). Programmes with stability >= 0.75 are
   stable; below 0.6 they should not be interpreted.
 
-Clones too small to be core are afterwards assigned to the most likely
-programme, taking their size into account (`clone_programme_assigned`).
+When programmes are defined on a subset of clones (`min_reliability` above
+0), the remaining clones are afterwards assigned to the most likely programme,
+taking their size into account (`clone_programme_assigned`).
 Marker genes of each programme (`programme_markers`) are found by comparing
 clone averages, so a large clone counts once.
 
-## 6. What distinguishes clones (`profile_association`, `association_test`)
+## 7. What distinguishes clones (`profile_association`, `association_test`)
 
 Cell-level labels (antigen binding, isotype, mutation load, sort gate, tissue)
 are first summarised per clone (majority label, mean value, or the fraction
@@ -109,7 +169,7 @@ of a clone's cells in a gate). Two questions are then asked, always with
 Labels that are fixed for a donor (age, sex, disease severity) cannot be
 separated from other differences between donors and are reported as such.
 
-## 7. Clonal memory (`clonal_memory`)
+## 8. Clonal memory (`clonal_memory`)
 
 *Do clones keep their state over time or across tissues?* For every clone seen
 at two time points (or tissues, or sort gates), Threadfin measures how much
@@ -119,7 +179,7 @@ the same donor. The **memory index** is 1 when clones keep everything that
 distinguishes them and 0 when a clone is no more similar to its earlier self
 than to a random clone.
 
-## 8. Clonally inherited genes (`gene_heritability`)
+## 9. Clonally inherited genes (`gene_heritability`)
 
 The same random-effects model is fitted gene by gene: a gene's clonal ICC is
 the share of its expression variation explained by clone. Genes are ranked by
@@ -127,7 +187,7 @@ how much they exceed shuffled clones, and gene sets (for example plasma-cell
 or germinal-centre genes) are compared with genes of similar expression level,
 because highly expressed genes are measured more precisely.
 
-## 9. Heritability along the receptor lineage tree (`lineage_heritability`)
+## 10. Heritability along the receptor lineage tree (`lineage_heritability`)
 
 Clone profiles describe how clones differ from each other. This asks the complementary question inside a
 clone: after removing everything a clone's cells share, do cells that sit close together on the clone's
@@ -162,17 +222,22 @@ pass a demanding test. See `split_test` for the measured calibration of both ava
 ## References
 
 * Anderson MJ. A new method for non-parametric multivariate analysis of variance. *Austral Ecol* 2001;26:32-46.
+* Böhm JN, Berens P, Kobak D. Attraction-repulsion spectrum in neighbor embeddings. *J Mach Learn Res* 2022;23:1-32.
 * Benjamini Y, Hochberg Y. Controlling the false discovery rate. *J R Stat Soc B* 1995;57:289-300.
 * Grabski IN, Street K, Irizarry RA. Significance analysis for clustering with single-cell RNA-sequencing data. *Nat Methods* 2023;20:1196-1202.
 * Gupta NT et al. Hierarchical clustering can identify B cell clones with high confidence in Ig repertoire sequencing data. *J Immunol* 2017;198:2489-2499.
 * Hennig C. Cluster-wise assessment of cluster stability. *Comput Stat Data Anal* 2007;52:258-271.
+* Kingma DP, Ba J. Adam: a method for stochastic optimization. *ICLR* 2015.
+* Kobak D, Berens P. The art of using t-SNE for single-cell transcriptomics. *Nat Commun* 2019;10:5416.
 * Korsunsky I et al. Fast, sensitive and accurate integration of single-cell data with Harmony. *Nat Methods* 2019;16:1289-1296.
 * Liu Y, Hayes DN, Nobel A, Marron JS. Statistical significance of clustering for high-dimension, low-sample size data. *J Am Stat Assoc* 2008;103:1281-1293.
 * Mantel N, Haenszel W. Statistical aspects of the analysis of data from retrospective studies of disease. *J Natl Cancer Inst* 1959;22:719-748.
+* McInnes L, Healy J, Saul N, Großberger L. UMAP: uniform manifold approximation and projection. *J Open Source Softw* 2018;3:861.
 * Muandet K, Fukumizu K, Sriperumbudur B, Schoelkopf B. Kernel mean embedding of distributions: a review and beyond. *Found Trends Mach Learn* 2017;10:1-141.
 * Phipson B, Smyth GK. Permutation p-values should never be zero. *Stat Appl Genet Mol Biol* 2010;9:39.
 * Rahimi A, Recht B. Random features for large-scale kernel machines. *NeurIPS* 2007.
 * Searle SR, Casella G, McCulloch CE. *Variance Components*. Wiley, 1992.
+* Spall JC. Multivariate stochastic approximation using a simultaneous perturbation gradient approximation. *IEEE Trans Autom Control* 1992;37:332-341.
 * Traag VA, Waltman L, van Eck NJ. From Louvain to Leiden: guaranteeing well-connected communities. *Sci Rep* 2019;9:5233.
 
 ## Optional frozen-reference state distributions

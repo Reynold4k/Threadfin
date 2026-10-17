@@ -2,81 +2,93 @@
  "dataset": "tonsil",
  "title": "King et al. 2021 Sci Immunol - paediatric tonsil (6 donors)",
  "clone_definition": {
-  "threshold": 0.167,
-  "threshold_method": "density",
-  "sequence": "nt",
-  "junction_col": "cdr3_nt",
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
   "donor_key": "donor",
-  "light_chain": false,
-  "n_cells": 11570,
-  "n_clones": 10179,
-  "n_expanded": 670
+  "n_cells": 14567,
+  "n_clones": 13405,
+  "n_clones_ge2": 780,
+  "largest_clone": 13,
+  "source": "dandelion",
+  "cells_dropped": 0
  },
  "qc": {
   "n_cells": 22478,
-  "n_cells_bcr": 11570,
-  "n_clones": 10179,
-  "clones_ge2": 670,
-  "clones_ge3": 259,
-  "clones_ge5": 75,
-  "clones_ge10": 16,
-  "cells_in_clones_ge2": 2061,
-  "largest_clone": 42,
+  "n_cells_bcr": 14566,
+  "n_clones": 13404,
+  "clones_ge2": 780,
+  "clones_ge3": 209,
+  "clones_ge5": 39,
+  "clones_ge10": 2,
+  "cells_in_clones_ge2": 1942,
+  "largest_clone": 13,
   "n_donors": 6,
   "n_samples": 6
  },
  "coherence": {
-  "icc": 0.16641521920232324,
-  "null_mean": 0.025892123602199685,
-  "null_q95": 0.03868825978178404,
-  "excess": 0.14052309560012355,
+  "icc": 0.17898520496059048,
+  "null_mean": 0.027980437110937596,
+  "null_q95": 0.04090496589308869,
+  "excess": 0.1510047678496529,
   "p_value": 0.001996007984031936,
-  "n_clones": 670,
-  "n_cells": 2061,
-  "min_cells_reliability_0.5": 5
+  "n_clones": 780,
+  "n_cells": 1942,
+  "min_cells_reliability_0.5": 4
+ },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "n_clones": 780,
+  "n_profiled": 780,
+  "min_cells": 2
  },
  "programme_splits": {
-  "n_leiden_communities": 2,
+  "n_leiden_communities": 5,
   "n_merged": 1,
-  "root_pvalue": 0.35770404333448796
+  "root_pvalue": 0.14515760045509346
  },
  "programmes": {
   "n": 1,
-  "n_clones": 75,
+  "n_clones": 780,
   "note": "no distinct programmes: clones vary along a continuum"
  },
  "label_effects": {
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.12710377151934155,
-   "null_mean": 0.040662184764980534,
-   "excess_r2": 0.086441586754361,
-   "p_value": 0.0004997501249375312,
-   "n_clones": 73,
+   "r2": 0.043416126708800316,
+   "null_mean": 0.011310401392371076,
+   "excess_r2": 0.03210572531642924,
+   "p_value": 0.0009995002498750624,
+   "n_clones": 320,
    "n_levels": 4,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "IGHA": [
-     -0.20898454402725952,
-     0.0999491297521676,
-     0.1253907264163557
+     -0.12135917813110382,
+     0.04914873131504858,
+     0.022169003933225746
     ],
     "IGHD": [
-     0.38513567597562176,
-     0.37301602183652877,
-     0.16967515794730187
+     -0.11700359541374664,
+     0.1255802154153292,
+     0.235394585239514
     ],
     "IGHG": [
-     -0.07059537599139683,
-     -0.266090263352188,
-     -0.42900266948618065
+     0.12509220141632715,
+     -0.17331153197041152,
+     -0.045065745644429056
     ],
     "IGHM": [
-     -0.23531208644697368,
-     -0.2689280987965414,
-     0.23926691142927575
+     0.06555088688608038,
+     0.04819542819073917,
+     -0.20065122222040307
     ]
    },
    "note": "heavy-chain isotype"
@@ -85,71 +97,71 @@
  "programme_associations": {},
  "memory": {},
  "heritability": {
-  "n_genes": 8974,
-  "median_icc": 0.016291407190570803,
+  "n_genes": 8433,
+  "median_icc": 0.014157969010382339,
   "top_genes": [
-   "FAM30A",
-   "GAPDH",
-   "GTSF1",
-   "ACTG1",
-   "ACTB",
-   "COTL1",
-   "RPL28",
-   "METAP2",
-   "CFL1",
    "XBP1",
+   "ACTB",
+   "PRDM1",
+   "FKBP11",
+   "ACTG1",
+   "GAPDH",
+   "RPL28",
+   "ITM2C",
+   "DERL3",
+   "JCHAIN",
    "PFN1",
    "PPIA",
    "SSR4",
-   "HMGN1",
-   "CORO1A",
+   "SELENOM",
+   "MZB1",
    "ZBP1",
-   "JCHAIN",
-   "ARHGDIB",
-   "FKBP11",
-   "ARPC2",
-   "RPS6",
-   "B2M",
-   "PSMA8",
+   "HSP90B1",
+   "HIST1H2AI",
+   "SEC11C",
    "PRDX4",
-   "AL139020.1"
+   "CFL1",
+   "COTL1",
+   "TCL1A",
+   "RPS7",
+   "HMGN1"
   ],
-  "receptor_gene_icc": 0.6598804373165287,
+  "receptor_gene_icc": 0.6142415676531936,
   "gene_sets": {
    "plasma cell": {
-    "median_icc": 0.2049,
-    "matched_background_median_icc": 0.0229,
+    "median_icc": 0.2994,
+    "matched_background_median_icc": 0.0174,
     "pvalue_vs_matched": 0.0
    },
    "germinal centre": {
-    "median_icc": 0.0688,
-    "matched_background_median_icc": 0.035,
-    "pvalue_vs_matched": 0.0476
+    "median_icc": 0.0801,
+    "matched_background_median_icc": 0.0199,
+    "pvalue_vs_matched": 0.0532
    },
    "dark zone / cycling": {
-    "median_icc": 0.093,
-    "matched_background_median_icc": 0.0299,
-    "pvalue_vs_matched": 0.0001
+    "median_icc": 0.0679,
+    "matched_background_median_icc": 0.0241,
+    "pvalue_vs_matched": 0.0047
    },
    "light zone": {
-    "median_icc": 0.0128,
-    "matched_background_median_icc": 0.0047,
-    "pvalue_vs_matched": 0.4261
+    "median_icc": 0.033,
+    "matched_background_median_icc": 0.003,
+    "pvalue_vs_matched": 0.0834
    },
    "memory": {
-    "median_icc": 0.1029,
-    "matched_background_median_icc": -0.0022,
+    "median_icc": 0.0968,
+    "matched_background_median_icc": 0.0008,
     "pvalue_vs_matched": 0.0
    },
    "naive": {
-    "median_icc": 0.1264,
-    "matched_background_median_icc": 0.0176,
-    "pvalue_vs_matched": 0.0
+    "median_icc": 0.1086,
+    "matched_background_median_icc": 0.0285,
+    "pvalue_vs_matched": 0.0008
    },
    "interferon": {
-    "median_icc": 0.0273,
-    "matched_background_median_icc": 0.0034,
-    "pvalue_vs_matched": 0.1792
+    "median_icc": 0.01,
+    "matched_background_median_icc": 0.0001,
+    "pvalue_vs_matched": 0.5268
    }
   }
  },
@@ -267,5 +279,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 2.0
+ "runtime_min": 1.7
 }

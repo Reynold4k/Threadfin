@@ -17,7 +17,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from ._utils import bh_fdr, codes, get_uns, log, perm_pvalue, permute_within, require_obs, require_complete_groups, require_positive_int
+from ._utils import bh_fdr, codes, get_uns, h5ad_safe, log, perm_pvalue, permute_within, require_obs, require_complete_groups, require_positive_int
 from .profiles import get_profiles, model_from_adata, variance_components
 
 
@@ -87,7 +87,7 @@ def clonal_coherence(
         "icc_per_feature": model.vc.icc_per_feature,
         "null": null,
     }
-    get_uns(adata)["coherence"] = res
+    get_uns(adata)["coherence"] = h5ad_safe(res)
     log(
         f"clonal coherence: ICC {observed:.3f} vs {res['null_mean']:.3f} under within-"
         f"'{strata_key}' permutation (p = {res['p_value']:.3g}, {n_perm} permutations).",
@@ -256,7 +256,7 @@ def association_test(
     out["fdr"] = bh_fdr(out["pvalue"].to_numpy())
     out.attrs["strata_key"] = strata_key
     out.attrs["n_clones"] = int(len(df))
-    get_uns(adata).setdefault("associations", {})[label_key] = out
+    get_uns(adata).setdefault("associations", {})[label_key] = h5ad_safe(out)
     n_sig = int((out["fdr"] < 0.05).sum())
     log(f"association '{label_key}': {len(df)} clones, {n_sig} programme effects at FDR < 0.05 "
         f"(within-'{strata_key}' permutation).", verbose)
@@ -274,7 +274,7 @@ def profile_association(
     strata_key: str | None = "auto",
     how: str = "auto",
     min_frac: float = 0.5,
-    min_reliability: float = 0.5,
+    min_reliability: float = 0.0,
     n_perm: int = 2000,
     random_state: int = 0,
     verbose: bool = True,
@@ -300,7 +300,14 @@ def profile_association(
         Clone-table column whose levels define permutation strata;
         ``"auto"`` uses the donor when available.
     min_reliability
-        Only clones whose profile reliability reaches this value are used.
+        Reliability floor; ``0.0`` (the default) uses every profiled clone.
+        Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
+    the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
+    population mean by the variance-component model, so its influence is down-weighted in proportion to
+    how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
+    twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
+    profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
+    though it had no clone structure when its map separates the sorted gate at p < 0.001.
 
     Returns
     -------
@@ -372,7 +379,7 @@ def profile_association(
         "n_clones": int(use.size), "n_levels": None if numeric else int(len(levels)),
         "strata_key": strata_key, "n_perm": int(n_perm), "axis_correlation": axis_corr,
     }
-    get_uns(adata).setdefault("profile_associations", {})[label_key] = res
+    get_uns(adata).setdefault("profile_associations", {})[label_key] = h5ad_safe(res)
     log(f"profile association '{label_key}': explains {100 * observed:.1f}% of clone-profile variance vs "
         f"{100 * res['null_mean']:.1f}% for permuted labels (p = {p_value:.3g}, {use.size} clones, "
         f"within-'{strata_key}' permutation).", verbose)

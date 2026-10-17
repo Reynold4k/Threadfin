@@ -1,0 +1,38 @@
+{
+  "Figure_2_GC_overview": {
+    "pages": 1,
+    "dimensions_mm": [
+      211.09,
+      307.53
+    ],
+    "text_clipped": [],
+    "text_characters": 2312
+  },
+  "Supplementary_model_antigen_NP": {
+    "pages": 1,
+    "dimensions_mm": [
+      204.91,
+      273.53
+    ],
+    "text_clipped": [],
+    "text_characters": 1608
+  },
+  "Supplementary_model_antigen_reporters": {
+    "pages": 1,
+    "dimensions_mm": [
+      204.55,
+      277.53
+    ],
+    "text_clipped": [],
+    "text_characters": 1564
+  },
+  "Supplementary_clone_compartments": {
+    "pages": 1,
+    "dimensions_mm": [
+      202.52,
+      82.56
+    ],
+    "text_clipped": [],
+    "text_characters": 500
+  }
+}

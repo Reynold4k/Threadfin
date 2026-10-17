@@ -1,0 +1,36 @@
+{
+  "source_files": {
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/cells.csv.gz": "943b64199ab6b08c834a74745b7292c85fc0f762ef64a3233bcd90851bfe3eb2",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/clone_table.csv": "373c7c28da94b19a058f55675670ee938593432ce35d0e109365fc7134bf160c"
+  },
+  "outputs": [
+    {
+      "name": "Gut_P2_P3_cell_UMAP_highres",
+      "width_px": 14400,
+      "height_px": 10800,
+      "dpi": 1200,
+      "plasma_only": false,
+      "highlighted_cells": {
+        "P2": 1906,
+        "P3": 1335
+      },
+      "background_cells": 13378,
+      "coordinates": "existing umap_1 / umap_2; no recomputation",
+      "draw_order": "fixed-seed interleaving of foreground cells"
+    },
+    {
+      "name": "Gut_P2_P3_plasma_cell_UMAP_highres",
+      "width_px": 14400,
+      "height_px": 10800,
+      "dpi": 1200,
+      "plasma_only": true,
+      "highlighted_cells": {
+        "P2": 1326,
+        "P3": 1220
+      },
+      "background_cells": 14073,
+      "coordinates": "existing umap_1 / umap_2; no recomputation",
+      "draw_order": "fixed-seed interleaving of foreground cells"
+    }
+  ]
+}

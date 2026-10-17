@@ -1,0 +1,57 @@
+{
+  "figure": "Figure 1 (A4): a, Threadfin concept; b, algorithm pipeline, fidelity test, biological inference",
+  "page_mm": [
+    210.0,
+    297.0
+  ],
+  "panel_a": {
+    "source": "figure1_programmes.draw(header=False, key=False)",
+    "mm_per_design_unit": 0.89
+  },
+  "panel_b_title": "Threadfin integrates scRNA-seq and BCR data into clone embeddings to infer relationships between clones",
+  "sections": {
+    "Algorithm pipeline": [
+      "1 scRNA-seq states / scBCR clone links on the same cells",
+      "2 overlapping clones pooled into Frechet means",
+      "3 clone embedding: points at Frechet means; A and A' share a footprint and sit together; cells of the two right arms interleave evenly on the scRNA UMAP"
+    ],
+    "Clone embedding fidelity test": [
+      "4 observed clonal ICC vs 500 clone-label shuffles within samples"
+    ],
+    "Biological inference": [
+      "5 GC B and plasma cells: one mass on the scRNA UMAP; their clones form a continuous GC hub with two parallel, unlabelled branches in the clone embedding (coloured GC-like to plasma-like)",
+      "6 position along the clone embedding tracks antigen binding and fate mapping"
+    ]
+  },
+  "clones": {
+    "A": {
+      "states": [
+        0,
+        1
+      ],
+      "n_cells": 8
+    },
+    "B": {
+      "states": [
+        1,
+        2
+      ],
+      "n_cells": 8
+    },
+    "C": {
+      "states": [
+        0,
+        2
+      ],
+      "n_cells": 8
+    }
+  },
+  "embedding_clones": 114,
+  "card5": {
+    "cells": 560,
+    "plasma_cells": 145,
+    "clones": 405
+  },
+  "scope": "Schematic; synthetic cells, clones, embeddings, statistics and readouts",
+  "not_used": "Clonotrace density surfaces, kNN-graph diffusion and optimal-transport distance matrix"
+}

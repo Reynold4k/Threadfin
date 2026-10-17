@@ -22,7 +22,6 @@ MODELS = {
     'flu_lung': ('Influenza lung', 'Tested coverage', 'Exploratory expression states'),
     'ebv': ('EBV organoids', 'Tested coverage', 'Measured GFP status in infected tonsil organoids'),
     'tonsil': ('Tonsil', 'Tested coverage', 'Exploratory expression states'),
-    'stephenson': ('COVID blood', 'Tested coverage', 'Exploratory expression states'),
 }
 
 def main():

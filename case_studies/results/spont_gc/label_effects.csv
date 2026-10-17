@@ -1,0 +1,4 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+isotype,categorical,0.03692473008462308,0.008771162364526571,0.02815356772009651,0.0004997501249375312,999,3.0,donor,2000,heavy-chain isotype
+mutation_frequency,numeric,0.047170449958498825,0.0012566050485865441,0.04591384490991228,0.0004997501249375312,1051,,donor,2000,V-region mutation frequency
+condition,categorical,0.03390395194589951,0.0009543924591009856,0.03294955948679853,0.0004997501249375312,1051,2.0,,2000,autoimmune chimera vs NP-CGG immunised (donor-level label: not separable from other donor differences)

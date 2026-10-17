@@ -5,8 +5,9 @@ Run it as a script, or paste the sections into a notebook:
     python examples/tutorial.py
 
 It uses simulated data with a known answer, so it needs no download and
-finishes in about a minute. Every step is the same on real data; the only
+finishes in a few minutes. Every step is the same on real data; the only
 difference is that you pass your own AnnData and BCR table to ``tf.run``.
+The tutorials in docs/tutorials/ walk through the same steps with their output.
 """
 
 from __future__ import annotations
@@ -33,6 +34,12 @@ print(adata.obs["clone_id"].value_counts().describe()[["count", "mean", "max"]])
 result = tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca",
                 state_key="true_state", test=["true_programme"])
 print(result.summary())
+
+# The clone map's UMAP settings were chosen for this dataset (n_neighbors="auto",
+# min_dist="auto"); the record of the choice is kept with the profiles.
+mp = adata.uns["threadfin"]["profiles"]["map_params"]
+print(f"\nclone map: n_neighbors {mp['n_neighbors']}, min_dist {mp['min_dist']:.2f}; "
+      f"{100 * mp['quality']['coherence']:.1f}% of clones in one connected piece")
 
 # ---------------------------------------------------------------- 3. the parts
 # Everything above is also available step by step, which is what you want when
@@ -68,5 +75,5 @@ print("\nwrote tutorial_overview.png")
 #   result = tf.run(adata, bcr="filtered_contig_annotations.csv",
 #                   donor_key="donor", sample_key="sample",
 #                   test=["isotype", "antigen_binding"], time_key="timepoint")
-# See report/ for worked examples on eight published datasets, and
-# docs/METHODS.md for what each step does.
+# See case_studies/ for the analyses of public datasets, docs/tutorials/ for
+# worked tutorials and docs/METHODS.md for what each step does.

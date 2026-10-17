@@ -189,3 +189,48 @@ def stable_categorical(values, prefix: str) -> pd.Categorical:
     mapping = {lab: f"{prefix}{i + 1}" for i, lab in enumerate(sizes.index)}
     cats = [mapping[lab] for lab in sizes.index]
     return pd.Categorical(s.map(mapping), categories=cats)
+
+
+def h5ad_safe(obj):
+    """A copy of ``obj`` that AnnData can write to h5ad, for storing results in ``adata.uns``.
+
+    AnnData cannot write tuples, lists of dicts, ragged lists, or DataFrame columns that hold lists,
+    ``None`` among text, or a mix of numbers and text. These become lists, DataFrames and text; everything
+    else is returned unchanged.
+    """
+    import numpy as np
+    import pandas as pd
+
+    def seq_text(v):
+        return ",".join(str(x) for x in v)
+
+    if isinstance(obj, dict):
+        return {k: h5ad_safe(v) for k, v in obj.items()}
+    if isinstance(obj, tuple):
+        obj = list(obj)
+    if isinstance(obj, list):
+        if obj and all(isinstance(v, dict) for v in obj):
+            return h5ad_safe(pd.DataFrame(obj))
+        if any(isinstance(v, (list, tuple, np.ndarray, dict)) for v in obj):
+            return [seq_text(v) if isinstance(v, (list, tuple, np.ndarray)) else str(v) for v in obj]
+        return obj
+    if isinstance(obj, pd.DataFrame):
+        out = obj.copy()
+        for col in out.columns:
+            s = out[col]
+            if s.dtype != object:
+                continue
+            if s.map(lambda v: isinstance(v, (list, tuple, np.ndarray))).any():
+                out[col] = s.map(lambda v: seq_text(v) if isinstance(v, (list, tuple, np.ndarray)) else
+                                 ("" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v)))
+                continue
+            kinds = {type(v) for v in s if v is not None and not (isinstance(v, float) and np.isnan(v))}
+            if kinds <= {bool, np.bool_} and s.notna().all():
+                out[col] = s.astype(bool)
+            elif kinds and kinds <= {int, float, np.integer, np.floating} | set(np.sctypeDict.values()) and \
+                    all(isinstance(v, (int, float, np.number)) for v in s.dropna()):
+                out[col] = pd.to_numeric(s, errors="coerce")
+            elif s.isna().any() or len(kinds) > 1:
+                out[col] = s.map(lambda v: "" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v))
+        return out
+    return obj

@@ -8,6 +8,8 @@ light-chain CDR3 similarity.
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -181,7 +183,16 @@ def define_clones(
     Returns
     -------
     Series indexed by barcode named ``out_col``.
+
+    .. deprecated::
+        Sequence-based redefinition is superseded by Dandelion's paired
+        heavy + light clone definition (:func:`threadfin.define_clones_dandelion`).
     """
+    warnings.warn(
+        "threadfin.bcrgraph.define_clones is deprecated; Threadfin's clone definition is "
+        "Dandelion's paired heavy + light definition — use threadfin.define_clones_dandelion.",
+        DeprecationWarning, stacklevel=2,
+    )
     for col in ("v_call", "j_call", "cdr3"):
         if col not in bcr.columns:
             raise ValueError(f"bcr needs a '{col}' column.")

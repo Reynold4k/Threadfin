@@ -1,0 +1,102 @@
+{
+  "checks": {
+    "word_has_nine_figures": true,
+    "pdf_pages": true,
+    "pdf_navigable": true,
+    "word_table_rows": true,
+    "key_results_in_word_and_pdf": true,
+    "all_appendix_items_in_word_and_pdf": true,
+    "ris_32_records": true,
+    "ris_unique_ids_dois": true,
+    "source_documents_unchanged": true,
+    "output_hashes_match": true,
+    "nine_current_plates_complete": true,
+    "prose_text_within_page": true
+  },
+  "figure_plates": [
+    {
+      "label": "Figure 1",
+      "pdf_page": 17,
+      "source_sha256": "8990fc784c54656a67a0273b049c987d1aa07c2f7a3a313a0ff13bd56c1df665",
+      "png_dimensions": [
+        9921,
+        10015
+      ]
+    },
+    {
+      "label": "Figure 2",
+      "pdf_page": 18,
+      "source_sha256": "ef132f0b60dbe0bd2874706480ce9a905e7276ed38edcddffe1604d5c9269265",
+      "png_dimensions": [
+        4960,
+        7795
+      ]
+    },
+    {
+      "label": "Figure 3",
+      "pdf_page": 19,
+      "source_sha256": "1e95341ac1394f4cd29f9b4bfdf6201f1dc8cf597efbc2933e36dd13d80e52ce",
+      "png_dimensions": [
+        4960,
+        8173
+      ]
+    },
+    {
+      "label": "Figure 4",
+      "pdf_page": 20,
+      "source_sha256": "36076b77a1d525b03eb2b27a5644a87f67a725bac5c437b5975e6a36501cef27",
+      "png_dimensions": [
+        4960,
+        5480
+      ]
+    },
+    {
+      "label": "Supplementary Figure S1",
+      "pdf_page": 21,
+      "source_sha256": "a44f3fc79c55cc23f95f3fbb93dd4fb5e577e28938ec044ab4b79004ee0a58b4",
+      "png_dimensions": [
+        9921,
+        13511
+      ]
+    },
+    {
+      "label": "Supplementary Figure S2",
+      "pdf_page": 22,
+      "source_sha256": "e855b72c47b74b5aed657b562f4aa7a48f2e416f8ae5f46cc980fd136d3cac46",
+      "png_dimensions": [
+        9921,
+        11338
+      ]
+    },
+    {
+      "label": "Supplementary Figure S3",
+      "pdf_page": 23,
+      "source_sha256": "0bd78e5a5df07584bcf45860f54e27b4a3567cee1056ca3ceb3e2575e3d7616d",
+      "png_dimensions": [
+        4960,
+        2267
+      ]
+    },
+    {
+      "label": "Supplementary Figure S4",
+      "pdf_page": 24,
+      "source_sha256": "cf16d139b15eb4222fc93ba6d0b34177d8a9443f1bfd68ecbd6d972c5f4f8c83",
+      "png_dimensions": [
+        4960,
+        2007
+      ]
+    },
+    {
+      "label": "Supplementary Figure S5",
+      "pdf_page": 25,
+      "source_sha256": "174f6dce9b7cc97f51d881eb45172b7a4fc604c5ff636e678f112cef6b97f65c",
+      "png_dimensions": [
+        4960,
+        2244
+      ]
+    }
+  ],
+  "pdf_pages": 25,
+  "references": 32,
+  "text_bounds_issues": []
+}

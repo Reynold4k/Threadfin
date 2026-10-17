@@ -1,0 +1,842 @@
+{
+  "input_sha256": {
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/cells.csv.gz": "0697230e461be7b41bea2db42f810b4bac157571bd3f3856ab23ce3faf34ad12",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/clone_table.csv": "3bfb57768b4317e40c99d71cee90e26242e446f25c3e5664cddc927ab5bba5d7",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_cells.csv.gz": "a99c718d6680eb3b55cc3947e354d01a3861af39b4f6da1ece13be2e6c0406db",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/clone_table.csv": "6ca235e78ca4975910e41b5aa824a095e3d0a30ccca4f6a53be9d070f1e134f1",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/cells.csv.gz": "943b64199ab6b08c834a74745b7292c85fc0f762ef64a3233bcd90851bfe3eb2",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/clone_table.csv": "373c7c28da94b19a058f55675670ee938593432ce35d0e109365fc7134bf160c",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/p3_subsplit.json": "799ebb07615bcd432a487b74bcd12108e86addea7437a047aaf235a51f6bc60f",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_clones.csv": "a72947fc23373bc2cbc0e22e52a98937e8278afee9fd10c87b9a1c7e79f32fed",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/plasma_branches.json": "bd40adc167583e6a2eb2c9a0b22023d5146ca2f2aa345b742de4cd340192d97c"
+  },
+  "panels": {
+    "a": {
+      "n_cells": 72359,
+      "category_counts": {
+        "Follicular Naive": 16830,
+        "Immature": 15448,
+        "GC": 11238,
+        "PB": 6620,
+        "Activated": 4658,
+        "Precursor": 3929,
+        "Bystander": 3438,
+        "MZ": 3395,
+        "Memory": 2683,
+        "Atypical": 2211,
+        "B1": 1909
+      },
+      "n_missing_coordinates": 0
+    },
+    "b": {
+      "n_clones": 1015,
+      "category_counts": {
+        "P1": 389,
+        "P2": 250,
+        "P3": 193,
+        "P4": 183
+      },
+      "n_cells_sum": 2350,
+      "n_cells": {
+        "n": 1015,
+        "missing": 0,
+        "median": 2.0,
+        "mean": 2.315270935960591,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 2.0,
+        "max": 9
+      },
+      "marker_area_pt2_per_cell": 1.5
+    },
+    "c": {
+      "n_cells": 72359,
+      "category_counts": {
+        "no programme": 70009,
+        "P1": 846,
+        "P2": 611,
+        "P4": 466,
+        "P3": 427
+      },
+      "n_labelled": 2350,
+      "n_without_programme": 70009,
+      "n_missing_clone_id": 12437,
+      "n_nonmissing_clone_id_not_in_clone_table": 57572
+    },
+    "d": {
+      "n_cells": 22898,
+      "category_counts": {
+        "ASC": 12362,
+        "GC": 6355,
+        "unassigned": 2806,
+        "CD23+ MemB": 603,
+        "Fcrl5+ MemB": 525,
+        "other MemB": 247
+      },
+      "n_missing_coordinates": 0
+    },
+    "e": {
+      "n_clones": 1051,
+      "category_counts": {
+        "P1": 488,
+        "P2": 322,
+        "P4": 129,
+        "P3": 112
+      },
+      "n_cells_sum": 6278,
+      "n_cells": {
+        "n": 1051,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.973358705994291,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 5.0,
+        "max": 114
+      },
+      "marker_area_pt2_per_cell": 0.35
+    },
+    "f": {
+      "n_cells": 22898,
+      "category_counts": {
+        "no programme": 16620,
+        "P1": 2827,
+        "P2": 2649,
+        "P4": 519,
+        "P3": 283
+      },
+      "n_labelled": 6278,
+      "n_without_programme": 16620,
+      "n_missing_clone_id": 14793,
+      "n_nonmissing_clone_id_not_in_clone_table": 1827
+    },
+    "g": {
+      "n_clones": 322,
+      "entropy": {
+        "n": 322,
+        "missing": 0,
+        "median": 0.4505612088663046,
+        "mean": 0.3739187608522634,
+        "min": -0.0,
+        "q25": 0.0,
+        "q75": 0.671820869673077,
+        "max": 1.242453324894
+      },
+      "spearman_rho": -0.7418447034530916,
+      "spearman_p": 1.7381735915612173e-57
+    },
+    "h": {
+      "n_clones": 322,
+      "qcut_edges": [
+        2.836689710617065,
+        4.499803781509399,
+        8.363207340240479,
+        11.888429164886475,
+        13.727415084838867
+      ],
+      "quartiles": [
+        {
+          "quartile": "Q1",
+          "n": 81,
+          "label_M_n": 29,
+          "label_M_fraction": 0.35802469135802467,
+          "x_min": 2.836689710617065,
+          "x_max": 4.498499393463135
+        },
+        {
+          "quartile": "Q2",
+          "n": 80,
+          "label_M_n": 10,
+          "label_M_fraction": 0.125,
+          "x_min": 4.503716945648193,
+          "x_max": 8.362255096435547
+        },
+        {
+          "quartile": "Q3",
+          "n": 80,
+          "label_M_n": 9,
+          "label_M_fraction": 0.1125,
+          "x_min": 8.36415958404541,
+          "x_max": 11.844064712524414
+        },
+        {
+          "quartile": "Q4",
+          "n": 81,
+          "label_M_n": 2,
+          "label_M_fraction": 0.024691358024691357,
+          "x_min": 11.903217315673828,
+          "x_max": 13.727415084838867
+        }
+      ],
+      "label_M_n": 50
+    },
+    "i": {
+      "n_clones": 322,
+      "donors_sorted_by_rho": [
+        {
+          "donor": "M21",
+          "n": 17,
+          "rho": -0.7398414344468424,
+          "p": 0.0006861324571258209
+        },
+        {
+          "donor": "M24",
+          "n": 45,
+          "rho": -0.7249139002870104,
+          "p": 1.7911720475000567e-08
+        },
+        {
+          "donor": "M11",
+          "n": 23,
+          "rho": -0.7199751610079289,
+          "p": 0.00010733201235227228
+        },
+        {
+          "donor": "M13",
+          "n": 74,
+          "rho": -0.7060686588377141,
+          "p": 2.1179953089944746e-12
+        },
+        {
+          "donor": "M17",
+          "n": 76,
+          "rho": -0.6303617350048103,
+          "p": 1.047703084634997e-09
+        },
+        {
+          "donor": "M34",
+          "n": 19,
+          "rho": -0.5331139899831832,
+          "p": 0.018754525708741483
+        },
+        {
+          "donor": "M14",
+          "n": 56,
+          "rho": -0.4630245628874461,
+          "p": 0.0003264163633690144
+        },
+        {
+          "donor": "M23",
+          "n": 12,
+          "rho": -0.4175464299643898,
+          "p": 0.17683562352208235
+        }
+      ]
+    },
+    "j": {
+      "n_cells": 16619,
+      "category_counts": {
+        "B_cell": 5957,
+        "GC_Bcell": 5502,
+        "plasma": 3973,
+        "other": 1187
+      },
+      "n_missing_coordinates": 0
+    },
+    "k": {
+      "n_clones": 958,
+      "category_counts": {
+        "P1": 475,
+        "P2": 294,
+        "P3": 189
+      },
+      "n_cells_sum": 5724,
+      "n_cells": {
+        "n": 958,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.974947807933194,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 6.0,
+        "max": 160
+      },
+      "marker_area_pt2_per_cell": 0.3
+    },
+    "l": {
+      "n_cells": 16619,
+      "category_counts": {
+        "no programme": 10895,
+        "P1": 2483,
+        "P2": 1906,
+        "P3": 1335
+      },
+      "n_labelled": 5724,
+      "n_without_programme": 10895,
+      "n_missing_clone_id": 4896,
+      "n_nonmissing_clone_id_not_in_clone_table": 5999
+    },
+    "m": {
+      "map": {
+        "n_clones": 958,
+        "gc_sort:GC": {
+          "n": 958,
+          "missing": 0,
+          "median": 1.0,
+          "mean": 0.88674236628779,
+          "min": 0.0,
+          "q25": 1.0,
+          "q75": 1.0,
+          "max": 1.0
+        }
+      },
+      "comparison": {
+        "threshold_column": "celltype:plasma",
+        "threshold_minimum": 0.5,
+        "n_all_programmes": 439,
+        "programmes": {
+          "P1": {
+            "n": 8,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.8125,
+            "min": 0.0,
+            "q25": 0.875,
+            "q75": 1.0,
+            "max": 1.0
+          },
+          "P2": {
+            "n": 242,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.9129047261278667,
+            "min": 0.0,
+            "q25": 1.0,
+            "q75": 1.0,
+            "max": 1.0
+          },
+          "P3": {
+            "n": 189,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.7358118271090666,
+            "min": 0.0,
+            "q25": 0.5,
+            "q75": 1.0,
+            "max": 1.0
+          }
+        },
+        "P2_P3_n": 431,
+        "U_P2_vs_P3": 28009.0,
+        "p_two_sided": 2.818265451214347e-07,
+        "reference_json_p": 2.818265451214347e-07,
+        "reference_json_matches": true,
+        "display": "offset raw points and tinted boxes; exact 5th/95th quantile whiskers",
+        "boxplot_summary": [
+          {
+            "programme": "P1",
+            "n": 8,
+            "q05": 0.17500000000000002,
+            "q25": 0.875,
+            "median": 1.0,
+            "q75": 1.0,
+            "q95": 1.0,
+            "n_equal_1": 6,
+            "fraction_equal_1": 0.75,
+            "IQR_zero": false
+          },
+          {
+            "programme": "P2",
+            "n": 242,
+            "q05": 0.5,
+            "q25": 1.0,
+            "median": 1.0,
+            "q75": 1.0,
+            "q95": 1.0,
+            "n_equal_1": 198,
+            "fraction_equal_1": 0.8181818181818182,
+            "IQR_zero": true
+          },
+          {
+            "programme": "P3",
+            "n": 189,
+            "q05": 0.0,
+            "q25": 0.5,
+            "median": 1.0,
+            "q75": 1.0,
+            "q95": 1.0,
+            "n_equal_1": 117,
+            "fraction_equal_1": 0.6190476190476191,
+            "IQR_zero": false
+          }
+        ],
+        "quantile_method": "numpy.quantile(method='linear')",
+        "whisker_rule": "exact empirical quantiles at 0.05 and 0.95; box Q1-Q3; median line; no vertical jitter"
+      }
+    }
+  },
+  "programme_colors": {
+    "S1": {
+      "P1": "#8053B5",
+      "P2": "#EC4776",
+      "P3": "#00A8A5",
+      "P4": "#E2A13B"
+    },
+    "S2": {
+      "P1": "#2a78d6",
+      "P2": "#eb6834",
+      "P3": "#12AD78",
+      "P4": "#9860D1"
+    },
+    "S3": {
+      "P1": "#405BD8",
+      "P2": "#E9AE14",
+      "P3": "#E44336"
+    }
+  },
+  "state_colors": {
+    "S1": {
+      "Follicular Naive": "#91a6bd",
+      "Immature": "#b7b39c",
+      "GC": "#2a78d6",
+      "PB": "#e34948",
+      "Activated": "#b56576",
+      "Precursor": "#8d6e63",
+      "Bystander": "#d4a373",
+      "MZ": "#4e9994",
+      "Memory": "#008300",
+      "Atypical": "#7563aa",
+      "B1": "#ae843e"
+    },
+    "S2": {
+      "GC": "#2a9d8f",
+      "ASC": "#e63946",
+      "Fcrl5+ MemB": "#457b9d",
+      "CD23+ MemB": "#8ecae6",
+      "other MemB": "#b5c9e2",
+      "unassigned": "#c3c2b7"
+    },
+    "S3": {
+      "B_cell": "#91a6bd",
+      "GC_Bcell": "#2a78d6",
+      "plasma": "#4a3aa7",
+      "other": "#c3c2b7"
+    }
+  },
+  "S2_display_rename": {
+    "P3a": "P3",
+    "P3b": "P4"
+  },
+  "S2_display_assignments_by_clone_id": {
+    "M11|B_VDJ_101_1_1": "P4",
+    "M11|B_VDJ_104_1_1": "P3",
+    "M11|B_VDJ_106_1_1": "P3",
+    "M11|B_VDJ_121_1_1": "P3",
+    "M11|B_VDJ_123_2_1": "P4",
+    "M11|B_VDJ_126_1_1": "P4",
+    "M11|B_VDJ_14_1_1": "P4",
+    "M11|B_VDJ_16_1_1": "P4",
+    "M11|B_VDJ_1_2_1": "P4",
+    "M11|B_VDJ_48_2_1": "P3",
+    "M11|B_VDJ_4_2_1": "P3",
+    "M11|B_VDJ_4_4_1": "P4",
+    "M11|B_VDJ_53_1_1": "P4",
+    "M11|B_VDJ_57_1_1": "P4",
+    "M11|B_VDJ_5_1_1": "P3",
+    "M11|B_VDJ_78_2_1": "P3",
+    "M11|B_VDJ_78_4_1": "P4",
+    "M11|B_VDJ_80_2_1": "P3",
+    "M11|B_VDJ_90_2_1": "P3",
+    "M13|B_VDJ_102_1_1": "P4",
+    "M13|B_VDJ_107_1_1": "P4",
+    "M13|B_VDJ_112_1_1": "P4",
+    "M13|B_VDJ_112_2_1": "P4",
+    "M13|B_VDJ_112_2_6": "P3",
+    "M13|B_VDJ_114_1_1": "P4",
+    "M13|B_VDJ_117_3_1": "P3",
+    "M13|B_VDJ_117_4_1": "P4",
+    "M13|B_VDJ_120_1_1": "P4",
+    "M13|B_VDJ_122_1_1": "P4",
+    "M13|B_VDJ_126_1_1": "P3",
+    "M13|B_VDJ_129_5_1": "P3",
+    "M13|B_VDJ_133_1_3": "P4",
+    "M13|B_VDJ_134_1_1": "P3",
+    "M13|B_VDJ_136_1_1": "P4",
+    "M13|B_VDJ_143_3_1": "P4",
+    "M13|B_VDJ_145_2_1": "P4",
+    "M13|B_VDJ_16_1_3": "P4",
+    "M13|B_VDJ_171_1_1": "P3",
+    "M13|B_VDJ_173_1_2": "P4",
+    "M13|B_VDJ_17_1_5": "P4",
+    "M13|B_VDJ_182_2_1": "P4",
+    "M13|B_VDJ_186_1_2": "P4",
+    "M13|B_VDJ_189_1_1": "P4",
+    "M13|B_VDJ_189_2_1": "P4",
+    "M13|B_VDJ_189_2_2": "P4",
+    "M13|B_VDJ_198_5_1": "P4",
+    "M13|B_VDJ_199_2_1": "P4",
+    "M13|B_VDJ_199_3_1": "P4",
+    "M13|B_VDJ_1_1_1": "P4",
+    "M13|B_VDJ_21_4_2": "P4",
+    "M13|B_VDJ_21_5_1": "P3",
+    "M13|B_VDJ_22_1_1": "P3",
+    "M13|B_VDJ_27_1_1": "P4",
+    "M13|B_VDJ_34_1_1": "P3",
+    "M13|B_VDJ_46_2_1": "P4",
+    "M13|B_VDJ_53_1_1": "P4",
+    "M13|B_VDJ_56_3_3": "P4",
+    "M13|B_VDJ_5_2_1": "P3",
+    "M13|B_VDJ_67_2_1": "P3",
+    "M13|B_VDJ_68_2_1": "P3",
+    "M13|B_VDJ_81_1_1": "P4",
+    "M13|B_VDJ_81_2_2": "P4",
+    "M13|B_VDJ_81_2_3": "P4",
+    "M13|B_VDJ_88_1_1": "P4",
+    "M13|B_VDJ_91_1_1": "P4",
+    "M13|B_VDJ_92_2_2": "P4",
+    "M13|B_VDJ_95_3_1": "P4",
+    "M13|B_VDJ_97_2_3": "P4",
+    "M13|B_VDJ_98_2_1": "P4",
+    "M14|B_VDJ_101_1_1": "P3",
+    "M14|B_VDJ_107_1_1": "P3",
+    "M14|B_VDJ_113_2_1": "P4",
+    "M14|B_VDJ_113_3_1": "P4",
+    "M14|B_VDJ_119_1_1": "P3",
+    "M14|B_VDJ_123_1_1": "P4",
+    "M14|B_VDJ_126_1_1": "P3",
+    "M14|B_VDJ_128_1_1": "P3",
+    "M14|B_VDJ_131_1_1": "P4",
+    "M14|B_VDJ_133_5_1": "P4",
+    "M14|B_VDJ_134_1_1": "P3",
+    "M14|B_VDJ_136_1_1": "P4",
+    "M14|B_VDJ_137_3_1": "P4",
+    "M14|B_VDJ_140_3_1": "P3",
+    "M14|B_VDJ_144_1_1": "P4",
+    "M14|B_VDJ_145_3_1": "P3",
+    "M14|B_VDJ_146_3_1": "P3",
+    "M14|B_VDJ_152_2_2": "P3",
+    "M14|B_VDJ_153_1_1": "P4",
+    "M14|B_VDJ_161_2_1": "P3",
+    "M14|B_VDJ_167_1_1": "P3",
+    "M14|B_VDJ_169_2_2": "P3",
+    "M14|B_VDJ_18_1_1": "P4",
+    "M14|B_VDJ_18_1_2": "P3",
+    "M14|B_VDJ_19_5_7": "P4",
+    "M14|B_VDJ_21_1_1": "P4",
+    "M14|B_VDJ_23_2_5": "P4",
+    "M14|B_VDJ_25_1_1": "P3",
+    "M14|B_VDJ_29_3_1": "P4",
+    "M14|B_VDJ_30_4_1": "P3",
+    "M14|B_VDJ_31_1_1": "P3",
+    "M14|B_VDJ_36_2_2": "P4",
+    "M14|B_VDJ_36_4_1": "P4",
+    "M14|B_VDJ_41_1_1": "P4",
+    "M14|B_VDJ_48_1_1": "P3",
+    "M14|B_VDJ_51_1_1": "P4",
+    "M14|B_VDJ_53_1_1": "P4",
+    "M14|B_VDJ_68_1_1": "P3",
+    "M14|B_VDJ_73_1_1": "P4",
+    "M14|B_VDJ_74_1_1": "P4",
+    "M14|B_VDJ_80_1_1": "P3",
+    "M14|B_VDJ_81_1_2": "P3",
+    "M14|B_VDJ_83_1_1": "P4",
+    "M14|B_VDJ_84_2_1": "P3",
+    "M14|B_VDJ_86_1_4": "P4",
+    "M14|B_VDJ_86_2_29": "P4",
+    "M14|B_VDJ_90_4_3": "P4",
+    "M14|B_VDJ_90_4_4": "P3",
+    "M14|B_VDJ_96_2_1": "P3",
+    "M14|B_VDJ_96_6_3": "P3",
+    "M14|B_VDJ_99_1_1": "P4",
+    "M14|B_VDJ_9_1_1": "P3",
+    "M17|B_VDJ_103_3_1": "P4",
+    "M17|B_VDJ_110_2_1": "P3",
+    "M17|B_VDJ_112_3_1": "P4",
+    "M17|B_VDJ_118_2_1": "P4",
+    "M17|B_VDJ_132_1_2": "P4",
+    "M17|B_VDJ_136_3_1": "P3",
+    "M17|B_VDJ_137_3_1": "P4",
+    "M17|B_VDJ_144_2_2": "P3",
+    "M17|B_VDJ_154_1_1": "P3",
+    "M17|B_VDJ_155_1_1": "P3",
+    "M17|B_VDJ_157_2_1": "P3",
+    "M17|B_VDJ_157_3_1": "P3",
+    "M17|B_VDJ_158_3_1": "P4",
+    "M17|B_VDJ_161_1_1": "P4",
+    "M17|B_VDJ_161_1_2": "P4",
+    "M17|B_VDJ_161_3_1": "P3",
+    "M17|B_VDJ_163_1_1": "P4",
+    "M17|B_VDJ_186_1_1": "P4",
+    "M17|B_VDJ_192_3_1": "P4",
+    "M17|B_VDJ_193_5_1": "P4",
+    "M17|B_VDJ_193_6_1": "P4",
+    "M17|B_VDJ_21_2_1": "P4",
+    "M17|B_VDJ_41_2_1": "P4",
+    "M17|B_VDJ_44_1_1": "P3",
+    "M17|B_VDJ_47_1_1": "P4",
+    "M17|B_VDJ_58_2_1": "P3",
+    "M17|B_VDJ_61_1_1": "P3",
+    "M17|B_VDJ_67_3_1": "P4",
+    "M17|B_VDJ_68_6_1": "P4",
+    "M17|B_VDJ_6_1_1": "P4",
+    "M17|B_VDJ_71_1_1": "P3",
+    "M17|B_VDJ_72_1_1": "P4",
+    "M17|B_VDJ_94_2_1": "P4",
+    "M17|B_VDJ_94_2_2": "P4",
+    "M17|B_VDJ_95_1_1": "P4",
+    "M21|B_VDJ_100_3_1": "P4",
+    "M21|B_VDJ_100_3_3": "P4",
+    "M21|B_VDJ_10_1_1": "P3",
+    "M21|B_VDJ_110_3_4": "P3",
+    "M21|B_VDJ_111_3_1": "P3",
+    "M21|B_VDJ_115_3_16": "P3",
+    "M21|B_VDJ_116_2_1": "P3",
+    "M21|B_VDJ_124_1_1": "P3",
+    "M21|B_VDJ_125_3_1": "P3",
+    "M21|B_VDJ_126_2_1": "P3",
+    "M21|B_VDJ_126_3_1": "P4",
+    "M21|B_VDJ_126_3_2": "P4",
+    "M21|B_VDJ_12_2_2": "P4",
+    "M21|B_VDJ_139_1_3": "P3",
+    "M21|B_VDJ_142_1_1": "P4",
+    "M21|B_VDJ_145_2_1": "P3",
+    "M21|B_VDJ_145_3_1": "P3",
+    "M21|B_VDJ_149_1_1": "P3",
+    "M21|B_VDJ_165_3_1": "P3",
+    "M21|B_VDJ_167_2_1": "P3",
+    "M21|B_VDJ_16_5_1": "P3",
+    "M21|B_VDJ_170_2_1": "P3",
+    "M21|B_VDJ_178_1_1": "P3",
+    "M21|B_VDJ_181_1_1": "P3",
+    "M21|B_VDJ_20_1_1": "P3",
+    "M21|B_VDJ_20_2_1": "P3",
+    "M21|B_VDJ_21_4_1": "P3",
+    "M21|B_VDJ_2_1_2": "P4",
+    "M21|B_VDJ_33_2_1": "P3",
+    "M21|B_VDJ_36_1_1": "P3",
+    "M21|B_VDJ_37_1_1": "P3",
+    "M21|B_VDJ_46_1_1": "P3",
+    "M21|B_VDJ_54_1_1": "P3",
+    "M21|B_VDJ_60_1_1": "P3",
+    "M21|B_VDJ_64_1_1": "P3",
+    "M21|B_VDJ_74_1_1": "P3",
+    "M21|B_VDJ_75_1_1": "P3",
+    "M21|B_VDJ_81_1_1": "P3",
+    "M21|B_VDJ_88_2_1": "P3",
+    "M21|B_VDJ_9_1_1": "P3",
+    "M23|B_VDJ_102_1_1": "P3",
+    "M23|B_VDJ_106_1_3": "P3",
+    "M23|B_VDJ_109_1_1": "P3",
+    "M23|B_VDJ_13_1_1": "P4",
+    "M23|B_VDJ_15_1_1": "P3",
+    "M23|B_VDJ_2_1_1": "P3",
+    "M23|B_VDJ_47_1_1": "P3",
+    "M23|B_VDJ_4_1_1": "P3",
+    "M23|B_VDJ_53_1_1": "P3",
+    "M23|B_VDJ_55_1_1": "P4",
+    "M23|B_VDJ_59_1_1": "P3",
+    "M23|B_VDJ_5_1_1": "P3",
+    "M23|B_VDJ_60_2_1": "P3",
+    "M23|B_VDJ_64_3_3": "P3",
+    "M23|B_VDJ_64_3_5": "P3",
+    "M23|B_VDJ_66_2_1": "P3",
+    "M23|B_VDJ_69_1_1": "P4",
+    "M23|B_VDJ_93_2_1": "P3",
+    "M23|B_VDJ_99_1_1": "P3",
+    "M23|B_VDJ_9_1_1": "P3",
+    "M24|B_VDJ_117_1_1": "P3",
+    "M24|B_VDJ_126_1_1": "P4",
+    "M24|B_VDJ_133_3_1": "P4",
+    "M24|B_VDJ_140_1_9": "P4",
+    "M24|B_VDJ_161_2_3": "P4",
+    "M24|B_VDJ_163_5_1": "P4",
+    "M24|B_VDJ_20_4_2": "P4",
+    "M24|B_VDJ_27_3_1": "P4",
+    "M24|B_VDJ_28_1_1": "P4",
+    "M24|B_VDJ_30_3_3": "P4",
+    "M24|B_VDJ_35_1_1": "P4",
+    "M24|B_VDJ_42_1_2": "P3",
+    "M24|B_VDJ_47_1_4": "P4",
+    "M24|B_VDJ_55_2_2": "P4",
+    "M24|B_VDJ_62_2_1": "P4",
+    "M24|B_VDJ_70_1_1": "P4",
+    "M24|B_VDJ_73_1_6": "P4",
+    "M24|B_VDJ_89_1_1": "P3",
+    "M34|B_VDJ_109_1_2": "P4",
+    "M34|B_VDJ_17_1_1": "P4",
+    "M34|B_VDJ_19_1_1": "P4",
+    "M34|B_VDJ_1_1_1": "P4",
+    "M34|B_VDJ_69_1_4": "P4",
+    "M34|B_VDJ_69_1_5": "P4",
+    "M34|B_VDJ_87_1_3": "P4"
+  },
+  "label_M_definition": {
+    "fate_values": [
+      "Fcrl5+ MemB",
+      "CD23+ MemB",
+      "other MemB"
+    ],
+    "minimum_cells_per_clone": 1
+  },
+  "analysis_population": {
+    "S2_g_h_i": "322 existing fate-clone rows",
+    "S2_e": "1051 existing clone-table rows",
+    "S3_m_ii": "all clone-table rows with celltype:plasma >= 0.5"
+  },
+  "shared_programme_keys": {
+    "b_c": "S1",
+    "e_f": "S2",
+    "k_l": "S3"
+  },
+  "legend_counts": "left keys show cell counts; shared programme keys use category names only",
+  "test_methods": {
+    "correlations": "two-sided scipy.stats.spearmanr",
+    "S3_P2_P3": "two-sided scipy.stats.mannwhitneyu, method=auto"
+  },
+  "layout": {
+    "name": "filled",
+    "page_mm": [
+      210,
+      356
+    ],
+    "dpi": 1200,
+    "panel_letters": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m"
+    ],
+    "axes_boxes_mm": {
+      "a": [
+        31,
+        8,
+        53,
+        53
+      ],
+      "b": [
+        91,
+        8,
+        53,
+        53
+      ],
+      "c": [
+        151,
+        8,
+        53,
+        53
+      ],
+      "d": [
+        31,
+        79,
+        53,
+        53
+      ],
+      "e": [
+        91,
+        79,
+        53,
+        53
+      ],
+      "f": [
+        151,
+        79,
+        53,
+        53
+      ],
+      "j": [
+        31,
+        220,
+        53,
+        53
+      ],
+      "k": [
+        91,
+        220,
+        53,
+        53
+      ],
+      "l": [
+        151,
+        220,
+        53,
+        53
+      ],
+      "g": [
+        7,
+        153,
+        53,
+        53
+      ],
+      "h": [
+        79,
+        153,
+        53,
+        53
+      ],
+      "i": [
+        145,
+        153,
+        63,
+        53
+      ],
+      "m": [
+        7,
+        291,
+        53,
+        53
+      ],
+      "m_ii": [
+        95,
+        291,
+        109,
+        53
+      ]
+    },
+    "legend_boxes_mm": {
+      "a": [
+        2,
+        8.125,
+        23.5,
+        52.75
+      ],
+      "b_c": [
+        91,
+        68,
+        113,
+        7.2
+      ],
+      "d": [
+        2,
+        87.1,
+        23.5,
+        36.8
+      ],
+      "e_f": [
+        91,
+        139,
+        113,
+        7.2
+      ],
+      "j": [
+        2,
+        233.6,
+        23.5,
+        25.8
+      ],
+      "k_l": [
+        91,
+        280,
+        113,
+        7.2
+      ]
+    },
+    "square_scatter_size_mm": [
+      53,
+      53
+    ],
+    "scatter_coordinate_aspect": "equal; matched square limits per dataset and coordinate type",
+    "minimum_axes_gap_mm": 7,
+    "minimum_legend_font_pt": 4.9,
+    "text_outside_page": [],
+    "legend_text_collisions": []
+  }
+}

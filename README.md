@@ -1,42 +1,73 @@
-# Threadfin
+<p align="center">
+  <img src="docs/_static/threadfin_overview.png" width="720" alt="Threadfin turns paired single-cell RNA and BCR sequencing into a clone embedding, one point per clone">
+</p>
 
-**Clone-level analysis of B-cell states from paired single-cell RNA-seq and BCR-seq.**
+<h1 align="center">Threadfin</h1>
 
-[![tests](https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg)](https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python >= 3.10](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org)
+<p align="center">
+  <b>Relationships between B-cell clones from paired single-cell RNA and receptor sequencing</b>
+</p>
 
-A B-cell clone is a family of cells descended from one ancestor that share a
-B-cell receptor. Paired single-cell sequencing supports receptor-based family
-assignment and measures each captured cell's expression state. Threadfin uses the **clone as the
-unit of analysis**.
+<p align="center">
+  <a href="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml"><img src="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
+  <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg" alt="Python 3.10 | 3.11 | 3.12"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-4.3.0-informational.svg" alt="version 4.3.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
+</p>
 
-In a germinal centre, B cells alternate between selection and division,
-while clonally related cells can occupy different states. Threadfin compares
-the distributions of states captured within sequence-defined families. Measured
-division reporters, sorting gates and antigen probes help interpret those
-distributions. A clone map shows similarities between families' observed
-expression profiles; neighbouring points do not establish shared ancestry,
-future fate or memory-cell re-entry into a GC.
+**Threadfin** is a Python package for paired single-cell RNA and B-cell receptor (BCR) sequencing. It
+uses the **clone** — the B cells that descend from one V(D)J rearrangement — as the unit of analysis.
+Each clone is represented by the distribution of transcriptional states among its sampled cells,
+estimated relative to the cells sampled alongside it and shrunk according to the number of cells
+captured. Clones are then compared with one another: in a **clone embedding** with one point per clone,
+in **clonal programmes** of clones that behave alike, and in **clone-level tests** of anything you
+measured. Threadfin works with [AnnData](https://anndata.readthedocs.io) and
+[Scanpy](https://scanpy.readthedocs.io), and defines clones with
+[Dandelion](https://github.com/zktuong/dandelion).
 
-It answers four questions:
+## Why clones?
 
-1. **Which states recur within clones?** How much of the variation in
-   gene expression is explained by which clone a cell belongs to, beyond when
-   and where the cells were sampled.
-2. **Which clones behave alike?** Reliable clones are grouped when matched-null
-   tests and resampling support separation; otherwise they are reported as a continuum.
-3. **What explains the differences between clones?** Clone-level tests against
-   anything you measured: antigen binding, isotype, mutation load, division
-   history, sort gate, infection, tissue, time.
-4. **Do clones keep their state** over time, across tissues, or across the
-   compartments of a germinal centre?
+The cells of one clone are distributed across states: germinal-centre (GC) B cells, plasmablasts, plasma
+cells and memory B cells. Two clones can have the same average state and still differ in how their cells
+are distributed. Selection, antigen affinity and fate bias act on clones, so questions such as *which
+clones connect the germinal centre with plasma-cell output* or *does antigen binding go with a clone's
+state* need the clone as the unit of representation and of statistical inference. Three features of
+repertoires sampled *in vivo* make this difficult, and Threadfin addresses each:
 
-Uncertainty and profile reliability accompany the analysis. Clones supply
-profile units; donor- or mouse-level designs are needed for population and
-treatment claims. The output supports testable biological hypotheses.
+* **Most clones are captured as one or a few cells.** Profiles are shrunk according to the number of cells
+  sampled, and each clone carries a reliability score. No clone is discarded for being small.
+* **Clone membership is confounded with donor, sample, tissue and sorting gate.** Each clone is described
+  relative to the cells sampled with it, and every test shuffles labels within the sampling design.
+* **Treating cells as independent inflates significance.** Tests use clones, not cells, as replicates.
 
----
+## What Threadfin answers
+
+| Question | Output | Function |
+|---|---|---|
+| Is cell state inherited within clones? | clonal coherence: variance explained by clone, against labels shuffled within samples | `tl.clonal_coherence` |
+| How are clones related to one another? | the clone embedding, laid out automatically so that continua stay connected | `tl.embed_clones` |
+| Which clones behave alike? | clonal programmes, with split tests and bootstrap stability | `tl.find_programmes` |
+| What explains the differences between clones? | variance in clone profiles explained by a label; per-programme effects | `tl.profile_association`, `tl.association_test` |
+| Do clones keep their state over time or across tissues? | the clonal memory index | `tl.clonal_memory` |
+| How far behind its germinal centre is a clone's output? | the export lag, in somatic mutations and in days | `tl.export_lag` |
+
+## Examples from public data
+
+The manuscript applies Threadfin to nine paired datasets from immunization, infection, vaccination and
+spontaneous germinal centres ([figures](paper/figure_plan/README.md)); scripts and results for these and
+further public datasets are in [case studies](case_studies/README.md).
+
+* **Gut-associated lymphoid tissues** (Siniscalco *et al.*, *Immunity* 2025): the clone embedding resolves
+  a continuous path of clones from GC B cells, through clones that contain both GC B cells and plasma
+  cells, to plasma-cell clones, with clones that lack GC-fate labelling grouped at its end.
+* **Spontaneous germinal centres** (Castrillon *et al.*, *eLife* 2023): position along the clone embedding
+  orders clones by the diversity of their cell states, and memory-containing clones concentrate at one
+  end.
+* ***Plasmodium* infection** (Skinner *et al.*, *Nat. Immunol.* 2026): whether plasmablasts were sampled
+  together with GC B cells of the same clone is a property of clones that cannot be read from the
+  cell-level embedding.
+* **Model-antigen germinal centres** (Merkenschlager *et al.*, *Nature* 2025): clone profiles are associated
+  with recent division, antigen binding and dark-zone sorting, none of which was used to construct them.
 
 ## Installation
 
@@ -44,31 +75,9 @@ treatment claims. The output supports testable biological hypotheses.
 pip install "git+https://github.com/Reynold4k/Threadfin.git"
 ```
 
-Python >= 3.10. Scanpy, Leiden and Harmony are installed automatically; no GPU
-and no R are needed.
-
-Clean Linux wheel installations were checked on Python 3.10, 3.11 and 3.12,
-including the full test suite, tutorial and simulated quick start. The legacy
-v3 reclustering repeatability check remains an expected failure on Python 3.12.
-See the [compatibility results](docs/COMPATIBILITY.md) and
-[English input-error guide](docs/TROUBLESHOOTING.md).
-
-## GC manuscript and figures
-
-The [GC manuscript](paper/MANUSCRIPT_draft_v2.md),
-[Figure 1](paper/figure_plan/Figure_1.png),
-[figure legends](paper/FIGURE_LEGENDS.md) and
-[native-method comparison](paper/METHOD_COMPARISON.md) distinguish receptor
-family membership from captured cell-state similarity. Figures 1–5 and
-Supplementary Figures 1–6 and 8 are available. The NP native comparison is complete;
-the RBD BiGCN run and Figure 6/S7 remain pending. The manuscript makes this
-status explicit and reports the RNA-centroid baseline's stronger NP readout.
-
-The [manuscript export guide](paper/EXPORT.md) describes template-style DOCX
-and numbered-reference/RIS exports. The
-[literature review and reviewer questions](paper/LITERATURE_REVIEW_REVIEWER_QUESTIONS_2026-10-06.md)
-record scientific improvements for future work. No additional biological
-analyses are required to build those documents.
+Threadfin requires Python ≥ 3.10; Scanpy, Leiden, UMAP and Harmony are installed with it, and no GPU or R
+is needed. To define clones from BCR contigs, also install Dandelion (`pip install sc-dandelion`), or
+provide your own clone ids in `adata.obs["clone_id"]`.
 
 ## Quick start
 
@@ -76,189 +85,102 @@ analyses are required to build those documents.
 import scanpy as sc
 import threadfin as tf
 
-adata = sc.read_h5ad("b_cells.h5ad")          # raw counts; one row per cell
+adata = sc.read_h5ad("b_cells.h5ad")           # raw counts, one row per cell
 
 result = tf.run(
     adata,
-    bcr="filtered_contig_annotations.csv",    # Cell Ranger VDJ output (or an AIRR .tsv)
-    donor_key="donor",                        # which person each cell came from
-    sample_key="sample",                      # which sample / library each cell came from
+    bcr="filtered_contig_annotations.csv",     # Cell Ranger VDJ output or an AIRR .tsv
+    donor_key="donor",                         # the individual each cell came from
+    sample_key="sample",                       # the sample or library each cell came from
 )
-
-print(result.summary())                       # plain-language report
-result.plot("threadfin_overview.pdf")         # overview figure
+print(result.summary())                        # plain-language report
+result.plot("threadfin_overview.pdf")          # clone map, coherence, stability, composition
 ```
 
-That is all. `tf.run` defines clones from the BCR sequences (within each
-donor), builds an expression embedding that ignores immunoglobulin genes,
-tests whether clones are transcriptionally coherent, groups clones into
-programmes and reports how stable they are.
+`tf.run` defines clones within each donor, builds an expression embedding without immunoglobulin genes,
+estimates one profile per clone, tests clonal coherence, lays out the clone embedding, finds clonal
+programmes and reports their stability. Add `test=[...]` to test your own labels and `time_key=` to ask
+whether clones keep their state. No data at hand? `tf.sim.simulate_repertoire()` makes a repertoire with
+a known answer ([Tutorial 1](docs/tutorials/01_getting_started.md)).
 
-**Add your own labels** to test them against the programmes, and a time column
-to ask whether clones keep their state:
+<p align="center">
+  <img src="docs/_static/tutorial_overview.png" width="760" alt="Overview figure produced by result.plot()">
+</p>
+
+## A clone embedding that holds together
+
+UMAP draws continuous populations of clones as one picture only for suitable settings, and the suitable
+settings differ between datasets. Threadfin therefore chooses them for each dataset by default: it lays
+the clones out over a ladder of settings, scores each layout for coherence (the fraction of clones in one
+connected piece) and for fidelity to the clone profiles, and keeps the most faithful setting that holds
+together in every layout it tried. A map is not allowed to be more fragmented than the clone profiles
+themselves, and the final map is checked once more before it is returned. The record of the choice is
+stored with the results, and the settings can always be fixed by hand
+([Tutorial 3](docs/tutorials/03_clone_map.md)).
 
 ```python
-result = tf.run(adata, bcr="filtered_contig_annotations.csv",
-                donor_key="donor", sample_key="sample",
-                state_key="cell_type",                    # your cell annotation (optional)
-                test=["antigen_binding", "isotype"],      # any obs columns (optional)
-                time_key="timepoint")                     # optional
+tf.tl.embed_clones(adata)                               # automatic (default)
+tf.tl.embed_clones(adata, n_neighbors=30, min_dist=0.3) # by hand
+tf.tl.map_quality(features, xy)                         # score any clone map (profiles, coordinates)
 ```
 
-A worked tutorial that runs in about a minute, with no download, is in
-[`examples/tutorial.py`](examples/tutorial.py).
+## How it works
 
-**No data at hand?** Try it on simulated data with a known answer:
+<p align="center">
+  <img src="docs/_static/threadfin_workflow.png" width="760" alt="Threadfin workflow">
+</p>
 
-```python
-adata = tf.sim.simulate_repertoire()
-result = tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca")
-print(result.summary())
-```
+1. **Clones** are defined from paired heavy- and light-chain sequences within each donor (Dandelion).
+2. **Clone profiles.** Each cell is described relative to the mean of its sampling context. The cells of
+   a clone are summarised by a kernel mean embedding of their state distribution, so a clone divided
+   between two states differs from a clone in an intermediate state, and the profile is shrunk towards the
+   context according to the number of cells (best linear unbiased prediction under a random-effects
+   model).
+3. **Clonal coherence** is the intraclass correlation of state within clones, tested against clone labels
+   permuted within samples.
+4. **The clone embedding** is a UMAP of the clone profiles with settings chosen as above.
+5. **Clonal programmes** are graph communities of clones; each split is tested against a single Gaussian
+   group, and each programme's stability is estimated by bootstrap resampling.
+6. **Clone-level tests** quantify how much of the variance between clone profiles a label explains, with
+   labels permuted among the clones of each donor.
 
-### What you get back
+The full description, with references, is in [Methods](docs/METHODS.md).
 
-| Output | Where | Meaning |
-|---|---|---|
-| clone of every cell | `adata.obs["clone_id"]` | defined within donors, hypermutated relatives merged |
-| programme of every cell | `adata.obs["clone_programme"]` | the programme of the cell's clone (reliable clones) |
-| extended programme labels | `adata.obs["clone_programme_assigned"]` | also smaller clones, assigned with posterior >= 0.7 |
-| per-clone table | `result.clones` | size, reliability, programme, bootstrap confidence, posterior |
-| clonal coherence | `result.coherence` | share of variance explained by clone, null, p-value |
-| programme summary | `result.programmes` | size and bootstrap stability of each programme |
-| label vs clone states | `result.profile_tests[label]` | share of clone-profile variance explained by the label, permutation p |
-| label vs programmes | `result.tests[label]` | per-programme odds ratios / effects, permutation p, FDR (needs >= 2 programmes) |
-| clonal memory | `result.memory` | memory index (1 = clones keep their state, 0 = no memory) |
+## Documentation
 
-## How it works (one paragraph per step)
-
-1. **Clones.** Cells are grouped into clones within each donor: same IGHV and
-   IGHJ genes, same junction length, and junction sequences closer than a
-   threshold found automatically from the data, so that hypermutated relatives
-   stay together.
-2. **Clone profiles.** Each clone is described relative to the cells it was
-   sampled with. Small clones are shrunk towards their sample, large clones
-   keep their own profile, and each clone gets a *reliability* score; the
-   profile can describe the whole distribution of a clone's cells, so a clone
-   split between two states is not mistaken for one sitting in between.
-3. **Coherence test.** The share of transcriptional variance explained by
-   clone identity is compared with clones shuffled *within samples*, so
-   the baseline accounts for differences between sampling contexts.
-4. **Programmes.** Reliable clones are grouped by similarity of their
-   profiles. Every split between groups must pass a significance test against
-   a single-group model, so clones that only vary along a continuum are
-   reported as one group instead of being cut into artificial programmes.
-   Resampling the cells 30-50 times tells how stable each programme is
-   (Jaccard >= 0.75 = stable). Smaller clones are then assigned to programmes
-   with a probability.
-5. **Tests and memory.** A label is first tested for whether it explains how
-   clone profiles differ at all (this works even without distinct
-   programmes), then compared between programmes; clones are the replicates
-   and labels are shuffled within donors. Clonal memory compares each clone's
-   snapshots at different time points with snapshots of random clones, after
-   removing sampling noise.
-
-Full statistical details: [`docs/METHODS.md`](docs/METHODS.md).
-
-## Step by step (advanced)
-
-`tf.run` chains functions you can also call yourself, for example to change
-the sampling context, the number of permutations or the programme resolution:
-
-```python
-bcr = tf.read_bcr("filtered_contig_annotations.csv")
-bcr["donor"] = adata.obs["donor"].reindex(bcr.index)
-bcr = tf.define_clones(bcr, donor_key="donor")             # 1. clones
-tf.attach_bcr(adata, bcr)
-tf.pp.prepare_embedding(adata, batch_key="donor")         # embedding without IG genes
-tf.tl.clone_profiles(adata, basis="X_threadfin",          # 2. clone profiles
-                     context_key="sample", donor_key="donor")
-tf.tl.clonal_coherence(adata)                             # 3. coherence test
-tf.tl.find_programmes(adata)                              # 4. programmes
-tf.tl.profile_association(adata, "isotype")               # 5. label vs clone states
-tf.tl.association_test(adata, "isotype")                  #    label vs programmes
-tf.tl.programme_markers(adata)                            #    genes, clones as replicates
-tf.tl.clonal_memory(adata, "timepoint")                   #    memory over time
-tf.tl.gene_heritability(adata)                            #    within-clone gene-expression resemblance
-```
-
-Figures: `tf.pl.clone_map`, `tf.pl.coherence`, `tf.pl.stability`,
-`tf.pl.programme_composition`, `tf.pl.association`, `tf.pl.memory`,
-`tf.pl.heritability`, `tf.pl.overview`.
-
-## What Threadfin found in public data
-
-The [current manuscript](paper/MANUSCRIPT_draft_v2.md) centres on GC biology:
-
-* **Measured GC division history:** NP-OVA and RBD reporter cohorts show
-  clone-associated state variation, interpreted using division/FACS labels
-  and independently measured BCR mutation load.
-* **Plasmodium GC/output relationships:** some same-mouse families contain
-  GC, plasmablast or memory-like cells, including exact paired heavy/light
-  matches. GC–PB sharing shows no consistent extra enrichment after controlling
-  isotype composition. It supports candidate selection rather than directed
-  fate or memory re-entry claims.
-* **Longitudinal human vaccination:** repeated same-donor GC-containing families
-  test persistence across dates; an expression map alone cannot identify a
-  parent cell.
-* **One non-GC validation:** verified marrow/blood donor identities and pure
-  PC/memory sorts reveal exact heavy/light receptor sharing across gates.
-
-[Main figures and focused supplements](paper/figure_plan/FIGURE_PLAN.md)
-carry these questions. Other [datasets already tested](paper/figure_plan/tested_datasets/)
-are retained as exploratory coverage. The [biological review](paper/BIOLOGICAL_INFERENCE_REVIEW_zh.md)
-explains the evidence, controls and limitations. Earlier reports in `report/`
-record the original analysis and are superseded by the current manuscript
-where sampling identities or interpretations have changed.
-
-## Upgrading from v3
-
-Version 4 replaces the v3 statistics, several of which were not valid (for
-example, community "transitions" over time were diagonal by construction and
-enrichment tests counted cells of the same clone as independent). The v3
-functions remain importable; see [`docs/MIGRATION_V3_TO_V4.md`](docs/MIGRATION_V3_TO_V4.md)
-for what changed and why. The v3 code and results are preserved at tag `v3.0.0`.
+| | |
+|---|---|
+| [Tutorial 1 — Getting started](docs/tutorials/01_getting_started.md) | the whole analysis on simulated data, with its output |
+| [Tutorial 2 — Your own data](docs/tutorials/02_your_data.md) | from Cell Ranger output to results, with several samples and donors |
+| [Tutorial 3 — The clone map](docs/tutorials/03_clone_map.md) | automatic and hand-set layouts, and how to check a map |
+| [Tutorial 4 — Step by step](docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
+| [Methods](docs/METHODS.md) | the statistical model behind each step |
+| [Case studies](case_studies/README.md) | scripts and results for the public datasets |
+| [Figures](paper/figure_plan/README.md) | figures of the manuscript, with their source code |
+| [Changelog](CHANGELOG.md) | what changed in each version |
 
 ## Citation
 
-If you use Threadfin, please cite this repository (see [`CITATION.cff`](CITATION.cff)).
-A manuscript is in preparation.
+A manuscript describing Threadfin is in preparation. Until it is available, please cite this repository
+([CITATION.cff](CITATION.cff)) and the tools Threadfin builds on: Dandelion (Suo *et al.*, *Nat.
+Biotechnol.* 2024) for clone definition, Scanpy (Wolf *et al.*, *Genome Biol.* 2018) and UMAP (McInnes
+*et al.*, *J. Open Source Softw.* 2018).
+
+## Related tools
+
+* [Dandelion](https://github.com/zktuong/dandelion) — single-cell immune receptor analysis; Threadfin's
+  clone definition.
+* [Scirpy](https://github.com/scverse/scirpy) — single-cell immune receptor analysis in the scverse
+  ecosystem.
+* [Scanpy](https://github.com/scverse/scanpy) and [AnnData](https://github.com/scverse/anndata) — the data
+  structures and single-cell tools Threadfin works with.
+* [Immcantation](https://immcantation.readthedocs.io) — B-cell receptor repertoire analysis, including
+  clonal lineage reconstruction.
+
+## Support
+
+Please report bugs and ask questions through [GitHub issues](https://github.com/Reynold4k/Threadfin/issues).
 
 ## License
 
-[MIT](LICENSE) © 2026 Chen Satoshi (Reynold4k)
-
-## Centroid reclustering presets
-
-The legacy `tf.clonotype_recluster` path now accepts `preset="cohesive"`
-(the unchanged default settings), `"continuous"` and `"discrete"`, with explicit
-UMAP/graph overrides and saved effective parameters. See
-[reclustering controls](docs/RECLUSTERING.md). These starting configurations
-remain separate from v4 profile reliability and programme validation.
-
-[Figure 2B](paper/figure_plan/Figure_2.png) now uses audited real GSE246382
-clone embedding of 49 same-mouse families, coloured by unsupervised Leiden
-`clone_cluster` with a captured-size legend. The
-[standalone preview](paper/figure_plan/review/GSE246382_clone_embedding.png)
-uses the notebook's distance-row UMAP and Scanpy-graph recipe, available through
-`embedding_mode="distance_profiles", cluster_on="embedding"`. Measured
-GC/PC gates and Myc RNA annotate the resulting three clusters.
-[Supplementary 8](paper/figure_plan/Supplementary_8.png) retains the historical
-Top2a image separately and adds the new cell/marker evidence. The
-[preset comparison](paper/figure_plan/review/GSE246382_reclustering_presets.png)
-shows identical families under three fixed settings. These views describe
-model-antigen GC state bias without measuring direction or fate; the GC
-selection/output interpretation does not extend to non-GC data. Source and
-execution limits are in the
-[provenance manifest](paper/figure_plan/assets/legacy_gc_provenance.json).
-
-## Optional sampling-aware clone composition
-
-Threadfin 4.1 adds frozen-reference state distributions and train-only RNA
-projection. It also fixes kernel feature reconstruction used by programme
-bootstraps and snapshot analysis. Existing mean/kernel profile defaults remain
-available. See [the API and its limitations](docs/STATE_DENSITY.md) and
-[the algorithm review and validation](docs/ALGORITHM_REVIEW_2026-10-09_zh.md).
-
-New comparisons retain negative results: simple RNA means often predict the
-held-out division reporter better, and shrinkage can bias pure-state clones.
+MIT; see [LICENSE](LICENSE).

@@ -1,0 +1,29 @@
+{
+  "groups": [
+    {
+      "programme": "P1",
+      "n": 488,
+      "memory_positive": 42,
+      "fraction": 0.0860655737704918
+    },
+    {
+      "programme": "P2",
+      "n": 322,
+      "memory_positive": 9,
+      "fraction": 0.027950310559006212
+    },
+    {
+      "programme": "P3",
+      "n": 112,
+      "memory_positive": 47,
+      "fraction": 0.41964285714285715
+    },
+    {
+      "programme": "P4",
+      "n": 129,
+      "memory_positive": 32,
+      "fraction": 0.24806201550387597
+    }
+  ],
+  "note": "P3/P4 are the prior P3a/P3b gene-score subgroups; RNA-derived and post-hoc, not independent fate validation."
+}

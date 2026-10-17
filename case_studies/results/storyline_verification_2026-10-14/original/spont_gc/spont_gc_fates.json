@@ -1,0 +1,298 @@
+{
+ "min_cells": 5,
+ "k_nn": 15,
+ "cell_fates": {
+  "ASC": 12362,
+  "GC": 6355,
+  "unassigned": 2806,
+  "Cd23a+ MemB": 603,
+  "Fcrl5+ MemB": 525,
+  "other MemB": 247
+ },
+ "leiden_x_fate": {
+  "ASC": {
+   "0": 0.387,
+   "1": 0.471,
+   "10": 0.96,
+   "11": 0.578,
+   "12": 0.503,
+   "13": 0.34,
+   "14": 0.514,
+   "15": 0.948,
+   "16": 0.884,
+   "17": 0.391,
+   "2": 0.294,
+   "3": 0.994,
+   "4": 0.306,
+   "5": 0.197,
+   "6": 0.999,
+   "7": 0.978,
+   "8": 0.644,
+   "9": 0.508
+  },
+  "Cd23a+ MemB": {
+   "0": 0.0,
+   "1": 0.0,
+   "10": 0.002,
+   "11": 0.048,
+   "12": 0.0,
+   "13": 0.077,
+   "14": 0.086,
+   "15": 0.0,
+   "16": 0.0,
+   "17": 0.013,
+   "2": 0.0,
+   "3": 0.0,
+   "4": 0.0,
+   "5": 0.001,
+   "6": 0.0,
+   "7": 0.0,
+   "8": 0.002,
+   "9": 0.144
+  },
+  "Fcrl5+ MemB": {
+   "0": 0.0,
+   "1": 0.0,
+   "10": 0.009,
+   "11": 0.142,
+   "12": 0.002,
+   "13": 0.071,
+   "14": 0.114,
+   "15": 0.0,
+   "16": 0.0,
+   "17": 0.225,
+   "2": 0.001,
+   "3": 0.0,
+   "4": 0.0,
+   "5": 0.0,
+   "6": 0.0,
+   "7": 0.0,
+   "8": 0.001,
+   "9": 0.045
+  },
+  "GC": {
+   "0": 0.608,
+   "1": 0.516,
+   "10": 0.016,
+   "11": 0.005,
+   "12": 0.115,
+   "13": 0.006,
+   "14": 0.029,
+   "15": 0.003,
+   "16": 0.007,
+   "17": 0.01,
+   "2": 0.587,
+   "3": 0.0,
+   "4": 0.686,
+   "5": 0.799,
+   "6": 0.0,
+   "7": 0.002,
+   "8": 0.332,
+   "9": 0.009
+  },
+  "other MemB": {
+   "0": 0.0,
+   "1": 0.0,
+   "10": 0.004,
+   "11": 0.023,
+   "12": 0.002,
+   "13": 0.025,
+   "14": 0.057,
+   "15": 0.0,
+   "16": 0.0,
+   "17": 0.099,
+   "2": 0.0,
+   "3": 0.0,
+   "4": 0.0,
+   "5": 0.0,
+   "6": 0.0,
+   "7": 0.0,
+   "8": 0.0,
+   "9": 0.049
+  },
+  "unassigned": {
+   "0": 0.006,
+   "1": 0.013,
+   "10": 0.011,
+   "11": 0.204,
+   "12": 0.378,
+   "13": 0.482,
+   "14": 0.2,
+   "15": 0.049,
+   "16": 0.11,
+   "17": 0.262,
+   "2": 0.117,
+   "3": 0.006,
+   "4": 0.008,
+   "5": 0.003,
+   "6": 0.001,
+   "7": 0.02,
+   "8": 0.021,
+   "9": 0.244
+  }
+ },
+ "clone_fate_width": {
+  "n_clones_ge5": 322,
+  "n_multi_fate": 204,
+  "frac_multi_fate": 0.6335403726708074,
+  "median_entropy": 0.45056120886630463,
+  "n_states_distribution": {
+   "1": 118,
+   "2": 168,
+   "3": 33,
+   "4": 3
+  },
+  "cells_in_multi_fate_clones": 2795,
+  "cells_in_ge5_clones": 4281,
+  "null_multi_fate_mean": 0.8996894409937889,
+  "null_multi_fate_q95": 0.922360248447205
+ },
+ "fate_width_by_condition": {
+  "autoimmune": {
+   "n_clones": 231,
+   "frac_multi": 0.5628,
+   "median_entropy": 0.3365,
+   "median_mu": 0.0226
+  },
+  "immunized": {
+   "n_clones": 91,
+   "frac_multi": 0.8132,
+   "median_entropy": 0.6365,
+   "median_mu": 0.0237
+  }
+ },
+ "entropy_mannwhitney_p": 9.43235265081083e-09,
+ "multi_fate_by_condition_fisher_p": 1.9838957655883086e-05,
+ "map_region_fate_class": {
+  "chi2": 130.46790781622693,
+  "p_value": 0.0,
+  "dof": 5,
+  "table": {
+   "multi-fate": {
+    "0": 61,
+    "1": 17,
+    "2": 35,
+    "3": 15,
+    "4": 24,
+    "5": 52
+   },
+   "single-fate": {
+    "0": 3,
+    "1": 39,
+    "2": 20,
+    "3": 50,
+    "4": 3,
+    "5": 3
+   }
+  }
+ },
+ "entropy_vs_map_position_spearman": {
+  "x": -0.7418447034530916,
+  "y": 0.5265175039330339
+ },
+ "condition_structure": {
+  "note": "condition is donor-level: 5 autoimmune (M13/17/21/24/34) vs 3 immunized (M11/14/23) donors",
+  "knn_condition_agreement": 0.6563146997929606,
+  "null_mean": 0.5934989648033127,
+  "null_q95": 0.6072670807453416,
+  "cross_donor_same_condition_agreement": 0.4298136645962733,
+  "cross_donor_null_mean": 0.42676397515527953,
+  "cross_donor_null_q95": 0.442888198757764,
+  "map_region_condition_chi2_p": 0.0
+ },
+ "per_donor": {
+  "M11": {
+   "condition": "immunized",
+   "n_clones": 23,
+   "frac_multi": 0.6087,
+   "median_entropy": 0.2749,
+   "median_mu": 0.0212
+  },
+  "M13": {
+   "condition": "autoimmune",
+   "n_clones": 74,
+   "frac_multi": 0.6081,
+   "median_entropy": 0.4101,
+   "median_mu": 0.0226
+  },
+  "M14": {
+   "condition": "immunized",
+   "n_clones": 56,
+   "frac_multi": 0.875,
+   "median_entropy": 0.663,
+   "median_mu": 0.0232
+  },
+  "M17": {
+   "condition": "autoimmune",
+   "n_clones": 76,
+   "frac_multi": 0.6579,
+   "median_entropy": 0.3927,
+   "median_mu": 0.0209
+  },
+  "M21": {
+   "condition": "autoimmune",
+   "n_clones": 17,
+   "frac_multi": 0.7647,
+   "median_entropy": 0.5835,
+   "median_mu": 0.0319
+  },
+  "M23": {
+   "condition": "immunized",
+   "n_clones": 12,
+   "frac_multi": 0.9167,
+   "median_entropy": 0.673,
+   "median_mu": 0.0291
+  },
+  "M24": {
+   "condition": "autoimmune",
+   "n_clones": 45,
+   "frac_multi": 0.4444,
+   "median_entropy": -0.0,
+   "median_mu": 0.021
+  },
+  "M34": {
+   "condition": "autoimmune",
+   "n_clones": 19,
+   "frac_multi": 0.1053,
+   "median_entropy": -0.0,
+   "median_mu": 0.0133
+  }
+ },
+ "knn_agreement_single_vs_multi": {
+  "cell_umap": {
+   "agreement": 0.6836720392431674,
+   "null_mean": 0.5467331620337927,
+   "null_q95": 0.5500856497703028,
+   "n_cells": 4281
+  },
+  "clone_map": {
+   "agreement": 0.7469979296066253,
+   "null_mean": 0.5340703933747413,
+   "null_q95": 0.5486645962732919,
+   "n_clones": 322
+  },
+  "n_perm": 100
+ },
+ "class_switching": {
+  "isotype_counts": {
+   "IGHM": 166,
+   "IGHG": 134,
+   "IGHA": 19,
+   "nan": 3
+  },
+  "frac_switched_overall": 0.4751552795031056,
+  "frac_switched_by_condition": {
+   "autoimmune": 0.5974025974025974,
+   "immunized": 0.16483516483516483
+  },
+  "fisher_p_condition": 9.97938536774551e-13,
+  "median_mu_by_isotype": {
+   "IGHA": 0.0224074074074074,
+   "IGHG": 0.0251192450446181,
+   "IGHM": 0.0209876543209876,
+   "nan": 0.0280764635603345
+  },
+  "frac_clones_multi_isotype_ge5": 0.26006191950464397
+ },
+ "map_region_isotype_chi2_p": 0.0
+}

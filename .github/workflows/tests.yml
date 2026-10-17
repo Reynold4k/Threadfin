@@ -21,5 +21,5 @@ jobs:
         run: pip install -e ".[test,seq]"
       - name: Run tests
         run: python -m pytest tests/ -q
-      - name: Quick start on simulated data
-        run: python examples/quickstart.py --simulated
+      - name: Tutorial on simulated data
+        run: python examples/tutorial.py

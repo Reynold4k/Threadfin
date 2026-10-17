@@ -438,7 +438,18 @@ def clone_profiles(
         Default: 15 for ``"kernel"``, 0 for ``"mean"``. The coherence test and
         clonal memory always use unsmoothed cells.
     min_cells
-        Clones with fewer cells are not profiled.
+        Clones with fewer cells are not profiled. The default of 2 is **not** a quality filter --
+        Threadfin never filters on reliability -- it is what the clone map is *of*. Singleton clones
+        are 75 to 98 % of clones in these deposits, so including them turns the clone embedding back
+        into the cell UMAP it is supposed to summarise. Set 1 to include them; they are then drawn as
+        triangles rather than circles so a reader can see how much of a map rests on a single cell.
+        Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
+    the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
+    population mean by the variance-component model, so its influence is down-weighted in proportion to
+    how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
+    twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
+    profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
+    though it had no clone structure when its map separates the sorted gate at p < 0.001.
 
     Returns
     -------
@@ -511,8 +522,8 @@ def clone_profiles(
     }
     log(
         f"clone profiles: {table.shape[0]} clones (>= {min_cells} cells); clonal ICC = "
-        f"{vc.icc:.3f} ({vc.n_clones} clones, {vc.n_cells} cells); reliability >= 0.5 "
-        f"needs >= {vc.min_cells_for(0.5)} cells per clone.",
+        f"{vc.icc:.3f} ({vc.n_clones} clones, {vc.n_cells} cells). Profiles are shrunk, so a clone "
+        f"reaches reliability 0.5 at {vc.min_cells_for(0.5)} cells; nothing is filtered on that.",
         verbose,
     )
     return table

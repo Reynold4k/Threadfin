@@ -1,0 +1,555 @@
+{
+  "date": "2026-10-16",
+  "tight_crop": true,
+  "random_draw_order_seed": 20261016,
+  "texts": [
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Measured division gate",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Low (\u22656 divisions)",
+      "font_pt": 5.7
+    },
+    {
+      "text": "High",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Sequence-derived W33L",
+      "font_pt": 7.4
+    },
+    {
+      "text": "germline W33",
+      "font_pt": 5.8
+    },
+    {
+      "text": "W33L",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone recent-division fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1",
+      "font_pt": 5.5
+    },
+    {
+      "text": "2",
+      "font_pt": 5.5
+    },
+    {
+      "text": "3",
+      "font_pt": 5.5
+    },
+    {
+      "text": "4",
+      "font_pt": 5.5
+    },
+    {
+      "text": "5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "6",
+      "font_pt": 5.5
+    },
+    {
+      "text": "7",
+      "font_pt": 5.5
+    },
+    {
+      "text": "8",
+      "font_pt": 5.5
+    },
+    {
+      "text": "9",
+      "font_pt": 5.5
+    },
+    {
+      "text": "10",
+      "font_pt": 5.5
+    },
+    {
+      "text": "11",
+      "font_pt": 5.5
+    },
+    {
+      "text": "12",
+      "font_pt": 5.5
+    },
+    {
+      "text": "13",
+      "font_pt": 5.5
+    },
+    {
+      "text": "14",
+      "font_pt": 5.5
+    },
+    {
+      "text": "15",
+      "font_pt": 5.5
+    },
+    {
+      "text": "16",
+      "font_pt": 5.5
+    },
+    {
+      "text": "17",
+      "font_pt": 5.5
+    },
+    {
+      "text": "18",
+      "font_pt": 5.5
+    },
+    {
+      "text": "19",
+      "font_pt": 5.5
+    },
+    {
+      "text": "20",
+      "font_pt": 5.5
+    },
+    {
+      "text": "21",
+      "font_pt": 5.5
+    },
+    {
+      "text": "22",
+      "font_pt": 5.5
+    },
+    {
+      "text": "23",
+      "font_pt": 5.5
+    },
+    {
+      "text": "24",
+      "font_pt": 5.5
+    },
+    {
+      "text": "25",
+      "font_pt": 5.5
+    },
+    {
+      "text": "26",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "scRNA clusters",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Measured division gate",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Low (\u22656 divisions)",
+      "font_pt": 5.7
+    },
+    {
+      "text": "High",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Protein arm: bait gate",
+      "font_pt": 7.4
+    },
+    {
+      "text": "RBD-",
+      "font_pt": 5.8
+    },
+    {
+      "text": "RBD+",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "mRNA arm: zone gate",
+      "font_pt": 7.4
+    },
+    {
+      "text": "LZ",
+      "font_pt": 5.8
+    },
+    {
+      "text": "DZ",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P2",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone recent-division fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone RBD+ fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone dark-zone fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Source RNA annotation",
+      "font_pt": 7.4
+    },
+    {
+      "text": "B cell",
+      "font_pt": 5.8
+    },
+    {
+      "text": "GC B cell",
+      "font_pt": 5.8
+    },
+    {
+      "text": "PC",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Other",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Original GC/nonGC sort",
+      "font_pt": 7.4
+    },
+    {
+      "text": "GC",
+      "font_pt": 5.8
+    },
+    {
+      "text": "nonGC",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Sampling tissue",
+      "font_pt": 7.4
+    },
+    {
+      "text": "MLN",
+      "font_pt": 5.8
+    },
+    {
+      "text": "PP",
+      "font_pt": 5.8
+    },
+    {
+      "text": "LP",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P2",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P3",
+      "font_pt": 5.8
+    },
+    {
+      "text": "NP\u2013OVA division reporter | GSE287123 | 10,109 GC-sorted cells, 471 profiles",
+      "font_pt": 8.0
+    },
+    {
+      "text": "A",
+      "font_pt": 9.5
+    },
+    {
+      "text": "B",
+      "font_pt": 9.5
+    },
+    {
+      "text": "C",
+      "font_pt": 9.5
+    },
+    {
+      "text": "D",
+      "font_pt": 9.5
+    },
+    {
+      "text": "RBD protein / mRNA | GSE287123 | 36,188 GC-sorted cells, 1,887 profiles",
+      "font_pt": 8.0
+    },
+    {
+      "text": "E",
+      "font_pt": 9.5
+    },
+    {
+      "text": "F",
+      "font_pt": 9.5
+    },
+    {
+      "text": "G",
+      "font_pt": 9.5
+    },
+    {
+      "text": "H",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Bait and zone labels belong to separate experimental arms; grey cells were not measured for that annotation.",
+      "font_pt": 6.2
+    },
+    {
+      "text": "I",
+      "font_pt": 9.5
+    },
+    {
+      "text": "J",
+      "font_pt": 9.5
+    },
+    {
+      "text": "K",
+      "font_pt": 9.5
+    },
+    {
+      "text": "L",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Oral OVA + CT | GSE284622 | 16,619 cells, 958 profiles; core comparison in Figure 3",
+      "font_pt": 8.0
+    },
+    {
+      "text": "M",
+      "font_pt": 9.5
+    },
+    {
+      "text": "N",
+      "font_pt": 9.5
+    },
+    {
+      "text": "O",
+      "font_pt": 9.5
+    },
+    {
+      "text": "P",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Division gates: 36 h dilution window. Sort/gate labels are categorical; RNA clusters are descriptive. Grey = missing label or no displayed profile.",
+      "font_pt": 6.1
+    }
+  ]
+}

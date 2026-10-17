@@ -1,0 +1,480 @@
+{
+  "panels": {
+    "a": {
+      "n_cells": 22898,
+      "category_counts": {
+        "ASC": 12362,
+        "GC": 6355,
+        "unassigned": 2806,
+        "CD23+ MemB": 603,
+        "Fcrl5+ MemB": 525,
+        "other MemB": 247
+      },
+      "n_missing_coordinates": 0
+    },
+    "b": {
+      "n_clones": 1051,
+      "category_counts": {
+        "P1": 488,
+        "P2": 322,
+        "P4": 129,
+        "P3": 112
+      },
+      "n_cells_sum": 6278,
+      "n_cells": {
+        "n": 1051,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.973358705994291,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 5.0,
+        "max": 114
+      },
+      "marker_area_pt2_per_cell": 0.35
+    },
+    "c": {
+      "n_cells": 22898,
+      "category_counts": {
+        "no programme": 16620,
+        "P1": 2827,
+        "P2": 2649,
+        "P4": 519,
+        "P3": 283
+      },
+      "n_labelled": 6278,
+      "n_without_programme": 16620,
+      "n_missing_clone_id": 14793,
+      "n_nonmissing_clone_id_not_in_clone_table": 1827
+    },
+    "d": {
+      "n_clones": 322,
+      "entropy": {
+        "n": 322,
+        "missing": 0,
+        "median": 0.4505612088663046,
+        "mean": 0.3739187608522634,
+        "min": -0.0,
+        "q25": 0.0,
+        "q75": 0.671820869673077,
+        "max": 1.242453324894
+      },
+      "spearman_rho": -0.7418447034530916,
+      "spearman_p": 1.7381735915612173e-57
+    },
+    "e": {
+      "n_clones": 322,
+      "qcut_edges": [
+        2.836689710617065,
+        4.499803781509399,
+        8.363207340240479,
+        11.888429164886475,
+        13.727415084838867
+      ],
+      "quartiles": [
+        {
+          "quartile": "Q1",
+          "n": 81,
+          "label_M_n": 29,
+          "label_M_fraction": 0.35802469135802467,
+          "x_min": 2.836689710617065,
+          "x_max": 4.498499393463135
+        },
+        {
+          "quartile": "Q2",
+          "n": 80,
+          "label_M_n": 10,
+          "label_M_fraction": 0.125,
+          "x_min": 4.503716945648193,
+          "x_max": 8.362255096435547
+        },
+        {
+          "quartile": "Q3",
+          "n": 80,
+          "label_M_n": 9,
+          "label_M_fraction": 0.1125,
+          "x_min": 8.36415958404541,
+          "x_max": 11.844064712524414
+        },
+        {
+          "quartile": "Q4",
+          "n": 81,
+          "label_M_n": 2,
+          "label_M_fraction": 0.024691358024691357,
+          "x_min": 11.903217315673828,
+          "x_max": 13.727415084838867
+        }
+      ],
+      "label_M_n": 50
+    },
+    "f": {
+      "n_clones": 322,
+      "donors_sorted_by_rho": [
+        {
+          "donor": "M21",
+          "n": 17,
+          "rho": -0.7398414344468424,
+          "p": 0.0006861324571258209
+        },
+        {
+          "donor": "M24",
+          "n": 45,
+          "rho": -0.7249139002870104,
+          "p": 1.7911720475000567e-08
+        },
+        {
+          "donor": "M11",
+          "n": 23,
+          "rho": -0.7199751610079289,
+          "p": 0.00010733201235227228
+        },
+        {
+          "donor": "M13",
+          "n": 74,
+          "rho": -0.7060686588377141,
+          "p": 2.1179953089944746e-12
+        },
+        {
+          "donor": "M17",
+          "n": 76,
+          "rho": -0.6303617350048103,
+          "p": 1.047703084634997e-09
+        },
+        {
+          "donor": "M34",
+          "n": 19,
+          "rho": -0.5331139899831832,
+          "p": 0.018754525708741483
+        },
+        {
+          "donor": "M14",
+          "n": 56,
+          "rho": -0.4630245628874461,
+          "p": 0.0003264163633690144
+        },
+        {
+          "donor": "M23",
+          "n": 12,
+          "rho": -0.4175464299643898,
+          "p": 0.17683562352208235
+        }
+      ]
+    },
+    "g": {
+      "n_cells": 16619,
+      "category_counts": {
+        "no programme": 10895,
+        "P1": 2483,
+        "P2": 1906,
+        "P3": 1335
+      },
+      "n_labelled": 5724,
+      "n_without_programme": 10895,
+      "n_missing_clone_id": 4896,
+      "n_nonmissing_clone_id_not_in_clone_table": 5999,
+      "source_panel_v3": "l",
+      "marker_area_pt2": 0.6124314702741188,
+      "draw_order": "randomized coloured cells over gray background",
+      "pc_zoom": {
+        "bounds": [
+          [
+            5.1087474434,
+            16.118153176599996
+          ],
+          [
+            -10.470856728600001,
+            0.5385490045999974
+          ]
+        ],
+        "matches_panel": "i",
+        "n_all_cells_in_window": 4079,
+        "programme_counts_in_window": {
+          "no programme": 1372,
+          "P2": 1336,
+          "P3": 1237,
+          "P1": 134
+        },
+        "draw_order": "same randomized programme order as panel g, over gray unassigned cells",
+        "marker_area_pt2": 0.4,
+        "alpha": 0.8,
+        "coordinates_and_labels_modified": false
+      }
+    },
+    "h": {
+      "n_clones": 958,
+      "category_counts": {
+        "P1": 475,
+        "P2": 294,
+        "P3": 189
+      },
+      "n_cells_sum": 5724,
+      "n_cells": {
+        "n": 958,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.974947807933194,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 6.0,
+        "max": 160
+      },
+      "marker_area_pt2_per_cell": 0.43745105019579916
+    },
+    "i": {
+      "source": "/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc/gex_reporter/metadata.csv.gz",
+      "source_sha256": "eb67e584ba422ab8b19417874273a364f39e72475fcfba5e7caeec95cad23dc8",
+      "n_cells": 16619,
+      "original_sort_counts": {
+        "GC": 9302,
+        "nonGC": 7317
+      },
+      "original_sort_counts_in_author_plasma_cells": {
+        "GC": 3394,
+        "nonGC": 579
+      },
+      "draw_order": "one uniform random permutation of every cell; both classes interleaved",
+      "random_seed": 20261015,
+      "n_points_dropped": 0,
+      "umap_coordinates_modified": false,
+      "sort_labels_modified": false,
+      "colors": {
+        "GC": "#d94845",
+        "nonGC": "#2a78d6"
+      },
+      "pc_zoom": {
+        "bounds": [
+          [
+            5.1087474434,
+            16.118153176599996
+          ],
+          [
+            -10.470856728600001,
+            0.5385490045999974
+          ]
+        ],
+        "definition": "Square limits from 1st/99th plasma-cell coordinate quantiles; all cell types in the window shown",
+        "n_all_cells_in_window": 4079,
+        "n_plasma_cells_in_window": 3970,
+        "plasma_sort_counts_in_window": {
+          "GC": 3392,
+          "nonGC": 578
+        },
+        "draw_order": "same randomized cell order as the full UMAP"
+      },
+      "marker_area_pt2": 0.55,
+      "alpha": 0.78
+    },
+    "j": {
+      "n_clones": 958,
+      "gc_sort:GC": {
+        "n": 958,
+        "missing": 0,
+        "median": 1.0,
+        "mean": 0.88674236628779,
+        "min": 0.0,
+        "q25": 1.0,
+        "q75": 1.0,
+        "max": 1.0
+      },
+      "source_panel_v4": "l"
+    }
+  },
+  "input_sha256": {
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/cells.csv.gz": "0697230e461be7b41bea2db42f810b4bac157571bd3f3856ab23ce3faf34ad12",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/clone_table.csv": "3bfb57768b4317e40c99d71cee90e26242e446f25c3e5664cddc927ab5bba5d7",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_cells.csv.gz": "a99c718d6680eb3b55cc3947e354d01a3861af39b4f6da1ece13be2e6c0406db",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/clone_table.csv": "6ca235e78ca4975910e41b5aa824a095e3d0a30ccca4f6a53be9d070f1e134f1",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/cells.csv.gz": "943b64199ab6b08c834a74745b7292c85fc0f762ef64a3233bcd90851bfe3eb2",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/clone_table.csv": "373c7c28da94b19a058f55675670ee938593432ce35d0e109365fc7134bf160c",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/p3_subsplit.json": "799ebb07615bcd432a487b74bcd12108e86addea7437a047aaf235a51f6bc60f",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_clones.csv": "a72947fc23373bc2cbc0e22e52a98937e8278afee9fd10c87b9a1c7e79f32fed",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/plasma_branches.json": "bd40adc167583e6a2eb2c9a0b22023d5146ca2f2aa345b742de4cd340192d97c"
+  },
+  "g_h_i_validation": {
+    "entropy_recomputed_from_assigned_cell_states": true,
+    "max_entropy_difference": 2.220446049250313e-16,
+    "minimum_assigned_cells_per_clone": 5,
+    "entropy_states": [
+      "ASC",
+      "CD23+ MemB",
+      "Fcrl5+ MemB",
+      "GC",
+      "other MemB"
+    ],
+    "entropy_log_base": "natural log",
+    "unassigned_cells_in_entropy": false,
+    "label_M_definition": {
+      "fate_values": [
+        "Fcrl5+ MemB",
+        "CD23+ MemB",
+        "other MemB"
+      ],
+      "minimum_cells_per_clone": 1
+    },
+    "quartile_counts_recomputed": true,
+    "within_donor_correlations_recomputed": true,
+    "state_label_origin": "RNA marker-based annotation; descriptive state composition"
+  },
+  "source": "v6 S2/S3 panels; S1 Plasmodium moved to Figure 2",
+  "panel_mapping_from_v6": {
+    "d": "a",
+    "e": "b",
+    "f": "c",
+    "g": "d",
+    "h": "e",
+    "i": "f",
+    "j": "g",
+    "k": "h",
+    "l": "i",
+    "m": "j"
+  },
+  "layout": {
+    "page_mm": [
+      210,
+      346
+    ],
+    "dpi": 600,
+    "panel_letters": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j"
+    ],
+    "axes_boxes_mm": {
+      "a": [
+        31,
+        25,
+        53,
+        53
+      ],
+      "b": [
+        91,
+        25,
+        53,
+        53
+      ],
+      "c": [
+        151,
+        25,
+        53,
+        53
+      ],
+      "d": [
+        7,
+        99,
+        53,
+        53
+      ],
+      "e": [
+        79,
+        99,
+        53,
+        53
+      ],
+      "f": [
+        145,
+        99,
+        63,
+        53
+      ],
+      "g": [
+        24,
+        171,
+        64,
+        64
+      ],
+      "h": [
+        128,
+        171,
+        64,
+        64
+      ],
+      "i": [
+        24,
+        261,
+        64,
+        64
+      ],
+      "j": [
+        128,
+        261,
+        64,
+        64
+      ]
+    },
+    "legend_boxes_mm": {
+      "d": [
+        2,
+        32.349999999999994,
+        23.5,
+        38.300000000000004
+      ],
+      "e_f": [
+        91,
+        85,
+        113,
+        8.4
+      ],
+      "j_k": [
+        24,
+        244,
+        168,
+        8.4
+      ],
+      "l_original_sort": [
+        24,
+        333,
+        64,
+        8.4
+      ],
+      "m_clone_scale": [
+        128,
+        335,
+        64,
+        6
+      ]
+    },
+    "minimum_axes_gap_mm": 7,
+    "text_outside_page": [],
+    "legend_text_collisions": [],
+    "scatter_coordinate_aspect": "equal; frozen square limits shared across views",
+    "visible_font_sizes_pt": [
+      6.8,
+      7.0,
+      7.2,
+      8.2,
+      8.4,
+      10.0
+    ],
+    "auxiliary_axes_boxes_mm": {
+      "l_pc_zoom": [
+        95,
+        273,
+        26,
+        26
+      ],
+      "g_pc_zoom": [
+        95,
+        183,
+        26,
+        26
+      ]
+    },
+    "all_visible_text_collisions": []
+  },
+  "interpretation": {
+    "memory": "RNA-annotated state composition; P3/P4 are post-hoc gene-score subgroups",
+    "plasma": "Whole-clone profile arms; original GC/nonGC library sort is a post-hoc external overlay",
+    "not_inferred": [
+      "time direction",
+      "two proven memory fates",
+      "GC negativity proves no GC history"
+    ]
+  }
+}

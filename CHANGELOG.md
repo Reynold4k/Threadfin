@@ -1,5 +1,50 @@
 # Changelog
 
+## 4.3.0 — 2026-10-18
+
+### The clone map chooses its own settings
+
+- `threadfin.tl.embed_clones` and `threadfin.run` now choose the UMAP settings of the clone map for each
+  dataset (`n_neighbors="auto"`, `min_dist="auto"`, the new default). Numbers still set them by hand, and
+  `n_neighbors=50, min_dist=0.8` reproduces the fixed default of 4.2. In `threadfin.run` the settings are
+  `map_n_neighbors` and `map_min_dist`.
+- New `threadfin.tl.tune_clone_map`: every candidate layout is scored for coherence (the fraction of
+  clones in one connected piece of the map) and for local and global fidelity to the clone profiles. The
+  most faithful setting that keeps at least the target fraction of clones in one piece *in every layout
+  tried* is chosen. The target comes from the profiles themselves (the largest component of their mutual
+  15-nearest-neighbour graph, capped at 0.99), so a map is not made more fragmented than the profiles. The
+  search lays the clones out over a ladder of settings with shared seeds, smooths the scores over
+  neighbouring settings, confirms the best settings on six layouts, and if necessary tries weaker repulsion
+  between clones. Above 3,000 clones the search runs on a random subset and the best settings are
+  confirmed again on all clones. `method="adam"` follows a stochastic gradient instead (Adam with simultaneous-
+  perturbation gradient estimates).
+- New `threadfin.tl.map_quality` scores any clone map, and `threadfin.tl.layout_clone_map` lays out and
+  checks the final map: if it falls short of the target, further seeds and the next confirmed settings are
+  tried. With settings given by hand, `embed_clones` reports when the map is more fragmented than the
+  profiles.
+- `adata.uns["threadfin"]["profiles"]["map_params"]` records the chosen settings, the quality of the map,
+  every layout tried and the full search; it is stored as tables, so results can be written to `.h5ad`.
+- The map is a display only: profiles, coherence, programmes and all tests are unchanged.
+
+### Fixes
+
+- Results can be written with `adata.write_h5ad` after a full analysis. The split-test table of
+  `find_programmes` held Python lists and the clonal-memory interval was a tuple, which AnnData cannot
+  write; stored results are now converted to writable types (lists of communities become comma-separated
+  text, with their counts in `n_communities_left` / `n_communities_right`). Returned objects are unchanged.
+
+### Documentation
+
+- New tutorials (`docs/tutorials/`): getting started, your own data, the clone map, and step by step.
+- `docs/METHODS.md` describes the clone map and corrects the description of reliability: no clone is
+  excluded for low reliability; reliability weights a clone's part in programme discovery.
+- New README, case-study overview and figure index.
+
+### Repository
+
+- Benchmarks, technical validation and analyses of non-B-cell lineage data (Clonotrace LARRY and NSCLC,
+  WATERMELON) are no longer part of the repository.
+
 ## 4.2.0 — 2026-10-10
 
 ### New analysis: heritability of cell state along the receptor lineage tree

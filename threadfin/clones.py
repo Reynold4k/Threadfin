@@ -1,4 +1,10 @@
-"""B-cell clones: definition from BCR sequences, and clone-level summaries.
+"""B-cell clones: clone-level summaries (and a deprecated heavy-chain-only caller).
+
+.. deprecated::
+    Clone definition in Threadfin is Dandelion's paired heavy + light definition —
+    :func:`threadfin.define_clones_dandelion`. The internal :func:`define_clones`
+    below groups cells by the heavy chain alone and is kept only for backward
+    compatibility with old analyses.
 
 Clone definition (:func:`define_clones`) follows the established rules for
 B-cell receptors (Gupta et al. 2017; Nouri & Kleinstein 2018):
@@ -171,7 +177,18 @@ def define_clones(
     Copy of ``bcr`` with ``out_col`` (NaN where V, J or junction is
     missing). ``.attrs['clone_definition']`` records the threshold, the
     sequence type and the number of clones.
+
+    .. deprecated::
+        This heavy-chain-only caller is superseded by Dandelion's paired
+        heavy + light clone definition (:func:`threadfin.define_clones_dandelion`),
+        which is Threadfin's clone definition.
     """
+    warnings.warn(
+        "threadfin.define_clones (heavy-chain-only) is deprecated and will be removed; "
+        "Threadfin's clone definition is Dandelion's paired heavy + light definition — "
+        "use threadfin.define_clones_dandelion.",
+        DeprecationWarning, stacklevel=2,
+    )
     from scipy.sparse import coo_matrix
     from scipy.sparse.csgraph import connected_components
 

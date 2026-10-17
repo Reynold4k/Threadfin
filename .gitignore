@@ -5,6 +5,7 @@ build/
 dist/
 .pytest_cache/
 .ipynb_checkpoints/
+.coverage
 
 # data and large artifacts (download via case_studies/download.sh)
 data/
@@ -12,23 +13,40 @@ data/
 *.h5mu
 *.h5
 manuscript.ipynb
-.coverage
-internal_validation/
 
 # lineage-tree working files: regenerate with case_studies/lineage_trees.py + run_gctree.sh
 case_studies/results/*/lineage/trees/
 case_studies/results/*/lineage/*.fasta
 case_studies/results/*/lineage/status.txt
 case_studies/logs/
+case_studies/results/*/matplotlib/
 
-# quickstart output
+# quickstart and tutorial output
 threadfin_summary.txt
 threadfin_overview.png
+threadfin_overview.pdf
 tutorial_overview.png
 
 # private material that must never be published
 paper/MAIT/
 paper/figure_plan/report/
 paper/*.full.pdf
-paper/*.docx
+paper/**/*.docx
+paper/manuscript_*/
 promprt/
+internal_validation/
+
+# figure working directories stay local; only the figure code, provenance and supplementary
+# analyses of the manuscript are published
+paper/figure_plan/reserve/*
+!paper/figure_plan/reserve/source/
+!paper/figure_plan/reserve/provenance/
+!paper/figure_plan/reserve/revision_2026-10-17/
+paper/figure_plan/reserve/revision_2026-10-17/logs/
+paper/figure_plan/reserve/provenance/Figure_4_*
+paper/figure_plan/reserve/provenance/consolidated_manuscript.json
+
+# Figure 4 and the plan for further figures are set aside and kept local
+paper/figure_plan/Figure_4_measured_validation.*
+paper/figure_plan/FIGURE4_DESIGN_AND_LEGEND_*.md
+paper/figure_plan/FIGURE5_6_ANALYSIS_PLAN_*.md

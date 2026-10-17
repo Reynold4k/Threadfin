@@ -1,0 +1,671 @@
+{
+  "date": "2026-10-16",
+  "tight_crop": true,
+  "random_draw_order_seed": 20261016,
+  "texts": [
+    {
+      "text": "0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1",
+      "font_pt": 5.5
+    },
+    {
+      "text": "2",
+      "font_pt": 5.5
+    },
+    {
+      "text": "3",
+      "font_pt": 5.5
+    },
+    {
+      "text": "4",
+      "font_pt": 5.5
+    },
+    {
+      "text": "5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "6",
+      "font_pt": 5.5
+    },
+    {
+      "text": "7",
+      "font_pt": 5.5
+    },
+    {
+      "text": "8",
+      "font_pt": 5.5
+    },
+    {
+      "text": "9",
+      "font_pt": 5.5
+    },
+    {
+      "text": "10",
+      "font_pt": 5.5
+    },
+    {
+      "text": "11",
+      "font_pt": 5.5
+    },
+    {
+      "text": "12",
+      "font_pt": 5.5
+    },
+    {
+      "text": "13",
+      "font_pt": 5.5
+    },
+    {
+      "text": "14",
+      "font_pt": 5.5
+    },
+    {
+      "text": "15",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "scRNA clusters",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "GC score",
+      "font_pt": 7.4
+    },
+    {
+      "text": "\u22121.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "\u22120.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "RNA score",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "LZ score",
+      "font_pt": 7.4
+    },
+    {
+      "text": "\u22121.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "\u22121.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "\u22120.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "RNA score",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cycling score",
+      "font_pt": 7.4
+    },
+    {
+      "text": "\u22120.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "2.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "2.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "RNA score",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Paired receptor coverage",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Paired BCR",
+      "font_pt": 5.8
+    },
+    {
+      "text": "No eligible pair",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P2",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P3",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone mean GC score",
+      "font_pt": 7.4
+    },
+    {
+      "text": "\u22121.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "\u22120.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "2.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "RNA score",
+      "font_pt": 5.7
+    },
+    {
+      "text": "0.59",
+      "font_pt": 6.0
+    },
+    {
+      "text": "0.37",
+      "font_pt": 6.0
+    },
+    {
+      "text": "0.77",
+      "font_pt": 6.0
+    },
+    {
+      "text": "P1",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "P3",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Bootstrap Jaccard",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.2",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.4",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.6",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.8",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Programme stability",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Recorded sorting gates",
+      "font_pt": 7.4
+    },
+    {
+      "text": "DZ",
+      "font_pt": 5.7
+    },
+    {
+      "text": "LZ",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Myc+ LZ",
+      "font_pt": 5.7
+    },
+    {
+      "text": "PC",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Sequence-derived W33L",
+      "font_pt": 7.4
+    },
+    {
+      "text": "germline W33",
+      "font_pt": 5.8
+    },
+    {
+      "text": "W33L",
+      "font_pt": 5.8
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Mouse identity",
+      "font_pt": 7.4
+    },
+    {
+      "text": "M1",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M2",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M3",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M4",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M5",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M6",
+      "font_pt": 5.3
+    },
+    {
+      "text": "M8",
+      "font_pt": 5.3
+    },
+    {
+      "text": "S1",
+      "font_pt": 5.3
+    },
+    {
+      "text": "S2",
+      "font_pt": 5.3
+    },
+    {
+      "text": "S3",
+      "font_pt": 5.3
+    },
+    {
+      "text": "S4",
+      "font_pt": 5.3
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Profiled clone members",
+      "font_pt": 7.4
+    },
+    {
+      "text": "In \u22652-cell profile",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Other cells",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone PC-gate fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone callable W33L fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "0.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "0.5",
+      "font_pt": 5.5
+    },
+    {
+      "text": "1.0",
+      "font_pt": 5.5
+    },
+    {
+      "text": "Fraction",
+      "font_pt": 5.7
+    },
+    {
+      "text": "n = 74",
+      "font_pt": 6.0
+    },
+    {
+      "text": "Callable W33L fraction",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.5",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "Captured PC fraction",
+      "font_pt": 6.9
+    },
+    {
+      "text": "0.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "0.5",
+      "font_pt": 6.3
+    },
+    {
+      "text": "1.0",
+      "font_pt": 6.3
+    },
+    {
+      "text": "W33L vs captured PC fraction",
+      "font_pt": 7.4
+    },
+    {
+      "text": "Cell UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Cell UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Programme map-back",
+      "font_pt": 7.4
+    },
+    {
+      "text": "P1",
+      "font_pt": 5.8
+    },
+    {
+      "text": "P2",
+      "font_pt": 5.8
+    },
+    {
+      "text": "NP\u2013CGG | GSE305877 | WT day 14: 13,727 QC cells, 508 profiles; one identifiable mouse",
+      "font_pt": 8.0
+    },
+    {
+      "text": "A",
+      "font_pt": 9.5
+    },
+    {
+      "text": "B",
+      "font_pt": 9.5
+    },
+    {
+      "text": "C",
+      "font_pt": 9.5
+    },
+    {
+      "text": "D",
+      "font_pt": 9.5
+    },
+    {
+      "text": "E",
+      "font_pt": 9.5
+    },
+    {
+      "text": "F",
+      "font_pt": 9.5
+    },
+    {
+      "text": "G",
+      "font_pt": 9.5
+    },
+    {
+      "text": "H",
+      "font_pt": 9.5
+    },
+    {
+      "text": "RNA scores are descriptive overlays. 6,959 cells have eligible paired BCRs; 3,182 belong to displayed profiles. P1/P2 stability <0.75.",
+      "font_pt": 6.2
+    },
+    {
+      "text": "NP\u2013OVA plate study | GSE246382 | day 14: 884 cells, 96 profiles; 11 mice",
+      "font_pt": 8.0
+    },
+    {
+      "text": "I",
+      "font_pt": 9.5
+    },
+    {
+      "text": "J",
+      "font_pt": 9.5
+    },
+    {
+      "text": "K",
+      "font_pt": 9.5
+    },
+    {
+      "text": "L",
+      "font_pt": 9.5
+    },
+    {
+      "text": "M",
+      "font_pt": 9.5
+    },
+    {
+      "text": "N",
+      "font_pt": 9.5
+    },
+    {
+      "text": "O",
+      "font_pt": 9.5
+    },
+    {
+      "text": "P",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Grey: unavailable annotation or no displayed profile. W33L fractions use callable cells only. Fractions describe captured cells, not output rates.",
+      "font_pt": 6.1
+    }
+  ]
+}

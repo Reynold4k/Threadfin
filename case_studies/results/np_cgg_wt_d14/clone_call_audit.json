@@ -1,0 +1,14 @@
+{
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 6988,
+  "n_clones": 4312,
+  "n_clones_ge2": 508,
+  "largest_clone": 237,
+  "productive_bcr_cells": 9304,
+  "exactly_one_heavy_one_light": 6988,
+  "exclusion": "Cells with missing or more than one productive full-length heavy/light contig are not clone-called."
+}

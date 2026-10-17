@@ -41,7 +41,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ._utils import codes, get_uns, log, require_obs, require_positive_int
+from ._utils import codes, get_uns, h5ad_safe, log, require_obs, require_positive_int
 from .profiles import get_profiles, model_from_adata, variance_components
 
 MEMORY_KEY = "memory"
@@ -97,7 +97,7 @@ def clonal_memory(
     *,
     order=None,
     programme_key: str = "clone_programme",
-    min_cells: int = 3,
+    min_cells: int = 1,
     min_pairs: int = 10,
     n_null: int = 500,
     n_boot: int = 500,
@@ -265,7 +265,7 @@ def clonal_memory(
         pairs["programme_later"] = np.asarray(names)[nearest[pb]]
         del clone_means
 
-    get_uns(adata).setdefault(MEMORY_KEY, {})[time_key] = res
+    get_uns(adata).setdefault(MEMORY_KEY, {})[time_key] = h5ad_safe(res)
     extra = (f"; same programme {res['persistence']:.2f} vs {res['persistence_null']:.2f} for random clones"
              if "persistence" in res else "")
     log(f"clonal memory over '{time_key}': {uniq.size} clones, {pa.size} snapshot pairs; memory index "

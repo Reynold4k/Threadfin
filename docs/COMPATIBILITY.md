@@ -1,5 +1,13 @@
 # Verified compatibility
 
+## Version 4.3.0 — 18 October 2026
+
+The package was installed with `pip` from the source tree into a new, isolated Python 3.11 environment
+and run outside the repository: `threadfin.run()` completed on a simulated repertoire, including the
+automatic choice of the clone-map settings, and the result was written to and read from `.h5ad`. The full
+test suite (232 tests) passed in the development environment (Python 3.11). Continuous integration runs
+the suite and the tutorial on Python 3.10, 3.11 and 3.12 for every change to `main`.
+
 ## Version 4.1.0 — 9 October 2026
 
 The final 4.1.0 wheel was installed into the three isolated Linux environments

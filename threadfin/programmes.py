@@ -43,7 +43,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ._utils import get_uns, log, stable_categorical
+from ._utils import get_uns, h5ad_safe, log, stable_categorical
 from .profiles import get_profiles, model_from_adata, project_features
 
 PROGRAMME_KEY = "programmes"
@@ -53,8 +53,14 @@ DEFAULT_RESOLUTIONS = (0.2, 0.4, 0.6, 0.8, 1.0, 1.4, 2.0)
 # --------------------------------------------------------------------------- graph + Leiden
 
 
-def knn_graph(features: np.ndarray, n_neighbors: int = 15):
-    """Weighted undirected kNN graph (igraph) with self-tuned Gaussian weights."""
+def knn_graph(features: np.ndarray, n_neighbors: int = 15, reliability: np.ndarray | None = None):
+    """Weighted undirected kNN graph (igraph) with self-tuned Gaussian weights.
+
+    ``reliability`` scales every edge by ``sqrt(rel_i * rel_j)``, so a clone seen in few cells still
+    takes part in the clustering but pulls on it only as hard as its profile deserves. This is the
+    alternative to a reliability threshold: nothing is removed, and a community of noisy profiles is
+    held together by weak edges that Leiden will not keep as a separate module.
+    """
     import igraph as ig
     from sklearn.neighbors import NearestNeighbors
 
@@ -76,8 +82,12 @@ def knn_graph(features: np.ndarray, n_neighbors: int = 15):
     first = np.ones(key_sorted.size, dtype=bool)
     first[1:] = key_sorted[1:] != key_sorted[:-1]
     sel = order[first]
+    weights = w.ravel()[sel]
+    if reliability is not None:
+        r = np.clip(np.asarray(reliability, dtype=float), 1e-6, 1.0)
+        weights = weights * np.sqrt(r[lo[sel]] * r[hi[sel]])
     g = ig.Graph(n=n, edges=list(zip(lo[sel].tolist(), hi[sel].tolist())), directed=False)
-    g.es["weight"] = w.ravel()[sel].tolist()
+    g.es["weight"] = weights.tolist()
     return g
 
 
@@ -264,7 +274,10 @@ def _merge_by_split_test(feats, labels, alpha, n_null, rng, null="total"):
         res = split_test(feats[inside], np.isin(labels[inside], a), n_null=n_null, null=null,
                          random_state=int(rng.integers(2**31)))
         level = alpha * (inside.sum() - 1) / (total - 1)
-        rows.append({"communities_left": [int(c) for c in a], "communities_right": [int(c) for c in b],
+        # communities as comma-separated text, so the table can be written to h5ad with the AnnData
+        rows.append({"communities_left": ",".join(str(int(c)) for c in a),
+                     "communities_right": ",".join(str(int(c)) for c in b),
+                     "n_communities_left": len(a), "n_communities_right": len(b),
                      "n_clones": int(inside.sum()), **res,
                      "alpha_node": float(level), "split": bool(res["pvalue"] <= level)})
         if res["pvalue"] <= level:
@@ -281,7 +294,8 @@ def _merge_by_split_test(feats, labels, alpha, n_null, rng, null="total"):
     if not tests.empty:
         to_group = {int(c): g for g, members in enumerate(groups) for c in members}
         for side in ("left", "right"):
-            tests[f"groups_{side}"] = [sorted({to_group[c] for c in cs}) for cs in tests[f"communities_{side}"]]
+            tests[f"groups_{side}"] = [sorted({to_group[int(c)] for c in cs.split(",")})
+                                       for cs in tests[f"communities_{side}"]]
     return merged, tests
 
 
@@ -311,13 +325,113 @@ def _bootstrap_features(model, adata, eligible_codes, n_boot, rng):
 # --------------------------------------------------------------------------- public API
 
 
+
+def embed_clones(
+    adata,
+    *,
+    n_neighbors: int | str = "auto",
+    min_dist: float | str = "auto",
+    spread: float = 1.0,
+    min_reliability: float = 0.0,
+    coherence_target: float | str = "auto",
+    tune_kwargs: dict | None = None,
+    random_state: int = 0,
+    verbose: bool = True,
+) -> pd.DataFrame:
+    """Lay the clone profiles out in two dimensions — **every** profiled clone, by default.
+
+    This is the clone map the rest of the package is built around, and it is deliberately separate from
+    :func:`find_programmes`. Programme discovery is a clustering problem and needs reasonably estimated
+    profiles, so it keeps its ``min_reliability`` gate. The map is a *display* of the clones that exist,
+    and filtering it by reliability throws away the data the map is meant to show: on GSE287123 the 0.5
+    gate removes 75 % (RBD) and 90 % (NP-OVA) of profiled clones, and on GSE246382 it removes all of
+    them, which is why that dataset appeared to have no clone map at all.
+
+    The map does not change any statistic: profiles, coherence, programmes and tests are computed in
+    profile space, never on the map.
+
+    Parameters
+    ----------
+    n_neighbors, min_dist
+        UMAP settings. ``"auto"`` (the default for both) chooses them per dataset with
+        :func:`threadfin.tl.tune_clone_map`: Adam, driven by simultaneous-perturbation gradient estimates,
+        searches for the most faithful layout that is no more fragmented than the clone profiles
+        themselves, so a continuum of clones is drawn as one connected picture. Pass numbers to set them
+        by hand (``n_neighbors=50, min_dist=0.8`` reproduces the fixed default of Threadfin 4.2); a
+        number for one and ``"auto"`` for the other tunes only the second.
+    spread
+        UMAP ``spread``.
+    min_reliability
+        Reliability floor. ``0.0`` (the default) keeps every clone that has a profile; raise it only to
+        reproduce an older filtered layout.
+    coherence_target, tune_kwargs
+        Passed to :func:`threadfin.tl.tune_clone_map` when a setting is ``"auto"``.
+    random_state
+        Seed for the tuner and for the final layout.
+
+    Returns
+    -------
+    The clone table with ``x`` and ``y`` added. ``adata.uns['threadfin']['profiles']['map_params']``
+    records the settings, how they were chosen (``"tuning"``, with the full optimisation history), the
+    quality of the final map (``"quality"``: coherence, local and global fidelity) and how many clones
+    were laid out.
+    """
+    from .maptune import layout_clone_map, tune_clone_map
+
+    prof = get_profiles(adata)
+    table, feats_all = prof["clone_table"], prof["features"]
+    use = table.index[table["reliability"] >= min_reliability]
+    if use.size < 15:
+        raise ValueError(
+            f"Only {use.size} clones to embed (need 15). Profile more clones, or lower min_cells in "
+            "clone_profiles.")
+    for name, value in (("n_neighbors", n_neighbors), ("min_dist", min_dist)):
+        if isinstance(value, str) and value != "auto":
+            raise ValueError(f"{name} must be 'auto' or a number, got {value!r}.")
+    feats = feats_all.loc[use].to_numpy()
+    tuning, repulsion = None, 1.0
+    if n_neighbors == "auto" or min_dist == "auto":
+        tuning = tune_clone_map(feats, n_neighbors=n_neighbors, min_dist=min_dist, spread=spread,
+                                coherence_target=coherence_target, random_state=random_state,
+                                verbose=verbose, **(tune_kwargs or {}))
+        n_neighbors, min_dist, repulsion = tuning.n_neighbors, tuning.min_dist, tuning.repulsion_strength
+
+    xy, quality, setting, attempts = layout_clone_map(
+        feats, n_neighbors=n_neighbors, min_dist=min_dist, repulsion_strength=repulsion, spread=spread,
+        coherence_target=coherence_target, tuning=tuning, random_state=random_state)
+    n_neighbors, min_dist, repulsion, layout_seed = setting
+    table["x"], table["y"] = np.nan, np.nan
+    table.loc[use, "x"], table.loc[use, "y"] = xy[:, 0], xy[:, 1]
+    prof["clone_table"] = table
+    prof["map_params"] = {"n_neighbors": int(n_neighbors), "min_dist": float(min_dist),
+                          "repulsion_strength": float(repulsion), "spread": float(spread),
+                          "min_reliability": float(min_reliability), "random_state": int(random_state),
+                          "layout_seed": int(layout_seed), "n_clones": int(use.size),
+                          "n_profiled": int(len(table)),
+                          "chosen_by": "tune_clone_map" if tuning is not None else "user",
+                          "quality": {k: float(v) for k, v in quality.items()},
+                          "attempts": pd.DataFrame(attempts)}
+    if tuning is not None:
+        prof["map_params"]["tuning"] = tuning.to_uns()
+    rep_txt = "" if repulsion == 1.0 else f", repulsion_strength {repulsion:g}"
+    log(f"clone map: {use.size:,} of {len(table):,} profiled clones laid out (n_neighbors {int(n_neighbors)}, "
+        f"min_dist {float(min_dist):.2f}{rep_txt}{', chosen automatically' if tuning is not None else ''}); "
+        f"{100 * quality['coherence']:.1f}% of clones in one connected piece.", verbose)
+    if tuning is None and quality["coherence"] < quality["coherence_target"] - 0.005:
+        log(f"  the map is more fragmented than the clone profiles (which keep "
+            f"{100 * quality['coherence_target']:.1f}% of clones connected); n_neighbors='auto', "
+            "min_dist='auto' chooses settings that keep it together.", verbose)
+    return table
+
+
 def find_programmes(
     adata,
     *,
     resolution: float | str = "auto",
     resolutions=DEFAULT_RESOLUTIONS,
     n_neighbors: int = 15,
-    min_reliability: float = 0.5,
+    min_reliability: float = 0.0,
+    weight_by_reliability: bool = True,
     n_boot: int = 30,
     stability_threshold: float = 0.75,
     min_programme_size: int = 5,
@@ -328,7 +442,6 @@ def find_programmes(
     split_null: str = "total",
     assign_remaining: bool = True,
     min_posterior: float = 0.7,
-    embed: bool = True,
     random_state: int = 0,
     key_added: str = "clone_programme",
     verbose: bool = True,
@@ -345,10 +458,21 @@ def find_programmes(
         ``stability_threshold`` (falling back to the most stable partition).
     n_neighbors
         Neighbours per clone in the clone graph.
+    weight_by_reliability
+        Scale each graph edge by ``sqrt(rel_i * rel_j)`` so that every clone is clustered but a
+        thinly observed one pulls weakly. This is what makes ``min_reliability=0`` safe: on a
+        simulated one-programme continuum of 3,000 clones with a median of one cell each, an
+        unweighted unfiltered run invents four programmes at bootstrap stability 0.78-0.86, while the
+        weighted run recovers the single true programme.
     min_reliability
-        Only clones whose profile reliability reaches this value are
-        clustered (see :class:`threadfin.profiles.VarianceComponents`);
-        other clones get no programme.
+        Reliability floor for clustering; ``0.0`` (the default) clusters every profiled clone.
+        Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
+    the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
+    population mean by the variance-component model, so its influence is down-weighted in proportion to
+    how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
+    twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
+    profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
+    though it had no clone structure when its map separates the sorted gate at p < 0.001.
     n_boot
         Bootstrap replicates for stability (0 disables stability, which is
         only allowed with a fixed ``resolution``).
@@ -372,9 +496,6 @@ def find_programmes(
         likely programme by a Gaussian classifier whose noise term shrinks
         with clone size (see ``_assign_remaining``); assignments with
         posterior >= ``min_posterior`` go to ``<key_added>_assigned``.
-    embed
-        Also compute a 2-D UMAP of clone profiles (columns ``x``/``y``) for
-        the clone map.
     key_added
         ``obs`` column receiving each cell's programme (cells of clones that
         were not clustered get NaN).
@@ -397,7 +518,8 @@ def find_programmes(
             "lower min_reliability."
         )
     feats = feats_all.loc[eligible].to_numpy()
-    graph = knn_graph(feats, n_neighbors)
+    rel = table.loc[eligible, "reliability"].to_numpy() if weight_by_reliability else None
+    graph = knn_graph(feats, n_neighbors, rel)
 
     auto = isinstance(resolution, str)
     if auto and resolution != "auto":
@@ -413,7 +535,7 @@ def find_programmes(
         code_of = {str(c): i for i, c in enumerate(model.clone_index.astype(str))}
         eligible_codes = np.array([code_of[c] for c in eligible], dtype=np.int64)
         boot_feats = _bootstrap_features(model, adata, eligible_codes, n_boot, rng)
-        boot_graphs = [knn_graph(f, n_neighbors) for f in boot_feats]
+        boot_graphs = [knn_graph(f, n_neighbors, rel) for f in boot_feats]
 
     scan_rows, partitions = [], {}
     for res in res_grid:
@@ -502,13 +624,6 @@ def find_programmes(
         assigned.loc[eligible] = np.asarray(labels, dtype=str)  # core clones keep their own programme
         table[f"{key_added}_assigned"] = pd.Categorical(assigned, categories=labels.categories)
         table["assignment_posterior"] = post
-    if embed and eligible.size >= 15:
-        import umap
-
-        xy = umap.UMAP(n_neighbors=int(min(n_neighbors, eligible.size - 1)),
-                       random_state=random_state).fit_transform(feats)
-        table["x"], table["y"] = np.nan, np.nan
-        table.loc[eligible, "x"], table.loc[eligible, "y"] = xy[:, 0], xy[:, 1]
     prof["clone_table"] = table
 
     # map to cells
@@ -541,8 +656,8 @@ def find_programmes(
                                                  for gs in split_tests.pop(f"groups_{side}")]
     get_uns(adata)[PROGRAMME_KEY] = {
         "summary": summary,
-        "resolution_scan": scan,
-        "split_tests": split_tests,
+        "resolution_scan": h5ad_safe(scan),
+        "split_tests": h5ad_safe(split_tests),
         "params": {
             "resolution": chosen, "auto": auto, "n_neighbors": int(n_neighbors),
             "test_splits": bool(test_splits), "alpha": float(alpha), "n_null": int(n_null),
@@ -721,6 +836,6 @@ def programme_markers(
         rows.append(tab)
     out = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(
         columns=["programme", "gene", "mean_diff", "auc", "pvalue", "fdr", "rank"])
-    get_uns(adata)["programme_markers"] = out
+    get_uns(adata)["programme_markers"] = h5ad_safe(out)
     log(f"programme markers: {n_clones} clones as replicates, {genes.size} genes tested.", verbose)
     return out

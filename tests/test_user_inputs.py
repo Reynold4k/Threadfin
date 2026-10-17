@@ -44,14 +44,14 @@ def test_run_requires_positive_integer_resampling_counts(kwargs, name):
         tf.run(_adata(), basis="X_pca", verbose=False, **kwargs)
 
 
-def test_run_explains_duplicate_bcr_barcodes():
+def test_run_rejects_per_cell_bcr_table_with_guidance():
     adata = _adata()
     bcr = pd.DataFrame(
         {"v_call": ["IGHV1", "IGHV1"], "j_call": ["IGHJ1", "IGHJ1"],
          "junction": ["TGT", "TGT"]},
         index=["cell0", "cell0"],
     )
-    with pytest.raises(ValueError, match="duplicate cell barcodes.*one row per cell"):
+    with pytest.raises(ValueError, match="contig-level"):
         tf.run(adata, bcr=bcr, basis="X_pca", verbose=False)
 
 

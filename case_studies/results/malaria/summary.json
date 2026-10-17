@@ -2,147 +2,187 @@
  "dataset": "malaria",
  "title": "GSE286215 - terminal splenic sampling during PcAS infection: day 0 (one naive mouse), day 4 (four infected mice), days 7/10/14 (five each); author transcriptomic annotations",
  "clone_definition": {
-  "threshold": 0.15,
-  "threshold_method": "default",
-  "sequence": "nt",
-  "junction_col": "junction",
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
   "donor_key": "donor",
-  "light_chain": false,
   "n_cells": 21145,
-  "n_clones": 20100,
-  "n_expanded": 801
+  "n_clones": 20500,
+  "n_clones_ge2": 523,
+  "largest_clone": 8,
+  "source": "dandelion",
+  "cells_dropped": 0
  },
  "qc": {
   "n_cells": 40623,
   "n_cells_bcr": 21145,
-  "n_clones": 20100,
-  "clones_ge2": 801,
-  "clones_ge3": 132,
-  "clones_ge5": 30,
+  "n_clones": 20500,
+  "clones_ge2": 523,
+  "clones_ge3": 73,
+  "clones_ge5": 11,
   "clones_ge10": 0,
-  "cells_in_clones_ge2": 1846,
+  "cells_in_clones_ge2": 1168,
   "largest_clone": 8,
   "n_donors": 20,
   "n_samples": 20
  },
  "coherence": {
-  "icc": 0.5944120507268962,
-  "null_mean": 0.05843925144286324,
-  "null_q95": 0.08571569435389445,
-  "excess": 0.535972799284033,
+  "icc": 0.7358597899533915,
+  "null_mean": 0.0622734767982781,
+  "null_q95": 0.09802194069554929,
+  "excess": 0.6735863131551134,
   "p_value": 0.001996007984031936,
-  "n_clones": 801,
-  "n_cells": 1846,
+  "n_clones": 523,
+  "n_cells": 1168,
   "min_cells_reliability_0.5": 1
  },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "n_clones": 523,
+  "n_profiled": 523
+ },
  "programme_splits": {
-  "n_leiden_communities": 3,
-  "n_merged": 0,
-  "root_pvalue": 2.4888005234567667e-22
+  "n_leiden_communities": 6,
+  "n_merged": 2,
+  "root_pvalue": 1.0734226490766142e-16
  },
  "programme_markers": {
   "P1": [
+   "Ssr4",
+   "Edem1",
+   "Sec11c",
+   "Jchain",
+   "H13",
+   "Tent5c",
+   "Edem2",
+   "Dnajc3",
+   "Ppib",
+   "Xbp1",
+   "Txndc11",
+   "Fkbp2"
+  ],
+  "P2": [
    "H2-Aa",
    "H2-Eb1",
    "Cd74",
    "Bank1",
-   "Rps27",
-   "H2-DMb2",
    "H2-Ab1",
+   "H2-DMb2",
+   "Rps27",
    "Cd79a",
-   "Btg1",
    "Tmsb10",
-   "Ly6d",
-   "Tmsb4x"
-  ],
-  "P2": [
-   "Eaf2",
-   "Edem1",
-   "Sec61b",
-   "Rexo2",
-   "Jchain",
-   "Manf",
-   "Mzb1",
-   "Spcs1",
-   "Creld2",
-   "Spcs2",
-   "Txndc11",
-   "H13"
+   "Btg1",
+   "Tmsb4x",
+   "Ly6d"
   ],
   "P3": [
+   "Top2a",
+   "Hmgb2",
+   "Mki67",
+   "Pclaf",
+   "H2afz",
+   "Stmn1",
+   "Hmgn2",
+   "H2afx",
+   "Hist1h1b",
+   "Tuba1b",
+   "Ube2s",
+   "Lmnb1"
+  ],
+  "P4": [
    "Apoe",
    "Rpl36",
-   "Rps11",
-   "Fcmr",
-   "Nfatc1",
-   "Ccdc28b",
    "Rps10",
    "Fcrl5",
    "Rps13",
-   "Rps18",
+   "Rpl21",
+   "Fcmr",
+   "Rps11",
+   "Rps5",
+   "Rps7",
    "Plac8",
-   "Emb"
+   "Rps9"
   ]
  },
  "programme_signatures": {
   "P1": {
-   "plasma cell": 0.164,
-   "germinal centre": -0.096,
-   "dark zone / cycling": 0.053,
-   "light zone": 0.153,
-   "memory": 0.246,
-   "naive": 0.334,
-   "interferon": 0.251
+   "plasma cell": 2.211,
+   "germinal centre": -0.185,
+   "dark zone / cycling": -0.04,
+   "light zone": 0.003,
+   "memory": -0.055,
+   "naive": -0.179,
+   "interferon": -0.104
   },
   "P2": {
-   "plasma cell": 1.877,
-   "germinal centre": -0.119,
-   "dark zone / cycling": 0.166,
-   "light zone": 0.013,
-   "memory": -0.059,
-   "naive": -0.163,
-   "interferon": -0.125
+   "plasma cell": 0.219,
+   "germinal centre": -0.088,
+   "dark zone / cycling": 0.055,
+   "light zone": 0.13,
+   "memory": 0.244,
+   "naive": 0.348,
+   "interferon": 0.246
   },
   "P3": {
-   "plasma cell": 0.13,
-   "germinal centre": -0.179,
-   "dark zone / cycling": 0.012,
-   "light zone": 0.082,
-   "memory": 0.207,
-   "naive": 0.043,
-   "interferon": 0.076
+   "plasma cell": 1.101,
+   "germinal centre": 0.04,
+   "dark zone / cycling": 0.747,
+   "light zone": 0.023,
+   "memory": -0.079,
+   "naive": -0.148,
+   "interferon": -0.143
+  },
+  "P4": {
+   "plasma cell": 0.113,
+   "germinal centre": -0.197,
+   "dark zone / cycling": 0.026,
+   "light zone": 0.055,
+   "memory": 0.178,
+   "naive": 0.005,
+   "interferon": 0.078
   }
  },
  "programmes": {
-  "n": 3,
-  "resolution": 0.2,
-  "n_clones": 801,
-  "n_cells": 1846,
-  "n_clones_with_assigned": 801,
-  "stability": {
-   "P1": 0.879,
-   "P2": 0.803,
-   "P3": 0.518
+  "n": 4,
+  "resolution": 0.6,
+  "map": {
+   "map_n_neighbors": 15,
+   "map_min_dist": 0.1,
+   "map_spread": 1.0
   },
-  "n_stable": 2
+  "n_clones": 523,
+  "n_cells": 1168,
+  "n_clones_with_assigned": 523,
+  "stability": {
+   "P1": 0.895,
+   "P2": 0.909,
+   "P3": 0.72,
+   "P4": 0.875
+  },
+  "n_stable": 3
  },
  "label_effects": {
   "cell_state:GC": {
    "label": "cell_state:GC",
    "kind": "numeric",
-   "r2": 0.043872976635062975,
-   "null_mean": 0.0047245760347575366,
-   "excess_r2": 0.03914840060030544,
+   "r2": 0.04635686809363378,
+   "null_mean": 0.0042048038009973344,
+   "excess_r2": 0.042152064292636446,
    "p_value": 0.0004997501249375312,
-   "n_clones": 801,
+   "n_clones": 523,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     -0.06648604688591796,
-     0.3416399870962055,
-     0.3730839127157807
+     0.0012582860871750497,
+     -0.3232510739866094,
+     -0.3626098840877495
     ]
    },
    "note": "fraction of the clone's cells in a germinal centre"
@@ -150,19 +190,19 @@
   "cell_state:PB": {
    "label": "cell_state:PB",
    "kind": "numeric",
-   "r2": 0.31930901972628833,
-   "null_mean": 0.11728780613732158,
-   "excess_r2": 0.20202121358896674,
+   "r2": 0.26492388170732734,
+   "null_mean": 0.10236835639237217,
+   "excess_r2": 0.16255552531495515,
    "p_value": 0.0004997501249375312,
-   "n_clones": 801,
+   "n_clones": 523,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     -0.7855297064437221,
-     -0.33213310553356346,
-     0.30050871710837956
+     -0.7436602175273404,
+     0.3912866366175455,
+     -0.3635689006046485
     ]
    },
    "note": "fraction of the clone's cells that are plasmablasts"
@@ -170,19 +210,19 @@
   "cell_state:Memory": {
    "label": "cell_state:Memory",
    "kind": "numeric",
-   "r2": 0.03808351129098862,
-   "null_mean": 0.005463522856412331,
-   "excess_r2": 0.032619988434576294,
+   "r2": 0.04713758050411359,
+   "null_mean": 0.009781612193995336,
+   "excess_r2": 0.037355968310118254,
    "p_value": 0.0004997501249375312,
-   "n_clones": 801,
+   "n_clones": 523,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     0.3011872986161012,
-     -0.059902626859879106,
-     -0.16689497865766445
+     0.3385589627639629,
+     0.03604442347787067,
+     0.18995760726706357
     ]
    },
    "note": "fraction of the clone's cells that are memory cells"
@@ -190,19 +230,19 @@
   "mutation_frequency": {
    "label": "mutation_frequency",
    "kind": "numeric",
-   "r2": 0.011188098040414481,
-   "null_mean": 0.0030232452580497594,
-   "excess_r2": 0.008164852782364722,
-   "p_value": 0.0029985007496251873,
-   "n_clones": 801,
+   "r2": 0.010202958700076366,
+   "null_mean": 0.003155442524565533,
+   "excess_r2": 0.0070475161755108335,
+   "p_value": 0.005997001499250375,
+   "n_clones": 523,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     -0.09134364259070608,
-     0.20601202437768745,
-     0.12177832998356257
+     -0.07160506192283617,
+     -0.19085410289809474,
+     -0.07685384270672724
     ]
    },
    "note": "V-region mutation frequency"
@@ -210,34 +250,34 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.2073713881523151,
-   "null_mean": 0.10248787691878385,
-   "excess_r2": 0.10488351123353125,
+   "r2": 0.15169998880907826,
+   "null_mean": 0.07998056396684973,
+   "excess_r2": 0.07171942484222853,
    "p_value": 0.0004997501249375312,
-   "n_clones": 652,
+   "n_clones": 462,
    "n_levels": 4,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "IGHA": [
-     -0.028734687164127595,
-     0.0664581739026746,
-     0.05894294802897969
+     -0.029911701726054913,
+     -0.06847554857948109,
+     0.06105942418459145
     ],
     "IGHD": [
-     0.27515672024941595,
-     -0.019577867947580152,
-     0.12829559448197259
+     0.2417182652019197,
+     -0.03899710712099596,
+     0.10271630669088505
     ],
     "IGHG": [
-     -0.6206976257365616,
-     -0.27994611530475383,
-     -0.42192047668466687
+     -0.5121027344486944,
+     0.3201175018222034,
+     -0.4268342676176598
     ],
     "IGHM": [
-     0.5046547588337654,
-     0.28415742267915917,
-     0.36102035104304275
+     0.4246048824571061,
+     -0.3006155779379512,
+     0.3836650177573851
     ]
    },
    "note": "heavy-chain isotype"
@@ -245,93 +285,93 @@
  },
  "programme_associations": {
   "cell_state:GC": {
-   "n_clones": 801,
-   "n_significant_fdr05": 2
+   "n_clones": 523,
+   "n_significant_fdr05": 3
   },
   "cell_state:PB": {
-   "n_clones": 801,
+   "n_clones": 523,
    "n_significant_fdr05": 3
   },
   "cell_state:Memory": {
-   "n_clones": 801,
-   "n_significant_fdr05": 2
+   "n_clones": 523,
+   "n_significant_fdr05": 3
   },
   "mutation_frequency": {
-   "n_clones": 801,
+   "n_clones": 523,
    "n_significant_fdr05": 2
   },
   "isotype": {
-   "n_clones": 652,
-   "n_significant_fdr05": 8
+   "n_clones": 462,
+   "n_significant_fdr05": 7
   }
  },
  "memory": {},
  "heritability": {
-  "n_genes": 7910,
-  "median_icc": 0.041947926800392984,
+  "n_genes": 7742,
+  "median_icc": 0.04604734073335044,
   "top_genes": [
-   "Hist1h2ak",
-   "Hist1h2bn",
-   "Hist1h2ab",
-   "Apoe",
-   "Hist1h1b",
    "Gm42418",
+   "Hist1h2ab",
+   "Gm30211",
+   "Hist1h2bn",
+   "Hist1h2ak",
    "Ly6c2",
+   "Cd74",
    "H2-Aa",
-   "Jchain",
-   "Pclaf",
-   "Hist1h2bk",
    "Slpi",
+   "Prg2",
+   "Hist1h1b",
+   "Pclaf",
+   "Hist1h2an",
+   "Iigp1",
    "Stmn1",
    "Ube2c",
-   "Gm30211",
-   "Hist1h2an",
-   "Rpl13",
-   "Hist1h3c",
-   "Xbp1",
-   "Cd74",
-   "Rpl18a",
-   "Top2a",
-   "Prg2",
+   "Ifitm3",
+   "Apoe",
+   "Hmgb2",
+   "Rps24",
    "Hist1h2ae",
-   "Ly6d"
+   "Birc5",
+   "Malat1",
+   "Ly6d",
+   "Top2a"
   ],
-  "receptor_gene_icc": 0.0,
+  "receptor_gene_icc": 0.0008653400935840202,
   "gene_sets": {
    "plasma cell": {
-    "median_icc": 0.3343,
-    "matched_background_median_icc": 0.0967,
+    "median_icc": 0.3957,
+    "matched_background_median_icc": 0.0932,
     "pvalue_vs_matched": 0.0
    },
    "germinal centre": {
-    "median_icc": 0.1316,
-    "matched_background_median_icc": 0.0131,
+    "median_icc": 0.1992,
+    "matched_background_median_icc": 0.0078,
     "pvalue_vs_matched": 0.0
    },
    "dark zone / cycling": {
-    "median_icc": 0.3077,
-    "matched_background_median_icc": 0.0334,
+    "median_icc": 0.4353,
+    "matched_background_median_icc": 0.0296,
     "pvalue_vs_matched": 0.0
    },
    "light zone": {
-    "median_icc": 0.1368,
-    "matched_background_median_icc": 0.0435,
-    "pvalue_vs_matched": 0.0073
+    "median_icc": 0.1732,
+    "matched_background_median_icc": 0.0538,
+    "pvalue_vs_matched": 0.0004
    },
    "memory": {
-    "median_icc": 0.245,
-    "matched_background_median_icc": 0.0538,
-    "pvalue_vs_matched": 0.0007
+    "median_icc": 0.2452,
+    "matched_background_median_icc": 0.0738,
+    "pvalue_vs_matched": 0.0022
    },
    "naive": {
-    "median_icc": 0.1949,
-    "matched_background_median_icc": 0.0417,
-    "pvalue_vs_matched": 0.0024
+    "median_icc": 0.2311,
+    "matched_background_median_icc": 0.0699,
+    "pvalue_vs_matched": 0.0117
    },
    "interferon": {
-    "median_icc": 0.1774,
-    "matched_background_median_icc": 0.0234,
-    "pvalue_vs_matched": 0.0014
+    "median_icc": 0.3486,
+    "matched_background_median_icc": 0.0198,
+    "pvalue_vs_matched": 0.0
    }
   }
  },
@@ -439,5 +479,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 3.8
+ "runtime_min": 2.4
 }

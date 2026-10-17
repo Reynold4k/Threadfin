@@ -1,0 +1,51 @@
+{
+  "dataset": "malaria_late",
+  "accession": "GSE286215",
+  "days": "10–42",
+  "source_files": [
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/cells.csv.gz",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/clone_table.csv"
+  ],
+  "mapping": "cells.clone_id -> clone_table.clone_programme; Figure 2 clones only",
+  "coordinates": "existing umap_1 / umap_2; no recomputation",
+  "programme_counts": {
+    "P1": {
+      "clones": 389,
+      "cells": 846
+    },
+    "P2": {
+      "clones": 250,
+      "cells": 611
+    },
+    "P3": {
+      "clones": 193,
+      "cells": 427
+    },
+    "P4": {
+      "clones": 183,
+      "cells": 466
+    }
+  },
+  "total_captured_cells": 72359,
+  "mapped_cells": 2350,
+  "background_cells": 70009,
+  "colours": {
+    "P1": "#2a78d6",
+    "P2": "#e34948",
+    "P3": "#4a3aa7",
+    "P4": "#eb6834"
+  },
+  "outputs": {
+    "overview": {
+      "stem": "Plasmodium_P1_P4_cell_UMAP_highres",
+      "width_px": 14400,
+      "height_px": 10800
+    },
+    "by_programme": {
+      "stem": "Plasmodium_P1_P4_cell_UMAP_by_programme_highres",
+      "width_px": 19200,
+      "height_px": 16800
+    }
+  },
+  "dpi": 1200
+}

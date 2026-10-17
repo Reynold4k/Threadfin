@@ -21,7 +21,7 @@ import threadfin as tf
 HERE = Path(__file__).resolve().parent
 RES = HERE / "results"
 ORDER = ["ln_vaccine", "mouse_np", "mouse_rbd", "gc_np_pc", "flu_lung", "malaria", "malaria_late",
-         "bone_marrow_pc", "flu", "ebv", "tonsil", "stephenson"]
+         "bone_marrow_pc", "flu", "ebv", "tonsil"]
 LABELS = {
     "ln_vaccine": "Human lymph node + blood, SARS-CoV-2 mRNA vaccine (Kim 2022)",
     "mouse_np": "Mouse germinal centres, NP-OVA, division reporter (Merkenschlager 2025)",
@@ -29,7 +29,6 @@ LABELS = {
     "flu": "Human blood, influenza vaccine, day 0 and day 7 (Wang 2023)",
     "ebv": "Human tonsil organoids, EBV infection (Mitul 2026)",
     "tonsil": "Human tonsil (King 2021)",
-    "stephenson": "Human blood, COVID-19 (Stephenson 2021, 5,000-cell subset)",
     "gc_np_pc": "Mouse germinal centres and plasma cells, NP-OVA, sorted zones (ElTanbouly 2023)",
     "flu_lung": "Mouse influenza infection, lung and draining node, alpha-v integrin knockout",
     "malaria": "Mouse Plasmodium infection, spleen, days 0-14 (Skinner, Asad 2026)",

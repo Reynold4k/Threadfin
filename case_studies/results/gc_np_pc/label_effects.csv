@@ -1,0 +1,6 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+fate:plasma cell,numeric,0.776437100826033,0.026713984594235036,0.749723116231798,0.0004997501249375312,96,,donor,2000,fraction of the clone's cells sorted as plasma cells
+fate:Myc+ light zone,numeric,0.027331006407121054,0.0027123549061935552,0.0246186515009275,0.0004997501249375312,96,,donor,2000,fraction of the clone's cells sorted as Myc-GFP+ light zone (recently positively selected; c-Myc-GFP mice)
+fate:dark zone,numeric,0.030945171472842356,0.008147027592120921,0.022798143880721433,0.033483258370814596,96,,donor,2000,fraction of the clone's cells sorted as dark zone
+w33l:W33L,numeric,0.06378685516664967,0.01313399120588947,0.0506528639607602,0.019490254872563718,74,,donor,2000,fraction of the clone's IGHV1-72 cells carrying the high-affinity W33L
+mutation_frequency,numeric,0.0015067985755268152,0.018259605832502197,-0.016752807256975383,0.9325337331334332,96,,donor,2000,V-region mutation frequency

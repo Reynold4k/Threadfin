@@ -41,3 +41,45 @@ def test_missing_spike_binding_is_not_a_negative_measurement():
     assert spike_binding_status(' false ') == 'S-'
     for value in [None, np.nan, pd.NA, '', 'unknown']:
         assert pd.isna(spike_binding_status(value))
+
+
+def test_loaders_do_not_reference_deleted_constants():
+    """A loader must not reference a module-level constant that no longer exists.
+
+    Deleting a retired loader once took the `_GSE287123` path constant with it. Nothing caught it:
+    the module still imports, because a name used only inside a function body is resolved at call
+    time, so it died eleven datasets into a SLURM re-run. This checks the exact failure class --
+    module-level constants (UPPER_CASE, with or without a leading underscore) used inside a function
+    but never assigned at module level.
+    """
+    import ast
+    import re
+
+    src = (HERE / "datasets.py").read_text()
+    tree = ast.parse(src)
+    module_level = {t.id for n in tree.body if isinstance(n, ast.Assign)
+                    for t in n.targets if isinstance(t, ast.Name)}
+    module_level |= {(al.asname or al.name).split(".")[0]
+                     for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))
+                     for al in n.names}
+    const = re.compile(r"^_?[A-Z][A-Z0-9_]*$")
+    for fn in (n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)):
+        assigned = {t.id for n in ast.walk(fn) if isinstance(n, ast.Assign)
+                    for t in n.targets if isinstance(t, ast.Name)}
+        assigned |= {(al.asname or al.name).split(".")[0]          # imports inside the function body
+                     for n in ast.walk(fn) if isinstance(n, (ast.Import, ast.ImportFrom))
+                     for al in n.names}
+        for node in ast.walk(fn):
+            if (isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
+                    and const.match(node.id) and node.id not in module_level
+                    and node.id not in assigned):
+                pytest.fail(f"datasets.{fn.name} uses undefined constant {node.id!r} "
+                            f"(datasets.py line {node.lineno})")
+
+
+def test_every_registered_loader_is_callable():
+    import datasets
+
+    assert set(datasets.LOADERS), "the loader registry is empty"
+    for name, fn in datasets.LOADERS.items():
+        assert callable(fn), f"{name} is not callable"

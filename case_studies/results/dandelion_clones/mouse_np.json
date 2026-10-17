@@ -1,0 +1,11 @@
+{
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 4855,
+  "n_clones": 2680,
+  "n_clones_ge2": 615,
+  "largest_clone": 48
+}

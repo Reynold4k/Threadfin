@@ -1,0 +1,513 @@
+{
+ "dataset": "gut_gc_reporter",
+ "title": "Siniscalco et al. 2025 Immunity - oral NP-OVA / OVA + cholera toxin, gut-draining lymphoid tissue of S1PR2-CreERT2 GC fate-reporter mice (3 mice, MLN/PP/LP, GC/nonGC sorts)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 11723,
+  "n_clones": 6957,
+  "n_clones_ge2": 958,
+  "largest_clone": 160,
+  "source": "dandelion",
+  "cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 16619,
+  "n_cells_bcr": 11723,
+  "n_clones": 6957,
+  "clones_ge2": 958,
+  "clones_ge3": 542,
+  "clones_ge5": 294,
+  "clones_ge10": 119,
+  "cells_in_clones_ge2": 5724,
+  "largest_clone": 160,
+  "n_donors": 3,
+  "n_samples": 17
+ },
+ "coherence": {
+  "icc": 0.40096671405466844,
+  "null_mean": 0.2784625829538702,
+  "null_q95": 0.2861809155457068,
+  "excess": 0.12250413110079822,
+  "p_value": 0.001996007984031936,
+  "n_clones": 958,
+  "n_cells": 5724,
+  "min_cells_reliability_0.5": 1
+ },
+ "clone_map": {
+  "n_neighbors": 30,
+  "min_dist": 0.3,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "n_clones": 958,
+  "n_profiled": 958,
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 3,
+  "n_merged": 0,
+  "root_pvalue": 1.4796448431370002e-30
+ },
+ "programme_markers": {
+  "P1": [
+   "Actg1",
+   "H2-Aa",
+   "Ms4a1",
+   "H2-Eb1",
+   "Actb",
+   "Pfn1",
+   "Cfl1",
+   "Sh3bgrl3",
+   "Lcp1",
+   "Clic1",
+   "H2-Ab1",
+   "Ppia"
+  ],
+  "P2": [
+   "Derl3",
+   "Tnfrsf17",
+   "Pdia4",
+   "Manf",
+   "Ckap4",
+   "Glipr1",
+   "Ssr4",
+   "Nucb1",
+   "Fkbp11",
+   "Xbp1",
+   "Edem2",
+   "Trp53inp1"
+  ],
+  "P3": [
+   "Jchain",
+   "Xbp1",
+   "Sec11c",
+   "Hsp90b1",
+   "Tent5c",
+   "Ssr4",
+   "Edem1",
+   "Txndc5",
+   "H13",
+   "Gm30211",
+   "Fndc3a",
+   "Fkbp2"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.071,
+   "germinal centre": 0.391,
+   "dark zone / cycling": 0.582,
+   "light zone": 0.139,
+   "memory": -0.289,
+   "naive": 0.092,
+   "interferon": -0.17
+  },
+  "P2": {
+   "plasma cell": 1.543,
+   "germinal centre": -0.114,
+   "dark zone / cycling": -0.015,
+   "light zone": 0.222,
+   "memory": -0.064,
+   "naive": 0.018,
+   "interferon": -0.127
+  },
+  "P3": {
+   "plasma cell": 2.055,
+   "germinal centre": -0.273,
+   "dark zone / cycling": -0.195,
+   "light zone": 0.253,
+   "memory": 0.039,
+   "naive": -0.048,
+   "interferon": -0.098
+  }
+ },
+ "programmes": {
+  "n": 3,
+  "resolution": 0.2,
+  "n_clones": 958,
+  "n_cells": 5724,
+  "n_clones_with_assigned": 958,
+  "stability": {
+   "P1": 0.858,
+   "P2": 0.55,
+   "P3": 0.726
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "gc_sort:GC": {
+   "label": "gc_sort:GC",
+   "kind": "numeric",
+   "r2": 0.066672554673118,
+   "null_mean": 0.0014208970306693396,
+   "excess_r2": 0.06525165764244865,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.2600210982319902,
+     -0.08310745490598881,
+     0.42267354312746697
+    ]
+   },
+   "note": "fraction of the clone's cells sorted GC-derived (tdTomato+ fate, measured FACS gate)"
+  },
+  "celltype:plasma": {
+   "label": "celltype:plasma",
+   "kind": "numeric",
+   "r2": 0.6055748118825894,
+   "null_mean": 0.013213713496193581,
+   "excess_r2": 0.5923610983863958,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.8759604489818115,
+     -0.08492406787899297,
+     0.102171965300418
+    ]
+   },
+   "note": "fraction of the clone's cells annotated plasma (RNA-derived)"
+  },
+  "celltype:GC_Bcell": {
+   "label": "celltype:GC_Bcell",
+   "kind": "numeric",
+   "r2": 0.5591835133413586,
+   "null_mean": 0.011816102516613053,
+   "excess_r2": 0.5473674108247456,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.8489443390462666,
+     0.25247801330118097,
+     0.0499936377492672
+    ]
+   },
+   "note": "fraction of the clone's cells annotated GC B (RNA-derived)"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.21769681622085493,
+   "null_mean": 0.004709699512542678,
+   "excess_r2": 0.21298711670831225,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 890,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     0.5258073483196036,
+     0.044264603358840714,
+     -0.017097054951860237
+    ],
+    "IGHD": [
+     -0.000414993355025392,
+     -0.09948522520017809,
+     0.09805161179190855
+    ],
+    "IGHG": [
+     -0.5137218209507923,
+     0.030626028453324485,
+     -0.05725614261027543
+    ],
+    "IGHM": [
+     -0.06713634579940378,
+     -0.18068451196516058,
+     0.17795829725302237
+    ]
+   },
+   "note": "heavy-chain isotype (sequential IgG1 -> IgA switching is the paper's central claim)"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.05079893254162771,
+   "null_mean": 0.0016797102653667323,
+   "excess_r2": 0.04911922227626098,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.26157010855044377,
+     0.14334004124043595,
+     0.05273420695336739
+    ]
+   },
+   "note": "V-region mutation frequency"
+  },
+  "tissue:LP": {
+   "label": "tissue:LP",
+   "kind": "numeric",
+   "r2": 0.512352726754832,
+   "null_mean": 0.013697381511898197,
+   "excess_r2": 0.4986553452429338,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "n_levels": null,
+   "strata_key": "donor",
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.809248533445782,
+     -0.02747733423555707,
+     -0.020250467842350708
+    ]
+   },
+   "note": "fraction of the clone's cells sampled in the lamina propria"
+  }
+ },
+ "programme_associations": {
+  "gc_sort:GC": {
+   "n_clones": 958,
+   "n_significant_fdr05": 2
+  },
+  "celltype:plasma": {
+   "n_clones": 958,
+   "n_significant_fdr05": 3
+  },
+  "celltype:GC_Bcell": {
+   "n_clones": 958,
+   "n_significant_fdr05": 3
+  },
+  "isotype": {
+   "n_clones": 890,
+   "n_significant_fdr05": 9
+  },
+  "mutation_frequency": {
+   "n_clones": 958,
+   "n_significant_fdr05": 2
+  },
+  "tissue:LP": {
+   "n_clones": 958,
+   "n_significant_fdr05": 3
+  }
+ },
+ "memory": {
+  "tissue": {
+   "n_clones": 311,
+   "n_pairs": 342,
+   "memory_index": 0.09696934003558333,
+   "memory_index_ci": [
+    0.04734249934560583,
+    0.14277324076465828
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.2719298245614035,
+   "persistence_null": 0.22137426900584792,
+   "levels": [
+    "LP",
+    "MLN",
+    "PP"
+   ]
+  },
+  "gc_sort": {
+   "n_clones": 126,
+   "n_pairs": 126,
+   "memory_index": 0.22224770720932507,
+   "memory_index_ci": [
+    0.07434298230171105,
+    0.3715465149648972
+   ],
+   "p_value": 0.013972055888223553,
+   "persistence": 0.4603174603174603,
+   "persistence_null": 0.4012698412698412,
+   "levels": [
+    "GC",
+    "nonGC"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 7371,
+  "median_icc": 0.020878824424227574,
+  "top_genes": [
+   "Slpi",
+   "Gm30211",
+   "Prg2",
+   "Hsp90b1",
+   "Pdia4",
+   "Ly6a",
+   "Fkbp11",
+   "Hmgb2",
+   "Rgs13",
+   "Actg1",
+   "Ly6d",
+   "Plac8",
+   "Hmgn2",
+   "Sub1",
+   "Mef2b",
+   "Xbp1",
+   "Nrgn",
+   "Itm2b",
+   "Tmsb10",
+   "Cfl1",
+   "Edem1",
+   "Actb",
+   "Gcsam",
+   "Pclaf",
+   "H2afz"
+  ],
+  "receptor_gene_icc": 0.039370624124996624,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.0985,
+    "matched_background_median_icc": 0.0334,
+    "pvalue_vs_matched": 0.0003
+   },
+   "germinal centre": {
+    "median_icc": 0.084,
+    "matched_background_median_icc": 0.0181,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0756,
+    "matched_background_median_icc": 0.0206,
+    "pvalue_vs_matched": 0.0008
+   },
+   "light zone": {
+    "median_icc": 0.0395,
+    "matched_background_median_icc": 0.0187,
+    "pvalue_vs_matched": 0.1345
+   },
+   "memory": {
+    "median_icc": 0.0301,
+    "matched_background_median_icc": 0.0247,
+    "pvalue_vs_matched": 0.3752
+   },
+   "naive": {
+    "median_icc": 0.0607,
+    "matched_background_median_icc": 0.0182,
+    "pvalue_vs_matched": 0.0357
+   },
+   "interferon": {
+    "median_icc": 0.0287,
+    "matched_background_median_icc": 0.0099,
+    "pvalue_vs_matched": 0.029
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200"
+   ],
+   "n_present": 6,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 5.0
+}

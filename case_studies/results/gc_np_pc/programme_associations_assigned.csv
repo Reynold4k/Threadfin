@@ -1,0 +1,13 @@
+label,programme,n_clones_programme,median_in_programme,median_elsewhere,rank_effect,pvalue,fdr,note,how,strata,programmes,level,n_clones_level,observed,expected,frac_in_programme,frac_elsewhere,odds_ratio,ci_low,ci_high
+fate:plasma cell,P1,56,0.0,0.5,-0.9669642857142858,0.0004997501249375312,0.0004997501249375312,fraction of the clone's cells sorted as plasma cells,fraction:plasma cell,donor,core + assigned,,,,,,,,,
+fate:plasma cell,P2,40,0.5,0.0,0.9669642857142858,0.0004997501249375312,0.0004997501249375312,fraction of the clone's cells sorted as plasma cells,fraction:plasma cell,donor,core + assigned,,,,,,,,,
+fate:Myc+ light zone,P1,56,0.0,0.0,0.2549107142857143,0.0004997501249375312,0.0004997501249375312,fraction of the clone's cells sorted as Myc-GFP+ light zone (recently positively selected; c-Myc-GFP mice),fraction:Myc+ light zone,donor,core + assigned,,,,,,,,,
+fate:Myc+ light zone,P2,40,0.0,0.0,-0.2549107142857143,0.0004997501249375312,0.0004997501249375312,fraction of the clone's cells sorted as Myc-GFP+ light zone (recently positively selected; c-Myc-GFP mice),fraction:Myc+ light zone,donor,core + assigned,,,,,,,,,
+fate:dark zone,P1,56,0.0,0.0,0.0705357142857143,0.384807596201899,0.384807596201899,fraction of the clone's cells sorted as dark zone,fraction:dark zone,donor,core + assigned,,,,,,,,,
+fate:dark zone,P2,40,0.0,0.0,-0.0705357142857143,0.384807596201899,0.384807596201899,fraction of the clone's cells sorted as dark zone,fraction:dark zone,donor,core + assigned,,,,,,,,,
+w33l:W33L,P1,41,0.0,0.0,-0.2771618625277161,0.004497751124437781,0.004497751124437781,fraction of the clone's IGHV1-72 cells carrying the high-affinity W33L,fraction:W33L,donor,core + assigned,,,,,,,,,
+w33l:W33L,P2,33,0.0,0.0,0.2771618625277161,0.004497751124437781,0.004497751124437781,fraction of the clone's IGHV1-72 cells carrying the high-affinity W33L,fraction:W33L,donor,core + assigned,,,,,,,,,
+mutation_frequency,P1,56,0.008503401360544217,0.008260864483250346,-0.07946428571428577,0.6256871564217891,0.6256871564217891,V-region mutation frequency,mean,donor,core + assigned,,,,,,,,,
+mutation_frequency,P2,40,0.008260864483250346,0.008503401360544217,0.07946428571428577,0.6256871564217891,0.6256871564217891,V-region mutation frequency,mean,donor,core + assigned,,,,,,,,,
+isotype,P1,55,,,,1.0,1.0,heavy-chain isotype,majority,donor,core + assigned,IGHG,95.0,55.0,55.0,1.0,1.0,,,
+isotype,P2,40,,,,1.0,1.0,heavy-chain isotype,majority,donor,core + assigned,IGHG,95.0,40.0,40.0,1.0,1.0,,,

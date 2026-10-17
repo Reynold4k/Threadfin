@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-16",
+  "tight_crop": true,
+  "random_draw_order_seed": 20261016,
+  "texts": [
+    {
+      "text": "958 profiles",
+      "font_pt": 6.5
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Oral OVA \u00b7 GSE284622",
+      "font_pt": 7.4
+    },
+    {
+      "text": "1,015 profiles",
+      "font_pt": 6.5
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Plasmodium \u00b7 GSE286215",
+      "font_pt": 7.4
+    },
+    {
+      "text": "1,243 profiles",
+      "font_pt": 6.5
+    },
+    {
+      "text": "Clone UMAP 1",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Clone UMAP 2",
+      "font_pt": 6.9
+    },
+    {
+      "text": "Human LN + blood \u00b7 GSE195673",
+      "font_pt": 7.4
+    },
+    {
+      "text": "germinal centre",
+      "font_pt": 7.0
+    },
+    {
+      "text": "plasmablast",
+      "font_pt": 7.0
+    },
+    {
+      "text": "plasma cell",
+      "font_pt": 7.0
+    },
+    {
+      "text": "memory",
+      "font_pt": 7.0
+    },
+    {
+      "text": "other",
+      "font_pt": 7.0
+    },
+    {
+      "text": "A",
+      "font_pt": 9.5
+    },
+    {
+      "text": "B",
+      "font_pt": 9.5
+    },
+    {
+      "text": "C",
+      "font_pt": 9.5
+    },
+    {
+      "text": "Colour = dominant named compartment among captured clone members; ties or no named compartment are grey.",
+      "font_pt": 6.2
+    },
+    {
+      "text": "Point area increases with captured clone size (capped). Compartments are RNA-derived annotations; proximity describes RNA-profile similarity.",
+      "font_pt": 6.2
+    }
+  ]
+}

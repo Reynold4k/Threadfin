@@ -147,7 +147,8 @@ class ThreadfinResult:
         vc = VarianceComponents(np.asarray(prof_vc["sigma2"]), np.asarray(prof_vc["tau2"]),
                                 prof_vc["n0"], prof_vc["n_clones"], prof_vc["n_cells"],
                                 np.zeros(len(prof_vc["tau2"])))
-        lines.append(f"   A clone's profile is reliable (>= 0.5) once it has >= {vc.min_cells_for(0.5)} cells.")
+        lines.append(f"   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at "
+                     f"{vc.min_cells_for(0.5)} cells. No clone is filtered out on reliability.")
         prog = self.programmes
         lines += ["", "2. Which clones behave alike? (clonal programmes)"]
         if prog.empty:
@@ -236,6 +237,8 @@ def run(
     clone_key: str = "clone_id",
     basis: str | None = None,
     representation: str = "kernel",
+    map_n_neighbors: int | str = "auto",
+    map_min_dist: float | str = "auto",
     n_perm: int = 200,
     n_boot: int = 30,
     random_state: int = 0,
@@ -250,10 +253,11 @@ def run(
         ``layers['counts']``) unless you pass a ready-made ``basis``.
     bcr
         BCR data: a path to a Cell Ranger ``filtered_contig_annotations.csv``
-        or an AIRR ``.tsv``, or a per-cell DataFrame indexed like
-        ``adata.obs_names``. Clones are then defined from the sequences
-        (within each donor). Leave ``None`` if ``adata.obs[clone_key]``
-        already holds clone ids.
+        or an AIRR ``.tsv``, or a contig-level DataFrame (one row per receptor
+        chain). Clones are defined with Dandelion's paired heavy + light
+        definition (:func:`threadfin.define_clones_dandelion`), within each
+        donor; this needs the sc-dandelion package. Leave ``None`` if
+        ``adata.obs[clone_key]`` already holds clone ids.
     donor_key
         ``obs`` column naming the individual each cell came from. Strongly
         recommended: clones are defined within donors and tests are
@@ -284,6 +288,12 @@ def run(
         so two clones with the same average but different spreads differ)
         or ``"mean"`` (the clone centroid only). The coherence test always
         uses clone means.
+    map_n_neighbors, map_min_dist
+        UMAP settings of the clone map. ``"auto"`` (default) chooses them
+        for this dataset by optimisation (:func:`threadfin.tl.tune_clone_map`),
+        so that clones that vary continuously are drawn as one connected
+        picture; pass numbers to set them by hand. The map is a display only:
+        no statistic depends on it.
     n_perm, n_boot
         Permutations for the coherence test; bootstrap replicates for
         programme stability.
@@ -302,12 +312,11 @@ def run(
     >>> print(result.summary())
     >>> result.plot("threadfin_overview.pdf")
     """
-    from .clones import define_clones
     from .dynamics import clonal_memory
     from .io import attach_bcr
     from .pp import prepare_embedding
     from .profiles import clone_profiles
-    from .programmes import find_programmes, programme_composition
+    from .programmes import embed_clones, find_programmes, programme_composition
     from .stats import association_test, clonal_coherence, profile_association
 
     # Check user-supplied column names before mutating ``adata`` or entering a
@@ -322,34 +331,47 @@ def run(
     if representation not in {"mean", "kernel"}:
         raise ValueError("representation must be 'mean' or 'kernel'.")
 
-    # Step 1 - clones from BCR sequences (within each donor)
+    # Step 1 - clones from BCR sequences (within each donor).
+    # Threadfin's clone definition is Dandelion's paired heavy + light definition, so the
+    # contig-level table (one row per receptor chain) is required — a per-cell summary cannot
+    # recover the light-chain pairing.
     if bcr is not None:
         if not isinstance(bcr, (pd.DataFrame, str, Path)):
-            raise TypeError("bcr must be a per-cell pandas DataFrame or a path to a 10x CSV/AIRR TSV file.")
-        table = bcr.copy() if isinstance(bcr, pd.DataFrame) else read_bcr(bcr)
-        table.index = table.index.astype(str)
-        if table.index.has_duplicates:
-            raise ValueError(
-                "BCR input has duplicate cell barcodes. Keep one row per cell (for example, "
-                "use threadfin.read_bcr() for a 10x/AIRR contig file) before calling run()."
-            )
-        table = table[table.index.isin(adata.obs_names.astype(str))]
-        if table.empty:
+            raise TypeError("bcr must be a contig-level pandas DataFrame or a path to a 10x "
+                            "filtered_contig_annotations.csv / AIRR .tsv file.")
+        from .dandelion import define_clones_dandelion, read_contigs
+
+        contigs = read_contigs(bcr)
+        contigs["cell_id"] = contigs["cell_id"].astype(str)
+        contigs = contigs[contigs["cell_id"].isin(adata.obs_names.astype(str))]
+        if contigs["cell_id"].nunique() == 0:
             raise ValueError(
                 "No BCR barcodes match adata.obs_names. Check that both use the same barcode "
-                "format; for multi-sample data, pass barcode_prefix/barcode_suffix to read_bcr()."
+                "format; for multi-sample data, harmonise the barcodes first (see "
+                "barcode_prefix/barcode_suffix in threadfin.read_bcr())."
             )
         if donor_key is not None:
-            table["donor"] = adata.obs[donor_key].astype(str).reindex(table.index).values
-        table = define_clones(table, donor_key="donor" if donor_key else None, out_col=clone_key,
-                              verbose=verbose)
-        if table[clone_key].notna().sum() == 0:
+            donor_of_cell = pd.Series(adata.obs[donor_key].astype(str).to_numpy(),
+                                      index=adata.obs_names.astype(str))
+            contigs["donor"] = contigs["cell_id"].map(donor_of_cell)
+        ids = define_clones_dandelion(contigs, cell_key="cell_id",
+                                      donor_key="donor" if donor_key else None,
+                                      out_col=clone_key, verbose=verbose)
+        if int(ids.notna().sum()) == 0:
             raise ValueError(
-                "Matched BCR barcodes contain no usable heavy-chain clone definition. Each retained "
-                "cell needs heavy-chain V and J calls plus a non-empty junction/CDR3 sequence."
+                "Matched BCR contigs produced no clone calls. Each retained cell needs "
+                "heavy-chain V and J calls plus a non-empty junction/CDR3 sequence."
             )
-        attach_bcr(adata, table.drop(columns=["donor"], errors="ignore"), clone_col=clone_key,
-                   summarize=False, verbose=verbose)
+        if isinstance(bcr, pd.DataFrame):
+            table = ids.rename(clone_key).to_frame()
+            table.index.name = "barcode"
+        else:
+            # per-cell V/J/C/SHM summary attached beside the Dandelion clone ids
+            table = read_bcr(bcr)
+            table.index = table.index.astype(str)
+            table = table[table.index.isin(ids.index)]
+            table[clone_key] = ids.reindex(table.index)
+        attach_bcr(adata, table, clone_col=clone_key, summarize=False, verbose=verbose)
     elif clone_key not in adata.obs.columns:
         raise ValueError(f"Pass `bcr`, or provide clone ids in adata.obs['{clone_key}'].")
 
@@ -370,6 +392,11 @@ def run(
 
     # Step 5 - group clones into programmes (significant splits only), with bootstrap stability
     try:
+        # the clone map is drawn separately from programme discovery, over every profiled clone;
+        # find_programmes used to do it over its reliability-gated subset, which silently left some
+        # datasets with no map at all
+        embed_clones(adata, n_neighbors=map_n_neighbors, min_dist=map_min_dist,
+                     random_state=random_state, verbose=verbose)
         programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, verbose=verbose)
     except ValueError as e:  # too few expanded clones: keep the coherence result
         log(f"no programmes: {e}", verbose)

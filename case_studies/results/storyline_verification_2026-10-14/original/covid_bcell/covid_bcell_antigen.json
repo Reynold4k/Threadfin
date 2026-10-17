@@ -1,0 +1,158 @@
+{
+ "params": {
+  "min_cells": 5,
+  "k": 15,
+  "n_perm": 100,
+  "antigen_levels": [
+   "spike",
+   "rbd",
+   "np",
+   "orf8",
+   "none"
+  ]
+ },
+ "clone_repertoire": {
+  "n_clones": 243,
+  "dominant_counts": {
+   "np": 86,
+   "rbd": 68,
+   "none": 42,
+   "orf8": 31,
+   "spike": 16
+  },
+  "mean_purity": 0.6463980709124666,
+  "mean_entropy": 0.5691003505833105,
+  "dominant_frac_median": 0.75
+ },
+ "visibility_knn15": {
+  "cell_umap_antigen_call": {
+   "agreement": 0.3013557737260402,
+   "null_mean": 0.22142028985507245,
+   "null_std": 0.0032531041105126383,
+   "z": 24.57206445150358,
+   "p_perm": 0.009900990099009901,
+   "n": 2139
+  },
+  "cell_umap_inherited_dominant": {
+   "agreement": 0.3634720274271466,
+   "null_mean": 0.23410565684899484,
+   "null_std": 0.0031260234564556917,
+   "z": 41.38368517708703,
+   "p_perm": 0.009900990099009901,
+   "n": 2139
+  },
+  "clone_map_dominant": {
+   "agreement": 0.31165980795610426,
+   "null_mean": 0.25121262002743483,
+   "null_std": 0.009144083132455237,
+   "z": 6.610524757164913,
+   "p_perm": 0.009900990099009901,
+   "n": 243
+  },
+  "cell_umap_antigen_call_excl_none": {
+   "agreement": 0.3000965064659332,
+   "null_mean": 0.28172283342983984,
+   "null_std": 0.00403648495864234,
+   "z": 4.551899294646033,
+   "p_perm": 0.009900990099009901,
+   "n": 1727
+  },
+  "clone_map_dominant_excl_none": {
+   "agreement": 0.3641791044776119,
+   "null_mean": 0.3252371475953565,
+   "null_std": 0.009122580304701299,
+   "z": 4.268743664792602,
+   "p_perm": 0.009900990099009901,
+   "n": 201
+  },
+  "mbc_like_cell_umap": {
+   "agreement": 0.28265895953757225,
+   "null_mean": 0.2573265895953757,
+   "null_std": 0.005885103655709288,
+   "z": 4.304490018221003,
+   "p_perm": 0.009900990099009901,
+   "n": 692
+  },
+  "plasma_high_cell_umap": {
+   "agreement": 0.31292328956461646,
+   "null_mean": 0.22063810181985719,
+   "null_std": 0.003604631629150945,
+   "z": 25.601835981918807,
+   "p_perm": 0.009900990099009901,
+   "n": 1447
+  },
+  "plasma_score_genes": [
+   "PRDM1",
+   "XBP1",
+   "JCHAIN",
+   "MZB1",
+   "SDC1",
+   "TNFRSF17",
+   "IRF4",
+   "DERL3"
+  ],
+  "plasma_score_median": 0.14773115515708923
+ },
+ "hcov": {
+  "n_cells_measured": 3098,
+  "n_cells_positive": 3027,
+  "n_clones_measured": 33,
+  "n_clones_positive": 32,
+  "positive_clones": [
+   "R2|B_VDJ_22_3_1_VJ_3_1_1",
+   "R2|B_VDJ_30_2_3_VJ_72_5_1",
+   "R2|B_VDJ_4_1_1_VJ_37_2_1",
+   "R2|B_VJ_63_1_1",
+   "R6|B_VDJ_10_1_1_VJ_20_1_1",
+   "R6|B_VDJ_11_1_1_VJ_33_1_1",
+   "R6|B_VDJ_12_1_1",
+   "R6|B_VDJ_14_1_1_VJ_25_1_1",
+   "R6|B_VDJ_20_1_1_VJ_22_1_1",
+   "R6|B_VDJ_21_1_1_VJ_9_1_1",
+   "R6|B_VDJ_21_2_1",
+   "R6|B_VDJ_29_1_1_VJ_12_1_1",
+   "R6|B_VDJ_2_1_1_VJ_11_2_1",
+   "R6|B_VDJ_30_1_1_VJ_17_1_1",
+   "R6|B_VDJ_30_2_1_VJ_8_1_1",
+   "R6|B_VDJ_30_3_1_VJ_19_2_1",
+   "R6|B_VDJ_4_1_1_VJ_11_1_2",
+   "R6|B_VDJ_5_1_1_VJ_18_1_1",
+   "R6|B_VDJ_7_1_1_VJ_2_1_1",
+   "R6|B_VDJ_8_1_1_VJ_12_2_1",
+   "R6|B_VDJ_8_2_1_VJ_11_1_1",
+   "R6|B_VDJ_9_1_1_VJ_23_1_1",
+   "R6|B_VJ_19_1_1",
+   "R6|B_VJ_4_1_1",
+   "early|B_VDJ_125_6_1_VJ_77_1_2",
+   "early|B_VDJ_12_6_1_VJ_111_3_2",
+   "early|B_VDJ_16_3_1_VJ_57_1_2",
+   "early|B_VDJ_46_1_1_VJ_28_1_5",
+   "early|B_VDJ_52_4_1_VJ_15_1_3",
+   "late|B_VDJ_12_1_1",
+   "late|B_VDJ_78_2_1_VJ_56_2_1",
+   "late|B_VJ_56_1_1"
+  ],
+  "proximity": {
+   "mean_min_dist_to_sars2_clone": 0.23918391733420935,
+   "null_mean": 0.2509892638698573,
+   "null_std": 0.006090990806875448,
+   "z": -1.9381652197409676,
+   "p_perm_smaller": 0.10891089108910891,
+   "n_pool_clones": 33,
+   "n_sars2_clones": 201
+  }
+ },
+ "disease_state_donor_level": {
+  "acute_clones": 33,
+  "convalescent_clones": 210,
+  "clone_map_knn15": {
+   "agreement": 0.8194787379972566,
+   "null_mean": 0.7645432098765432,
+   "null_std": 0.007927019350706478,
+   "z": 6.93016198021736,
+   "p_perm": 0.009900990099009901,
+   "n": 243
+  },
+  "note": "donor-level label: agreement conflates donor identity with disease state"
+ }
+}

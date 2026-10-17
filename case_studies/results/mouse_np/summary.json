@@ -2,66 +2,77 @@
  "dataset": "mouse_np",
  "title": "Merkenschlager et al. 2025 Nature - NP-OVA germinal centres, H2B-mCherry division reporter (7 mice)",
  "clone_definition": {
-  "threshold": 0.161,
-  "threshold_method": "density",
-  "sequence": "nt",
-  "junction_col": "junction",
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
   "donor_key": "donor",
-  "light_chain": false,
-  "n_cells": 3894,
-  "n_clones": 1536,
-  "n_expanded": 373
+  "n_cells": 4855,
+  "n_clones": 2680,
+  "n_clones_ge2": 615,
+  "largest_clone": 48,
+  "source": "dandelion",
+  "cells_dropped": 0
  },
  "qc": {
   "n_cells": 10109,
   "n_cells_bcr": 3894,
-  "n_clones": 1536,
-  "clones_ge2": 373,
-  "clones_ge3": 251,
-  "clones_ge5": 150,
-  "clones_ge10": 80,
-  "cells_in_clones_ge2": 2731,
-  "largest_clone": 92,
+  "n_clones": 2297,
+  "clones_ge2": 471,
+  "clones_ge3": 268,
+  "clones_ge5": 119,
+  "clones_ge10": 41,
+  "cells_in_clones_ge2": 2068,
+  "largest_clone": 48,
   "n_donors": 7,
   "n_samples": 14
  },
  "coherence": {
-  "icc": 0.0928271469651806,
-  "null_mean": 0.03470714074136718,
-  "null_q95": 0.04384108788486284,
-  "excess": 0.05812000622381342,
+  "icc": 0.12021740956934464,
+  "null_mean": 0.04136229507355059,
+  "null_q95": 0.053830347826336986,
+  "excess": 0.07885511449579405,
   "p_value": 0.001996007984031936,
-  "n_clones": 373,
-  "n_cells": 2731,
-  "min_cells_reliability_0.5": 10
+  "n_clones": 471,
+  "n_cells": 2068,
+  "min_cells_reliability_0.5": 7
+ },
+ "clone_map": {
+  "n_neighbors": 15,
+  "min_dist": 0.1,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "n_clones": 471,
+  "n_profiled": 471
  },
  "programme_splits": {
   "n_leiden_communities": 2,
   "n_merged": 1,
-  "root_pvalue": 0.09964452425182957
+  "root_pvalue": 0.2514452779897518
  },
  "programmes": {
   "n": 1,
-  "n_clones": 69,
+  "n_clones": 471,
   "note": "no distinct programmes: clones vary along a continuum"
  },
  "label_effects": {
   "division_gate:mCherry-low": {
    "label": "division_gate:mCherry-low",
    "kind": "numeric",
-   "r2": 0.17560296508752998,
-   "null_mean": 0.01390396678224748,
-   "excess_r2": 0.1616989983052825,
+   "r2": 0.08197524041408079,
+   "null_mean": 0.0021256313142612882,
+   "excess_r2": 0.0798496090998195,
    "p_value": 0.0004997501249375312,
-   "n_clones": 69,
+   "n_clones": 471,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     -0.598381045052525,
-     0.17487118212821523,
-     -0.17713701562705525
+     0.45253950062502596,
+     0.024288503925476015,
+     0.08878898549790243
     ]
    },
    "note": "fraction of the clone's cells that divided most (mCherry-low gate)"
@@ -69,24 +80,24 @@
   "w33l": {
    "label": "w33l",
    "kind": "categorical",
-   "r2": 0.022906325996782027,
-   "null_mean": 0.068627013325713,
-   "excess_r2": -0.045720687328930976,
-   "p_value": 0.9815092453773113,
-   "n_clones": 19,
+   "r2": 0.014744101564751933,
+   "null_mean": 0.013133554771690644,
+   "excess_r2": 0.0016105467930612894,
+   "p_value": 0.31434282858570717,
+   "n_clones": 82,
    "n_levels": 2,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "W33L": [
-     0.1347150628109127,
-     0.365655170486763,
-     -0.15396007178390023
+     0.14015631474018767,
+     0.012458339088016681,
+     0.13496534012018074
     ],
     "germline W33": [
-     -0.1347150628109127,
-     -0.365655170486763,
-     0.15396007178390023
+     -0.14015631474018767,
+     -0.012458339088016681,
+     -0.13496534012018074
     ]
    },
    "note": "VH186.2 W33L high-affinity mutation (IGHV1-72 clones)"
@@ -94,19 +105,19 @@
   "mutation_frequency": {
    "label": "mutation_frequency",
    "kind": "numeric",
-   "r2": 0.020885638131025456,
-   "null_mean": 0.014324802242904486,
-   "excess_r2": 0.00656083588812097,
-   "p_value": 0.1874062968515742,
-   "n_clones": 69,
+   "r2": 0.0015309715020699287,
+   "null_mean": 0.002081900868022533,
+   "excess_r2": -0.0005509293659526043,
+   "p_value": 0.48575712143928035,
+   "n_clones": 471,
    "n_levels": null,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "label": [
-     0.10276037196402271,
-     0.07966897460179609,
-     -0.1790314035995418
+     -0.06213711478674868,
+     -0.08948553409780144,
+     0.11033373375039318
     ]
    },
    "note": "V-region mutation frequency"
@@ -114,29 +125,29 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.05083400449741471,
-   "null_mean": 0.03244797082902672,
-   "excess_r2": 0.018386033668387987,
-   "p_value": 0.09295352323838081,
-   "n_clones": 69,
+   "r2": 0.014977963231193193,
+   "null_mean": 0.004459752017585204,
+   "excess_r2": 0.010518211213607988,
+   "p_value": 0.0069965017491254375,
+   "n_clones": 450,
    "n_levels": 3,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "IGHD": [
-     0.19484204028490001,
-     -0.20701966780270628,
-     -0.09133220638354689
+     -0.08010591858298104,
+     0.0811957950262869,
+     -0.07574641280975758
     ],
     "IGHG": [
-     -0.07807414781719467,
-     0.08241160047370548,
-     0.021687263282554072
+     0.031135726357946838,
+     -0.013006062909015764,
+     -0.05044775916224297
     ],
     "IGHM": [
-     -0.08524339262464377,
-     0.09133220638354689,
-     0.06088813758903125
+     -0.00975371717881286,
+     -0.00934518452210866,
+     0.07358694478884467
     ]
    },
    "note": "heavy-chain isotype"
@@ -145,14 +156,14 @@
  "programme_associations": {},
  "memory": {
   "division_gate": {
-   "n_clones": 70,
-   "n_pairs": 70,
-   "memory_index": 0.31631901691777553,
+   "n_clones": 203,
+   "n_pairs": 203,
+   "memory_index": 0.13391766024389506,
    "memory_index_ci": [
-    0.06300416439953922,
-    0.5660939215641162
+    -0.043850758116167274,
+    0.2904383741341415
    ],
-   "p_value": 0.005988023952095809,
+   "p_value": 0.01996007984031936,
    "persistence": null,
    "persistence_null": null,
    "levels": [
@@ -162,71 +173,71 @@
   }
  },
  "heritability": {
-  "n_genes": 9085,
-  "median_icc": 0.01886853937657231,
+  "n_genes": 9137,
+  "median_icc": 0.0283211927831811,
   "top_genes": [
    "Gm30211",
-   "Cd72",
-   "Slc15a2",
    "Eya1",
-   "Lgals9",
-   "Usp18",
+   "Cd72",
+   "Gm20628",
    "Gm42031",
-   "Slpi",
-   "Il10ra",
-   "Gm4316",
+   "Slc15a2",
+   "Lgals9",
+   "Gm42047",
    "Apoe",
-   "Serpinb1a",
-   "Ifitm3",
-   "Cmpk2",
-   "Ifi203",
-   "Gm43305",
-   "Ephx1",
-   "Cr2",
-   "Cdk5rap1",
-   "Arhgap24",
-   "Mndal",
+   "Hist2h4",
+   "Slpi",
+   "Lmo7",
    "Ifi27l2a",
-   "Gm35082",
-   "Ms4a4c",
-   "Ly6d"
+   "Gm43305",
+   "Cd74",
+   "Jchain",
+   "Gm4316",
+   "Cr2",
+   "Hmces",
+   "Klf2",
+   "Nmral1",
+   "Rgs13",
+   "Blvrb",
+   "Cd79a",
+   "Ptprj"
   ],
-  "receptor_gene_icc": 0.7474630806843208,
+  "receptor_gene_icc": 0.8078394848656734,
   "gene_sets": {
    "plasma cell": {
-    "median_icc": 0.0462,
-    "matched_background_median_icc": 0.0184,
-    "pvalue_vs_matched": 0.0059
+    "median_icc": 0.0545,
+    "matched_background_median_icc": 0.0294,
+    "pvalue_vs_matched": 0.0209
    },
    "germinal centre": {
-    "median_icc": 0.0648,
-    "matched_background_median_icc": 0.0261,
-    "pvalue_vs_matched": 0.0716
+    "median_icc": 0.077,
+    "matched_background_median_icc": 0.0454,
+    "pvalue_vs_matched": 0.1951
    },
    "dark zone / cycling": {
-    "median_icc": 0.0468,
-    "matched_background_median_icc": 0.0224,
-    "pvalue_vs_matched": 0.0525
+    "median_icc": 0.0598,
+    "matched_background_median_icc": 0.0428,
+    "pvalue_vs_matched": 0.1686
    },
    "light zone": {
-    "median_icc": 0.0496,
-    "matched_background_median_icc": 0.0147,
-    "pvalue_vs_matched": 0.0
+    "median_icc": 0.0686,
+    "matched_background_median_icc": 0.0277,
+    "pvalue_vs_matched": 0.0134
    },
    "memory": {
-    "median_icc": 0.0197,
-    "matched_background_median_icc": 0.0053,
-    "pvalue_vs_matched": 0.1492
+    "median_icc": 0.0164,
+    "matched_background_median_icc": 0.0115,
+    "pvalue_vs_matched": 0.5495
    },
    "naive": {
-    "median_icc": 0.0422,
-    "matched_background_median_icc": 0.0161,
-    "pvalue_vs_matched": 0.0714
+    "median_icc": 0.0822,
+    "matched_background_median_icc": 0.0255,
+    "pvalue_vs_matched": 0.1039
    },
    "interferon": {
-    "median_icc": 0.076,
-    "matched_background_median_icc": 0.007,
-    "pvalue_vs_matched": 0.0
+    "median_icc": 0.0817,
+    "matched_background_median_icc": 0.0181,
+    "pvalue_vs_matched": 0.0006
    }
   }
  },
@@ -335,5 +346,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 1.8
+ "runtime_min": 1.2
 }

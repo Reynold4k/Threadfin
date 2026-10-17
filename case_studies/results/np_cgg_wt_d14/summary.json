@@ -1,0 +1,101 @@
+{
+  "dataset": "GSE305877",
+  "subset": "WT day 14 experiment 1, one identifiable mouse",
+  "source_gex": "GSM9186600",
+  "source_bcr": "GSM9186599",
+  "n_cells_raw": 13853,
+  "n_cells": 13727,
+  "n_cells_paired_bcr": 6959,
+  "n_clones_all": 4285,
+  "n_profiles_ge2": 508,
+  "n_cells_profiles_ge2": 3182,
+  "qc": {
+    "min_genes": 200,
+    "min_counts": 500,
+    "max_mito_percent_exclusive": 20,
+    "min_cells_per_gene": 3
+  },
+  "pooled_replicates": "Excluded: per-cell HTO assignments absent in downloaded processed files.",
+  "map_input": "RNA only; immunoglobulin/receptor genes excluded; no author state labels or isotype supplied.",
+  "replication": "One mouse: descriptive, not a between-animal validation.",
+  "input_sha256": {
+    "GSE305877_filtered_feature_bc_matrix_Experiment2_D14_WT_GEX_replicate2and3.h5": "c2d376c6b0a912f379c1b23b7c82da34c4ec1fd27cc1b81bd026390b9ab71598",
+    "download_urls.txt": "0ca82091b079942a61e79a4792a35a4707f39a116fdcf41bb1ec9c6f7f80ef92",
+    "GSM9186599_filtered_contig_annotations_Experiment1_D14_WT_BCR.csv.gz": "70a21b8d2eca76e2e73438f2f5357bf467fb3e7bba1d5cba3200eafefd90e2fd",
+    "GSE305877_Experiment2_D14_WT_Prdm1cKO_FBHTO.txt.gz": "54dd8d19d7b96517cc742b7dd2d64ab375894d8dfad0a3f33d7887a35eeacf32",
+    "GSM9186608_filtered_contig_annotations_Experiment2_D14_WT_BCR.csv.gz": "e91cc7ff1862b61c263e8922486d7150be7c310f98c93c6a3f22302b597dc384",
+    "GSM9186600_filtered_feature_bc_matrix_Experiment1_D14_WT_GEX.h5": "80cf49856fccac34f819da9939cee9e9d364e44bb079eb7b2e3e3271c6f44169"
+  },
+  "post_hoc_gene_sets": {
+    "GC score": [
+      "Bcl6",
+      "Aicda",
+      "Rgs13",
+      "S1pr2",
+      "Mef2b"
+    ],
+    "LZ score": [
+      "Cd83",
+      "Cd86",
+      "Nfkbia",
+      "H2-DMa",
+      "H2-Oa"
+    ],
+    "Cycling score": [
+      "Mki67",
+      "Top2a",
+      "Cenpf",
+      "Ccnb1",
+      "Cdk1"
+    ],
+    "PC score": [
+      "Prdm1",
+      "Xbp1",
+      "Mzb1",
+      "Sdc1",
+      "Irf4"
+    ]
+  },
+  "coherence": {
+    "icc": 0.17559194110458576,
+    "null_mean": 0.005703938780038437,
+    "null_q95": 0.01200584941430727,
+    "excess": 0.16988800232454732,
+    "p_value": 0.001996007984031936,
+    "n_clones": 508,
+    "n_cells": 3182
+  },
+  "clone_map": {
+    "n_neighbors": 50,
+    "min_dist": 0.8,
+    "spread": 1.0,
+    "min_reliability": 0.0,
+    "random_state": 0,
+    "n_clones": 508,
+    "n_profiled": 508
+  },
+  "n_programmes": 3,
+  "programme_counts": {
+    "P1": 206,
+    "P2": 170,
+    "P3": 132
+  },
+  "rna_cluster_counts": {
+    "0": 3682,
+    "7": 2015,
+    "1": 1594,
+    "5": 1498,
+    "8": 1071,
+    "2": 913,
+    "4": 721,
+    "6": 718,
+    "3": 673,
+    "9": 267,
+    "10": 205,
+    "12": 124,
+    "15": 91,
+    "13": 75,
+    "14": 66,
+    "11": 14
+  }
+}

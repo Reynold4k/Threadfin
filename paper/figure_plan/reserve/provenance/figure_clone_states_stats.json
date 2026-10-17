@@ -1,0 +1,563 @@
+{
+  "input_sha256": {
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/cells.csv.gz": "0697230e461be7b41bea2db42f810b4bac157571bd3f3856ab23ce3faf34ad12",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/malaria_late/clone_table.csv": "3bfb57768b4317e40c99d71cee90e26242e446f25c3e5664cddc927ab5bba5d7",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_cells.csv.gz": "a99c718d6680eb3b55cc3947e354d01a3861af39b4f6da1ece13be2e6c0406db",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/clone_table.csv": "6ca235e78ca4975910e41b5aa824a095e3d0a30ccca4f6a53be9d070f1e134f1",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/cells.csv.gz": "943b64199ab6b08c834a74745b7292c85fc0f762ef64a3233bcd90851bfe3eb2",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/clone_table.csv": "373c7c28da94b19a058f55675670ee938593432ce35d0e109365fc7134bf160c",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/p3_subsplit.json": "799ebb07615bcd432a487b74bcd12108e86addea7437a047aaf235a51f6bc60f",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/spont_gc/spont_gc_fate_clones.csv": "a72947fc23373bc2cbc0e22e52a98937e8278afee9fd10c87b9a1c7e79f32fed",
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/plasma_branches.json": "bd40adc167583e6a2eb2c9a0b22023d5146ca2f2aa345b742de4cd340192d97c"
+  },
+  "panels": {
+    "a": {
+      "n_cells": 72359,
+      "category_counts": {
+        "Follicular Naive": 16830,
+        "Immature": 15448,
+        "GC": 11238,
+        "PB": 6620,
+        "Activated": 4658,
+        "Precursor": 3929,
+        "Bystander": 3438,
+        "MZ": 3395,
+        "Memory": 2683,
+        "Atypical": 2211,
+        "B1": 1909
+      },
+      "n_missing_coordinates": 0
+    },
+    "b": {
+      "n_clones": 1015,
+      "category_counts": {
+        "P1": 389,
+        "P2": 250,
+        "P3": 193,
+        "P4": 183
+      },
+      "n_cells_sum": 2350,
+      "n_cells": {
+        "n": 1015,
+        "missing": 0,
+        "median": 2.0,
+        "mean": 2.315270935960591,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 2.0,
+        "max": 9
+      },
+      "marker_area_pt2_per_cell": 1.5
+    },
+    "c": {
+      "n_cells": 72359,
+      "category_counts": {
+        "no programme": 70009,
+        "P1": 846,
+        "P2": 611,
+        "P4": 466,
+        "P3": 427
+      },
+      "n_labelled": 2350,
+      "n_without_programme": 70009,
+      "n_missing_clone_id": 12437,
+      "n_nonmissing_clone_id_not_in_clone_table": 57572
+    },
+    "d": {
+      "n_cells": 22898,
+      "category_counts": {
+        "ASC": 12362,
+        "GC": 6355,
+        "unassigned": 2806,
+        "CD23+ MemB": 603,
+        "Fcrl5+ MemB": 525,
+        "other MemB": 247
+      },
+      "n_missing_coordinates": 0
+    },
+    "e": {
+      "n_clones": 1051,
+      "category_counts": {
+        "P1": 488,
+        "P2": 322,
+        "P3b": 129,
+        "P3a": 112
+      },
+      "n_cells_sum": 6278,
+      "n_cells": {
+        "n": 1051,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.973358705994291,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 5.0,
+        "max": 114
+      },
+      "marker_area_pt2_per_cell": 0.35
+    },
+    "f": {
+      "n_cells": 22898,
+      "category_counts": {
+        "no programme": 16620,
+        "P1": 2827,
+        "P2": 2649,
+        "P3b": 519,
+        "P3a": 283
+      },
+      "n_labelled": 6278,
+      "n_without_programme": 16620,
+      "n_missing_clone_id": 14793,
+      "n_nonmissing_clone_id_not_in_clone_table": 1827
+    },
+    "g": {
+      "n_clones": 322,
+      "entropy": {
+        "n": 322,
+        "missing": 0,
+        "median": 0.4505612088663046,
+        "mean": 0.3739187608522634,
+        "min": -0.0,
+        "q25": 0.0,
+        "q75": 0.671820869673077,
+        "max": 1.242453324894
+      },
+      "spearman_rho": -0.7418447034530916,
+      "spearman_p": 1.7381735915612173e-57
+    },
+    "h": {
+      "n_clones": 322,
+      "qcut_edges": [
+        2.836689710617065,
+        4.499803781509399,
+        8.363207340240479,
+        11.888429164886475,
+        13.727415084838867
+      ],
+      "quartiles": [
+        {
+          "quartile": "Q1",
+          "n": 81,
+          "label_M_n": 29,
+          "label_M_fraction": 0.35802469135802467,
+          "x_min": 2.836689710617065,
+          "x_max": 4.498499393463135
+        },
+        {
+          "quartile": "Q2",
+          "n": 80,
+          "label_M_n": 10,
+          "label_M_fraction": 0.125,
+          "x_min": 4.503716945648193,
+          "x_max": 8.362255096435547
+        },
+        {
+          "quartile": "Q3",
+          "n": 80,
+          "label_M_n": 9,
+          "label_M_fraction": 0.1125,
+          "x_min": 8.36415958404541,
+          "x_max": 11.844064712524414
+        },
+        {
+          "quartile": "Q4",
+          "n": 81,
+          "label_M_n": 2,
+          "label_M_fraction": 0.024691358024691357,
+          "x_min": 11.903217315673828,
+          "x_max": 13.727415084838867
+        }
+      ],
+      "label_M_n": 50
+    },
+    "i": {
+      "n_clones": 322,
+      "donors_sorted_by_rho": [
+        {
+          "donor": "M21",
+          "n": 17,
+          "rho": -0.7398414344468424,
+          "p": 0.0006861324571258209
+        },
+        {
+          "donor": "M24",
+          "n": 45,
+          "rho": -0.7249139002870104,
+          "p": 1.7911720475000567e-08
+        },
+        {
+          "donor": "M11",
+          "n": 23,
+          "rho": -0.7199751610079289,
+          "p": 0.00010733201235227228
+        },
+        {
+          "donor": "M13",
+          "n": 74,
+          "rho": -0.7060686588377141,
+          "p": 2.1179953089944746e-12
+        },
+        {
+          "donor": "M17",
+          "n": 76,
+          "rho": -0.6303617350048103,
+          "p": 1.047703084634997e-09
+        },
+        {
+          "donor": "M34",
+          "n": 19,
+          "rho": -0.5331139899831832,
+          "p": 0.018754525708741483
+        },
+        {
+          "donor": "M14",
+          "n": 56,
+          "rho": -0.4630245628874461,
+          "p": 0.0003264163633690144
+        },
+        {
+          "donor": "M23",
+          "n": 12,
+          "rho": -0.4175464299643898,
+          "p": 0.17683562352208235
+        }
+      ]
+    },
+    "j": {
+      "n_cells": 16619,
+      "category_counts": {
+        "B_cell": 5957,
+        "GC_Bcell": 5502,
+        "plasma": 3973,
+        "other": 1187
+      },
+      "n_missing_coordinates": 0
+    },
+    "k": {
+      "n_clones": 958,
+      "category_counts": {
+        "P1": 475,
+        "P2": 294,
+        "P3": 189
+      },
+      "n_cells_sum": 5724,
+      "n_cells": {
+        "n": 958,
+        "missing": 0,
+        "median": 3.0,
+        "mean": 5.974947807933194,
+        "min": 2,
+        "q25": 2.0,
+        "q75": 6.0,
+        "max": 160
+      },
+      "marker_area_pt2_per_cell": 0.3
+    },
+    "l": {
+      "n_cells": 16619,
+      "category_counts": {
+        "no programme": 10895,
+        "P1": 2483,
+        "P2": 1906,
+        "P3": 1335
+      },
+      "n_labelled": 5724,
+      "n_without_programme": 10895,
+      "n_missing_clone_id": 4896,
+      "n_nonmissing_clone_id_not_in_clone_table": 5999
+    },
+    "m": {
+      "map": {
+        "n_clones": 958,
+        "gc_sort:GC": {
+          "n": 958,
+          "missing": 0,
+          "median": 1.0,
+          "mean": 0.88674236628779,
+          "min": 0.0,
+          "q25": 1.0,
+          "q75": 1.0,
+          "max": 1.0
+        }
+      },
+      "comparison": {
+        "threshold_column": "celltype:plasma",
+        "threshold_minimum": 0.5,
+        "n_all_programmes": 439,
+        "programmes": {
+          "P1": {
+            "n": 8,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.8125,
+            "min": 0.0,
+            "q25": 0.875,
+            "q75": 1.0,
+            "max": 1.0
+          },
+          "P2": {
+            "n": 242,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.9129047261278667,
+            "min": 0.0,
+            "q25": 1.0,
+            "q75": 1.0,
+            "max": 1.0
+          },
+          "P3": {
+            "n": 189,
+            "missing": 0,
+            "median": 1.0,
+            "mean": 0.7358118271090666,
+            "min": 0.0,
+            "q25": 0.5,
+            "q75": 1.0,
+            "max": 1.0
+          }
+        },
+        "P2_P3_n": 431,
+        "U_P2_vs_P3": 28009.0,
+        "p_two_sided": 2.818265451214347e-07,
+        "reference_json_p": 2.818265451214347e-07,
+        "reference_json_matches": true,
+        "display": "seed=0 horizontal jitter and boxplot; all qualifying programmes"
+      }
+    }
+  },
+  "P3_split_accepted": true,
+  "programme_colors": {
+    "S1": {
+      "P1": "#7b3294",
+      "P2": "#c51b7d",
+      "P3": "#8c6d31",
+      "P4": "#6b6b6b"
+    },
+    "S2": {
+      "P1": "#2a78d6",
+      "P2": "#eb6834",
+      "P3": "#1baf7a",
+      "P3a": "#1baf7a",
+      "P3b": "#0b7a5c"
+    },
+    "S3": {
+      "P1": "#343a70",
+      "P2": "#ba9600",
+      "P3": "#bd3b32"
+    }
+  },
+  "state_colors": {
+    "S1": {
+      "Follicular Naive": "#91a6bd",
+      "Immature": "#b7b39c",
+      "GC": "#2a78d6",
+      "PB": "#e34948",
+      "Activated": "#b56576",
+      "Precursor": "#8d6e63",
+      "Bystander": "#d4a373",
+      "MZ": "#4e9994",
+      "Memory": "#008300",
+      "Atypical": "#7563aa",
+      "B1": "#ae843e"
+    },
+    "S2": {
+      "GC": "#2a9d8f",
+      "ASC": "#e63946",
+      "Fcrl5+ MemB": "#457b9d",
+      "CD23+ MemB": "#8ecae6",
+      "other MemB": "#b5c9e2",
+      "unassigned": "#c3c2b7"
+    },
+    "S3": {
+      "B_cell": "#91a6bd",
+      "GC_Bcell": "#2a78d6",
+      "plasma": "#4a3aa7",
+      "other": "#c3c2b7"
+    }
+  },
+  "label_M_definition": {
+    "fate_values": [
+      "Fcrl5+ MemB",
+      "CD23+ MemB",
+      "other MemB"
+    ],
+    "minimum_cells_per_clone": 1
+  },
+  "analysis_population": {
+    "S2_g_h_i": "all 322 rows of spont_gc_fate_clones.csv, as in the reference panel",
+    "S2_e": "all 1051 rows of clone_table.csv",
+    "S2_f": "all 22898 rows of spont_gc_fate_cells.csv.gz",
+    "S3_m_ii": "all clone_table rows with celltype:plasma >= 0.5"
+  },
+  "test_methods": {
+    "correlations": "two-sided scipy.stats.spearmanr",
+    "S3_P2_P3": "two-sided scipy.stats.mannwhitneyu, method=auto, continuity correction=True"
+  },
+  "layout": {
+    "page_mm": [
+      210,
+      297
+    ],
+    "dpi": 1200,
+    "panel_letters": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m"
+    ],
+    "main_axes_boxes_mm": {
+      "a": [
+        2,
+        30.5,
+        53,
+        50
+      ],
+      "b": [
+        65,
+        30.5,
+        53,
+        50
+      ],
+      "c": [
+        128,
+        30.5,
+        53,
+        50
+      ],
+      "d": [
+        2,
+        112.0,
+        53,
+        33
+      ],
+      "e": [
+        65,
+        112.0,
+        53,
+        33
+      ],
+      "f": [
+        128,
+        112.0,
+        53,
+        33
+      ],
+      "j": [
+        2,
+        213.0,
+        53,
+        30
+      ],
+      "k": [
+        65,
+        213.0,
+        53,
+        30
+      ],
+      "l": [
+        128,
+        213.0,
+        53,
+        30
+      ],
+      "g": [
+        2,
+        167.0,
+        46,
+        28
+      ],
+      "h": [
+        69,
+        167.0,
+        47,
+        28
+      ],
+      "i": [
+        131,
+        167.0,
+        50,
+        28
+      ],
+      "m": [
+        2,
+        263.0,
+        61,
+        25
+      ],
+      "m_ii": [
+        98,
+        263.0,
+        78,
+        25
+      ]
+    },
+    "legend_boxes_mm": {
+      "a": [
+        2,
+        83.0,
+        53,
+        17
+      ],
+      "b": [
+        65,
+        83.0,
+        53,
+        17
+      ],
+      "c": [
+        128,
+        83.0,
+        53,
+        17
+      ],
+      "d": [
+        2,
+        148.0,
+        53,
+        11
+      ],
+      "e": [
+        65,
+        148.0,
+        53,
+        11
+      ],
+      "f": [
+        128,
+        148.0,
+        53,
+        11
+      ],
+      "j": [
+        2,
+        246.0,
+        53,
+        9
+      ],
+      "k": [
+        65,
+        246.0,
+        53,
+        9
+      ],
+      "l": [
+        128,
+        246.0,
+        53,
+        9
+      ]
+    },
+    "minimum_axes_separation_mm": 10,
+    "minimum_legend_font_pt": 4.5,
+    "text_outside_page": []
+  }
+}

@@ -76,11 +76,11 @@ def test_continuum_gives_a_single_programme():
     ad = tf.sim.simulate_repertoire(n_programmes=1, random_state=1)
     tf.tl.clone_profiles(ad, basis="X_pca", context_key="context", donor_key="donor", representation="kernel",
                          verbose=False)
-    summ = tf.tl.find_programmes(ad, n_boot=10, embed=False, verbose=False)
+    summ = tf.tl.find_programmes(ad, n_boot=10, verbose=False)
     assert summ.shape[0] == 1
     assert not ad.uns["threadfin"]["programmes"]["split_tests"]["split"].any()
     # without the split test, Leiden cuts the continuum into pieces
-    summ = tf.tl.find_programmes(ad, n_boot=10, embed=False, test_splits=False, verbose=False)
+    summ = tf.tl.find_programmes(ad, n_boot=10, test_splits=False, verbose=False)
     assert summ.shape[0] >= 2
 
 
@@ -234,7 +234,7 @@ def test_programme_markers_clone_level(sim):
                          representation="kernel", verbose=False)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        tf.tl.find_programmes(ad, n_boot=6, embed=False, verbose=False)
+        tf.tl.find_programmes(ad, n_boot=6, verbose=False)
     # plant a marker in the true programme that dominates the purest recovered programme
     comp = pd.crosstab(ad.obs["clone_programme"], ad.obs["true_programme"], normalize="index")
     best_prog = comp.max(axis=1).idxmax()
@@ -281,3 +281,20 @@ def test_clonal_memory_declines_on_too_few_clones():
                          representation="kernel", verbose=False)
     with pytest.raises(ValueError, match="no memory index is reported"):
         tf.tl.clonal_memory(ad, "timepoint", min_pairs=10_000, n_null=10, n_boot=10, verbose=False)
+
+
+def test_results_can_be_written_to_h5ad(tmp_path):
+    """Every result Threadfin stores in adata.uns must survive adata.write_h5ad."""
+    import anndata
+
+    ad = tf.sim.simulate_repertoire(n_clones=1500, n_timepoints=2, random_state=2)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        tf.run(ad, donor_key="donor", sample_key="context", basis="X_pca", n_perm=20, n_boot=5,
+               test=["true_programme"], time_key="timepoint", map_n_neighbors=30, map_min_dist=0.5,
+               verbose=False)
+    ad.write_h5ad(tmp_path / "result.h5ad")
+    back = anndata.read_h5ad(tmp_path / "result.h5ad")
+    assert {"profiles", "coherence", "programmes", "memory", "associations"} <= set(back.uns["threadfin"])
+    lo, hi = back.uns["threadfin"]["memory"]["timepoint"]["memory_index_ci"]
+    assert lo <= hi

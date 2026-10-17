@@ -1,0 +1,64 @@
+{
+  "figure": "Figure 1 | Threadfin concept and workflow",
+  "restored_from": "figure1_overview.py layout rendered 2026-10-13 (reserve/main_figure_text_2026-10-16_142405/Figure_1.png)",
+  "replaces": "A4 portrait reflow of 2026-10-16 14:44 (archived in reserve/figure1_restore_2026-10-16/before/)",
+  "page_mm": [
+    210.0,
+    198.46
+  ],
+  "mm_per_design_unit": 1.0995,
+  "removed": [
+    "figure title and subtitle",
+    "selection-node outline, fill, label and pointer",
+    "dashed return-to-GC arrow with its two labels",
+    "gradient end labels (Cycling / Output-like)"
+  ],
+  "renamed": {
+    "GC cycling": "Clonal programme 1",
+    "Memory-like": "Clonal programme 2",
+    "Output-like states": "Clonal programme 3",
+    "Identify GC selection-associated nodes": "Discover clonal programmes",
+    "Resolve cycling-to-output clone gradients": "Clone embedding"
+  },
+  "former_node_clones": {
+    "n": 78,
+    "rule": "angularly closest bridge direction around the node centre",
+    "node_centre": [
+      124.0,
+      65.0
+    ],
+    "arm_directions_deg": [
+      116.6,
+      323.1,
+      69.9
+    ],
+    "assigned": {
+      "Clonal programme 1": 29,
+      "Clonal programme 2": 30,
+      "Clonal programme 3": 19
+    }
+  },
+  "clone_coordinates_and_sizes_unchanged": true,
+  "clone_geometry_sha256": "40fee11349b9aac4857e6c5d17c021eca8e9c9dd5404237627809cfecd4f4276",
+  "clones_on_map": 535,
+  "gradient_clones": 245,
+  "programme_colours": {
+    "Clonal programme 1": "#397DAD",
+    "Clonal programme 2": "#44988B",
+    "Clonal programme 3": "#BD6179"
+  },
+  "gradient_palette": [
+    "#397DAD",
+    "#5D76BF",
+    "#9368B8",
+    "#B55E9A",
+    "#BD6179"
+  ],
+  "seeds": {
+    "map": 8126,
+    "gradient": 328,
+    "rna_cells": 217
+  },
+  "fish_asset_sha256": "6c9e6add4b63a3b2ef1dfd740fc6fa6dc60f2ec133fa0d3d413dca4776c45b58",
+  "scope": "Synthetic schematic: no fitted embedding, inferred lineage direction or pooled data"
+}
