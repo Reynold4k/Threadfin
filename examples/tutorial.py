@@ -43,20 +43,22 @@ print(f"\nclone map: n_neighbors {mp['n_neighbors']}, min_dist {mp['min_dist']:.
 
 # ---------------------------------------------------------------- 3. the parts
 # Everything above is also available step by step, which is what you want when
-# you need to change the sampling context or the number of permutations.
-tf.tl.clone_profiles(adata, basis="X_pca", context_key="context", donor_key="donor",
+# you need to change the sampling context or the number of permutations. The
+# steps run on a copy, so that `result` keeps the analysis made by tf.run.
+steps = adata.copy()
+tf.tl.clone_profiles(steps, basis="X_pca", context_key="context", donor_key="donor",
                      representation="kernel")
-coherence = tf.tl.clonal_coherence(adata, strata_key="context", n_perm=500)
+coherence = tf.tl.clonal_coherence(steps, strata_key="context", n_perm=500)
 print(f"\nclone identity explains {100 * coherence['icc']:.1f}% of state, "
       f"{100 * coherence['null_mean']:.1f}% when shuffled (p = {coherence['p_value']:.3g})")
 
 # Groups of clones are reported only when the split between them is real.
-programmes = tf.tl.find_programmes(adata)
+programmes = tf.tl.find_programmes(steps)
 print(programmes)
 
 # A label is first tested against the clone profiles - this works whether or not
 # distinct groups exist - and then, if there are groups, between them.
-effect = tf.tl.profile_association(adata, "true_programme")
+effect = tf.tl.profile_association(steps, "true_programme")
 print(f"\nthe label explains {100 * effect['r2']:.1f}% of how clones differ "
       f"(p = {effect['p_value']:.3g}, {effect['n_clones']} clones)")
 

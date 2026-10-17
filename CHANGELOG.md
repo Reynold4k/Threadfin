@@ -32,6 +32,10 @@
   `find_programmes` held Python lists and the clonal-memory interval was a tuple, which AnnData cannot
   write; stored results are now converted to writable types (lists of communities become comma-separated
   text, with their counts in `n_communities_left` / `n_communities_right`). Returned objects are unchanged.
+- The Dandelion adapter recognises missing junction amino-acid sequences under pandas 3, where missing
+  values in a text column are no longer turned into the string "nan".
+- `examples/tutorial.py` runs its step-by-step section on a copy, so the overview figure of `tf.run` can
+  still be drawn at the end.
 
 ### Documentation
 

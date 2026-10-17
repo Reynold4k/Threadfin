@@ -121,7 +121,9 @@ def _fill_junction_aa(t: pd.DataFrame, *, verbose: bool = True) -> pd.DataFrame:
 
     blank = {"", "nan", "none", "na", "null", "out_of_frame", "partial", "?", "-"}
     if "junction_aa" in t.columns:
-        aa = t["junction_aa"].astype(str).str.strip()
+        raw = t["junction_aa"].astype("object")
+        # missing values become "" explicitly: with pandas >= 3, astype(str) keeps NaN as missing
+        aa = raw.where(raw.notna(), "").astype(str).str.strip()
         aa = aa.where(~aa.str.lower().isin(blank), "")
     else:
         aa = pd.Series("", index=t.index, dtype="object")
