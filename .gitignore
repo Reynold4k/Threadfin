@@ -21,11 +21,12 @@ case_studies/results/*/lineage/status.txt
 case_studies/logs/
 case_studies/results/*/matplotlib/
 
-# quickstart and tutorial output
-threadfin_summary.txt
-threadfin_overview.png
-threadfin_overview.pdf
-tutorial_overview.png
+# quickstart and tutorial output, written to the folder they are run from (anchored to the
+# repository root so that the documentation images in docs/_static/ are not ignored)
+/threadfin_summary.txt
+/threadfin_overview.png
+/threadfin_overview.pdf
+/tutorial_overview.png
 
 # private material that must never be published
 paper/MAIT/
