@@ -1,0 +1,33 @@
+Threadfin summary
+=================
+Cells with a BCR: 21,145 of 40,623, in 20,500 clones (73 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 73.5% of transcriptional variance within 'donor' strata; shuffled clones explain 6.3% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 1 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   4 programmes from 523 reliable clones (every split significant); 3 are stable (bootstrap Jaccard >= 0.75).
+   P1: 221 clones, 492 cells, stability 0.88; PB 100%, Activated 0%
+   P2: 204 clones, 446 cells, stability 0.89; Bystanders 41%, PB 21%
+   P3: 74 clones, 166 cells, stability 0.70; PB 57%, GC 39%
+   P4: 24 clones, 64 cells, stability 0.90; B1 100%, Activated 0%
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   cell_state explains clone states: 39.1% of clone-profile variance vs 14.9% for shuffled labels (p = 0.0005, 476 clones).
+   isotype explains clone states: 15.2% of clone-profile variance vs 8.0% for shuffled labels (p = 0.0005, 462 clones).
+   Programme differences (FDR < 0.05):
+   cell_state: P1 depleted for 'GC' (0% vs 10% of clones; OR 0.00, FDR 0.0015)
+   cell_state: P1 depleted for 'Naive Follicular' (0% vs 6% of clones; OR 0.00, FDR 0.0015)
+   cell_state: P2 depleted for 'B1' (1% vs 8% of clones; OR 0.00, FDR 0.0015)
+   cell_state: P1 enriched for 'PB' (100% vs 25% of clones; OR inf, FDR 0.0015)
+   cell_state: P2 enriched for 'Bystanders' (46% vs 0% of clones; OR inf, FDR 0.0015)
+   cell_state: P2 depleted for 'PB' (18% vs 84% of clones; OR 0.17, FDR 0.0015)
+   isotype: P2 enriched for 'IGHD' (12% vs 0% of clones; OR 135.12, FDR 0.0027)
+   isotype: P4 depleted for 'IGHG' (0% vs 60% of clones; OR 0.00, FDR 0.0027)
+   isotype: P4 enriched for 'IGHM' (100% vs 35% of clones; OR inf, FDR 0.0027)
+   isotype: P1 enriched for 'IGHG' (85% vs 33% of clones; OR 2.47, FDR 0.0048)
+   isotype: P2 depleted for 'IGHG' (21% vs 76% of clones; OR 0.37, FDR 0.0048)
+   isotype: P1 depleted for 'IGHD' (0% vs 8% of clones; OR 0.00, FDR 0.008)
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

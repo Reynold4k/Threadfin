@@ -1,10 +1,11 @@
 experiment,dataset,cores,n_clones_ge2,tool,status,seconds,peak_rss_gb,stages
 cores,mouse_rbd,1,1887,threadfin_run,completed,116.95,0.73,"{""clone_profiles"": 5.39, ""clonal_coherence"": 0.64, ""clone_map"": 75.77, ""programmes"": 33.25, ""profile_association"": 1.9}"
 cores,mouse_rbd,1,1887,clone2vec_min2,completed,281.9,1.1167449951171875,"{""clones_adata"": 0.015, ""clonal_nn"": 36.724, ""clone2vec"": 230.252, ""umap"": 7.976}"
+cores,mouse_rbd,1,1887,clonotrace_revised_min2,completed,13309.0,2.2984466552734375,"{""load"": 0.193, ""cell_graph"": 38.065, ""label_spreading"": 9749.168, ""sparsify"": 5.608, ""clone_distance"": 3499.683, ""leiden_umap"": 10.741}"
 cores,mouse_rbd,1,1887,benisse_min2,completed,1159.33,4.040340423583984,"{""encoder"": 4.473, ""benisse_core"": 1128.0, ""aggregate"": 1.55}"
 cores,mouse_rbd,2,1887,threadfin_run,completed,84.35,0.75,"{""clone_profiles"": 3.83, ""clonal_coherence"": 0.63, ""clone_map"": 56.33, ""programmes"": 21.67, ""profile_association"": 1.89}"
 cores,mouse_rbd,2,1887,clone2vec_min2,completed,217.79,1.1180534362792969,"{""clones_adata"": 0.017, ""clonal_nn"": 34.776, ""clone2vec"": 166.084, ""umap"": 7.61}"
-cores,mouse_rbd,2,1887,clonotrace_revised_min2,running or killed,,,
+cores,mouse_rbd,2,1887,clonotrace_revised_min2,completed,7631.0,2.2066688537597656,"{""load"": 0.193, ""cell_graph"": 31.361, ""label_spreading"": 5301.896, ""sparsify"": 5.406, ""clone_distance"": 2276.684, ""leiden_umap"": 10.332}"
 cores,mouse_rbd,4,1887,threadfin_run,completed,60.91,0.76,"{""clone_profiles"": 3.09, ""clonal_coherence"": 0.66, ""clone_map"": 41.06, ""programmes"": 14.12, ""profile_association"": 1.98}"
 cores,mouse_rbd,4,1887,clone2vec_min2,completed,215.57999999999998,1.1195297241210938,"{""clones_adata"": 0.017, ""clonal_nn"": 34.49, ""clone2vec"": 166.761, ""umap"": 8.031}"
 cores,mouse_rbd,4,1887,clonotrace_revised_min2,completed,4029.0,2.2074813842773438,"{""load"": 0.185, ""cell_graph"": 34.194, ""label_spreading"": 2781.012, ""sparsify"": 5.446, ""clone_distance"": 1192.627, ""leiden_umap"": 10.135}"
@@ -34,5 +35,5 @@ size,ln_vaccine_f0.25,8,2785,benisse_min2,completed,2401.27,8.8568115234375,"{""
 size,ln_vaccine_f0.5,8,5570,threadfin_run,completed,154.27,1.45,"{""clone_profiles"": 29.19, ""clonal_coherence"": 1.75, ""clone_map"": 62.48, ""programmes"": 51.42, ""profile_association"": 9.41}"
 size,ln_vaccine_f0.5,8,5570,threadfin_kernel,completed,27.652,1.4660148620605469,"{""representation"": 27.652}"
 size,ln_vaccine_f0.5,8,5570,clone2vec_min2,completed,619.01,1.1947174072265625,"{""clones_adata"": 0.077, ""clonal_nn"": 37.214, ""clone2vec"": 562.267, ""umap"": 12.735}"
-size,ln_vaccine_f0.5,8,5570,clonotrace_revised_min2,running or killed,,,
+size,ln_vaccine_f0.5,8,5570,clonotrace_revised_min2,completed,33152.0,16.780651092529297,"{""load"": 0.837, ""cell_graph"": 118.361, ""label_spreading"": 10139.241, ""sparsify"": 46.316, ""clone_distance"": 22737.916, ""leiden_umap"": 80.681}"
 size,ln_vaccine_f0.5,8,5570,benisse_min2,completed,10356.0,35.298851013183594,"{""encoder"": 5.034, ""benisse_core"": 10283.826, ""aggregate"": 8.354}"

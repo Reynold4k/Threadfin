@@ -1,0 +1,47 @@
+{
+ "dataset": "flu_lung",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 25.6,
+  "threadfin_run": 43.8,
+  "plot_and_save": 0.6
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 2
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 4121,
+ "contigs": 19423,
+ "contigs_matching_a_cell": 0.24089996396025332,
+ "test": [
+  "ha_binding",
+  "tissue",
+  "isotype"
+ ],
+ "h5ad_gb": 0.14,
+ "clones": 1367,
+ "clones_ge2": 204,
+ "icc": 0.16163318219793016,
+ "icc_shuffled": 0.01838956311103565,
+ "p_value": 0.004975124378109453,
+ "programmes": 1,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 32,
+  "min_dist": 0.95
+ },
+ "seconds_total": 70.0,
+ "peak_rss_gb": 1.13
+}

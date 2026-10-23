@@ -1,0 +1,20 @@
+Threadfin summary
+=================
+Cells with a clone id: 44,664 of 44,664, in 8,057 clones (4,415 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 59.8% of transcriptional variance within 'sample' strata; shuffled clones explain 0.1% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 1 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   8 programmes from 6,174 reliable clones (every split significant); 0 are stable (bootstrap Jaccard >= 0.75).
+   P1: 1,407 clones, 4,656 cells, stability 0.69; Undifferentiated 89%, Monocyte 3%
+   P2: 1,246 clones, 11,319 cells, stability 0.73; Monocyte 62%, Undifferentiated 28%
+   P3: 1,135 clones, 8,587 cells, stability 0.62; Baso 60%, Undifferentiated 31%
+   P4: 1,070 clones, 7,758 cells, stability 0.68; Undifferentiated 86%, Neutrophil 12%
+   P5: 715 clones, 4,404 cells, stability 0.52; Neutrophil 81%, Undifferentiated 16%  [unstable - do not interpret]
+   P6: 307 clones, 2,218 cells, stability 0.42; Undifferentiated 42%, Meg 38%  [unstable - do not interpret]
+   P7: 149 clones, 2,604 cells, stability 0.29; Neutrophil 80%, Monocyte 13%  [unstable - do not interpret]
+   P8: 145 clones, 1,235 cells, stability 0.39; Mast 85%, Baso 8%  [unstable - do not interpret]
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

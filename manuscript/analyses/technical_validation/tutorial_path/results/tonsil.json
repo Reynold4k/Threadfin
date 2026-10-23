@@ -1,0 +1,57 @@
+{
+ "dataset": "tonsil",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 5.8,
+  "threadfin_run": 64.9,
+  "plot_and_save": 0.8
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 6
+  },
+  {
+   "category": "ImplicitModificationWarning",
+   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
+   "file": "anndata.py",
+   "count": 1
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.67). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 22478,
+ "contigs": 55557,
+ "contigs_matching_a_cell": 0.8037331029393235,
+ "test": [
+  "isotype"
+ ],
+ "h5ad_gb": 0.71,
+ "clones": 11075,
+ "clones_ge2": 361,
+ "icc": 0.25284805436727426,
+ "icc_shuffled": 0.03319047199588504,
+ "p_value": 0.004975124378109453,
+ "programmes": 2,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 180,
+  "min_dist": 0.95
+ },
+ "seconds_total": 71.5,
+ "peak_rss_gb": 2.54
+}

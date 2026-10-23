@@ -1,0 +1,54 @@
+{
+ "dataset": "mouse_rbd",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 71.8,
+  "threadfin_run": 137.2,
+  "plot_and_save": 1.6
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 4
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.65). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 36188,
+ "contigs": 90058,
+ "contigs_matching_a_cell": 0.44180417064558397,
+ "test": [
+  "rbd_bait",
+  "division_gate",
+  "zone_gate",
+  "isotype"
+ ],
+ "h5ad_gb": 2.01,
+ "clones": 8736,
+ "clones_ge2": 1881,
+ "icc": 0.16918595941154516,
+ "icc_shuffled": 0.006501013469672257,
+ "p_value": 0.004975124378109453,
+ "programmes": 3,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 10,
+  "min_dist": 0.95
+ },
+ "seconds_total": 210.7,
+ "peak_rss_gb": 7.9
+}

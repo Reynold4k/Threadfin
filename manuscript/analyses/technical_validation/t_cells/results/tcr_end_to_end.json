@@ -1,0 +1,49 @@
+{
+ "threadfin": "4.5.0",
+ "scirpy": "0.22.5",
+ "python_hash_seed": "0",
+ "cells": 3000,
+ "cells_with_clone": 2793,
+ "clones": 2373,
+ "clones_ge2": 191,
+ "receptor": "TCR",
+ "icc": 0.2646573583716335,
+ "icc_shuffled": 0.029882217380261217,
+ "icc_p": 0.004975124378109453,
+ "programmes": 1,
+ "source_r2": 0.01700619527436069,
+ "source_p": 0.07846076961519241,
+ "minutes": 1.0,
+ "contigs_by_locus": {
+  "TRB": 3497,
+  "TRA": 2691,
+  "Multi": 976,
+  "IGH": 117,
+  "IGL": 60,
+  "TRG": 45,
+  "TRD": 22,
+  "IGK": 16
+ },
+ "clone_calls": [
+  {
+   "check_contigs": false,
+   "cells": 2793,
+   "clones": 2373,
+   "clones_ge2": 191,
+   "cells_in_clones_ge2": 611,
+   "combined_ids": 231,
+   "combined_two_beta": 127,
+   "contigs_set_aside": 0
+  },
+  {
+   "check_contigs": true,
+   "cells": 2793,
+   "clones": 2356,
+   "clones_ge2": 199,
+   "cells_in_clones_ge2": 636,
+   "combined_ids": 74,
+   "combined_two_beta": 0,
+   "contigs_set_aside": 168
+  }
+ ]
+}

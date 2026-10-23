@@ -5,37 +5,40 @@
   "method": "dandelion",
   "dandelion_version": "0.5.7",
   "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 11683,
   "identity": 0.85,
   "donor_key": "donor",
-  "n_cells": 51186,
-  "n_clones": 46444,
-  "n_clones_ge2": 2281,
-  "largest_clone": 83,
+  "n_cells": 39503,
+  "n_clones": 38059,
+  "n_clones_ge2": 588,
+  "largest_clone": 33,
+  "python_hash_seed": "0",
   "source": "dandelion",
-  "cells_dropped": 11684,
-  "light_chain_only_cells_dropped": 11684
+  "cells_dropped": 11683,
+  "light_chain_only_cells_dropped": 0
  },
  "qc": {
   "n_cells": 61423,
-  "n_cells_bcr": 39502,
-  "n_clones": 38055,
-  "clones_ge2": 592,
-  "clones_ge3": 192,
-  "clones_ge5": 77,
+  "n_cells_bcr": 39503,
+  "n_clones": 38059,
+  "clones_ge2": 588,
+  "clones_ge3": 195,
+  "clones_ge5": 76,
   "clones_ge10": 31,
-  "cells_in_clones_ge2": 2039,
+  "cells_in_clones_ge2": 2032,
   "largest_clone": 33,
   "n_donors": 37,
   "n_samples": 36
  },
  "coherence": {
-  "icc": 0.3983038649244767,
-  "null_mean": 0.035089171624959274,
-  "null_q95": 0.048463457562406755,
-  "excess": 0.36321469329951744,
+  "icc": 0.40028797901149443,
+  "null_mean": 0.035845364592320364,
+  "null_q95": 0.04933159929340166,
+  "excess": 0.3644426144191741,
   "p_value": 0.001996007984031936,
-  "n_clones": 592,
-  "n_cells": 2039,
+  "n_clones": 588,
+  "n_cells": 2032,
   "min_cells_reliability_0.5": 2
  },
  "clone_map": {
@@ -46,65 +49,65 @@
   "min_reliability": 0.0,
   "random_state": 0,
   "layout_seed": 0,
-  "n_clones": 592,
-  "n_profiled": 592,
+  "n_clones": 588,
+  "n_profiled": 588,
   "chosen_by": "user",
   "quality": {
-   "score": 0.38677994733947485,
-   "coherence": 0.9341216216216216,
-   "local_fidelity": 0.548704954954955,
-   "global_fidelity": 0.7316116964807513,
-   "coherence_target": 0.9847972972972973
+   "score": 0.3917818396113941,
+   "coherence": 0.9336734693877551,
+   "local_fidelity": 0.5561791383219955,
+   "global_fidelity": 0.7205818198123574,
+   "coherence_target": 0.9829931972789115
   },
   "min_cells": 2
  },
  "programme_splits": {
   "n_leiden_communities": 2,
   "n_merged": 1,
-  "root_pvalue": 0.15949290670446503
+  "root_pvalue": 0.07352527277457764
  },
  "programmes": {
   "n": 1,
-  "n_clones": 592,
+  "n_clones": 588,
   "note": "no distinct programmes: clones vary along a continuum"
  },
  "label_effects": {
   "antigen_call": {
    "label": "antigen_call",
    "kind": "categorical",
-   "r2": 0.07009847526078207,
-   "null_mean": 0.04063976767071972,
-   "excess_r2": 0.029458707590062347,
+   "r2": 0.0673456029467981,
+   "null_mean": 0.038494706139902905,
+   "excess_r2": 0.028850896806895197,
    "p_value": 0.0004997501249375312,
-   "n_clones": 482,
+   "n_clones": 484,
    "n_levels": 5,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "none": [
-     -0.1994462082088245,
-     0.28907705291818214,
-     -0.0014476601591266812
+     -0.19445717683513122,
+     0.2838294255980674,
+     -0.011176639248588503
     ],
     "np": [
-     0.13652439716517337,
-     0.027317395994773404,
-     0.018868716821132146
+     0.12363205219413784,
+     0.0185758711588177,
+     -0.011741938625473394
     ],
     "orf8": [
-     0.12970221103025675,
-     -0.09050659442538767,
-     0.10694471652278084
+     0.12745406580232027,
+     -0.08147124224348345,
+     -0.10018786891818587
     ],
     "rbd": [
-     0.012722982704324816,
-     0.049788782027906944,
-     0.008236844294129362
+     0.030446534203693428,
+     0.04903340096019261,
+     -0.028576849382033746
     ],
     "spike": [
-     -0.15406942868010734,
-     -0.3279903398181465,
-     -0.16922614277763998
+     -0.1566279677889591,
+     -0.3152362088580106,
+     0.1878929882817128
     ]
    },
    "note": "dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)"
@@ -112,34 +115,34 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.10843834559468311,
-   "null_mean": 0.02823368300737143,
-   "excess_r2": 0.08020466258731168,
+   "r2": 0.10666173161208743,
+   "null_mean": 0.027262103208191328,
+   "excess_r2": 0.07939962840389611,
    "p_value": 0.0004997501249375312,
-   "n_clones": 512,
+   "n_clones": 510,
    "n_levels": 4,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "IGHA": [
-     -0.31609161193959384,
-     0.1727446728799951,
-     -0.001741696976791885
+     -0.3098540247195543,
+     0.15832398852333102,
+     -0.01892346930901193
     ],
     "IGHD": [
-     0.0544925774100099,
-     0.02953574593422602,
-     0.02422280702061377
+     0.060997214773715294,
+     0.038423442377143485,
+     -0.028268675463184137
     ],
     "IGHG": [
-     -0.32176608746130547,
-     -0.037023864850159675,
-     -0.2684350461050339
+     -0.3219076020649212,
+     -0.037125861761235175,
+     0.3006422687684078
     ],
     "IGHM": [
-     0.48769232432752513,
-     -0.11171129183705203,
-     0.21589494066940504
+     0.47995910484692345,
+     -0.10383678861311331,
+     -0.22616874802664372
     ]
    },
    "note": "heavy-chain isotype"
@@ -147,24 +150,24 @@
   "disease_state": {
    "label": "disease_state",
    "kind": "categorical",
-   "r2": 0.04995175728499679,
-   "null_mean": 0.0017201671820922155,
-   "excess_r2": 0.04823159010290457,
+   "r2": 0.05039200095321543,
+   "null_mean": 0.0017356942702922823,
+   "excess_r2": 0.048656306682923145,
    "p_value": 0.0004997501249375312,
-   "n_clones": 592,
+   "n_clones": 588,
    "n_levels": 2,
    "strata_key": null,
    "n_perm": 2000,
    "axis_correlation": {
     "Acute": [
-     -0.18471928417634373,
-     0.33555967495061606,
-     0.019602169092168355
+     -0.17740686557320678,
+     0.33568723240482184,
+     0.015032053651700059
     ],
     "Convalescent": [
-     0.18471928417634373,
-     -0.33555967495061606,
-     -0.019602169092168355
+     0.17740686557320678,
+     -0.33568723240482184,
+     -0.015032053651700059
     ]
    },
    "note": "acute vs convalescent sampling (donor-level label: not separable from other donor differences)"
@@ -173,12 +176,12 @@
  "programme_associations": {},
  "memory": {
   "visit": {
-   "n_clones": 17,
-   "n_pairs": 17,
-   "memory_index": 0.6202739490067481,
+   "n_clones": 13,
+   "n_pairs": 13,
+   "memory_index": 1.2147173506854343,
    "memory_index_ci": [
-    0.00804269536746438,
-    1.2986831687433373
+    NaN,
+    NaN
    ],
    "p_value": 0.001996007984031936,
    "persistence": null,
@@ -190,66 +193,66 @@
   }
  },
  "heritability": {
-  "n_genes": 4936,
-  "median_icc": 0.03196855814982974,
+  "n_genes": 4934,
+  "median_icc": 0.031741732332812356,
   "top_genes": [
    "JCHAIN",
    "MALAT1",
    "HLA-DRA",
    "GAPDH",
    "CD74",
-   "HOPX",
    "HIST1H4C",
+   "HOPX",
    "ACTB",
-   "HSP90B1",
    "ACTG1",
+   "HSP90B1",
    "TUBA1B",
    "HLA-DPB1",
-   "CD37",
    "CCND2",
+   "CD37",
    "CRIP1",
-   "KIAA0125",
    "HLA-DRB1",
    "LTB",
-   "S100A4",
+   "KIAA0125",
    "MZB1",
-   "FTL",
    "MT-CO2",
-   "TSC22D3",
+   "S100A4",
+   "FTL",
    "TMSB10",
+   "TSC22D3",
    "MT-CO1"
   ],
-  "receptor_gene_icc": 0.8753353775220474,
+  "receptor_gene_icc": 0.8786812190141647,
   "gene_sets": {
    "plasma cell": {
-    "median_icc": 0.1301,
-    "matched_background_median_icc": 0.0295,
+    "median_icc": 0.1323,
+    "matched_background_median_icc": 0.0284,
     "pvalue_vs_matched": 0.0004
    },
    "dark zone / cycling": {
-    "median_icc": 0.1937,
-    "matched_background_median_icc": 0.0368,
-    "pvalue_vs_matched": 0.0003
+    "median_icc": 0.1977,
+    "matched_background_median_icc": 0.0355,
+    "pvalue_vs_matched": 0.0
    },
    "light zone": {
-    "median_icc": 0.0709,
-    "matched_background_median_icc": 0.0138,
-    "pvalue_vs_matched": 0.0398
+    "median_icc": 0.0797,
+    "matched_background_median_icc": 0.0112,
+    "pvalue_vs_matched": 0.0189
    },
    "memory": {
-    "median_icc": 0.0648,
-    "matched_background_median_icc": 0.0176,
-    "pvalue_vs_matched": 0.0244
+    "median_icc": 0.0705,
+    "matched_background_median_icc": 0.0151,
+    "pvalue_vs_matched": 0.0225
    },
    "naive": {
-    "median_icc": 0.1688,
-    "matched_background_median_icc": 0.0265,
-    "pvalue_vs_matched": 0.0004
+    "median_icc": 0.168,
+    "matched_background_median_icc": 0.0274,
+    "pvalue_vs_matched": 0.0006
    },
    "interferon": {
-    "median_icc": 0.0042,
-    "matched_background_median_icc": 0.0083,
-    "pvalue_vs_matched": 0.8833
+    "median_icc": 0.0003,
+    "matched_background_median_icc": 0.0048,
+    "pvalue_vs_matched": 0.9468
    }
   }
  },
@@ -367,5 +370,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 3.5
+ "runtime_min": 6.6
 }

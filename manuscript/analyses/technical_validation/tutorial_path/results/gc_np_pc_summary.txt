@@ -1,0 +1,26 @@
+Threadfin summary
+=================
+Cells with a BCR: 772 of 884, in 609 clones (34 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 4.9% of transcriptional variance within 'donor' strata; shuffled clones explain 3.2% (p = 0.239, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 5 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   2 programmes from 92 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   P1: 50 clones, 126 cells, stability 0.80; light zone 49%, Myc+ light zone 37%
+   P2: 42 clones, 129 cells, stability 0.72; plasma cell 58%, light zone 27%
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   fate explains clone states: 77.7% of clone-profile variance vs 8.2% for shuffled labels (p = 0.0005, 64 clones).
+   Programme differences (FDR < 0.05):
+   fate: P1 depleted for 'plasma cell' (0% vs 70% of clones; OR 0.00, FDR 0.002)
+   fate: P2 enriched for 'plasma cell' (70% vs 0% of clones; OR inf, FDR 0.002)
+   fate: P1 enriched for 'light zone' (61% vs 26% of clones; OR 9.41, FDR 0.002)
+   fate: P2 depleted for 'light zone' (26% vs 61% of clones; OR 0.11, FDR 0.002)
+   isotype: no significant programme effect.
+
+Not run (everything above is complete):
+   clone-level test of 'isotype': 'isotype' has a single level among the reliable clones.
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

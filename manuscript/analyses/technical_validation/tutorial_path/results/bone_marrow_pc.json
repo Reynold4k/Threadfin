@@ -1,0 +1,60 @@
+{
+ "dataset": "bone_marrow_pc",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 8.9,
+  "threadfin_run": 377.6,
+  "plot_and_save": 2.4
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 15
+  },
+  {
+   "category": "ImplicitModificationWarning",
+   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
+   "file": "anndata.py",
+   "count": 1
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.60). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 115144,
+ "contigs": 183314,
+ "contigs_matching_a_cell": 0.6970607809550825,
+ "test": [
+  "sorted_as",
+  "tissue",
+  "antigen",
+  "isotype"
+ ],
+ "h5ad_gb": 2.1,
+ "clones": 55621,
+ "clones_ge2": 6583,
+ "icc": 0.4269243637623394,
+ "icc_shuffled": 0.045932633437314074,
+ "p_value": 0.004975124378109453,
+ "programmes": 3,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 70,
+  "min_dist": 0.95
+ },
+ "seconds_total": 389.1,
+ "peak_rss_gb": 8.03
+}

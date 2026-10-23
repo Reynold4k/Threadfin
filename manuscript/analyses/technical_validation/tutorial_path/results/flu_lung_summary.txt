@@ -1,0 +1,20 @@
+Threadfin summary
+=================
+Cells with a BCR: 2,115 of 4,121, in 1,367 clones (117 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 16.2% of transcriptional variance within 'donor' strata; shuffled clones explain 1.8% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 4 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   No distinct programmes: the 204 reliable clones differ, but along a continuum rather than in separate groups (split test p = 0.11).
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   ha_binding does not significantly explain clone states: 1.7% of clone-profile variance vs 2.0% for shuffled labels (p = 0.53, 151 clones).
+   tissue explains clone states: 26.2% of clone-profile variance vs 0.7% for shuffled labels (p = 0.0005, 194 clones).
+   isotype explains clone states: 5.1% of clone-profile variance vs 1.1% for shuffled labels (p = 0.005, 199 clones).
+
+4. Do clones keep their state over 'tissue'? (clonal memory)
+   28 clones seen at >= 2 levels: memory index -0.10 [-0.32, 0.11], p = 0.93 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

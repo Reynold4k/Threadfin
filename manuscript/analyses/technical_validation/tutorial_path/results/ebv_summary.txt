@@ -1,0 +1,33 @@
+Threadfin summary
+=================
+Cells with a BCR: 123,369 of 205,630, in 87,396 clones (3,957 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 15.8% of transcriptional variance within 'timepoint' strata; shuffled clones explain 1.4% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 6 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   2 programmes from 6,124 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   P1: 3,693 clones, 23,809 cells, stability 0.79
+   P2: 2,431 clones, 18,288 cells, stability 0.54  [unstable - do not interpret]
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   gfp explains clone states: 10.8% of clone-profile variance vs 0.0% for shuffled labels (p = 0.0005, 5009 clones).
+   isotype explains clone states: 9.2% of clone-profile variance vs 0.0% for shuffled labels (p = 0.0005, 6035 clones).
+   Programme differences (FDR < 0.05):
+   gfp: P1 enriched for 'GFP+' (64% vs 56% of clones; OR 1.41, FDR 0.0005)
+   gfp: P1 depleted for 'GFP-' (36% vs 44% of clones; OR 0.71, FDR 0.0005)
+   gfp: P2 depleted for 'GFP+' (56% vs 64% of clones; OR 0.71, FDR 0.0005)
+   gfp: P2 enriched for 'GFP-' (44% vs 36% of clones; OR 1.41, FDR 0.0005)
+   isotype: P1 depleted for 'IGHA' (6% vs 19% of clones; OR 0.27, FDR 0.0005)
+   isotype: P1 depleted for 'IGHD' (0% vs 1% of clones; OR 0.16, FDR 0.0005)
+   isotype: P1 depleted for 'IGHG' (14% vs 50% of clones; OR 0.16, FDR 0.0005)
+   isotype: P1 enriched for 'IGHM' (80% vs 30% of clones; OR 9.47, FDR 0.0005)
+   isotype: P2 enriched for 'IGHA' (19% vs 6% of clones; OR 3.71, FDR 0.0005)
+   isotype: P2 enriched for 'IGHD' (1% vs 0% of clones; OR 6.38, FDR 0.0005)
+
+4. Do clones keep their state over 'timepoint'? (clonal memory)
+   730 clones seen at >= 2 levels: memory index 0.28 [0.23, 0.33], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
+   Same programme at the next level: 59% of clones vs 45% expected for random clones.
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

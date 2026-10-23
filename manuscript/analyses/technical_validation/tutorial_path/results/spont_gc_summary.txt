@@ -1,0 +1,25 @@
+Threadfin summary
+=================
+Cells with a BCR: 8,105 of 22,898, in 2,879 clones (643 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 27.9% of transcriptional variance within 'donor' strata; shuffled clones explain 2.6% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 3 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   3 programmes from 1,053 reliable clones (every split significant); 0 are stable (bootstrap Jaccard >= 0.75).
+   P1: 494 clones, 2,859 cells, stability 0.75
+   P2: 405 clones, 2,921 cells, stability 0.73
+   P3: 154 clones, 499 cells, stability 0.61
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   isotype explains clone states: 3.7% of clone-profile variance vs 0.9% for shuffled labels (p = 0.0005, 1000 clones).
+   Programme differences (FDR < 0.05):
+   isotype: P1 depleted for 'IGHA' (3% vs 10% of clones; OR 0.24, FDR 0.0015)
+   isotype: P1 enriched for 'IGHG' (48% vs 42% of clones; OR 1.85, FDR 0.0015)
+   isotype: P3 depleted for 'IGHG' (21% vs 49% of clones; OR 0.35, FDR 0.0015)
+   isotype: P3 enriched for 'IGHA' (14% vs 6% of clones; OR 2.76, FDR 0.0067)
+   isotype: P2 enriched for 'IGHA' (9% vs 5% of clones; OR 1.95, FDR 0.0081)
+   isotype: P3 enriched for 'IGHM' (64% vs 46% of clones; OR 1.69, FDR 0.016)
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

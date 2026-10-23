@@ -1,0 +1,46 @@
+{
+ "dataset": "malaria_late",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 42.3,
+  "threadfin_run": 268.8,
+  "plot_and_save": 2.2
+ },
+ "warnings": [
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.66). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 72359,
+ "contigs": 121236,
+ "contigs_matching_a_cell": 1.0,
+ "test": [
+  "cell_state",
+  "isotype"
+ ],
+ "h5ad_gb": 2.22,
+ "clones": 58594,
+ "clones_ge2": 1007,
+ "icc": 0.45385865623055355,
+ "icc_shuffled": 0.01586201311978199,
+ "p_value": 0.004975124378109453,
+ "programmes": 4,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 32,
+  "min_dist": 0.8
+ },
+ "seconds_total": 313.5,
+ "peak_rss_gb": 6.5
+}

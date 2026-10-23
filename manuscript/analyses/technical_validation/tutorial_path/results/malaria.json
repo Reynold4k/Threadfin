@@ -1,0 +1,40 @@
+{
+ "dataset": "malaria",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 19.9,
+  "threadfin_run": 136.0,
+  "plot_and_save": 1.6
+ },
+ "warnings": [
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 40623,
+ "contigs": 47810,
+ "contigs_matching_a_cell": 0.90798996025936,
+ "test": [
+  "cell_state",
+  "isotype"
+ ],
+ "h5ad_gb": 1.22,
+ "clones": 20500,
+ "clones_ge2": 523,
+ "icc": 0.7352724353953749,
+ "icc_shuffled": 0.06286786440159815,
+ "p_value": 0.004975124378109453,
+ "programmes": 4,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 18,
+  "min_dist": 0.95
+ },
+ "seconds_total": 157.5,
+ "peak_rss_gb": 3.64
+}

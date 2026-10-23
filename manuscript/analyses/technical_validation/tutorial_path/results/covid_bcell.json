@@ -1,0 +1,58 @@
+{
+ "dataset": "covid_bcell",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 10.3,
+  "threadfin_run": 155.5,
+  "plot_and_save": 1.4
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 36
+  },
+  {
+   "category": "ImplicitModificationWarning",
+   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
+   "file": "anndata.py",
+   "count": 1
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "The confidence interval of the memory index could not be computed: in some bootstrap resamples of clones no between-clone difference was left to compare with (too few clones seen at two levels). The memory index and its P value are unaffected; the interval is reported as missing.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 61423,
+ "contigs": 147974,
+ "contigs_matching_a_cell": 0.9141132901725979,
+ "test": [
+  "antigen_call",
+  "isotype"
+ ],
+ "h5ad_gb": 1.06,
+ "clones": 38059,
+ "clones_ge2": 588,
+ "icc": 0.40028924112303604,
+ "icc_shuffled": 0.045626755289156835,
+ "p_value": 0.004975124378109453,
+ "programmes": 1,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 56,
+  "min_dist": 0.95
+ },
+ "seconds_total": 167.5,
+ "peak_rss_gb": 4.31
+}

@@ -9,9 +9,9 @@
 | malaria | GSE286215 (exp. 1) | mouse | Plasmodium chabaudi infection, days 0-14 | 40,623 | 21,145 | 523 | 0 | 0.736 | 0.062 | 0.002 | 4 | Supp. Table 2 |
 | ln_vaccine | GSE195673 | human | SARS-CoV-2 mRNA vaccination, lymph node FNA + blood | 193,442 | 153,049 | 11,141 | 1,243 | 0.326 | 0.164 | 0.002 | 4 | Fig. 2B; Supp. Figs. 2, 6 |
 | spont_gc | GSE203132 | mouse | spontaneous GCs, AID-EYFP+ splenic B cells | 22,898 | 8,105 | 1,051 | 127 | 0.279 | 0.026 | 0.002 | 3 | Fig. 3a-f; Supp. Fig. 3 |
-| covid_bcell | GSE171703 | human | antigen-bait-sorted B cells after SARS-CoV-2 infection | 61,423 | 39,502 | 592 | 31 | 0.398 | 0.035 | 0.002 | 1 | additional (not in manuscript) |
-| flu | GSE175522 / GSE175523 | human | seasonal influenza vaccination, blood d0 and d7 (heavy chain only) | 123,693 | 84,037 | 2,080 | 25 | 0.560 | 0.030 | 0.002 | 4 | additional (not in manuscript) |
-| flu_lung | GSE317692 | mouse | influenza A infection, lung and mediastinal LN, day 20, HA tetramers | 4,121 | 2,115 | 201 | 22 | 0.154 | 0.052 | 0.002 | 1 | additional (not in manuscript) |
-| tonsil | E-MTAB-9005 / 9003 | human | paediatric tonsil | 22,478 | 11,570 | 361 | 0 | 0.255 | 0.034 | 0.002 | 2 | additional (not in manuscript) |
-| ebv | GSE317492 | human | EBV infection of tonsil organoids (donors pooled) | 205,630 | 92,162 | 6,916 | 223 | 0.215 | 0.039 | 0.002 | 4 | additional (not in manuscript) |
-| bone_marrow_pc | GSE253857 | human | bone-marrow plasma cells and memory B cells, with blood | 115,144 | 67,718 | 6,788 | 59 | 0.401 | 0.225 | 0.002 | 3 | additional (not in manuscript) |
+| covid_bcell | GSE171703 | human | antigen-bait-sorted B cells after SARS-CoV-2 infection | 61,423 | 39,503 | 588 | 31 | 0.400 | 0.036 | 0.002 | 1 | additional (not in manuscript) |
+| flu | GSE175522 / GSE175523 | human | seasonal influenza vaccination, blood d0 and d7 (heavy chain only) | 123,693 | 84,037 | 2,082 | 26 | 0.561 | 0.030 | 0.002 | 4 | additional (not in manuscript) |
+| flu_lung | GSE317692 | mouse | influenza A infection, lung and mediastinal LN, day 20, HA tetramers | 4,121 | 2,115 | 204 | 20 | 0.162 | 0.052 | 0.002 | 1 | additional (not in manuscript) |
+| tonsil | E-MTAB-9005 / 9003 | human | paediatric tonsil | 22,478 | 11,570 | 361 | 0 | 0.253 | 0.033 | 0.002 | 2 | additional (not in manuscript) |
+| ebv | GSE317492 | human | EBV infection of tonsil organoids (donors pooled) | 205,630 | 123,369 | 6,124 | 974 | 0.158 | 0.043 | 0.002 | 2 | additional (not in manuscript) |
+| bone_marrow_pc | GSE253857 | human | bone-marrow plasma cells and memory B cells, with blood | 115,144 | 67,895 | 6,583 | 64 | 0.427 | 0.245 | 0.002 | 3 | additional (not in manuscript) |

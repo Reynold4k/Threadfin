@@ -10,6 +10,17 @@ Most scripts were written to run from the repository's former `case_studies/` fo
 validation workspace; paths at the top of each script record where their inputs were. They are provided as a
 record of exactly what was run.
 
+## Questions a user asks first (2026-10-24)
+
+| Folder | Question | Answer |
+|---|---|---|
+| [`tutorial_path/`](tutorial_path/README.md) | Does the documented path work on real data, as a new user would follow it? | `tf.run` on all 14 public BCR datasets and the two LARRY datasets, in a new environment, with every setting at its default: no errors; every code block of Tutorials 1, 3 and 4 runs. |
+| [`clone_definition/`](clone_definition/README.md) | Do the results depend on how clones are called? | Junction identities 0.75–1.0 and Dandelion's contig check, on two case studies: every conclusion holds. |
+| [`embedding/`](embedding/README.md) | Do the results depend on how the expression embedding is built? | No: 2,000–5,000 variable genes and 20–50 components leave the excess clonal ICC within 0.115–0.126 and every label effect significant; leaving the receptor genes in would inflate the RBD coherence (excess 0.118 → 0.176). |
+| [`power/`](power/README.md) | How many clones does the coherence test need? | Calibrated; 80 % power for a clonal ICC of 0.1 with about 10 clones of two or more cells, 0.05 with about 40, 0.02 with 160–320. |
+| [`scalability/`](scalability/README.md) | Does it scale to atlas-size data? | A million cells (71,376 clones of two or more cells) in about an hour on 8 cores and 8.3 GB; time grows about in proportion to the number of cells. |
+| [`t_cells/`](t_cells/README.md) | Does it work for T cells, from a scirpy object? | Yes, with the same call: 3,000 T cells of 14 patients (Wu et al. 2020) in one minute; clone identity explains 26.5 % of state variation (3.0 % shuffled). |
+
 ## Clone-map settings chosen automatically (`clone_map_settings/`, 2026-10-18)
 
 **Question.** UMAP draws a continuum of clones as one picture only for suitable settings

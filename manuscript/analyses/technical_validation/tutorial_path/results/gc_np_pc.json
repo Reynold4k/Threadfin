@@ -1,0 +1,48 @@
+{
+ "dataset": "gc_np_pc",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 0.8,
+  "threadfin_run": 49.7,
+  "plot_and_save": 0.6
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 1
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 884,
+ "contigs": 1800,
+ "contigs_matching_a_cell": 0.8544444444444445,
+ "test": [
+  "fate",
+  "isotype"
+ ],
+ "h5ad_gb": 0.06,
+ "clones": 609,
+ "clones_ge2": 92,
+ "icc": 0.04896730686385704,
+ "icc_shuffled": 0.03244988267551145,
+ "p_value": 0.23880597014925373,
+ "programmes": 2,
+ "skipped": {
+  "clone-level test of 'isotype'": "'isotype' has a single level among the reliable clones."
+ },
+ "map": {
+  "n_neighbors": 18,
+  "min_dist": 0.95
+ },
+ "seconds_total": 51.1,
+ "peak_rss_gb": 0.6
+}

@@ -37,23 +37,23 @@ ln_vaccine,tissue:blood,numeric,0.4330291269265687,0.004445017523125,0.428584109
 spont_gc,isotype,categorical,0.036924730084623,0.0087711623645265,0.0281535677200965,0.0004997501249375,999,3.0,donor,2000,heavy-chain isotype
 spont_gc,mutation_frequency,numeric,0.0471704499584988,0.0012566050485865,0.0459138449099122,0.0004997501249375,1051,,donor,2000,V-region mutation frequency
 spont_gc,condition,categorical,0.0339039519458995,0.0009543924591009,0.0329495594867985,0.0004997501249375,1051,2.0,,2000,autoimmune chimera vs NP-CGG immunised (donor-level label: not separable from other donor differences)
-covid_bcell,antigen_call,categorical,0.070098475260782,0.0406397676707197,0.0294587075900623,0.0004997501249375,482,5.0,donor,2000,dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)
-covid_bcell,isotype,categorical,0.1084383455946831,0.0282336830073714,0.0802046625873116,0.0004997501249375,512,4.0,donor,2000,heavy-chain isotype
-covid_bcell,disease_state,categorical,0.0499517572849967,0.0017201671820922,0.0482315901029045,0.0004997501249375,592,2.0,,2000,acute vs convalescent sampling (donor-level label: not separable from other donor differences)
-flu,isotype,categorical,0.16794345205669,0.0057896129478668,0.1621538391088231,0.0004997501249375,1770,4.0,donor,2000,heavy-chain isotype
-flu,mutation_frequency,numeric,0.0884193572755014,0.004713372930602,0.0837059843448993,0.0004997501249375,2078,,donor,2000,V-region mutation frequency
-flu,timepoint:d7,numeric,0.0672386601194363,0.0067076584250507,0.0605310016943855,0.0004997501249375,2080,,donor,2000,fraction of the clone's cells sampled at day 7
-flu,age_group,categorical,0.0061517385401693,0.0004605241293397,0.0056912144108295,0.0004997501249375,2080,2.0,,2000,donor age group (donor-level label: not separable from other donor differences)
-flu_lung,ha_binding:PR8HA,numeric,0.0040362122942077,0.0050263001258269,-0.0009900878316192,0.4712643678160919,201,,donor,2000,fraction of the clone's cells binding the infecting strain's haemagglutinin
-flu_lung,ha_binding:both strains,numeric,0.0033188707983505,0.0051517751532346,-0.0018329043548841,0.6156921539230384,201,,donor,2000,fraction of the clone's cells binding both strains (cross-reactive)
-flu_lung,tissue:Lung,numeric,0.2920770553145216,0.0073172808116381,0.2847597745028835,0.0004997501249375,201,,donor,2000,fraction of the clone's cells found in the infected lung
-flu_lung,mutation_frequency,numeric,0.0921764291303472,0.0049160140818949,0.0872604150484522,0.0004997501249375,201,,donor,2000,V-region mutation frequency
-flu_lung,isotype,categorical,0.0530430899197343,0.0101799103327099,0.0428631795870244,0.0014992503748125,196,3.0,donor,2000,heavy-chain isotype
-flu_lung,genotype,categorical,0.0183360552974459,0.0050869762551101,0.0132490790423358,0.0134932533733133,201,2.0,,2000,B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)
-tonsil,isotype,categorical,0.0412767193512873,0.0113546489679941,0.0299220703832931,0.000999500249875,320,4.0,donor,2000,heavy-chain isotype
-ebv,gfp:GFP+,numeric,0.0,0.0,0.0,1.0,5992,,donor,2000,fraction of the clone's d14/d21 cells that are EBV-GFP+
-ebv,isotype,categorical,0.1395650459800659,0.0005317631633583,0.1390332828167076,0.0004997501249375,5626,4.0,donor,2000,heavy-chain isotype
-bone_marrow_pc,sorted_as:plasma cells,numeric,0.3437879372996091,0.0025167997558786,0.3412711375437305,0.0004997501249375,6788,,donor,2000,fraction of the clone's cells sorted as plasma cells
-bone_marrow_pc,tissue:bone marrow,numeric,0.3241368698125008,0.0016714315606021,0.3224654382518987,0.0004997501249375,6788,,donor,2000,fraction of the clone's cells found in the bone marrow
-bone_marrow_pc,antigen,categorical,0.0065067866747872,0.0021452381867229,0.0043615484880642,0.0004997501249375,6786,3.0,donor,2000,antigen the clone's antibody was sorted on
-bone_marrow_pc,isotype,categorical,0.0389426455654369,0.0026384714741812,0.0363041740912556,0.0004997501249375,6315,5.0,donor,2000,heavy-chain isotype
+covid_bcell,antigen_call,categorical,0.0673456029467981,0.0384947061399029,0.0288508968068951,0.0004997501249375,484,5.0,donor,2000,dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)
+covid_bcell,isotype,categorical,0.1066617316120874,0.0272621032081913,0.0793996284038961,0.0004997501249375,510,4.0,donor,2000,heavy-chain isotype
+covid_bcell,disease_state,categorical,0.0503920009532154,0.0017356942702922,0.0486563066829231,0.0004997501249375,588,2.0,,2000,acute vs convalescent sampling (donor-level label: not separable from other donor differences)
+flu,isotype,categorical,0.1686817371841961,0.0057686157076322,0.1629131214765639,0.0004997501249375,1771,4.0,donor,2000,heavy-chain isotype
+flu,mutation_frequency,numeric,0.0877048615433791,0.0045121884836424,0.0831926730597367,0.0004997501249375,2080,,donor,2000,V-region mutation frequency
+flu,timepoint:d7,numeric,0.0667094808428407,0.0064772665907867,0.0602322142520539,0.0004997501249375,2082,,donor,2000,fraction of the clone's cells sampled at day 7
+flu,age_group,categorical,0.006315666333329,0.0004941101548947,0.0058215561784342,0.0004997501249375,2082,2.0,,2000,donor age group (donor-level label: not separable from other donor differences)
+flu_lung,ha_binding:PR8HA,numeric,0.0060401133238565,0.0051268362106153,0.0009132771132411,0.2928535732133933,204,,donor,2000,fraction of the clone's cells binding the infecting strain's haemagglutinin
+flu_lung,ha_binding:both strains,numeric,0.0038851306387539,0.0048553094411569,-0.000970178802403,0.495752123938031,204,,donor,2000,fraction of the clone's cells binding both strains (cross-reactive)
+flu_lung,tissue:Lung,numeric,0.3026175397517138,0.0081980928943884,0.2944194468573254,0.0004997501249375,204,,donor,2000,fraction of the clone's cells found in the infected lung
+flu_lung,mutation_frequency,numeric,0.0958611530927807,0.0049179903934013,0.0909431626993793,0.0004997501249375,204,,donor,2000,V-region mutation frequency
+flu_lung,isotype,categorical,0.0505670925758934,0.0105956570231733,0.0399714355527201,0.0049975012493753,199,3.0,donor,2000,heavy-chain isotype
+flu_lung,genotype,categorical,0.0209562210547456,0.0048395783543846,0.0161166427003609,0.0069965017491254,204,2.0,,2000,B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)
+tonsil,isotype,categorical,0.038007515828813,0.0115364516923978,0.0264710641364151,0.0004997501249375,317,4.0,donor,2000,heavy-chain isotype
+ebv,gfp:GFP+,numeric,0.1131842911722224,0.0001723145565317,0.1130119766156907,0.0004997501249375,5808,,donor,2000,fraction of the clone's d14/d21 cells that are EBV-GFP+
+ebv,isotype,categorical,0.0920953489393017,0.0004933724619718,0.0916019764773299,0.0004997501249375,6035,4.0,donor,2000,heavy-chain isotype
+bone_marrow_pc,sorted_as:plasma cells,numeric,0.3541434361728241,0.0022728587727269,0.3518705774000971,0.0004997501249375,6583,,donor,2000,fraction of the clone's cells sorted as plasma cells
+bone_marrow_pc,tissue:bone marrow,numeric,0.33372737529906,0.001708599506565,0.3320187757924949,0.0004997501249375,6583,,donor,2000,fraction of the clone's cells found in the bone marrow
+bone_marrow_pc,antigen,categorical,0.0064462937184601,0.0021323491426546,0.0043139445758055,0.0004997501249375,6581,3.0,donor,2000,antigen the clone's antibody was sorted on
+bone_marrow_pc,isotype,categorical,0.0397980483781865,0.0025790665072515,0.037218981870935,0.0004997501249375,6266,5.0,donor,2000,heavy-chain isotype

@@ -1,0 +1,211 @@
+[
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 1,
+  "code": "import threadfin as tf\nprint(tf.__version__)          # 4.5.0 or later\n",
+  "error": null,
+  "printed": "4.5.0\n",
+  "shown_in_tutorial": "",
+  "warnings": [
+   "PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'"
+  ]
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 2,
+  "code": "import threadfin as tf\n\nadata = tf.sim.simulate_repertoire(random_state=0)\nprint(adata)\n",
+  "error": null,
+  "printed": "AnnData object with n_obs \u00d7 n_vars = 8467 \u00d7 20\n    obs: 'clone_id', 'donor', 'context', 'true_programme', 'true_state', 'clone_size'\n    uns: 'simulation'\n    obsm: 'X_pca'\n",
+  "shown_in_tutorial": "AnnData object with n_obs \u00d7 n_vars = 8467 \u00d7 20\n    obs: 'clone_id', 'donor', 'context', 'true_programme', 'true_state', 'clone_size'\n    uns: 'simulation'\n    obsm: 'X_pca'\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 3,
+  "code": "sizes = adata.obs[\"clone_id\"].value_counts()\nprint(sizes.value_counts().sort_index().head(6))   # number of clones with 1, 2, 3, ... cells\nprint(f\"{(sizes >= 2).sum()} clones have two or more cells; largest clone: {sizes.max()} cells\")\n",
+  "error": null,
+  "printed": "count\n1    2069\n2     437\n3     168\n4      79\n5      52\n6      31\nName: count, dtype: int64\n931 clones have two or more cells; largest clone: 300 cells\n",
+  "shown_in_tutorial": "count\n1    2069\n2     437\n3     168\n4      79\n5      52\n6      31\n931 clones have two or more cells; largest clone: 300 cells\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 4,
+  "code": "result = tf.run(\n    adata,\n    donor_key=\"donor\",            # clones are compared within individuals\n    sample_key=\"context\",         # each clone is compared with the cells sampled alongside it\n    basis=\"X_pca\",                # an existing embedding; omit it to let Threadfin build one\n    state_key=\"true_state\",       # optional: describes the programmes by cell state\n    test=[\"true_programme\"],      # optional: labels to test against the clones\n)\nprint(result.summary())\n",
+  "error": null,
+  "printed": " under within-'context' permutation (p = 0.00498, 200 permutations).\n[threadfin] choosing clone-map settings (ladder) on 931 clones; target: at least 99.0% of clones in one piece.\n[threadfin]   ladder: n_neighbors 56, min_dist 0.95 -> score 0.742 (smoothed 0.740)\n[threadfin]   ladder: n_neighbors 32, min_dist 0.95 -> score 0.737 (smoothed 0.739)\n[threadfin]   ladder: n_neighbors 56, min_dist 0.80 -> score 0.743 (smoothed 0.738)\n[threadfin] clone-map settings: n_neighbors 56, min_dist 0.95; in every layout at least 99.9% of clones form one piece (local fidelity 0.566, global fidelity 0.919; 72 layouts, 63 s).\n[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 56, min_dist 0.95, chosen automatically); 99.8% of clones in one connected piece.\n[threadfin] programmes: 4 programmes over 931 core clones (resolution 0.2); 1 with bootstrap stability >= 0.75; 931 of 931 profiled clones assigned with posterior >= 0.7.\n[threadfin] profile association 'true_programme': explains 55.6% of clone-profile variance vs 0.3% for permuted labels (p = 0.0005, 931 clones, within-'donor' permutation).\n[threadfin] association 'true_programme': 931 clones, 16 programme effects at FDR < 0.05 (within-'donor' permutation).\n[threadfin] done. print(result.summary()) for a readable report.\nThreadfin summary\n=================\nCells with a clone id: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cells).\n\n1. Does clone identity shape cell state? (clonal coherence)\n   Clone identity explains 27.2% of transcriptional variance within 'context' strata; shuffled clones explain 0.2% (p = 0.00498, 200 permutations).\n   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 3 cells. No clone is filtered out on reliability.\n\n2. Which clones behave alike? (clonal programmes)\n   4 programmes from 931 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).\n   P1: 285 clones, 1,577 cells, stability 0.75; S5 87%, S1 8%\n   P2: 259 clones, 1,979 cells, stability 0.71; S2 53%, S4 19%\n   P3: 229 clones, 1,655 cells, stability 0.66; S0 64%, S2 20%\n   P4: 158 clones, 1,187 cells, stability 0.72; S3 56%, S5 32%\n\n3. Do your labels explain how clones differ? (clone-level tests)\n   true_programme explains clone states: 55.6% of clone-profile variance vs 0.3% for shuffled labels (p = 0.0005, 931 clones).\n   Programme differences (FDR < 0.05):\n   true_programme: P1 depleted for 'G0' (1% vs 38% of clones; OR 0.02, FDR 0.00053)\n   true_programme: P1 depleted for 'G1' (3% vs 38% of clones; OR 0.05, FDR 0.00053)\n   true_programme: P1 enriched for 'G2' (79% vs 0% of clones; OR 1062.45, FDR 0.00053)\n   true_programme: P2 depleted for 'G0' (14% vs 32% of clones; OR 0.35, FDR 0.00053)\n   true_programme: P2 depleted for 'G2' (0% vs 34% of clones; OR 0.01, FDR 0.00053)\n   true_programme: P2 enriched for 'G1' (85% vs 5% of clones; OR 115.52, FDR 0.00053)\n\nPer-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.\n",
+  "shown_in_tutorial": "Threadfin summary\n=================\nCells with a clone id: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cells).\n\n1. Does clone identity shape cell state? (clonal coherence)\n   Clone identity explains 27.2% of transcriptional variance within 'context' strata; shuffled clones explain 0.2% (p = 0.00498, 200 permutations).\n   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 3 cells. No clone is filtered out on reliability.\n\n2. Which clones behave alike? (clonal programmes)\n   4 programmes from 931 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).\n   P1: 285 clones, 1,577 cells, stability 0.75; S5 87%, S1 8%\n   P2: 259 clones, 1,979 cells, stability 0.71; S2 53%, S4 19%\n   P3: 229 clones, 1,655 cells, stability 0.66; S0 64%, S2 20%\n   P4: 158 clones, 1,187 cells, stability 0.72; S3 56%, S5 32%\n\n3. Do your labels explain how clones differ? (clone-level tests)\n   true_programme explains clone states: 55.6% of clone-profile variance vs 0.3% for shuffled labels (p = 0.0005, 931 clones).\n   ...\n",
+  "warnings": [
+   "ImportWarning: Tensorflow not installed; ParametricUMAP will be unavailable",
+   "UserWarning: No resolution reached stability 0.75; using the most stable partition (stability 0.71). Interpret programmes cautiously."
+  ]
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 5,
+  "code": "import pandas as pd\nfrom sklearn.metrics import adjusted_rand_score\n\ntruth = adata.obs.groupby(\"clone_id\", observed=True)[\"true_programme\"].first()\nfound = result.clones[\"clone_programme\"].dropna()\nprint(f\"adjusted Rand index: {adjusted_rand_score(truth.loc[found.index], found):.2f}\")\nprint(pd.crosstab(truth.loc[found.index].rename(\"simulated\"), found.rename(\"found\")))\n",
+  "error": null,
+  "printed": "adjusted Rand index: 0.67\nfound       P1   P2   P3   P4\nsimulated                    \nG0           3   36  210    0\nG1           8  221    9   14\nG2         225    1    0    1\nG3          49    1   10  143\n",
+  "shown_in_tutorial": "adjusted Rand index: 0.67\nfound       P1   P2   P3   P4\nsimulated\nG0           3   36  210    0\nG1           8  221    9   14\nG2         225    1    0    1\nG3          49    1   10  143\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 6,
+  "code": "result.plot(\"threadfin_overview.png\")\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 7,
+  "code": "mp = adata.uns[\"threadfin\"][\"profiles\"][\"map_params\"]\nprint(mp[\"n_neighbors\"], mp[\"min_dist\"], round(mp[\"quality\"][\"coherence\"], 3))\n",
+  "error": null,
+  "printed": "56 0.95 0.998\n",
+  "shown_in_tutorial": "56 0.95 0.998\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 8,
+  "code": "result.clones.head()[[\"n_cells\", \"reliability\", \"clone_programme\", \"confidence\"]]\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "           n_cells  reliability clone_programme  confidence\nclone_id\nD0|C00011        7     0.765086              P2    1.000000\nD0|C00016        6     0.737834              P1    1.000000\nD0|C00019        2     0.499726              P3    0.766667\nD0|C00051        4     0.657441              P3    0.866667\nD0|C00073        3     0.594096              P1    1.000000\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 9,
+  "code": "t = result.clones\nprint(t.groupby(t[\"n_cells\"].clip(upper=10))[\"reliability\"].median().round(2))   # 10 = ten or more cells\n",
+  "error": null,
+  "printed": "n_cells\n2     0.50\n3     0.59\n4     0.66\n5     0.70\n6     0.74\n7     0.77\n8     0.79\n9     0.81\n10    0.89\nName: reliability, dtype: float64\n",
+  "shown_in_tutorial": "n_cells\n2     0.50\n3     0.59\n4     0.66\n5     0.70\n6     0.74\n7     0.77\n8     0.79\n9     0.81\n10    0.89\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "01_getting_started.md",
+  "block": 10,
+  "code": "result.clones.to_csv(\"threadfin_clones.csv\")      # opens in any spreadsheet\nadata.write_h5ad(\"threadfin_result.h5ad\")         # everything, including adata.uns[\"threadfin\"]\nopen(\"threadfin_methods.txt\", \"w\").write(result.methods())   # a starting point for your Methods section\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "",
+  "warnings": [
+   "ResourceWarning: unclosed file <_io.TextIOWrapper name='threadfin_methods.txt' mode='w' encoding='UTF-8'>"
+  ]
+ },
+ {
+  "tutorial": "03_clone_map.md",
+  "block": 1,
+  "code": "import threadfin as tf\n\nadata = tf.sim.simulate_repertoire(random_state=0)\ntf.tl.clone_profiles(adata, basis=\"X_pca\", context_key=\"context\", donor_key=\"donor\",\n                     representation=\"kernel\")\ntable = tf.tl.embed_clones(adata)          # n_neighbors=\"auto\", min_dist=\"auto\"\n",
+  "error": null,
+  "printed": "[threadfin] clone profiles: 931 clones (>= 2 cells, 6398 cells in all). Profiles are shrunk, so a clone reaches reliability 0.5 at 3 cells; nothing is filtered on that.\n[threadfin] choosing clone-map settings (ladder) on 931 clones; target: at least 99.0% of clones in one piece.\n[threadfin]   ladder: n_neighbors 56, min_dist 0.95 -> score 0.742 (smoothed 0.740)\n[threadfin]   ladder: n_neighbors 32, min_dist 0.95 -> score 0.737 (smoothed 0.739)\n[threadfin]   ladder: n_neighbors 56, min_dist 0.80 -> score 0.743 (smoothed 0.738)\n[threadfin] clone-map settings: n_neighbors 56, min_dist 0.95; in every layout at least 99.9% of clones form one piece (local fidelity 0.566, global fidelity 0.919; 72 layouts, 47 s).\n[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 56, min_dist 0.95, chosen automatically); 99.8% of clones in one connected piece.\n",
+  "shown_in_tutorial": "[threadfin] choosing clone-map settings (ladder) on 931 clones; target: at least 99.0% of clones in one piece.\n[threadfin]   ladder: n_neighbors 56, min_dist 0.95 -> score 0.742 (smoothed 0.740)\n[threadfin]   ladder: n_neighbors 32, min_dist 0.95 -> score 0.737 (smoothed 0.739)\n[threadfin]   ladder: n_neighbors 56, min_dist 0.80 -> score 0.743 (smoothed 0.738)\n[threadfin] clone-map settings: n_neighbors 56, min_dist 0.95; in every layout at least 99.9% of clones form one piece (local fidelity 0.566, global fidelity 0.919; 72 layouts, 49 s).\n[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 56, min_dist 0.95, chosen automatically); 99.8% of clones in one connected piece.\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "03_clone_map.md",
+  "block": 2,
+  "code": "mp = adata.uns[\"threadfin\"][\"profiles\"][\"map_params\"]\nmp[\"n_neighbors\"], mp[\"min_dist\"], mp[\"quality\"]\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "(56, 0.95, {'score': 0.739, 'coherence': 0.998, 'local_fidelity': 0.578, 'global_fidelity': 0.9, 'coherence_target': 0.99})\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "03_clone_map.md",
+  "block": 3,
+  "code": "tf.tl.embed_clones(adata, n_neighbors=10, min_dist=0.05)\n",
+  "error": null,
+  "printed": "[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 10, min_dist 0.05); 29.2% of clones in one connected piece.\n[threadfin]   the map is more fragmented than the clone profiles (which keep 99.0% of clones connected); n_neighbors='auto', min_dist='auto' chooses settings that keep it together.\n",
+  "shown_in_tutorial": "[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 10, min_dist 0.05); 29.2% of clones in one connected piece.\n[threadfin]   the map is more fragmented than the clone profiles (which keep 99.0% of clones connected); n_neighbors='auto', min_dist='auto' chooses settings that keep it together.\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "03_clone_map.md",
+  "block": 4,
+  "code": "prof = adata.uns[\"threadfin\"][\"profiles\"]\nxy = prof[\"clone_table\"].loc[:, [\"x\", \"y\"]].dropna()\ntf.tl.map_quality(prof[\"features\"].loc[xy.index], xy.to_numpy())\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "{'score': -2.793, 'coherence': 0.292, 'local_fidelity': 0.578, 'global_fidelity': 0.815, 'coherence_target': 0.99}\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "03_clone_map.md",
+  "block": 5,
+  "code": "table = prof[\"clone_table\"]\ntable[\"fraction_S5\"] = tf.tl.clone_labels(adata, \"true_state\", how=\"fraction:S5\")\ntf.pl.clone_map(adata, color=\"fraction_S5\")          # a number: one colour scale\ntf.tl.find_programmes(adata)\ntf.pl.clone_map(adata, color=\"clone_programme\")      # categories: one panel per programme\n",
+  "error": null,
+  "printed": "[threadfin] programmes: 4 programmes over 931 core clones (resolution 0.2); 1 with bootstrap stability >= 0.75; 931 of 931 profiled clones assigned with posterior >= 0.7.\n",
+  "shown_in_tutorial": "",
+  "warnings": [
+   "UserWarning: No resolution reached stability 0.75; using the most stable partition (stability 0.71). Interpret programmes cautiously."
+  ]
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 1,
+  "code": "import threadfin as tf\n\nadata = tf.sim.simulate_repertoire(n_timepoints=2, memory=0.8, random_state=0)\n",
+  "error": null,
+  "printed": "",
+  "shown_in_tutorial": "cells + clone ids + embedding\n        \u2502\n        \u25bc\n1. clone_profiles \u2500\u2500\u25ba 2. clonal_coherence        (is clone identity informative at all?)\n        \u2502\n        \u251c\u2500\u2500\u25ba 3. embed_clones                       (the clone map, a display)\n        \u251c\u2500\u2500\u25ba 4. find_programmes                    (groups of clones, if they exist)\n        \u251c\u2500\u2500\u25ba 5. profile_association / association_test   (do annotations explain clone differences?)\n        \u2514\u2500\u2500\u25ba 6. clonal_memory                      (do clones keep their state over time or tissue?)\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 2,
+  "code": "table = tf.tl.clone_profiles(adata, basis=\"X_pca\", context_key=\"context\", donor_key=\"donor\",\n                             representation=\"kernel\")\n",
+  "error": null,
+  "printed": "[threadfin] clone profiles: 962 clones (>= 2 cells, 5896 cells in all). Profiles are shrunk, so a clone reaches reliability 0.5 at 2 cells; nothing is filtered on that.\n",
+  "shown_in_tutorial": "[threadfin] clone profiles: 962 clones (>= 2 cells, 5896 cells in all). Profiles are shrunk, so ...\n           n_cells  reliability donor  n_contexts\nclone_id\nD0|C00055        7     0.775251    D0           2\nD0|C00086        5     0.714856    D0           2\nD0|C00091       15     0.877449    D0           2\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 3,
+  "code": "coh = tf.tl.clonal_coherence(adata, strata_key=\"context\", n_perm=200)\n",
+  "error": null,
+  "printed": "[threadfin] clonal coherence: ICC 0.284 vs 0.003 under within-'context' permutation (p = 0.00498, 200 permutations).\n",
+  "shown_in_tutorial": "[threadfin] clonal coherence: ICC 0.284 vs 0.003 under within-'context' permutation (p = 0.00498, 200 permutations).\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 4,
+  "code": "tf.tl.embed_clones(adata)\n",
+  "error": null,
+  "printed": "[threadfin] choosing clone-map settings (ladder) on 962 clones; target: at least 99.0% of clones in one piece.\n[threadfin]   ladder: n_neighbors 56, min_dist 0.95 -> score 0.736 (smoothed 0.723)\n[threadfin]   ladder: n_neighbors 100, min_dist 0.95 -> score 0.724 (smoothed 0.722)\n[threadfin]   ladder: n_neighbors 180, min_dist 0.95 -> score 0.711 (smoothed 0.716)\n[threadfin] clone-map settings: n_neighbors 100, min_dist 0.95; in every layout at least 99.7% of clones form one piece (local fidelity 0.536, global fidelity 0.914; 72 layouts, 51 s).\n[threadfin] clone map: 962 of 962 profiled clones laid out (n_neighbors 100, min_dist 0.95, chosen automatically); 100.0% of clones in one connected piece.\n",
+  "shown_in_tutorial": "[threadfin] clone-map settings: n_neighbors 100, min_dist 0.95; in every layout at least 99.7% of clones form one piece ...\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 5,
+  "code": "programmes = tf.tl.find_programmes(adata)\n",
+  "error": null,
+  "printed": "[threadfin] programmes: 3 programmes over 962 core clones (resolution 0.2 after merging 1 non-significant split(s)); 0 with bootstrap stability >= 0.75; 962 of 962 profiled clones assigned with posterior >= 0.7.\n",
+  "shown_in_tutorial": "           n_clones  n_cells  mean_reliability  mean_confidence  stability  n_clones_with_assigned\nprogramme\nP1              539     3109          0.628033         0.519357   0.510800                     539\nP2              244     1743          0.621933         0.946038   0.693330                     244\nP3              179     1044          0.619189         0.772626   0.684919                     179\n",
+  "warnings": [
+   "UserWarning: No resolution reached stability 0.75; using the most stable partition (stability 0.66). Interpret programmes cautiously."
+  ]
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 6,
+  "code": "effect = tf.tl.profile_association(adata, \"true_programme\")\ntable = tf.tl.association_test(adata, \"true_programme\")\n",
+  "error": null,
+  "printed": "[threadfin] profile association 'true_programme': explains 55.3% of clone-profile variance vs 0.3% for permuted labels (p = 0.0005, 894 clones, within-'donor' permutation).\n[threadfin] association 'true_programme': 894 clones, 12 programme effects at FDR < 0.05 (within-'donor' permutation).\n",
+  "shown_in_tutorial": "[threadfin] profile association 'true_programme': explains 55.3% of clone-profile variance vs 0.3% for permuted labels (p = 0.0005, 894 clones, within-'donor' permutation).\n[threadfin] association 'true_programme': 894 clones, 12 programme effects at FDR < 0.05 (within-'donor' permutation).\n",
+  "warnings": []
+ },
+ {
+  "tutorial": "04_step_by_step.md",
+  "block": 7,
+  "code": "memory = tf.tl.clonal_memory(adata, \"timepoint\")\n",
+  "error": null,
+  "printed": "[threadfin] clonal memory over 'timepoint': 677 clones, 677 snapshot pairs; memory index 0.63 [0.56, 0.71], p = 0.002; same programme 0.64 vs 0.38 for random clones.\n",
+  "shown_in_tutorial": "[threadfin] clonal memory over 'timepoint': 677 clones, 677 snapshot pairs; memory index 0.63 [0.56, 0.71], p = 0.002; same programme 0.64 vs 0.38 for random clones.\n",
+  "warnings": []
+ }
+]

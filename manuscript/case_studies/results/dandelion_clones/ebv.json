@@ -2,10 +2,13 @@
   "method": "dandelion",
   "dandelion_version": "0.5.7",
   "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 10841,
   "identity": 0.85,
   "donor_key": "donor",
-  "n_cells": 100289,
-  "n_clones": 81799,
-  "n_clones_ge2": 8114,
-  "largest_clone": 118
+  "n_cells": 123369,
+  "n_clones": 87396,
+  "n_clones_ge2": 6124,
+  "largest_clone": 345,
+  "python_hash_seed": "0"
 }

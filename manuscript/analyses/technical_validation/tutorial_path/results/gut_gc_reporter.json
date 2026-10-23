@@ -1,0 +1,47 @@
+{
+ "dataset": "gut_gc_reporter",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 6.1,
+  "threadfin_run": 72.8,
+  "plot_and_save": 0.9
+ },
+ "warnings": [
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.66). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 16619,
+ "contigs": 25492,
+ "contigs_matching_a_cell": 0.9332339557508238,
+ "test": [
+  "gc_sort",
+  "tissue",
+  "isotype"
+ ],
+ "h5ad_gb": 0.49,
+ "clones": 6963,
+ "clones_ge2": 964,
+ "icc": 0.40050742474694895,
+ "icc_shuffled": 0.02309306890023858,
+ "p_value": 0.004975124378109453,
+ "programmes": 3,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 56,
+  "min_dist": 0.95
+ },
+ "seconds_total": 79.9,
+ "peak_rss_gb": 1.61
+}

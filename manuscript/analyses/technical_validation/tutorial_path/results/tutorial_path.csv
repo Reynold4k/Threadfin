@@ -1,0 +1,17 @@
+dataset,key,errors,cells,contigs matching a cell,clones with >= 2 cells,case study,clonal ICC,case study ICC,programmes,minutes,"peak memory, GB",Threadfin's own notes,not run
+GSE253857 bone-marrow plasma cells,bone_marrow_pc,0,115144,0.6970607809550825,6583,6583.0,0.4269243637623394,0.427,3,6.5,8.03,No resolution reached stability 0.75,
+GSE171703 SARS-CoV-2 bait-sorted B cells,covid_bcell,0,61423,0.9141132901725979,588,588.0,0.40028924112303604,0.4,1,2.8,4.31,The confidence interval of the memory index could not be computed: in ,
+GSE317492 EBV tonsil organoids,ebv,0,205630,1.0,6124,6124.0,0.1582933357013237,0.158,2,7.7,25.54,No resolution reached stability 0.75,
+"GSE175522 blood, influenza vaccine",flu,0,123693,0.8678769853563831,2082,2082.0,0.5614943486603674,0.561,5,6.8,9.31,,
+GSE317692 influenza lung,flu_lung,0,4121,0.24089996396025332,204,204.0,0.16163318219793016,0.162,1,1.2,1.13,,
+"GSE246382 GC + plasma cells (Smart-seq2, TRUST4)",gc_np_pc,0,884,0.8544444444444445,92,96.0,0.04896730686385704,0.048,2,0.9,0.6,,clone-level test of 'isotype'
+GSE284622 gut GC-fate reporter,gut_gc_reporter,0,16619,0.9332339557508238,964,958.0,0.40050742474694895,0.401,3,1.3,1.61,No resolution reached stability 0.75,
+GSE140802 LARRY day 2 (clone ids given),larry_d2,0,28249,,1401,,0.6800159008303752,,4,1.1,0.66,,
+GSE140802 LARRY days 4/6 (clone ids given),larry_d46,0,44664,,6174,,0.5976894634687825,,8,3.8,0.91,No resolution reached stability 0.75,
+"GSE195673 lymph node, mRNA vaccine",ln_vaccine,0,193442,0.7618136250849297,11126,11141.0,0.3259824612779099,0.326,4,11.2,23.68,No resolution reached stability 0.75,
+GSE286215 Plasmodium d0-14,malaria,0,40623,0.90798996025936,523,523.0,0.7352724353953749,0.736,4,2.6,3.64,,
+GSE286215 Plasmodium d10-42,malaria_late,0,72359,1.0,1007,1015.0,0.45385865623055355,0.451,4,5.2,6.5,No resolution reached stability 0.75,
+GSE287123 NP reporter,mouse_np,0,10109,0.4658020688590397,470,471.0,0.11662370917944359,0.12,1,1.1,1.62,,
+GSE287123 RBD reporter (Tutorial 5),mouse_rbd,0,36188,0.44180417064558397,1881,1887.0,0.16918595941154516,0.169,3,3.5,7.9,No resolution reached stability 0.75,
+GSE203132 spontaneous GCs,spont_gc,0,22898,1.0,1053,1051.0,0.27896312138588547,0.279,3,1.4,2.26,No resolution reached stability 0.75,
+E-MTAB-9005 paediatric tonsil,tonsil,0,22478,0.8037331029393235,361,361.0,0.25284805436727426,0.253,2,1.2,2.54,No resolution reached stability 0.75,

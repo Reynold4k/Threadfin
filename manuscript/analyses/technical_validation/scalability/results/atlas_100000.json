@@ -1,0 +1,31 @@
+{
+ "n_cells": 100000,
+ "n_jobs": 8,
+ "threadfin": "4.4.2",
+ "clones": 17017,
+ "clones_ge2": 6655,
+ "steps": {
+  "clone_profiles": {
+   "seconds": 22.6,
+   "peak_gb": 1.28
+  },
+  "clonal_coherence": {
+   "seconds": 4.0,
+   "peak_gb": 1.28
+  },
+  "clone_map": {
+   "seconds": 81.8,
+   "peak_gb": 1.28
+  },
+  "programmes": {
+   "seconds": 201.0,
+   "peak_gb": 1.44
+  },
+  "profile_association": {
+   "seconds": 5.1,
+   "peak_gb": 1.44
+  }
+ },
+ "total_seconds": 315.1,
+ "peak_gb": 1.44
+}

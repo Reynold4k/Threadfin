@@ -1,0 +1,6 @@
+{
+ "threadfin": "4.5.0",
+ "replicates": 100,
+ "n_perm": 200,
+ "minutes": 1.5
+}

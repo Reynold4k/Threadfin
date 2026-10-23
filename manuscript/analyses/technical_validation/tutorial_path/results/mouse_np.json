@@ -1,0 +1,46 @@
+{
+ "dataset": "mouse_np",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 15.2,
+  "threadfin_run": 50.4,
+  "plot_and_save": 0.7
+ },
+ "warnings": [
+  {
+   "category": "UserWarning",
+   "message": "Variable names are not unique. To make them unique, call `.var_names_make_unique`.",
+   "file": "anndata.py",
+   "count": 2
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 10109,
+ "contigs": 19431,
+ "contigs_matching_a_cell": 0.4658020688590397,
+ "test": [
+  "division_gate",
+  "isotype"
+ ],
+ "h5ad_gb": 0.46,
+ "clones": 2295,
+ "clones_ge2": 470,
+ "icc": 0.11662370917944359,
+ "icc_shuffled": 0.00783803445306593,
+ "p_value": 0.004975124378109453,
+ "programmes": 1,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 18,
+  "min_dist": 0.8
+ },
+ "seconds_total": 66.4,
+ "peak_rss_gb": 1.62
+}

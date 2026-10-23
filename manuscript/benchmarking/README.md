@@ -175,7 +175,7 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-23 21:44, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-24 01:31, Melbourne time).*
 
 Still running: none.
 
@@ -763,8 +763,8 @@ timed for its complete analysis, the other tools for their clone representation;
 
 | cores | Threadfin, complete analysis | clone2vec | Clonotrace | Benisse |
 |---|---|---|---|---|
-| 1 | 1.9 min, 0.7 GB | 4.7 min, 1.1 GB | — | 19.3 min, 4.0 GB |
-| 2 | 1.4 min, 0.8 GB | 3.6 min, 1.1 GB | running | — |
+| 1 | 1.9 min, 0.7 GB | 4.7 min, 1.1 GB | 3.7 h, 2.3 GB | 19.3 min, 4.0 GB |
+| 2 | 1.4 min, 0.8 GB | 3.6 min, 1.1 GB | 2.1 h, 2.2 GB | — |
 | 4 | 1.0 min, 0.8 GB | 3.6 min, 1.1 GB | 1.1 h, 2.2 GB | 15.8 min, 4.2 GB |
 | 8 | 53.9 s, 0.8 GB | 3.4 min, 1.1 GB | 39.0 min, 2.2 GB | — |
 | 16 | 58.2 s, 0.8 GB | 3.8 min, 1.1 GB | 24.6 min, 2.5 GB | 56.4 min, 4.2 GB |
@@ -780,7 +780,7 @@ timed for its complete analysis, the other tools for their clone representation;
 | 5 % | 557 | 37.8 s, 0.5 GB | 1.3 s, 0.3 GB | 1.9 min, 1.2 GB | 3.5 min, 0.6 GB | 1.4 min, 0.6 GB |
 | 10 % | 1,114 | 48.6 s, 0.6 GB | 2.5 s, 0.4 GB | 2.1 min, 1.1 GB | 11.1 min, 1.1 GB | 6.0 min, 2.0 GB |
 | 25 % | 2,785 | 1.5 min, 0.8 GB | 6.7 s, 0.7 GB | 5.8 min, 1.1 GB | 1.5 h, 4.6 GB | 40.0 min, 8.9 GB |
-| 50 % | 5,570 | 2.6 min, 1.4 GB | 27.7 s, 1.5 GB | 10.3 min, 1.2 GB | running | 2.9 h, 35.3 GB |
+| 50 % | 5,570 | 2.6 min, 1.4 GB | 27.7 s, 1.5 GB | 10.3 min, 1.2 GB | 9.2 h, 16.8 GB | 2.9 h, 35.3 GB |
 
 <!-- END:resources_size -->
 
@@ -801,7 +801,7 @@ clonotypes (35 GB at 5,570 clones).
 | tool | compared | identical | lowest Spearman correlation of clone distances | largest difference of a clone distance |
 |---|---|---|---|---|
 | clone2vec | 1 core(s) vs 2, 4, 8, 16 | no | 0.999914 | 0.503 |
-| Clonotrace | 4 core(s) vs 8, 16 | yes | 1.000000 | 0 |
+| Clonotrace | 1 core(s) vs 2, 4, 8, 16 | yes | 1.000000 | 0 |
 | Benisse | 1 core(s) vs 4, 16 | no | 1.000000 | 0.00931 |
 | Threadfin (clone map and programmes) | 4.4.0 with 1 and with 8 cores vs the released 4.3.1, on 2 datasets (clone-map coordinates and programme labels) | yes |  |  |
 

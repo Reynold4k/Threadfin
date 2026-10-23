@@ -1,0 +1,41 @@
+Threadfin summary
+=================
+Cells with a BCR: 16,667 of 36,188, in 8,736 clones (939 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 16.9% of transcriptional variance within 'donor' strata; shuffled clones explain 0.7% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 5 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   3 programmes from 1,881 reliable clones (every split significant); 0 are stable (bootstrap Jaccard >= 0.75).
+   P1: 1,076 clones, 6,264 cells, stability 0.66
+   P2: 743 clones, 3,131 cells, stability 0.55  [unstable - do not interpret]
+   P3: 62 clones, 417 cells, stability 0.21  [unstable - do not interpret]
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   rbd_bait explains clone states: 2.3% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 1386 clones).
+   division_gate explains clone states: 8.5% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 1600 clones).
+   zone_gate explains clone states: 3.7% of clone-profile variance vs 0.4% for shuffled labels (p = 0.0005, 264 clones).
+   isotype explains clone states: 4.6% of clone-profile variance vs 0.2% for shuffled labels (p = 0.0005, 1731 clones).
+   Programme differences (FDR < 0.05):
+   rbd_bait: P1 enriched for 'RBD+' (24% vs 17% of clones; OR 1.68, FDR 0.0015)
+   rbd_bait: P1 depleted for 'RBD-' (76% vs 83% of clones; OR 0.59, FDR 0.0015)
+   rbd_bait: P2 depleted for 'RBD+' (17% vs 24% of clones; OR 0.63, FDR 0.0015)
+   rbd_bait: P2 enriched for 'RBD-' (83% vs 76% of clones; OR 1.59, FDR 0.0015)
+   division_gate: P1 depleted for 'mCherry-high' (23% vs 49% of clones; OR 0.31, FDR 0.00075)
+   division_gate: P1 enriched for 'mCherry-low' (77% vs 51% of clones; OR 3.25, FDR 0.00075)
+   division_gate: P2 enriched for 'mCherry-high' (52% vs 23% of clones; OR 3.47, FDR 0.00075)
+   division_gate: P2 depleted for 'mCherry-low' (48% vs 77% of clones; OR 0.29, FDR 0.00075)
+   zone_gate: no significant programme effect.
+   isotype: P1 enriched for 'IGHG' (90% vs 83% of clones; OR 1.79, FDR 0.0015)
+   isotype: P3 enriched for 'IGHE' (5% vs 0% of clones; OR 73.63, FDR 0.0015)
+   isotype: P2 enriched for 'IGHM' (17% vs 10% of clones; OR 1.81, FDR 0.0015)
+   isotype: P2 depleted for 'IGHG' (82% vs 90% of clones; OR 0.53, FDR 0.0015)
+   isotype: P1 depleted for 'IGHD' (0% vs 1% of clones; OR 0.00, FDR 0.003)
+   isotype: P2 enriched for 'IGHD' (1% vs 0% of clones; OR inf, FDR 0.003)
+
+4. Do clones keep their state over 'division_gate'? (clonal memory)
+   809 clones seen at >= 2 levels: memory index 0.64 [0.49, 0.78], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
+   Same programme at the next level: 56% of clones vs 47% expected for random clones.
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

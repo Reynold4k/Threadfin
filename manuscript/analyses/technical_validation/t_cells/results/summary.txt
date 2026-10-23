@@ -1,0 +1,15 @@
+Threadfin summary
+=================
+Cells with a TCR: 2,793 of 3,000, in 2,373 clones (78 clones have >= 3 cells).
+
+1. Does clone identity shape cell state? (clonal coherence)
+   Clone identity explains 26.5% of transcriptional variance within 'sample' strata; shuffled clones explain 3.0% (p = 0.00498, 200 permutations).
+   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 2 cells. No clone is filtered out on reliability.
+
+2. Which clones behave alike? (clonal programmes)
+   No distinct programmes: the 191 reliable clones differ, but along a continuum rather than in separate groups (split test p = 0.96).
+
+3. Do your labels explain how clones differ? (clone-level tests)
+   source does not significantly explain clone states: 1.7% of clone-profile variance vs 1.1% for shuffled labels (p = 0.0785, 158 clones).
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

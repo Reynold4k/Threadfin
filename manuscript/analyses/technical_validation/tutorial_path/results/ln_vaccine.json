@@ -1,0 +1,640 @@
+{
+ "dataset": "ln_vaccine",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 114.8,
+  "threadfin_run": 552.5,
+  "plot_and_save": 5.2
+ },
+ "warnings": [
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/layers' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/layers/scaled' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/cell_id' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/__categories/sample' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/sample' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/__categories/donor' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/donor' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/__categories/tissue' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/tissue' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/pre_qc_bcr' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/n_hkg' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/n_feature' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/n_umi' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/pct_mt' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/n_gene_expressed' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/__categories/leiden_0.18' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/leiden_0.18' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/__categories/anno_leiden_0.18' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/anno_leiden_0.18' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obs/_index' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obsm' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obsm/X_pca' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obsm/X_umap' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/obsp' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/anno_leiden_0.18_colors' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/categories_idx_ordered' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/categories_ordered' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/cor_method' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/correlation_matrix' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/color_list' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/dcoord' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/icoord' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/ivl' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/leaves' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/dendrogram_info/leaves_color_list' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/groupby' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/linkage' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/linkage_method' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_anno_leiden_0.18/use_rep' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/categories_idx_ordered' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/categories_ordered' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/cor_method' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/correlation_matrix' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/color_list' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/dcoord' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/icoord' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/ivl' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/leaves' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/dendrogram_info/leaves_color_list' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/groupby' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/linkage' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/linkage_method' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/dendrogram_leiden_0.18/use_rep' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/hvg' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/hvg/flavor' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/leiden' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/leiden/params' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/leiden/params/n_iterations' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/leiden/params/random_state' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/leiden/params/resolution' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/connectivities_key' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/distances_key' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/method' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/metric' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/n_neighbors' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/n_pcs' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/random_state' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/neighbors/params/use_rep' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca/params' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca/params/use_highly_variable' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca/params/zero_center' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca/variance' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/pca/variance_ratio' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/umap' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/umap/params' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/umap/params/a' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/uns/umap/params/b' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/gene_ids' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/__categories/gene_name' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/gene_name' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/__categories/biotype' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/biotype' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/highly_variable' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/highly_variable_rank' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/means' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/variances' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/variances_norm' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/var/_index' was written without encoding metadata.",
+   "file": "utils.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/varm' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "OldFormatWarning",
+   "message": "Element '/varm/PCs' was written without encoding metadata.",
+   "file": "registry.py",
+   "count": 1
+  },
+  {
+   "category": "ImplicitModificationWarning",
+   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
+   "file": "anndata.py",
+   "count": 1
+  },
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.71). Interpret programmes cautiously.",
+   "file": "api.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 193442,
+ "contigs": 401803,
+ "contigs_matching_a_cell": 0.7618136250849297,
+ "test": [
+  "tissue",
+  "isotype"
+ ],
+ "h5ad_gb": 7.92,
+ "clones": 104329,
+ "clones_ge2": 11126,
+ "icc": 0.3259824612779099,
+ "icc_shuffled": 0.0009920179638017925,
+ "p_value": 0.004975124378109453,
+ "programmes": 4,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 37,
+  "min_dist": 0.95
+ },
+ "seconds_total": 672.9,
+ "peak_rss_gb": 23.68
+}

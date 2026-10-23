@@ -5,37 +5,40 @@
   "method": "dandelion",
   "dandelion_version": "0.5.7",
   "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 2997,
   "identity": 0.85,
   "donor_key": "donor",
-  "n_cells": 14567,
-  "n_clones": 13405,
-  "n_clones_ge2": 780,
-  "largest_clone": 13,
+  "n_cells": 11570,
+  "n_clones": 11075,
+  "n_clones_ge2": 361,
+  "largest_clone": 9,
+  "python_hash_seed": "0",
   "source": "dandelion",
   "cells_dropped": 2996,
-  "light_chain_only_cells_dropped": 2996
+  "light_chain_only_cells_dropped": 0
  },
  "qc": {
   "n_cells": 22478,
   "n_cells_bcr": 11570,
-  "n_clones": 11080,
+  "n_clones": 11075,
   "clones_ge2": 361,
   "clones_ge3": 76,
-  "clones_ge5": 12,
+  "clones_ge5": 13,
   "clones_ge10": 0,
-  "cells_in_clones_ge2": 851,
+  "cells_in_clones_ge2": 856,
   "largest_clone": 9,
   "n_donors": 6,
   "n_samples": 6
  },
  "coherence": {
-  "icc": 0.25542100459343087,
-  "null_mean": 0.03373686748771328,
-  "null_q95": 0.05630735053483644,
-  "excess": 0.22168413710571758,
+  "icc": 0.25284801282774994,
+  "null_mean": 0.03324442967977868,
+  "null_q95": 0.056847369395986405,
+  "excess": 0.21960358314797127,
   "p_value": 0.001996007984031936,
   "n_clones": 361,
-  "n_cells": 851,
+  "n_cells": 856,
   "min_cells_reliability_0.5": 3
  },
  "clone_map": {
@@ -50,18 +53,18 @@
   "n_profiled": 361,
   "chosen_by": "user",
   "quality": {
-   "score": -0.36530852189858654,
-   "coherence": 0.7645429362880887,
-   "local_fidelity": 0.5999076638965836,
-   "global_fidelity": 0.8578409432757723,
-   "coherence_target": 0.9833795013850416
+   "score": -0.32643324519036687,
+   "coherence": 0.7700831024930748,
+   "local_fidelity": 0.6041551246537397,
+   "global_fidelity": 0.8482415428602634,
+   "coherence_target": 0.9806094182825484
   },
   "min_cells": 2
  },
  "programme_splits": {
   "n_leiden_communities": 2,
   "n_merged": 0,
-  "root_pvalue": 4.648373560136832e-06
+  "root_pvalue": 6.348721542452679e-06
  },
  "programme_markers": {
   "P1": [
@@ -70,58 +73,58 @@
    "CORO1A",
    "PFN1",
    "COTL1",
-   "HMGN1",
    "TMSB4X",
+   "HMGN1",
    "CFL1",
    "GAPDH",
-   "RPS24",
    "PPIA",
-   "LIMD2"
+   "RPS24",
+   "RPS23"
   ],
   "P2": [
    "SSR4",
    "MZB1",
-   "XBP1",
    "FKBP11",
-   "HSP90B1",
+   "XBP1",
    "JCHAIN",
+   "HSP90B1",
    "SEC11C",
    "DERL3",
-   "PLPP5",
    "FKBP2",
+   "PLPP5",
    "PRDM1",
    "SELENOS"
   ]
  },
  "programme_signatures": {
   "P1": {
-   "plasma cell": -0.028,
-   "germinal centre": 0.378,
-   "dark zone / cycling": 0.497,
-   "light zone": -0.027,
-   "memory": -0.148,
+   "plasma cell": -0.029,
+   "germinal centre": 0.376,
+   "dark zone / cycling": 0.509,
+   "light zone": -0.03,
+   "memory": -0.149,
    "naive": 0.279,
-   "interferon": -0.0
+   "interferon": 0.003
   },
   "P2": {
-   "plasma cell": 1.226,
-   "germinal centre": 0.112,
-   "dark zone / cycling": 0.039,
-   "light zone": -0.052,
-   "memory": 0.02,
-   "naive": 0.092,
-   "interferon": 0.014
+   "plasma cell": 1.232,
+   "germinal centre": 0.108,
+   "dark zone / cycling": 0.035,
+   "light zone": -0.047,
+   "memory": 0.019,
+   "naive": 0.085,
+   "interferon": 0.012
   }
  },
  "programmes": {
   "n": 2,
   "resolution": 0.2,
   "n_clones": 361,
-  "n_cells": 851,
+  "n_cells": 856,
   "n_clones_with_assigned": 361,
   "stability": {
-   "P1": 0.716,
-   "P2": 0.793
+   "P1": 0.696,
+   "P2": 0.794
   },
   "n_stable": 1
  },
@@ -129,34 +132,34 @@
   "isotype": {
    "label": "isotype",
    "kind": "categorical",
-   "r2": 0.041276719351287336,
-   "null_mean": 0.01135464896799418,
-   "excess_r2": 0.029922070383293156,
-   "p_value": 0.0009995002498750624,
-   "n_clones": 320,
+   "r2": 0.038007515828813045,
+   "null_mean": 0.011536451692397854,
+   "excess_r2": 0.02647106413641519,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 317,
    "n_levels": 4,
    "strata_key": "donor",
    "n_perm": 2000,
    "axis_correlation": {
     "IGHA": [
-     -0.11203530175650328,
-     0.057877466644461854,
-     0.012944317732823087
+     -0.1060997931779509,
+     -0.03716607236566186,
+     0.010277768615085264
     ],
     "IGHD": [
-     -0.10380232737209502,
-     0.15568246993068766,
-     0.22084796504075138
+     -0.11126594266708452,
+     -0.13674999009471644,
+     0.1897913633847707
     ],
     "IGHG": [
-     0.10827308189816552,
-     -0.18579023354840243,
-     -0.04248862249245267
+     0.11031122972340245,
+     0.16100598294425134,
+     -0.03610185700038625
     ],
     "IGHM": [
-     0.06529565955232536,
-     0.025905574376134298,
-     -0.18125394485502175
+     0.06004618688843345,
+     -0.032500523532620625,
+     -0.14898172802808524
     ]
    },
    "note": "heavy-chain isotype"
@@ -164,14 +167,14 @@
  },
  "programme_associations": {
   "isotype": {
-   "n_clones": 320,
-   "n_significant_fdr05": 4
+   "n_clones": 317,
+   "n_significant_fdr05": 2
   }
  },
  "memory": {},
  "heritability": {
-  "n_genes": 9059,
-  "median_icc": 0.026901878603232166,
+  "n_genes": 9078,
+  "median_icc": 0.027565075958235492,
   "top_genes": [
    "GAPDH",
    "COTL1",
@@ -179,62 +182,62 @@
    "ACTG1",
    "ACTB",
    "RPL28",
-   "HIST1H2AI",
-   "PPIA",
-   "CFL1",
-   "GPAT2",
-   "PFN1",
-   "HMGN1",
-   "GTSF1",
    "FRZB",
-   "JCHAIN",
+   "CFL1",
+   "HMGN1",
+   "PPIA",
+   "PFN1",
    "HSP90B1",
-   "PRDM1",
+   "GTSF1",
+   "JCHAIN",
+   "HIST1H2AI",
+   "CCDC191",
    "RGS1",
-   "HIST1H2AL",
-   "SELENOM",
-   "FOSB",
+   "PRDM1",
+   "SSR4",
    "FAM30A",
-   "MT-ND3",
-   "LY6E",
-   "SEC11C"
+   "SEC11C",
+   "SLC25A5",
+   "PRDX4",
+   "RAN",
+   "MT-ND3"
   ],
-  "receptor_gene_icc": 0.730585599484084,
+  "receptor_gene_icc": 0.7243609461859558,
   "gene_sets": {
    "plasma cell": {
-    "median_icc": 0.2776,
-    "matched_background_median_icc": 0.0401,
-    "pvalue_vs_matched": 0.0
-   },
-   "germinal centre": {
-    "median_icc": 0.0702,
-    "matched_background_median_icc": 0.0507,
-    "pvalue_vs_matched": 0.441
-   },
-   "dark zone / cycling": {
-    "median_icc": 0.1646,
-    "matched_background_median_icc": 0.0541,
-    "pvalue_vs_matched": 0.0008
-   },
-   "light zone": {
-    "median_icc": 0.033,
-    "matched_background_median_icc": 0.018,
-    "pvalue_vs_matched": 0.3301
-   },
-   "memory": {
-    "median_icc": 0.1708,
-    "matched_background_median_icc": 0.0155,
-    "pvalue_vs_matched": 0.0
-   },
-   "naive": {
-    "median_icc": 0.1815,
+    "median_icc": 0.2796,
     "matched_background_median_icc": 0.0318,
     "pvalue_vs_matched": 0.0
    },
+   "germinal centre": {
+    "median_icc": 0.0583,
+    "matched_background_median_icc": 0.0496,
+    "pvalue_vs_matched": 0.3252
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.1678,
+    "matched_background_median_icc": 0.0521,
+    "pvalue_vs_matched": 0.0002
+   },
+   "light zone": {
+    "median_icc": 0.0333,
+    "matched_background_median_icc": 0.0135,
+    "pvalue_vs_matched": 0.2776
+   },
+   "memory": {
+    "median_icc": 0.1609,
+    "matched_background_median_icc": 0.0056,
+    "pvalue_vs_matched": 0.0
+   },
+   "naive": {
+    "median_icc": 0.1975,
+    "matched_background_median_icc": 0.0474,
+    "pvalue_vs_matched": 0.0004
+   },
    "interferon": {
-    "median_icc": 0.015,
-    "matched_background_median_icc": -0.0019,
-    "pvalue_vs_matched": 0.3027
+    "median_icc": 0.0465,
+    "matched_background_median_icc": 0.0052,
+    "pvalue_vs_matched": 0.117
    }
   }
  },
@@ -352,5 +355,5 @@
    "n_requested": 10
   }
  },
- "runtime_min": 1.7
+ "runtime_min": 2.0
 }

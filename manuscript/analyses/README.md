@@ -20,12 +20,12 @@ in [`../benchmarking/`](../benchmarking/README.md); what did not hold is in
 | 9 | [Clonal memory across time, tissue and gates](#9-clonal-memory-across-time-points-tissues-and-gates) | 11 datasets | clones keep their state across vaccine visits and between RBD-bait gates, not between lymph node and blood | [`cross_dataset/clonal_memory.csv`](cross_dataset/clonal_memory.csv) |
 | 10 | [Clonally inherited gene sets](#10-clonally-inherited-genes) | 15 datasets | plasma-cell and GC programmes are inherited within clones above expression-matched genes | [`cross_dataset/geneset_heritability.csv`](cross_dataset/geneset_heritability.csv) |
 | 11 | [All clone-level association tests](#11-every-clone-level-association-test) | 15 datasets | 58 annotation tests in one table | [`cross_dataset/label_effects.csv`](cross_dataset/label_effects.csv) |
-| 12 | [Additional datasets](#12-additional-datasets) | 6 datasets | the pipeline on influenza, tonsil, EBV, bone marrow and bait-sorted cells (four re-run on 2026-10-20 without light-chain-only pseudo-clones) | `../case_studies/results/<dataset>/` |
+| 12 | [Additional datasets](#12-additional-datasets) | 6 datasets | the pipeline on influenza, tonsil, EBV, bone marrow and bait-sorted cells (all six re-run on 2026-10-23 with threadfin 4.4 clone calls) | `../case_studies/results/<dataset>/` |
 | 13 | [Gut: all B cells and centring](gut_all_B_and_centring/README.md) | GSE284622 | the second plasma branch is one mouse; the GC → plasma path survives every centring | [`gut_all_B_and_centring/`](gut_all_B_and_centring) |
 | 14 | [Lineage-barcode and TCR data](lineage_barcode_systems/README.md) | LARRY, WATERMELON, NSCLC T cells | day-2 profiles predict day-6 fate (kernel vs centroid not significantly different); T-cell clones keep their state across therapy cycles | [`lineage_barcode_systems/`](lineage_barcode_systems) |
 | 15 | [Heavy-chain vs paired-chain clones](spont_gc_paired_chains/README.md) | GSE203132 | adding the light chain splits 481 of 1,051 clones, but Figure 3d–f is unchanged (entropy vs clone axis ρ −0.747 → −0.754; 8 of 8 mice) | [`spont_gc_paired_chains/`](spont_gc_paired_chains) |
 | 16 | [Incomplete chain pairs and reused contig ids (RBD)](rbd_complete_pairs/README.md) | GSE287123 | Figure 4 is unchanged with complete heavy + light pairs only (division excess R² 0.088 → 0.096) and with corrected contig ids (0.085; cosine 0.896; 10 of 10 mice) | [`rbd_complete_pairs/`](rbd_complete_pairs) |
-| 17 | [Technical validation](technical_validation/README.md) | all | automatic clone-map settings (30/30 maps coherent); state-density model; runtimes; audits | [`technical_validation/`](technical_validation) |
+| 17 | [Technical validation](technical_validation/README.md) | all | the tutorial path on 16 datasets without an error; clone definition and embedding sensitivity; power of the coherence test; one million cells; T cells; automatic clone-map settings (30/30 maps coherent); state-density model; runtimes; audits | [`technical_validation/`](technical_validation) |
 | 18 | [Negative results and corrected defects](negative_and_withdrawn_results.md) | — | three falsified predictions, two withdrawn headlines, eighteen fixed defects | — |
 
 ---
@@ -205,14 +205,14 @@ itself than to a random clone). Selected results (`cross_dataset/clonal_memory.c
 
 | Dataset | Axis | Clones | Memory index [95 % CI] |
 |---|---|---|---|
-| influenza vaccination | day 0 → day 7 | 727 | 0.89 [0.80, 0.98] |
+| influenza vaccination | day 0 → day 7 | 726 | 0.89 [0.81, 0.98] |
 | RBD | RBD-bait gates | 484 | 0.84 [0.68, 1.01] |
 | RBD | division gates | 798 | 0.61 [0.48, 0.75] |
 | human lymph node | visits (days 28–201) | 1,736 | 0.55 [0.47, 0.64] |
-| bone marrow | blood ↔ bone marrow | 1,843 | 0.26 [0.22, 0.29] |
+| bone marrow | blood ↔ bone marrow | 1,604 | 0.29 [0.26, 0.33] |
+| EBV organoids | days 0–21 | 730 | 0.28 [0.23, 0.33] |
 | gut | GC ↔ nonGC sort | 126 | 0.22 [0.07, 0.37] |
 | RBD | zone gates | 192 | 0.21 [0.03, 0.42] |
-| EBV organoids | days 0–21 | 4,430 | 0.17 [0.15, 0.19] |
 | gut | tissues | 311 | 0.10 [0.05, 0.14] |
 | human lymph node | lymph node ↔ blood | 554 | −0.02 [−0.05, 0.02] |
 
@@ -239,14 +239,16 @@ the profiles.
 
 Six further datasets went through the same pipeline (results in `../case_studies/results/<dataset>/`;
 statistics in [`../dataset_overview.md`](../dataset_overview.md)): antigen-bait-sorted B cells after SARS-CoV-2
-infection (592 clones; ICC 0.40), influenza vaccination (heavy chain only; 2,080 clones; ICC 0.56, not
-comparable with paired datasets), influenza infection with haemagglutinin tetramers (201 clones; ICC 0.15;
-a clone's cells in different haemagglutinin-binding categories have similar states, memory index 0.52), paediatric tonsil (361 clones;
-ICC 0.26), EBV-infected tonsil organoids (6,916 clones; ICC 0.22; donors pooled) and human bone-marrow plasma
-cells with blood (6,788 clones; ICC 0.40, with a large shuffled value of 0.23 because sorted compartments
-differ in composition). The SARS-CoV-2, tonsil, EBV and bone-marrow results were re-run on 2026-10-20 after
-Dandelion's light-chain-only groups were removed from their clones (they had made up 1,689 of 2,281, 419 of
-780, 1,198 of 8,114 and 67 of 6,855 groups of two or more cells; see the
-[record of defects](negative_and_withdrawn_results.md)); coherence rose in the SARS-CoV-2 and tonsil data once
-these pseudo-clones were gone. They are not in the manuscript because they add breadth rather than new biology, and
+infection (588 clones; ICC 0.40), influenza vaccination (heavy chain only; 2,082 clones; ICC 0.56, not
+comparable with paired datasets), influenza infection with haemagglutinin tetramers (204 clones; ICC 0.16;
+a clone's cells in different haemagglutinin-binding categories have similar states, memory index 0.63), paediatric
+tonsil (361 clones; ICC 0.25), EBV-infected tonsil organoids (6,124 clones; ICC 0.16; donors pooled) and human
+bone-marrow plasma cells with blood (6,583 clones; ICC 0.43, with a large shuffled value of 0.25 because sorted
+compartments differ in composition). All six were re-run on 2026-10-23 with clones called by threadfin 4.4,
+which leaves light-chain-only groups without a clone (they had made up 1,689 of 2,281, 419 of 780, 1,198 of
+8,114 and 67 of 6,855 groups of two or more cells in the SARS-CoV-2, tonsil, EBV and bone-marrow data) and
+renames contig ids that repeat across libraries. The second change mattered most for the EBV organoids, whose
+libraries (one per time point) reuse barcodes: clones seen at two time points fell from 4,430 to 730 and the ICC
+from 0.22 to 0.16 ([record of defects](negative_and_withdrawn_results.md)). They are not in the manuscript
+because they add breadth rather than new biology, and
 three of them have design limitations (heavy chain only, pooled donors, sorting by compartment).

@@ -1,0 +1,35 @@
+{
+ "dataset": "larry_d2",
+ "threadfin": "4.5.0",
+ "python_hash_seed": "0",
+ "steps": {
+  "user_inputs": 0.0,
+  "threadfin_run": 67.9,
+  "plot_and_save": 0.8
+ },
+ "warnings": [
+  {
+   "category": "ImportWarning",
+   "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
+   "file": "__init__.py",
+   "count": 1
+  }
+ ],
+ "error": null,
+ "cells": 28249,
+ "test": [],
+ "h5ad_gb": 0.01,
+ "clones": 2672,
+ "clones_ge2": 1401,
+ "icc": 0.6800159008303752,
+ "icc_shuffled": 0.009519351581525502,
+ "p_value": 0.004975124378109453,
+ "programmes": 4,
+ "skipped": {},
+ "map": {
+  "n_neighbors": 100,
+  "min_dist": 0.8
+ },
+ "seconds_total": 68.8,
+ "peak_rss_gb": 0.66
+}
