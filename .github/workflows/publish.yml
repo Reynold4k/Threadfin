@@ -1,0 +1,46 @@
+name: publish to PyPI
+
+# Builds the sdist and wheel of a GitHub release and uploads them to PyPI with trusted publishing (no token is
+# stored anywhere). One-time setup on pypi.org is described in docs/RELEASING.md.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
+      - name: Install the wheel and run the tutorial on simulated data
+        run: |
+          pip install dist/*.whl
+          cd /tmp && python "$GITHUB_WORKSPACE/examples/tutorial.py"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/threadfin
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

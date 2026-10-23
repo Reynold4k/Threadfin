@@ -55,6 +55,8 @@ benchmark = ["clone2vec>=0.1", "psutil>=5"]
 Homepage = "https://github.com/Reynold4k/Threadfin"
 Repository = "https://github.com/Reynold4k/Threadfin"
 Issues = "https://github.com/Reynold4k/Threadfin/issues"
+Documentation = "https://github.com/Reynold4k/Threadfin/blob/main/docs/README.md"
+Changelog = "https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["threadfin*"]

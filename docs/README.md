@@ -12,6 +12,7 @@
 | [State densities](STATE_DENSITY.md) | the optional frozen-reference region-count model |
 | [Reclustering (v3)](RECLUSTERING.md) | the legacy clonotype reclustering presets, kept for compatibility |
 | [Compatibility](COMPATIBILITY.md) | Python versions (3.10–3.14) and dependency versions on which the package was installed and tested |
+| [Releasing](RELEASING.md) | how a version is released to GitHub and PyPI |
 | [The manuscript](../manuscript/README.md) | publication status, datasets, analyses, the benchmark against related tools |
 
 **Which tutorial first?** New to Threadfin: Tutorial 1 (a minute, simulated data), then Tutorial 5 (real data,
