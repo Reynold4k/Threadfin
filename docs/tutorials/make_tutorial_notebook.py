@@ -89,7 +89,7 @@ The same environment can be created from [`environment.yml`](environment.yml) wi
 * *`matplotlib<3.9`* is needed by Dandelion 0.5.7, which uses a matplotlib function removed in version 3.9
   (`matplotlib.cm.get_cmap`); Dandelion's package metadata does not say so, so pip would otherwise install a
   newer matplotlib and `import dandelion` would fail. Threadfin itself works with matplotlib 3.7 and later.
-* *Python 3.11* is the version the manuscript analyses used; Threadfin supports 3.10–3.12.
+* *Python 3.11* is the version the manuscript analyses used; Threadfin supports 3.10–3.14.
 * *Dandelion* is only needed to define clones. If you already have clone ids (one per cell), you can skip it
   and put them in `adata.obs["clone_id"]`.
 * *`--env PYTHONHASHSEED 0`* makes clone calling reproducible. Dandelion's clone assignment depends on the
@@ -125,7 +125,7 @@ with warnings.catch_warnings():               # silence import-time notices of t
         print(f"{module:12s} {version(dist)}")
 
 import threadfin as tf
-assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 3, 1), "this tutorial needs threadfin >= 4.3.1"
+assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 0), "this tutorial needs threadfin >= 4.5.0"
 seed = os.environ.get("PYTHONHASHSEED")
 print(f"\nPYTHONHASHSEED = {seed}" if seed is not None else
       "\nPYTHONHASHSEED is not set: clone calls may differ slightly between runs (see Step 0)")
@@ -408,21 +408,24 @@ identical. Clones are called separately within each mouse, and the mouse is writ
 **Why.**
 
 * *Paired chains.* Defining clones on the heavy chain alone merges unrelated cells that happen to use the same
-  heavy chain; in this dataset the light chain splits a 791-cell "clone" into real clones of at most 254
-  cells, and clonal coherence increases when the light chain is used.
+  heavy chain; in this dataset the light chain splits a 791-cell "clone" into real clones of about 250 cells
+  at most, and clonal coherence increases when the light chain is used.
 * *Within each mouse.* Two mice cannot share a clone. Calling clones within mice prevents public
   (convergent) receptors from joining cells of different animals.
 * *85 % junction identity* allows for somatic hypermutation inside the CDR3.
 * *Cells without a heavy chain get no clone.* Dandelion can group cells whose heavy chain was not recovered
   by their light chain alone, but light-chain rearrangements are far less diverse, so such groups join
   unrelated cells. Threadfin (≥ 4.3.1) leaves these cells without a clone; the log line says how many.
+* *Contig ids that repeat across libraries are renamed.* Cell Ranger names contigs after the barcode, and the
+  same barcode occurs in different tubes, so two cells can have the same contig id. Threadfin (≥ 4.4.0) renames
+  such contigs after their cell, so Dandelion never mixes the chains of two cells; a log line says how many.
 
 **What to look for.** Most clones are captured as one cell. Threadfin profiles every clone with **at least
 two** cells: a clone seen once has no second cell to compare, so it cannot answer whether cells of one clone
 share a state. Clones of two or three cells are kept — Threadfin shrinks their profiles instead of
 discarding them (Step 9). Expect about 8,700 clones, of which about 1,880 have ≥ 2 cells (the manuscript
-analysed 1,887), and a log line saying that about 5,300 cells without a heavy chain were left without a
-clone. With `PYTHONHASHSEED=0` (Step 0) you get exactly the numbers shown here; without it, a few clones
+analysed 1,887), a log line saying that about 5,300 cells without a heavy chain were left without a clone, and
+one saying that about 150 contigs were renamed because their barcode occurs in two tubes. With `PYTHONHASHSEED=0` (Step 0) you get exactly the numbers shown here; without it, a few clones
 more or fewer.
 """)
 
@@ -682,13 +685,39 @@ plt.show()
 """)
 
 md(r"""
-## Step 15 — Save the results
+## Step 15 — Which genes change along the clone landscape?
+
+**What.** Score every gene by how smoothly its clone-average expression changes between neighbouring clones
+in profile space (Moran's I, `tf.tl.landscape_genes`), and split the genes that clearly follow the landscape
+by the direction in which they change along its main axis (`corr_axis1`).
+
+**Why.** Programmes are unstable here (Step 10), so programme markers would describe unstable groups.
+`landscape_genes` needs no groups: it names the genes that vary along the continuum of clones. The profiles
+are built from the same expression, so this describes the landscape; it is not an independent test.
+
+**What to look for.** One end of the main axis carries dark-zone and cell-cycle genes (*Mki67*, *Top2a*,
+*Hmgb2*), the other genes of B cells outside the dark zone, resting or activated (*Fcer2a*, *Cd83*, *Bank1*,
+*Ccr6*): the axis that follows division history in Step 14. With almost 2,000 clones most expressed genes
+pass FDR < 0.05, so read Moran's I (here at least 0.3) rather than the number of significant genes.
+""")
+
+code(r"""
+genes = tf.tl.landscape_genes(adata, layer="log_norm", n_top=None)
+strong = genes[genes["morans_i"] >= 0.3]
+print(f"{len(strong)} genes with Moran's I >= 0.3")
+print("one end of the axis:  ", ", ".join(strong.nlargest(12, "corr_axis1")["gene"]))
+print("other end of the axis:", ", ".join(strong.nsmallest(12, "corr_axis1")["gene"]))
+""")
+
+md(r"""
+## Step 16 — Save the results
 
 **What.** Write the annotated AnnData (with clone ids, profiles, programmes and tests in `adata.uns`) and
 the clone table as files you can open in Python, R or a spreadsheet.
 
 **Why.** `adata.uns["threadfin"]` keeps every result together with the settings that produced it, so the
-analysis can be re-plotted or extended without re-running it.
+analysis can be re-plotted or extended without re-running it. `result.methods()` turns those settings into a
+Methods paragraph with references, as a starting point for a paper.
 """)
 
 code(r"""
@@ -696,13 +725,14 @@ out = Path("threadfin_tutorial_output")
 out.mkdir(exist_ok=True)
 result.clones.to_csv(out / "clones.csv")
 result.programmes.to_csv(out / "programmes.csv")
+(out / "methods.txt").write_text(result.methods(clone_ids))   # a Methods paragraph; clone_ids from Step 7
 adata.obs.to_csv(out / "cells.csv.gz")
 adata.write_h5ad(out / "GSE287123_rbd_threadfin.h5ad", compression="gzip")
 print(sorted(p.name for p in out.iterdir()))
 """)
 
 md(r"""
-## Step 16 — Where to go next
+## Step 17 — Where to go next
 
 * [Tutorial 1](01_getting_started.md) runs the same analysis on simulated data in a minute and explains the
   overview figure; [Tutorial 2](02_your_data.md) starts from Cell Ranger output of your own experiment;

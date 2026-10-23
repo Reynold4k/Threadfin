@@ -90,3 +90,30 @@ def test_prepare_embedding_integrates_batches_with_harmony():
     emb = adata.obsm["X_threadfin"]
     assert emb.shape == (n, 10) and np.isfinite(emb).all()
     assert not np.allclose(emb, adata.obsm["X_pca"][:, :10])          # Harmony changed the embedding
+
+
+def test_a_misspelled_column_is_answered_with_the_closest_names():
+    adata = _adata()
+    adata.obs["sort_gate"] = "A"
+    with pytest.raises(KeyError, match="Did you mean 'sort_gate'"):
+        tf.run(adata, basis="X_pca", test=["sort_gat"], verbose=False)
+
+
+def test_normalised_data_passed_as_counts_is_flagged():
+    rng = np.random.default_rng(1)
+    counts = rng.poisson(1.0, size=(60, 80)).astype(np.float32)
+    adata = AnnData(X=np.log1p(counts / counts.sum(1, keepdims=True) * 1e4),
+                    obs=pd.DataFrame(index=[f"c{i}" for i in range(60)]),
+                    var=pd.DataFrame(index=[f"G{i}" for i in range(80)]))
+    with pytest.warns(UserWarning, match="does not look like raw counts"):
+        tf.pp.prepare_embedding(adata, n_top_genes=40, n_comps=5, verbose=False)
+
+
+
+def test_a_subset_without_copy_runs_and_keeps_its_results():
+    """adata[mask] without .copy() is a view; results used to vanish and surface as 'run clone_profiles first'."""
+    full = tf.sim.simulate_repertoire(random_state=0, n_clones=300)
+    view = full[full.obs["donor"].isin(["D0", "D1"])]
+    assert view.is_view
+    res = tf.run(view, basis="X_pca", donor_key="donor", sample_key="context", n_perm=10, n_boot=3, verbose=False)
+    assert not view.is_view and "threadfin" in view.uns and len(res.clones) > 0

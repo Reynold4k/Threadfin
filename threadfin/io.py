@@ -276,5 +276,5 @@ def attach_bcr(
         "n_clones": n_clones,
     }
     if verbose:
-        print(f"[threadfin] attached BCR: {n_matched}/{adata.n_obs} cells, {n_clones} clones.", flush=True)
+        print(f"[threadfin] attached clone ids: {n_matched}/{adata.n_obs} cells, {n_clones} clones.", flush=True)
     return adata

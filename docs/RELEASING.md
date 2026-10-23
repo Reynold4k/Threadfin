@@ -2,7 +2,8 @@
 
 ## Every release
 
-1. Update the version in `pyproject.toml` and `threadfin/__init__.py`, add the entry to `CHANGELOG.md` and run
+1. Update the version in `pyproject.toml`, `threadfin/__init__.py` and `CITATION.cff` (with `date-released`), add
+   the entry to `CHANGELOG.md` and run
    `python docs/make_api_reference.py` (the function reference carries the version).
 2. Push to `main` and wait for the tests (Linux with Python 3.10–3.14 and the oldest allowed dependencies, macOS,
    Windows).

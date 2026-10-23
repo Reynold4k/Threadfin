@@ -21,7 +21,8 @@ OUT = Path(__file__).resolve().parent / "API.md"
 SECTIONS = [
     ("One call", "The complete analysis and its result.", [
         ("tf.run", tf.run), ("tf.ThreadfinResult", tf.ThreadfinResult),
-        ("ThreadfinResult.summary", tf.ThreadfinResult.summary), ("ThreadfinResult.plot", tf.ThreadfinResult.plot)]),
+        ("ThreadfinResult.summary", tf.ThreadfinResult.summary), ("ThreadfinResult.methods", tf.ThreadfinResult.methods),
+        ("ThreadfinResult.plot", tf.ThreadfinResult.plot)]),
     ("Reading data and calling clones", "Receptor tables in, one clone id per cell out.", [
         (f"tf.{n}", getattr(tf, n)) for n in ("read_bcr", "read_10x_vdj", "read_airr", "attach_bcr", "read_contigs",
                                                "define_clones_dandelion", "define_clones")]),

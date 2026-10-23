@@ -104,6 +104,7 @@ result = tf.run(
 )
 print(result.summary())                        # plain-language report
 result.plot("threadfin_overview.pdf")          # clone map, coherence, stability, composition
+print(result.methods())                        # a Methods paragraph with the settings used
 ```
 
 `tf.run` defines clones within each donor, builds an expression embedding without immunoglobulin genes,
@@ -112,6 +113,8 @@ programmes and reports their stability. Add `test=[...]` to test your own labels
 whether clones keep their state, and `n_jobs=-1` to use every CPU core (the results do not change). No data
 at hand? `tf.sim.simulate_repertoire()` makes a repertoire with a known answer
 ([Tutorial 1](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md)).
+T cells work the same way, with TCR contigs as `bcr`, and receptor data loaded with scirpy can be passed as
+they are ([Tutorial 2, section 6](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md#6-how-clones-are-called)).
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/_static/tutorial_overview.png" width="760" alt="Overview figure produced by result.plot()">
@@ -200,8 +203,9 @@ measured clone annotations Threadfin is comparable to clone2vec and to a simple 
 coordinates, and better than Clonotrace at its default and than Benisse; in simulation, clone2vec groups clones by their
 planted programme and tells mixed from in-between clones more accurately. Threadfin needs a fraction of the
 others' time (its clone profiles take seconds; clone2vec about 30 times longer, Clonotrace 300 to 2,400
-times) and finished every run without help. The benchmark reports every result, including those where
-Threadfin is not the best.
+times) and finished every run without help; a million cells take about an hour on 8 cores
+([scalability](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/analyses/technical_validation/scalability/README.md)).
+The benchmark reports every result, including those where Threadfin is not the best.
 
 ## Related tools
 
@@ -215,7 +219,7 @@ Threadfin is not the best.
 * [CoNGA](https://github.com/phbradley/conga) — graph-vs-graph analysis of T-cell receptor and expression
   similarity.
 * [Scirpy](https://github.com/scverse/scirpy) — single-cell immune receptor analysis in the scverse
-  ecosystem.
+  ecosystem; Threadfin reads its AnnData and MuData objects.
 * [Scanpy](https://github.com/scverse/scanpy) and [AnnData](https://github.com/scverse/anndata) — the data
   structures and single-cell tools Threadfin works with.
 * [Immcantation](https://immcantation.readthedocs.io) — B-cell receptor repertoire analysis, including

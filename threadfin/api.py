@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from ._utils import log, require_complete_groups, require_obs, require_positive_int
+from ._utils import ensure_actual, log, require_complete_groups, require_obs, require_positive_int
 
 # --------------------------------------------------------------------------- reading BCR files
 
@@ -135,7 +135,8 @@ class ThreadfinResult:
         lines = [
             "Threadfin summary",
             "=================",
-            f"Cells with a BCR: {clones.size:,} of {ad.n_obs:,}, in {sizes.size:,} clones "
+            f"Cells with a {self.settings.get('receptor') or 'clone id'}: {clones.size:,} of {ad.n_obs:,}, "
+            f"in {sizes.size:,} clones "
             f"({int((sizes >= 3).sum()):,} clones have >= 3 cells).",
             "",
             "1. Does clone identity shape cell state? (clonal coherence)",
@@ -219,6 +220,190 @@ class ThreadfinResult:
                       "per-clone table: result.clones."]
         return "\n".join(lines)
 
+    def methods(self, clone_ids: pd.Series | None = None) -> str:
+        """A Methods paragraph for this analysis, with the settings and package versions that were used.
+
+        Written from the settings recorded by :func:`run`, followed by the references it cites. Check it
+        against your own description of the data before using it.
+
+        Parameters
+        ----------
+        clone_ids
+            When the clones were called before :func:`run` (``adata.obs['clone_id']`` filled from
+            :func:`threadfin.define_clones_dandelion`), pass the Series that call returned: its recorded
+            settings are then described too.
+        """
+        import platform
+        from importlib.metadata import PackageNotFoundError, version
+
+        from . import __version__
+
+        def ver(dist):
+            try:
+                return version(dist)
+            except PackageNotFoundError:
+                return "unknown"
+
+        def n(x):
+            return f"{int(x):,}"
+
+        ad, st = self.adata, self.settings
+        uns = ad.uns.get("threadfin", {})
+        refs = {"threadfin": "Threadfin (https://github.com/Reynold4k/Threadfin)"}
+        text = [f"Clonal analyses used Threadfin {__version__} (Python {platform.python_version()}, "
+                f"scanpy {ver('scanpy')}, anndata {ver('anndata')})."]
+
+        # clones
+        cc = st.get("clone_calling")
+        if cc is None and clone_ids is not None and clone_ids.attrs.get("method") == "dandelion":
+            cc = dict(clone_ids.attrs)
+        clones = ad.obs[st["clone_key"]].dropna().astype(str)
+        sizes = clones.value_counts()
+        if cc:
+            ident = cc.get("identity")
+
+            def identity_for(kind, default):
+                value = float(ident.get(kind, default)) if isinstance(ident, dict) else float(ident)
+                return ("identical junction amino-acid sequences" if value >= 1
+                        else f"a junction amino-acid identity of at least {value:g}")
+
+            light = cc.get("use_light_chain", True)
+            receptor = st.get("receptor") or cc.get("receptor") or "BCR"
+            if receptor == "TCR":
+                chains, ident_txt, vdj = ("the beta and alpha chains" if light else "the beta chain",
+                                          identity_for("tr-ab", 1.0), "a beta (or delta) chain")
+            elif receptor == "BCR":
+                chains, ident_txt, vdj = ("the heavy and light chains" if light else "the heavy chain",
+                                          identity_for("ig", 0.85), "a heavy chain")
+            else:
+                chains = ("both chains (heavy and light; beta and alpha)" if light else "the heavy (beta) chain")
+                ident_txt = f"{identity_for('ig', 0.85)} for B-cell and {identity_for('tr-ab', 1.0)} for T-cell receptors"
+                vdj = "a heavy (beta) chain"
+            # run() passes its own column of donors to the clone caller; an earlier call names the user's column
+            donor = st.get("donor_key") if st.get("clone_calling") else cc.get("donor_key")
+            text.append(
+                f"Clones were called with Dandelion {cc.get('dandelion_version', '')} (ref. dandelion)"
+                + (f" within each donor ({donor!r})" if donor else "")
+                + f", from productive contigs, requiring the same V and J genes and junction length on {chains} and "
+                f"{ident_txt}" + (", after Dandelion's contig check" if cc.get("check_contigs") else "") + ". "
+                + (f"Cells without {vdj} were not assigned to a clone. " if cc.get("require_heavy_chain", True) else "")
+                + (f"Python's hash seed was fixed ({cc['python_hash_seed']}) so that clone calls are reproducible."
+                   if cc.get("python_hash_seed") is not None else
+                   "Python's hash seed was not fixed, so clone calls can differ slightly between sessions."))
+            refs["dandelion"] = ("Suo C et al. Dandelion uses the single-cell adaptive immune receptor repertoire "
+                                 "to explore lymphocyte developmental origins. Nat Biotechnol 2024;42:40-51.")
+        else:
+            text.append(f"Clone identities were taken from adata.obs['{st['clone_key']}'].")
+        text.append(f"{n(sizes.sum())} of {n(ad.n_obs)} cells belonged to {n(sizes.size)} clones, "
+                    f"{n((sizes >= 2).sum())} of them with two or more cells.")
+
+        # embedding
+        emb = uns.get("prepare_embedding")
+        if emb and st.get("basis") == emb.get("key_added", "X_threadfin"):
+            batch = emb.get("batch_key")
+            text.append(
+                f"Counts were normalised to 10,000 per cell and log-transformed; {n(emb['n_top_genes'])} highly "
+                f"variable genes (Seurat flavour{f', batch-aware over {batch!r}' if batch else ''}) were selected "
+                + ("after excluding immunoglobulin and T-cell receptor genes, " if emb.get("exclude_receptor_genes")
+                   else "") + f"scaled and reduced to {emb['n_comps']} principal components"
+                + (f", integrated over {batch!r} with Harmony (ref. harmony)" if emb.get("integrate") == "harmony"
+                   else "") + ".")
+            if emb.get("integrate") == "harmony":
+                refs["harmony"] = ("Korsunsky I et al. Fast, sensitive and accurate integration of single-cell "
+                                   "data with Harmony. Nat Methods 2019;16:1289-1296.")
+        else:
+            text.append(f"Cell states were the coordinates of the embedding '{st.get('basis')}'.")
+
+        # clone profiles
+        prof = uns.get("profiles", {})
+        pp_ = prof.get("params", {})
+        ctx = pp_.get("context_key")
+        centring = (f"Each cell's coordinates were centred on the mean of its sampling context ({ctx!r}). " if ctx
+                    else "")
+        if pp_.get("representation") == "kernel":
+            smooth = int(pp_.get("smooth", 0))
+            text.append(
+                centring
+                + (f"Each cell was averaged with its {smooth} nearest neighbours and " if smooth else "Cells were ")
+                + f"mapped to {pp_.get('n_features', 256)} random Fourier features of a Gaussian kernel (bandwidth "
+                f"{float(pp_.get('bandwidth', float('nan'))):.3g}, the median distance between cells; ref. rff); every "
+                f"clone with at least {pp_.get('min_cells', 2)} cells was described by the mean of its cells' "
+                "features (kernel mean embedding; ref. kme), shrunk towards the context average the more, the fewer "
+                "cells it has (best linear unbiased prediction under a random-effects model; ref. searle), and the "
+                f"profiles were reduced to {pp_.get('n_components', 30)} principal components.")
+            refs["rff"] = "Rahimi A, Recht B. Random features for large-scale kernel machines. NeurIPS 2007."
+            refs["kme"] = ("Muandet K, Fukumizu K, Sriperumbudur B, Schoelkopf B. Kernel mean embedding of "
+                           "distributions: a review and beyond. Found Trends Mach Learn 2017;10:1-141.")
+        else:
+            text.append(centring + f"Every clone with at least {pp_.get('min_cells', 2)} cells was described by the "
+                        "mean of its cells' coordinates, shrunk towards the context average the more, the fewer cells "
+                        "it has (best linear unbiased prediction under a random-effects model; ref. searle).")
+        refs["searle"] = "Searle SR, Casella G, McCulloch CE. Variance Components. Wiley, 1992."
+
+        # coherence
+        coh = self.coherence
+        floor = np.isclose(coh["p_value"], 1 / (coh["n_perm"] + 1))
+        text.append(
+            "Clonal coherence was the intraclass correlation of cell states within clones (the share of variance "
+            "explained by clone, on unsmoothed, context-centred coordinates), tested against "
+            f"{n(coh['n_perm'])} permutations of clone labels"
+            + (f" within {coh['strata_key']!r}" if coh.get("strata_key") else "")
+            + f" (observed {coh['icc']:.3f}, shuffled {coh['null_mean']:.3f}, P = {coh['p_value']:.2g}"
+            + (", the smallest possible with this number of permutations" if floor else "") + ").")
+
+        # clone map
+        mp = prof.get("map_params")
+        if mp:
+            text.append(f"The clone map is a UMAP (ref. umap) of the clone profiles with n_neighbors "
+                        f"{mp['n_neighbors']} and min_dist {mp['min_dist']:g}"
+                        + (", chosen by Threadfin's layout search" if mp.get("chosen_by") == "tune_clone_map" else "")
+                        + "; it is a display, and no statistic depends on it.")
+            refs["umap"] = ("McInnes L, Healy J, Saul N, Grossberger L. UMAP: uniform manifold approximation and "
+                            "projection. J Open Source Softw 2018;3:861.")
+
+        # programmes
+        prog = uns.get("programmes")
+        if prog and not self.programmes.empty:
+            pr = prog["params"]
+            k = self.programmes.shape[0]
+            text.append(
+                f"Clonal programmes were Leiden communities (ref. leiden) of the {pr['n_neighbors']}-nearest-neighbour "
+                "graph of clone profiles"
+                + (" (edges weighted by the clones' reliabilities), " if pr.get("weight_by_reliability", True) else ", ")
+                + ("at the resolution chosen for bootstrap stability" if pr.get("auto", True)
+                   else f"at resolution {pr['resolution']:g}")
+                + f"; every split was tested against a single Gaussian group (alpha {pr['alpha']:g}) and splits "
+                "that failed were merged; "
+                f"stability was the mean Jaccard overlap with the best-matching group over {pr['n_boot']} bootstrap "
+                "replicates (ref. hennig). "
+                + (f"This gave {k} programmes." if k > 1 else "No split was significant: one programme."))
+            refs["leiden"] = ("Traag VA, Waltman L, van Eck NJ. From Louvain to Leiden: guaranteeing well-connected "
+                              "communities. Sci Rep 2019;9:5233.")
+            refs["hennig"] = ("Hennig C. Cluster-wise assessment of cluster stability. Comput Stat Data Anal "
+                              "2007;52:258-271.")
+
+        # label tests and memory
+        if self.profile_tests:
+            r0 = next(iter(self.profile_tests.values()))
+            labels = ", ".join(repr(k) for k in self.profile_tests)
+            text.append(
+                f"For {labels}, the share of the variance between clone profiles explained by the clone-level label "
+                f"(as in PERMANOVA; ref. anderson) was tested with {n(r0.get('n_perm', 2000))} permutations of the label "
+                + (f"among clones of the same {r0['strata_key']!r}" if r0.get("strata_key") else "among clones")
+                + ".")
+            refs["anderson"] = ("Anderson MJ. A new method for non-parametric multivariate analysis of variance. "
+                                "Austral Ecol 2001;26:32-46.")
+        if self.memory is not None:
+            text.append(f"Clonal memory over {self.memory['time_key']!r} compared the change of each clone's profile "
+                        "between levels, corrected for sampling, with the distance to a random clone of the same donor.")
+
+        body = " ".join(text)
+        order = list(dict.fromkeys(k for k in refs if k != "threadfin"))
+        for i, key in enumerate(order, 1):
+            body = body.replace(f"ref. {key}", f"ref. {i}")
+        lines = [body, "", "References"] + [f"{i}. {refs[key]}" for i, key in enumerate(order, 1)]
+        return "\n".join(lines)
+
     def plot(self, save: str | Path | None = None):
         """Overview figure (clone map, coherence test, programme composition, stability)."""
         from .plotting import overview
@@ -248,6 +433,7 @@ def run(
     n_boot: int = 30,
     random_state: int = 0,
     n_jobs: int | None = 1,
+    clone_options: dict | None = None,
     verbose: bool = True,
 ) -> ThreadfinResult:
     """Run the complete Threadfin analysis in one call.
@@ -255,15 +441,17 @@ def run(
     Parameters
     ----------
     adata
-        AnnData of B cells (one row per cell). Needs raw counts in ``X`` (or
-        ``layers['counts']``) unless you pass a ready-made ``basis``.
+        AnnData of B cells, or T cells (one row per cell). Needs raw counts in
+        ``X`` (or ``layers['counts']``) unless you pass a ready-made ``basis``.
     bcr
-        BCR data: a path to a Cell Ranger ``filtered_contig_annotations.csv``
-        or an AIRR ``.tsv``, or a contig-level DataFrame (one row per receptor
-        chain). Clones are defined with Dandelion's paired heavy + light
-        definition (:func:`threadfin.define_clones_dandelion`), within each
-        donor; this needs the sc-dandelion package. Leave ``None`` if
-        ``adata.obs[clone_key]`` already holds clone ids.
+        Receptor data, BCR or TCR: a path to a Cell Ranger
+        ``filtered_contig_annotations.csv`` or an AIRR ``.tsv``, a contig-level
+        DataFrame (one row per receptor chain), or a scirpy AnnData/MuData.
+        Clones are defined with Dandelion's paired definition (heavy + light
+        chain; TCR beta + alpha) within each donor
+        (:func:`threadfin.define_clones_dandelion`); this needs the
+        sc-dandelion package. Leave ``None`` if ``adata.obs[clone_key]``
+        already holds clone ids.
     donor_key
         ``obs`` column naming the individual each cell came from. Strongly
         recommended: clones are defined within donors and tests are
@@ -308,6 +496,10 @@ def run(
         of the clone-map settings and the bootstrap of programme stability
         (``-1``: all available cores). Results are identical for any value;
         only the run time changes.
+    clone_options
+        Settings for calling clones from ``bcr``, passed to
+        :func:`threadfin.define_clones_dandelion`, e.g. ``{"identity": 0.9}`` or
+        ``{"check_contigs": True}`` (Dandelion's check for cells with several chains of one kind).
 
     Returns
     -------
@@ -323,6 +515,7 @@ def run(
     >>> print(result.summary())
     >>> result.plot("threadfin_overview.pdf")
     """
+    ensure_actual(adata, verbose)
     from .dynamics import clonal_memory
     from .io import attach_bcr
     from .pp import prepare_embedding
@@ -342,22 +535,23 @@ def run(
     if representation not in {"mean", "kernel"}:
         raise ValueError("representation must be 'mean' or 'kernel'.")
 
-    # Step 1 - clones from BCR sequences (within each donor).
+    # Step 1 - clones from receptor sequences (within each donor).
     # Threadfin's clone definition is Dandelion's paired heavy + light definition, so the
     # contig-level table (one row per receptor chain) is required — a per-cell summary cannot
     # recover the light-chain pairing.
     if bcr is not None:
-        if not isinstance(bcr, (pd.DataFrame, str, Path)):
-            raise TypeError("bcr must be a contig-level pandas DataFrame or a path to a 10x "
-                            "filtered_contig_annotations.csv / AIRR .tsv file.")
-        from .dandelion import define_clones_dandelion, read_contigs
+        if not isinstance(bcr, (pd.DataFrame, str, Path)) and not (hasattr(bcr, "mod") or hasattr(bcr, "obsm")):
+            raise TypeError("bcr must be a contig-level pandas DataFrame, a path to a 10x "
+                            "filtered_contig_annotations.csv / AIRR .tsv file, or a scirpy AnnData/MuData.")
+        from .dandelion import _locus, _receptor_name, define_clones_dandelion, read_contigs
 
-        contigs = read_contigs(bcr)
+        contigs = read_contigs(bcr, obs_names=adata.obs_names)
         contigs["cell_id"] = contigs["cell_id"].astype(str)
         contigs = contigs[contigs["cell_id"].isin(adata.obs_names.astype(str))]
+        receptor = _receptor_name(_locus(contigs))
         if contigs["cell_id"].nunique() == 0:
             raise ValueError(
-                "No BCR barcodes match adata.obs_names. Check that both use the same barcode "
+                "No barcode of the receptor data matches adata.obs_names. Check that both use the same barcode "
                 "format; for multi-sample data, harmonise the barcodes first (see "
                 "barcode_prefix/barcode_suffix in threadfin.read_bcr())."
             )
@@ -367,13 +561,14 @@ def run(
             contigs["donor"] = contigs["cell_id"].map(donor_of_cell)
         ids = define_clones_dandelion(contigs, cell_key="cell_id",
                                       donor_key="donor" if donor_key else None,
-                                      out_col=clone_key, verbose=verbose)
+                                      out_col=clone_key, verbose=verbose, **(clone_options or {}))
+        clone_calling = dict(ids.attrs)
         if int(ids.notna().sum()) == 0:
             raise ValueError(
-                "Matched BCR contigs produced no clone calls. Each retained cell needs "
-                "heavy-chain V and J calls plus a non-empty junction/CDR3 sequence."
+                "Matched receptor contigs produced no clone calls. Each retained cell needs "
+                "heavy-chain (TCR: beta or delta) V and J calls plus a non-empty junction/CDR3 sequence."
             )
-        if isinstance(bcr, pd.DataFrame):
+        if not isinstance(bcr, (str, Path)):          # a DataFrame or a scirpy object: clone ids only
             table = ids.rename(clone_key).to_frame()
             table.index.name = "barcode"
         else:
@@ -385,6 +580,8 @@ def run(
         attach_bcr(adata, table, clone_col=clone_key, summarize=False, verbose=verbose)
     elif clone_key not in adata.obs.columns:
         raise ValueError(f"Pass `bcr`, or provide clone ids in adata.obs['{clone_key}'].")
+    else:
+        receptor, clone_calling = None, None
 
     # Threadfin needs clones observed more than once; say so plainly instead of failing deep inside the model
     sizes = adata.obs[clone_key].dropna().astype(str).value_counts()
@@ -392,7 +589,7 @@ def run(
         raise ValueError(
             f"Only {int((sizes >= 2).sum())} clone(s) have two or more cells ({sizes.size:,} clones, "
             f"{int(sizes.sum()):,} cells with a clone id). Threadfin compares the cells within a clone, so it needs "
-            "clones seen at least twice. Check that the BCR barcodes match adata.obs_names (the share of cells with a "
+            "clones seen at least twice. Check that the receptor barcodes match adata.obs_names (the share of cells with a "
             "clone id), that clones were called within donors, and that the data contain expanded B cells.")
 
     # Step 2 - expression embedding without immunoglobulin genes
@@ -454,7 +651,8 @@ def run(
         composition=composition, tests=tests, profile_tests=profile_tests, memory=memory, skipped=skipped,
         settings={"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
                   "state_key": state_key, "time_key": time_key, "basis": basis,
-                  "representation": representation},
+                  "representation": representation, "receptor": receptor, "clone_calling": clone_calling,
+                  "n_perm": int(n_perm), "n_boot": int(n_boot), "random_state": int(random_state)},
     )
     log("done. print(result.summary()) for a readable report.", verbose)
     return result

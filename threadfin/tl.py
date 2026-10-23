@@ -31,7 +31,7 @@ from .heritability import gene_heritability, geneset_heritability
 from .maptune import layout_clone_map, map_quality, tune_clone_map
 from .phylo import lineage_forest, lineage_heritability
 from .profiles import clone_profiles
-from .programmes import embed_clones, find_programmes, programme_composition, programme_markers
+from .programmes import embed_clones, find_programmes, landscape_genes, programme_composition, programme_markers
 from .stats import association_test, clonal_coherence, clone_labels, profile_association
 
 __all__ = [
@@ -57,5 +57,6 @@ __all__ = [
     "profile_association",
     "programme_composition",
     "programme_markers",
+    "landscape_genes",
     "tune_clone_map",
 ]

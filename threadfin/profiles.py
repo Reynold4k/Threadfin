@@ -44,7 +44,8 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import codes, get_basis, get_uns, log, modal, require_complete_groups, require_obs, require_positive_int
+from ._utils import (codes, ensure_actual, get_basis, get_uns, log, modal, require_complete_groups, require_obs,
+                     require_positive_int)
 
 PROFILE_KEY = "profiles"
 
@@ -459,6 +460,7 @@ def clone_profiles(
     ``reliability`` and, when available, ``donor`` and ``n_contexts``.
     Profiles and model parameters go to ``adata.uns['threadfin']['profiles']``.
     """
+    ensure_actual(adata, verbose)
     require_obs(adata, clone_key, context="clone profiling")
     require_complete_groups(adata, context_key, donor_key, context="clone profiling")
     if representation not in {"mean", "kernel"}:
@@ -527,9 +529,10 @@ def clone_profiles(
         "reduction": reduction,
     }
     log(
-        f"clone profiles: {table.shape[0]} clones (>= {min_cells} cells); clonal ICC = "
-        f"{vc.icc:.3f} ({vc.n_clones} clones, {vc.n_cells} cells). Profiles are shrunk, so a clone "
-        f"reaches reliability 0.5 at {vc.min_cells_for(0.5)} cells; nothing is filtered on that.",
+        # the clonal ICC itself is reported by clonal_coherence, on unsmoothed cells; the variance components
+        # of the profile features (smoothed for kernel profiles) only set the shrinkage, so they are not quoted
+        f"clone profiles: {table.shape[0]} clones (>= {min_cells} cells, {vc.n_cells} cells in all). Profiles are "
+        f"shrunk, so a clone reaches reliability 0.5 at {vc.min_cells_for(0.5)} cells; nothing is filtered on that.",
         verbose,
     )
     return table

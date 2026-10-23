@@ -1,4 +1,4 @@
-# API reference (threadfin 4.4.1)
+# API reference (threadfin 4.5.0)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -19,6 +19,7 @@ The complete analysis and its result.
 | [`tf.run`](#tfrun) | Run the complete Threadfin analysis in one call. |
 | [`tf.ThreadfinResult`](#tfthreadfinresult) | Everything :func:`run` computed. Print :meth:`summary` for a readable report. |
 | [`ThreadfinResult.summary`](#threadfinresultsummary) | Plain-language summary of the results. |
+| [`ThreadfinResult.methods`](#threadfinresultmethods) | A Methods paragraph for this analysis, with the settings and package versions that were used. |
 | [`ThreadfinResult.plot`](#threadfinresultplot) | Overview figure (clone map, coherence test, programme composition, stability). |
 
 ### tf.run
@@ -28,8 +29,8 @@ tf.run(adata, bcr=None, *, donor_key: 'str | None' = None, sample_key: 'str | No
     batch_key: 'str | None' = None, state_key: 'str | None' = None, time_key: 'str | None' = None,
     test=None, clone_key: 'str' = 'clone_id', basis: 'str | None' = None, representation: 'str' =
     'kernel', map_n_neighbors: 'int | str' = 'auto', map_min_dist: 'float | str' = 'auto', n_perm:
-    'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0, n_jobs: 'int | None' = 1, verbose:
-    'bool' = True) -> 'ThreadfinResult'
+    'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0, n_jobs: 'int | None' = 1,
+    clone_options: 'dict | None' = None, verbose: 'bool' = True) -> 'ThreadfinResult'
 ```
 
 ```text
@@ -38,15 +39,17 @@ Run the complete Threadfin analysis in one call.
 Parameters
 ----------
 adata
-    AnnData of B cells (one row per cell). Needs raw counts in ``X`` (or
-    ``layers['counts']``) unless you pass a ready-made ``basis``.
+    AnnData of B cells, or T cells (one row per cell). Needs raw counts in
+    ``X`` (or ``layers['counts']``) unless you pass a ready-made ``basis``.
 bcr
-    BCR data: a path to a Cell Ranger ``filtered_contig_annotations.csv``
-    or an AIRR ``.tsv``, or a contig-level DataFrame (one row per receptor
-    chain). Clones are defined with Dandelion's paired heavy + light
-    definition (:func:`threadfin.define_clones_dandelion`), within each
-    donor; this needs the sc-dandelion package. Leave ``None`` if
-    ``adata.obs[clone_key]`` already holds clone ids.
+    Receptor data, BCR or TCR: a path to a Cell Ranger
+    ``filtered_contig_annotations.csv`` or an AIRR ``.tsv``, a contig-level
+    DataFrame (one row per receptor chain), or a scirpy AnnData/MuData.
+    Clones are defined with Dandelion's paired definition (heavy + light
+    chain; TCR beta + alpha) within each donor
+    (:func:`threadfin.define_clones_dandelion`); this needs the
+    sc-dandelion package. Leave ``None`` if ``adata.obs[clone_key]``
+    already holds clone ids.
 donor_key
     ``obs`` column naming the individual each cell came from. Strongly
     recommended: clones are defined within donors and tests are
@@ -91,6 +94,10 @@ n_jobs
     of the clone-map settings and the bootstrap of programme stability
     (``-1``: all available cores). Results are identical for any value;
     only the run time changes.
+clone_options
+    Settings for calling clones from ``bcr``, passed to
+    :func:`threadfin.define_clones_dandelion`, e.g. ``{"identity": 0.9}`` or
+    ``{"check_contigs": True}`` (Dandelion's check for cells with several chains of one kind).
 
 Returns
 -------
@@ -128,6 +135,26 @@ summary(self) -> 'str'
 
 ```text
 Plain-language summary of the results.
+```
+
+### ThreadfinResult.methods
+
+```python
+methods(self, clone_ids: 'pd.Series | None' = None) -> 'str'
+```
+
+```text
+A Methods paragraph for this analysis, with the settings and package versions that were used.
+
+Written from the settings recorded by :func:`run`, followed by the references it cites. Check it
+against your own description of the data before using it.
+
+Parameters
+----------
+clone_ids
+    When the clones were called before :func:`run` (``adata.obs['clone_id']`` filled from
+    :func:`threadfin.define_clones_dandelion`), pass the Series that call returned: its recorded
+    settings are then described too.
 ```
 
 ### ThreadfinResult.plot
@@ -266,27 +293,29 @@ The modified ``adata`` (in place and returned).
 ### tf.read_contigs
 
 ```python
-tf.read_contigs(bcr) -> 'pd.DataFrame'
+tf.read_contigs(bcr, obs_names=None) -> 'pd.DataFrame'
 ```
 
 ```text
 Contig-level AIRR table from a path or a DataFrame, for :func:`define_clones_dandelion`.
 
 Accepts a Cell Ranger ``filtered_contig_annotations.csv`` (``.csv`` / ``.csv.gz``), an AIRR
-rearrangement ``.tsv`` / ``.tsv.gz``, or an already contig-level DataFrame (one row per chain,
+rearrangement ``.tsv`` / ``.tsv.gz``, a scirpy AnnData or MuData (receptor data in ``obsm['airr']``),
+or an already contig-level DataFrame (one row per chain,
 with ``cell_id``/``barcode``, ``v_call``/``v_gene``, ``j_call``/``j_gene`` and
 ``junction``/``cdr3_nt``). A per-cell table (one row per cell, e.g. the output of
 :func:`threadfin.read_bcr`) is refused: the paired heavy + light clone definition needs the
-individual chains.
+individual chains. When a table has both a 10x ``barcode`` and an AIRR ``cell_id`` column, the one that
+matches more of ``obs_names`` (by default ``cell_id``) names the cells.
 ```
 
 ### tf.define_clones_dandelion
 
 ```python
 tf.define_clones_dandelion(contigs: 'pd.DataFrame', *, use_light_chain: 'bool' = True, identity:
-    'float' = 0.85, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id', productive_only:
-    'bool' = True, require_heavy_chain: 'bool' = True, out_col: 'str' = 'clone_id', verbose: 'bool'
-    = True) -> 'pd.Series'
+    'float | dict | None' = None, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id',
+    productive_only: 'bool' = True, require_heavy_chain: 'bool' = True, check_contigs: 'bool' =
+    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True) -> 'pd.Series'
 ```
 
 ```text
@@ -297,28 +326,44 @@ Parameters
 contigs
     **Contig-level** AIRR table — one row per receptor chain, not per cell — with at least
     ``cell_id``, ``v_call``, ``j_call`` and ``junction``. This is what Cell Ranger's
-    ``airr_rearrangement.tsv`` and ``filtered_contig_annotations.csv`` provide.
+    ``airr_rearrangement.tsv`` and ``filtered_contig_annotations.csv`` provide. BCR and TCR contigs are
+    both accepted.
 use_light_chain
-    ``True`` (default) defines a clone on the heavy **and** light chain, which is Dandelion's own
-    definition. ``False`` keeps only IGH contigs, for deposits with no light chain; the choice is
-    recorded in ``Series.attrs['use_light_chain']``.
+    ``True`` (default) defines a clone on both chains (BCR heavy + light; TCR beta + alpha), which is
+    Dandelion's own definition. ``False`` keeps only the VDJ chain (IGH, TRB, TRD), for deposits with no
+    light (alpha) chain; the choice is recorded in ``Series.attrs['use_light_chain']``.
 identity
-    Junction identity threshold passed to ``dandelion.tl.find_clones``.
+    Junction amino-acid identity required within a clone, passed to ``dandelion.tl.find_clones``.
+    ``None`` (default) uses Dandelion's defaults: 0.85 for BCR, which allows for somatic hypermutation,
+    and 1.0 (identical junctions) for TCR, which does not mutate. A number applies to every chain type;
+    a dict sets them separately (keys ``"ig"``, ``"tr-ab"``, ``"tr-gd"``).
 donor_key
     Column naming the individual. When given, clones are called separately within each donor, so no
     clone can span two animals or participants; the donor is prefixed to the id.
 productive_only
     Drop non-productive rearrangements before calling.
 require_heavy_chain
-    ``True`` (default) returns clone ids only for cells with a (productive) heavy chain. Dandelion
+    ``True`` (default) returns clone ids only for cells with a (productive) VDJ chain — the BCR heavy
+    chain, or the TCR beta or delta chain. Dandelion
     also groups cells whose heavy chain was not recovered, by their light chain alone (ids such as
     ``B_VJ_...``). Light-chain rearrangements are far less diverse than heavy-chain ones, so these
     groups join unrelated cells and are not clones; in GSE287123 they were 5,276 of 21,939 cells and
     740 of 2,626 groups of two or more cells. ``False`` keeps them.
+check_contigs
+    ``True`` runs Dandelion's own contig check (``dandelion.pp.check_contigs``) before the clones are
+    called, as Dandelion's tutorial does: identical contigs of a cell are merged, a cell with several
+    heavy chains keeps the one that clearly dominates in UMIs (IgM with IgD is allowed; two light chains
+    are allowed too, as in allelic inclusion), and cells without a dominant heavy chain — often doublets —
+    are set aside instead of joining clones. It needs UMI
+    counts (``umi_count`` or ``duplicate_count``); without them every cell with two chains of one kind is
+    set aside. Read counts (``consensus_count``) break ties and are replaced by the UMI count when absent.
+    ``False`` (default, as in the manuscript) calls clones on all productive contigs.
 
 Returns
 -------
-Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts and the
+Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts (with
+``n_cells_with_combined_id``, the cells with two productive chains of one kind, and
+``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), and the
 ``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
 sessions, see the module notes).
 ```
@@ -483,6 +528,7 @@ The steps that `tf.run` calls, and further analyses, one by one.
 | [`tf.tl.find_threshold`](#tftlfind_threshold) | Threshold at the density valley of a distance-to-nearest distribution. |
 | [`tf.tl.gene_heritability`](#tftlgene_heritability) | Clonal ICC of every gene, with a within-stratum permutation p-value. |
 | [`tf.tl.geneset_heritability`](#tftlgeneset_heritability) | Summarise :func:`gene_heritability` over named gene sets. |
+| [`tf.tl.landscape_genes`](#tftllandscape_genes) | Genes whose expression changes smoothly across the clones, with no programmes needed. |
 | [`tf.tl.layout_clone_map`](#tftllayout_clone_map) | Lay the clones out at given settings, at UMAP's default number of epochs, and check the result. |
 | [`tf.tl.lineage_forest`](#tftllineage_forest) | Group cells into clone x block units and collect their lineage-tree distances. |
 | [`tf.tl.lineage_heritability`](#tftllineage_heritability) | Estimate and test lineage heritability of cell state inside clones. |
@@ -764,9 +810,9 @@ sequence type and the number of clones.
 
 ```python
 tf.tl.define_clones_dandelion(contigs: 'pd.DataFrame', *, use_light_chain: 'bool' = True, identity:
-    'float' = 0.85, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id', productive_only:
-    'bool' = True, require_heavy_chain: 'bool' = True, out_col: 'str' = 'clone_id', verbose: 'bool'
-    = True) -> 'pd.Series'
+    'float | dict | None' = None, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id',
+    productive_only: 'bool' = True, require_heavy_chain: 'bool' = True, check_contigs: 'bool' =
+    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True) -> 'pd.Series'
 ```
 
 ```text
@@ -777,28 +823,44 @@ Parameters
 contigs
     **Contig-level** AIRR table — one row per receptor chain, not per cell — with at least
     ``cell_id``, ``v_call``, ``j_call`` and ``junction``. This is what Cell Ranger's
-    ``airr_rearrangement.tsv`` and ``filtered_contig_annotations.csv`` provide.
+    ``airr_rearrangement.tsv`` and ``filtered_contig_annotations.csv`` provide. BCR and TCR contigs are
+    both accepted.
 use_light_chain
-    ``True`` (default) defines a clone on the heavy **and** light chain, which is Dandelion's own
-    definition. ``False`` keeps only IGH contigs, for deposits with no light chain; the choice is
-    recorded in ``Series.attrs['use_light_chain']``.
+    ``True`` (default) defines a clone on both chains (BCR heavy + light; TCR beta + alpha), which is
+    Dandelion's own definition. ``False`` keeps only the VDJ chain (IGH, TRB, TRD), for deposits with no
+    light (alpha) chain; the choice is recorded in ``Series.attrs['use_light_chain']``.
 identity
-    Junction identity threshold passed to ``dandelion.tl.find_clones``.
+    Junction amino-acid identity required within a clone, passed to ``dandelion.tl.find_clones``.
+    ``None`` (default) uses Dandelion's defaults: 0.85 for BCR, which allows for somatic hypermutation,
+    and 1.0 (identical junctions) for TCR, which does not mutate. A number applies to every chain type;
+    a dict sets them separately (keys ``"ig"``, ``"tr-ab"``, ``"tr-gd"``).
 donor_key
     Column naming the individual. When given, clones are called separately within each donor, so no
     clone can span two animals or participants; the donor is prefixed to the id.
 productive_only
     Drop non-productive rearrangements before calling.
 require_heavy_chain
-    ``True`` (default) returns clone ids only for cells with a (productive) heavy chain. Dandelion
+    ``True`` (default) returns clone ids only for cells with a (productive) VDJ chain — the BCR heavy
+    chain, or the TCR beta or delta chain. Dandelion
     also groups cells whose heavy chain was not recovered, by their light chain alone (ids such as
     ``B_VJ_...``). Light-chain rearrangements are far less diverse than heavy-chain ones, so these
     groups join unrelated cells and are not clones; in GSE287123 they were 5,276 of 21,939 cells and
     740 of 2,626 groups of two or more cells. ``False`` keeps them.
+check_contigs
+    ``True`` runs Dandelion's own contig check (``dandelion.pp.check_contigs``) before the clones are
+    called, as Dandelion's tutorial does: identical contigs of a cell are merged, a cell with several
+    heavy chains keeps the one that clearly dominates in UMIs (IgM with IgD is allowed; two light chains
+    are allowed too, as in allelic inclusion), and cells without a dominant heavy chain — often doublets —
+    are set aside instead of joining clones. It needs UMI
+    counts (``umi_count`` or ``duplicate_count``); without them every cell with two chains of one kind is
+    set aside. Read counts (``consensus_count``) break ties and are replaced by the UMI count when absent.
+    ``False`` (default, as in the manuscript) calls clones on all productive contigs.
 
 Returns
 -------
-Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts and the
+Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts (with
+``n_cells_with_combined_id``, the cells with two productive chains of one kind, and
+``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), and the
 ``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
 sessions, see the module notes).
 ```
@@ -1068,6 +1130,43 @@ significant at FDR < 0.05 and a Mann-Whitney p-value (set vs matched
 background).
 ```
 
+### tf.tl.landscape_genes
+
+```python
+tf.tl.landscape_genes(adata, *, layer: 'str | None' = 'log_norm', context_key: 'str | None' =
+    'auto', n_neighbors: 'int' = 15, min_frac_expressed: 'float' = 0.05, state_key: 'str | None' =
+    None, state: 'str | None' = None, min_cells_in_state: 'int' = 1, n_top: 'int | None' = 50,
+    verbose: 'bool' = True) -> 'pd.DataFrame'
+```
+
+```text
+Genes whose expression changes smoothly across the clones, with no programmes needed.
+
+Programme markers need distinct programmes; when clones vary along a continuum (a single programme),
+this asks instead which genes follow the landscape of clone profiles. Every profiled clone is summarised
+by the mean context-centred log expression of its cells (as in :func:`programme_markers`; with
+``state_key``/``state``, of its cells in that state only). Clones are linked to their ``n_neighbors``
+nearest clones in profile space, and each gene is scored by Moran's I of the clone means on that graph:
+I > 0 when neighbouring clones express the gene alike, about 0 when the gene ignores the landscape. P values
+use the normal approximation under randomisation (Cliff and Ord), corrected by Benjamini-Hochberg.
+``corr_axis1`` is the Spearman correlation of the gene with the first component of the clone profiles,
+the main axis along which clones differ, and gives the direction of a gradient.
+
+This describes the landscape rather than testing an independent hypothesis: the profiles are built from
+the same expression, so the genes that make clones differ are expected to score. Use it to name what
+varies across clones; test annotations that the profiles did not use with :func:`profile_association`.
+
+With hundreds of clones most expressed genes reach FDR < 0.05, so rank genes by Moran's I (0 to 1 in
+practice) rather than counting them. The top genes often lie at one end of the main axis; ``n_top=None``
+returns every gene that passes, so both ends can be read from ``corr_axis1``.
+
+Returns
+-------
+DataFrame ``[gene, morans_i, z, pvalue, fdr, corr_axis1, rank]`` of the ``n_top`` genes with the largest
+Moran's I among those with FDR < 0.05 (fewer if fewer pass; all of them with ``n_top=None``), also stored
+in ``adata.uns['threadfin']['landscape_genes']``.
+```
+
 ### tf.tl.layout_clone_map
 
 ```python
@@ -1278,7 +1377,8 @@ Fraction of each programme's cells in each cell state (rows sum to 1).
 ```python
 tf.tl.programme_markers(adata, *, programme_key: 'str' = 'clone_programme', layer: 'str | None' =
     'log_norm', context_key: 'str | None' = 'auto', min_frac_expressed: 'float' = 0.05, n_top: 'int'
-    = 25, verbose: 'bool' = True) -> 'pd.DataFrame'
+    = 25, state_key: 'str | None' = None, state: 'str | None' = None, min_cells_in_state: 'int' = 1,
+    verbose: 'bool' = True) -> 'pd.DataFrame'
 ```
 
 ```text
@@ -1290,9 +1390,15 @@ other programmes by a Mann-Whitney test per gene (BH FDR). Testing across
 clones avoids the pseudoreplication of cell-level marker tests, where one
 expanded clone contributes hundreds of correlated cells.
 
+Programmes usually differ in which cell states their clones contain, so the genes found this way are
+largely the markers of those states. To ask what differs between programmes *within one state* — for
+example between the germinal-centre B cells of clones from two programmes — pass ``state_key`` and
+``state``: each clone is then summarised by its cells in that state only (clones with at least
+``min_cells_in_state`` such cells), centred on the cells of the same state in its context.
+
 Returns
 -------
-Tidy DataFrame ``[programme, gene, mean_diff, auc, pvalue, fdr, rank]``
+Tidy DataFrame ``[programme, gene, mean_diff, auc, pvalue, fdr, rank]`` (and ``state`` when given)
 with the top ``n_top`` up-regulated genes per programme.
 ```
 

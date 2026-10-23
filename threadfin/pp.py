@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import log, require_complete_groups, require_positive_int
+from ._utils import ensure_actual, log, require_complete_groups, require_positive_int
 from .expression import FrozenExpressionModel
 
 __all__ = ["ig_gene_mask", "exclude_ig_genes", "prepare_embedding"]
@@ -31,6 +31,10 @@ _IG_SEGMENT = re.compile(r"^IG[HKL][VDJ](\d|I|V|X|OR)", re.IGNORECASE)
 _IG_CONSTANT = re.compile(
     r"^(IGH(M|D|E|EP\d*|G\d*[A-Z]?|GP|A\d*)|IGKC|IGLC\d*|IGLL\d*)$", re.IGNORECASE
 )
+# TCR segments (TRAV, TRBJ, TRDC, ...). The pattern also matches TRADD, which is not a receptor gene. It is kept
+# as it is so that embeddings stay identical to those of the published analyses: letting TRADD back into the gene
+# pool changes 2-4 of the 3,000 highly variable genes in 7 of the 14 public datasets. To be corrected in the next
+# major version.
 _TR_SEGMENT = re.compile(r"^TR[ABDG][VDJC]", re.IGNORECASE)
 
 
@@ -132,6 +136,7 @@ def prepare_embedding(
     -------
     ``adata`` (modified in place).
     """
+    ensure_actual(adata, verbose)
     import scanpy as sc
 
     require_complete_groups(adata, batch_key, context="prepare_embedding")
@@ -154,7 +159,24 @@ def prepare_embedding(
             "Counts contain NaN, infinite, or negative values. Use finite non-negative raw counts, "
             "or pass a precomputed embedding with threadfin.run(basis=...)."
         )
-    tmp = sc.AnnData(X=counts.copy(), obs=adata.obs[[]].copy(), var=adata.var[[]].copy())
+    sample = values[: 200_000] if values.size > 200_000 else values
+    if sample.size and not np.allclose(sample, np.round(sample)):
+        import warnings
+
+        warnings.warn(
+            f"{'adata.layers[' + repr(counts_layer) + ']' if counts_layer else 'adata.X'} does not look like raw counts "
+            "(it has non-integer values). Threadfin normalises and log-transforms the counts itself, so normalised "
+            "data would be transformed twice. Put raw counts in adata.X (or a layer, with counts_layer=), or pass "
+            "your own embedding with threadfin.run(basis=...). Ignore this if your counts are corrected but not "
+            "normalised (for example after ambient-RNA removal).", UserWarning, stacklevel=2)
+    genes = pd.Index(adata.var_names.astype(str))
+    if not genes.is_unique:                    # AnnData would warn on every copy; the user's names are not changed
+        from anndata.utils import make_index_unique
+
+        genes = make_index_unique(genes)
+        log(f"{int(adata.var_names.duplicated().sum())} duplicated gene names were made unique for the embedding "
+            "(adata.var_names itself is unchanged)", verbose)
+    tmp = sc.AnnData(X=counts.copy(), obs=adata.obs[[]].copy(), var=pd.DataFrame(index=genes))
     if batch_key is not None:
         tmp.obs[batch_key] = adata.obs[batch_key].astype(str).values
     sc.pp.normalize_total(tmp, target_sum=1e4)
@@ -188,6 +210,8 @@ def prepare_embedding(
             "No highly variable genes were selected. Check that counts vary across cells, or pass a "
             "precomputed embedding to threadfin.run(basis=...)."
         )
+    if sp.issparse(sub.X):                     # scaling centres the genes, which makes the matrix dense anyway
+        sub.X = sub.X.toarray()
     sc.pp.scale(sub, max_value=10)
     # ARPACK requires fewer components than both axes.  Capping here lets a
     # legitimately small pilot dataset use the same workflow without claiming

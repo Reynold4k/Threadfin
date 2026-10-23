@@ -225,6 +225,30 @@ def test_run_end_to_end(sim, tmp_path):
     assert (tmp_path / "overview.png").exists()
     assert fig is not None
 
+    # a Methods paragraph from the settings that were used, with numbered references
+    methods = result.methods()
+    assert f"Threadfin {tf.__version__}" in methods and "Clone identities were taken from" in methods
+    assert "20 permutations of clone labels within 'context'" in methods and "6 bootstrap" in methods
+    assert "ref. 1" in methods and "\nReferences\n1. " in methods and "ref. dandelion" not in methods
+    # clones called by Dandelion: the settings recorded by define_clones_dandelion are described
+    result.settings["clone_calling"] = {"dandelion_version": "0.5.7", "donor_key": "donor", "use_light_chain": True,
+                                        "require_heavy_chain": True, "check_contigs": True,
+                                        "identity": {"ig": 0.85, "tr-ab": 1.0, "tr-gd": 1.0},
+                                        "python_hash_seed": "0"}
+    methods = result.methods()
+    assert "Dandelion 0.5.7 (ref. 1) within each donor ('donor')" in methods
+    assert "heavy and light chains and a junction amino-acid identity of at least 0.85" in methods
+    assert "after Dandelion's contig check" in methods and "Suo C et al." in methods
+    result.settings["receptor"] = "TCR"
+    assert "beta and alpha chains and identical junction amino-acid sequences" in result.methods()
+    # clones called before run(): the Series returned by define_clones_dandelion carries the settings
+    result.settings.update(clone_calling=None, receptor=None)
+    assert "Clone identities were taken from" in result.methods()
+    ids = pd.Series(["c1"], index=["cell0"])
+    ids.attrs.update({"method": "dandelion", "dandelion_version": "0.5.7", "donor_key": "mouse", "identity": 0.85,
+                      "receptor": "BCR", "use_light_chain": True, "require_heavy_chain": True})
+    assert "Dandelion 0.5.7 (ref. 1) within each donor ('mouse')" in result.methods(ids)
+
 
 def test_programme_markers_clone_level(sim):
     import scipy.sparse as sp
@@ -298,3 +322,96 @@ def test_results_can_be_written_to_h5ad(tmp_path):
     assert {"profiles", "coherence", "programmes", "memory", "associations"} <= set(back.uns["threadfin"])
     lo, hi = back.uns["threadfin"]["memory"]["timepoint"]["memory_index_ci"]
     assert lo <= hi
+
+
+def test_programme_markers_within_one_state_separate_fate_from_composition():
+    """Programme P2 holds more plasma cells (composition); its GC cells also express 'fate' more (within state).
+    Markers across all cells find the plasma gene; markers within GC cells find 'fate' and not the plasma gene."""
+    import scipy.sparse as sp
+    from anndata import AnnData
+
+    rng = np.random.default_rng(0)
+    rows, expr = [], []
+    for c in range(80):
+        prog = "P1" if c < 40 else "P2"
+        for k in range(6):
+            state = "PC" if (prog == "P2" and k < 4) or (prog == "P1" and k == 0) else "GC"
+            g = rng.normal(0, 0.3, size=20)
+            g[0] += 3.0 if state == "PC" else 0.0                         # plasma-cell gene
+            g[1] += 1.5 if (state == "GC" and prog == "P2") else 0.0       # within-GC difference
+            rows.append({"clone_id": f"c{c}", "donor": "d1", "sample": "s1", "state": state, "prog": prog})
+            expr.append(np.clip(g + 2, 0, None))
+    obs = pd.DataFrame(rows, index=[f"cell{i}" for i in range(len(rows))])
+    x = np.asarray(expr, dtype=np.float32)
+    ad = AnnData(X=sp.csr_matrix(x), obs=obs, var=pd.DataFrame(index=["plasma"] + ["fate"] + [f"g{i}" for i in range(18)]))
+    ad.layers["log_norm"] = ad.X.copy()
+    ad.obsm["X_emb"] = rng.normal(size=(ad.n_obs, 5)).astype(np.float32)
+    tf.tl.clone_profiles(ad, basis="X_emb", donor_key="donor", context_key="sample", verbose=False)
+    ad.obs["clone_programme"] = ad.obs["prog"].astype(str)
+    allc = tf.tl.programme_markers(ad, context_key=None, n_top=3, verbose=False)
+    gc = tf.tl.programme_markers(ad, context_key=None, n_top=3, state_key="state", state="GC", verbose=False)
+    assert "plasma" in set(allc.loc[allc["programme"] == "P2", "gene"])
+    sig = gc[(gc["programme"] == "P2") & (gc["fdr"] < 0.05)]
+    assert sig["gene"].iloc[0] == "fate" and "plasma" not in set(sig["gene"])
+    assert (gc["state"] == "GC").all()
+
+
+def test_landscape_genes_find_the_gene_that_follows_a_continuum_of_clones():
+    """Clones lie along a continuum (no programmes); one gene follows it, the others are noise."""
+    import scipy.sparse as sp
+    from anndata import AnnData
+
+    rng = np.random.default_rng(3)
+    rows, emb, expr = [], [], []
+    for c in range(150):
+        t = rng.uniform()
+        for _ in range(4):
+            tc = t + rng.normal(0, 0.05)
+            emb.append([3 * tc, 0.0] + list(rng.normal(0, 0.3, 4)))
+            g = rng.normal(0, 0.4, 30)
+            g[0] += 2.5 * tc                                     # follows the continuum
+            expr.append(np.clip(g + 2, 0, None))
+            rows.append({"clone_id": f"c{c}", "donor": "d1", "sample": "s1"})
+    obs = pd.DataFrame(rows, index=[f"cell{i}" for i in range(len(rows))])
+    ad = AnnData(X=sp.csr_matrix(np.asarray(expr, dtype=np.float32)), obs=obs,
+                 var=pd.DataFrame(index=["trend"] + [f"noise{i}" for i in range(29)]))
+    ad.layers["log_norm"] = ad.X.copy()
+    ad.obsm["X_emb"] = np.asarray(emb, dtype=np.float32)
+    tf.tl.clone_profiles(ad, basis="X_emb", donor_key="donor", context_key="sample", verbose=False)
+    out = tf.tl.landscape_genes(ad, context_key=None, verbose=False)
+    assert out["gene"].iloc[0] == "trend" and abs(out["corr_axis1"].iloc[0]) > 0.8
+    assert (out["gene"] != "trend").sum() <= 3                  # noise genes rarely pass FDR 5 %
+
+
+def test_landscape_genes_report_the_right_gene_when_rare_genes_are_left_out():
+    """Genes expressed in too few cells are dropped before scoring; names and correlations must stay aligned."""
+    import scipy.sparse as sp
+    from anndata import AnnData
+
+    rng = np.random.default_rng(4)
+    rows, emb, expr = [], [], []
+    for c in range(150):
+        t = rng.uniform()
+        for _ in range(4):
+            tc = t + rng.normal(0, 0.05)
+            emb.append([3 * tc, 0.0] + list(rng.normal(0, 0.3, 4)))
+            g = np.clip(rng.normal(0, 0.4, 40) + 2, 0, None)
+            g[:20] = 0                                           # 20 genes never expressed: filtered out
+            g[30] = max(0.0, 2 + 2.5 * tc + rng.normal(0, 0.4))  # follows the continuum, after the gap
+            expr.append(g)
+            rows.append({"clone_id": f"c{c}", "donor": "d1", "sample": "s1"})
+    obs = pd.DataFrame(rows, index=[f"cell{i}" for i in range(len(rows))])
+    names = [f"silent{i}" for i in range(20)] + [f"noise{i}" for i in range(10)] + ["trend"] + \
+        [f"noise{i}" for i in range(10, 19)]
+    ad = AnnData(X=sp.csr_matrix(np.asarray(expr, dtype=np.float32)), obs=obs, var=pd.DataFrame(index=names))
+    ad.layers["log_norm"] = ad.X.copy()
+    ad.obsm["X_emb"] = np.asarray(emb, dtype=np.float32)
+    tf.tl.clone_profiles(ad, basis="X_emb", donor_key="donor", context_key="sample", verbose=False)
+    out = tf.tl.landscape_genes(ad, context_key=None, verbose=False)
+    assert out["gene"].iloc[0] == "trend" and abs(out["corr_axis1"].iloc[0]) > 0.8
+    assert not out["gene"].str.startswith("silent").any()
+    mean_profiles = tf.tl.clone_profiles(ad, basis="X_emb", donor_key="donor", context_key="sample",
+                                         representation="mean", verbose=False)
+    assert len(mean_profiles)
+    out = tf.tl.landscape_genes(ad, context_key=None, verbose=False)
+    assert out["gene"].iloc[0] == "trend" and abs(out["corr_axis1"].iloc[0]) > 0.8

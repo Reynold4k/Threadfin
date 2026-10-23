@@ -15,17 +15,38 @@ def log(msg: str, verbose: bool = True) -> None:
         print(f"[threadfin] {msg}", flush=True)
 
 
+def ensure_actual(adata, verbose: bool = True):
+    """Turn a view (``adata[mask]`` without ``.copy()``) into its own AnnData, in place.
+
+    Results written to a view are not kept, which used to surface later as a misleading "run clone_profiles
+    first". AnnData itself converts a view on its first change; this does it up front and says so.
+    """
+    if getattr(adata, "is_view", False):
+        adata._init_as_actual(adata.copy())
+        log("adata was a view (a subset made without .copy()); it now holds its own data, so the results "
+            "can be stored in it", verbose)
+    return adata
+
+
 def get_uns(adata) -> dict:
     """The Threadfin results dict in ``adata.uns`` (created if absent)."""
     return adata.uns.setdefault(UNS_KEY, {})
 
 
 def require_obs(adata, *cols: str, context: str | None = None) -> None:
-    """Raise a helpful ``KeyError`` if any ``obs`` column is missing."""
+    """Raise a helpful ``KeyError`` if any ``obs`` column is missing, naming the closest existing columns."""
+    import difflib
+
     for col in cols:
         if col is not None and col not in adata.obs.columns:
             hint = f" (needed for {context})" if context else ""
-            raise KeyError(f"'{col}' not found in adata.obs{hint}.")
+            names = [str(c) for c in adata.obs.columns]
+            close = difflib.get_close_matches(str(col), names, n=3, cutoff=0.6)
+            close += [c for c in names if c.lower() == str(col).lower() and c not in close]
+            suggestion = (f" Did you mean {', '.join(repr(c) for c in close)}?" if close
+                          else f" Columns available: {', '.join(repr(c) for c in names[:12])}"
+                               + (" ..." if len(names) > 12 else "") + ".")
+            raise KeyError(f"'{col}' not found in adata.obs{hint}.{suggestion}")
 
 
 def require_complete_groups(adata, *cols: str, context: str | None = None) -> None:

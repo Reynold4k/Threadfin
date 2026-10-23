@@ -2,6 +2,102 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.5.0 — 2026-10-24
+
+New features answer the questions a specialist in clonal analysis would ask first: does it work for T cells, does it
+take my scirpy object, how are doublets and cells with two light chains handled, and which genes vary between clones
+when there are no distinct programmes? The fixes were found by following the tutorials on all 14 public BCR datasets
+of the case studies and on the two LARRY datasets, in a new environment, as a user would
+(`manuscript/analyses/technical_validation/tutorial_path/`). Results of the published analyses are unchanged.
+
+*What this means for you:* existing analyses give the same results. T cells run with the same call; scirpy users
+pass their object as `bcr`; `print(result.methods())` gives a Methods paragraph with the settings used. Read the new
+log line on cells with two chains of one kind: when many of them have two heavy chains, compare with
+`clone_options={"check_contigs": True}`.
+
+### New
+
+- **T cells.** `tf.run(adata, bcr=tcr_contigs, ...)` and `tf.define_clones_dandelion` accept TCR contigs: clones
+  are called on the beta (or delta) and alpha (or gamma) chains with identical junctions (Dandelion's default for
+  TCRs, which do not mutate; B cells keep 0.85). `identity` can be one number or a dict per chain type. Tested end
+  to end on scirpy's example data (Wu et al. 2020, 3,000 T cells).
+- **scirpy objects as input.** `bcr=` takes a scirpy AnnData or MuData (receptor chains in `obsm["airr"]`), as well
+  as files and contig tables.
+- **Clone-calling settings in `tf.run`**: `clone_options={...}` is passed to `define_clones_dandelion`, for example
+  `{"identity": 0.9}` or `{"check_contigs": True}`, which runs Dandelion's contig check first (a cell with two heavy
+  chains keeps the one that dominates in UMIs, or is set aside when none does).
+- **Cells with two chains of one kind are reported.** Dandelion gives such cells (4–20 % in the public datasets,
+  mostly two light chains) a clone id that joins both chains, so most of them form a clone of their own. The log now
+  says how many cells this affects and how many have two heavy chains; the counts are in the returned `attrs`.
+- **`tl.landscape_genes`**: genes whose clone-average expression changes smoothly across the clones (Moran's I on the
+  clone-profile graph, analytic P values, BH correction), with the direction along the main axis of the profiles.
+  For datasets in which clones vary along a continuum and there are no programmes to compare.
+- **`tl.programme_markers(..., state_key=, state=)`** compares programmes within one cell state (for example their
+  germinal-centre B cells only), so the markers are not simply those of the states the programmes contain.
+- **`result.methods()`** writes a Methods paragraph for the analysis just run — clone calling, embedding, profiles,
+  coherence test, clone map, programmes and label tests — with the settings and package versions that were used and
+  numbered references, as a starting point for a paper.
+- **How much do the results depend on the clone definition?**
+  `manuscript/analyses/technical_validation/clone_definition/`: junction identities 0.75–1.0 and the contig check on
+  two case studies; every conclusion holds.
+- **How many clones are needed?** `manuscript/analyses/technical_validation/power/`: the coherence test is calibrated
+  and detects a clonal ICC of 0.1 with about 10 clones of two or more cells, 0.05 with about 40 and 0.02 with about
+  160–320. Tutorial 2's checklist now quotes these numbers.
+- **Further checks** in the same folder: the conclusions hold for 2,000–5,000 variable genes and 20–50 principal
+  components, and leaving the receptor genes in would inflate clonal coherence (`embedding/`); a million cells take
+  about an hour on 8 cores and 8.3 GB (`scalability/`); T cells run end to end from a scirpy object (`t_cells/`).
+
+### Fixes
+
+- **A subset made without `.copy()` works.** `adata[mask]` is a view; Threadfin's results written to a view
+  were lost, and `threadfin.run` then stopped with the misleading "Run threadfin.tl.clone_profiles() first".
+  `run`, `tl.clone_profiles` and `pp.prepare_embedding` now turn a view into its own object first (as AnnData
+  does on any change) and say so.
+- **Contig tables with both a 10x `barcode` and an AIRR `cell_id` column** (for example a deposited AIRR table
+  to which harmonised barcodes were added) no longer end up with two `cell_id` columns; the column that names
+  the cells of `adata` is used.
+- A cell that Dandelion cannot place receives no clone instead of the empty clone id `""`, which several such cells
+  of one donor would have shared (one cell of GSE246382 had it; no clone of two or more cells was affected).
+- A `productive` column read as numbers (1.0/0.0, as pandas reads a column with gaps) is understood; such contigs
+  were all dropped before.
+- The Dandelion version recorded with the clone ids is that of the installed package; Dandelion's own
+  `__version__` reports the version of whichever git repository the current directory is in.
+
+### Clearer messages
+
+- **A misspelled column name is answered with the closest existing names** ("Did you mean 'sort_gate'?").
+- **Normalised data passed as counts is flagged**: `pp.prepare_embedding` (and `run` without `basis=`) warns when
+  the counts have non-integer values, because Threadfin normalises and log-transforms them itself.
+- The message for a missing Dandelion installation gives the exact install command; the message for an
+  undefined clonal-memory interval says what it means and that the estimate and P value are unaffected.
+- **Fewer alarming warnings that were not about the user's data**: the notice that nxviz prints when Dandelion is
+  imported is no longer shown, the expression matrix is made dense before scaling (scanpy warned that it would
+  densify it), and duplicated gene names are made unique inside the embedding step without a warning per copy.
+  Dandelion's notice that a table "needs to undergo sanitization", printed twice per donor, is hidden.
+- **One clonal ICC in the log.** The clone-profile step printed a second "clonal ICC" (of the smoothed profile
+  features, which only sets the shrinkage); only the tested ICC of the coherence step is reported now.
+- **The warning that no resolution reached the stability threshold** is given only when two or more programmes
+  remain after the split test; when the clones form a continuum, the log already says so.
+- **Receptor-neutral wording**: the summary says "Cells with a BCR", "a TCR" or "a clone id" according to the data,
+  and the messages about unmatched barcodes name the receptor data rather than the BCR.
+
+### Documentation
+
+- Tutorial 2: a section on how clones are called (defaults, `clone_options`, cells with two chains of one kind,
+  T cells, scirpy objects); the troubleshooting table quotes the current messages; the expected share of matching
+  BCR contigs is taken from the 14 datasets tested. Tutorial 1: time and memory on real data. Tutorial 4: the new
+  gene-level functions. Tutorial 5 (notebook): a step on the genes along the clone landscape; needs
+  threadfin ≥ 4.5.0 and explains the renamed contig ids. Methods: T cells, the contig check, within-state markers
+  and landscape genes.
+- `CITATION.cff` carries the current version; a test keeps it, `pyproject.toml`, `threadfin.__version__` and the
+  function reference in step.
+
+### Known issue
+
+- The pattern for TCR genes, which are left out of the expression embedding, also matches *TRADD*, which is not a
+  receptor gene. Correcting it would change 2–4 of the 3,000 variable genes in 7 of the 14 public datasets, and with
+  them the published embeddings, so it is kept until the next major version.
+
 ## 4.4.1 — 2026-10-23
 
 - **Installs on Windows.** harmonypy 2.x publishes no Windows wheels and its source does not compile with

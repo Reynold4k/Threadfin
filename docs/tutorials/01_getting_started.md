@@ -35,7 +35,7 @@ Check your installation first (see the [README](../../README.md#installation)):
 
 ```python
 import threadfin as tf
-print(tf.__version__)          # 4.3.0 or later
+print(tf.__version__)          # 4.5.0 or later
 ```
 
 ---
@@ -146,7 +146,7 @@ The printed report:
 ```
 Threadfin summary
 =================
-Cells with a BCR: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cells).
+Cells with a clone id: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cells).
 
 1. Does clone identity shape cell state? (clonal coherence)
    Clone identity explains 27.2% of transcriptional variance within 'context' strata; shuffled clones explain 0.2% (p = 0.00498, 200 permutations).
@@ -249,7 +249,7 @@ The clone map was laid out with settings chosen automatically for this dataset (
 
 ```python
 mp = adata.uns["threadfin"]["profiles"]["map_params"]
-print(mp["n_neighbors"], mp["min_dist"], mp["quality"]["coherence"])
+print(mp["n_neighbors"], mp["min_dist"], round(mp["quality"]["coherence"], 3))
 ```
 
 ```
@@ -307,6 +307,7 @@ n_cells
 | clonal coherence | `result.coherence` | variance explained by clone, permutation null and P value |
 | programmes | `result.programmes` | size and bootstrap stability of each programme |
 | label tests | `result.profile_tests`, `result.tests` | variance explained by each label; per-programme effects |
+| a Methods paragraph | `result.methods()` | what was run, with the settings and package versions used, and references |
 | everything else | `adata.uns["threadfin"]` | profiles, map settings and the full record of each step |
 
 Save them with
@@ -314,14 +315,18 @@ Save them with
 ```python
 result.clones.to_csv("threadfin_clones.csv")      # opens in any spreadsheet
 adata.write_h5ad("threadfin_result.h5ad")         # everything, including adata.uns["threadfin"]
+open("threadfin_methods.txt", "w").write(result.methods())   # a starting point for your Methods section
 ```
 
 ---
 
 ## 5. Frequently asked questions
 
-**How long does it take on real data?** From under a minute (a few thousand cells) to about 15 minutes
-(190,000 cells, 11,000 clones) on one CPU node; the clone-map settings search is usually the longest step.
+**How long does it take on real data, and how much memory?** From under a minute (a few thousand cells) to about
+12 minutes (190,000 cells, 11,000 clones) on 8 CPU cores, from raw counts and contigs to the summary; the
+clone-map settings search is usually the longest step. Memory grows with the number of cells: about 3 GB for
+20,000 cells, 8 GB for 36,000 and 30 GB for 200,000 (most of it for the expression embedding). Add
+`n_jobs=-1` to use every core.
 
 **Do I need a GPU or R?** No.
 

@@ -39,7 +39,7 @@ table = tf.tl.clone_profiles(adata, basis="X_pca", context_key="context", donor_
 ```
 
 ```
-[threadfin] clone profiles: 962 clones (>= 2 cells); clonal ICC = 0.313 (962 clones, 5896 cells). ...
+[threadfin] clone profiles: 962 clones (>= 2 cells, 5896 cells in all). Profiles are shrunk, so ...
            n_cells  reliability donor  n_contexts
 clone_id
 D0|C00055        7     0.775251    D0           2
@@ -185,7 +185,8 @@ programme with probability 0.8). The same call works across tissues or sort gate
 | `tl.gene_heritability`, `tl.geneset_heritability` | Which genes are clonally inherited? | gene expression in `adata.X` or a layer |
 | `tl.lineage_forest`, `tl.lineage_heritability` | Within a clone, do close relatives on the mutation lineage tree share state? | per-cell V-region sequences and germlines |
 | `tl.export_lag` | How far behind its germinal-centre relatives is a clone's output, in somatic mutations? | cell states (GC vs output), mutation frequency, isotype |
-| `tl.programme_markers` | Which genes mark each programme, with clones as replicates? | gene expression |
+| `tl.programme_markers` | Which genes mark each programme, with clones as replicates? With `state_key=` and `state=`: which genes differ between programmes *within* one cell state? | gene expression |
+| `tl.landscape_genes` | Which genes change smoothly across the clones, when there are no distinct programmes? | gene expression |
 | `tl.programme_composition` | Which cell states make up each programme, with clones weighted equally? | a cell-state annotation |
 | `tl.map_quality` | Is a clone map faithful and connected? | profiles and map coordinates |
 

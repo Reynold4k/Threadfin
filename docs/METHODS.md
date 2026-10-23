@@ -26,9 +26,9 @@ clones.
 A clone is the family of B cells descended from one V(D)J recombination event — one
 rearrangement of the heavy **and** the light chain. Threadfin delegates clone calling to
 **Dandelion** (a maintained, cited implementation of the paired definition;
-sc-dandelion), through :func:`threadfin.define_clones_dandelion`: contig-level AIRR tables
+sc-dandelion; Suo et al. 2024), through :func:`threadfin.define_clones_dandelion`: contig-level AIRR tables
 are grouped within each donor with ``dandelion.tl.find_clones`` (default junction identity
-0.85), and the composite heavy+light clone id is returned per cell. Dandelion is an optional
+0.85 for BCR and 1.0 for TCR), and the composite heavy+light clone id is returned per cell. Dandelion is an optional
 dependency: only clone calling needs it, and clone ids made by any other caller can be supplied
 directly in ``adata.obs``. Dandelion 0.5.7 uses ``matplotlib.cm.get_cmap``, which matplotlib 3.9
 removed, so install it with ``pip install "threadfin[dandelion]"`` (or ``pip install sc-dandelion
@@ -40,6 +40,21 @@ the seed in use is recorded with the result.
 light-chain rearrangement (same V and J genes, same junction length, junctions ≥ 85 % identical, which
 allows for somatic hypermutation). Clones are called inside each individual, so no clone can contain cells
 of two people or animals.
+
+*T cells.* TCR contigs are handled the same way, with the beta (or delta) chain in the place of the heavy chain
+and the alpha (or gamma) chain in the place of the light chain. T-cell receptors do not mutate, so T-cell
+clones need identical junctions (Dandelion's default identity of 1.0 for TCR). In both cases, cells without a
+heavy (beta) chain are left without a clone (light and alpha chains alone are not diverse enough, and some alpha
+chains, such as those of MAIT cells, are shared by unrelated T cells).
+
+*Cells with two chains of one kind.* A cell with two productive light chains or two heavy chains (allelic
+inclusion, ambient RNA, or a doublet) receives from Dandelion a clone id that joins both chains, so it usually
+forms a clone of its own; Threadfin reports how many cells this affects (4–20 % of cells in the public datasets,
+mostly two light chains). Optionally (`check_contigs=True`), Dandelion's contig check runs first: a cell with
+two heavy chains keeps the one that clearly dominates in UMIs or is set aside, while two light chains are allowed
+(Suo et al. 2024). The case studies use the default; the clone-definition sensitivity analysis
+(`manuscript/analyses/technical_validation/clone_definition`) compares both, and junction identities from 0.75
+to 1.0.
 
 (Threadfin's earlier built-in caller grouped cells by the heavy chain alone with a
 data-driven Hamming threshold, light chains only as an optional post-hoc split. It is
@@ -199,7 +214,20 @@ When programmes are defined on a subset of clones (`min_reliability` above
 0), the remaining clones are afterwards assigned to the most likely programme,
 taking their size into account (`clone_programme_assigned`).
 Marker genes of each programme (`programme_markers`) are found by comparing
-clone averages, so a large clone counts once.
+clone averages, so a large clone counts once. Programmes usually differ in which cell states their clones
+contain, so these markers are largely the markers of those states; with `state_key` and `state`, each clone is
+summarised by its cells in one state only (for example its germinal-centre B cells), centred on the cells of
+that state in its context, which asks what differs between programmes within a state.
+
+**Genes along the landscape (`landscape_genes`).** When clones vary continuously there are no programmes to
+compare. Each profiled clone is then summarised by the mean context-centred log expression of its cells, the
+clones are linked to their 15 nearest neighbours in profile space, and each gene is scored by Moran's I of the
+clone means on this graph (Moran 1950): positive when neighbouring clones express the gene alike, about
+−1/(n−1) when the gene ignores the landscape. P values come from the normal approximation under randomisation
+(Cliff & Ord 1981), with Benjamini–Hochberg correction; in simulations the analytic mean and variance of I
+matched 20,000 permutations. The rank correlation of each gene with the first principal component of the clone
+profiles gives the direction of a gradient. Because the profiles are built from the same expression, this
+names what varies across clones rather than testing an independent hypothesis.
 
 ## 7. What distinguishes clones (`profile_association`, `association_test`)
 
@@ -299,6 +327,7 @@ pass a demanding test. See `split_test` for the measured calibration of both ava
 * Anderson MJ. A new method for non-parametric multivariate analysis of variance. *Austral Ecol* 2001;26:32-46.
 * Böhm JN, Berens P, Kobak D. Attraction-repulsion spectrum in neighbor embeddings. *J Mach Learn Res* 2022;23:1-32.
 * Benjamini Y, Hochberg Y. Controlling the false discovery rate. *J R Stat Soc B* 1995;57:289-300.
+* Cliff AD, Ord JK. *Spatial Processes: Models and Applications*. Pion, 1981.
 * Grabski IN, Street K, Irizarry RA. Significance analysis for clustering with single-cell RNA-sequencing data. *Nat Methods* 2023;20:1196-1202.
 * Gupta NT et al. Hierarchical clustering can identify B cell clones with high confidence in Ig repertoire sequencing data. *J Immunol* 2017;198:2489-2499.
 * Hennig C. Cluster-wise assessment of cluster stability. *Comput Stat Data Anal* 2007;52:258-271.
@@ -308,11 +337,13 @@ pass a demanding test. See `split_test` for the measured calibration of both ava
 * Liu Y, Hayes DN, Nobel A, Marron JS. Statistical significance of clustering for high-dimension, low-sample size data. *J Am Stat Assoc* 2008;103:1281-1293.
 * Mantel N, Haenszel W. Statistical aspects of the analysis of data from retrospective studies of disease. *J Natl Cancer Inst* 1959;22:719-748.
 * McInnes L, Healy J, Saul N, Großberger L. UMAP: uniform manifold approximation and projection. *J Open Source Softw* 2018;3:861.
+* Moran PAP. Notes on continuous stochastic phenomena. *Biometrika* 1950;37:17-23.
 * Muandet K, Fukumizu K, Sriperumbudur B, Schoelkopf B. Kernel mean embedding of distributions: a review and beyond. *Found Trends Mach Learn* 2017;10:1-141.
 * Phipson B, Smyth GK. Permutation p-values should never be zero. *Stat Appl Genet Mol Biol* 2010;9:39.
 * Rahimi A, Recht B. Random features for large-scale kernel machines. *NeurIPS* 2007.
 * Searle SR, Casella G, McCulloch CE. *Variance Components*. Wiley, 1992.
 * Spall JC. Multivariate stochastic approximation using a simultaneous perturbation gradient approximation. *IEEE Trans Autom Control* 1992;37:332-341.
+* Suo C et al. Dandelion uses the single-cell adaptive immune receptor repertoire to explore lymphocyte developmental origins. *Nat Biotechnol* 2024;42:40-51.
 * Traag VA, Waltman L, van Eck NJ. From Louvain to Leiden: guaranteeing well-connected communities. *Sci Rep* 2019;9:5233.
 
 ## Optional frozen-reference state distributions

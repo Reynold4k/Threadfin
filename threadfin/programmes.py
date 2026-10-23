@@ -43,7 +43,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ._utils import get_uns, h5ad_safe, log, stable_categorical
+from ._utils import get_uns, h5ad_safe, log, require_obs, stable_categorical
 from .profiles import get_profiles, model_from_adata, project_features
 
 PROGRAMME_KEY = "programmes"
@@ -592,6 +592,7 @@ def find_programmes(
         })
     scan = pd.DataFrame(scan_rows)
 
+    caution = None          # raised only if programmes survive the split test (below)
     if auto:
         multi = scan[(scan["n_programmes"] >= 2) & (scan["frac_clones_in_small_groups"] <= 0.10)]
         stable = multi[multi["stability_weighted"] >= stability_threshold]
@@ -599,14 +600,12 @@ def find_programmes(
             best = stable.sort_values(["n_programmes", "stability_weighted"], ascending=False).iloc[0]
         elif not multi.empty:
             best = multi.sort_values("stability_weighted", ascending=False).iloc[0]
-            warnings.warn(
-                f"No resolution reached stability {stability_threshold}; using the most stable "
-                f"partition (stability {best['stability_weighted']:.2f}). Interpret programmes "
-                "cautiously.", stacklevel=2,
-            )
+            if boot_graphs:     # without bootstrap replicates there is no stability to fall short of
+                caution = (f"No resolution reached stability {stability_threshold}; using the most stable "
+                           f"partition (stability {best['stability_weighted']:.2f}). Interpret programmes "
+                           "cautiously.")
         else:
             best = scan.iloc[0]
-            warnings.warn("No resolution split the clones into >= 2 programmes.", stacklevel=2)
         chosen = float(best["resolution"])
     else:
         chosen = res_grid[0]
@@ -690,6 +689,7 @@ def find_programmes(
         "split_tests": h5ad_safe(split_tests),
         "params": {
             "resolution": chosen, "auto": auto, "n_neighbors": int(n_neighbors),
+            "weight_by_reliability": bool(weight_by_reliability),
             "test_splits": bool(test_splits), "alpha": float(alpha), "n_null": int(n_null),
             "split_null": str(split_null),
             "min_reliability": float(min_reliability), "n_boot": int(n_boot),
@@ -700,6 +700,9 @@ def find_programmes(
         },
     }
     n_stable = int((summary["stability"] >= stability_threshold).sum()) if n_boot else 0
+    if caution and summary.shape[0] >= 2 and n_stable < summary.shape[0]:
+        # with a single programme left there is nothing to interpret, and the log says so
+        warnings.warn(caution, stacklevel=2)
     extra = (f"; {int(table[f'{key_added}_assigned'].notna().sum())} of {len(table)} profiled clones "
              f"assigned with posterior >= {min_posterior}" if assign_remaining else "")
     if summary.shape[0] == 1:
@@ -788,6 +791,53 @@ def programme_composition(adata, state_key: str, *, key: str | None = None) -> p
     return tab.div(tab.sum(axis=1), axis=0)
 
 
+def _clone_expression(adata, *, clone_key, cell_mask, layer, context_key, state_key, state, min_cells_in_state,
+                      min_frac_expressed, caller):
+    """Mean context-centred expression of each clone's cells (optionally only its cells of one state).
+
+    Returns ``(cells, clone_codes, clone_index, genes, clone_means)``: the cells used, their clone codes, the
+    clone ids, the indices of the genes expressed in at least ``min_frac_expressed`` of those cells, and the
+    clones x genes matrix of means, each minus the mean of the same-state cells of the clone's contexts.
+    """
+    import scipy.sparse as sp
+
+    from ._utils import codes
+
+    x = adata.layers[layer] if layer is not None else adata.X
+    x = sp.csr_matrix(x) if not sp.issparse(x) else x.tocsr()
+    in_state = np.ones(adata.n_obs, dtype=bool)
+    if state_key is not None:
+        require_obs(adata, state_key, context=f"{caller}(state_key=...)")
+        levels = adata.obs[state_key].dropna().astype(str)
+        if state is None or str(state) not in set(levels):
+            raise ValueError(f"state={state!r} is not a level of '{state_key}'; levels: "
+                             f"{', '.join(sorted(set(levels))[:12])}.")
+        in_state = (adata.obs[state_key].astype(str) == str(state)).to_numpy()
+    cells = np.flatnonzero(np.asarray(cell_mask) & adata.obs[clone_key].notna().to_numpy() & in_state)
+    clone_codes, clone_index = codes(adata.obs[clone_key].iloc[cells].astype(str))
+    if min_cells_in_state > 1:                    # keep clones with enough cells in the state
+        counts = np.bincount(clone_codes, minlength=len(clone_index))
+        cells = cells[(counts >= min_cells_in_state)[clone_codes]]
+        clone_codes, clone_index = codes(adata.obs[clone_key].iloc[cells].astype(str))
+    n_clones = len(clone_index)
+    member = sp.csr_matrix((np.ones(cells.size), (clone_codes, np.arange(cells.size))), shape=(n_clones, cells.size))
+    member = sp.diags(1.0 / np.maximum(np.asarray(member.sum(axis=1)).ravel(), 1)) @ member
+    expressed = np.asarray((x[cells] > 0).mean(axis=0)).ravel() >= min_frac_expressed
+    genes = np.flatnonzero(expressed)
+    clone_means = np.asarray((member @ x[cells][:, genes]).toarray())
+    if context_key is not None:
+        # subtract, for every clone, the mean expression of the contexts its cells came from
+        ctx, ctx_index = codes(adata.obs[context_key])
+        ok = np.flatnonzero((ctx >= 0) & in_state)       # within a state, centre on that state's cells
+        cmember = sp.csr_matrix((np.ones(ok.size), (ctx[ok], ok)), shape=(len(ctx_index), adata.n_obs))
+        cmember = sp.diags(1.0 / np.maximum(np.asarray(cmember.sum(axis=1)).ravel(), 1)) @ cmember
+        ctx_means = np.asarray((cmember @ x[:, genes]).toarray())
+        cell_ctx = sp.csr_matrix((np.ones(cells.size), (np.arange(cells.size), np.maximum(ctx[cells], 0))),
+                                 shape=(cells.size, len(ctx_index)))
+        clone_means -= np.asarray((member @ cell_ctx).toarray()) @ ctx_means
+    return cells, clone_codes, clone_index, genes, clone_means
+
+
 def programme_markers(
     adata,
     *,
@@ -796,6 +846,9 @@ def programme_markers(
     context_key: str | None = "auto",
     min_frac_expressed: float = 0.05,
     n_top: int = 25,
+    state_key: str | None = None,
+    state: str | None = None,
+    min_cells_in_state: int = 1,
     verbose: bool = True,
 ) -> pd.DataFrame:
     """Genes that distinguish programmes, tested with clones as replicates.
@@ -806,9 +859,15 @@ def programme_markers(
     clones avoids the pseudoreplication of cell-level marker tests, where one
     expanded clone contributes hundreds of correlated cells.
 
+    Programmes usually differ in which cell states their clones contain, so the genes found this way are
+    largely the markers of those states. To ask what differs between programmes *within one state* — for
+    example between the germinal-centre B cells of clones from two programmes — pass ``state_key`` and
+    ``state``: each clone is then summarised by its cells in that state only (clones with at least
+    ``min_cells_in_state`` such cells), centred on the cells of the same state in its context.
+
     Returns
     -------
-    Tidy DataFrame ``[programme, gene, mean_diff, auc, pvalue, fdr, rank]``
+    Tidy DataFrame ``[programme, gene, mean_diff, auc, pvalue, fdr, rank]`` (and ``state`` when given)
     with the top ``n_top`` up-regulated genes per programme.
     """
     import scipy.sparse as sp
@@ -820,27 +879,15 @@ def programme_markers(
     clone_key = prof["params"]["clone_key"]
     if context_key == "auto":
         context_key = prof["params"].get("context_key")
-    x = adata.layers[layer] if layer is not None else adata.X
-    x = sp.csr_matrix(x) if not sp.issparse(x) else x.tocsr()
     lab = adata.obs[programme_key]
-    cells = np.flatnonzero(lab.notna().to_numpy() & adata.obs[clone_key].notna().to_numpy())
-    clone_codes, clone_index = codes(adata.obs[clone_key].iloc[cells].astype(str))
+    cells, clone_codes, clone_index, genes, clone_means = _clone_expression(
+        adata, clone_key=clone_key, cell_mask=lab.notna().to_numpy(), layer=layer, context_key=context_key,
+        state_key=state_key, state=state, min_cells_in_state=min_cells_in_state,
+        min_frac_expressed=min_frac_expressed, caller="programme_markers")
     n_clones = len(clone_index)
-    member = sp.csr_matrix((np.ones(cells.size), (clone_codes, np.arange(cells.size))), shape=(n_clones, cells.size))
-    member = sp.diags(1.0 / np.asarray(member.sum(axis=1)).ravel()) @ member
-    expressed = np.asarray((x[cells] > 0).mean(axis=0)).ravel() >= min_frac_expressed
-    genes = np.flatnonzero(expressed)
-    clone_means = np.asarray((member @ x[cells][:, genes]).toarray())
-    if context_key is not None:
-        # subtract, for every clone, the mean expression of the contexts its cells came from
-        ctx, ctx_index = codes(adata.obs[context_key])
-        ok = np.flatnonzero(ctx >= 0)
-        cmember = sp.csr_matrix((np.ones(ok.size), (ctx[ok], ok)), shape=(len(ctx_index), adata.n_obs))
-        cmember = sp.diags(1.0 / np.maximum(np.asarray(cmember.sum(axis=1)).ravel(), 1)) @ cmember
-        ctx_means = np.asarray((cmember @ x[:, genes]).toarray())
-        cell_ctx = sp.csr_matrix((np.ones(cells.size), (np.arange(cells.size), np.maximum(ctx[cells], 0))),
-                                 shape=(cells.size, len(ctx_index)))
-        clone_means -= np.asarray((member @ cell_ctx).toarray()) @ ctx_means
+    if n_clones < 6:
+        raise ValueError(f"Only {n_clones} clones have cells{' in ' + repr(state) if state_key else ''}; "
+                         "programme markers need at least 3 clones inside and 3 outside a programme.")
     clone_prog = (pd.Series(lab.iloc[cells].astype(str).to_numpy()).groupby(clone_codes).first()).to_numpy()
 
     ranks = np.apply_along_axis(rankdata, 0, clone_means)
@@ -860,6 +907,8 @@ def programme_markers(
         diff = clone_means[inside].mean(axis=0) - clone_means[~inside].mean(axis=0)
         tab = pd.DataFrame({"programme": prog, "gene": adata.var_names[genes], "mean_diff": diff,
                             "auc": auc, "pvalue": pvals})
+        if state_key is not None:
+            tab.insert(1, "state", str(state))
         tab["fdr"] = bh_fdr(tab["pvalue"].to_numpy())
         tab = tab[tab["mean_diff"] > 0].sort_values(["fdr", "mean_diff"], ascending=[True, False]).head(n_top)
         tab["rank"] = np.arange(1, len(tab) + 1)
@@ -867,5 +916,113 @@ def programme_markers(
     out = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(
         columns=["programme", "gene", "mean_diff", "auc", "pvalue", "fdr", "rank"])
     get_uns(adata)["programme_markers"] = h5ad_safe(out)
-    log(f"programme markers: {n_clones} clones as replicates, {genes.size} genes tested.", verbose)
+    where = f" within '{state}'" if state_key is not None else ""
+    log(f"programme markers{where}: {n_clones} clones as replicates, {genes.size} genes tested.", verbose)
+    return out
+
+
+def landscape_genes(
+    adata,
+    *,
+    layer: str | None = "log_norm",
+    context_key: str | None = "auto",
+    n_neighbors: int = 15,
+    min_frac_expressed: float = 0.05,
+    state_key: str | None = None,
+    state: str | None = None,
+    min_cells_in_state: int = 1,
+    n_top: int | None = 50,
+    verbose: bool = True,
+) -> pd.DataFrame:
+    """Genes whose expression changes smoothly across the clones, with no programmes needed.
+
+    Programme markers need distinct programmes; when clones vary along a continuum (a single programme),
+    this asks instead which genes follow the landscape of clone profiles. Every profiled clone is summarised
+    by the mean context-centred log expression of its cells (as in :func:`programme_markers`; with
+    ``state_key``/``state``, of its cells in that state only). Clones are linked to their ``n_neighbors``
+    nearest clones in profile space, and each gene is scored by Moran's I of the clone means on that graph:
+    I > 0 when neighbouring clones express the gene alike, about 0 when the gene ignores the landscape. P values
+    use the normal approximation under randomisation (Cliff and Ord), corrected by Benjamini-Hochberg.
+    ``corr_axis1`` is the Spearman correlation of the gene with the first component of the clone profiles,
+    the main axis along which clones differ, and gives the direction of a gradient.
+
+    This describes the landscape rather than testing an independent hypothesis: the profiles are built from
+    the same expression, so the genes that make clones differ are expected to score. Use it to name what
+    varies across clones; test annotations that the profiles did not use with :func:`profile_association`.
+
+    With hundreds of clones most expressed genes reach FDR < 0.05, so rank genes by Moran's I (0 to 1 in
+    practice) rather than counting them. The top genes often lie at one end of the main axis; ``n_top=None``
+    returns every gene that passes, so both ends can be read from ``corr_axis1``.
+
+    Returns
+    -------
+    DataFrame ``[gene, morans_i, z, pvalue, fdr, corr_axis1, rank]`` of the ``n_top`` genes with the largest
+    Moran's I among those with FDR < 0.05 (fewer if fewer pass; all of them with ``n_top=None``), also stored
+    in ``adata.uns['threadfin']['landscape_genes']``.
+    """
+    import scipy.sparse as sp
+    from scipy.stats import norm, rankdata
+    from sklearn.neighbors import NearestNeighbors
+
+    from ._utils import bh_fdr, require_positive_int
+
+    require_positive_int(n_neighbors, "n_neighbors")
+    prof = get_profiles(adata)
+    clone_key = prof["params"]["clone_key"]
+    if context_key == "auto":
+        context_key = prof["params"].get("context_key")
+    feats = prof["features"]
+    profiled = adata.obs[clone_key].astype(str).isin(set(feats.index.astype(str))).to_numpy()
+    _, _, clone_index, genes, clone_means = _clone_expression(
+        adata, clone_key=clone_key, cell_mask=profiled, layer=layer, context_key=context_key,
+        state_key=state_key, state=state, min_cells_in_state=min_cells_in_state,
+        min_frac_expressed=min_frac_expressed, caller="landscape_genes")
+    n = len(clone_index)
+    if n < n_neighbors + 2:
+        raise ValueError(f"Only {n} profiled clones{' with cells in ' + repr(state) if state_key else ''}; "
+                         f"landscape_genes needs more than n_neighbors + 1 = {n_neighbors + 1}.")
+    f = feats.loc[clone_index.astype(str)].to_numpy(dtype=float)
+    nn = NearestNeighbors(n_neighbors=n_neighbors + 1).fit(f)
+    _, idx = nn.kneighbors(f)
+    rows = np.repeat(np.arange(n), n_neighbors)
+    w = sp.csr_matrix((np.ones(rows.size), (rows, idx[:, 1:].ravel())), shape=(n, n))
+    s0 = float(w.sum())
+    ws = w + w.T
+    s1 = 0.5 * float(ws.multiply(ws).sum())
+    s2 = float(((np.asarray(w.sum(axis=1)).ravel() + np.asarray(w.sum(axis=0)).ravel()) ** 2).sum())
+
+    z = clone_means - clone_means.mean(axis=0)
+    var = (z ** 2).sum(axis=0)
+    ok = var > 0
+    z, var, genes = z[:, ok], var[ok], genes[ok]
+    moran = (n / s0) * np.asarray((z * (w @ z)).sum(axis=0)).ravel() / var
+    expected = -1.0 / (n - 1)
+    b2 = n * (z ** 4).sum(axis=0) / var ** 2                     # kurtosis of each gene's clone means
+    var_i = ((n * ((n ** 2 - 3 * n + 3) * s1 - n * s2 + 3 * s0 ** 2)
+              - b2 * ((n ** 2 - n) * s1 - 2 * n * s2 + 6 * s0 ** 2))
+             / ((n - 1) * (n - 2) * (n - 3) * s0 ** 2) - expected ** 2)
+    zscore = (moran - expected) / np.sqrt(np.maximum(var_i, 1e-12))
+    pvals = norm.sf(zscore)                                       # one-sided: smoother than random
+    # the main axis of the clone profiles (their first principal component; the sign is arbitrary, so it is
+    # fixed to make the most extreme clone positive), and each gene's rank correlation with it
+    fc = f - f.mean(axis=0)
+    u, sv, _ = np.linalg.svd(fc, full_matrices=False)
+    axis1 = u[:, 0] * sv[0]
+    axis1 = axis1 if axis1[np.argmax(np.abs(axis1))] >= 0 else -axis1
+    ra = rankdata(axis1)
+    rz = rankdata(z, axis=0)                                      # columns of z are the genes kept above
+    ra, rz = ra - ra.mean(), rz - rz.mean(axis=0)
+    denom = np.sqrt((ra ** 2).sum() * (rz ** 2).sum(axis=0))
+    corr = np.divide((ra[:, None] * rz).sum(axis=0), denom, out=np.full(rz.shape[1], np.nan), where=denom > 0)
+    tab = pd.DataFrame({"gene": adata.var_names[genes], "morans_i": moran, "z": zscore, "pvalue": pvals,
+                        "fdr": bh_fdr(pvals), "corr_axis1": corr})
+    out = tab[tab["fdr"] < 0.05].sort_values("morans_i", ascending=False)
+    out = (out if n_top is None else out.head(n_top)).reset_index(drop=True)
+    out["rank"] = np.arange(1, len(out) + 1)
+    get_uns(adata)["landscape_genes"] = h5ad_safe(out)
+    where = f" within '{state}'" if state_key is not None else ""
+    # with many clones most genes reach significance; Moran's I itself says how closely a gene follows the landscape
+    top = ", ".join(f"{g} ({i:.2f})" for g, i in zip(out["gene"].head(5), out["morans_i"].head(5)))
+    log(f"landscape genes{where}: Moran's I over {n} clones, FDR < 0.05 for {int((tab['fdr'] < 0.05).sum())} of "
+        f"{len(tab)} genes; highest: {top}.", verbose)
     return out

@@ -1,5 +1,21 @@
 # Verified compatibility
 
+## Version 4.5.0 — 24 October 2026
+
+* **The user's path on real data.** A new environment was built as Tutorial 2 describes (Python 3.11,
+  `pip install "threadfin[dandelion]"` from this version: numpy 2.4, pandas 2.3, scipy 1.17, scikit-learn 1.9,
+  anndata 0.12, scanpy 1.11, umap-learn 0.5.12, harmonypy 2.1, sc-dandelion 0.5.7, matplotlib 3.8), and `tf.run`
+  was called on the 14 public BCR datasets of the case studies and the two LARRY datasets with every setting at
+  its default, followed by `summary()`, `methods()`, `plot()` and saving: no dataset raised an error, and every
+  clone count and clonal ICC equals that of 4.4.2. Every code block of Tutorials 1, 3 and 4 ran (22 of 22)
+  ([`tutorial_path`](../manuscript/analyses/technical_validation/tutorial_path/README.md)).
+* **The tutorial notebook** (`docs/tutorials/05_end_to_end_tutorial.ipynb`, which downloads GSE287123 from GEO)
+  was executed end to end in a separately built conda environment: no error, 5.6 minutes on 8 cores, 7.6 GB.
+* **Tests.** The full suite (261 tests) passed with none skipped in one environment that has both optional
+  dependencies (Python 3.11, sc-dandelion 0.5.7, scirpy 0.22.5).
+* **T cells and scirpy.** scirpy's example T-cell dataset ran end to end from the scirpy MuData
+  ([`t_cells`](../manuscript/analyses/technical_validation/t_cells/README.md)).
+
 ## Version 4.4.1 — 23 October 2026
 
 Continuous integration now also installs the package and runs the test suite and the tutorial on macOS and

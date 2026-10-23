@@ -217,8 +217,10 @@ def clonal_memory(
     # Dropping undefined ratios would produce a falsely reassuring conditional CI.
     ci = (float(np.quantile(boots, 0.025)), float(np.quantile(boots, 0.975))) if identifiable.all() else (np.nan, np.nan)
     if not identifiable.all():
-        warnings.warn("Some clone bootstraps have non-positive corrected null distance; "
-                      "the memory-index interval is undefined.", stacklevel=2)
+        warnings.warn("The confidence interval of the memory index could not be computed: in some bootstrap "
+                      "resamples of clones no between-clone difference was left to compare with (too few clones "
+                      "seen at two levels). The memory index and its P value are unaffected; the interval is "
+                      "reported as missing.", stacklevel=2)
 
     pairs = pd.DataFrame({
         "clone": clones_of_pairs, "earlier": [levels[t] for t in t_arr[pa]],
