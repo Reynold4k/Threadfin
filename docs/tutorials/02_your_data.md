@@ -36,7 +36,7 @@ complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_t
 
 Clones are defined with Dandelion's paired heavy- and light-chain definition (Suo et al. 2024), which needs
 the `sc-dandelion` package. Dandelion 0.5.7 uses a matplotlib function that was removed in matplotlib 3.9,
-so install both together: `pip install "threadfin[dandelion] @ git+https://github.com/Reynold4k/Threadfin.git"`
+so install both together: `pip install "threadfin[dandelion]"`
 or `pip install sc-dandelion "matplotlib<3.9"` (Threadfin works with matplotlib 3.7 and later). If you prefer,
 define clones in a separate environment or with another clone caller and pass the clone ids directly
 (section 6).

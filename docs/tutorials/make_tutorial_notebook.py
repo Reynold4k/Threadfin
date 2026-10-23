@@ -69,9 +69,8 @@ sequences) and Jupyter.
 conda create -n threadfin -c conda-forge python=3.11 pip -y
 conda activate threadfin
 
-# 2. Threadfin from GitHub, Dandelion from PyPI, and Jupyter
-pip install "git+https://github.com/Reynold4k/Threadfin.git"
-pip install "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
+# 2. Threadfin and Dandelion from PyPI, and Jupyter
+pip install threadfin "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
 
 # 3. make the environment available as a Jupyter kernel (with a fixed hash seed, see below), then open
 #    the notebook

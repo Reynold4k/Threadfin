@@ -158,8 +158,8 @@ def _require_dandelion():
             import dandelion as ddl
     except ImportError as exc:  # pragma: no cover - exercised only without the optional dependency
         raise ImportError(
-            "Clone calling needs the Dandelion package: pip install \"threadfin[dandelion] @ "
-            "git+https://github.com/Reynold4k/Threadfin.git\" (or: pip install sc-dandelion \"matplotlib<3.9\"; "
+            "Clone calling needs the Dandelion package: pip install \"threadfin[dandelion]\" (or: pip install "
+            "sc-dandelion \"matplotlib<3.9\"; "
             "Dandelion 0.5.7 needs matplotlib < 3.9 but does not say so). Alternatively call clones elsewhere and "
             "put the ids in adata.obs['clone_id']."
         ) from exc

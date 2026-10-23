@@ -13,7 +13,10 @@ Publishing the release starts [`.github/workflows/publish.yml`](../.github/workf
 the sdist and the wheel, checks them, installs the wheel and runs the simulated tutorial, and uploads both to PyPI.
 No password or token is stored: PyPI trusts this repository's workflow (trusted publishing).
 
-## One-time setup on PyPI (account owner, about two minutes)
+## One-time setup on PyPI (done on 24 October 2026; kept as a record)
+
+Threadfin 4.5.0 was the first release uploaded this way; `pip install threadfin` installs the latest release.
+The steps, in case the publisher ever has to be added again:
 
 1. Sign in at <https://pypi.org> (create the account if needed, with two-factor authentication).
 2. Open *Your account → Publishing → Add a new pending publisher → GitHub* and enter

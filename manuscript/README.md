@@ -280,7 +280,7 @@ of these, as better, no clear difference or worse.
 | More cores, more data | 16 instead of 1 core: Threadfin's complete analysis 2.0 times faster (no gain beyond 8), clone2vec 1.2, Clonotrace 2.7 (from 4 to 16), Benisse 2.9 times *slower*. Ten times more clones: Threadfin's profiles 20 times longer, clone2vec 6, Clonotrace 110, Benisse 123 (and 35 GB at 5,570 clones). Threadfin and Clonotrace give identical results on any number of cores; clone2vec and Benisse differ slightly. |
 | Runs that finished | Threadfin, clone2vec forced to two-cell clones and the baselines: all 77 (full data and halves). clone2vec at its default: 65 of 77 (fails on small inputs with an internal error). Benisse: 26 of 27. Clonotrace: 45 of 50 without help (one stopped after 72 h, four needed a larger cell graph, one of them after failing at k = 10, 30 and 50). |
 | Sensitivity of Threadfin | unchanged by the number of random features, the seed, 5–30-cell smoothing or 50 principal components; a narrower kernel separates mixed from in-between clones better and a wider one worse; without smoothing measured annotations are recovered better but planted programmes worse. |
-| Ease of use (checklist) | Threadfin 11.5 of 13 (not on PyPI, not yet peer-reviewed); clone2vec 11 of 13; Clonotrace 10 of 13; Benisse and CoNGA 5.5; scirpy 11 of the 11 criteria assessed. |
+| Ease of use (checklist) | Threadfin 12 of 13 (not yet peer-reviewed); clone2vec 11 of 13; Clonotrace 10 of 13; Benisse and CoNGA 5.5; scirpy 11 of the 11 criteria assessed. |
 
 **What this means for the manuscript.**
 
@@ -399,7 +399,7 @@ Listed by priority. "Before submission" items are also in section 2.3.
 13. **Composition-balanced centring as an option** of `clone_profiles`, since it was needed to interpret the
     gut branches; the benchmark simulation shows the same artefact (centring adds same-donor structure when
     donors differ in clone composition).
-14. **scverse integration** (MuData/scirpy input) and a PyPI release.
+14. **scverse integration** (MuData/scirpy input) and a PyPI release — *done in 4.5.0* (`pip install threadfin`).
 
 ### D. Beyond this manuscript
 

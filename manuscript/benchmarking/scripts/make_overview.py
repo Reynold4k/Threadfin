@@ -593,7 +593,7 @@ def draw(cells: dict, u: pd.DataFrame):
                                lw=0.8, clip_on=False))
         bx.text(i * 1.6 + 0.5, len(tools_u) + 0.075, lab, va="center", fontsize=7.4)
     bx.text(4.9, len(tools_u) + 0.075, "Evidence for every score: scripts/usability_checklist.csv. Threadfin is not "
-            "yet on PyPI or peer-reviewed; the other tools' rows describe their public releases.", va="center",
+            "yet peer-reviewed; the other tools' rows describe their public releases.", va="center",
             fontsize=7.2, color=INK2)
     fig.text(0.012, 0.975, "The benchmark at a glance: each tool compared with Threadfin, and how easy each tool "
              "is to use", fontsize=12.5, fontweight="bold", va="center")

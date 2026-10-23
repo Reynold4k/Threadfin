@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml"><img src="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue.svg" alt="Python 3.10 to 3.14"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-4.3.1-informational.svg" alt="version 4.3.1"></a>
+  <a href="https://pypi.org/project/threadfin/"><img src="https://img.shields.io/pypi/v/threadfin.svg" alt="PyPI version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
 </p>
 
@@ -76,17 +76,18 @@ manuscript — status, datasets, every analysis and a benchmark against related 
 ## Installation
 
 ```bash
-pip install "git+https://github.com/Reynold4k/Threadfin.git"
-# with Dandelion, to define clones from BCR contigs:
-pip install "threadfin[dandelion] @ git+https://github.com/Reynold4k/Threadfin.git"
+pip install threadfin
+# with Dandelion, to define clones from BCR or TCR contigs:
+pip install "threadfin[dandelion]"
 ```
 
 Threadfin requires Python ≥ 3.10 and is tested on 3.10 to 3.14, down to the oldest dependency versions it
 allows ([compatibility](https://github.com/Reynold4k/Threadfin/blob/main/docs/COMPATIBILITY.md)); Scanpy, Leiden, UMAP and Harmony are installed with it, and no
-GPU or R is needed. Clones can be defined from BCR contigs with Dandelion (the `[dandelion]` extra also pins
+GPU or R is needed. Clones can be defined from BCR or TCR contigs with Dandelion (the `[dandelion]` extra also pins
 `matplotlib<3.9`, which Dandelion 0.5.7 needs but does not declare), or you can provide your own clone ids
 in `adata.obs["clone_id"]`. Dandelion's clone calls depend on Python's string-hash seed; start Python with
-`PYTHONHASHSEED=0` if clone ids must be identical run after run.
+`PYTHONHASHSEED=0` if clone ids must be identical run after run. The development version installs with
+`pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
 
 ## Quick start
 

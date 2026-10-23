@@ -2,7 +2,7 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-24 01:31, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-24 10:09, Melbourne time).*
 
 Still running: none.
 
@@ -326,7 +326,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 |---|---|---|---|---|---|---|
 | Open-source licence | yes | yes | yes | yes | yes | yes |
 | Numbered releases | yes | partly | yes | yes | partly | yes |
-| Installs with one command | partly | partly | yes | no | no | yes |
+| Installs with one command | yes | partly | yes | no | no | yes |
 | Dependencies listed with versions | yes | yes | yes | partly | partly | yes |
 | Automated tests | yes | yes | yes | no | no | yes |
 | Tests run on every change | yes | yes | yes | no | no | yes |

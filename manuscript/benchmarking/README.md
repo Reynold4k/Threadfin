@@ -63,8 +63,7 @@ s43588-026-00977-z, Fig. 4): 1 = yes, 0.5 = partly, 0 = no, with the evidence fo
   inputs) and Benisse on 1 of 27. Benisse becomes slower with more cores (2.9 times slower on 16 cores than on
   one) and needed 35 GB for 5,570 clones. The complete Threadfin analysis — profiles, test, clone map,
   programmes — takes 18 s to 9.5 min in one process and under 2.3 GB (section 6.9).
-* **Ease of use.** Threadfin scores 11.5 of 13 on the checklist: it is not yet on PyPI and not yet
-  peer-reviewed. scirpy (11 of 11 assessed) and clone2vec (11 of 13) are the most mature of the other tools.
+* **Ease of use.** Threadfin scores 12 of 13 on the checklist: it is not yet peer-reviewed. scirpy (11 of 11 assessed) and clone2vec (11 of 13) are the most mature of the other tools.
 
 How each column's verdict is reached:
 
@@ -97,7 +96,7 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
 |---|---|---|---|---|---|---|
 | Open-source licence | yes | yes | yes | yes | yes | yes |
 | Numbered releases | yes | partly | yes | yes | partly | yes |
-| Installs with one command | partly | partly | yes | no | no | yes |
+| Installs with one command | yes | partly | yes | no | no | yes |
 | Dependencies listed with versions | yes | yes | yes | partly | partly | yes |
 | Automated tests | yes | yes | yes | no | no | yes |
 | Tests run on every change | yes | yes | yes | no | no | yes |
@@ -175,7 +174,7 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-24 01:31, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-24 10:09, Melbourne time).*
 
 Still running: none.
 

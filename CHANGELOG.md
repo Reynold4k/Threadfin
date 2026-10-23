@@ -2,6 +2,11 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## Unreleased
+
+- Threadfin is on PyPI: `pip install threadfin` (with Dandelion: `pip install "threadfin[dandelion]"`). The
+  README, the tutorials, the tutorial environment and the install hint shown when Dandelion is missing use it.
+
 ## 4.5.0 — 2026-10-24
 
 New features answer the questions a specialist in clonal analysis would ask first: does it work for T cells, does it
