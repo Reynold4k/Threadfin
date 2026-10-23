@@ -4,6 +4,9 @@ Each version lists what changed and, under *What this means for you*, what you n
 
 ## Unreleased
 
+- **Installs on Windows.** harmonypy 2.x publishes no Windows wheels and its source does not compile with
+  Microsoft's compiler, so `pip install threadfin` failed on Windows. Windows now receives the pure-Python
+  harmonypy (< 2); Linux and macOS are unchanged. Continuous integration now also runs on macOS and Windows.
 - The repeatability test of the legacy `clonotype_recluster` no longer fails with pandas 3. The function was
   always deterministic; the test compared the labels of cells without a clone as NaN == NaN, which pandas 3
   keeps missing in `astype(str)` (issue #2).

@@ -38,7 +38,9 @@ dependencies = [
     "leidenalg>=0.10",
     "umap-learn>=0.5.5",            # older releases import pkg_resources, absent from new environments
     "pynndescent>=0.5.8",           # likewise
-    "harmonypy>=0.0.9",
+    "harmonypy>=0.0.9; platform_system != 'Windows'",
+    # harmonypy 2.x ships no Windows wheels and does not compile with MSVC; 0.2 and earlier are pure Python
+    "harmonypy>=0.0.9,<2; platform_system == 'Windows'",
 ]
 
 [project.optional-dependencies]

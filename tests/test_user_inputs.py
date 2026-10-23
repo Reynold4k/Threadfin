@@ -74,3 +74,19 @@ def test_prepare_embedding_rejects_negative_counts_with_fix():
 def test_prepare_embedding_requires_positive_integer_n_comps(n_comps):
     with pytest.raises(ValueError, match="n_comps must be a positive integer"):
         tf.pp.prepare_embedding(_adata(), n_comps=n_comps, verbose=False)
+
+
+def test_prepare_embedding_integrates_batches_with_harmony():
+    """The Harmony step runs with every harmonypy the package allows (pure-Python 0.x and compiled 2.x)."""
+    rng = np.random.default_rng(0)
+    n, g = 240, 300
+    genes = [f"G{i}" for i in range(g - 4)] + ["IGHM", "IGKC", "IGHV1-2", "IGLC2"]
+    counts = rng.poisson(1.0, size=(n, g)).astype(np.float32)
+    batch = np.repeat(["a", "b", "c"], n // 3)
+    counts[batch == "b", :40] += rng.poisson(3.0, size=(int((batch == "b").sum()), 40))   # a batch effect
+    adata = AnnData(X=counts, obs=pd.DataFrame({"batch": batch}, index=[f"c{i}" for i in range(n)]),
+                    var=pd.DataFrame(index=genes))
+    tf.pp.prepare_embedding(adata, batch_key="batch", n_top_genes=150, n_comps=10, verbose=False)
+    emb = adata.obsm["X_threadfin"]
+    assert emb.shape == (n, 10) and np.isfinite(emb).all()
+    assert not np.allclose(emb, adata.obsm["X_pca"][:, :10])          # Harmony changed the embedding

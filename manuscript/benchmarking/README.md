@@ -788,6 +788,16 @@ timed for its complete analysis, the other tools for their clone representation;
 
 <!-- END:resources_size -->
 
+*Reading.* Threadfin's complete analysis gains about twofold from parallel layouts and bootstrap replicates
+and nothing beyond 8 cores, because each stage of the clone-map search lays out only a few dozen maps;
+its clone profiles alone take seconds and grow slightly faster than the number of clones. clone2vec trains
+with PyTorch threads and gains little from more cores, but its time grows slowly with the data. Clonotrace's
+parallel R sessions scale well (2.7 times from 4 to 16), yet its time grows with about the square of the number
+of clones, which is why the full GSE195673 run did not finish in 72 h on 4 sessions. Benisse became slower with
+more threads: its Python and R parts both use multithreaded linear algebra, which oversubscribes the cores;
+limiting it to 1–4 threads (`OMP_NUM_THREADS`) avoids this. Its memory grows with the square of the number of
+clonotypes (35 GB at 5,570 clones).
+
 **Same result with any number of cores?**
 
 <!-- BEGIN:resources_repro -->
@@ -910,6 +920,8 @@ The defaults (median-distance bandwidth, 15-cell smoothing) sit between these en
 * **The simulation's donor effect is additive**, the case that centring removes exactly (section 6.7).
 * **Clonotrace's times** are inflated for the runs marked †; its outputs are not affected.
 * **Benisse was run at ≥ 10 cells on GSE195673** (section 3).
+* **The resource experiments use one dataset each** (cores: GSE287123 RBD; data size: subsets of GSE195673),
+  each configuration alone in a job with dedicated cores; absolute times depend on the hardware.
 * **Run-to-run variation of clone calls.** Dandelion's clone assignment depends on Python's hash seed
   (a few clones per 10,000 differ between sessions); all tools received the same clone ids, so the
   comparison is unaffected.
