@@ -69,7 +69,7 @@ cell-by-feature embeddings and non-negative counts. Requested test columns
 are not silently skipped. PCA dimensions are capped to the selected matrix
 size. Errors are in English and include concrete correction steps.
 
-See [Troubleshooting](TROUBLESHOOTING.md) for examples. Missing measured
+See the [troubleshooting table of Tutorial 2](tutorials/02_your_data.md#9-troubleshooting) for examples. Missing measured
 state, probe or time labels remain missing observations; they are not filled
 as negative measurements.
 

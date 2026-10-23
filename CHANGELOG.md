@@ -181,9 +181,9 @@ an unreproducible legacy fit is attempted.
 The optional state model is not a validated replacement for every endpoint.
 Simulations retain prior-misspecification failures; whole-mouse reporter tests
 often favour RNA means. Its data_weight is not the legacy profile reliability,
-and posterior direction probabilities are not p-values. See
-[the algorithm review](docs/ALGORITHM_REVIEW_2026-10-09_zh.md) and
-[state-distribution documentation](docs/STATE_DENSITY.md).
+and posterior direction probabilities are not p-values. See the
+[state-distribution documentation](docs/STATE_DENSITY.md) (the algorithm review of 2026-10-09 cited here at
+the time is no longer part of the repository).
 
 ### Paper and reproducibility assets
 
