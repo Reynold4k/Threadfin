@@ -2,13 +2,13 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-23 15:20, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-23 20:17, Melbourne time).*
 
 Still running: none.
 
-Failed (each with the reason the tool gave): Clonotrace (forced to ≥ 2 cells) on Plasmodium d10-42 — the cell graph stayed disconnected at graph_k = 10, 30, 50 (Clonotrace: "Clone-distance output contains infinite distances because the cell graph has disconnected clone-bearing components").
+Failed (each with the reason the tool gave): none.
 
-Stopped before completion: Clonotrace (forced to ≥ 2 cells) on Human LN vaccine — stopped after 72 h: bootstrap label spreading took 15 h on 4 workers; the clone-distance step (one process in this run) had been running for 57 h when it was stopped on 2026-10-23. For comparison, LARRY days 4/6 (6,174 eligible clones, 4,693 kept) needed 29 h of clone distances on 6 workers; this dataset has 11,141 eligible clones.
+Stopped before completion: Clonotrace (forced to ≥ 2 cells) on Human LN vaccine — stopped after 72 h: bootstrap label spreading took 15 h on 4 workers; the clone-distance step (one process in this run) had been running for 57 h when it was stopped on 2026-10-23. For comparison, LARRY days 4/6 (6,174 eligible clones, 4,693 kept) needed 29 h of clone distances on 6 workers; this dataset has 11,141 eligible clones. A rerun with more workers was still running when this table was made.
 
 Split-half runs still running (sections 6.4–6.5 use the halves that are complete): none.
 
@@ -36,7 +36,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | RBD reporter | 1,887 | 946 | 1,887 (946 two-cell) | 941 (0 two-cell) | 1,887 (946 two-cell) | 160 (0 two-cell) | 1,173 (232 two-cell) | 1,887 (946 two-cell) |
 | NP reporter | 471 | 203 | 471 (203 two-cell) | 268 (0 two-cell) | 471 (203 two-cell) | 41 (0 two-cell) | 315 (47 two-cell) | 471 (203 two-cell) |
 | GC + plasma cells | 96 | 62 | 96 (62 two-cell) | 34 (0 two-cell) | 96 (62 two-cell) | n/a (< 3 clones ≥ 10 cells) | 58 (24 two-cell) | 96 (62 two-cell) |
-| Plasmodium d10-42 | 1,015 | 830 | 1,015 (830 two-cell) | 185 (0 two-cell) | 1,015 (830 two-cell) | n/a (< 3 clones ≥ 10 cells) | failed (disconnected cell graph) | 1,015 (830 two-cell) |
+| Plasmodium d10-42 | 1,015 | 830 | 1,015 (830 two-cell) | 185 (0 two-cell) | 1,015 (830 two-cell) | n/a (< 3 clones ≥ 10 cells) | 531 (346 two-cell) | 1,015 (830 two-cell) |
 | Plasmodium d0-14 | 523 | 450 | 523 (450 two-cell) | 73 (0 two-cell) | 523 (450 two-cell) | n/a (< 3 clones ≥ 10 cells) | 275 (202 two-cell) | 523 (450 two-cell) |
 | Human LN vaccine | 11,141 | 5,083 | 11,141 (5,083 two-cell) | 6,058 (0 two-cell) | 11,141 (5,083 two-cell) | 1,243 (0 two-cell) | stopped after 72 h | 1,243 (0 two-cell) [≥ 10 cells] |
 | Spontaneous GC | 1,051 | 411 | 1,051 (411 two-cell) | 640 (0 two-cell) | 1,051 (411 two-cell) | 127 (0 two-cell) | 770 (130 two-cell) | 1,051 (411 two-cell) |
@@ -48,24 +48,24 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 6 | 10 | 25 | -0.018 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 8 | 30 | 1 | 8 | 21 | -0.039 | 363 |
-| Clonotrace, published distance (≥ 2) | 8 | 30 | 2 | 14 | 14 | -0.096 | 363 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 10 | 26 | -0.018 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 9 | 34 | 1 | 10 | 23 | -0.041 | 471 |
+| Clonotrace, published distance (≥ 2) | 9 | 34 | 2 | 18 | 14 | -0.108 | 471 |
 | Benisse | 8 | 31 | 3 | 22 | 6 | -0.372 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
-| Cluster composition (baseline) | 10 | 41 | 1 | 26 | 14 | -0.101 | 958 |
+| Cluster composition (baseline) | 10 | 41 | 1 | 25 | 15 | -0.101 | 958 |
 | Medoid cell, CoNGA's rule (baseline) | 10 | 41 | 1 | 21 | 19 | -0.050 | 958 |
 
 ## pairwise_forced_no_rna
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 6 | 5 | 24 | -0.006 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 8 | 27 | 1 | 5 | 21 | -0.035 | 411 |
-| Clonotrace, published distance (≥ 2) | 8 | 27 | 2 | 11 | 14 | -0.071 | 411 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 5 | 25 | -0.006 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 9 | 29 | 1 | 5 | 23 | -0.035 | 411 |
+| Clonotrace, published distance (≥ 2) | 9 | 29 | 2 | 13 | 14 | -0.095 | 411 |
 | Benisse | 8 | 26 | 3 | 17 | 6 | -0.284 | 958 |
 | Mean of the embedding (baseline) | 10 | 35 | 7 | 5 | 23 | +0.001 | 958 |
-| Cluster composition (baseline) | 10 | 35 | 1 | 21 | 13 | -0.095 | 958 |
+| Cluster composition (baseline) | 10 | 35 | 1 | 20 | 14 | -0.095 | 958 |
 | Medoid cell, CoNGA's rule (baseline) | 10 | 35 | 1 | 15 | 19 | -0.043 | 958 |
 
 ## pairwise_native
@@ -74,15 +74,15 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 |---|---|---|---|---|---|---|---|
 | clone2vec (default, ≥ 3 cells) | 10 | 41 | 10 | 7 | 24 | +0.002 | 268 |
 | Clonotrace (default, ≥ 10 cells) | 6 | 26 | 0 | 8 | 18 | -0.039 | 127 |
-| Clonotrace, published distance (≥ 10) | 6 | 26 | 1 | 11 | 14 | -0.096 | 127 |
+| Clonotrace, published distance (≥ 10) | 6 | 26 | 0 | 11 | 15 | -0.096 | 127 |
 | Benisse (≥ 10 cells) | 1 | 7 | 0 | 7 | 0 | -0.606 | 1243 |
 
 ## pairwise_ablation
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| Threadfin, mean profile | 10 | 41 | 7 | 4 | 30 | +0.003 | 958 |
-| Threadfin, no centring | 10 | 41 | 2 | 13 | 26 | -0.010 | 958 |
+| Threadfin, mean profile | 10 | 41 | 8 | 6 | 27 | +0.003 | 958 |
+| Threadfin, no centring | 10 | 41 | 1 | 13 | 27 | -0.010 | 958 |
 | Threadfin, no smoothing | 10 | 41 | 14 | 4 | 23 | +0.010 | 958 |
 | Threadfin, no shrinkage | 10 | 41 | 6 | 1 | 34 | +0.002 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
@@ -92,7 +92,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | tool | annotations | median R² on two-cell clones, tool | median R² on the same clones, Threadfin | tool higher | Threadfin higher | annotations with R² > 0.1 for the tool |
 |---|---|---|---|---|---|---|
 | clone2vec (forced to ≥ 2 cells) | 41 | 0.259 | 0.246 | 15 | 26 | 30 |
-| Clonotrace (forced to ≥ 2 cells) | 28 | 0.165 | 0.233 | 9 | 19 | 15 |
+| Clonotrace (forced to ≥ 2 cells) | 32 | 0.221 | 0.278 | 10 | 22 | 19 |
 | Benisse | 31 | -0.084 | 0.246 | 5 | 26 | 1 |
 | Mean of the embedding (baseline) | 41 | 0.259 | 0.246 | 20 | 21 | 33 |
 | Cluster composition (baseline) | 41 | 0.120 | 0.246 | 3 | 38 | 23 |
@@ -122,17 +122,17 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | GC + plasma cells | plasma-cell sort | 0.59 vs 0.79 ▼ | 0.50 vs 0.62 | -0.15 vs 0.79 ▼ | 0.73 vs 0.79 ▼ |
 | GC + plasma cells | V-region mutation | -0.15 vs -0.15 | -0.14 vs -0.19 | -0.13 vs -0.15 | -0.10 vs -0.15 |
 | GC + plasma cells | W33L | -0.05 vs 0.07 | -0.08 vs -0.13 | 0.09 vs 0.07 | 0.04 vs 0.07 |
-| Plasmodium d10-42 | GC B cell (RNA) | 0.67 vs 0.84 ▼ | — | -0.14 vs 0.84 ▼ | 0.74 vs 0.84 ▼ |
-| Plasmodium d10-42 | IgG | 0.50 vs 0.52 | — | -0.19 vs 0.52 ▼ | 0.53 vs 0.52 |
-| Plasmodium d10-42 | plasmablast (RNA) | 0.39 vs 0.77 ▼ | — | -0.54 vs 0.77 ▼ | 0.46 vs 0.77 ▼ |
-| Plasmodium d10-42 | V-region mutation | 0.31 vs 0.35 | — | 0.06 vs 0.35 ▼ | 0.34 vs 0.35 |
+| Plasmodium d10-42 | GC B cell (RNA) | 0.67 vs 0.84 ▼ | 0.57 vs 0.68 ▼ | -0.14 vs 0.84 ▼ | 0.74 vs 0.84 ▼ |
+| Plasmodium d10-42 | IgG | 0.50 vs 0.52 | 0.42 vs 0.40 | -0.19 vs 0.52 ▼ | 0.53 vs 0.52 |
+| Plasmodium d10-42 | plasmablast (RNA) | 0.39 vs 0.77 ▼ | 0.35 vs 0.69 ▼ | -0.54 vs 0.77 ▼ | 0.46 vs 0.77 ▼ |
+| Plasmodium d10-42 | V-region mutation | 0.31 vs 0.35 | 0.26 vs 0.31 | 0.06 vs 0.35 ▼ | 0.34 vs 0.35 |
 | Plasmodium d0-14 | V-region mutation | -0.03 vs 0.06 ▼ | -0.07 vs 0.07 ▼ | -0.08 vs 0.06 ▼ | 0.02 vs 0.06 |
 | Plasmodium d0-14 | GC B cell (RNA) | 0.69 vs 0.70 | 0.32 vs 0.53 ▼ | -0.15 vs 0.70 ▼ | 0.64 vs 0.70 |
 | Plasmodium d0-14 | plasmablast (RNA) | 0.53 vs 0.63 ▼ | 0.33 vs 0.60 ▼ | -0.35 vs 0.63 ▼ | 0.53 vs 0.63 ▼ |
 | Plasmodium d0-14 | IgG | 0.20 vs 0.23 | 0.10 vs 0.25 ▼ | -0.31 vs 0.23 ▼ | 0.23 vs 0.23 |
 | Human LN vaccine | blood (vs lymph node) | 0.88 vs 0.97 ▼ | — | — | 0.87 vs 0.97 ▼ |
 | Human LN vaccine | V-region mutation | 0.39 vs 0.35 ▲ | — | — | 0.39 vs 0.35 ▲ |
-| Human LN vaccine | IgG | 0.40 vs 0.39 ▲ | — | — | 0.40 vs 0.39 ▲ |
+| Human LN vaccine | IgG | 0.40 vs 0.39 | — | — | 0.40 vs 0.39 ▲ |
 | Human LN vaccine | GC B cell (RNA) | 0.84 vs 0.96 ▼ | — | — | 0.91 vs 0.96 ▼ |
 | Human LN vaccine | IgA | 0.17 vs 0.15 | — | — | 0.17 vs 0.15 ▲ |
 | Human LN vaccine | spike binding | 0.32 vs 0.32 | — | — | 0.32 vs 0.32 |
@@ -217,7 +217,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | RBD reporter | 3.1 s, 0.5 GB | 1.1 min, 1.1 GB | 1.8 min, 1.1 GB | 3.1 h, 1.3 GB † | 1.2 h, 2.4 GB † | 11.0 min, 4.0 GB |
 | NP reporter | 0.7 s, 0.3 GB | 35.6 s, 1.1 GB | 47.6 s, 1.1 GB | 1.7 min, 0.6 GB † | 3.3 min, 0.6 GB | 49.1 s, 0.5 GB |
 | GC + plasma cells | 0.2 s, 0.2 GB | 33.3 s, 1.1 GB | 32.5 s, 1.1 GB | — | 28.6 s, 0.4 GB † | 5.7 s, 0.3 GB |
-| Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | — | 2.0 min, 0.8 GB |
+| Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | 18.8 min, 2.7 GB | 2.0 min, 0.8 GB |
 | Plasmodium d0-14 | 5.8 s, 0.6 GB | 36.1 s, 1.1 GB | 53.4 s, 1.1 GB | — | 11.5 min, 1.4 GB † | 20.0 s, 0.3 GB |
 | Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | — | 19.0 min, 31.6 GB |
 | Spontaneous GC | 1.2 s, 0.4 GB | 53.8 s, 1.1 GB | 1.0 min, 1.1 GB | 43.6 min, 1.0 GB † | 29.7 min, 1.4 GB † | 3.3 min, 1.9 GB |
@@ -235,6 +235,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | RBD reporter | forced ≥ 2 | 1,887 | 1,173 | 40.1 min | 31.6 min (1 process) |  |
 | NP reporter | default ≥ 10 | 41 | 41 | 34.3 s | 1.0 min (1 process) |  |
 | NP reporter | forced ≥ 2 | 471 | 315 | 2.9 min | 18.6 s (4 workers) | 10 |
+| Plasmodium d10-42 | forced ≥ 2 | 1,015 | 531 | 16.4 min | 35.3 s (8 workers) | 100 |
 | Plasmodium d0-14 | forced ≥ 2 | 523 | 275 | 10.5 min | 8.7 s (1 process) |  |
 | Human LN vaccine | default ≥ 10 | 1,243 | 1,243 | 2.6 h | 26.1 h (4 workers) | 10 |
 | Spontaneous GC | default ≥ 10 | 127 | 127 | 1.7 min | 41.6 min (1 process) |  |
@@ -251,10 +252,10 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | method | datasets | median distance Spearman | median 10-NN overlap | overlap by chance | median re-identification (top 1) | re-identification by chance |
 |---|---|---|---|---|---|---|
 | Benisse | 6 | 0.774 | 0.455 | 0.063 | 0.083 | 0.0062 |
-| Threadfin, no centring | 10 | 0.718 | 0.112 | 0.044 | 0.084 | 0.0044 |
+| Threadfin, no centring | 10 | 0.719 | 0.112 | 0.044 | 0.084 | 0.0044 |
 | Mean of the embedding (baseline) | 10 | 0.653 | 0.161 | 0.051 | 0.084 | 0.0051 |
 | Threadfin (default) | 10 | 0.650 | 0.125 | 0.051 | 0.084 | 0.0051 |
-| Threadfin, no smoothing | 10 | 0.644 | 0.137 | 0.044 | 0.090 | 0.0044 |
+| Threadfin, no smoothing | 10 | 0.645 | 0.137 | 0.044 | 0.090 | 0.0044 |
 | Threadfin, mean profile | 10 | 0.643 | 0.130 | 0.051 | 0.077 | 0.0051 |
 | Threadfin, no shrinkage | 10 | 0.593 | 0.130 | 0.044 | 0.070 | 0.0044 |
 | clone2vec (forced to ≥ 2 cells) | 10 | 0.588 | 0.127 | 0.039 | 0.030 | 0.0039 |
@@ -299,3 +300,84 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | native: clones >= 10 cells | Threadfin, mean profile | 164 | 863 | 0.055 | 0.146 | 0.087 | 176 | 0.0012 |
 | native: clones >= 10 cells | Cluster composition (baseline) | 164 | 863 | 0.024 | 0.140 | 0.063 | 128 | 0.0012 |
 | native: clones >= 10 cells | Medoid cell, CoNGA's rule (baseline) | 164 | 863 | 0.012 | 0.061 | 0.035 | 275 | 0.0012 |
+
+## overview_rules
+
+| column | how the verdict is reached |
+|---|---|
+| Share of clones it describes | median over the 11 datasets of the share of clones with ≥ 2 cells that the tool represents; a run that failed, stopped or could not start counts as 0. Better or worse: more than 5 percentage points from Threadfin. |
+| Keeps two-cell clones | the same for clones of exactly two cells. |
+| Datasets it could analyse | datasets (of 11) on which the tool produced a result. |
+| Predicts measured clone traits | measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05. |
+| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions); sign test over annotations. |
+| Recognises a clone from other cells | share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets. |
+| Links day-2 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
+| Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
+| Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
+| Few false alarms without signal | share of replicates in which the test reports clonal structure after clone labels were shuffled within each sample (no clonal signal), median over datasets; Wilcoxon over datasets. Only scirpy and the ANOVA test the same hypothesis; the other tools have no test. |
+| Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |
+| Peak memory | peak memory, the same way. |
+| Gain from 16 CPU cores | time with 1 core divided by time with 16 cores (GSE287123 RBD; Threadfin: its complete analysis). Better or worse: more than 25 % from Threadfin's gain. |
+| Slow-down as data grow | how much longer the clone representation takes for 10 times more clones, from 5-50 % subsets of GSE195673 (8 cores). Better or worse: an exponent more than 0.25 from Threadfin's. |
+| Runs that ended without help | runs on the full data and on the disjoint halves that finished with the tool's default settings; failed or stopped runs, and runs that needed a larger cell graph, are counted against the tool. |
+
+## usability
+
+| criterion | Threadfin | Clonotrace | clone2vec | Benisse | CoNGA | scirpy |
+|---|---|---|---|---|---|---|
+| Open-source licence | yes | yes | yes | yes | yes | yes |
+| Numbered releases | yes | partly | yes | yes | partly | yes |
+| Installs with one command | partly | partly | yes | no | no | yes |
+| Dependencies listed with versions | yes | yes | yes | partly | partly | yes |
+| Automated tests | yes | yes | yes | no | no | yes |
+| Tests run on every change | yes | yes | yes | no | no | yes |
+| Same result when re-run | yes | yes | partly | partly | n.a. | n.a. |
+| Step-by-step tutorial | yes | yes | yes | partly | yes | yes |
+| Every function documented | yes | yes | yes | partly | partly | yes |
+| Explains bad input and how to fix it | yes | partly | partly | no | n.a. | n.a. |
+| Can use several CPU cores | yes | yes | yes | partly | n.a. | yes |
+| Works with AnnData or Seurat objects | yes | partly | yes | no | yes | yes |
+| Peer-reviewed paper | no | no | no | yes | yes | yes |
+
+## resources_cores
+
+| cores | Threadfin, complete analysis | clone2vec | Clonotrace | Benisse |
+|---|---|---|---|---|
+| 1 | 1.9 min, 0.7 GB | 4.7 min, 1.1 GB | — | 19.3 min, 4.0 GB |
+| 2 | 1.4 min, 0.8 GB | 3.6 min, 1.1 GB | running | — |
+| 4 | 1.0 min, 0.8 GB | 3.6 min, 1.1 GB | 1.1 h, 2.2 GB | 15.8 min, 4.2 GB |
+| 8 | 53.9 s, 0.8 GB | 3.4 min, 1.1 GB | 39.0 min, 2.2 GB | — |
+| 16 | 58.2 s, 0.8 GB | 3.8 min, 1.1 GB | 24.6 min, 2.5 GB | 56.4 min, 4.2 GB |
+
+## resources_size
+
+| subset of GSE195673 | clones ≥ 2 cells | Threadfin, complete analysis | Threadfin, clone profiles | clone2vec | Clonotrace | Benisse |
+|---|---|---|---|---|---|---|
+| 5 % | 557 | 37.8 s, 0.5 GB | 1.3 s, 0.3 GB | 1.9 min, 1.2 GB | 3.5 min, 0.6 GB | 1.4 min, 0.6 GB |
+| 10 % | 1,114 | 48.6 s, 0.6 GB | 2.5 s, 0.4 GB | 2.1 min, 1.1 GB | 11.1 min, 1.1 GB | 6.0 min, 2.0 GB |
+| 25 % | 2,785 | 1.5 min, 0.8 GB | 6.7 s, 0.7 GB | 5.8 min, 1.1 GB | 1.5 h, 4.6 GB | 40.0 min, 8.9 GB |
+| 50 % | 5,570 | 2.6 min, 1.4 GB | 27.7 s, 1.5 GB | 10.3 min, 1.2 GB | running | 2.9 h, 35.3 GB |
+
+## resources_repro
+
+| tool | compared | identical | lowest Spearman correlation of clone distances | largest difference of a clone distance |
+|---|---|---|---|---|
+| clone2vec | 1 core(s) vs 2, 4, 8, 16 | no | 0.999914 | 0.503 |
+| Clonotrace | 4 core(s) vs 8, 16 | yes | 1.000000 | 0 |
+| Benisse | 1 core(s) vs 4, 16 | no | 1.000000 | 0.00931 |
+| Threadfin (clone map and programmes) | 4.4.0 with 1 and with 8 cores vs the released 4.3.1, on 2 datasets (clone-map coordinates and programme labels) | yes |  |  |
+
+## threadfin_full_run
+
+| dataset | cells | clones ≥ 2 cells | profiles | coherence test (200 permutations) | clone map (automatic settings) | programmes (30 bootstraps) | one label test | total | peak memory |
+|---|---|---|---|---|---|---|---|---|---|
+| Gut GC reporter | 16,619 | 958 | 1.9 s | 0.3 s | 47.5 s | 16.6 s | 1.4 s | 1.1 min | 0.6 GB |
+| RBD reporter | 36,188 | 1,887 | 3.1 s | 0.7 s | 1.3 min | 35.2 s | 1.9 s | 2.0 min | 0.7 GB |
+| NP reporter | 10,109 | 471 | 0.7 s | 0.2 s | 28.7 s | 8.2 s | 0.6 s | 38.3 s | 0.5 GB |
+| Plasmodium d10-42 | 72,359 | 1,015 | 30.2 s | 1.1 s | 45.4 s | 19.8 s | 8.8 s | 1.8 min | 1.5 GB |
+| Plasmodium d0-14 | 40,623 | 523 | 6.0 s | 0.5 s | 32.8 s | 12.9 s | 3.2 s | 55.4 s | 0.8 GB |
+| Human LN vaccine | 193,442 | 11,141 | 42.2 s | 4.3 s | 3.7 min | 4.7 min | 18.3 s | 9.5 min | 2.2 GB |
+| Spontaneous GC | 22,898 | 1,051 | 1.2 s | 0.3 s | 47.3 s | 19.2 s | 0.8 s | 1.1 min | 0.6 GB |
+| GC + plasma cells | 884 | 96 | 0.2 s | 0.0 s | 15.8 s | 1.6 s | 0.2 s | 17.8 s | 0.5 GB |
+| Human COVID-19 | 61,423 | 592 | 25.5 s | 0.7 s | 28.6 s | 12.0 s | 5.8 s | 1.2 min | 1.2 GB |
+| LARRY d4/d6 | 44,664 | 6,174 | 3.5 s | 1.3 s | 2.7 min | 3.0 min | ? | 5.8 min | 0.9 GB |

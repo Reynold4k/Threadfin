@@ -371,6 +371,91 @@ def status_block():
     return "\n".join(lines)
 
 
+def overview_tables():
+    """Rules of the overview figure, and the usability checklist as a matrix (evidence in the CSV)."""
+    import json
+
+    out = {}
+    rules = RESULTS / "overview_rules.json"
+    if rules.exists():
+        from make_overview import COLUMNS
+        label = {k: lab.replace("-\n", "").replace("\n", " ") for k, _, lab in COLUMNS}
+        r = json.loads(rules.read_text())
+        out["overview_rules"] = md(pd.DataFrame({"column": [label[k] for k in r], "how the verdict is reached": list(r.values())}))
+    u = read("usability.csv")
+    if u is not None:
+        m = u.pivot_table(index=["group", "criterion"], columns="tool", values="score", aggfunc="first", sort=False)
+        m = m.reindex(columns=["Threadfin", "Clonotrace", "clone2vec", "Benisse", "CoNGA", "scirpy"])
+        m = m.map(lambda v: "n.a." if pd.isna(v) else {1.0: "yes", 0.5: "partly", 0.0: "no"}[float(v)]) \
+            if hasattr(m, "map") else m.applymap(lambda v: "n.a." if pd.isna(v) else {1.0: "yes", 0.5: "partly", 0.0: "no"}[float(v)])
+        out["usability"] = md(m.reset_index().drop(columns="group"))
+    return out
+
+
+def resource_tables():
+    out = {}
+    res = read("resources.csv")
+    if res is not None:
+        tools = [("threadfin_run", "Threadfin, complete analysis"), ("clone2vec_min2", "clone2vec"),
+                 ("clonotrace_revised_min2", "Clonotrace"), ("benisse_min2", "Benisse")]
+        c = res[res["experiment"].eq("cores")]
+        rows = []
+        for n in sorted(c["cores"].unique()):
+            row = {"cores": int(n)}
+            for t, lab in tools:
+                r = c[c["tool"].eq(t) & c["cores"].eq(n)]
+                row[lab] = ("—" if r.empty else "running" if r["status"].iloc[0] != "completed"
+                            else f"{fmt_seconds(r['seconds'].iloc[0])}, {r['peak_rss_gb'].iloc[0]:.1f} GB")
+            rows.append(row)
+        out["resources_cores"] = md(pd.DataFrame(rows))
+        g = res[res["experiment"].eq("size")]
+        tools_g = [("threadfin_run", "Threadfin, complete analysis"), ("threadfin_kernel", "Threadfin, clone profiles"),
+                   ("clone2vec_min2", "clone2vec"), ("clonotrace_revised_min2", "Clonotrace"), ("benisse_min2", "Benisse")]
+        rows = []
+        for ds in sorted(g["dataset"].unique(), key=lambda d: float(d.split("_f")[1])):
+            sub = g[g["dataset"].eq(ds)]
+            row = {"subset of GSE195673": f"{100 * float(ds.split('_f')[1]):g} %",
+                   "clones ≥ 2 cells": f"{int(sub['n_clones_ge2'].iloc[0]):,}"}
+            for t, lab in tools_g:
+                r = sub[sub["tool"].eq(t)]
+                row[lab] = ("—" if r.empty else "running" if r["status"].iloc[0] != "completed"
+                            else f"{fmt_seconds(r['seconds'].iloc[0])}, {r['peak_rss_gb'].iloc[0]:.1f} GB")
+            rows.append(row)
+        out["resources_size"] = md(pd.DataFrame(rows))
+    rep = read("resources_reproducibility.csv")
+    if rep is not None:
+        lab = {"threadfin_run": "Threadfin (clone map and programmes)", "clone2vec_min2": "clone2vec",
+               "clonotrace_revised_min2": "Clonotrace", "benisse_min2": "Benisse"}
+        rows = []
+        for t, g in rep.groupby("tool", sort=False):
+            ident = bool(g["identical"].all())
+            rho = g["distance_spearman"].min() if g["distance_spearman"].notna().any() else np.nan
+            diff = g["max_abs_difference"].max() if g["max_abs_difference"].notna().any() else np.nan
+            if t == "threadfin_run":
+                compared = (f"4.4.0 with 1 and with 8 cores vs the released 4.3.1, on {g['dataset'].nunique()} datasets "
+                            "(clone-map coordinates and programme labels)")
+            else:
+                compared = f"{int(g['reference_cores'].iloc[0])} core(s) vs " + ", ".join(str(int(c)) for c in g["cores"])
+            rows.append({"tool": lab.get(t, t), "compared": compared, "identical": "yes" if ident else "no",
+                         "lowest Spearman correlation of clone distances": "" if np.isnan(rho) else f"{rho:.6f}",
+                         "largest difference of a clone distance": "" if np.isnan(diff) else f"{diff:.3g}"})
+        out["resources_repro"] = md(pd.DataFrame(rows))
+    full = read("threadfin_full_run.csv")
+    if full is not None:
+        rows = []
+        for _, r in full.iterrows():
+            rows.append({"dataset": SHORT.get(r["dataset"], r["dataset"]), "cells": f"{int(r['n_cells']):,}",
+                         "clones ≥ 2 cells": f"{int(r['n_clones_ge2']):,}",
+                         "profiles": fmt_seconds(r["seconds_clone_profiles"]),
+                         "coherence test (200 permutations)": fmt_seconds(r["seconds_clonal_coherence"]),
+                         "clone map (automatic settings)": fmt_seconds(r["seconds_clone_map"]),
+                         "programmes (30 bootstraps)": fmt_seconds(r["seconds_programmes"]),
+                         "one label test": fmt_seconds(r.get("seconds_profile_association", np.nan)),
+                         "total": fmt_seconds(r["total_seconds"]), "peak memory": f"{r['peak_rss_gb']:.1f} GB"})
+        out["threadfin_full_run"] = md(pd.DataFrame(rows))
+    return out
+
+
 def write(tables: dict):
     body = []
     for k, v in tables.items():
@@ -394,7 +479,7 @@ def write(tables: dict):
 def main():
     tables = {"status": status_block(), "datasets": datasets_table(), "coverage": coverage_table(), **pairwise_tables(), "tests": tests_table(),
               "simulation": simulation_table(), "runtime": runtime_table(), "clonotrace_stages": clonotrace_table(),
-              **halves_tables(), "larry": larry_table()}
+              **halves_tables(), "larry": larry_table(), **overview_tables(), **resource_tables()}
     write(tables)
 
 

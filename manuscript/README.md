@@ -29,7 +29,7 @@ manuscript stands, what was tested on which data, what was found, and what is st
 | **Title** | Threadfin infers relationships between B-cell clones from paired single-cell RNA and receptor sequencing |
 | **Authors** | Chen Zhu (Peter Doherty Institute, University of Melbourne), Yang Yang (Frazer Institute, University of Queensland; corresponding), Zewen Kelvin Tuong (Ian Frazer Centre for Children's Immunotherapy Research, University of Queensland; corresponding), Zhian Chen (affiliation to be provided) |
 | **Article type and target** | Article, prepared for *Nature Methods* (format, word limits and reporting standards of that journal); *Cell Systems* and *Genome Biology* were assessed as alternatives |
-| **Current version** | preprint draft of 2026-10-17, with the new Figure 4 added on 2026-10-19; package version used for the analyses 4.2.0, current package 4.3.1 |
+| **Current version** | preprint draft of 2026-10-17, with the new Figure 4 added on 2026-10-19; package version used for the analyses 4.2.0, current package 4.4.0 |
 | **Main figures** | 4 (concept; application to germinal-centre data; clone states; model-antigen germinal centres) |
 | **Supplementary material** | 6 supplementary figures (Supplementary Fig. 1 in two sheets), 2 supplementary tables |
 | **Datasets** | 9 paired scRNA-seq + scBCR-seq datasets in the manuscript, 6 further B-cell datasets analysed, 3 non-B-cell lineage datasets |
@@ -107,14 +107,14 @@ was retired; its material is in [`analyses/lineage_barcode_systems/`](analyses/l
 
 | # | Item | Why | Suggested action |
 |---|---|---|---|
-| 1 | **Clone definition of the spontaneous-GC dataset (GSE203132)** | The Methods state that clones were defined from paired heavy and light chains for every dataset. The deposited AIRR table of GSE203132 contains heavy chains only (8,106 IGH rows), so its clones (Fig. 3a–f, Supplementary Fig. 3) are heavy-chain clones. The deposit's per-mouse `filtered_contig.fasta` files do contain light chains (in mouse M11, 764 of 1,022 cells have two contigs). | Either state in Methods that GSE203132 clones are heavy-chain clones, or annotate the light chains with IgBLAST, redefine paired clones and re-run Fig. 3a–f (the authors fixed Figure 3 on 2026-10-17, so this is their decision). |
-| 2 | **"We did not compare these methods on common tasks"** (Discussion) | The benchmark in [`benchmarking/`](benchmarking/README.md) now compares Threadfin with Clonotrace, clone2vec, Benisse, CoNGA's reduction and scirpy on common tasks. | Replace the sentence with a summary of the benchmark and add it as a supplementary figure, or keep the benchmark as a separate resource and say so. |
+| 1 | **Clone definition of the spontaneous-GC dataset (GSE203132)** — *resolved 2026-10-23* | The deposited AIRR table of GSE203132 holds heavy chains only (8,106 IGH rows), so Fig. 3a–f and Supplementary Fig. 3 use heavy-chain clones, while the Methods say paired chains for every dataset. The light chains were annotated from the deposited contigs with IgBLAST and the clones re-defined on heavy + light chains ([`analyses/spont_gc_paired_chains/`](analyses/spont_gc_paired_chains/README.md)): the light chain splits 481 of 1,051 clones, but the result of Fig. 3d–f is unchanged (entropy vs clone axis ρ −0.747 → −0.754; 8 of 8 mice negative; ICC 0.279 → 0.293). | Keep Figure 3 as fixed by the authors. In Methods, say that GSE203132 clones are heavy-chain clones because the deposited table has no light chains, and that clones re-defined on paired chains from the deposited contigs give the same result (numbers above; a supplementary note or one sentence). The sentence is in the local draft since 2026-10-23. |
+| 2 | **"We did not compare these methods on common tasks"** (Discussion) — *replaced in the local draft 2026-10-23, for the authors to review* | The benchmark in [`benchmarking/`](benchmarking/README.md) compares Threadfin with Clonotrace, clone2vec, Benisse, CoNGA's reduction and scirpy on common tasks. The sentence now summarises it (coverage and test calibration are where Threadfin differs; annotation recovery is similar to clone2vec and to the clone mean; clone2vec groups simulated discrete programmes better). | Review the wording; add the benchmark overview (its Fig. 0) as a supplementary figure if wanted. |
 | 3 | **Library confound of the GSE287123 gates** | The Results paragraph that states that the bait and zone gates are fully determined by sequencing library (and that only the RBD division gate is crossed) was added on 2026-10-18 and awaits the authors' approval. | Approve or edit. |
-| 4 | **"Paired chains" in the RBD data** | 359 of 9,825 cells in profiled RBD clones lack a complete productive heavy + light pair (115 profiles); Dandelion still assigned them. One profiled RBD "clone" (two cells, `M2\|B_VJ_189_1_1`) has no heavy chain at all: a light-chain-only group, which threadfin 4.3.1 no longer calls a clone. | One sentence in Methods; optionally a sensitivity analysis restricted to complete pairs (and without the light-chain-only group, which changes 1 of 1,887 profiles). |
+| 4 | **"Paired chains" in the RBD data** — *resolved 2026-10-23* | 797 RBD cells with a clone have no productive light chain; restricted to complete heavy + light pairs (1,772 of 1,887 profiled clones), Figure 4 is unchanged (division excess R² 0.088 → 0.096, crossover cosine 0.887 → 0.884, 10 of 10 mice). The one "light-chain-only" RBD group was an artefact of contig ids reused across libraries (fixed in threadfin 4.4.0; Figure 4 with the corrected clones: 0.085, cosine 0.896, 10 of 10 mice) — [`analyses/rbd_complete_pairs/`](analyses/rbd_complete_pairs/README.md). | One sentence in Methods: clones are Dandelion's paired-chain clones; cells missing one chain keep the clone of the other, and excluding them does not change the result (in the local draft since 2026-10-23). |
 | 5 | Placeholders | affiliation (Zhian Chen), LLM statement, acknowledgements, author contributions, competing interests, Zenodo DOIs, reporting summary | Authors. |
-| 6 | Package version | the analyses used 4.2.0; 4.3.0 only adds automatic clone-map settings, which change no statistic; 4.3.1 stops giving light-chain-only Dandelion groups a clone id (the manuscript's datasets were unaffected except one two-cell RBD group; four additional case studies were re-run without them), fixes the memory use of `tl.export_lag` and records the hash seed of clone calls | Keep the sentence in Methods; archive the versions on Zenodo. |
+| 6 | Package version | the analyses used 4.2.0; 4.3.0 only adds automatic clone-map settings, which change no statistic; 4.3.1 stops giving light-chain-only Dandelion groups a clone id (the manuscript's datasets were unaffected except one two-cell RBD group; four additional case studies were re-run without them), fixes the memory use of `tl.export_lag` and records the hash seed of clone calls; 4.4.0 adds `n_jobs` (same results on any number of cores), renames contig ids that repeat across libraries (Figure 4 unchanged, see 2.3-4) and is tested on Python 3.10–3.14 | Keep the sentence in Methods; archive the versions on Zenodo. |
 | 8 | **Clone calls depend on Python's hash seed** | Dandelion's clone assignment changes by a few clones between Python sessions unless `PYTHONHASHSEED` is fixed (GSE287123: 8,729–8,734 clones, 1,879–1,887 with ≥ 2 cells, from the same contigs). The manuscript's clone tables were computed once and are saved with the case-study results. | Deposit the clone tables on Zenodo with the processed data, and add one sentence to Methods (clone ids are provided; re-running Dandelion with `PYTHONHASHSEED=0` reproduces a table that differs by a handful of clones). |
-| 7 | Word count | main text 4,788 words, within the 5,000-word maximum but above the 3,000-word guideline | Optional trimming of the Discussion. |
+| 7 | Word count | main text 4,844 words after the 2026-10-23 edits, within the 5,000-word maximum but above the 3,000-word guideline | Optional trimming of the Discussion. |
 
 ---
 
@@ -126,7 +126,7 @@ was retired; its material is in [`analyses/lineage_barcode_systems/`](analyses/l
 | Clone identity explains state | ICC 0.12–0.74 vs 0.006–0.28 shuffled; P = 0.002 (500 permutations within samples) in 8 of 9 datasets; not significant in the 96-clone Smart-seq2 dataset (Supp. Table 2) | 9 datasets | the shuffled value shows how much sampling structure a naive test would call clonal |
 | Two-cell clones contribute | *Plasmodium*: 830/1,015 clones have two cells, ICC 0.451 vs 0.015 (Fig. 2C) | GSE286215 | stability of P3 0.28: a continuum region, not a group |
 | A clone property not visible on cells | P2 and P3 plasmablasts overlap on the cell embedding; P3 clones also contain GC cells (Fig. 2D) | GSE286215 | — |
-| State diversity orders clones | entropy vs clone axis ρ = −0.742 (322 clones); memory-containing clones 35.8 % → 2.5 % across quartiles; negative in 8/8 mice; same on profile axes, after rarefaction and size adjustment (Fig. 3a–f; Supp. Fig. 3) | GSE203132 | annotations are RNA-derived; P3/P4 split is post hoc; clones are heavy-chain clones (item 2.3-1) |
+| State diversity orders clones | entropy vs clone axis ρ = −0.742 (322 clones); memory-containing clones 35.8 % → 2.5 % across quartiles; negative in 8/8 mice; same on profile axes, after rarefaction and size adjustment (Fig. 3a–f; Supp. Fig. 3) | GSE203132 | annotations are RNA-derived; P3/P4 split is post hoc; clones are heavy-chain clones, and paired-chain clones give the same result (ρ −0.754, 8/8 mice; item 2.3-1) |
 | A GC → plasma-cell clonal path in the gut | bridging clones: 131/146 contain GC B and plasma cells, 128/146 span inductive sites and LP; isotype IgG1 → IgA along the path (measured in BCR); profiles associated with IgA (R² 0.18), IgG1 (0.08), LP (0.51), GC sort (0.067) (Fig. 3g–j; Supp. Fig. 4) | GSE284622 | a static arrangement, not a measured trajectory; the second plasma branch is one mouse (Supp. Fig. 5) |
 | Division history is written into clone profiles | excess R² 0.088 (1,887 clones); per cohort 0.092 and 0.069; cosine of division directions 0.89 vs −1 for a library effect; ρ > 0 in 10/10 mice (Fig. 4) | GSE287123 | bait and zone gates are library-confounded; bait is a gate, not affinity |
 
@@ -178,7 +178,9 @@ Notes on individual datasets:
 * **GSE195673** (human lymph node). The kernel profiles, clone embedding, programmes and associations use the
   1,243 clones with ≥ 10 cells; coherence uses all 11,141 clones with ≥ 2 cells; Harmony integration over
   participants (from the original study). The blood/lymph-node label is a library label.
-* **GSE203132** (spontaneous GCs). Heavy-chain clones only (see 2.3-1); states from marker-gene modules.
+* **GSE203132** (spontaneous GCs). Heavy-chain clones (the deposited AIRR table has no light chains); clones
+  re-defined on paired chains from the deposited contigs give the same result (see 2.3-1); states from
+  marker-gene modules.
 * **Additional datasets** (not in the manuscript): antigen-bait-sorted human B cells (GSE171703), influenza
   vaccination (GSE175522, heavy chain only, so its clones are not comparable with the paired datasets),
   influenza infection with haemagglutinin tetramers (GSE317692), tonsil (E-MTAB-9005), EBV-infected tonsil
@@ -236,14 +238,14 @@ The full write-up of each (question, data, method, result with numbers, caveats)
 | 13 | [Gut: all B cells and centring](analyses/gut_all_B_and_centring/README.md) | GSE284622 | the second plasma branch is one mouse; the GC → plasma path survives every centring | [`gut_all_B_and_centring/`](analyses/gut_all_B_and_centring) |
 | 14 | [Lineage-barcode and TCR data](analyses/lineage_barcode_systems/README.md) | LARRY, WATERMELON, NSCLC T cells | day-2 profiles predict day-6 fate (kernel vs centroid not significantly different); T-cell clones keep their state across therapy cycles | [`lineage_barcode_systems/`](analyses/lineage_barcode_systems) |
 | 15 | [Technical validation](analyses/technical_validation/README.md) | all | automatic clone-map settings (30/30 maps coherent); state-density model; runtimes; audits | [`technical_validation/`](analyses/technical_validation) |
-| 16 | [Negative results and corrected defects](analyses/negative_and_withdrawn_results.md) | — | three falsified predictions, two withdrawn headlines, fourteen fixed defects | — |
+| 16 | [Negative results and corrected defects](analyses/negative_and_withdrawn_results.md) | — | three falsified predictions, two withdrawn headlines, eighteen fixed defects | — |
 
 ### 5.3 Negative results and corrected defects
 
 What did **not** hold, and the defects found in our own code and estimators, are recorded in
 [`analyses/negative_and_withdrawn_results.md`](analyses/negative_and_withdrawn_results.md): the withdrawn
 "GC continuum" dichotomy, the withdrawn "cell state collapses" headline, three falsified frozen predictions,
-the artefactual 791-cell clone, the re-interpreted gut plasma branches, and fourteen code or estimator defects
+the artefactual 791-cell clone, the re-interpreted gut plasma branches, and eighteen code or estimator defects
 with their fixes.
 
 ---
@@ -253,14 +255,17 @@ with their fixes.
 The full benchmark — tools, versions, settings, fairness protocol, every result table and figure, and how to
 rerun it — is in [`benchmarking/README.md`](benchmarking/README.md). In brief:
 
-**What was compared.** Threadfin 4.3.1 against Clonotrace 1.2.1, clone2vec 0.1.1, Benisse 1.1.0, CoNGA's
+**What was compared.** Threadfin 4.3.1/4.4.0 against Clonotrace 1.2.1, clone2vec 0.1.1, Benisse 1.1.0, CoNGA's
 one-cell-per-clone reduction, scirpy's clonotype modularity and two simple baselines (mean of the cells'
 embedding coordinates; Leiden-cluster composition), on the nine B-cell datasets of the case studies plus
 LARRY lineage barcoding (Clonotrace's own tutorial data) and 12 simulated repertoires with a known answer.
 Every tool received the same embedding and clone ids and ran at its documented defaults, and again forced to
 clones of ≥ 2 cells. Readouts: coverage; recovery of measured clone annotations that no tool used (sort gates,
 isotype, mutation, tissue, later fate), with the same and with disjoint cells; split-half reproducibility;
-LARRY clone linking; simulation; calibration and power of clonal tests; runtime and memory.
+LARRY clone linking; simulation; calibration and power of clonal tests; runtime and memory per dataset, with
+1–16 cores and with growing data; runs that failed or were stopped; sensitivity of Threadfin to its settings;
+and a usability checklist. A one-page overview (benchmark Fig. 0) compares every tool with Threadfin on each
+of these, as better, no clear difference or worse.
 
 **What was found.**
 
@@ -271,7 +276,11 @@ LARRY clone linking; simulation; calibration and power of clonal tests; runtime 
 | Which representation recovers measured annotations best? | None uniformly. Against Threadfin on the same clones: clone2vec (forced) 6 better / 10 worse of 41 annotations, (default ≥ 3 cells) 10 / 7; plain mean 7 / 10; Clonotrace (forced, default distance) 1 / 8 of 30, (default ≥ 10 cells) 0 / 8 of 26; Benisse 3 / 22 of 31, winning only receptor-sequence annotations (bait binding, mutation, W33L). Threadfin's edge over the mean comes from centring on the donor. |
 | Are the clonal tests calibrated? | Threadfin's coherence test: 0–8 % false positives at α = 5 % with real sampling structure kept; scirpy (≥ 1 clone flagged): 100 % in 4 of 9 datasets; cell-level ANOVA: 86–100 %. |
 | Simulation with a known answer | clone2vec and cluster composition group clones by programme better than Threadfin, and separate "mixture" from "intermediate" clones better (AUROC 0.99 / 0.96 vs 0.88 with ≥ 10 cells; no method succeeds with two-cell clones). Centring removes an additive donor shift exactly but adds same-donor structure when donors differ in composition. |
-| Cost | Threadfin profiles 0.2–43 s, < 2.5 GB; clone2vec 0.5–11 min; Benisse up to 19 min and 32 GB; Clonotrace from a minute to more than a day (31 h for 6,174 LARRY clones on 6 workers; the 11,141-clone lymph-node run was stopped after 72 h). |
+| Cost | Threadfin profiles 0.2–43 s, < 2.5 GB, and the complete analysis 18 s–9.5 min; clone2vec 0.5–11 min (about 30 times Threadfin); Benisse up to 19 min and 32 GB; Clonotrace from a minute to more than a day (300–2,400 times Threadfin; 31 h for 6,174 LARRY clones on 6 workers; the 11,141-clone lymph-node run was stopped after 72 h). |
+| More cores, more data | 16 instead of 1 core: Threadfin's complete analysis 2.0 times faster (no gain beyond 8), clone2vec 1.2, Clonotrace 2.7 (from 4 to 16), Benisse 2.9 times *slower*. Ten times more clones: Threadfin's profiles 20 times longer, clone2vec 6, Clonotrace 110, Benisse 123 (and 35 GB at 5,570 clones). Threadfin and Clonotrace give identical results on any number of cores; clone2vec and Benisse differ slightly. |
+| Runs that finished | Threadfin, clone2vec forced to two-cell clones and the baselines: all 77 (full data and halves). clone2vec at its default: 65 of 77 (fails on small inputs with an internal error). Benisse: 26 of 27. Clonotrace: 45 of 50 without help (one stopped after 72 h, four needed a larger cell graph, one of them after failing at k = 10, 30 and 50). |
+| Sensitivity of Threadfin | unchanged by the number of random features, the seed, 5–30-cell smoothing or 50 principal components; a narrower kernel separates mixed from in-between clones better and a wider one worse; without smoothing measured annotations are recovered better but planted programmes worse. |
+| Ease of use (checklist) | Threadfin 11.5 of 13 (not on PyPI, not yet peer-reviewed); clone2vec 11 of 13; Clonotrace 10 of 13; Benisse and CoNGA 5.5; scirpy 11 of the 11 criteria assessed. |
 
 **What this means for the manuscript.**
 
@@ -284,8 +293,9 @@ LARRY clone linking; simulation; calibration and power of clonal tests; runtime 
    when forced.
 3. The donor-centring artefact seen in the gut data (Supp. Fig. 5) is reproduced in simulation; the Methods
    or Discussion should state that centring assumes donors differ by a shift, not by composition.
-4. Benchmark figures suitable for a supplementary figure: coverage (Fig. 1 of the benchmark), two-cell
-   clones (Fig. 4), test calibration (Fig. 5), simulation (Fig. 6).
+4. Benchmark figures suitable for a supplementary figure: the one-page overview (Fig. 0 of the benchmark),
+   coverage (Fig. 1), two-cell clones (Fig. 4), test calibration (Fig. 5), simulation (Fig. 6) and computing
+   resources (Figs. 11–12).
 
 ---
 
@@ -295,7 +305,8 @@ The model behind every step is described in [`../docs/METHODS.md`](../docs/METHO
 summaries). Conventions used throughout the manuscript:
 
 * **Clone definition.** Dandelion (sc-dandelion 0.5.7), paired heavy and light chains, within donors,
-  junction amino-acid identity ≥ 85 % (GSE203132: heavy chain only; GSE175522: heavy chain only).
+  junction amino-acid identity ≥ 85 % (GSE203132: heavy chain only, with a paired-chain sensitivity analysis;
+  GSE175522: heavy chain only).
 * **Embedding.** Library-size normalisation to 10,000, log1p, immunoglobulin and TCR genes removed,
   3,000 highly variable genes, scaling, 30 principal components; Harmony over participants for GSE195673 only.
 * **Profiles.** Kernel mean embeddings (256 random Fourier features, median-heuristic bandwidth, 15-neighbour
@@ -349,14 +360,15 @@ Listed by priority. "Before submission" items are also in section 2.3.
 
 ### A. Before submission
 
-1. **Correct or redo the GSE203132 clone definition** (2.3-1).
+1. ~~Correct or redo the GSE203132 clone definition~~ — done 2026-10-23: paired-chain clones give the same
+   result; one Methods sentence remains (2.3-1).
 2. **Bring the benchmark into the paper** (2.3-2): a supplementary figure with coverage of small clones,
    annotation recovery, split-half reproducibility, calibration of clone-level tests and runtime, and a revised
    Discussion sentence.
 3. **Deposit code and processed data on Zenodo** (clone tables, profiles, source data for every figure) and
    complete the reporting summary.
 4. **Approve the library-confound paragraph** for GSE287123 (2.3-3) and add the paired-chain completeness
-   sentence for RBD (2.3-4).
+   sentence for RBD (2.3-4; the sensitivity analysis is done).
 
 ### B. Strengthen the evidence
 
@@ -378,10 +390,10 @@ Listed by priority. "Before submission" items are also in section 2.3.
 
 ### C. Package
 
-11. **The default neighbour smoothing** (each cell averaged with its 15 nearest cells): in the benchmark,
-    profiles without smoothing recovered measured annotations better on 14 of 41 annotations and worse on 4
-    (isotype, mutation and bait binding blur most). Test a smaller neighbourhood or smoothing only for clones
-    below a size threshold. (Done in 4.3.1: `tl.export_lag` no longer runs out of memory on large data.)
+11. **The default neighbour smoothing** (each cell averaged with its 15 nearest cells): without smoothing,
+    measured annotations are recovered better (14 better, 1 worse of 35) but planted programmes worse in
+    simulation (benchmark section 6.10), so the default was kept. Smoothing only clones below a size
+    threshold remains worth testing.
 12. **Automatic choice of the sampling context**: warn when `sample_key` is confounded with an annotation
     passed in `test`.
 13. **Composition-balanced centring as an option** of `clone_profiles`, since it was needed to interpret the
@@ -411,6 +423,7 @@ Listed by priority. "Before submission" items are also in section 2.3.
 | 2026-10-18 | every sentence checked against saved results (9 corrections); package 4.3.0 (automatic clone-map settings); Results headings rewritten as claims |
 | 2026-10-19 | new Figure 4 (RBD division reporter, crossed libraries) |
 | 2026-10-20 | this folder: all analyses published, orphaned analyses re-run on current clones, end-to-end benchmark, beginner documentation and a tested end-to-end tutorial notebook; package 4.3.1 |
+| 2026-10-23 | package 4.4.0 (parallel `n_jobs` with identical results, contig-id fix, clearer errors, function reference, Python 3.10–3.14 and oldest dependencies tested); benchmark overview figure, computing-resource and sensitivity readouts, usability checklist; GSE203132 paired-chain and RBD complete-pair checks (Figures 3 and 4 unchanged) |
 
 ---
 

@@ -68,6 +68,12 @@ METHODS = {
     "benisse_min2": ("benisse_min2", "distances"),
     "benisse_min10": ("benisse_min10", "distances"),
 }
+# Threadfin's default profile with one setting changed at a time (run_threadfin.py SENSITIVITY)
+SENSITIVITY = ["threadfin_kernel_smooth5", "threadfin_kernel_smooth30", "threadfin_kernel_rff128",
+               "threadfin_kernel_rff512", "threadfin_kernel_rff1024", "threadfin_kernel_bw0.5", "threadfin_kernel_bw2",
+               "threadfin_kernel_pc10", "threadfin_kernel_pc50", "threadfin_kernel_seed1", "threadfin_kernel_seed2"]
+METHODS.update({m: (m, "features") for m in SENSITIVITY})
+SENS_SET = ["threadfin_kernel", "threadfin_kernel_nosmooth"] + SENSITIVITY
 # each tool at its own default minimum clone size ("native"), and every tool forced to two cells
 NATIVE = ["threadfin_kernel", "threadfin_mean", "clonotrace_revised_min10", "clonotrace_raw_min10",
           "clone2vec_min3", "benisse_min2", "benisse_min10", "mean_pca", "composition", "conga_medoid"]
@@ -216,7 +222,7 @@ def load_cells(dataset, variant="full"):
     d = INPUTS / dataset
     cells = pd.read_csv(d / "cells.tsv.gz", sep="\t", index_col=0, low_memory=False)
     cells.index = cells.index.astype(str)
-    if variant != "full":
+    if variant.startswith("half"):
         half, seed = variant[4], int(variant.split("_s")[1])
         split = pd.read_csv(d / f"split_seed{seed}.tsv.gz", sep="\t", index_col=0)["half"]
         split.index = split.index.astype(str)
@@ -509,17 +515,26 @@ def larry_linking_rows(sets):
         q = pd.Index([c for c in d4 if bc[c] in partners])
         if len(q) < 10:
             continue
+        ranks = {}
         for m, rep in reps.items():
             D = rep.sub_distance(q.append(d6))
             dq = D[: len(q), len(q):]
             target = np.array([d6.get_loc(f"{bc[c]}|d6") for c in q])
             own = dq[np.arange(len(q)), target]
-            rank = (dq < own[:, None]).sum(1) + 1
+            ranks[m] = rank = (dq < own[:, None]).sum(1) + 1
             rows.append({"dataset": "larry_d46", "set": set_name, "method": m, "n_query_clones": len(q),
                          "n_candidate_day6_clones": len(d6), "top1": float(np.mean(rank == 1)),
                          "top10": float(np.mean(rank <= 10)), "mrr": float(np.mean(1 / rank)),
                          "median_rank": float(np.median(rank)), "chance_top1": 1 / len(d6),
                          "median_rank_chance": (len(d6) + 1) / 2})
+        # paired bootstrap over query clones: reciprocal rank of the method minus that of Threadfin
+        if "threadfin_kernel" in ranks:
+            boot = np.random.default_rng(0).integers(0, len(q), size=(2000, len(q)))
+            for row in rows[-len(ranks):]:
+                d = 1 / ranks[row["method"]] - 1 / ranks["threadfin_kernel"]
+                lo, hi = np.percentile(d[boot].mean(axis=1), [2.5, 97.5])
+                row.update({"mrr_delta_vs_threadfin": float(d.mean()), "mrr_delta_ci_low": float(lo),
+                            "mrr_delta_ci_high": float(hi)})
     return rows
 
 
@@ -591,7 +606,19 @@ def coverage_rows(datasets):
             # Threadfin and the baselines run in one process per dataset; their own stage times are in run.json
             wall, rss = time_file(RUNS / ds / "full" / METHODS[m][0] / "time.txt")
             if info.get("status") == "missing":
-                info = {"status": "not run", "reason": not_run_reason(ds, m, sizes)}
+                # a run that had to be stopped is kept next to its rerun as <sub>_..._stopped...
+                stopped = sorted((RUNS / ds / "full").glob(f"{METHODS[m][0]}_*stopped*/run.json"))
+                if stopped:
+                    info = json.loads(stopped[-1].read_text())
+                    wall, rss = time_file(stopped[-1].parent / "time.txt")
+                    if (RUNS / ds / "full" / METHODS[m][0]).is_dir():
+                        info["reason"] += " A rerun with more workers was still running when this table was made."
+                else:
+                    info = {"status": "not run", "reason": not_run_reason(ds, m, sizes)}
+            elif info.get("graph_k_failed_attempts"):
+                tried = ", ".join(a.split(":")[0] for a in info["graph_k_failed_attempts"])
+                info["reason"] = (f"completed only with graph_k={info['graph_k_used']}: the default and the next settings "
+                                  f"({tried}) gave a cell graph whose clone-bearing parts were disconnected")
             rows.append({"dataset": ds, "method": m, "status": info.get("status"), "reason": info.get("reason", ""),
                          "n_clones_represented": n, "n_clones_ge2": int((sizes >= 2).sum()),
                          "n_clones_ge10": int((sizes >= 10).sum()),
@@ -608,6 +635,117 @@ def coverage_rows(datasets):
     return rows
 
 
+PROFILE = RUNS.parent / "profile_run"           # make_resource_jobs.py / profile_threadfin_run.py outputs
+RESOURCE_TOOLS = {"clone2vec_min2": "clone2vec_min2", "clonotrace_revised_min2": "clonotrace_min2",
+                  "benisse_min2": "benisse_min2"}
+CORES = (1, 2, 4, 8, 16)
+
+
+def resource_rows():
+    """Time and memory with 1-16 cores (GSE287123 RBD) and on 5-50 % subsets of GSE195673 (8 cores), and whether
+    each tool gives the same result with any number of cores."""
+    rows = []
+    plan = [("cores", "mouse_rbd", f"full_w{n}", n) for n in CORES]
+    plan += [("size", f"ln_vaccine_f{f}", "full", 8) for f in ("0.05", "0.1", "0.25", "0.5")]
+    for exp, ds, variant, cores in plan:
+        if not (INPUTS / ds).is_dir():
+            continue
+        n2 = int((clone_sizes(load_cells(ds)) >= 2).sum())
+        base = {"experiment": exp, "dataset": ds, "cores": cores, "n_clones_ge2": n2}
+        prof = PROFILE / f"{ds}_{variant if exp == 'cores' else 'full_w8'}.json"
+        if prof.exists():                       # the complete Threadfin analysis, step by step
+            r = json.loads(prof.read_text())
+            rows.append({**base, "tool": "threadfin_run", "status": "completed", "seconds": r["total_seconds"],
+                         "peak_rss_gb": r["peak_rss_gb"],
+                         "stages": json.dumps({k: v["seconds"] for k, v in r["steps"].items()})})
+        if exp == "size":                       # Threadfin's clone representation alone, as timed for the others
+            info = run_info(ds, "full", "threadfin_kernel")
+            if info.get("status") == "completed":
+                rows.append({**base, "tool": "threadfin_kernel", "status": "completed",
+                             "seconds": float(sum(info["seconds"].values())), "peak_rss_gb": info.get("peak_rss_gb_self"),
+                             "stages": json.dumps(info["seconds"])})
+        for m, sub in RESOURCE_TOOLS.items():
+            d = RUNS / ds / variant / sub
+            if not (d / "run.json").exists():
+                if (d / "time.txt").exists():
+                    rows.append({**base, "tool": m, "status": "running or killed"})
+                continue
+            info = json.loads((d / "run.json").read_text())
+            wall, rss = time_file(d / "time.txt")
+            rows.append({**base, "tool": m, "status": info.get("status"), "seconds": wall, "peak_rss_gb": rss,
+                         "stages": json.dumps(info.get("seconds", {}))})
+    repro = []
+    for m in RESOURCE_TOOLS:
+        reps = {f"full_w{n}": load_rep("mouse_rbd", f"full_w{n}", m) for n in CORES}
+        reps = {v: r for v, r in reps.items() if r is not None}
+        if len(reps) < 2:
+            continue
+        ref_v = next(iter(reps))
+        ref = reps[ref_v]
+        for v, r in reps.items():
+            if v == ref_v:
+                continue
+            common = ref.clones.intersection(r.clones)
+            a, b = ref.sub_distance(common), r.sub_distance(common)
+            iu = np.triu_indices(len(common), 1)
+            repro.append({"tool": m, "reference_cores": int(ref_v.split("_w")[1]), "cores": int(v.split("_w")[1]),
+                          "n_clones": len(common), "same_clones": len(common) == len(ref.clones) == len(r.clones),
+                          "identical": bool(np.array_equal(a, b)), "max_abs_difference": float(np.abs(a - b).max()),
+                          "distance_spearman": float(stats.spearmanr(a[iu], b[iu]).statistic)})
+    for ds in ("mouse_np", "mouse_rbd"):        # Threadfin: verify_identical.py, released 4.3.1 vs n_jobs 1 and 8
+        files = {k: PROFILE / f"verify_{ds}_{k}.json" for k in ("head", "new1", "new8")}
+        if all(f.exists() for f in files.values()):
+            r = {k: json.loads(f.read_text()) for k, f in files.items()}
+            for k in ("new1", "new8"):
+                same = (r[k]["labels"] == r["head"]["labels"] and r[k]["programmes"] == r["head"]["programmes"]
+                        and r[k]["xy_sum"] == r["head"]["xy_sum"])
+                repro.append({"tool": "threadfin_run", "dataset": ds, "reference_cores": 1, "cores": int(k[-1]),
+                              "identical": bool(same), "note": "clone map and programmes vs released 4.3.1"})
+    return rows, repro
+
+
+def full_run_rows(datasets):
+    """The complete Threadfin analysis (profile_threadfin_run.py: profiles, coherence test, tuned clone map,
+    programmes, one label test) on every dataset, with the released 4.3.1 in one process."""
+    rows = []
+    for ds in datasets:
+        f = PROFILE / f"{ds}_v431_seq.json"
+        if not f.exists():
+            continue
+        r = json.loads(f.read_text())
+        rows.append({"dataset": ds, "threadfin": r["threadfin"], "n_cells": r["n_cells"], "n_clones_ge2": r["n_clones_ge2"],
+                     **{f"seconds_{k}": v["seconds"] for k, v in r["steps"].items()},
+                     "total_seconds": r["total_seconds"], "peak_rss_gb": r["peak_rss_gb"]})
+    return rows
+
+
+def run_status_rows(datasets):
+    """Every run of every tool on the full data and on the disjoint halves: did it finish, and with which settings."""
+    rows = []
+    for ds in datasets:
+        for vdir in sorted(p for p in (RUNS / ds).iterdir() if p.is_dir()):
+            variant = vdir.name
+            if not (variant == "full" or variant.startswith("half")):
+                continue
+            for sub in sorted(set(s for s, _ in METHODS.values()) | {"clonotrace_min10", "clonotrace_min2"}):
+                d = vdir / sub
+                stopped = sorted(vdir.glob(f"{sub}_*stopped*/run.json"))
+                if (d / "run.json").exists():
+                    info = json.loads((d / "run.json").read_text())
+                elif stopped:
+                    info = json.loads(stopped[-1].read_text())
+                    if d.is_dir():
+                        info["reason"] += " A rerun with more workers was still running when this table was made."
+                else:
+                    continue
+                rows.append({"dataset": ds, "variant": variant, "tool_run": sub, "status": info.get("status"),
+                             "graph_k_used": info.get("graph_k_used"),
+                             "graph_k_failed_attempts": len(info.get("graph_k_failed_attempts", [])),
+                             "seconds": float(sum(info.get("seconds", {}).values())) if info.get("seconds") else None,
+                             "reason": str(info.get("reason", ""))[:300]})
+    return rows
+
+
 REAL = ["gut_gc_reporter", "mouse_rbd", "mouse_np", "malaria_late", "malaria", "ln_vaccine", "spont_gc", "gc_np_pc",
         "covid_bcell"]
 SIMS = [f"sim_{r}_b{b}_s{s}" for r in ("small", "large") for b in ("0", "1.5") for s in (1, 2, 3)]
@@ -615,7 +753,7 @@ SETS_FULL = [("native: clones >= 10 cells", NATIVE, 10), ("forced: clones >= 2 c
              ("ablation: clones >= 2 cells", ABLATION, 2), ("clone2vec default: clones >= 3 cells",
                                                             ["threadfin_kernel", "clone2vec_min3", "mean_pca"], 3)]
 SETS_HALF = [("forced: >= 2 cells per half", ALL2, 2), ("native: >= 10 cells per half", NATIVE, 10),
-             ("ablation: >= 2 cells per half", ABLATION, 2)]
+             ("ablation: >= 2 cells per half", ABLATION, 2), ("sensitivity: >= 2 cells per half", SENS_SET, 2)]
 
 
 def save(rows, name):
@@ -629,6 +767,13 @@ def save(rows, name):
 def main(what):
     if what in ("coverage", "all"):
         save(coverage_rows(REAL + ["larry_d2", "larry_d46"] + SIMS), "coverage_runtime")
+    if what in ("status", "coverage", "all"):
+        save(run_status_rows(REAL + ["larry_d2", "larry_d46"]), "run_status")
+    if what in ("resources", "all"):
+        rows, repro = resource_rows()
+        save(rows, "resources")
+        save(repro, "resources_reproducibility")
+        save(full_run_rows(REAL + ["larry_d2", "larry_d46"]), "threadfin_full_run")
     if what in ("annotation", "all"):
         save([r for ds in REAL + ["larry_d2"] for r in annotation_rows(ds, SETS_FULL)], "annotation_recovery")
     if what in ("pairwise", "all"):
@@ -644,7 +789,8 @@ def main(what):
              "larry_clone_linking")
     if what in ("simulation", "all"):
         save(simulation_rows(SIMS, [("native: clones >= 10 cells", NATIVE, 10), ("forced: clones >= 2 cells", ALL2, 2),
-                                    ("ablation: clones >= 2 cells", ABLATION, 2)]), "simulation")
+                                    ("ablation: clones >= 2 cells", ABLATION, 2),
+                                    ("sensitivity: clones >= 2 cells", SENS_SET, 2)]), "simulation")
 
 
 if __name__ == "__main__":

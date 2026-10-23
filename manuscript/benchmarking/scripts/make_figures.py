@@ -19,6 +19,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.ticker  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
@@ -495,50 +496,270 @@ def larry_figure():
 
 # --------------------------------------------------------------------------- 11. runtime and memory
 
+RES_PANELS = [("clone2vec_min3", "clone2vec\n(default, ≥ 3 cells)", C2V), ("clone2vec_min2", "clone2vec\n(forced to ≥ 2 cells)", C2V),
+              ("clonotrace_revised_min10", "Clonotrace\n(default, ≥ 10 cells)", CT),
+              ("clonotrace_revised_min2", "Clonotrace\n(forced to ≥ 2 cells)", CT), ("benisse", "Benisse\n(≥ 2 cells)", BN)]
+# the core-count and data-size experiments ran each program once; the default and forced settings share it
+SAME_PROGRAM = {"clone2vec_min3": "clone2vec_min2", "clone2vec_min2": "clone2vec_min2",
+                "clonotrace_revised_min10": "clonotrace_revised_min2", "clonotrace_revised_min2": "clonotrace_revised_min2",
+                "benisse": "benisse_min2"}
+STOP_SECONDS = 72 * 3600
+
+
+def _run(sub, key):
+    if key == "benisse":
+        r = sub.loc["benisse_min2"]
+        return sub.loc["benisse_min10"] if r["status"] != "completed" and sub.loc["benisse_min10", "status"] == "completed" else r
+    return sub.loc[key]
+
+
+def _not_run_note(r):
+    reason = str(r["reason"])
+    return ("stopped at 72 h" if r["status"] == "stopped" else "failed" if r["status"] == "failed" else
+            "no BCR" if "receptor" in reason else "< 3 clones ≥ 10 cells" if "fewer than 3" in reason else "not run")
+
+
+def resource_rows():
+    """Rows of the computing-resource figure: (block, label, {panel: (ratio, note, hollow)})."""
+    cov, res = read("coverage_runtime.csv"), read("resources.csv")
+    cov = cov[cov["dataset"].isin(ORDER)]
+    out = []
+    for block, what in (("Run time on each dataset (4 cores)", "time"), ("Peak memory on each dataset", "memory")):
+        for ds in ORDER:
+            sub = cov[cov["dataset"] == ds].set_index("method")
+            if sub.empty:
+                continue
+            tf = sub.loc["threadfin_kernel"]
+            cells = {}
+            for key, *_ in RES_PANELS:
+                r = _run(sub, key)
+                hollow = key.startswith("clonotrace") and r.get("distance_workers") == 1
+                if r["status"] == "completed":
+                    if what == "time":
+                        v = (r["seconds_method"] if pd.notna(r["seconds_method"]) else r["wall_seconds_task"]) / tf["seconds_method"]
+                    else:
+                        v = r["peak_rss_gb_task"] / tf["peak_rss_gb_method"]
+                    note = "≥ 10 cells" if r.name == "benisse_min10" else ""
+                    cells[key] = (float(v), note, hollow)
+                elif r["status"] == "stopped" and what == "time":
+                    cells[key] = (STOP_SECONDS / tf["seconds_method"], "stopped at 72 h", False)
+                else:
+                    cells[key] = (np.nan, _not_run_note(r), False)
+            out.append((block, DATASET[ds], cells))
+    if res is not None:
+        c = res[res["experiment"].eq("cores")]
+        for n in sorted(c["cores"].unique()):
+            at = c[c["cores"].eq(n)].set_index("tool")
+            if "threadfin_run" not in at.index:
+                continue
+            cells = {}
+            for key, *_ in RES_PANELS:
+                t = SAME_PROGRAM[key]
+                if t in at.index and at.loc[t, "status"] == "completed":
+                    cells[key] = (float(at.loc[t, "seconds"] / at.loc["threadfin_run", "seconds"]), "", False)
+                else:
+                    planned = n in ((1, 4, 16) if t == "benisse_min2" else (1, 2, 4, 8, 16))
+                    cells[key] = (np.nan, "running" if t in at.index else "pending" if planned else "not planned", False)
+            out.append(("Run time with 1 to 16 cores (GSE287123 RBD; Threadfin: its complete analysis)",
+                        f"{n} core" + ("s" if n > 1 else ""), cells))
+        g = res[res["experiment"].eq("size")]
+        for ds in sorted(g["dataset"].unique(), key=lambda d: float(d.split("_f")[1])):
+            at = g[g["dataset"].eq(ds)].set_index("tool")
+            if "threadfin_kernel" not in at.index:
+                continue
+            cells = {}
+            for key, *_ in RES_PANELS:
+                t = SAME_PROGRAM[key]
+                if t in at.index and at.loc[t, "status"] == "completed":
+                    cells[key] = (float(at.loc[t, "seconds"] / at.loc["threadfin_kernel", "seconds"]), "", False)
+                else:
+                    cells[key] = (np.nan, "running" if t in at.index else "not run", False)
+            frac = float(ds.split("_f")[1])
+            out.append(("Run time as the data grow (random subsets of GSE195673, 8 cores)",
+                        f"{int(at['n_clones_ge2'].iloc[0]):,} clones ({100 * frac:g} %)", cells))
+    return out
+
+
 def runtime_figure():
-    cov = read("coverage_runtime.csv")
-    if cov is None:
+    if read("coverage_runtime.csv") is None:
         return
-    tools = ["threadfin_kernel", "clone2vec_min3", "clone2vec_min2", "clonotrace_revised_min10", "clonotrace_revised_min2",
-             "benisse_min2", "benisse_min10"]
-    cov = cov[cov["dataset"].isin(ORDER) & cov["method"].isin(tools) & cov["status"].eq("completed")].copy()
-    rows = [d for d in ORDER if d in set(cov["dataset"])]
-    # one marker per tool and setting (default and forced settings of a tool share its colour)
-    markers = {"threadfin_kernel": "o", "clone2vec_min3": "s", "clone2vec_min2": "P", "clonotrace_revised_min10": "^",
-               "clonotrace_revised_min2": "v", "benisse_min2": "D", "benisse_min10": "X"}
-    fig, axes = plt.subplots(1, 2, figsize=(12.5, 0.4 * len(rows) + 2.2), sharey=True, layout="constrained")
-    for ax, col, xl in [(axes[0], "seconds_method", "time to compute the clone representation (seconds, log scale)"),
-                        (axes[1], "peak_gb", "peak memory (GB, log scale)")]:
-        for k, m in enumerate(tools):
-            s = cov[cov["method"] == m]
+    rows = resource_rows()
+    blocks = list(dict.fromkeys(b for b, *_ in rows))
+    ypos, labels, y = [], [], 0
+    heads = []
+    for b in blocks:
+        heads.append((y, b))
+        y += 1
+        for blk, lab, cells in rows:
+            if blk == b:
+                ypos.append(y)
+                labels.append(lab)
+                y += 1
+        y += 0.4
+    fig, axes = plt.subplots(1, len(RES_PANELS), figsize=(14.5, 0.25 * y + 2.4), sharey=True, layout="constrained")
+    lo, hi = 0.05, 3e5
+    for ax, (key, title, col) in zip(axes, RES_PANELS):
+        counts = {b: [0, 0, 0] for b in blocks}             # faster, slower, missing
+        for (blk, lab, cells), yy in zip(rows, ypos):
+            v, note, hollow = cells[key]
+            if np.isfinite(v):
+                ax.scatter([min(max(v, lo), hi)], [yy], s=30, zorder=3, color=SURFACE if hollow else col,
+                           edgecolor=col, linewidth=1.2)
+                if note:
+                    ax.text(min(v, hi) * 1.6, yy, note, fontsize=6.2, color=INK2, va="center")
+                if note.startswith("stopped"):
+                    ax.annotate("", xy=(min(v, hi) * 1.5, yy), xytext=(min(v, hi), yy),
+                                arrowprops=dict(arrowstyle="->", color=col, lw=1))
+                counts[blk][0 if v < 1 / 1.25 else 1 if v > 1.25 else 2] += 0 if 1 / 1.25 <= v <= 1.25 else 1
+            else:
+                ax.text(np.sqrt(lo * hi), yy, note, fontsize=6.3,
+                        color=MUTED if note in ("not run", "no BCR", "not planned", "pending", "running") else "#c2511f",
+                        va="center", ha="center", style="italic")
+                if note not in ("no BCR", "< 3 clones ≥ 10 cells", "not run", "running", "pending", "not planned"):
+                    counts[blk][2] += 1
+        ax.axvline(1, color=INK2, lw=0.9)
+        ax.set_xscale("log")
+        ax.set_xlim(lo, hi)
+        ax.set_title(title, fontsize=8.2)
+        ax.grid(axis="y", visible=False)
+        ax.text(0.75, -0.55, "← less", fontsize=6.6, color=INK2, ha="right", va="center")
+        ax.text(1.35, -0.55, "more →", fontsize=6.6, color=INK2, ha="left", va="center")
+        foot = []
+        for b, short in zip(blocks, ("time", "memory", "1-16 cores", "data size")):
+            f, sl, miss = counts[b]
+            foot.append(f"{short}: {'less' if short == 'memory' else 'faster'} {f}, {'more' if short == 'memory' else 'slower'} {sl}"
+                        + (f", failed or stopped {miss}" if miss else ""))
+        ax.set_xlabel("times Threadfin (log scale)\n\n" + "\n".join(foot), fontsize=7)
+    axes[0].set_yticks(ypos, labels, fontsize=7)
+    for yy, b in heads:
+        axes[0].text(-0.02, yy, b, transform=axes[0].get_yaxis_transform(), ha="right", va="center", fontsize=7.6,
+                     fontweight="bold")
+    axes[0].set_ylim(y - 0.4, -1.4)
+    fig.suptitle("Computing resources, each tool relative to Threadfin: time and memory per dataset, gain from more "
+                 "cores and growth with the data (1 = same as Threadfin)", x=0.01, ha="left", fontsize=9.5,
+                 fontweight="bold")
+    fig.text(0.01, -0.01, "Hollow: Clonotrace runs whose clone distances used one R session (slower than its parallel "
+             "plan). Counts at the bottom: differences of less than 25 % are not counted. Clonotrace's run on the "
+             "11,141 GSE195673 clones was stopped after 72 h; the arrow marks a lower bound.", fontsize=7, color=INK2)
+    save(fig, "fig11_runtime_memory.png")
+
+
+def scaling_figure():
+    """Absolute numbers behind fig11: speed-up with cores, time and memory against the number of clones, and
+    where the time of the complete Threadfin analysis goes."""
+    res = read("resources.csv")
+    if res is None:
+        return
+    tools = [("threadfin_run", "Threadfin, complete analysis", TF, "o", "-"),
+             ("threadfin_kernel", "Threadfin, clone profiles only", TF, "o", "--"),
+             ("clone2vec_min2", "clone2vec", C2V, "s", "-"), ("clonotrace_revised_min2", "Clonotrace", CT, "v", "-"),
+             ("benisse_min2", "Benisse", BN, "D", "-")]
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 3.9), layout="constrained")
+    c = res[res["experiment"].eq("cores") & res["status"].eq("completed")]
+    ax = axes[0]
+    for t, lab, col, mk, ls in tools:
+        s = c[c["tool"].eq(t)].sort_values("cores")
+        if len(s) < 2:
+            continue
+        base = s.iloc[0]
+        ax.plot(s["cores"], base["seconds"] / s["seconds"], marker=mk, color=col, ls=ls, label=lab + (
+            f" (vs {int(base['cores'])} cores)" if base["cores"] != 1 else ""))
+    ax.plot([1, 16], [1, 16], color=MUTED, lw=0.8, ls=":", label="perfect scaling")
+    ax.set_xscale("log", base=2)
+    ax.set_yscale("log", base=2)
+    ax.set_xticks([1, 2, 4, 8, 16], ["1", "2", "4", "8", "16"])
+    ax.set_yticks([0.25, 0.5, 1, 2, 4, 8, 16], ["¼", "½", "1", "2", "4", "8", "16"])
+    ax.set_xlabel("CPU cores")
+    ax.set_ylabel("speed-up over the fewest cores")
+    ax.set_title("a  More cores (GSE287123 RBD, 1,887 clones)", loc="left", fontsize=8.5)
+    ax.legend(fontsize=6.5)
+    g = res[res["experiment"].eq("size") & res["status"].eq("completed")]
+    for ax, col_name, ylab, title in ((axes[1], "seconds", "seconds (log scale)", "b  Time as the data grow"),
+                                      (axes[2], "peak_rss_gb", "peak memory, GB (log scale)", "c  Memory as the data grow")):
+        for t, lab, col, mk, ls in tools:
+            s = g[g["tool"].eq(t)].sort_values("n_clones_ge2")
             if s.empty:
                 continue
-            if col == "peak_gb":
-                # Threadfin's methods share one process, so its own peak is read in-process; the other tools run
-                # in their own process tree, whose largest process /usr/bin/time records
-                vals = s["peak_rss_gb_method"] if m == "threadfin_kernel" else s["peak_rss_gb_task"].fillna(s["peak_rss_gb_method"])
-            else:
-                vals = s["seconds_method"].fillna(s["wall_seconds_task"])
-            ys = [rows.index(d) + (k - 3) * 0.1 for d in s["dataset"]]
-            single = s["distance_workers"].fillna(4).eq(1).to_numpy() if m.startswith("clonotrace") else np.zeros(len(s), bool)
-            ax.scatter(vals[~single], np.array(ys)[~single], marker=markers[m], s=26, color=colour(m),
-                       edgecolor=SURFACE, linewidth=0.8, zorder=3, label=name(m))
-            if single.any():
-                ax.scatter(vals[single], np.array(ys)[single], marker=markers[m], s=26, facecolor=SURFACE,
-                           edgecolor=colour(m), linewidth=1.1, zorder=3)
+            ax.plot(s["n_clones_ge2"], s[col_name], marker=mk, color=col, ls=ls, label=lab)
         ax.set_xscale("log")
-        ax.set_xlabel(xl)
+        ax.set_yscale("log")
+        ax.set_xticks([500, 1000, 2000, 5000], ["500", "1,000", "2,000", "5,000"])
+        ax.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        ax.set_xlabel("clones with ≥ 2 cells (random subsets of GSE195673, 8 cores)")
+        ax.set_ylabel(ylab)
+        ax.set_title(title, loc="left", fontsize=8.5)
+    axes[1].legend(fontsize=6.5)
+    fig.suptitle("Scaling: how the tools use more cores and how their cost grows with the number of clones",
+                 x=0.01, ha="left", fontsize=9.5, fontweight="bold")
+    save(fig, "fig12_scaling.png")
+
+
+SENS = [("threadfin_kernel_rff128", "128 random features (default 256)"),
+        ("threadfin_kernel_rff512", "512 random features"), ("threadfin_kernel_rff1024", "1,024 random features"),
+        ("threadfin_kernel_bw0.5", "bandwidth × 0.5 (default: median distance)"), ("threadfin_kernel_bw2", "bandwidth × 2"),
+        ("threadfin_kernel_smooth5", "smoothing over 5 cells (default 15)"),
+        ("threadfin_kernel_smooth30", "smoothing over 30 cells"), ("threadfin_kernel_nosmooth", "no smoothing"),
+        ("threadfin_kernel_pc10", "10 principal components (default 30)"), ("threadfin_kernel_pc50", "50 principal components"),
+        ("threadfin_kernel_seed1", "random seed 1 (default 0)"), ("threadfin_kernel_seed2", "random seed 2")]
+
+
+def sensitivity_figure():
+    """How much do Threadfin's results move when its settings change?"""
+    pw, rep, sim = read("annotation_pairwise.csv"), read("split_half_reproducibility.csv"), read("simulation.csv")
+    if pw is None or rep is None or sim is None:
+        return
+    keys = [k for k, _ in SENS]
+    fig, axes = plt.subplots(1, 4, figsize=(15, 0.36 * len(SENS) + 2.0), sharey=True, layout="constrained",
+                             gridspec_kw={"width_ratios": [1.3, 1, 1, 1]})
+    y = {k: i for i, k in enumerate(keys)}
+    a = pw[pw["method"].isin(keys) & (pw["tag"] != "rna")]
+    ax = axes[0]
+    for k in keys:
+        d = a[a["method"].eq(k)]
+        jitter = np.random.default_rng(0).uniform(-0.18, 0.18, len(d))
+        sig = (d["delta_ci_low"] > 0) | (d["delta_ci_high"] < 0)
+        ax.scatter(d["delta_method_minus_reference"], y[k] + jitter, s=9, color=np.where(sig, TF, "#b9c9de"), lw=0, zorder=2)
+        ax.plot([d["delta_method_minus_reference"].median()] * 2, [y[k] - 0.3, y[k] + 0.3], color=INK, lw=1.6, zorder=3)
+        ax.text(0.205, y[k], f"{int((d['delta_ci_low'] > 0).sum())} ▲  {int((d['delta_ci_high'] < 0).sum())} ▼",
+                fontsize=6.6, va="center", color=INK2)
+    ax.axvline(0, color=INK2, lw=0.8)
+    ax.set_xlim(-0.2, 0.26)
+    ax.set_xlabel("R² of the setting − R² of the default, per measured annotation\n(dark: 95 % interval excludes 0; "
+                  "bar: median; ▲ ▼ annotations better / worse)")
+    ax.set_title("a  Recovering measured annotations (35)", loc="left", fontsize=8.5)
+    r = rep[rep["set"].str.startswith("sensitivity")].groupby(["dataset", "method"])["reid_top1"].mean().unstack()
+    ax = axes[1]
+    for k in keys:
+        if k not in r:
+            continue
+        d = (r[k] - r["threadfin_kernel"]).dropna()
+        ax.scatter(100 * d, [y[k]] * len(d), s=12, color=TF, alpha=0.7, lw=0)
+        ax.plot([100 * d.median()] * 2, [y[k] - 0.3, y[k] + 0.3], color=INK, lw=1.6)
+    ax.axvline(0, color=INK2, lw=0.8)
+    ax.set_xlabel("re-identified clones, percentage points\n(setting − default; one dot per dataset)")
+    ax.set_title("b  Recognising a clone from other cells", loc="left", fontsize=8.5)
+    ss = sim[sim["set"].str.startswith("sensitivity")]
+    for ax, col, title in ((axes[2], "programme_purity", "c  Simulation: planted clone groups"),
+                           (axes[3], "mixture_vs_intermediate_auroc", "d  Simulation: mixed vs in-between")):
+        sub = ss if col == "programme_purity" else ss[ss["regime"].eq("large")]
+        m = sub.pivot_table(index="dataset", columns="method", values=col, aggfunc="first")
+        for k in keys:
+            if k not in m:
+                continue
+            d = (m[k] - m["threadfin_kernel"]).dropna()
+            ax.scatter(d, [y[k]] * len(d), s=12, color=TF, alpha=0.7, lw=0)
+            ax.plot([d.median()] * 2, [y[k] - 0.3, y[k] + 0.3], color=INK, lw=1.6)
+        ax.axvline(0, color=INK2, lw=0.8)
+        ax.set_xlabel(("purity" if col == "programme_purity" else "AUROC") + " of the setting − default\n"
+                      "(one dot per simulated dataset" + ("" if col == "programme_purity" else ", clones ≥ 10 cells") + ")")
+        ax.set_title(title, loc="left", fontsize=8.5)
+    axes[0].set_yticks(range(len(keys)), [lab for _, lab in SENS])
+    axes[0].set_ylim(len(keys) - 0.5, -0.6)
+    for ax in axes:
         ax.grid(axis="y", visible=False)
-    axes[0].set_yticks(range(len(rows)), [DATASET[d] for d in rows])
-    axes[0].set_ylim(len(rows) - 0.5, -0.5)
-    handles = [Line2D([], [], marker=markers[m], ls="", color=colour(m), label=name(m)) for m in tools
-               if m in set(cov["method"])]
-    handles.append(Line2D([], [], marker="v", ls="", mfc=SURFACE, mec=CT,
-                          label="hollow: Clonotrace with clone distances on 1 process"))
-    fig.legend(handles=handles, loc="outside lower center", ncol=4, fontsize=7)
-    fig.suptitle("Cost: time and memory per dataset (4 CPU threads per tool; the full Threadfin analysis, with tests "
-                 "and the clone map, is timed separately in the text)", x=0.01, ha="left", fontsize=9.5, fontweight="bold")
-    save(fig, "fig11_runtime_memory.png")
+    fig.suptitle("Sensitivity of Threadfin to its settings: each setting changed alone, everything else at the default",
+                 x=0.01, ha="left", fontsize=9.5, fontweight="bold")
+    save(fig, "fig13_sensitivity.png")
 
 
 def main():
@@ -549,6 +770,8 @@ def main():
     halves_figures()
     larry_figure()
     runtime_figure()
+    scaling_figure()
+    sensitivity_figure()
 
 
 if __name__ == "__main__":

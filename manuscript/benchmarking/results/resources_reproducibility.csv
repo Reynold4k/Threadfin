@@ -1,0 +1,13 @@
+tool,reference_cores,cores,n_clones,same_clones,identical,max_abs_difference,distance_spearman,dataset,note
+clone2vec_min2,1,2,1887.0,True,False,0.2551482755984438,0.9999577467122359,,
+clone2vec_min2,1,4,1887.0,True,False,0.3203771043497907,0.9999532661775308,,
+clone2vec_min2,1,8,1887.0,True,False,0.31990249382210223,0.9999447556882627,,
+clone2vec_min2,1,16,1887.0,True,False,0.5033231804034455,0.9999137621015628,,
+clonotrace_revised_min2,4,8,1173.0,True,True,0.0,1.0,,
+clonotrace_revised_min2,4,16,1173.0,True,True,0.0,1.0,,
+benisse_min2,1,4,1887.0,True,False,0.0077724456787109375,0.9999999818200357,,
+benisse_min2,1,16,1887.0,True,False,0.00930929183959961,0.9999999830918367,,
+threadfin_run,1,1,,,True,,,mouse_np,clone map and programmes vs released 4.3.1
+threadfin_run,1,8,,,True,,,mouse_np,clone map and programmes vs released 4.3.1
+threadfin_run,1,1,,,True,,,mouse_rbd,clone map and programmes vs released 4.3.1
+threadfin_run,1,8,,,True,,,mouse_rbd,clone map and programmes vs released 4.3.1

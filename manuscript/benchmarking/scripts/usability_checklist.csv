@@ -1,0 +1,79 @@
+group,criterion,tool,score,evidence
+Get it,Open-source licence,Threadfin,1,MIT (LICENSE)
+Get it,Open-source licence,Clonotrace,1,MIT + file LICENSE (DESCRIPTION)
+Get it,Open-source licence,clone2vec,1,MIT (file named LISENCE in the repository)
+Get it,Open-source licence,Benisse,1,MIT (LICENSE)
+Get it,Open-source licence,CoNGA,1,MIT (LICENSE)
+Get it,Open-source licence,scirpy,1,BSD-3-Clause (LICENSE)
+Get it,Numbered releases,Threadfin,1,tagged GitHub release v4.4.0 and CHANGELOG.md
+Get it,Numbered releases,Clonotrace,0.5,version 1.2.1 in DESCRIPTION and NEWS.md; no tagged release
+Get it,Numbered releases,clone2vec,1,GitHub release v0.1.1 and PyPI
+Get it,Numbered releases,Benisse,1,GitHub releases v1.0.0 and v1.1.0
+Get it,Numbered releases,CoNGA,0.5,version 0.1.2 in setup.py; no tagged release
+Get it,Numbered releases,scirpy,1,GitHub releases (v0.25.1) on PyPI and conda-forge
+Get it,Installs with one command,Threadfin,0.5,pip install git+https://github.com/Reynold4k/Threadfin (not on PyPI)
+Get it,Installs with one command,Clonotrace,0.5,"remotes::install_github after installing two Bioconductor packages (three commands, README)"
+Get it,Installs with one command,clone2vec,1,pip install clone2vec
+Get it,Installs with one command,Benisse,0,"clone the repository, build a Python 3.10 environment with pinned packages and install the R packages (README: about 30 min)"
+Get it,Installs with one command,CoNGA,0,"clone the repository, compile the C++ TCRdist code, pip install -e . (README)"
+Get it,Installs with one command,scirpy,1,pip install scirpy or conda install -c conda-forge scirpy
+Get it,Dependencies listed with versions,Threadfin,1,pyproject.toml with minimum versions; the lowest allowed versions are installed and tested (docs/COMPATIBILITY.md)
+Get it,Dependencies listed with versions,Clonotrace,1,DESCRIPTION Imports and requirements.txt
+Get it,Dependencies listed with versions,clone2vec,1,pyproject.toml
+Get it,Dependencies listed with versions,Benisse,0.5,versions given in the README's install commands; no machine-readable file
+Get it,Dependencies listed with versions,CoNGA,0.5,setup.py names scanpy and leidenalg without versions; other packages in README commands
+Get it,Dependencies listed with versions,scirpy,1,pyproject.toml
+Trust the code,Automated tests,Threadfin,1,pytest suite (tests/; 243 tests)
+Trust the code,Automated tests,Clonotrace,1,testthat suite (tests/testthat; 9 files)
+Trust the code,Automated tests,clone2vec,1,pytest suite (tests/; 7 files)
+Trust the code,Automated tests,Benisse,0,no tests
+Trust the code,Automated tests,CoNGA,0,no tests
+Trust the code,Automated tests,scirpy,1,pytest suite
+Trust the code,Tests run on every change,Threadfin,1,GitHub Actions on Python 3.10-3.13 with the tutorial on simulated data
+Trust the code,Tests run on every change,Clonotrace,1,GitHub Actions R-CMD-check and a scheduled smoke test
+Trust the code,Tests run on every change,clone2vec,1,GitHub Actions tests.yml
+Trust the code,Tests run on every change,Benisse,0,no continuous integration
+Trust the code,Tests run on every change,CoNGA,0,no continuous integration
+Trust the code,Tests run on every change,scirpy,1,"GitHub Actions (tests, tutorials, conda build)"
+Trust the code,Same result when re-run,Threadfin,1,identical clone maps and programmes with 1 and 8 processes and with the released 4.3.1 (this benchmark)
+Trust the code,Same result when re-run,Clonotrace,1,"clone distances identical with one and four R sessions (49,455 and 648,091 pairs; this benchmark)"
+Trust the code,Same result when re-run,clone2vec,,assessed from the runs with 1-16 cores (filled by make_overview.py)
+Trust the code,Same result when re-run,Benisse,,assessed from the runs with 1-16 cores (filled by make_overview.py)
+Trust the code,Same result when re-run,CoNGA,,not assessed (only CoNGA's clone-reduction rule was used)
+Trust the code,Same result when re-run,scirpy,,not assessed
+Learn it,Step-by-step tutorial,Threadfin,1,"notebook that downloads public data and runs end to end, tested in a clean environment (docs/tutorials)"
+Learn it,Step-by-step tutorial,Clonotrace,1,vignette on the pkgdown site
+Learn it,Step-by-step tutorial,clone2vec,1,tutorials on Read the Docs
+Learn it,Step-by-step tutorial,Benisse,0.5,README walk-through on example data
+Learn it,Step-by-step tutorial,CoNGA,1,notebooks including a Colab notebook
+Learn it,Step-by-step tutorial,scirpy,1,tutorials on scirpy.scverse.org
+Learn it,Every function documented,Threadfin,1,docs/API.md generated from the docstrings of every public function
+Learn it,Every function documented,Clonotrace,1,man pages and pkgdown reference
+Learn it,Every function documented,clone2vec,1,API reference on Read the Docs
+Learn it,Every function documented,Benisse,0.5,command-line arguments described in the README; no function reference
+Learn it,Every function documented,CoNGA,0.5,docstrings; no reference pages
+Learn it,Every function documented,scirpy,1,API reference on scirpy.scverse.org
+Use it safely,Explains bad input and how to fix it,Threadfin,1,"19 awkward inputs: each runs, or stops with a message naming the problem and the fix (tests/test_parallel_and_robustness.py)"
+Use it safely,Explains bad input and how to fix it,Clonotrace,0.5,"a disconnected cell graph stops with a message naming the remedy (a larger graph_k); clones left without cells after label spreading stop clone_disance() with an internal error"
+Use it safely,Explains bad input and how to fix it,clone2vec,0.5,"few clones stop with an internal error (`k` must be an integer satisfying 0 < k < min(A.shape)) that does not name the cause"
+Use it safely,Explains bad input and how to fix it,Benisse,0,"few clonotypes stop with an internal R error (result would be too long a vector, in plotClusters); a 30-dimensional embedding fails in its initialisation"
+Use it safely,Explains bad input and how to fix it,CoNGA,,not assessed
+Use it safely,Explains bad input and how to fix it,scirpy,,not assessed
+Use it safely,Can use several CPU cores,Threadfin,1,n_jobs for the clone-map search and the programme bootstrap; results do not depend on it
+Use it safely,Can use several CPU cores,Clonotrace,1,parallel R sessions (future) for label spreading and clone distances
+Use it safely,Can use several CPU cores,clone2vec,1,PyTorch threads for training; n_jobs for its association tests
+Use it safely,Can use several CPU cores,Benisse,0.5,only through the threads of the linear-algebra libraries
+Use it safely,Can use several CPU cores,CoNGA,,not assessed
+Use it safely,Can use several CPU cores,scirpy,1,n_jobs in define_clonotypes and ir_dist
+Use it safely,Works with AnnData or Seurat objects,Threadfin,1,AnnData in and out
+Use it safely,Works with AnnData or Seurat objects,Clonotrace,0.5,an embedding matrix and a cell table (extracted from Seurat or AnnData by the user)
+Use it safely,Works with AnnData or Seurat objects,clone2vec,1,AnnData (scanpy)
+Use it safely,Works with AnnData or Seurat objects,Benisse,0,CSV files of contigs and expression
+Use it safely,Works with AnnData or Seurat objects,CoNGA,1,AnnData
+Use it safely,Works with AnnData or Seurat objects,scirpy,1,AnnData and MuData
+Credibility,Peer-reviewed paper,Threadfin,0,manuscript in preparation
+Credibility,Peer-reviewed paper,Clonotrace,0,bioRxiv preprint (2025)
+Credibility,Peer-reviewed paper,clone2vec,0,bioRxiv preprint (2026)
+Credibility,Peer-reviewed paper,Benisse,1,Nat. Mach. Intell. 2022
+Credibility,Peer-reviewed paper,CoNGA,1,Nat. Biotechnol. 2022
+Credibility,Peer-reviewed paper,scirpy,1,Bioinformatics 2020

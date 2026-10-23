@@ -9,6 +9,8 @@ Usage: python make_tasks.py <phase> > tasks_<phase>.txt
   phase ``full``    every dataset, all cells
   phase ``halves``  every real dataset, the two disjoint halves of split seed 0 (and seeds 1-2 for the fast
                     tools); the simulations are not split (their readouts use the full data only)
+  phase ``sensitivity``  Threadfin's default profile with one setting changed at a time (run_threadfin.py
+                    SENSITIVITY), on the full data, the six halves of the real datasets and the simulations
 """
 from __future__ import annotations
 
@@ -90,6 +92,14 @@ def main(phase):
         s0 = ["halfA_s0", "halfB_s0"]
         more = s0 + ["halfA_s1", "halfB_s1", "halfA_s2", "halfB_s2"]
         lines = tasks({"threadfin": more, "clone2vec": more, "clonotrace": s0, "benisse": s0}, REAL + LARRY)
+    elif phase == "sensitivity":
+        lines = []
+        for ds in REAL + LARRY + SIMS:
+            variants = ["full"] if ds in SIMS else ["full", "halfA_s0", "halfB_s0", "halfA_s1", "halfB_s1",
+                                                    "halfA_s2", "halfB_s2"]
+            for v in variants:
+                run = RUNS / ds / v / "_threadfin_sensitivity_task"
+                lines.append(timed(run, f"{TF} run_threadfin.py {ds} {v} sensitivity", 2))
     else:
         raise SystemExit(f"unknown phase {phase}")
     print("\n".join(lines))

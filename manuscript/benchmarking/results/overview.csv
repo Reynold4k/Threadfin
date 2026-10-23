@@ -1,0 +1,166 @@
+row,column,verdict,shown,detail,n,p
+Threadfin,Share of clones it describes,ref,100 %,,11.0,
+Threadfin,Keeps two-cell clones,ref,100 %,,11.0,
+Threadfin,Datasets it could analyse,ref,11 of 11,,11.0,
+Threadfin,Predicts measured clone traits,ref,reference,,,
+Threadfin,… when traits come from other cells,ref,reference,,,
+Threadfin,Recognises a clone from other cells,ref,11 %,,,
+Threadfin,Links day-2 clones to day 6,ref,0.030,,,
+Threadfin,Finds planted clone groups,ref,0.75,,,
+Threadfin,Tells mixed from in-between clones,ref,0.89,,,
+Threadfin,Few false alarms without signal,ref,4.0 % (0 %–8.0 %),,9.0,
+Threadfin,Run time,ref,3.1 s (median),,,
+Threadfin,Peak memory,ref,0.5 GB (median),,,
+Threadfin,Gain from 16 CPU cores,ref,2.0× faster,,,
+Threadfin,Slow-down as data grow,ref,20× time for 10× clones,,,
+Threadfin,Runs that ended with- out help,ref,77 of 77,,,
+"clone2vec, its default (clones ≥ 3 cells)",Share of clones it describes,worse,50 %,"per dataset: 57 %, 50 %, 57 %, 35 %, 18 %, 14 %, 54 %, 61 %, 32 %, 29 %, 72 %",11.0,
+"clone2vec, its default (clones ≥ 3 cells)",Keeps two-cell clones,worse,0 %,"per dataset: 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %",11.0,
+"clone2vec, its default (clones ≥ 3 cells)",Datasets it could analyse,similar,11 of 11,,11.0,
+"clone2vec, its default (clones ≥ 3 cells)",Predicts measured clone traits,similar,10 better 3 worse,"10 better, 3 worse, 35 annotations",35.0,0.09228515625
+"clone2vec, its default (clones ≥ 3 cells)",… when traits come from other cells,similar,11 better 7 worse,18 annotations,18.0,0.480682373046875
+"clone2vec, its default (clones ≥ 3 cells)",Recognises a clone from other cells,similar,31 % vs 55 %,5 datasets,5.0,0.0625
+"clone2vec, its default (clones ≥ 3 cells)",Links day-2 clones to day 6,similar,0.110 vs 0.087,"95 % CI of difference [-0.019, 0.062]",164.0,
+"clone2vec, its default (clones ≥ 3 cells)",Finds planted clone groups,better,0.93 vs 0.86,6 simulated datasets,6.0,0.03125
+"clone2vec, its default (clones ≥ 3 cells)",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
+"clone2vec, its default (clones ≥ 3 cells)",Few false alarms without signal,na,no test,,,
+"clone2vec, its default (clones ≥ 3 cells)",Run time,worse,27× slower,11 datasets,11.0,0.0009765625
+"clone2vec, its default (clones ≥ 3 cells)",Peak memory,worse,2.3× more,11 datasets,11.0,0.013671875
+"clone2vec, its default (clones ≥ 3 cells)",Gain from 16 CPU cores,worse,1.2× faster Threadfin 2.0×,Threadfin 2.0×,,
+"clone2vec, its default (clones ≥ 3 cells)",Slow-down as data grow,better,6× time for 10× clones,exponent 0.78 vs 1.29,,
+"clone2vec, its default (clones ≥ 3 cells)",Runs that ended with- out help,worse,65 of 77 12 failed,12 failed,77.0,
+"clone2vec, forced to clones ≥ 2 cells",Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+"clone2vec, forced to clones ≥ 2 cells",Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+"clone2vec, forced to clones ≥ 2 cells",Datasets it could analyse,similar,11 of 11,,11.0,
+"clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 5 worse,"5 better, 5 worse, 35 annotations",35.0,1.0
+"clone2vec, forced to clones ≥ 2 cells",… when traits come from other cells,similar,17 better 12 worse,29 annotations,29.0,0.45825831964612007
+"clone2vec, forced to clones ≥ 2 cells",Recognises a clone from other cells,worse,3.6 % vs 11 %,10 datasets,10.0,0.001953125
+"clone2vec, forced to clones ≥ 2 cells",Links day-2 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.004, 0.017]",1251.0,
+"clone2vec, forced to clones ≥ 2 cells",Finds planted clone groups,similar,0.76 vs 0.75,12 simulated datasets,12.0,0.67724609375
+"clone2vec, forced to clones ≥ 2 cells",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
+"clone2vec, forced to clones ≥ 2 cells",Few false alarms without signal,na,no test,,,
+"clone2vec, forced to clones ≥ 2 cells",Run time,worse,34× slower,11 datasets,11.0,
+"clone2vec, forced to clones ≥ 2 cells",Peak memory,worse,2.3× more,11 datasets,11.0,0.013671875
+"clone2vec, forced to clones ≥ 2 cells",Gain from 16 CPU cores,worse,1.2× faster Threadfin 2.0×,Threadfin 2.0×,,
+"clone2vec, forced to clones ≥ 2 cells",Slow-down as data grow,better,6× time for 10× clones,exponent 0.78 vs 1.29,,
+"clone2vec, forced to clones ≥ 2 cells",Runs that ended with- out help,similar,77 of 77,,77.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Share of clones it describes,worse,8.5 %,"per dataset: 12 %, 8.5 %, 8.7 %, 0 %, 0 %, 0 %, 11 %, 12 %, 5.2 %, 0 %, 18 %",11.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Keeps two-cell clones,worse,0 %,"per dataset: 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %",11.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Datasets it could analyse,worse,7 of 11 4 too small,4 too small,11.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Predicts measured clone traits,worse,0 better 6 worse,"0 better, 6 worse, 24 annotations",24.0,0.03125
+"Clonotrace, its default (clones ≥ 10 cells)",… when traits come from other cells,similar,6 better 12 worse,18 annotations,18.0,0.237884521484375
+"Clonotrace, its default (clones ≥ 10 cells)",Recognises a clone from other cells,similar,39 % vs 55 %,5 datasets,5.0,0.3125
+"Clonotrace, its default (clones ≥ 10 cells)",Links day-2 clones to day 6,similar,0.098 vs 0.087,"95 % CI of difference [-0.014, 0.032]",164.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Finds planted clone groups,worse,0.81 vs 0.86,6 simulated datasets,6.0,0.03125
+"Clonotrace, its default (clones ≥ 10 cells)",Tells mixed from in-between clones,worse,0.63 vs 0.89,6 simulated datasets,6.0,0.03125
+"Clonotrace, its default (clones ≥ 10 cells)",Few false alarms without signal,na,no test,,,
+"Clonotrace, its default (clones ≥ 10 cells)",Run time,worse,"2,436× slower",3 datasets,3.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Peak memory,worse,3.8× more,3 datasets,3.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Gain from 16 CPU cores,pending,running,,,
+"Clonotrace, its default (clones ≥ 10 cells)",Slow-down as data grow,worse,110× time for 10× clones,exponent 2.04 vs 1.29,,
+"Clonotrace, its default (clones ≥ 10 cells)",Runs that ended with- out help,worse,19 of 21 2 re-run,2 re-run,21.0,
+"Clonotrace, forced to clones ≥ 2 cells",Share of clones it describes,worse,64 %,"per dataset: 64 %, 62 %, 67 %, 60 %, 52 %, 53 %, 0 %, 73 %, 69 %, 72 %, 76 %",11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Keeps two-cell clones,worse,32 %,"per dataset: 16 %, 25 %, 23 %, 39 %, 42 %, 45 %, 0 %, 32 %, 55 %, 61 %, 16 %",11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Datasets it could analyse,worse,10 of 11 1 stopped,1 stopped,11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,1 better 5 worse,"1 better, 5 worse, 29 annotations",29.0,0.21875
+"Clonotrace, forced to clones ≥ 2 cells",… when traits come from other cells,similar,12 better 9 worse,21 annotations,21.0,0.6636238098144531
+"Clonotrace, forced to clones ≥ 2 cells",Recognises a clone from other cells,similar,8.9 % vs 14 %,7 datasets,7.0,0.9375
+"Clonotrace, forced to clones ≥ 2 cells",Links day-2 clones to day 6,better,0.039 vs 0.030,"95 % CI of difference [0.003, 0.015]",1251.0,
+"Clonotrace, forced to clones ≥ 2 cells",Finds planted clone groups,worse,0.51 vs 0.61,6 simulated datasets,6.0,0.03125
+"Clonotrace, forced to clones ≥ 2 cells",Tells mixed from in-between clones,na,—,,,
+"Clonotrace, forced to clones ≥ 2 cells",Few false alarms without signal,na,no test,,,
+"Clonotrace, forced to clones ≥ 2 cells",Run time,worse,"≥ 286× slower, 1 stopped",5 datasets,5.0,
+"Clonotrace, forced to clones ≥ 2 cells",Peak memory,worse,2.0× more,4 datasets,4.0,
+"Clonotrace, forced to clones ≥ 2 cells",Gain from 16 CPU cores,pending,running,,,
+"Clonotrace, forced to clones ≥ 2 cells",Slow-down as data grow,worse,110× time for 10× clones,exponent 2.04 vs 1.29,,
+"Clonotrace, forced to clones ≥ 2 cells",Runs that ended with- out help,worse,"26 of 29 1 stopped, 2 re-run",1 stopped; 2 re-run,29.0,
+Benisse,Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 11 %, 100 %, 100 %",9.0,
+Benisse,Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 0 %, 100 %, 100 %",9.0,
+Benisse,Datasets it could analyse,worse,9 of 11 2 without BCR,2 without BCR,11.0,
+Benisse,Predicts measured clone traits,worse,3 better 23 worse,"3 better, 23 worse, 32 annotations",32.0,8.797645568847656e-05
+Benisse,… when traits come from other cells,worse,5 better 16 worse,21 annotations,21.0,0.02660369873046875
+Benisse,Recognises a clone from other cells,similar,8.3 % vs 10 %,6 datasets,6.0,0.6875
+Benisse,Links day-2 clones to day 6,na,no BCR,,,
+Benisse,Finds planted clone groups,na,no BCR,,,
+Benisse,Tells mixed from in-between clones,na,no BCR,,,
+Benisse,Few false alarms without signal,na,no test,,,
+Benisse,Run time,worse,33× slower,9 datasets,9.0,0.00390625
+Benisse,Peak memory,similar,1.6× more,9 datasets,9.0,0.25
+Benisse,Gain from 16 CPU cores,worse,2.9× slower Threadfin 2.0×,Threadfin 2.0×,,
+Benisse,Slow-down as data grow,worse,123× time for 10× clones,exponent 2.09 vs 1.29,,
+Benisse,Runs that ended with- out help,worse,26 of 27 1 failed,1 failed,27.0,
+CoNGA's one-cell-per-clone rule,Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+CoNGA's one-cell-per-clone rule,Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+CoNGA's one-cell-per-clone rule,Datasets it could analyse,similar,11 of 11,,11.0,
+CoNGA's one-cell-per-clone rule,Predicts measured clone traits,worse,1 better 15 worse,"1 better, 15 worse, 35 annotations",35.0,0.000518798828125
+CoNGA's one-cell-per-clone rule,… when traits come from other cells,similar,9 better 20 worse,29 annotations,29.0,0.06142834573984146
+CoNGA's one-cell-per-clone rule,Recognises a clone from other cells,similar,3.3 % vs 11 %,10 datasets,10.0,0.10546875
+CoNGA's one-cell-per-clone rule,Links day-2 clones to day 6,worse,0.019 vs 0.030,"95 % CI of difference [-0.017, -0.003]",1251.0,
+CoNGA's one-cell-per-clone rule,Finds planted clone groups,worse,0.44 vs 0.75,12 simulated datasets,12.0,0.00048828125
+CoNGA's one-cell-per-clone rule,Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
+CoNGA's one-cell-per-clone rule,Few false alarms without signal,na,no test,,,
+CoNGA's one-cell-per-clone rule,Run time,na,not timed,,,
+CoNGA's one-cell-per-clone rule,Peak memory,na,not measured,,,
+CoNGA's one-cell-per-clone rule,Gain from 16 CPU cores,na,—,,,
+CoNGA's one-cell-per-clone rule,Slow-down as data grow,na,—,,,
+CoNGA's one-cell-per-clone rule,Runs that ended with- out help,similar,77 of 77,,77.0,
+Mean of the embedding (baseline),Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+Mean of the embedding (baseline),Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+Mean of the embedding (baseline),Datasets it could analyse,similar,11 of 11,,11.0,
+Mean of the embedding (baseline),Predicts measured clone traits,similar,7 better 5 worse,"7 better, 5 worse, 35 annotations",35.0,0.7744140625
+Mean of the embedding (baseline),… when traits come from other cells,similar,16 better 13 worse,29 annotations,29.0,0.711071103811264
+Mean of the embedding (baseline),Recognises a clone from other cells,similar,8.2 % vs 11 %,10 datasets,10.0,0.431640625
+Mean of the embedding (baseline),Links day-2 clones to day 6,similar,0.034 vs 0.030,"95 % CI of difference [-0.000, 0.010]",1251.0,
+Mean of the embedding (baseline),Finds planted clone groups,worse,0.70 vs 0.75,12 simulated datasets,12.0,0.00048828125
+Mean of the embedding (baseline),Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
+Mean of the embedding (baseline),Few false alarms without signal,na,no test,,,
+Mean of the embedding (baseline),Run time,na,not timed,,,
+Mean of the embedding (baseline),Peak memory,na,not measured,,,
+Mean of the embedding (baseline),Gain from 16 CPU cores,na,—,,,
+Mean of the embedding (baseline),Slow-down as data grow,na,—,,,
+Mean of the embedding (baseline),Runs that ended with- out help,similar,77 of 77,,77.0,
+Cluster composition (baseline),Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+Cluster composition (baseline),Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
+Cluster composition (baseline),Datasets it could analyse,similar,11 of 11,,11.0,
+Cluster composition (baseline),Predicts measured clone traits,worse,1 better 20 worse,"1 better, 20 worse, 35 annotations",35.0,2.09808349609375e-05
+Cluster composition (baseline),… when traits come from other cells,worse,4 better 25 worse,29 annotations,29.0,0.00010371580719947815
+Cluster composition (baseline),Recognises a clone from other cells,similar,3.4 % vs 11 %,10 datasets,10.0,0.193359375
+Cluster composition (baseline),Links day-2 clones to day 6,better,0.059 vs 0.030,"95 % CI of difference [0.018, 0.042]",1251.0,
+Cluster composition (baseline),Finds planted clone groups,similar,0.77 vs 0.75,12 simulated datasets,12.0,0.1513671875
+Cluster composition (baseline),Tells mixed from in-between clones,similar,0.95 vs 0.89,6 simulated datasets,6.0,0.09375
+Cluster composition (baseline),Few false alarms without signal,na,no test,,,
+Cluster composition (baseline),Run time,na,not timed,,,
+Cluster composition (baseline),Peak memory,na,not measured,,,
+Cluster composition (baseline),Gain from 16 CPU cores,na,—,,,
+Cluster composition (baseline),Slow-down as data grow,na,—,,,
+Cluster composition (baseline),Runs that ended with- out help,similar,77 of 77,,77.0,
+scirpy clonotype modularity (test),Share of clones it describes,na,—,,,
+scirpy clonotype modularity (test),Keeps two-cell clones,na,—,,,
+scirpy clonotype modularity (test),Datasets it could analyse,na,—,,,
+scirpy clonotype modularity (test),Predicts measured clone traits,na,—,,,
+scirpy clonotype modularity (test),… when traits come from other cells,na,—,,,
+scirpy clonotype modularity (test),Recognises a clone from other cells,na,—,,,
+scirpy clonotype modularity (test),Links day-2 clones to day 6,na,—,,,
+scirpy clonotype modularity (test),Finds planted clone groups,na,—,,,
+scirpy clonotype modularity (test),Tells mixed from in-between clones,na,—,,,
+scirpy clonotype modularity (test),Few false alarms without signal,worse,80 % vs 4.0 %,9 datasets,9.0,0.015625
+scirpy clonotype modularity (test),Run time,worse,8.5× slower,"the test alone, per replicate",9.0,0.0390625
+scirpy clonotype modularity (test),Peak memory,na,—,,,
+scirpy clonotype modularity (test),Gain from 16 CPU cores,na,—,,,
+scirpy clonotype modularity (test),Slow-down as data grow,na,—,,,
+scirpy clonotype modularity (test),Runs that ended with- out help,na,—,,,
+Cell-level ANOVA (test),Share of clones it describes,na,—,,,
+Cell-level ANOVA (test),Keeps two-cell clones,na,—,,,
+Cell-level ANOVA (test),Datasets it could analyse,na,—,,,
+Cell-level ANOVA (test),Predicts measured clone traits,na,—,,,
+Cell-level ANOVA (test),… when traits come from other cells,na,—,,,
+Cell-level ANOVA (test),Recognises a clone from other cells,na,—,,,
+Cell-level ANOVA (test),Links day-2 clones to day 6,na,—,,,
+Cell-level ANOVA (test),Finds planted clone groups,na,—,,,
+Cell-level ANOVA (test),Tells mixed from in-between clones,na,—,,,
+Cell-level ANOVA (test),Few false alarms without signal,worse,100 % vs 4.0 %,9 datasets,9.0,0.00390625
+Cell-level ANOVA (test),Run time,na,—,,,
+Cell-level ANOVA (test),Peak memory,na,—,,,
+Cell-level ANOVA (test),Gain from 16 CPU cores,na,—,,,
+Cell-level ANOVA (test),Slow-down as data grow,na,—,,,
+Cell-level ANOVA (test),Runs that ended with- out help,na,—,,,

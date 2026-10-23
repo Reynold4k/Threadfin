@@ -1,0 +1,17 @@
+{
+ "coverage": "median over the 11 datasets of the share of clones with ≥ 2 cells that the tool represents; a run that failed, stopped or could not start counts as 0. Better or worse: more than 5 percentage points from Threadfin.",
+ "two_cell": "the same for clones of exactly two cells.",
+ "datasets": "datasets (of 11) on which the tool produced a result.",
+ "traits": "measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05.",
+ "traits_disjoint": "as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions); sign test over annotations.",
+ "reid": "share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets.",
+ "fate": "LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones.",
+ "sim_groups": "simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets.",
+ "sim_mixed": "AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets.",
+ "false_alarms": "share of replicates in which the test reports clonal structure after clone labels were shuffled within each sample (no clonal signal), median over datasets; Wilcoxon over datasets. Only scirpy and the ANOVA test the same hypothesis; the other tools have no test.",
+ "time": "time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets).",
+ "memory": "peak memory, the same way.",
+ "cores": "time with 1 core divided by time with 16 cores (GSE287123 RBD; Threadfin: its complete analysis). Better or worse: more than 25 % from Threadfin's gain.",
+ "growth": "how much longer the clone representation takes for 10 times more clones, from 5-50 % subsets of GSE195673 (8 cores). Better or worse: an exponent more than 0.25 from Threadfin's.",
+ "finished": "runs on the full data and on the disjoint halves that finished with the tool's default settings; failed or stopped runs, and runs that needed a larger cell graph, are counted against the tool."
+}

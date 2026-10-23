@@ -23,8 +23,10 @@ in [`../benchmarking/`](../benchmarking/README.md); what did not hold is in
 | 12 | [Additional datasets](#12-additional-datasets) | 6 datasets | the pipeline on influenza, tonsil, EBV, bone marrow and bait-sorted cells (four re-run on 2026-10-20 without light-chain-only pseudo-clones) | `../case_studies/results/<dataset>/` |
 | 13 | [Gut: all B cells and centring](gut_all_B_and_centring/README.md) | GSE284622 | the second plasma branch is one mouse; the GC → plasma path survives every centring | [`gut_all_B_and_centring/`](gut_all_B_and_centring) |
 | 14 | [Lineage-barcode and TCR data](lineage_barcode_systems/README.md) | LARRY, WATERMELON, NSCLC T cells | day-2 profiles predict day-6 fate (kernel vs centroid not significantly different); T-cell clones keep their state across therapy cycles | [`lineage_barcode_systems/`](lineage_barcode_systems) |
-| 15 | [Technical validation](technical_validation/README.md) | all | automatic clone-map settings (30/30 maps coherent); state-density model; runtimes; audits | [`technical_validation/`](technical_validation) |
-| 16 | [Negative results and corrected defects](negative_and_withdrawn_results.md) | — | three falsified predictions, two withdrawn headlines, fourteen fixed defects | — |
+| 15 | [Heavy-chain vs paired-chain clones](spont_gc_paired_chains/README.md) | GSE203132 | adding the light chain splits 481 of 1,051 clones, but Figure 3d–f is unchanged (entropy vs clone axis ρ −0.747 → −0.754; 8 of 8 mice) | [`spont_gc_paired_chains/`](spont_gc_paired_chains) |
+| 16 | [Incomplete chain pairs and reused contig ids (RBD)](rbd_complete_pairs/README.md) | GSE287123 | Figure 4 is unchanged with complete heavy + light pairs only (division excess R² 0.088 → 0.096) and with corrected contig ids (0.085; cosine 0.896; 10 of 10 mice) | [`rbd_complete_pairs/`](rbd_complete_pairs) |
+| 17 | [Technical validation](technical_validation/README.md) | all | automatic clone-map settings (30/30 maps coherent); state-density model; runtimes; audits | [`technical_validation/`](technical_validation) |
+| 18 | [Negative results and corrected defects](negative_and_withdrawn_results.md) | — | three falsified predictions, two withdrawn headlines, eighteen fixed defects | — |
 
 ---
 

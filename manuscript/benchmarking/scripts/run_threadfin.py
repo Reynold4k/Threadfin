@@ -17,6 +17,15 @@ Methods (all receive the same embedding, clone ids, donors and samples):
 ``conga_medoid``               CoNGA's reduction rule (Schattgen et al. 2022): each clone is represented by
                                the cell with the smallest summed distance to the other cells of the clone
 
+Sensitivity of the default profile to its settings (one setting changed at a time):
+
+``threadfin_kernel_smooth5`` / ``_smooth30``      neighbour smoothing over 5 / 30 cells (default 15; 0 is
+                                                  ``threadfin_kernel_nosmooth``)
+``threadfin_kernel_rff128`` / ``_rff512`` / ``_rff1024``   number of random Fourier features (default 256)
+``threadfin_kernel_bw0.5`` / ``_bw2``             kernel bandwidth 0.5 / 2 times the median heuristic
+``threadfin_kernel_pc10`` / ``_pc50``             principal components kept (default 30)
+``threadfin_kernel_seed1`` / ``_seed2``           another draw of the random features
+
 Usage: python run_threadfin.py <dataset> <variant> <method> [<method> ...]
 """
 from __future__ import annotations
@@ -40,15 +49,30 @@ def _adata(x, cells):
     return a
 
 
-def threadfin(x, cells, *, representation="kernel", context="donor", smooth=None, shrink=True):
+def median_heuristic(x, cells, context="donor"):
+    """The bandwidth the default profile uses: median distance between context-centred cells."""
+    from threadfin._utils import codes
+    from threadfin.profiles import _center_by, median_bandwidth
+
+    finite = np.isfinite(x).all(axis=1)
+    ctx = codes(cells[context])[0] if context else np.zeros(len(cells), dtype=np.int64)
+    resid = _center_by(np.where(finite[:, None], x, 0.0), ctx, finite)
+    return median_bandwidth(resid[finite], rng=np.random.default_rng(0))
+
+
+def threadfin(x, cells, *, representation="kernel", context="donor", smooth=None, shrink=True, n_features=256,
+              n_components=30, bandwidth="median", random_state=0):
     import threadfin as tf
     from threadfin.profiles import build_model
 
     a = _adata(x, cells)
+    if isinstance(bandwidth, tuple):                  # ("scale", factor): a multiple of the median heuristic
+        bandwidth = bandwidth[1] * median_heuristic(np.asarray(x, dtype=float), cells, context)
     if shrink:
         tab = tf.tl.clone_profiles(a, clone_key="clone", basis="X_emb", context_key=context, donor_key="donor",
                                    representation=representation, smooth=smooth, min_cells=MIN_CELLS,
-                                   verbose=False)
+                                   n_features=n_features, n_components=n_components, bandwidth=bandwidth,
+                                   random_state=random_state, verbose=False)
         feats = a.uns["threadfin"]["profiles"]["features"]
         vc = a.uns["threadfin"]["profiles"]["variance_components"]
         return feats.index.to_numpy(), tab["n_cells"].to_numpy(), feats.to_numpy(), {"variance_share_between_clones_of_representation": vc["icc"]}
@@ -122,10 +146,27 @@ METHODS = {
     "threadfin_kernel_nocentre": lambda x, c: threadfin(x, c, context=None),
     "threadfin_kernel_nosmooth": lambda x, c: threadfin(x, c, smooth=0),
     "threadfin_kernel_noshrink": lambda x, c: threadfin(x, c, shrink=False),
+    "threadfin_kernel_smooth5": lambda x, c: threadfin(x, c, smooth=5),
+    "threadfin_kernel_smooth30": lambda x, c: threadfin(x, c, smooth=30),
+    "threadfin_kernel_rff128": lambda x, c: threadfin(x, c, n_features=128),
+    "threadfin_kernel_rff512": lambda x, c: threadfin(x, c, n_features=512),
+    "threadfin_kernel_rff1024": lambda x, c: threadfin(x, c, n_features=1024),
+    "threadfin_kernel_bw0.5": lambda x, c: threadfin(x, c, bandwidth=("scale", 0.5)),
+    "threadfin_kernel_bw2": lambda x, c: threadfin(x, c, bandwidth=("scale", 2.0)),
+    "threadfin_kernel_pc10": lambda x, c: threadfin(x, c, n_components=10),
+    "threadfin_kernel_pc50": lambda x, c: threadfin(x, c, n_components=50),
+    "threadfin_kernel_seed1": lambda x, c: threadfin(x, c, random_state=1),
+    "threadfin_kernel_seed2": lambda x, c: threadfin(x, c, random_state=2),
     "mean_pca": mean_pca,
     "composition": composition,
     "conga_medoid": conga_medoid,
 }
+
+
+SENSITIVITY = ["threadfin_kernel_smooth5", "threadfin_kernel_smooth30", "threadfin_kernel_rff128",
+               "threadfin_kernel_rff512", "threadfin_kernel_rff1024", "threadfin_kernel_bw0.5", "threadfin_kernel_bw2",
+               "threadfin_kernel_pc10", "threadfin_kernel_pc50", "threadfin_kernel_seed1", "threadfin_kernel_seed2"]
+DEFAULT_METHODS = [m for m in METHODS if m not in SENSITIVITY]
 
 
 def main(dataset, variant, methods):
@@ -150,4 +191,5 @@ def main(dataset, variant, methods):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3:] or list(METHODS))
+    chosen = sys.argv[3:] or DEFAULT_METHODS
+    main(sys.argv[1], sys.argv[2], SENSITIVITY if chosen == ["sensitivity"] else chosen)

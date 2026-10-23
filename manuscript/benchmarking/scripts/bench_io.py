@@ -25,13 +25,17 @@ from bench_paths import INPUTS, run_dir
 
 
 def load(dataset: str, variant: str = "full"):
-    """Embedding and cell table for one variant (cells of the other half are removed)."""
+    """Embedding and cell table for one variant (cells of the other half are removed).
+
+    Variants ``half<A|B>_s<seed>`` keep one half of a random split; any other variant name (``full``,
+    ``full_w8`` for a run with 8 workers, ...) is the full data.
+    """
     d = INPUTS / dataset
     x = np.load(d / "X.npy")
     cells = pd.read_csv(d / "cells.tsv.gz", sep="\t", index_col=0, low_memory=False)
     cells.index = cells.index.astype(str)
     cells["clone"] = cells["clone"].astype("string")
-    if variant != "full":
+    if variant.startswith("half"):
         half, seed = variant[4], int(variant.split("_s")[1])
         split = pd.read_csv(d / f"split_seed{seed}.tsv.gz", sep="\t", index_col=0)["half"]
         split.index = split.index.astype(str)

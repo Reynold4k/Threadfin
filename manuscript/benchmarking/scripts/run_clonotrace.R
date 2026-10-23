@@ -18,7 +18,8 @@
 # distance is deterministic) but their clone-distance times are single-process. run.json records
 # `distance_workers` for every run made with this version.
 #
-# Usage: Rscript run_clonotrace.R <dataset> <variant> <min_size> <workers> <inputs_dir> <out_dir>
+# Usage: Rscript run_clonotrace.R <dataset> <variant> <min_size> <workers> <inputs_dir> <out_dir> [graph_k ladder]
+#   graph_k ladder: comma-separated graph sizes to try for clone distances, default "10,30,50"
 
 suppressPackageStartupMessages({
   library(Clonotrace); library(Matrix); library(future); library(future.apply); library(data.table)
@@ -27,6 +28,7 @@ suppressPackageStartupMessages({
 args <- commandArgs(trailingOnly = TRUE)
 dataset <- args[1]; variant <- args[2]; min_size <- as.integer(args[3]); workers <- as.integer(args[4])
 inputs <- file.path(args[5], dataset); out <- args[6]
+ladder <- if (length(args) >= 7) as.integer(strsplit(args[7], ",")[[1]]) else c(10L, 30L, 50L)
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 options(future.globals.maxSize = 64 * 1024^3)
 set.seed(0)
@@ -70,7 +72,7 @@ X <- read_npy(file.path(inputs, "X.npy"))
 zread <- function(path, ...) fread(cmd = sprintf("zcat '%s'", path), sep = "\t", ...)   # fread needs R.utils for .gz
 cells <- zread(file.path(inputs, "cells.tsv.gz"), colClasses = list(character = c("cell", "clone", "donor", "sample")))
 rownames(X) <- cells$cell
-if (variant != "full") {
+if (startsWith(variant, "half")) {          # other variant names (full, full_w8, ...) are the full data
   half <- substr(variant, 5, 5); seed <- sub(".*_s", "", variant)
   split <- zread(file.path(inputs, sprintf("split_seed%s.tsv.gz", seed)), colClasses = list(character = c("cell", "half")))
   keep <- cells$cell %in% split$cell[split$half == half]
@@ -134,9 +136,9 @@ result <- tryCatch({
   # package defaults: centroids from the cell-to-clone probabilities (clone_labels = NULL) and no
   # sample restriction (sample = NULL), exactly as clone_disance() is called in the vignette. The default
   # cell graph (graph_k = 10) can be disconnected; Clonotrace then stops and recommends a larger graph_k,
-  # which is what is done here (30, then 50), and recorded.
+  # which is what is done here (30, then 50 by default; a longer ladder can be given), and recorded.
   dis <- NULL; attempts <- character()
-  for (gk in c(10L, 30L, 50L)) {
+  for (gk in ladder) {
     attempt <- tryCatch(clone_disance(emb, prob, outpath = file.path(out, sprintf("graph_k%d", gk)), graph_k = gk,
                                       exact = FALSE, revised = TRUE, verbose = FALSE), error = function(e) e)
     if (!inherits(attempt, "error")) { dis <- attempt; graph_k_used <<- gk; break }

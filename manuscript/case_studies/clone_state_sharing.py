@@ -84,7 +84,7 @@ def read_cohort(name: str, cells_path: Path, bcr_path: Path, metadata_path: Path
     # Multiple IGH contigs cannot support an unambiguous exact-clonotype control.
     heavy_n = heavy.groupby("cell_id", observed=True).size()
     heavy = heavy.loc[heavy["cell_id"].isin(heavy_n[heavy_n == 1].index)].copy()
-    strict_valid = heavy[["v_call", "j_call", "junction"]].map(valid_strict_value).all(axis=1)
+    strict_valid = heavy[["v_call", "j_call", "junction"]].apply(lambda col: col.map(valid_strict_value)).all(axis=1)
     heavy = heavy.loc[strict_valid].copy()
     heavy["strict_igh"] = (heavy["v_call"].map(clean_gene) + "|" + heavy["j_call"].map(clean_gene)
                            + "|" + heavy["junction"].map(clean_gene))
@@ -92,7 +92,7 @@ def read_cohort(name: str, cells_path: Path, bcr_path: Path, metadata_path: Path
     light = bcr.loc[bcr["locus"].isin(["IGK", "IGL"])].copy()
     # Paired-light exact controls have the same productive, unambiguous AIRR
     # requirement as the heavy-chain exact control.
-    light_valid = light[["v_call", "j_call", "junction"]].map(valid_strict_value).all(axis=1)
+    light_valid = light[["v_call", "j_call", "junction"]].apply(lambda col: col.map(valid_strict_value)).all(axis=1)
     light = light.loc[light_valid].copy()
     light["light_signature"] = (light["locus"].map(clean_gene) + "|" + light["v_call"].map(clean_gene)
                                 + "|" + light["j_call"].map(clean_gene) + "|" + light["junction"].map(clean_gene))

@@ -1,0 +1,134 @@
+{
+ "counts": {
+  "cells_with_clone": 16667,
+  "cells_with_clone_without_complete_pair": 797,
+  "of_which_no_heavy_chain": 0,
+  "of_which_no_light_chain": 797,
+  "cells_with_two_or_more_heavy_chains": 256
+ },
+ "all_cells": {
+  "clones": 1887,
+  "cells_in_clones": 9825,
+  "clones_by_cohort": {
+   "protein": 1544,
+   "mRNA": 343
+  },
+  "associations": {
+   "recently_divided_all": {
+    "excess_r2": 0.088170134109627,
+    "r2": 0.08926946884217772,
+    "null_mean": 0.001099334732550728,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1887
+   },
+   "recently_divided_protein": {
+    "excess_r2": 0.09171634455785999,
+    "r2": 0.09243813363312278,
+    "null_mean": 0.0007217890752628017,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1544
+   },
+   "recently_divided_mrna": {
+    "excess_r2": 0.06883630478046104,
+    "r2": 0.07180039736871283,
+    "null_mean": 0.002964092588251785,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 343
+   },
+   "rbd_binding_protein": {
+    "excess_r2": 0.02308524740857836,
+    "r2": 0.023828523149875894,
+    "null_mean": 0.0007432757412975356,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1544
+   },
+   "dark_zone_mrna": {
+    "excess_r2": 0.037042506729743754,
+    "r2": 0.040001004651028196,
+    "null_mean": 0.0029584979212844446,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 343
+   }
+  },
+  "crossover_cosine": 0.886901248540947,
+  "crossover_null_q99": 0.7592823005364836,
+  "crossover_p": 0.0004997501249375312,
+  "tube_effect_relative_to_division": 0.03411545158164903,
+  "division_rho_by_cohort": {
+   "recently_divided|protein": 0.39349182128519444,
+   "recently_divided|mRNA": 0.2893231754954015,
+   "rbd_binding|protein": 0.19075417687170568,
+   "dark_zone|mRNA": 0.18629839930183037
+  },
+  "mice_with_positive_division_rho": 10,
+  "mice": 10
+ },
+ "complete_pairs": {
+  "clones": 1772,
+  "cells_in_clones": 9465,
+  "clones_by_cohort": {
+   "protein": 1456,
+   "mRNA": 316
+  },
+  "associations": {
+   "recently_divided_all": {
+    "excess_r2": 0.09607830271832862,
+    "r2": 0.09730098952248198,
+    "null_mean": 0.0012226868041533491,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1772
+   },
+   "recently_divided_protein": {
+    "excess_r2": 0.0982496594868593,
+    "r2": 0.09902244612205793,
+    "null_mean": 0.0007727866351986279,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1456
+   },
+   "recently_divided_mrna": {
+    "excess_r2": 0.0796746879226151,
+    "r2": 0.08282019022930102,
+    "null_mean": 0.0031455023066859276,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 316
+   },
+   "rbd_binding_protein": {
+    "excess_r2": 0.024982359199222395,
+    "r2": 0.025754217056031464,
+    "null_mean": 0.0007718578568090673,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1456
+   },
+   "dark_zone_mrna": {
+    "excess_r2": 0.044760927775684654,
+    "r2": 0.04795728738506273,
+    "null_mean": 0.003196359609378079,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 316
+   }
+  },
+  "crossover_cosine": 0.8844789469021777,
+  "crossover_null_q99": 0.7679965533958737,
+  "crossover_p": 0.0004997501249375312,
+  "tube_effect_relative_to_division": 0.019944150131848318,
+  "division_rho_by_cohort": {
+   "recently_divided|protein": 0.40635161373537293,
+   "recently_divided|mRNA": 0.3215125378669228,
+   "rbd_binding|protein": 0.19906423163627376,
+   "dark_zone|mRNA": 0.2636933838368326
+  },
+  "mice_with_positive_division_rho": 10,
+  "mice": 10
+ },
+ "saved_figure4": {
+  "saved_crossover_cosine": 0.8869012485409472,
+  "saved_division_excess_r2": {
+   "recently_divided_all": 0.0881701341096271,
+   "recently_divided_protein": 0.09171634455786008,
+   "recently_divided_mrna": 0.06883630478046113,
+   "rbd_binding_protein": 0.023085247408578362,
+   "dark_zone_mrna": 0.037042506729743824
+  }
+ },
+ "threadfin": "4.4.0"
+}

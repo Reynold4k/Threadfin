@@ -1,0 +1,33 @@
+{
+ "annotation_check": {
+  "deposited_heavy_chains": 8106,
+  "found_in_igblast": 8106,
+  "same_junction_aa": 1.0,
+  "same_v_gene": 0.9979027880582285,
+  "same_j_gene": 1.0
+ },
+ "chains": {
+  "cells_with_heavy_chain": 8106,
+  "with_light_chain": 8106,
+  "with_one_light_chain": 7566,
+  "with_two_or_more_light_chains": 540,
+  "light_chain_loci": {
+   "IGK": 8140,
+   "IGL": 506
+  }
+ },
+ "clone_call": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 1,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 8105,
+  "n_clones": 3640,
+  "n_clones_ge2": 1038,
+  "largest_clone": 111,
+  "python_hash_seed": "0"
+ }
+}
