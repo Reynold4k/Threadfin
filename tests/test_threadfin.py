@@ -1,4 +1,3 @@
-import sys
 
 import numpy as np
 import pandas as pd
@@ -67,14 +66,16 @@ def test_clonotype_recluster_recovers_states(synthetic):
     assert singles["clone_cluster"].isna().all()
 
 
-@pytest.mark.xfail(sys.version_info >= (3, 12), strict=False,
-                   reason="legacy v3 clonotype_recluster: nondeterministic on 3.12 dependency stack (issue #2)")
 def test_determinism(synthetic):
+    """Two identical calls give identical clone clusters. Cells without a clone have no label; they are compared
+    as missing (pandas >= 3 keeps missing values missing in astype(str), and NaN != NaN, which made this test look
+    nondeterministic on newer stacks - issue #2)."""
     adata, bcr, _ = synthetic
     tf.attach_bcr(adata, bcr)
     a1 = tf.clonotype_recluster(adata.copy(), random_state=7)
     a2 = tf.clonotype_recluster(adata.copy(), random_state=7)
-    assert (a1.obs["clone_cluster"].astype(str) == a2.obs["clone_cluster"].astype(str)).all()
+    pd.testing.assert_series_equal(a1.obs["clone_cluster"].astype(object), a2.obs["clone_cluster"].astype(object))
+    assert a1.obs["clone_cluster"].notna().sum() > 0
 
 
 def test_cdr3_blending(synthetic):

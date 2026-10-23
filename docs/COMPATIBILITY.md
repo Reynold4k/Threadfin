@@ -13,6 +13,8 @@ each (2 tests are skipped when an optional dependency is absent):
 | 3.13 | current releases | 244 passed, 1 expected failure (the legacy v3 repeatability check) | passed |
 | 3.14 | current releases: numpy 2.5, pandas 3.1, scipy 1.18, scikit-learn 1.9, anndata 0.13, scanpy 1.12, matplotlib 3.11, numba 0.68 | 244 passed, the same expected failure | passed |
 
+The expected failure was a fault of the test, not of the package, and is fixed since 4.4.0: with pandas 3, `astype(str)` keeps missing values missing, and the test compared the labels of cells without a clone as NaN == NaN. `clonotype_recluster` gives identical clusters on every stack tested (issue #2).
+
 This check found two problems, both fixed in 4.4.0: umap-learn < 0.5.5 and pynndescent < 0.5.8 import
 `pkg_resources`, which new environments do not include (the minimum versions were raised), and a
 manuscript script used `DataFrame.map`, which pandas 2.0 does not have. Continuous integration now runs
@@ -100,6 +102,5 @@ as negative measurements.
 ## Verification limits
 
 This verifies the tested Linux dependency stacks and documented example paths.
-It does not establish Windows/macOS compatibility or every real-data configuration. For reproducible
-legacy-v3 reclustering, use the tested Python 3.10/3.11 stack or retain the
-computed labels. Record package versions alongside scientific outputs.
+It does not establish Windows/macOS compatibility or every real-data configuration. Record package versions
+alongside scientific outputs.
