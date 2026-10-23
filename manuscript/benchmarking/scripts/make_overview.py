@@ -14,7 +14,6 @@ results/overview.csv. Usage: python make_overview.py
 """
 from __future__ import annotations
 
-import glob
 import json
 import textwrap
 from dataclasses import dataclass
@@ -46,8 +45,6 @@ ROWS = [  # label, key, kind
     ("CoNGA's one-cell-per-clone rule", "conga_medoid", "baseline"),
     ("Mean of the embedding (baseline)", "mean_pca", "baseline"),
     ("Cluster composition (baseline)", "composition", "baseline"),
-    ("scirpy clonotype modularity (test)", "scirpy", "test"),
-    ("Cell-level ANOVA (test)", "anova", "test"),
 ]
 COLUMNS = [  # key, group, label
     ("coverage", "Which clones it can use", "Share of\nclones it\ndescribes"),
@@ -59,7 +56,6 @@ COLUMNS = [  # key, group, label
     ("fate", "How well it describes clones", "Links day-2\nclones to\nday 6"),
     ("sim_groups", "How well it describes clones", "Finds\nplanted clone\ngroups"),
     ("sim_mixed", "How well it describes clones", "Tells mixed\nfrom in-between\nclones"),
-    ("false_alarms", "Can its test\nbe trusted?", "Few false\nalarms without\nsignal"),
     ("time", "Computer resources", "Run\ntime"),
     ("memory", "Computer resources", "Peak\nmemory"),
     ("cores", "Computer resources", "Gain from\n16 CPU\ncores"),
@@ -87,9 +83,6 @@ RULES = {
                   "programme; Wilcoxon over simulated datasets.",
     "sim_mixed": "AUROC for telling clones made of two kinds of cells from clones of cells halfway between them "
                  "(clones ≥ 10 cells); Wilcoxon over simulated datasets.",
-    "false_alarms": "share of replicates in which the test reports clonal structure after clone labels were "
-                    "shuffled within each sample (no clonal signal), median over datasets; Wilcoxon over datasets. "
-                    "Only scirpy and the ANOVA test the same hypothesis; the other tools have no test.",
     "time": "time to compute the clone representation, divided by Threadfin's on the same dataset (median); "
             "Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as "
             "72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on "
@@ -188,8 +181,6 @@ class Overview:
         self.sim = read("simulation.csv")
         self.res = read("resources.csv")
         self.status = read("run_status.csv")
-        files = sorted(glob.glob(str(RESULTS / "tests" / "*.csv")))
-        self.tests = pd.concat([pd.read_csv(f) for f in files], ignore_index=True) if files else None
 
     # helpers -----------------------------------------------------------------
     def runs(self, key):
@@ -331,22 +322,6 @@ class Overview:
         return Cell(v, f"{both.iloc[:, 0].median():.2f}\nvs {both.iloc[:, 1].median():.2f}", f"{len(both)} simulated datasets",
                     len(both), p)
 
-    # tests ---------------------------------------------------------------------
-    def false_alarms(self, key):
-        if self.tests is None:
-            return Cell("pending", "…")
-        nw = self.tests[self.tests["scenario"].eq("null_within_sample")]
-        rate = pd.DataFrame({"tf": nw.groupby("dataset")["threadfin_p"].apply(lambda p: (p < 0.05).mean()),
-                             "scirpy": nw.groupby("dataset")["scirpy_n_clones_fdr05"].apply(lambda n: (n > 0).mean()),
-                             "anova": nw.groupby("dataset")["cell_anova_p"].apply(lambda p: (p < 0.05).mean())})
-        if key == TF:
-            return Cell("ref", f"{pct(rate['tf'].median())}\n({pct(rate['tf'].min())}–{pct(rate['tf'].max())})",
-                        n=len(rate))
-        if key not in ("scirpy", "anova"):
-            return Cell("na", "no test")
-        v, p = paired(rate[key] - rate["tf"], higher_better=False)
-        return Cell(v, f"{pct(rate[key].median())}\nvs {pct(rate['tf'].median())}", f"{len(rate)} datasets", len(rate), p)
-
     # resources -----------------------------------------------------------------
     def _usable_runs(self, key):
         r = self.runs(key)
@@ -361,14 +336,8 @@ class Overview:
         if key == TF:
             t = self.runs(TF)["seconds_method"]
             return Cell("ref", f"{t.median():.1f} s\n(median)")
-        if key == "scirpy":
-            nw = self.tests[self.tests["scenario"].eq("null_within_sample")]
-            g = nw.groupby("dataset")[["seconds_scirpy", "seconds_threadfin"]].median()
-            ratios = g["seconds_scirpy"] / g["seconds_threadfin"]
-            v, p = ratio_verdict(ratios)
-            return Cell(v, times_text(float(np.median(ratios))), "the test alone, per replicate", len(ratios), p)
-        if key in ("anova",) or key in ("conga_medoid", "mean_pca", "composition"):
-            return Cell("na", "—" if key == "anova" else "not timed")
+        if key in ("conga_medoid", "mean_pca", "composition"):
+            return Cell("na", "not timed")
         r, tf = self._usable_runs(key)
         sec = np.where(r["status"].eq("stopped"), STOP_SECONDS,
                        r["seconds_method"].fillna(r["wall_seconds_task"]).to_numpy(float))
@@ -383,8 +352,8 @@ class Overview:
     def memory(self, key):
         if key == TF:
             return Cell("ref", f"{self.runs(TF)['peak_rss_gb_method'].median():.1f} GB\n(median)")
-        if key in ("scirpy", "anova", "conga_medoid", "mean_pca", "composition"):
-            return Cell("na", "—" if key in ("scirpy", "anova") else "not measured")
+        if key in ("conga_medoid", "mean_pca", "composition"):
+            return Cell("na", "not measured")
         r, tf = self._usable_runs(key)
         r = r[r["status"].eq("completed")]
         ratios = r["peak_rss_gb_task"].to_numpy(float) / tf.loc[r["dataset"], "peak_rss_gb_method"].to_numpy(float)
@@ -445,7 +414,7 @@ class Overview:
 
     def finished(self, key):
         st = self.status
-        if st is None or key in ("scirpy", "anova"):
+        if st is None:
             return Cell("na", "—")
         runs = {"clonotrace_revised_min10": ["clonotrace_min10"], "clonotrace_revised_min2": ["clonotrace_min2"],
                 "benisse": ["benisse_min2", "benisse_min10"]}.get(key, [key])
@@ -471,12 +440,9 @@ class Overview:
              "traits_disjoint": lambda: self.traits_disjoint(key), "reid": lambda: self.reid(key),
              "fate": lambda: self.fate(key), "sim_groups": lambda: self.simulation(key, "programme_purity"),
              "sim_mixed": lambda: self.simulation(key, "mixture_vs_intermediate_auroc"),
-             "false_alarms": lambda: self.false_alarms(key), "time": lambda: self.time(key),
+             "time": lambda: self.time(key),
              "memory": lambda: self.memory(key), "cores": lambda: self.cores(key),
              "growth": lambda: self.growth(key), "finished": lambda: self.finished(key)}[col]
-        test_only = key in ("scirpy", "anova")
-        if test_only and col not in ("false_alarms", "time"):
-            return Cell("na", "—")
         if key == "benisse" and col in ("fate", "sim_groups", "sim_mixed"):
             return Cell("na", "no BCR")
         try:
@@ -631,8 +597,8 @@ def draw(cells: dict, u: pd.DataFrame):
             fontsize=7.2, color=INK2)
     fig.text(0.012, 0.975, "The benchmark at a glance: each tool compared with Threadfin, and how easy each tool "
              "is to use", fontsize=12.5, fontweight="bold", va="center")
-    fig.text(0.012, 0.952, "Rows: tools at their own defaults and forced to the smallest clones, simple baselines and "
-             "two tests. 11 real datasets (9 B-cell, 2 LARRY lineage-barcode), 12 simulated datasets.",
+    fig.text(0.012, 0.952, "Rows: tools at their own defaults and forced to the smallest clones, and simple baselines. "
+             "11 real datasets (9 B-cell, 2 LARRY lineage-barcode), 12 simulated datasets.",
              fontsize=8.4, color=INK2, va="center")
     return fig
 

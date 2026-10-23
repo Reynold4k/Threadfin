@@ -2,7 +2,7 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-23 20:17, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-23 21:44, Melbourne time).*
 
 Still running: none.
 
@@ -314,7 +314,6 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Links day-2 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
 | Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
 | Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
-| Few false alarms without signal | share of replicates in which the test reports clonal structure after clone labels were shuffled within each sample (no clonal signal), median over datasets; Wilcoxon over datasets. Only scirpy and the ANOVA test the same hypothesis; the other tools have no test. |
 | Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |
 | Peak memory | peak memory, the same way. |
 | Gain from 16 CPU cores | time with 1 core divided by time with 16 cores (GSE287123 RBD; Threadfin: its complete analysis). Better or worse: more than 25 % from Threadfin's gain. |

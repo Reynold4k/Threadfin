@@ -30,8 +30,9 @@ including the ones where Threadfin is not the best.
 ![The benchmark at a glance](figures/fig0_overview.png)
 
 **How to read it.** In panel **a**, each row is a tool — at its own default and, where it matters, forced down
-to clones of two cells — or one of three simple baselines or two statistical tests. Each column is one
-question of the benchmark, in plain words, grouped as in section 6. Every tile compares the tool with
+to clones of two cells — or one of three simple baselines. Each column is one question of the benchmark, in
+plain words, grouped as in section 6 (the calibration of clonal tests, which only Threadfin, scirpy and a
+cell-level ANOVA address, is in section 6.6). Every tile compares the tool with
 Threadfin on the same clones and datasets: **blue ▲** better than Threadfin, **grey** no clear difference,
 **orange ▼** worse, with the number behind the verdict ("vs" gives Threadfin's value on the same clones);
 Threadfin's own row gives its value. Runs that failed, were stopped or needed help are counted, never dropped.
@@ -56,10 +57,6 @@ s43588-026-00977-z, Fig. 4): 1 = yes, 0.5 = partly, 0 = no, with the evidence fo
   descendants slightly better; clone2vec's run time grows more slowly with the number of clones; and
   Clonotrace gains more from extra cores (2.7 times faster from 4 to 16 cores, against Threadfin's 2.0 from 1
   to 16).
-* **Among the tests compared, only Threadfin's holds its error rate.** With no clonal signal it reports
-  structure in a median 4 % of replicates (0–8 %), against 80 % for scirpy's clonotype modularity and 100 % for
-  a cell-level ANOVA. clone2vec, Clonotrace and Benisse have no test of this question (CoNGA's graph-overlap
-  test asks a different one and was not benchmarked).
 * **Cost and reliability.** clone2vec takes about 30 times and Benisse 33 times Threadfin's time for the
   clone representation; Clonotrace 290–2,400 times. One Clonotrace run (11,141 clones) was stopped after
   72 h and four needed a larger cell graph to finish; clone2vec at its default failed on 12 of 77 runs (small
@@ -84,7 +81,6 @@ How each column's verdict is reached:
 | Links day-2 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
 | Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
 | Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
-| Few false alarms without signal | share of replicates in which the test reports clonal structure after clone labels were shuffled within each sample (no clonal signal), median over datasets; Wilcoxon over datasets. Only scirpy and the ANOVA test the same hypothesis; the other tools have no test. |
 | Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |
 | Peak memory | peak memory, the same way. |
 | Gain from 16 CPU cores | time with 1 core divided by time with 16 cores (GSE287123 RBD; Threadfin: its complete analysis). Better or worse: more than 25 % from Threadfin's gain. |
@@ -179,7 +175,7 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-23 20:17, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-23 21:44, Melbourne time).*
 
 Still running: none.
 
