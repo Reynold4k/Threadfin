@@ -45,6 +45,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+__all__ = ["simulate_repertoire"]
+
 
 def _distinct_compositions(rng, n_programmes, n_states, alpha, min_dist=0.35, tries=200):
     """Programme state compositions that are pairwise distinct (Hellinger)."""

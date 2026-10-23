@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml"><img src="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
-  <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg" alt="Python 3.10 | 3.11 | 3.12"></a>
+  <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue.svg" alt="Python 3.10 to 3.14"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-4.3.1-informational.svg" alt="version 4.3.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
 </p>
@@ -81,8 +81,9 @@ pip install "git+https://github.com/Reynold4k/Threadfin.git"
 pip install "threadfin[dandelion] @ git+https://github.com/Reynold4k/Threadfin.git"
 ```
 
-Threadfin requires Python ≥ 3.10; Scanpy, Leiden, UMAP and Harmony are installed with it, and no GPU or R
-is needed. Clones can be defined from BCR contigs with Dandelion (the `[dandelion]` extra also pins
+Threadfin requires Python ≥ 3.10 and is tested on 3.10 to 3.14, down to the oldest dependency versions it
+allows ([compatibility](docs/COMPATIBILITY.md)); Scanpy, Leiden, UMAP and Harmony are installed with it, and no
+GPU or R is needed. Clones can be defined from BCR contigs with Dandelion (the `[dandelion]` extra also pins
 `matplotlib<3.9`, which Dandelion 0.5.7 needs but does not declare), or you can provide your own clone ids
 in `adata.obs["clone_id"]`. Dandelion's clone calls depend on Python's string-hash seed; start Python with
 `PYTHONHASHSEED=0` if clone ids must be identical run after run.
@@ -108,8 +109,9 @@ result.plot("threadfin_overview.pdf")          # clone map, coherence, stability
 `tf.run` defines clones within each donor, builds an expression embedding without immunoglobulin genes,
 estimates one profile per clone, tests clonal coherence, lays out the clone embedding, finds clonal
 programmes and reports their stability. Add `test=[...]` to test your own labels and `time_key=` to ask
-whether clones keep their state. No data at hand? `tf.sim.simulate_repertoire()` makes a repertoire with
-a known answer ([Tutorial 1](docs/tutorials/01_getting_started.md)).
+whether clones keep their state, and `n_jobs=-1` to use every CPU core (the results do not change). No data
+at hand? `tf.sim.simulate_repertoire()` makes a repertoire with a known answer
+([Tutorial 1](docs/tutorials/01_getting_started.md)).
 
 <p align="center">
   <img src="docs/_static/tutorial_overview.png" width="760" alt="Overview figure produced by result.plot()">
@@ -173,6 +175,7 @@ The full description, with references, is in [Methods](docs/METHODS.md).
 | [Tutorial 4 — Step by step](docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
 | [Tutorial 5 — From GEO to results (notebook)](docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset end to end: download, demultiplexing, clones, embedding, Threadfin, interpretation |
 | [Methods](docs/METHODS.md) | the statistical model behind each step |
+| [Function reference](docs/API.md) | every public function and its arguments, generated from the code |
 | [The manuscript](manuscript/README.md) | publication status, datasets, every analysis, open work |
 | [Case studies](manuscript/case_studies/README.md) | scripts and results for the public datasets |
 | [Figures](manuscript/figures/README.md) | figures of the manuscript, with their source code |
@@ -189,13 +192,16 @@ Biotechnol.* 2024) for clone definition, Scanpy (Wolf *et al.*, *Genome Biol.* 2
 ## How Threadfin compares with related tools
 
 Clonotrace, clone2vec, Benisse and CoNGA also combine lineage and transcriptome, and answer related but
-different questions. On the same data and clones ([benchmark](manuscript/benchmarking/README.md)):
-Threadfin is the only one that represents every clone with two or more cells by default (clone2vec starts at
-three cells, Clonotrace at ten) and its test of clonal coherence keeps its error rate when samples differ,
-where per-clone graph scores and cell-level tests do not. For recovering measured clone annotations it is
-comparable to clone2vec and to a simple mean of the cells' coordinates, and on simulated discrete
-programmes clone2vec and cluster-composition profiles group clones more accurately. The benchmark reports
-every result, including those.
+different questions. On the same data and clones ([benchmark](manuscript/benchmarking/README.md), with a
+one-page overview): Threadfin and Benisse represent every clone with two or more cells by default
+(clone2vec starts at three cells, Clonotrace at ten), and Threadfin's test of clonal coherence keeps its
+error rate when samples differ, where per-clone graph scores and cell-level tests do not. For recovering
+measured clone annotations Threadfin is comparable to clone2vec and to a simple mean of the cells'
+coordinates, and better than Clonotrace at its default and than Benisse; in simulation, clone2vec groups clones by their
+planted programme and tells mixed from in-between clones more accurately. Threadfin needs a fraction of the
+others' time (its clone profiles take seconds; clone2vec about 30 times longer, Clonotrace 300 to 2,400
+times) and finished every run without help. The benchmark reports every result, including those where
+Threadfin is not the best.
 
 ## Related tools
 

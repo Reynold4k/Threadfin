@@ -2,6 +2,48 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.4.0 — 2026-10-23
+
+### New
+
+- **Several CPU cores, the same result.** `threadfin.run`, `tl.embed_clones`, `tl.tune_clone_map` and
+  `tl.find_programmes` take `n_jobs` (default 1; `-1` uses every core the job may use). The clone-map search
+  lays out its candidate maps in parallel and the programme search runs its bootstrap replicates in parallel.
+  The chosen map, its coordinates and the programmes are identical for any `n_jobs` (verified against 4.3.1 on
+  GSE287123). On GSE287123 RBD (1,887 clones) 8 cores made the clone-map search 2.4 times and the bootstrap
+  2.6 times faster; more than 8 cores gave nothing further.
+  *What this means for you:* on large data, `tf.run(..., n_jobs=-1)`.
+- **Analyses that could not be run are listed in the summary.** A requested label test whose label has no
+  usable values, or a clonal-memory axis on which no clone is seen twice, was skipped with a log line only. It
+  is now recorded in `result.skipped` and listed under "Not run" in `result.summary()`; everything else is
+  reported as before.
+- **A function reference**, [`docs/API.md`](docs/API.md), generated from the docstrings (a test keeps it in
+  step with the code).
+
+### Fixes
+
+- **Contig ids reused across libraries.** Cell Ranger names contigs after the cell barcode
+  (`ACGG...-1_contig_1`), so when one donor was sequenced in several libraries two of its cells could carry the
+  same contig ids, and Dandelion mixed their chains. `define_clones_dandelion` now renames duplicated ids after
+  their cell. In GSE287123 this affected 18 of 21,939 cells (RBD) and 8 of 4,855 (NP); the RBD and NP
+  "light-chain-only groups" counted in 4.3.1 were this artefact. Figure 4 of the manuscript is unchanged
+  (`manuscript/analyses/rbd_complete_pairs/`).
+  *What this means for you:* if your donors span several 10x libraries, re-call clones with 4.4.0.
+- **`define_clones_dandelion(cell_key=...)`** checked for a `cell_id` column before using `cell_key`, so a
+  table whose barcode column had another name was rejected; the required columns now follow `cell_key`.
+- **Clearer messages** for clone ids shared between donors (how many, an example, and the one-line fix), for an
+  embedding with missing or infinite values (how many cells, and how to drop them) and for data in which no
+  clone has two cells.
+
+### Installation
+
+- **Python 3.10 to 3.14.** The test suite and the tutorial pass on Python 3.13 and 3.14 with current releases of
+  every dependency, and on Python 3.10 with the oldest versions `pyproject.toml` allows; continuous integration
+  now runs all of these.
+- **Minimum versions raised:** umap-learn 0.5.5 and pynndescent 0.5.8. Older releases import `pkg_resources`,
+  which new Python environments no longer include, so an installation that picked them could not draw the clone
+  map. `joblib` (already installed with scikit-learn) is now declared.
+
 ## 4.3.1 — 2026-10-20
 
 ### Fixes

@@ -269,23 +269,70 @@ def _key(setting) -> tuple:
     return int(k), round(float(md), 3), round(float(rep), 3)
 
 
+def _layout_quality(ref: _Reference, key: tuple, spread: float, n_epochs, target: float, penalty: float) -> dict:
+    """One layout at ``key = (n_neighbors, min_dist, repulsion, seed)`` and its score (runs in a worker)."""
+    k, md, rep, seed = key
+    xy = ref.layout(k, md, spread, seed, repulsion=rep, n_epochs=n_epochs)
+    return ref.quality(xy, target, penalty)
+
+
+def resolve_n_jobs(n_jobs) -> int:
+    """``n_jobs`` as a positive number of processes (``-1``: every available core; ``None``: one)."""
+    import os
+
+    if n_jobs is None:
+        return 1
+    if isinstance(n_jobs, bool) or not isinstance(n_jobs, (int, np.integer)) or n_jobs == 0:
+        raise ValueError(f"n_jobs must be a positive integer, -1 (all cores) or None, got {n_jobs!r}.")
+    try:
+        available = len(os.sched_getaffinity(0))
+    except AttributeError:                                  # macOS / Windows
+        available = os.cpu_count() or 1
+    return int(available + 1 + n_jobs) if n_jobs < 0 else int(min(n_jobs, available))
+
+
 class _Search:
     """Lays clones out at requested settings, scores each layout once and keeps every result."""
 
-    def __init__(self, ref: _Reference, target: float, penalty: float, spread: float, n_epochs):
+    def __init__(self, ref: _Reference, target: float, penalty: float, spread: float, n_epochs, n_jobs: int = 1):
         self.ref, self.target, self.penalty, self.spread, self.n_epochs = ref, target, penalty, spread, n_epochs
+        self.n_jobs = int(n_jobs)
         self.cache: dict = {}
         self.rows: list = []
 
     def evaluate(self, setting, seed: int, stage: str) -> dict:
-        k, md, rep = _key(setting)
-        if (k, md, rep, int(seed)) not in self.cache:
-            xy = self.ref.layout(k, md, self.spread, seed, repulsion=rep, n_epochs=self.n_epochs)
-            q = self.ref.quality(xy, self.target, self.penalty)
-            self.cache[(k, md, rep, int(seed))] = q
-            self.rows.append(dict(stage=stage, n_neighbors=k, min_dist=md, repulsion_strength=rep, seed=int(seed),
-                                  **q))
-        return self.cache[(k, md, rep, int(seed))]
+        self.evaluate_many([(setting, seed, stage)])
+        return self.cache[_key(setting) + (int(seed),)]
+
+    def evaluate_many(self, requests) -> None:
+        """Lay out and score every requested ``(setting, seed, stage)`` not seen before.
+
+        With ``n_jobs > 1`` the layouts are computed in parallel processes. A layout depends only on its
+        setting and seed, and results are stored in the order requested, so the outcome is identical for
+        any ``n_jobs``.
+        """
+        todo, planned = [], set()
+        for setting, seed, stage in requests:
+            key = _key(setting) + (int(seed),)
+            if key not in self.cache and key not in planned:
+                planned.add(key)
+                todo.append((key, stage))
+        if not todo:
+            return
+        args = (self.spread, self.n_epochs, self.target, self.penalty)
+        if self.n_jobs > 1 and len(todo) > 1:
+            from joblib import Parallel, delayed
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                results = Parallel(n_jobs=min(self.n_jobs, len(todo)))(
+                    delayed(_layout_quality)(self.ref, key, *args) for key, _ in todo)
+        else:
+            results = [_layout_quality(self.ref, key, *args) for key, _ in todo]
+        for (key, stage), q in zip(todo, results):
+            self.cache[key] = q
+            self.rows.append(dict(stage=stage, n_neighbors=key[0], min_dist=key[1], repulsion_strength=key[2],
+                                  seed=key[3], **q))
 
     def count(self, setting) -> int:
         key = _key(setting)
@@ -321,10 +368,7 @@ def _smoothed(search: _Search, ks, mds, sigma: float) -> pd.DataFrame:
 def _ladder_candidates(search: _Search, ks, mds, rng, n_seeds: int, top: int, sigma: float, verbose: bool):
     """Steps 1-2: every ladder setting with shared seeds, worst-case coherence, Gaussian smoothing."""
     seeds = [int(rng.integers(2**31 - 1)) for _ in range(n_seeds)]
-    for k in ks:
-        for md in mds:
-            for s in seeds:
-                search.evaluate((k, md, 1.0), s, "ladder")
+    search.evaluate_many([((k, md, 1.0), s, "ladder") for k in ks for md in mds for s in seeds])
     tab = _smoothed(search, ks, mds, sigma)
     for _, r in tab.nlargest(3, "smoothed").iterrows():
         log(f"  ladder: n_neighbors {int(r['n_neighbors'])}, min_dist {r['min_dist']:.2f} -> score "
@@ -387,9 +431,13 @@ def _confirm(search: _Search, candidates, rng, n_layouts: int, tolerance: float,
     settings that break apart loses to one in a robust neighbourhood. Ties go to the more coherent and
     then to the standard (stronger) repulsion.
     """
+    requests, planned = [], {}
     for setting in candidates:
-        for _ in range(max(0, n_layouts - search.count(setting))):
-            search.evaluate(setting, int(rng.integers(2**31 - 1)), "confirm")
+        key = _key(setting)
+        need = max(0, n_layouts - search.count(setting) - planned.get(key, 0))
+        planned[key] = planned.get(key, 0) + need
+        requests += [(setting, int(rng.integers(2**31 - 1)), "confirm") for _ in range(need)]
+    search.evaluate_many(requests)
     tab = pd.DataFrame([search.robust(s) for s in candidates])
     tab["smoothed"] = tab["score"]
     if ladder is not None:
@@ -438,6 +486,7 @@ def tune_clone_map(
     full_layouts: int = 2,
     adam_options: dict | None = None,
     random_state: int = 0,
+    n_jobs: int | None = 1,
     verbose: bool = True,
 ) -> MapTuning:
     """Choose UMAP ``n_neighbors`` and ``min_dist`` for a clone map.
@@ -490,6 +539,10 @@ def tune_clone_map(
         ``sqrt(N)`` neighbours between 15 and 100, and ``min_dist`` 0.3).
     random_state
         Seed for layout seeds and the clone subset; the result is reproducible for a given seed.
+    n_jobs
+        Processes used to compute layouts in parallel (``-1``: all available cores). Every layout depends
+        only on its setting and seed, so the chosen settings are identical for any ``n_jobs``; only the
+        time changes.
 
     Returns
     -------
@@ -523,7 +576,8 @@ def tune_clone_map(
 
     ref = _Reference(feats, k_max=k_cap, random_state=int(rng.integers(2**31 - 1)))
     target = _target(ref, coherence_target)
-    search = _Search(ref, target, penalty, spread, search_epochs)
+    n_jobs = resolve_n_jobs(n_jobs)
+    search = _Search(ref, target, penalty, spread, search_epochs, n_jobs)
     k_fixed = int(np.clip(round(n_neighbors / scale), k_lo, k_cap)) if not tune_k else None
     log(f"choosing clone-map settings ({method}) on {n:,} clones"
         f"{f' (random subset of {n_all:,})' if scale > 1 else ''}; target: at least {100 * target:.1f}% of "
@@ -586,7 +640,7 @@ def tune_clone_map(
         full_ref = _Reference(feats_all, k_max=min(N_NEIGHBORS_RANGE[1], n_all - 1),
                               random_state=int(rng.integers(2**31 - 1)))
         full_target = _target(full_ref, coherence_target)
-        full = _Search(full_ref, full_target, penalty, spread, search_epochs)
+        full = _Search(full_ref, full_target, penalty, spread, search_epochs, n_jobs)
         ranked = table.sort_values(["coherence", "smoothed"], ascending=False)
         picks = [(int(n_neighbors) if not tune_k else k_full(k), float(md), float(rep))
                  for k, md, rep in zip(ranked["n_neighbors"], ranked["min_dist"], ranked["repulsion_strength"])]
@@ -602,8 +656,7 @@ def tune_clone_map(
             log(f"  no setting held together on all clones; scanning {len(corner)} wide-spacing settings.",
                 verbose)
             seed = int(rng.integers(2**31 - 1))
-            for c in corner:
-                full.evaluate(c, seed, "full data")
+            full.evaluate_many([(c, seed, "full data") for c in corner])
             corner.sort(key=lambda c: (full.robust(c)["coherence"], full.robust(c)["score"]), reverse=True)
             picks = picks + corner[:3]
             table, win = _confirm(full, picks, rng, full_layouts, tolerance)

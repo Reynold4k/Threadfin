@@ -144,3 +144,21 @@ def test_hash_seed_in_use_is_recorded(monkeypatch):
     assert define_clones_dandelion(paired_and_light_only(), verbose=False).attrs["python_hash_seed"] == "0"
     monkeypatch.delenv("PYTHONHASHSEED")
     assert define_clones_dandelion(paired_and_light_only(), verbose=False).attrs["python_hash_seed"] is None
+
+
+def test_cell_key_replaces_cell_id_among_the_required_columns():
+    """A table whose barcode column has another name is valid with cell_key; only truly absent columns count."""
+    from threadfin.dandelion import define_clones_dandelion
+    t = contigs().rename(columns={"cell_id": "barcode"}).drop(columns="v_call")
+    with pytest.raises(ValueError, match=r"missing \['v_call'\]"):
+        define_clones_dandelion(t, cell_key="barcode", verbose=False)
+
+
+def test_contig_ids_reused_across_libraries_are_made_unique():
+    """Cell Ranger contig ids repeat across libraries; two cells must never share one (GSE287123 did)."""
+    from threadfin.dandelion import _unique_sequence_ids
+    t = contigs(4, sequence_id=["AAAC-1_contig_1", "AAAC-1_contig_1", "GGGT-1_contig_1", "GGGT-1_contig_2"])
+    out = _unique_sequence_ids(t, verbose=False)
+    assert out["sequence_id"].is_unique
+    assert list(out["sequence_id"].iloc[2:]) == ["GGGT-1_contig_1", "GGGT-1_contig_2"]   # unique ids are kept
+

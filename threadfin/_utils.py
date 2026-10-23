@@ -85,7 +85,10 @@ def get_basis(adata, basis: str, dtype=np.float64) -> np.ndarray:
     if x.shape[1] == 0:
         raise ValueError(f"'{basis}' has no features. Compute or provide a non-empty embedding.")
     if not np.isfinite(x).all():
-        raise ValueError(f"'{basis}' contains NaN or infinite values. Recompute or clean the embedding first.")
+        bad = int((~np.isfinite(x).all(axis=1)).sum())
+        raise ValueError(
+            f"'{basis}' has NaN or infinite values in {bad:,} of {x.shape[0]:,} cells. Recompute the embedding, or "
+            f"drop those cells first: adata = adata[np.isfinite(adata.obsm['{basis}']).all(axis=1)].copy()")
     return x
 
 

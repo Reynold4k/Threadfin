@@ -164,6 +164,24 @@ def _fill_junction_aa(t: pd.DataFrame, *, verbose: bool = True) -> pd.DataFrame:
     return t
 
 
+def _unique_sequence_ids(t: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
+    """Make contig ids unique. Cell Ranger names contigs after the barcode (``AAAC...-1_contig_1``), so two
+    libraries of one donor can carry the same id for different cells; Dandelion indexes contigs by this id and
+    would mix those cells' chains. Duplicated ids are prefixed with the cell id."""
+    sid = t["sequence_id"].astype(str)
+    if not sid.duplicated().any():
+        return t
+    t = t.copy()
+    dup = sid.duplicated(keep=False)
+    t["sequence_id"] = sid.where(~dup, t["cell_id"].astype(str) + "|" + sid)
+    if t["sequence_id"].duplicated().any():           # the same cell listed a contig twice
+        t["sequence_id"] = t["sequence_id"] + "_" + t.groupby("sequence_id").cumcount().astype(str)
+    if verbose:
+        log(f"{int(dup.sum()):,} contigs shared their id with a contig of another cell (barcode reused across "
+            "libraries); they were renamed after their cell")
+    return t
+
+
 def define_clones_dandelion(
     contigs: pd.DataFrame,
     *,
@@ -208,10 +226,12 @@ def define_clones_dandelion(
     ``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
     sessions, see the module notes).
     """
-    ddl = _require_dandelion()
-    missing = [c for c in REQUIRED if c not in contigs.columns]
+    required = [cell_key if c == "cell_id" else c for c in REQUIRED]
+    missing = [c for c in required if c not in contigs.columns]
     if missing:
-        raise ValueError(f"contigs is missing {missing}; this function needs a contig-level AIRR table.")
+        raise ValueError(f"contigs is missing {missing}; this function needs a contig-level AIRR table "
+                         f"(cell_key={cell_key!r} names the column with the cell barcode).")
+    ddl = _require_dandelion()
 
     t = contigs.copy()
     t[cell_key] = t[cell_key].astype(str)
@@ -244,6 +264,7 @@ def define_clones_dandelion(
         t = t.reset_index(drop=True)
         t["sequence_id"] = (t["cell_id"].astype(str) + "_" + t["locus"].astype(str) + "_"
                             + t.groupby(["cell_id", "locus"]).cumcount().add(1).astype(str))
+    t = _unique_sequence_ids(t, verbose=verbose)
     # Dandelion validates a fixed column list on construction. Deposits legitimately omit some of them
     # (GSE195673 has no constant-region call), and an absent optional field should not stop clone calling.
     for col in ("d_call", "c_call", "productive"):

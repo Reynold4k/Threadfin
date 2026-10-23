@@ -81,7 +81,7 @@ def test_airr_umi_sort_keeps_chain_identity_aligned(tmp_path):
 def test_profiles_reject_shared_clone_ids_across_donors():
     a=repertoire()
     a.obs["donor"]=np.tile(["A","B"],40)
-    with pytest.raises(ValueError,match="multiple donors"):
+    with pytest.raises(ValueError,match="more than one donor"):
         tf.tl.clone_profiles(a,donor_key="donor",verbose=False)
 
 def test_memory_does_not_borrow_other_donors_when_matching_is_impossible():

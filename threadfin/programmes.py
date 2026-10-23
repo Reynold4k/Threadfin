@@ -105,6 +105,18 @@ def leiden(graph, resolution: float, seed: int = 0) -> np.ndarray:
     return np.asarray(part.membership, dtype=np.int64)
 
 
+def _leiden_many(tasks, n_jobs: int = 1) -> list:
+    """Leiden partitions for ``(graph, resolution, seed)`` tasks, in parallel processes when ``n_jobs > 1``.
+
+    Each partition depends only on its graph, resolution and seed, so the result is the same for any ``n_jobs``.
+    """
+    if n_jobs > 1 and len(tasks) > 1:
+        from joblib import Parallel, delayed
+
+        return Parallel(n_jobs=min(n_jobs, len(tasks)))(delayed(leiden)(g, r, s) for g, r, s in tasks)
+    return [leiden(g, r, s) for g, r, s in tasks]
+
+
 def jaccard_match(ref: np.ndarray, other: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Best-match Jaccard of every reference cluster, and per-item agreement.
 
@@ -336,6 +348,7 @@ def embed_clones(
     coherence_target: float | str = "auto",
     tune_kwargs: dict | None = None,
     random_state: int = 0,
+    n_jobs: int | None = 1,
     verbose: bool = True,
 ) -> pd.DataFrame:
     """Lay the clone profiles out in two dimensions — **every** profiled clone, by default.
@@ -354,9 +367,9 @@ def embed_clones(
     ----------
     n_neighbors, min_dist
         UMAP settings. ``"auto"`` (the default for both) chooses them per dataset with
-        :func:`threadfin.tl.tune_clone_map`: Adam, driven by simultaneous-perturbation gradient estimates,
-        searches for the most faithful layout that is no more fragmented than the clone profiles
-        themselves, so a continuum of clones is drawn as one connected picture. Pass numbers to set them
+        :func:`threadfin.tl.tune_clone_map`: a ladder of settings, each laid out with several seeds and
+        smoothed over its neighbours, finds the most faithful layout that is no more fragmented than the
+        clone profiles themselves, so a continuum of clones is drawn as one connected picture. Pass numbers to set them
         by hand (``n_neighbors=50, min_dist=0.8`` reproduces the fixed default of Threadfin 4.2); a
         number for one and ``"auto"`` for the other tunes only the second.
     spread
@@ -368,6 +381,9 @@ def embed_clones(
         Passed to :func:`threadfin.tl.tune_clone_map` when a setting is ``"auto"``.
     random_state
         Seed for the tuner and for the final layout.
+    n_jobs
+        Processes for the layouts of the automatic search (``-1``: all available cores). The chosen
+        settings and the map do not depend on it.
 
     Returns
     -------
@@ -393,7 +409,7 @@ def embed_clones(
     if n_neighbors == "auto" or min_dist == "auto":
         tuning = tune_clone_map(feats, n_neighbors=n_neighbors, min_dist=min_dist, spread=spread,
                                 coherence_target=coherence_target, random_state=random_state,
-                                verbose=verbose, **(tune_kwargs or {}))
+                                n_jobs=n_jobs, verbose=verbose, **(tune_kwargs or {}))
         n_neighbors, min_dist, repulsion = tuning.n_neighbors, tuning.min_dist, tuning.repulsion_strength
 
     xy, quality, setting, attempts = layout_clone_map(
@@ -443,6 +459,7 @@ def find_programmes(
     assign_remaining: bool = True,
     min_posterior: float = 0.7,
     random_state: int = 0,
+    n_jobs: int | None = 1,
     key_added: str = "clone_programme",
     verbose: bool = True,
 ) -> pd.DataFrame:
@@ -496,6 +513,10 @@ def find_programmes(
         likely programme by a Gaussian classifier whose noise term shrinks
         with clone size (see ``_assign_remaining``); assignments with
         posterior >= ``min_posterior`` go to ``<key_added>_assigned``.
+    n_jobs
+        Processes for the Leiden runs on the bootstrap graphs (``-1``: all
+        available cores). Programmes and stabilities are identical for any
+        value; only the run time changes.
     key_added
         ``obs`` column receiving each cell's programme (cells of clones that
         were not clustered get NaN).
@@ -537,14 +558,23 @@ def find_programmes(
         boot_feats = _bootstrap_features(model, adata, eligible_codes, n_boot, rng)
         boot_graphs = [knn_graph(f, n_neighbors, rel) for f in boot_feats]
 
+    # every Leiden partition of the scan (reference and bootstrap graphs at every resolution), computed once
+    from .maptune import resolve_n_jobs
+
+    tasks = [(graph, res, random_state) for res in res_grid]
+    tasks += [(bg, res, random_state + b + 1) for res in res_grid for b, bg in enumerate(boot_graphs)]
+    parts = iter(_leiden_many(tasks, resolve_n_jobs(n_jobs)))
+    ref_part = {res: next(parts) for res in res_grid}
+    boot_part = {(res, b): next(parts) for res in res_grid for b in range(len(boot_graphs))}
+
     scan_rows, partitions = [], {}
     for res in res_grid:
-        ref = leiden(graph, res, seed=random_state)
+        ref = ref_part[res]
         k = int(ref.max()) + 1
         jac_sum = np.zeros(k)
         agree = np.zeros(ref.size)
-        for b, bg in enumerate(boot_graphs):
-            jac, ok = jaccard_match(ref, leiden(bg, res, seed=random_state + b + 1))
+        for b in range(len(boot_graphs)):
+            jac, ok = jaccard_match(ref, boot_part[(res, b)])
             jac_sum += jac
             agree += ok
         nb = max(len(boot_graphs), 1)
@@ -596,8 +626,8 @@ def find_programmes(
             # stability of the final programmes: repeat Leiden *and* the split test in every bootstrap
             jac_mean = np.zeros(int(ref.max()) + 1)
             agree = np.zeros(ref.size)
-            for b, (bf, bg) in enumerate(zip(boot_feats, boot_graphs)):
-                bl = leiden(bg, chosen, seed=random_state + b + 1)[keep_mask]
+            for b, bf in enumerate(boot_feats):
+                bl = boot_part[(chosen, b)][keep_mask]
                 bl, _ = _merge_by_split_test(bf[keep_mask], bl, alpha, max(n_null // 4, 20), rng, split_null)
                 jac, ok = jaccard_match(ref, bl)
                 jac_mean += jac

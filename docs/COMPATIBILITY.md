@@ -1,5 +1,29 @@
 # Verified compatibility
 
+## Version 4.4.0 — 23 October 2026
+
+The package was installed from the source tree with `uv` into new, isolated environments (no inherited
+`PYTHONPATH` or user site-packages), and the full test suite and the tutorial on simulated data were run in
+each (2 tests are skipped when an optional dependency is absent):
+
+| Python | dependency versions | tests | tutorial |
+|---|---|---|---|
+| 3.10 | the **oldest** versions `pyproject.toml` allows: numpy 1.24.1, pandas 2.0.0, scipy 1.10.0, scikit-learn 1.3.0, anndata 0.10.0, scanpy 1.10.0, matplotlib 3.7.0, umap-learn 0.5.5, pynndescent 0.5.8, igraph 0.10.0, leidenalg 0.10.0, joblib 1.2.0, harmonypy 0.0.9 | 245 passed | passed |
+| 3.11 | the benchmark environment (numpy 2.2, pandas 2.3, scanpy 1.11) | 245 passed | passed |
+| 3.13 | current releases | 244 passed, 1 expected failure (the legacy v3 repeatability check) | passed |
+| 3.14 | current releases: numpy 2.5, pandas 3.1, scipy 1.18, scikit-learn 1.9, anndata 0.13, scanpy 1.12, matplotlib 3.11, numba 0.68 | 244 passed, the same expected failure | passed |
+
+This check found two problems, both fixed in 4.4.0: umap-learn < 0.5.5 and pynndescent < 0.5.8 import
+`pkg_resources`, which new environments do not include (the minimum versions were raised), and a
+manuscript script used `DataFrame.map`, which pandas 2.0 does not have. Continuous integration now runs
+Python 3.10–3.14 and the oldest-versions installation for every change to `main`.
+
+The tutorial notebook (`docs/tutorials/05_end_to_end_tutorial.ipynb`), which downloads GSE287123 from GEO, was
+executed end to end in a new conda environment built as the notebook describes, with this version installed.
+
+`n_jobs` (clone-map search and programme bootstrap) gives the same clone map and programmes as one process and
+as the released 4.3.1; this is checked in `tests/test_parallel_and_robustness.py` and was checked on GSE287123.
+
 ## Version 4.3.0 — 18 October 2026
 
 The package was installed with `pip` from the source tree into a new, isolated Python 3.11 environment
@@ -76,7 +100,6 @@ as negative measurements.
 ## Verification limits
 
 This verifies the tested Linux dependency stacks and documented example paths.
-It does not establish Windows/macOS compatibility, minimum dependency-version
-support, Python 3.13+ support or every real-data configuration. For reproducible
+It does not establish Windows/macOS compatibility or every real-data configuration. For reproducible
 legacy-v3 reclustering, use the tested Python 3.10/3.11 stack or retain the
 computed labels. Record package versions alongside scientific outputs.

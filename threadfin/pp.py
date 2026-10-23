@@ -21,6 +21,8 @@ import scipy.sparse as sp
 from ._utils import log, require_complete_groups, require_positive_int
 from .expression import FrozenExpressionModel
 
+__all__ = ["ig_gene_mask", "exclude_ig_genes", "prepare_embedding"]
+
 # V/D/J segments (incl. orphons such as IGKV1OR1-1 and Roman-numeral
 # pseudogenes such as IGHVII-1-1) for human (IGHV1-2) and mouse (Ighv1-72).
 _IG_SEGMENT = re.compile(r"^IG[HKL][VDJ](\d|I|V|X|OR)", re.IGNORECASE)

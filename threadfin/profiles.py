@@ -427,7 +427,9 @@ def clone_profiles(
     representation
         ``"mean"`` (shrunken centroid) or ``"kernel"`` (shrunken kernel mean
         embedding from ``n_features`` random Fourier features, reduced to
-        ``n_components`` principal components).
+        ``n_components`` principal components). :func:`threadfin.run` uses
+        ``"kernel"``; this function keeps ``"mean"`` as its default so that
+        code written for earlier versions gives the same result.
     bandwidth
         Kernel bandwidth: ``"median"`` (median distance between cells, the
         standard heuristic), ``"local"`` (distance to the 30th nearest
@@ -469,7 +471,11 @@ def clone_profiles(
     if donor_key is not None:
         groups = adata.obs.dropna(subset=[clone_key]).groupby(clone_key, observed=True)[donor_key].nunique()
         if groups.gt(1).any():
-            raise ValueError("A clone id occurs in multiple donors. Use donor-private clone ids.")
+            shared = groups.index[groups.gt(1)]
+            raise ValueError(
+                f"{len(shared):,} clone id(s) occur in more than one donor (e.g. {shared[0]!r}). A clone belongs to one "
+                f"individual: call clones within donors, or make the ids donor-private, e.g. "
+                f"adata.obs['{clone_key}'] = adata.obs['{donor_key}'].astype(str) + '|' + adata.obs['{clone_key}'].astype(str)")
     if smooth is None:
         smooth = 15 if representation == "kernel" else 0
     model = build_model(

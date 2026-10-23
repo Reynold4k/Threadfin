@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "threadfin"
-version = "4.3.1"
+version = "4.4.0"
 description = "Relationships between B-cell clones from paired single-cell RNA and BCR sequencing: clone embeddings, clonal coherence, clonal programmes, clone-level tests and clonal memory"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -21,6 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
@@ -29,12 +31,13 @@ dependencies = [
     "pandas>=2.0",
     "scipy>=1.10",
     "scikit-learn>=1.3",
+    "joblib>=1.2",                 # parallel clone-map search and programme bootstrap (n_jobs)
     "scanpy>=1.10",
     "matplotlib>=3.7",
     "igraph>=0.10",
     "leidenalg>=0.10",
-    "umap-learn>=0.5",
-    "pynndescent>=0.5",
+    "umap-learn>=0.5.5",            # older releases import pkg_resources, absent from new environments
+    "pynndescent>=0.5.8",           # likewise
     "harmonypy>=0.0.9",
 ]
 

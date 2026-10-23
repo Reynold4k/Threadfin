@@ -21,6 +21,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+__all__ = [
+    "set_style",
+    "category_colors",
+    "clone_map",
+    "coherence",
+    "programme_composition",
+    "stability",
+    "association",
+    "memory",
+    "label_effects",
+    "heritability",
+    "overview",
+    "cells",
+    "signature_heatmap",
+]
+
 # validated categorical order (adjacent-pair CVD and normal-vision checks pass)
 PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"]
 OTHER = "#c3c2b7"

@@ -115,6 +115,8 @@ class ThreadfinResult:
     profile_tests: dict = field(default_factory=dict, repr=False)
     memory: dict | None = field(default=None, repr=False)
     settings: dict = field(default_factory=dict, repr=False)
+    #: analyses that were requested but could not be run on these data, with the reason
+    skipped: dict = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
         n_prog = self.programmes.shape[0]
@@ -210,6 +212,9 @@ class ThreadfinResult:
             if "persistence" in m:
                 lines.append(f"   Same programme at the next level: {100 * m['persistence']:.0f}% of clones vs "
                              f"{100 * m['persistence_null']:.0f}% expected for random clones.")
+        if self.skipped:
+            lines += ["", "Not run (everything above is complete):"]
+            lines += [f"   {what}: {why}" for what, why in self.skipped.items()]
         lines += ["", "Per-cell programme labels: adata.obs['clone_programme']; "
                       "per-clone table: result.clones."]
         return "\n".join(lines)
@@ -242,6 +247,7 @@ def run(
     n_perm: int = 200,
     n_boot: int = 30,
     random_state: int = 0,
+    n_jobs: int | None = 1,
     verbose: bool = True,
 ) -> ThreadfinResult:
     """Run the complete Threadfin analysis in one call.
@@ -297,6 +303,11 @@ def run(
     n_perm, n_boot
         Permutations for the coherence test; bootstrap replicates for
         programme stability.
+    n_jobs
+        Processes for the two most time-consuming steps, the automatic choice
+        of the clone-map settings and the bootstrap of programme stability
+        (``-1``: all available cores). Results are identical for any value;
+        only the run time changes.
 
     Returns
     -------
@@ -375,6 +386,15 @@ def run(
     elif clone_key not in adata.obs.columns:
         raise ValueError(f"Pass `bcr`, or provide clone ids in adata.obs['{clone_key}'].")
 
+    # Threadfin needs clones observed more than once; say so plainly instead of failing deep inside the model
+    sizes = adata.obs[clone_key].dropna().astype(str).value_counts()
+    if int((sizes >= 2).sum()) < 2:
+        raise ValueError(
+            f"Only {int((sizes >= 2).sum())} clone(s) have two or more cells ({sizes.size:,} clones, "
+            f"{int(sizes.sum()):,} cells with a clone id). Threadfin compares the cells within a clone, so it needs "
+            "clones seen at least twice. Check that the BCR barcodes match adata.obs_names (the share of cells with a "
+            "clone id), that clones were called within donors, and that the data contain expanded B cells.")
+
     # Step 2 - expression embedding without immunoglobulin genes
     if basis is None:
         basis = "X_threadfin"
@@ -396,8 +416,9 @@ def run(
         # find_programmes used to do it over its reliability-gated subset, which silently left some
         # datasets with no map at all
         embed_clones(adata, n_neighbors=map_n_neighbors, min_dist=map_min_dist,
-                     random_state=random_state, verbose=verbose)
-        programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, verbose=verbose)
+                     random_state=random_state, n_jobs=n_jobs, verbose=verbose)
+        programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, n_jobs=n_jobs,
+                                     verbose=verbose)
     except ValueError as e:  # too few expanded clones: keep the coherence result
         log(f"no programmes: {e}", verbose)
         programmes = pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
@@ -405,7 +426,7 @@ def run(
 
     # Step 6 - describe and test the programmes
     composition = None
-    tests, profile_tests = {}, {}
+    tests, profile_tests, skipped = {}, {}, {}
     if not programmes.empty:
         composition = programme_composition(adata, state_key) if state_key else None
     for col in test_cols:
@@ -413,17 +434,24 @@ def run(
         try:
             profile_tests[col] = profile_association(adata, col, random_state=random_state, verbose=verbose)
         except ValueError as e:
+            skipped[f"clone-level test of '{col}'"] = str(e)
             log(f"profile test '{col}' skipped: {e}", verbose)
         if programmes.shape[0] >= 2:  # which programmes differ? (needs >= 2 programmes)
             tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
     memory = None
     if time_key is not None:
-        memory = clonal_memory(adata, time_key, random_state=random_state, verbose=verbose)
+        # optional like the label tests: a time point or tissue column that cannot be tested (e.g. no clone seen at
+        # two of its levels) is reported, not allowed to discard the analysis that is already complete
+        try:
+            memory = clonal_memory(adata, time_key, random_state=random_state, verbose=verbose)
+        except ValueError as e:
+            skipped[f"clonal memory over '{time_key}'"] = str(e)
+            log(f"clonal memory over '{time_key}' skipped: {e}", verbose)
 
     clones = adata.uns["threadfin"]["profiles"]["clone_table"]
     result = ThreadfinResult(
         adata=adata, coherence=coherence, programmes=programmes, clones=clones,
-        composition=composition, tests=tests, profile_tests=profile_tests, memory=memory,
+        composition=composition, tests=tests, profile_tests=profile_tests, memory=memory, skipped=skipped,
         settings={"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
                   "state_key": state_key, "time_key": time_key, "basis": basis,
                   "representation": representation},
