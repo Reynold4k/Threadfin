@@ -1,5 +1,12 @@
 # Verified compatibility
 
+## Version 4.4.1 — 23 October 2026
+
+Continuous integration now also installs the package and runs the test suite and the tutorial on macOS and
+Windows (Python 3.12). Windows found one problem: harmonypy 2.x publishes no Windows wheels and its source does
+not compile with Microsoft's compiler, so the installation failed; Windows now receives the pure-Python
+harmonypy (< 2). The Harmony step is tested with harmonypy 0.0.9, 0.2.0 and 2.1.0.
+
 ## Version 4.4.0 — 23 October 2026
 
 The package was installed from the source tree with `uv` into new, isolated environments (no inherited

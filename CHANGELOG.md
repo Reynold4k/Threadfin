@@ -2,7 +2,7 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
-## Unreleased
+## 4.4.1 — 2026-10-23
 
 - **Installs on Windows.** harmonypy 2.x publishes no Windows wheels and its source does not compile with
   Microsoft's compiler, so `pip install threadfin` failed on Windows. Windows now receives the pure-Python
