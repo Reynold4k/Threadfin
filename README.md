@@ -15,6 +15,96 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
 </p>
 
+Threadfin takes paired single-cell RNA and receptor (BCR or TCR) sequencing and describes every clone by the
+distribution of its cells' transcriptional states, so that clones, not cells, can be compared, mapped and tested.
+
+## Get started
+
+### 1. Install
+
+```bash
+pip install threadfin                  # Python 3.10–3.14 on Linux, macOS or Windows; no GPU or R needed
+pip install "threadfin[dandelion]"     # also installs Dandelion, to call clones from BCR or TCR contigs
+```
+
+Scanpy, Leiden, UMAP and Harmony are installed with it. Dandelion's clone calls depend on Python's hash seed:
+start Python with `PYTHONHASHSEED=0` when clone ids must be identical run after run. The development version
+installs with `pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
+
+### 2. Run
+
+You need, for the same cells: raw gene counts in an [AnnData](https://anndata.readthedocs.io) object, the
+contig-level receptor table (Cell Ranger's `filtered_contig_annotations.csv` or an AIRR `.tsv`), and the donor
+and sample of each cell.
+
+```python
+import scanpy as sc
+import threadfin as tf
+
+adata = sc.read_h5ad("b_cells.h5ad")           # raw counts, one row per cell
+
+result = tf.run(
+    adata,
+    bcr="filtered_contig_annotations.csv",     # Cell Ranger VDJ output or an AIRR .tsv
+    donor_key="donor",                         # the individual each cell came from
+    sample_key="sample",                       # the sample or library each cell came from
+)
+```
+
+`tf.run` calls clones within each donor (Dandelion, paired chains), builds an expression embedding without the
+receptor genes, estimates one profile per clone, tests clonal coherence, lays out the clone map and looks for
+clonal programmes. On the 16 public datasets tested (up to 206,000 cells) it took 1 to 15 minutes with 8 cores
+(`n_jobs=8`).
+
+### 3. Read the results
+
+```python
+print(result.summary())                 # plain-language report
+result.plot("threadfin_overview.pdf")   # clone map, coherence, stability, composition
+print(result.methods())                 # a Methods paragraph with the settings and versions used
+result.clones.to_csv("clones.csv")      # one row per clone: size, reliability, programme, map position
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/_static/tutorial_overview.png" width="760" alt="Overview figure produced by result.plot()">
+</p>
+
+| What you get | Where |
+|---|---|
+| Does clone identity shape cell state? Clonal coherence, with its permutation P value | `result.coherence`; first part of the summary |
+| A map with one point per clone | `result.plot()`; `result.clones[["x", "y"]]` |
+| Groups of clones that behave alike, with their stability | `result.programmes`; `adata.obs["clone_programme"]` |
+| How much your own labels explain the differences between clones | `result.profile_tests` (with `test=[...]`) |
+| A Methods paragraph for your paper, with references | `result.methods()` |
+
+### Common variations
+
+* **Your own labels** (antigen binding, isotype, sort gate): `tf.run(..., test=["antigen_binding", "isotype"])`.
+* **Time points or tissues**, to ask whether clones keep their state: `tf.run(..., time_key="timepoint")`.
+* **T cells**: pass the TCR contigs as `bcr`; clones are called on identical beta and alpha junctions.
+* **scirpy users**: pass your scirpy AnnData or MuData as `bcr`.
+* **Clones defined elsewhere**: put them in `adata.obs["clone_id"]` and leave out `bcr`.
+* **Large data**: `n_jobs=-1` uses every CPU core and gives the same result; a million cells take about an hour
+  on 8 cores.
+* **No data at hand**: `adata = tf.sim.simulate_repertoire()` makes a repertoire with a known answer.
+
+### Tutorials
+
+| Tutorial | What it covers |
+|---|---|
+| [1 — Getting started](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md) | the whole analysis on simulated data in a minute, with every output explained |
+| [2 — Your own data](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md) | from Cell Ranger output to results: quality control, several samples and donors, clone calling, T cells, troubleshooting |
+| [3 — The clone map](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/03_clone_map.md) | automatic and hand-set layouts, and how to check a map |
+| [4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
+| [5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset (GSE287123) end to end: download, hashtag demultiplexing, clones, embedding, Threadfin and interpretation; executed in a fresh environment before every release (about 6 minutes on 8 cores) |
+
+New in 4.5.0: T cells, scirpy input, `result.methods()` and gene-level summaries of the clone landscape
+([changelog](https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md)).
+
+---
+
+## What Threadfin does
+
 **Threadfin** is a Python package for paired single-cell RNA and B-cell receptor (BCR) sequencing. It
 uses the **clone** — the B cells that descend from one V(D)J rearrangement — as the unit of analysis.
 Each clone is represented by the distribution of transcriptional states among its sampled cells,
@@ -73,63 +163,6 @@ manuscript — status, datasets, every analysis and a benchmark against related 
   the association cannot be a library artefact; antigen-bait and dark-zone gates are also associated with
   clone profiles but were each sequenced in their own library.
 
-## Installation
-
-```bash
-pip install threadfin
-# with Dandelion, to define clones from BCR or TCR contigs:
-pip install "threadfin[dandelion]"
-```
-
-Threadfin requires Python ≥ 3.10 and is tested on 3.10 to 3.14, down to the oldest dependency versions it
-allows ([compatibility](https://github.com/Reynold4k/Threadfin/blob/main/docs/COMPATIBILITY.md)); Scanpy, Leiden, UMAP and Harmony are installed with it, and no
-GPU or R is needed. Clones can be defined from BCR or TCR contigs with Dandelion (the `[dandelion]` extra also pins
-`matplotlib<3.9`, which Dandelion 0.5.7 needs but does not declare), or you can provide your own clone ids
-in `adata.obs["clone_id"]`. Dandelion's clone calls depend on Python's string-hash seed; start Python with
-`PYTHONHASHSEED=0` if clone ids must be identical run after run. The development version installs with
-`pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
-
-## Quick start
-
-```python
-import scanpy as sc
-import threadfin as tf
-
-adata = sc.read_h5ad("b_cells.h5ad")           # raw counts, one row per cell
-
-result = tf.run(
-    adata,
-    bcr="filtered_contig_annotations.csv",     # Cell Ranger VDJ output or an AIRR .tsv
-    donor_key="donor",                         # the individual each cell came from
-    sample_key="sample",                       # the sample or library each cell came from
-)
-print(result.summary())                        # plain-language report
-result.plot("threadfin_overview.pdf")          # clone map, coherence, stability, composition
-print(result.methods())                        # a Methods paragraph with the settings used
-```
-
-`tf.run` defines clones within each donor, builds an expression embedding without immunoglobulin genes,
-estimates one profile per clone, tests clonal coherence, lays out the clone embedding, finds clonal
-programmes and reports their stability. Add `test=[...]` to test your own labels and `time_key=` to ask
-whether clones keep their state, and `n_jobs=-1` to use every CPU core (the results do not change). No data
-at hand? `tf.sim.simulate_repertoire()` makes a repertoire with a known answer
-([Tutorial 1](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md)).
-T cells work the same way, with TCR contigs as `bcr`, and receptor data loaded with scirpy can be passed as
-they are ([Tutorial 2, section 6](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md#6-how-clones-are-called)).
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/_static/tutorial_overview.png" width="760" alt="Overview figure produced by result.plot()">
-</p>
-
-## A complete, tested tutorial on public data
-
-[`docs/tutorials/05_end_to_end_tutorial.ipynb`](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) takes you from an
-empty folder to the main result of the manuscript's Figure 4: it creates the environment
-([`environment.yml`](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/environment.yml)), downloads a published dataset from GEO (GSE287123,
-about 600 MB), assigns cells to mice from hashtags, defines clones, builds the embedding, runs Threadfin and
-explains every output, including how to tell biology from a sequencing-library effect. It was executed end
-to end in a fresh environment before release and takes about 6 minutes on 8 CPU cores (about 8 GB of memory).
-
 ## A clone embedding that holds together
 
 UMAP draws continuous populations of clones as one picture only for suitable settings, and the suitable
@@ -153,7 +186,8 @@ tf.tl.map_quality(features, xy)                         # score any clone map (p
   <img src="https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/_static/threadfin_workflow.png" width="760" alt="Threadfin workflow">
 </p>
 
-1. **Clones** are defined from paired heavy- and light-chain sequences within each donor (Dandelion).
+1. **Clones** are defined from paired heavy- and light-chain sequences (for T cells, beta and alpha chains)
+   within each donor (Dandelion).
 2. **Clone profiles.** Each cell is described relative to the mean of its sampling context. The cells of
    a clone are summarised by a kernel mean embedding of their state distribution, so a clone divided
    between two states differs from a clone in an intermediate state, and the profile is shrunk towards the
@@ -173,18 +207,15 @@ The full description, with references, is in [Methods](https://github.com/Reynol
 
 | | |
 |---|---|
-| [Tutorial 1 — Getting started](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md) | the whole analysis on simulated data, with its output |
-| [Tutorial 2 — Your own data](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md) | from Cell Ranger output to results, with several samples and donors |
-| [Tutorial 3 — The clone map](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/03_clone_map.md) | automatic and hand-set layouts, and how to check a map |
-| [Tutorial 4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
-| [Tutorial 5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset end to end: download, demultiplexing, clones, embedding, Threadfin, interpretation |
 | [Methods](https://github.com/Reynold4k/Threadfin/blob/main/docs/METHODS.md) | the statistical model behind each step |
 | [Function reference](https://github.com/Reynold4k/Threadfin/blob/main/docs/API.md) | every public function and its arguments, generated from the code |
+| [Compatibility](https://github.com/Reynold4k/Threadfin/blob/main/docs/COMPATIBILITY.md) | Python and dependency versions, operating systems and datasets tested |
+| [Changelog](https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md) | what changed in each version |
 | [The manuscript](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/README.md) | publication status, datasets, every analysis, open work |
 | [Case studies](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/case_studies/README.md) | scripts and results for the public datasets |
 | [Figures](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/figures/README.md) | figures of the manuscript, with their source code |
 | [Benchmark](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/benchmarking/README.md) | Threadfin against Clonotrace, clone2vec, Benisse, CoNGA and scirpy |
-| [Changelog](https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md) | what changed in each version |
+| [Technical validation](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/analyses/technical_validation/README.md) | the tutorials on 16 public datasets, sensitivity to clone calling and embedding, power, a million cells, T cells |
 
 ## Citation
 
