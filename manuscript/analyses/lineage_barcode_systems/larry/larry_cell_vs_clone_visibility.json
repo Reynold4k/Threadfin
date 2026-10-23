@@ -1,0 +1,13 @@
+{
+ "n_day2_cells": 402,
+ "n_day2_clones": 172,
+ "cell_spring_knn_r": 0.5117653379643894,
+ "cell_null_mean": -0.009118325956355334,
+ "cell_null_max": 0.10432669406360309,
+ "clone_map_knn_r": 0.38271543047360396,
+ "clone_null_mean": -0.04054787839282899,
+ "clone_null_max": 0.07270940752243782,
+ "cell_spring_knn_r_excluding_same_clone": 0.48481507811692764,
+ "cell_null_excl_mean": -0.005425753395090588,
+ "cell_null_excl_max": 0.07469047476489299
+}

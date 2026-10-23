@@ -1,0 +1,2 @@
+communities_left,communities_right,n_clones,cluster_index,null_mean,null_sd,pvalue,pvalue_empirical,alpha_node,split,programmes_left,programmes_right
+[0],[1],957,0.32828870496453727,0.5014161657296919,0.010770726345126751,1.9445132416580564e-58,0.009900990099009901,0.05,True,P1,P2

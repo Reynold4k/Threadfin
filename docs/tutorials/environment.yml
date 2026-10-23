@@ -1,0 +1,17 @@
+# Environment for the end-to-end tutorial (05_end_to_end_tutorial.ipynb):
+#   conda env create -f docs/tutorials/environment.yml
+#   conda activate threadfin
+#   python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)" --env PYTHONHASHSEED 0
+# (the fixed hash seed makes Dandelion's clone calls identical run after run; see Step 0 of the notebook)
+name: threadfin
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - "threadfin @ git+https://github.com/Reynold4k/Threadfin.git"
+      - sc-dandelion==0.5.7
+      - matplotlib<3.9          # Dandelion 0.5.7 uses matplotlib.cm.get_cmap, removed in matplotlib 3.9
+      - jupyterlab
+      - ipykernel

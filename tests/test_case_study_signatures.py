@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-HERE = Path(__file__).resolve().parents[1] / "case_studies"
+HERE = Path(__file__).resolve().parents[1] / "manuscript" / "case_studies"
 sys.path.insert(0, str(HERE))
 spec = importlib.util.spec_from_file_location("case_run", HERE / "run_case_study.py")
 case_run = importlib.util.module_from_spec(spec)

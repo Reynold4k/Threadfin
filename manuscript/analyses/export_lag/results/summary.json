@@ -1,0 +1,179 @@
+{
+  "malaria_late": {
+    "n_clones": 92,
+    "n_output_earlier": 65,
+    "n_output_later": 8,
+    "n_equal": 19,
+    "median_lag": -0.00375235842415025,
+    "median_lag_ci": [
+      -0.00730082600586195,
+      -0.0037037037037037
+    ],
+    "maturation_slope": NaN,
+    "median_lag_days": -3.7199107059077585,
+    "dataset": "malaria_late",
+    "title": "Plasmodium infection, days 10-42 (GSE286215 exp. 2)",
+    "settings": {
+      "source_states": [
+        "GC"
+      ],
+      "output_states": [
+        "PB"
+      ],
+      "within": [
+        "timepoint"
+      ],
+      "switched_only": true,
+      "min_cells": 1,
+      "time_key": null
+    },
+    "gc_clock_per_day": 0.0010087227142820821,
+    "gc_clock_ci": [
+      0.0007936507936507928,
+      0.0013468013468013454
+    ],
+    "n_days": 6,
+    "per_visit": [
+      {
+        "day": 10,
+        "n_clones": 1,
+        "median_lag": -0.0111111111111111,
+        "output_earlier": 1
+      },
+      {
+        "day": 14,
+        "n_clones": 49,
+        "median_lag": -0.0037037037037037,
+        "output_earlier": 32
+      },
+      {
+        "day": 21,
+        "n_clones": 12,
+        "median_lag": -0.00714322159293835,
+        "output_earlier": 9
+      },
+      {
+        "day": 28,
+        "n_clones": 13,
+        "median_lag": -0.0108695652173913,
+        "output_earlier": 10
+      },
+      {
+        "day": 35,
+        "n_clones": 10,
+        "median_lag": -0.017072409488139824,
+        "output_earlier": 9
+      },
+      {
+        "day": 42,
+        "n_clones": 7,
+        "median_lag": -0.0018796992481203006,
+        "output_earlier": 4
+      }
+    ]
+  },
+  "malaria": {
+    "n_clones": 9,
+    "n_output_earlier": 4,
+    "n_output_later": 1,
+    "n_equal": 4,
+    "median_lag": 0.0,
+    "median_lag_ci": [
+      -0.0111940298507462,
+      0.0
+    ],
+    "maturation_slope": NaN,
+    "median_lag_days": null,
+    "dataset": "malaria",
+    "title": "Plasmodium infection, days 0-14 (GSE286215 exp. 1)",
+    "settings": {
+      "source_states": [
+        "GC"
+      ],
+      "output_states": [
+        "PB"
+      ],
+      "within": [
+        "timepoint"
+      ],
+      "switched_only": true,
+      "min_cells": 1,
+      "time_key": null
+    },
+    "gc_clock_per_day": -0.0009148886188849082,
+    "gc_clock_ci": [
+      -0.004956629491945467,
+      0.0018282085561497124
+    ],
+    "n_days": 4
+  },
+  "ln_vaccine": {
+    "n_clones": 2564,
+    "n_output_earlier": 1536,
+    "n_output_later": 821,
+    "n_equal": 207,
+    "median_lag": -0.0018518499999999995,
+    "median_lag_ci": [
+      -0.0018726577993878756,
+      -0.0016538065696428577
+    ],
+    "maturation_slope": NaN,
+    "median_lag_days": -8.057060770571162,
+    "dataset": "ln_vaccine",
+    "title": "Human lymph node after mRNA vaccination (GSE195673)",
+    "settings": {
+      "source_states": [
+        "GC"
+      ],
+      "output_states": [
+        "PB",
+        "LNPC"
+      ],
+      "within": [
+        "timepoint",
+        "tissue"
+      ],
+      "switched_only": true,
+      "min_cells": 1,
+      "time_key": null
+    },
+    "gc_clock_per_day": 0.00022984188064759038,
+    "gc_clock_ci": [
+      2.3257142857142773e-05,
+      0.00029629640000000007
+    ],
+    "n_days": 5,
+    "per_visit": [
+      {
+        "day": 28,
+        "n_clones": 21,
+        "median_lag": -0.0026752281428571428,
+        "output_earlier": 14
+      },
+      {
+        "day": 35,
+        "n_clones": 288,
+        "median_lag": -0.0015823462781385284,
+        "output_earlier": 169
+      },
+      {
+        "day": 60,
+        "n_clones": 1358,
+        "median_lag": -0.0018518514999999996,
+        "output_earlier": 819
+      },
+      {
+        "day": 110,
+        "n_clones": 608,
+        "median_lag": -0.0018518469166666652,
+        "output_earlier": 369
+      },
+      {
+        "day": 201,
+        "n_clones": 289,
+        "median_lag": -0.0018518499999999952,
+        "output_earlier": 165
+      }
+    ]
+  }
+}

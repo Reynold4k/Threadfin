@@ -8,6 +8,28 @@ chooses the map's settings, how to set them by hand and how to check any map.
 The map is a display. Clone profiles, clonal coherence, programmes and every test are computed in profile
 space; changing the map changes none of them.
 
+## 0. A short primer: what a clone map can and cannot tell you
+
+**What is laid out.** Each clone has a profile: a vector of about 30 numbers that describes how its cells are
+distributed over cell states (Tutorial 1, section 0). Two clones whose cells are distributed alike have
+similar profiles. The clone map squeezes these 30-dimensional profiles onto a plane with
+[UMAP](https://umap-learn.readthedocs.io), the same algorithm that is used for cell embeddings.
+
+**What UMAP preserves.** UMAP tries to keep each clone next to its nearest neighbours in profile space. It
+preserves *neighbourhoods* well and *large distances* only roughly.
+
+| You may read from the map | You should not read from the map |
+|---|---|
+| which clones have similar state distributions (neighbours) | ancestry, or which clone came from which |
+| whether clones form separate groups or one continuous population | time or direction of differentiation |
+| how an annotation (antigen binding, isotype, sort gate) varies across clones, when you colour by it | exact distances, or the meaning of an axis |
+| where a programme lies relative to the others | statistical significance — use the tests, which use the profiles |
+
+**Why the settings matter.** With too few neighbours per clone (`n_neighbors`) or too little spacing
+(`min_dist`), UMAP breaks a continuous population of clones into islands that do not exist in profile space —
+the most common way a clone map misleads. With too many neighbours, local structure is smoothed away.
+Because the right values depend on the dataset, Threadfin chooses them automatically (section 1).
+
 ## 1. Automatic settings
 
 ```python
@@ -125,7 +147,22 @@ tf.pl.clone_map(adata, color="clone_programme")      # categories: one panel per
 mean of a number, or the fraction of the clone's cells in one category. On your own data the same call
 summarises, for example, antigen binding (`how="fraction:positive"`) or mutation load (`how="mean"`).
 
-## 6. Notes
+## 6. Can I trust this map? A checklist
+
+1. **Is the map at least as connected as the profiles?** `mp["quality"]["coherence"]` should be close to
+   `mp["quality"]["coherence_target"]`. If it is much lower, islands on the map are artefacts of the layout.
+2. **Does colouring by a known annotation give a smooth pattern?** Colour by the fraction of plasma cells,
+   germinal-centre cells or by isotype. A biologically meaningful map usually shows gradients; random
+   speckle means the profiles carry little about that annotation (check the test in `result.profile_tests`).
+3. **Is a group made of one donor?** Colour by donor
+   (`tf.pl.clone_map(adata, color="donor")`). A region filled by one donor can reflect a difference in what
+   was sampled from that individual rather than a clone type (see Methods, centring on the sampling context).
+4. **Does the structure survive a different seed?** `tf.tl.embed_clones(adata, random_state=1)`; the
+   automatic settings are chosen to hold together across seeds, but hand-set settings may not.
+5. **Is the structure also in the profiles?** Programmes and their stability are computed from the profiles,
+   not the map. A group you see on the map but not as a stable programme is a region of a continuum.
+
+## 7. Notes
 
 * **Reproducibility.** The choice is deterministic for a given `random_state`. If the final layout falls
   short of the coherence target, Threadfin tries two more seeds and then the next confirmed settings;

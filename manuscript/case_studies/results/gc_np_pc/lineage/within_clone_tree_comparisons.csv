@@ -1,0 +1,7 @@
+comparison,measure,n_clones,mean_difference,median_difference,wilcoxon_p
+plasma cell vs light zone+Myc+ light zone+dark zone,depth,14,-1.633333333333333,-1.65,0.010722787538526915
+plasma cell vs light zone+Myc+ light zone+dark zone,ancestral,14,0.0630952380952381,0.0,0.5991742659401892
+dark zone vs light zone+Myc+ light zone,depth,9,0.9907407407407409,1.0,0.16015625
+dark zone vs light zone+Myc+ light zone,ancestral,9,-0.10185185185185186,0.0,
+Myc+ light zone vs light zone,depth,3,0.6666666666666666,-0.5,
+Myc+ light zone vs light zone,ancestral,3,-0.16666666666666666,0.0,

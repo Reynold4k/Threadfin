@@ -1,0 +1,175 @@
+{
+  "created_utc": "2026-10-15T02:16:31.426478+00:00",
+  "dataset": "GSE284622 gut_gc_reporter",
+  "inputs": {
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/cells.csv.gz": {
+      "sha256": "943b64199ab6b08c834a74745b7292c85fc0f762ef64a3233bcd90851bfe3eb2"
+    },
+    "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/gut_gc_reporter/clone_table.csv": {
+      "sha256": "373c7c28da94b19a058f55675670ee938593432ce35d0e109365fc7134bf160c"
+    },
+    "/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc/gex_reporter/metadata.csv.gz": {
+      "sha256": "eb67e584ba422ab8b19417874273a364f39e72475fcfba5e7caeec95cad23dc8"
+    }
+  },
+  "umap_source": "Existing scRNA coordinates: cells.csv.gz columns umap_1, umap_2",
+  "umap_refitted": false,
+  "cell_join": "Exact unique cell ID, with sample/tissue/celltype/donor cross-checks",
+  "clone_join": "Exact saved Dandelion clone_id, including donor prefix",
+  "clone_fraction_definition": "GC-labelled captured cells / all GC-or-nonGC-labelled captured cells in each clone",
+  "clone_fraction_source": "clone_table.csv: gc_sort:GC (mapped without replacing saved values)",
+  "original_sort_source": "Original Seurat meta.data exported as metadata.csv.gz: gc",
+  "measurement_level": {
+    "clone_fraction": "Captured-cell sort proportion per clone",
+    "original_sort": "Per-cell categorical GC/nonGC library sort label"
+  },
+  "continuous_tdTomato_fluorescence_available_in_metadata": false,
+  "original_metadata_columns": [
+    "index",
+    "orig.ident",
+    "nCount_RNA",
+    "nFeature_RNA",
+    "sample_num",
+    "sample_name",
+    "percent.mt",
+    "sample_id",
+    "tissue",
+    "mouse",
+    "gc",
+    "log_counts",
+    "lognorm_counts",
+    "RNA_snn_res.0.5",
+    "seurat_clusters",
+    "RNA_snn_res.0.2",
+    "RNA_snn_res.0.05",
+    "celltype",
+    "cell_id_unique",
+    "clone_id",
+    "mu_freq",
+    "isotype",
+    "contains_bcr",
+    "ct_gc"
+  ],
+  "n_cells_total": 16619,
+  "n_cells_exactly_matched_to_metadata": 16619,
+  "n_cells_with_clone_id": 11723,
+  "n_clones_with_cells": 6957,
+  "n_clones_in_saved_fraction_table": 958,
+  "n_cells_with_saved_clone_fraction": 5724,
+  "n_cells_without_saved_clone_fraction_gray": 10895,
+  "fraction_mapping_status_counts": {
+    "clone_not_in_saved_table": 5999,
+    "saved_clone_fraction": 5724,
+    "no_clone_id": 4896
+  },
+  "original_sort_counts_all_cells": {
+    "GC": 9302,
+    "nonGC": 7317
+  },
+  "original_sort_counts_in_mapped_cells": {
+    "GC": 5320,
+    "nonGC": 404
+  },
+  "original_sort_counts_by_celltype": {
+    "B_cell": {
+      "GC": 546,
+      "nonGC": 5411
+    },
+    "GC_Bcell": {
+      "GC": 5259,
+      "nonGC": 243
+    },
+    "other": {
+      "GC": 103,
+      "nonGC": 1084
+    },
+    "plasma": {
+      "GC": 3394,
+      "nonGC": 579
+    }
+  },
+  "original_sort_counts_by_tissue": {
+    "LP": {
+      "GC": 3408,
+      "nonGC": 1660
+    },
+    "MLN": {
+      "GC": 1711,
+      "nonGC": 3157
+    },
+    "PP": {
+      "GC": 4183,
+      "nonGC": 2500
+    }
+  },
+  "saved_clone_fraction_summary_unweighted": {
+    "n": 958,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.88674236628779,
+    "median": 1.0
+  },
+  "mapped_cell_fraction_summary_cell_weighted": {
+    "n": 5724,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.9294199860237596,
+    "median": 1.0
+  },
+  "fraction_validation": {
+    "all_clones_match": true,
+    "all_clone_sizes_match": true,
+    "max_absolute_error": 1.1102230246251565e-16
+  },
+  "clones_by_fraction": {
+    "all_nonGC": 63,
+    "mixed": 126,
+    "all_GC": 769
+  },
+  "clone_fraction_by_programme": {
+    "P1": {
+      "count": 475,
+      "mean": 0.9276514341763553,
+      "median": 1.0
+    },
+    "P2": {
+      "count": 294,
+      "mean": 0.9176745590010895,
+      "median": 1.0
+    },
+    "P3": {
+      "count": 189,
+      "mean": 0.7358118271090666,
+      "median": 1.0
+    }
+  },
+  "n_sort_libraries": 17,
+  "all_sort_labels_agree_with_sample_suffix": true,
+  "color_scale": {
+    "fraction": {
+      "cmap": "viridis",
+      "vmin": 0,
+      "vmax": 1
+    },
+    "original_sort": {
+      "GC": "#d94845",
+      "nonGC": "#2a78d6"
+    },
+    "no_saved_fraction": "#d5d5d5"
+  },
+  "plot_dpi": 600,
+  "plot_population": "All cells with existing UMAP coordinates, identical in all new panels",
+  "text_bounds_validated": true,
+  "outputs": [
+    "scrna_umap_gc_derived_fraction.png",
+    "scrna_umap_gc_derived_fraction.pdf",
+    "scrna_umap_gc_sort_label.png",
+    "scrna_umap_gc_sort_label.pdf",
+    "scrna_umap_gc_derived_comparison.png",
+    "scrna_umap_gc_derived_comparison.pdf",
+    "gc_derived_umap_cells.csv.gz",
+    "gc_sort_fraction_validation.csv",
+    "gc_sort_analysis_review.md",
+    "gc_derived_umap_summary.json"
+  ]
+}

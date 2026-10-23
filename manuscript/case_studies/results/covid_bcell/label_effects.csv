@@ -1,0 +1,4 @@
+label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+antigen_call,categorical,0.07009847526078207,0.04063976767071972,0.029458707590062347,0.0004997501249375312,482,5,donor,2000,dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)
+isotype,categorical,0.10843834559468311,0.02823368300737143,0.08020466258731168,0.0004997501249375312,512,4,donor,2000,heavy-chain isotype
+disease_state,categorical,0.04995175728499679,0.0017201671820922155,0.04823159010290457,0.0004997501249375312,592,2,,2000,acute vs convalescent sampling (donor-level label: not separable from other donor differences)

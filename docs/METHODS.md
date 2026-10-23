@@ -4,6 +4,23 @@ This page describes each step of `threadfin.run()` and the matching
 functions in `threadfin.tl`, with the defaults and the reasoning behind them.
 References are listed at the end.
 
+**How to read this page.** Every section starts with *In plain words*, a summary without formulas, followed
+by the details. If you only want to use Threadfin, the plain-words paragraphs are enough; the details matter
+when you write a methods section or change a default.
+
+**The whole method in one paragraph.** Cells are grouped into clones by their receptor sequences. Each cell
+has coordinates in an expression space built without immunoglobulin genes. A clone is described by the
+distribution of its cells in that space, measured relative to the other cells sampled with it and shrunk
+towards the sample average when the clone was seen in few cells (the *clone profile*). Clone profiles are then
+compared: in a two-dimensional *clone map*, in groups of similar clones (*programmes*, kept only if they pass a
+test and are reproducible), and in permutation tests that ask whether clone identity explains cell state
+(*coherence*) and whether an annotation explains differences between clones (*association*). Every test uses
+clones, not cells, as the unit, and shuffles labels only within the strata of the sampling design.
+
+**Symbols used below.** *i* a cell; *c(i)* its clone; *s(i)* its sampling context; *x* a cell's embedding
+coordinates; *n_c* the number of cells of clone *c*; *τ²* variance between clones; *σ²* variance within
+clones.
+
 ## 1. Clones (`define_clones_dandelion`)
 
 A clone is the family of B cells descended from one V(D)J recombination event — one
@@ -11,9 +28,18 @@ rearrangement of the heavy **and** the light chain. Threadfin delegates clone ca
 **Dandelion** (a maintained, cited implementation of the paired definition;
 sc-dandelion), through :func:`threadfin.define_clones_dandelion`: contig-level AIRR tables
 are grouped within each donor with ``dandelion.tl.find_clones`` (default junction identity
-0.85), and the composite heavy+light clone id is returned per cell. Because Dandelion pins
-older plotting libraries, it is an optional dependency — run it in its own environment, or
-install ``sc-dandelion``; the rest of Threadfin never needs it.
+0.85), and the composite heavy+light clone id is returned per cell. Dandelion is an optional
+dependency: only clone calling needs it, and clone ids made by any other caller can be supplied
+directly in ``adata.obs``. Dandelion 0.5.7 uses ``matplotlib.cm.get_cmap``, which matplotlib 3.9
+removed, so install it with ``pip install "threadfin[dandelion]"`` (or ``pip install sc-dandelion
+"matplotlib<3.9"``) or run it in its own environment. Dandelion's assignment depends on Python's string-hash
+seed (set iteration order), so clone ids are identical between sessions only when ``PYTHONHASHSEED`` is fixed;
+the seed in use is recorded with the result.
+
+*In plain words.* Two cells belong to the same clone when they carry the same heavy-chain and the same
+light-chain rearrangement (same V and J genes, same junction length, junctions ≥ 85 % identical, which
+allows for somatic hypermutation). Clones are called inside each individual, so no clone can contain cells
+of two people or animals.
 
 (Threadfin's earlier built-in caller grouped cells by the heavy chain alone with a
 data-driven Hamming threshold, light chains only as an optional post-hoc split. It is
@@ -22,6 +48,10 @@ are not the same clone, and roughly a quarter of analysable multi-cell clones ar
 the stricter paired definition — a reported, intended cost.)
 
 ## 2. Expression embedding (`threadfin.pp.prepare_embedding`)
+
+*In plain words.* Each cell gets 30 coordinates that summarise its gene expression, computed after removing
+the receptor genes so that cells of one clone do not look alike just because they express the same
+antibody transcripts.
 
 Standard single-cell processing (normalisation, 3,000 highly variable genes,
 30 principal components, optional Harmony integration over technical batches;
@@ -33,6 +63,13 @@ Integrate only over technical factors (donor, library), never over the biology
 under study (tissue, time point, sort gate).
 
 ## 3. Clone profiles (`clone_profiles`)
+
+*In plain words.* A clone profile answers "how are this clone's cells distributed over cell states,
+compared with the other cells sampled with them?". It is measured relative to the sampling context, it
+describes the whole distribution (so a clone split between two states differs from a clone halfway between
+them), and it is pulled towards the context average when only a few cells of the clone were seen. The pull
+is strong for a 2-cell clone and weak for a 50-cell clone, which is how small clones are kept without
+letting their noise dominate.
 
 Each clone is described by where its cells sit **relative to the other cells
 sampled with them** (same sample, or same donor), so that differences between
@@ -60,6 +97,12 @@ Each cell is first averaged with its 15 nearest cells to reduce noise.
 
 ## 4. Clonal coherence (`clonal_coherence`)
 
+*In plain words.* "Do cells of the same clone resemble each other more than chance?" The answer is the
+share of variation in cell state that clone identity explains — 0 if clones are random collections of
+cells, 1 if all cells of a clone are identical — compared with what shuffled clone labels give. For
+example, an ICC of 0.27 against 0.002 for shuffled labels means clone identity explains about a quarter of
+the cell-to-cell variation within samples.
+
 *Does clone identity shape cell state?* The clonal ICC is compared with the
 same quantity after shuffling clone labels **among cells of the same sample**.
 Shuffling within samples keeps every sample's cell-type composition, so
@@ -68,6 +111,10 @@ reported as the variance explained by clone, the shuffled value and a
 permutation p-value (Phipson & Smyth 2010).
 
 ## 5. The clone map (`embed_clones`, `tune_clone_map`)
+
+*In plain words.* A picture with one dot per clone, in which clones with similar profiles are close. It is
+for looking, not for testing; Threadfin chooses its layout settings so that a continuous population of
+clones is not broken into islands.
 
 *How are clones related to one another?* Every clone with a profile is placed on a two-dimensional
 map with UMAP (McInnes et al. 2018), one point per clone. Clones whose cells are distributed alike sit
@@ -124,6 +171,10 @@ perturbation gradient estimates, Spall 1992) and ends with the same confirmation
 
 ## 6. Clonal programmes (`find_programmes`)
 
+*In plain words.* Groups of clones with similar profiles — but only groups that are better than one big
+group (a split test) and that come back when the cells are resampled (stability). If clones vary along a
+continuum, Threadfin says so instead of inventing groups.
+
 *Which clones behave alike?* Clones are connected to their 15 most similar
 clones, with each connection weighted by the reliability of the two clones,
 and grouped by Leiden community detection (Traag et al. 2019); the resolution
@@ -152,6 +203,10 @@ clone averages, so a large clone counts once.
 
 ## 7. What distinguishes clones (`profile_association`, `association_test`)
 
+*In plain words.* "Does this annotation — antigen binding, isotype, a sort gate — line up with how clones
+differ?" The annotation is summarised once per clone, and its association with the profiles is compared
+with the association obtained after shuffling the annotation among clones of the same donor.
+
 Cell-level labels (antigen binding, isotype, mutation load, sort gate, tissue)
 are first summarised per clone (majority label, mean value, or the fraction
 of a clone's cells in a gate). Two questions are then asked, always with
@@ -171,6 +226,9 @@ separated from other differences between donors and are reported as such.
 
 ## 8. Clonal memory (`clonal_memory`)
 
+*In plain words.* "Is a clone still recognisably itself at a later time point, or in another tissue?" A clone
+seen twice is compared with itself and with a random other clone of the same donor.
+
 *Do clones keep their state over time or across tissues?* For every clone seen
 at two time points (or tissues, or sort gates), Threadfin measures how much
 its profile changed, removes the part expected from sampling only a few
@@ -180,6 +238,9 @@ distinguishes them and 0 when a clone is no more similar to its earlier self
 than to a random clone.
 
 ## 9. Clonally inherited genes (`gene_heritability`)
+
+*In plain words.* The coherence question asked gene by gene: which genes are more similar among cells of one
+clone than among unrelated cells?
 
 The same random-effects model is fitted gene by gene: a gene's clonal ICC is
 the share of its expression variation explained by clone. Genes are ranked by
@@ -211,6 +272,20 @@ which stays valid when units differ in variance.
 
 Because `h2` is a variance share and not a test statistic, `lineage_power` plants a component of known size on
 the same trees and reports what the data could have detected.
+
+### Centring on the sampling context, and when it misleads
+
+Centring removes each context's average before clones are compared. This removes technical differences
+between samples, but it has a side effect when contexts differ in their *cell-type composition*: if one
+donor's sampled cells are mostly plasma cells, that donor's average lies close to the plasma-cell state, and
+subtracting it shifts all of that donor's clones together. In a gut immunisation dataset this placed the
+plasma-cell clones of one mouse, whose sampled response was dominated by lamina-propria plasma cells, in a
+branch of their own (manuscript, Supplementary Fig. 5). Three habits avoid misreading such a result:
+
+1. examine programmes and map regions **by donor** (`tf.pl.clone_map(adata, color="donor")`);
+2. repeat the analysis **without centring** (`context_key=None`) or with a composition-balanced reference,
+   and keep only conclusions that survive;
+3. choose as the context a **nuisance** variable (donor, library), never the biology under study.
 
 ### A note on counting programmes
 

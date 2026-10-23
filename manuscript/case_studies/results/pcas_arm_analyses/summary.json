@@ -1,0 +1,100 @@
+{
+ "malaria": {
+  "n_clones": 20500,
+  "n_with_arm": 5138,
+  "arm_counts": {
+   "plasmablast": 3317,
+   "germinal centre": 1009,
+   "memory": 812
+  },
+  "n_convergent_groups": 1388,
+  "n_convergent_clones": 4060,
+  "convergence_by_arm": [
+   {
+    "arm": "germinal centre",
+    "n_clones": 1009,
+    "n_convergent": 221,
+    "rate": 0.21903,
+    "null_mean": 0.27434,
+    "p_greater": 1.0,
+    "p_less": 0.0
+   },
+   {
+    "arm": "plasmablast",
+    "n_clones": 3317,
+    "n_convergent": 1043,
+    "rate": 0.31444,
+    "null_mean": 0.28453,
+    "p_greater": 0.0,
+    "p_less": 1.0
+   },
+   {
+    "arm": "memory",
+    "n_clones": 812,
+    "n_convergent": 170,
+    "rate": 0.20936,
+    "null_mean": 0.26282,
+    "p_greater": 1.0,
+    "p_less": 0.0
+   }
+  ],
+  "clone_sizes": {
+   "max": 8,
+   "ge5": 11,
+   "ge8": 1,
+   "ge15": 0
+  },
+  "lineage_trees": "not attempted: no clone reaches 15 cells, so tree topology has no signal",
+  "identity_threshold": 0.8,
+  "n_perm": 2000
+ },
+ "malaria_late": {
+  "n_clones": 58587,
+  "n_with_arm": 16185,
+  "arm_counts": {
+   "germinal centre": 8073,
+   "plasmablast": 5810,
+   "memory": 2302
+  },
+  "n_convergent_groups": 4535,
+  "n_convergent_clones": 17854,
+  "convergence_by_arm": [
+   {
+    "arm": "germinal centre",
+    "n_clones": 8073,
+    "n_convergent": 2562,
+    "rate": 0.31735,
+    "null_mean": 0.33298,
+    "p_greater": 1.0,
+    "p_less": 0.0
+   },
+   {
+    "arm": "plasmablast",
+    "n_clones": 5810,
+    "n_convergent": 2372,
+    "rate": 0.40826,
+    "null_mean": 0.39068,
+    "p_greater": 0.0,
+    "p_less": 1.0
+   },
+   {
+    "arm": "memory",
+    "n_clones": 2302,
+    "n_convergent": 780,
+    "rate": 0.33884,
+    "null_mean": 0.32841,
+    "p_greater": 0.1145,
+    "p_less": 0.898
+   }
+  ],
+  "clone_sizes": {
+   "max": 9,
+   "ge5": 30,
+   "ge8": 4,
+   "ge15": 0
+  },
+  "lineage_trees": "not attempted: no clone reaches 15 cells, so tree topology has no signal",
+  "identity_threshold": 0.8,
+  "n_perm": 2000
+ }
+}

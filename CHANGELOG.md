@@ -1,5 +1,67 @@
 # Changelog
 
+Each version lists what changed and, under *What this means for you*, what you need to know or do.
+
+## 4.3.1 — 2026-10-20
+
+### Fixes
+
+- **Cells without a heavy chain no longer receive a clone.** `threadfin.define_clones_dandelion` (and
+  therefore `threadfin.run(bcr=...)`) returned Dandelion's light-chain-only groups (ids such as `B_VJ_...`)
+  as clones. Light-chain rearrangements are far less diverse than heavy-chain ones, so these groups join
+  unrelated cells: in GSE287123 they were 5,276 of 21,939 cells and 740 of 2,626 groups of two or more cells.
+  Such cells are now left without a clone (`require_heavy_chain=True`, the new default); the number is logged
+  and stored in `ids.attrs["n_cells_without_heavy_chain"]`. The nine datasets of the manuscript were essentially
+  unaffected (their loaders keep only cells with a heavy chain; one two-cell group among the 1,887 profiled
+  RBD clones was light-chain-only). Four additional case studies whose loaders read 10x per-cell tables were
+  affected — GSE171703 (1,689 of 2,281 groups of two or more cells were light-chain-only), the paediatric
+  tonsil (419 of 780), EBV-infected tonsil organoids (1,198 of 8,114) and bone-marrow plasma cells (67 of
+  6,855) — and were re-run with these groups removed (`manuscript/case_studies/run_case_study.py` now drops
+  them as well).
+  *What this means for you:* if you ran `threadfin.run(bcr=...)` or `define_clones_dandelion` with 4.3.0 or
+  earlier, re-run it; expect fewer clones with two or more cells, and more reliable ones.
+- **`tl.export_lag` works on large datasets.** The maturation slope used to convert mutation gaps into days was
+  computed over every pair of germinal-centre cells, which needs 8 × 10⁸ slopes for 40,000 cells. Above five
+  million pairs it is now the median over a fixed-seed random sample of five million pairs, which agrees with
+  the exact value to within 5 × 10⁻⁵ in tests.
+  *What this means for you:* `export_lag(..., time_key=...)` no longer runs out of memory on large data;
+  results on small data are unchanged.
+- **Clone calls record the hash seed.** Dandelion's clone assignment depends on the order in which Python
+  iterates over sets of sequences, which changes in every new Python session unless `PYTHONHASHSEED` is fixed:
+  the same GSE287123 contigs gave 8,729 clones in one session and 8,731 in another. `define_clones_dandelion`
+  now stores the seed in use in `ids.attrs["python_hash_seed"]` and logs a note when it is not set.
+  *What this means for you:* for clone ids that are identical run after run, start Python (or register your
+  Jupyter kernel) with `PYTHONHASHSEED=0`; conclusions should not depend on it.
+
+### Installation
+
+- New optional extra: `pip install "threadfin[dandelion] @ git+https://github.com/Reynold4k/Threadfin.git"`
+  installs Dandelion together with a compatible matplotlib. Dandelion 0.5.7 calls `matplotlib.cm.get_cmap`,
+  which matplotlib 3.9 removed, but does not declare the limit, so a plain `pip install sc-dandelion` can leave
+  `import dandelion` failing.
+  *What this means for you:* use the extra, or `pip install sc-dandelion "matplotlib<3.9"`.
+
+### Documentation
+
+- New **end-to-end tutorial notebook** (`docs/tutorials/05_end_to_end_tutorial.ipynb`): environment, download of
+  a published dataset from GEO (GSE287123), hashtag demultiplexing, clone definition, embedding, `threadfin.run`,
+  every output explained, clone-level tests with the library caveat, and the main result of the manuscript's
+  Figure 4 — tested end to end in a fresh environment before release. `docs/tutorials/environment.yml`
+  recreates the tested environment.
+- Tutorials 1–4, Methods, the case-study guide and the figure guide were expanded for beginners: what each step
+  does and why, how to read every output, common misreadings, a checklist for preparing your own data, how to
+  choose `donor_key` / `sample_key` / `batch_key`, a clone-map trust checklist and a troubleshooting table.
+- The homepage images that a `.gitignore` pattern had hidden are published.
+
+### Repository
+
+- Everything behind the manuscript is now in `manuscript/`: figures and their code (`manuscript/figures/`,
+  formerly `paper/figure_plan/`), the case studies (`manuscript/case_studies/`, formerly `case_studies/`), every
+  analysis beyond the figures and the technical validation (`manuscript/analyses/`), a record of negative
+  results, and an end-to-end benchmark against Clonotrace, clone2vec, Benisse, CoNGA's reduction and scirpy
+  (`manuscript/benchmarking/`). `manuscript/README.md` describes the state of the manuscript.
+  *What this means for you:* update links and paths that pointed to `case_studies/` or `paper/figure_plan/`.
+
 ## 4.3.0 — 2026-10-18
 
 ### The clone map chooses its own settings

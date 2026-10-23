@@ -1,0 +1,106 @@
+{
+ "generator": "reserve/source/figure4_figure_2026-10-19.py",
+ "analysis": "reserve/source/figure4_analysis_2026-10-19.py",
+ "page_mm": [
+  210,
+  297
+ ],
+ "dpi": 600,
+ "inputs": {
+  "summary": {
+   "path": "reserve/figure4_rbd_2026-10-19/summary.json",
+   "sha256": "2b953b7d2fbda4bafbadc602560256cbe979ef0c57c51da3e361178c68c3ba19"
+  },
+  "clones": {
+   "path": "reserve/figure4_rbd_2026-10-19/clones.csv",
+   "sha256": "a3dc381770e7f234afa37fdb256d9fa5911a9162aa6251235ac293cc09cbbb95"
+  },
+  "deciles": {
+   "path": "reserve/figure4_rbd_2026-10-19/pc1_deciles.csv",
+   "sha256": "8329869d9dd5ee554f6d7784c06387cc6c38a536431dce2636d6fc8ec8605e80"
+  },
+  "cells": {
+   "path": "reserve/figure4_rbd_2026-10-19/cells.csv.gz",
+   "sha256": "5294a42d5b532bf44f9463b29405b88269789dd214549fba3da8f115c4bd2ac5"
+  },
+  "null": {
+   "path": "reserve/figure4_rbd_2026-10-19/crossover_null.npy",
+   "sha256": "3c18c9cd4da8f6adfa89c5dedee41fdf059a8702d7e5f33f327d9ac3662415db"
+  }
+ },
+ "panels": {
+  "b": {
+   "n_cells": 36188,
+   "n_low": 19006,
+   "n_high": 17182
+  },
+  "c": {
+   "n_clones": 1887
+  },
+  "d": {
+   "rho_protein": 0.39349182128519444,
+   "rho_mrna": 0.2893231754954015
+  },
+  "e": {
+   "cosine": 0.8869012485409472,
+   "null_mean": 0.015239804090146664,
+   "null_q95": 0.6058665846505502,
+   "p_value": 0.0004997501249375312
+  },
+  "f": {
+   "M1": 0.459,
+   "M2": 0.35,
+   "M3": 0.343,
+   "M4": 0.362,
+   "M5": 0.45,
+   "M6": 0.343,
+   "M7": 0.462,
+   "M8": 0.157,
+   "M9": 0.375,
+   "M10": 0.233
+  },
+  "g": {
+   "decile_1": {
+    "n_clones": 189,
+    "n_cells": 799,
+    "fraction_low": 0.1702127659574468
+   },
+   "decile_5": {
+    "n_clones": 189,
+    "n_cells": 1034,
+    "fraction_low": 0.6518375241779497
+   },
+   "decile_10": {
+    "n_clones": 189,
+    "n_cells": 1959,
+    "fraction_low": 0.709545686574783
+   }
+  },
+  "h_i": {
+   "n_clones_binding": 1544,
+   "n_clones_zone": 343
+  },
+  "j": {
+   "binding_positive": 5,
+   "zone_positive": 5
+  }
+ },
+ "layout_audit": {
+  "page_mm": [
+   210,
+   297
+  ],
+  "text_outside_page": [],
+  "text_overlaps": [],
+  "font_sizes_pt": [
+   7.2,
+   7.4,
+   7.5,
+   7.6,
+   8.0,
+   8.8,
+   11.0
+  ],
+  "minimum_font_pt": 7.2
+ }
+}

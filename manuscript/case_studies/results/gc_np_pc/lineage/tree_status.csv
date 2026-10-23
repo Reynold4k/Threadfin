@@ -1,0 +1,3 @@
+dataset,outcome,clones,share
+gc_np_pc,ok,30,0.967741935483871
+gc_np_pc,trivial,1,0.03225806451612903

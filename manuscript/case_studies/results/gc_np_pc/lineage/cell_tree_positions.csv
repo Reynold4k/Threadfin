@@ -1,0 +1,125 @@
+clone,group,donor,file,mutations,window_length,depth,ancestral,germline,n_descendant_genotypes
+M1|B_VDJ_15_2_3_VJ_8_1_1,plasma cell,M1,M1_B_VDJ_15_2_3_VJ_8_1_1,0,294,0.0,False,True,2
+M1|B_VDJ_15_2_3_VJ_8_1_1,light zone,M1,M1_B_VDJ_15_2_3_VJ_8_1_1,3,294,3.0,False,False,0
+M1|B_VDJ_15_2_3_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_15_2_3_VJ_8_1_1,7,294,7.0,False,False,0
+M1|B_VDJ_3_3_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_3_3_1_VJ_8_1_1,4,294,4.0,False,False,0
+M1|B_VDJ_3_3_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_3_3_1_VJ_8_1_1,4,294,4.0,False,False,0
+M1|B_VDJ_3_3_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_3_3_1_VJ_8_1_1,12,294,12.0,False,False,0
+M1|B_VDJ_3_3_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_3_3_1_VJ_8_1_1,4,294,4.0,False,False,0
+M1|B_VDJ_6_1_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_6_1_1_VJ_8_1_1,1,292,1.0,False,False,0
+M1|B_VDJ_6_1_1_VJ_8_1_1,Myc+ light zone,M1,M1_B_VDJ_6_1_1_VJ_8_1_1,3,292,3.0,False,False,0
+M1|B_VDJ_6_1_1_VJ_8_1_1,light zone,M1,M1_B_VDJ_6_1_1_VJ_8_1_1,2,292,2.0,False,False,0
+M1|B_VDJ_6_1_1_VJ_8_1_1,light zone,M1,M1_B_VDJ_6_1_1_VJ_8_1_1,5,292,5.0,False,False,0
+M2|B_VDJ_2_1_1_VJ_15_1_1,Myc+ light zone,M2,M2_B_VDJ_2_1_1_VJ_15_1_1,1,294,1.0,False,False,0
+M2|B_VDJ_2_1_1_VJ_15_1_1,light zone,M2,M2_B_VDJ_2_1_1_VJ_15_1_1,1,294,1.0,True,False,1
+M2|B_VDJ_2_1_1_VJ_15_1_1,light zone,M2,M2_B_VDJ_2_1_1_VJ_15_1_1,2,294,2.0,False,False,0
+M2|B_VDJ_4_1_1_VJ_6_1_1,Myc+ light zone,M2,M2_B_VDJ_4_1_1_VJ_6_1_1,0,302,0.0,False,True,3
+M2|B_VDJ_4_1_1_VJ_6_1_1,Myc+ light zone,M2,M2_B_VDJ_4_1_1_VJ_6_1_1,0,302,0.0,False,True,3
+M2|B_VDJ_4_1_1_VJ_6_1_1,Myc+ light zone,M2,M2_B_VDJ_4_1_1_VJ_6_1_1,1,302,1.0,False,False,0
+M2|B_VDJ_4_1_1_VJ_6_1_1,Myc+ light zone,M2,M2_B_VDJ_4_1_1_VJ_6_1_1,2,302,2.0,False,False,0
+M2|B_VDJ_4_1_1_VJ_6_1_1,Myc+ light zone,M2,M2_B_VDJ_4_1_1_VJ_6_1_1,4,302,4.0,False,False,0
+M3|B_VDJ_1_1_1_VJ_9_1_5,plasma cell,M3,M3_B_VDJ_1_1_1_VJ_9_1_5,5,294,5.0,False,False,0
+M3|B_VDJ_1_1_1_VJ_9_1_5,plasma cell,M3,M3_B_VDJ_1_1_1_VJ_9_1_5,4,294,4.0,False,False,0
+M3|B_VDJ_1_1_1_VJ_9_1_5,Myc+ light zone,M3,M3_B_VDJ_1_1_1_VJ_9_1_5,2,294,2.0,False,False,0
+M3|B_VDJ_1_1_1_VJ_9_1_5,Myc+ light zone,M3,M3_B_VDJ_1_1_1_VJ_9_1_5,3,294,3.0,True,False,1
+M3|B_VDJ_1_1_1_VJ_9_1_5,plasma cell,M3,M3_B_VDJ_1_1_1_VJ_9_1_5,5,294,5.0,False,False,0
+M3|B_VDJ_4_1_1_VJ_7_1_1,Myc+ light zone,M3,M3_B_VDJ_4_1_1_VJ_7_1_1,2,294,2.0,False,False,0
+M3|B_VDJ_4_1_1_VJ_7_1_1,dark zone,M3,M3_B_VDJ_4_1_1_VJ_7_1_1,5,294,5.0,False,False,0
+M3|B_VDJ_4_1_1_VJ_7_1_1,dark zone,M3,M3_B_VDJ_4_1_1_VJ_7_1_1,9,294,9.0,False,False,0
+M4|B_VDJ_1_2_1_VJ_5_1_3,Myc+ light zone,M4,M4_B_VDJ_1_2_1_VJ_5_1_3,1,294,1.0,True,False,2
+M4|B_VDJ_1_2_1_VJ_5_1_3,Myc+ light zone,M4,M4_B_VDJ_1_2_1_VJ_5_1_3,1,294,1.0,True,False,2
+M4|B_VDJ_1_2_1_VJ_5_1_3,Myc+ light zone,M4,M4_B_VDJ_1_2_1_VJ_5_1_3,5,294,5.0,True,False,1
+M4|B_VDJ_1_2_1_VJ_5_1_3,Myc+ light zone,M4,M4_B_VDJ_1_2_1_VJ_5_1_3,6,294,6.0,False,False,0
+M5|B_VDJ_4_1_1_VJ_16_1_4,Myc+ light zone,M5,M5_B_VDJ_4_1_1_VJ_16_1_4,1,294,1.0,True,False,1
+M5|B_VDJ_4_1_1_VJ_16_1_4,Myc+ light zone,M5,M5_B_VDJ_4_1_1_VJ_16_1_4,1,294,1.0,True,False,1
+M5|B_VDJ_4_1_1_VJ_16_1_4,dark zone,M5,M5_B_VDJ_4_1_1_VJ_16_1_4,2,294,2.0,False,False,0
+M5|B_VDJ_6_2_3_VJ_16_1_4,dark zone,M5,M5_B_VDJ_6_2_3_VJ_16_1_4,1,294,1.0,True,False,3
+M5|B_VDJ_6_2_3_VJ_16_1_4,dark zone,M5,M5_B_VDJ_6_2_3_VJ_16_1_4,3,294,3.0,False,False,0
+M5|B_VDJ_6_2_3_VJ_16_1_4,Myc+ light zone,M5,M5_B_VDJ_6_2_3_VJ_16_1_4,2,294,2.0,True,False,1
+M5|B_VDJ_6_2_3_VJ_16_1_4,dark zone,M5,M5_B_VDJ_6_2_3_VJ_16_1_4,3,294,3.0,False,False,0
+S1|B_VDJ_17_2_1_VJ_8_1_18,light zone,S1,S1_B_VDJ_17_2_1_VJ_8_1_18,4,294,4.0,False,False,0
+S1|B_VDJ_17_2_1_VJ_8_1_18,light zone,S1,S1_B_VDJ_17_2_1_VJ_8_1_18,7,294,7.0,False,False,0
+S1|B_VDJ_17_2_1_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_17_2_1_VJ_8_1_18,3,294,3.0,True,False,1
+S1|B_VDJ_17_2_1_VJ_8_1_18,light zone,S1,S1_B_VDJ_17_2_1_VJ_8_1_18,7,294,7.0,False,False,0
+S1|B_VDJ_1_1_11_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_1_11_VJ_8_1_18,4,294,4.0,False,False,0
+S1|B_VDJ_1_1_11_VJ_8_1_18,dark zone,S1,S1_B_VDJ_1_1_11_VJ_8_1_18,5,294,5.0,False,False,0
+S1|B_VDJ_1_1_11_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_1_11_VJ_8_1_18,3,294,3.0,False,False,0
+S1|B_VDJ_1_1_16_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_1_16_VJ_8_1_18,2,291,2.0,True,False,1
+S1|B_VDJ_1_1_16_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_1_16_VJ_8_1_18,2,291,2.0,True,False,1
+S1|B_VDJ_1_1_16_VJ_8_1_18,dark zone,S1,S1_B_VDJ_1_1_16_VJ_8_1_18,3,291,3.0,False,False,0
+S1|B_VDJ_1_1_7_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_1_7_VJ_8_1_18,3,290,3.0,False,False,0
+S1|B_VDJ_1_1_7_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_1_7_VJ_8_1_18,3,290,3.0,False,False,0
+S1|B_VDJ_1_1_7_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_1_7_VJ_8_1_18,2,290,2.0,False,False,0
+S1|B_VDJ_1_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_2_3_VJ_8_1_18,2,294,2.0,False,False,0
+S1|B_VDJ_1_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_2_3_VJ_8_1_18,5,294,5.0,False,False,0
+S1|B_VDJ_1_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_2_3_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_1_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_2_3_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_1_3_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_1_3_3_VJ_8_1_18,0,294,0.0,False,True,4
+S1|B_VDJ_1_3_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_3_3_VJ_8_1_18,3,294,3.0,False,False,0
+S1|B_VDJ_1_3_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_3_3_VJ_8_1_18,7,294,7.0,False,False,0
+S1|B_VDJ_1_3_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_1_3_3_VJ_8_1_18,2,294,2.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,0,294,0.0,False,True,7
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,0,294,0.0,False,True,7
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,0,294,0.0,False,True,7
+S1|B_VDJ_20_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,5,294,5.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,4,294,4.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,dark zone,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,3,294,3.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,1,294,1.0,True,False,1
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_20_2_3_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_2_3_VJ_8_1_18,4,294,4.0,False,False,0
+S1|B_VDJ_20_3_1_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_3_1_VJ_8_1_18,0,294,0.0,False,True,2
+S1|B_VDJ_20_3_1_VJ_8_1_18,light zone,S1,S1_B_VDJ_20_3_1_VJ_8_1_18,4,294,4.0,False,False,0
+S1|B_VDJ_20_3_1_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_20_3_1_VJ_8_1_18,1,294,1.0,False,False,0
+S1|B_VDJ_2_1_4_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_2_1_4_VJ_8_1_18,2,294,2.0,False,False,0
+S1|B_VDJ_2_1_4_VJ_8_1_18,light zone,S1,S1_B_VDJ_2_1_4_VJ_8_1_18,2,294,2.0,False,False,0
+S1|B_VDJ_2_1_4_VJ_8_1_18,light zone,S1,S1_B_VDJ_2_1_4_VJ_8_1_18,2,294,2.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_12,light zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_12,4,294,4.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_12,dark zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_12,6,294,6.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_12,light zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_12,6,294,6.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,0,291,0.0,False,True,6
+S1|B_VDJ_2_1_5_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,0,291,0.0,False,True,6
+S1|B_VDJ_2_1_5_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,0,291,0.0,False,True,6
+S1|B_VDJ_2_1_5_VJ_8_1_18,light zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,3,291,3.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_18,dark zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,6,291,6.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_18,light zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,2,291,2.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_18,dark zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,3,291,3.0,False,False,0
+S1|B_VDJ_2_1_5_VJ_8_1_18,plasma cell,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,1,291,1.0,True,False,1
+S1|B_VDJ_2_1_5_VJ_8_1_18,light zone,S1,S1_B_VDJ_2_1_5_VJ_8_1_18,3,291,3.0,False,False,0
+S2|B_VDJ_15_1_1_VJ_4_1_1,light zone,S2,S2_B_VDJ_15_1_1_VJ_4_1_1,0,294,0.0,False,True,2
+S2|B_VDJ_15_1_1_VJ_4_1_1,light zone,S2,S2_B_VDJ_15_1_1_VJ_4_1_1,0,294,0.0,False,True,2
+S2|B_VDJ_15_1_1_VJ_4_1_1,light zone,S2,S2_B_VDJ_15_1_1_VJ_4_1_1,3,294,3.0,False,False,0
+S2|B_VDJ_15_1_1_VJ_4_1_1,light zone,S2,S2_B_VDJ_15_1_1_VJ_4_1_1,1,294,1.0,False,False,0
+S3|B_VDJ_13_2_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_2_1_VJ_16_1_8,2,294,2.0,True,False,1
+S3|B_VDJ_13_2_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_13_2_1_VJ_16_1_8,4,294,4.0,True,False,1
+S3|B_VDJ_13_2_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_2_1_VJ_16_1_8,7,294,7.0,False,False,0
+S3|B_VDJ_13_2_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_2_1_VJ_16_1_8,5,294,5.0,False,False,0
+S3|B_VDJ_13_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_3_1_VJ_16_1_8,4,294,4.0,True,False,1
+S3|B_VDJ_13_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_3_1_VJ_16_1_8,4,294,4.0,True,False,1
+S3|B_VDJ_13_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_3_1_VJ_16_1_8,4,294,4.0,True,False,1
+S3|B_VDJ_13_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_3_1_VJ_16_1_8,4,294,4.0,True,False,1
+S3|B_VDJ_13_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_13_3_1_VJ_16_1_8,5,294,5.0,False,False,0
+S3|B_VDJ_15_2_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_15_2_1_VJ_16_1_8,0,290,0.0,False,True,2
+S3|B_VDJ_15_2_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_15_2_1_VJ_16_1_8,4,290,4.0,False,False,0
+S3|B_VDJ_15_2_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_15_2_1_VJ_16_1_8,5,290,5.0,False,False,0
+S3|B_VDJ_3_4_3_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_3_4_3_VJ_16_1_8,1,294,1.0,False,False,0
+S3|B_VDJ_3_4_3_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_3_4_3_VJ_16_1_8,1,294,1.0,False,False,0
+S3|B_VDJ_3_4_3_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_3_4_3_VJ_16_1_8,1,294,1.0,False,False,0
+S3|B_VDJ_3_4_3_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_3_4_3_VJ_16_1_8,1,294,1.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,2,294,2.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,2,294,2.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,8,294,8.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,4,294,4.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,plasma cell,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,3,294,3.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,6,294,6.0,False,False,0
+S3|B_VDJ_4_3_1_VJ_16_1_8,light zone,S3,S3_B_VDJ_4_3_1_VJ_16_1_8,3,294,5.0,False,False,0
+S4|B_VDJ_2_3_4_VJ_8_1_9,light zone,S4,S4_B_VDJ_2_3_4_VJ_8_1_9,0,280,0.0,False,True,2
+S4|B_VDJ_2_3_4_VJ_8_1_9,light zone,S4,S4_B_VDJ_2_3_4_VJ_8_1_9,1,280,1.0,False,False,0
+S4|B_VDJ_2_3_4_VJ_8_1_9,light zone,S4,S4_B_VDJ_2_3_4_VJ_8_1_9,3,280,3.0,False,False,0
+S4|B_VDJ_2_5_1_VJ_8_1_9,light zone,S4,S4_B_VDJ_2_5_1_VJ_8_1_9,0,294,0.0,False,True,2
+S4|B_VDJ_2_5_1_VJ_8_1_9,dark zone,S4,S4_B_VDJ_2_5_1_VJ_8_1_9,1,294,1.0,True,False,1
+S4|B_VDJ_2_5_1_VJ_8_1_9,light zone,S4,S4_B_VDJ_2_5_1_VJ_8_1_9,3,294,3.0,False,False,0
+S4|B_VDJ_3_2_1_VJ_8_1_9,light zone,S4,S4_B_VDJ_3_2_1_VJ_8_1_9,2,294,2.0,False,False,0
+S4|B_VDJ_3_2_1_VJ_8_1_9,light zone,S4,S4_B_VDJ_3_2_1_VJ_8_1_9,3,294,3.0,False,False,0
+S4|B_VDJ_3_2_1_VJ_8_1_9,dark zone,S4,S4_B_VDJ_3_2_1_VJ_8_1_9,4,294,4.0,False,False,0

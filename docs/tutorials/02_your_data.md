@@ -1,28 +1,95 @@
 # Tutorial 2 — Your own data
 
-Threadfin needs two things for each cell: its gene expression and the B-cell receptor (BCR) that tells
-which clone it belongs to. This tutorial goes from Cell Ranger output to results.
+Threadfin needs two things for each cell: its **gene expression** and its **B-cell receptor (BCR)**, which
+tells which clone it belongs to. This tutorial goes from Cell Ranger output to results, explains each
+decision you have to make, and lists the errors you are most likely to meet and how to fix them. For a
+complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_tutorial.ipynb).
+
+---
+
+## 0. Before you start: a checklist
+
+| Question | Why it matters |
+|---|---|
+| Do I have **gene expression** and **BCR** for the *same* cells (5′ 10x, or plate-based with TRUST4/MiXCR)? | Clones come from the BCR; states come from the RNA; the two are linked by the cell barcode. |
+| Do I have the **contig-level** BCR table — one row per receptor chain? | Clones are defined from heavy *and* light chain; a per-cell summary cannot be paired. Cell Ranger's `filtered_contig_annotations.csv` and `airr_rearrangement.tsv` are contig-level. |
+| Do I know which **individual** (donor, mouse) each cell came from? | Clones are defined within individuals and every test shuffles labels within individuals. |
+| Do I know the **sample** (library / sort / time point) of each cell? | Each clone is compared with the cells sampled with it. |
+| Are there enough clones with **two or more cells**? | Coherence needs a few dozen such clones; programmes and tests are more informative with hundreds. Most published 10x B-cell datasets have 500–10,000. |
+| Are **plasma cells and memory B cells** included, if they were sampled? | Clones span these states; removing them removes exactly the clone structure Threadfin describes. |
+
+> **Rule of thumb for experiment design.** Threadfin learns about clones from *repeated sampling of the same
+> clone*. Sorting a single compartment (for example only germinal-centre B cells) keeps clones but removes
+> the states they connect; sampling a whole response (GC, plasma, memory) gives clones more to say.
+
+---
 
 ## 1. What to prepare
 
 | Input | Format | Notes |
 |---|---|---|
-| expression | `AnnData`, one row per cell, raw counts in `X` (or `layers["counts"]`) | B cells only; doublets and low-quality cells removed |
-| `obs["donor"]` | the individual each cell came from | clones are defined and compared within individuals |
-| `obs["sample"]` | the library, sort or time point each cell was sequenced in | each clone is compared with the cells sampled alongside it |
+| expression | `AnnData`, one row per cell, **raw counts** in `X` (or `layers["counts"]`) | B cells (including plasma cells); doublets and low-quality cells removed |
+| `obs["donor"]` | the individual each cell came from | mouse id, participant id |
+| `obs["sample"]` | the library, sort or time point each cell was sequenced in | used as the sampling context — see section 5 |
 | BCR | Cell Ranger `filtered_contig_annotations.csv`, an AIRR `.tsv`, or a contig-level `DataFrame` | one row per receptor chain, so that heavy and light chains can be paired |
 
-Clones are defined with Dandelion's paired heavy- and light-chain definition (Suo et al. 2024), which
-needs the `sc-dandelion` package. Dandelion pins older plotting libraries, so you may prefer to define
-clones in a separate environment and pass the clone ids in `adata.obs["clone_id"]` instead (section 4).
+Clones are defined with Dandelion's paired heavy- and light-chain definition (Suo et al. 2024), which needs
+the `sc-dandelion` package. Dandelion 0.5.7 uses a matplotlib function that was removed in matplotlib 3.9,
+so install both together: `pip install "threadfin[dandelion] @ git+https://github.com/Reynold4k/Threadfin.git"`
+or `pip install sc-dandelion "matplotlib<3.9"` (Threadfin works with matplotlib 3.7 and later). If you prefer,
+define clones in a separate environment or with another clone caller and pass the clone ids directly
+(section 6).
 
-## 2. One sample
+*Reproducible clone ids.* Dandelion's clone assignment depends on the order in which Python iterates over
+sets of sequences, which is randomised in every new Python session. Repeated runs can therefore differ by a
+few clones out of thousands (the conclusions should not change). Start Python with `PYTHONHASHSEED=0`
+(in a terminal: `PYTHONHASHSEED=0 python my_analysis.py`; for Jupyter, register the kernel with
+`python -m ipykernel install --user --name threadfin --env PYTHONHASHSEED 0`) when the ids must be identical
+every time; the seed in use is stored in `clone_ids.attrs["python_hash_seed"]`.
+
+---
+
+## 2. Quality control and the right cells
+
+**What.** Remove empty droplets, damaged cells and doublets, and keep the B-lineage cells.
+
+**Why.** Damaged cells (few genes, many mitochondrial reads) and doublets (two cells in one droplet) create
+artificial "states". A doublet of a germinal-centre B cell and a plasma cell would even look like a clone
+spanning both states.
 
 ```python
 import scanpy as sc
-import threadfin as tf
 
 adata = sc.read_10x_h5("sample1/filtered_feature_bc_matrix.h5")
+adata.var_names_make_unique()
+adata.var["mt"] = adata.var_names.str.upper().str.startswith("MT-")
+sc.pp.calculate_qc_metrics(adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True)
+sc.pl.violin(adata, ["n_genes_by_counts", "total_counts", "pct_counts_mt"], multi_panel=True)
+
+# starting points: inspect the plots and adapt them to your tissue and chemistry
+adata = adata[(adata.obs["n_genes_by_counts"] >= 200) &
+              (adata.obs["total_counts"] >= 500) &
+              (adata.obs["pct_counts_mt"] < 15)].copy()
+```
+
+* *Thresholds* depend on tissue and chemistry; read them off the violin plots rather than copying them.
+  Plasma cells have many immunoglobulin transcripts and sometimes fewer detected genes — do not set the
+  gene threshold so high that they disappear.
+* *Doublets*: if your samples were hashtagged, remove cells positive for two hashtags (Tutorial 5, Step 3);
+  otherwise a doublet detector such as Scrublet (`sc.pp.scrublet`) helps.
+* *B-lineage cells*: keep cells annotated as B cells, germinal-centre B cells, plasmablasts, plasma cells
+  and memory B cells. Marker genes that help: *CD19*, *MS4A1*, *CD79A* (B cells), *BCL6*, *AICDA* (germinal
+  centre), *PRDM1*, *XBP1*, *JCHAIN*, *SDC1* (plasma cells). Plasma cells have little *MS4A1*/CD20, so do not
+  select B cells on *MS4A1* alone.
+* Keep the **raw counts**: Threadfin normalises them itself.
+
+---
+
+## 3. One sample
+
+```python
+import threadfin as tf
+
 adata.obs["donor"] = "donor1"
 adata.obs["sample"] = "sample1"
 
@@ -31,14 +98,24 @@ result = tf.run(adata, bcr="sample1/filtered_contig_annotations.csv",
 print(result.summary())
 ```
 
-`tf.run` defines the clones, builds an expression embedding without immunoglobulin genes (so that cells of
-one clone do not look alike merely because they share receptor transcripts), estimates one profile per
-clone, tests clonal coherence, lays out the clone map, finds programmes and reports their stability.
+`tf.run` (1) defines the clones; (2) builds an expression embedding without immunoglobulin genes, so that
+cells of one clone do not look alike merely because they share receptor transcripts; (3) estimates one
+profile per clone; (4) tests clonal coherence; (5) lays out the clone map; (6) finds programmes and their
+stability; and (7) runs the tests you asked for. [Tutorial 1](01_getting_started.md#2-one-call) explains how
+to read the summary.
 
-## 3. Several samples
+**What to look for.** The first line of the summary says how many cells have a BCR and how many clones have
+at least three cells. If almost no cell has a BCR, the barcodes did not match (section 4).
 
-Barcodes repeat across 10x libraries, so give every cell a unique name in both tables, for example by
-prefixing the sample:
+---
+
+## 4. Several samples: make every barcode unique
+
+**What.** Load each sample, prefix every barcode with its sample name in *both* the expression and the BCR
+table, and concatenate.
+
+**Why.** 10x barcodes are drawn from a fixed whitelist, so the same barcode occurs in different libraries.
+Without a prefix, cells of different samples would be merged, and BCRs would be attached to the wrong cells.
 
 ```python
 import anndata as ad
@@ -48,6 +125,7 @@ samples = {"d0_LN": "donor1", "d7_LN": "donor1", "d0_blood": "donor2"}
 parts, contigs = [], []
 for sample, donor in samples.items():
     a = sc.read_10x_h5(f"{sample}/filtered_feature_bc_matrix.h5")
+    a.var_names_make_unique()
     a.obs_names = [f"{sample}_{b}" for b in a.obs_names]
     a.obs["sample"], a.obs["donor"] = sample, donor
     parts.append(a)
@@ -58,18 +136,51 @@ for sample, donor in samples.items():
 adata = ad.concat(parts)
 contigs = pd.concat(contigs, ignore_index=True)
 
+# check the match before running anything else
+matched = contigs["barcode"].isin(adata.obs_names)
+print(f"{matched.mean():.0%} of BCR contigs match a cell of the expression data")
+
 result = tf.run(adata, bcr=contigs, donor_key="donor", sample_key="sample",
                 batch_key="sample")          # integrate over technical batches only
 ```
 
-Use `batch_key` only for technical batches (libraries, sequencing runs). Do not integrate over the biology
-you want to study — tissue, time point or sort gate — because integration would remove the differences you
-are asking about.
+**What to look for.** Usually 60–95 % of contigs match (the rest belong to droplets removed by QC). A match
+near 0 % means the prefixes or the `-1` suffixes differ between the two tables.
 
-## 4. Clones defined elsewhere
+---
 
-If clone ids come from Dandelion run in its own environment, from Immcantation or from your own pipeline,
-put them in `obs` and omit `bcr`:
+## 5. Choosing `donor_key`, `sample_key` and `batch_key`
+
+These three arguments decide what Threadfin treats as *nuisance* — differences that should not count as
+differences between clones.
+
+| Argument | What it does | Use | Never use |
+|---|---|---|---|
+| `donor_key` | clones are defined within individuals; tests shuffle labels among clones of one individual | the individual | — |
+| `sample_key` | each clone is described relative to the cells of its context; coherence shuffles clone labels within it | the donor, a library, or donor × time point when time is *not* what you study | anything you want to compare between clones: tissue, sort gate, treatment, time point |
+| `batch_key` | Harmony integration when the embedding is built | technical batches (libraries, runs) | biology |
+
+**Why the context must be a nuisance variable.** Threadfin subtracts each context's average before
+comparing clones. If the context were the tissue, every clone would be compared only with the cells of its
+own tissue, and differences between tissues — the thing you wanted to see — would be removed. Two examples:
+
+* *Lymph node and blood, several visits per donor.* Use `sample_key="donor"` if you want to see lymph-node
+  versus blood clones; test `tissue` afterwards with `test=["tissue"]`.
+* *Cells sorted into gates (for example GC versus plasma cells, or a division reporter), each gate a library.*
+  Use the donor as the context, and keep in mind that a gate sorted into its own library cannot be separated
+  from differences between libraries (Tutorial 5, Step 13).
+
+**Why the coherence test shuffles within samples.** Cells of one clone are usually sequenced together. If
+samples differ in their cell-type composition, any analysis that ignores samples would call that clonal.
+Shuffling clone labels within samples keeps every sample's composition and destroys only the link between a
+cell's clone and its state.
+
+---
+
+## 6. Clones defined elsewhere
+
+If clone ids come from Dandelion run separately, from Immcantation or from your own pipeline, put them in
+`obs` and omit `bcr`:
 
 ```python
 ids = pd.read_csv("clones.csv", index_col=0)["clone_id"]       # one row per cell
@@ -80,7 +191,14 @@ result = tf.run(adata, donor_key="donor", sample_key="sample")
 Clone ids must not be shared across donors. With Dandelion, `tf.define_clones_dandelion(contigs,
 donor_key="donor")` prefixes the donor to every id.
 
-## 5. Your own labels
+> **Why paired chains?** Defining clones on the heavy chain alone merges unrelated cells that happen to use
+> similar heavy chains. In the published datasets analysed with Threadfin, adding the light chain split
+> over-merged clones (one 791-cell "clone" became clones of at most 254 cells) and increased clonal coherence
+> in every dataset that had light chains.
+
+---
+
+## 7. Your own labels
 
 Anything measured per cell can be tested against the clones: antigen binding, isotype, mutation load, sort
 gate, tissue or time point.
@@ -95,16 +213,46 @@ result.plot("threadfin_overview.pdf")
 ```
 
 For each label, Threadfin first asks how much of the difference between clone profiles the label explains
-(`result.profile_tests`), which needs no programmes, and then which programmes differ
-(`result.tests`). Labels are shuffled among the clones of each donor, so a label that differs only between
-donors cannot appear clonal. Labels that are constant within a donor (age, sex, disease group) cannot be
-separated from other differences between donors; compare donors for those.
+(`result.profile_tests`), which needs no programmes, and then which programmes differ (`result.tests`).
+Labels are shuffled among the clones of each donor, so a label that differs only between donors cannot
+appear clonal.
 
-## 6. Saving
+* A **categorical label** (isotype) is summarised per clone as its majority value; use
+  `tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")` to test the fraction of one level.
+* A **numeric label** (mutation frequency) is summarised as the clone mean.
+* Labels **constant within a donor** (age, sex, disease group) cannot be separated from other differences
+  between donors; compare donors for those.
+* Labels derived from the same **RNA** (a cell-type annotation) are not independent of the clone profiles;
+  they describe programmes but do not validate them.
+
+**Reading a test result.** `r2` is the share of variation between clone profiles explained by the label;
+`null_mean` is what shuffled labels explain; `excess_r2` is their difference; `p_value` is the permutation
+P value (with 2,000 permutations it cannot be smaller than 0.0005). Small R² values are normal: a label is
+one coarse measurement, the profile describes the whole transcriptome.
+
+---
+
+## 8. Saving
 
 ```python
 result.clones.to_csv("threadfin_clones.csv")       # one row per clone
 adata.write_h5ad("threadfin_result.h5ad")          # everything, including adata.uns["threadfin"]
 ```
+
+---
+
+## 9. Troubleshooting
+
+| Message or symptom | Cause | Fix |
+|---|---|---|
+| `No BCR barcodes match adata.obs_names` | the barcode formats differ (prefix, `-1` suffix) | harmonise them as in section 4; `tf.read_bcr(path, barcode_prefix=..., barcode_suffix=...)` helps |
+| `A per-cell BCR table cannot be used for clone definition` | a one-row-per-cell table was passed | pass the contig-level table (`filtered_contig_annotations.csv` or AIRR) |
+| `Only N clones have >= 2 cells` | too few cells per clone were captured, or BCRs were not attached | check the match rate; check that clones were called within donors; a dataset with very few repeated clones cannot be profiled |
+| `A clone id occurs in multiple donors` | clone ids were not made donor-private | prefix the donor, or call clones with `donor_key` |
+| `Counts contain NaN, infinite, or negative values` | `adata.X` holds normalised or scaled data | put raw counts in `X` (or `layers["counts"]` with `counts_layer=`), or pass your own embedding with `basis=` |
+| `ModuleNotFoundError: dandelion` | Dandelion is not installed | `pip install sc-dandelion "matplotlib<3.9"`, or pass clone ids yourself (section 6) |
+| `cannot import name 'get_cmap' from 'matplotlib.cm'` | Dandelion 0.5.7 with matplotlib ≥ 3.9 | `pip install "matplotlib<3.9"` |
+| coherence high but the shuffled value is also high (> 10 %) | samples differ strongly in composition | expected; Threadfin accounts for it — make sure `sample_key` is set |
+| a programme is dominated by one donor | donors differ in their sampled composition, and centring shifts all clones of a donor together | look at programmes by donor; compare with `sample_key=None` (no centring); see Methods, "centring on the sampling context" |
 
 Next: [Tutorial 3 — the clone map](03_clone_map.md).

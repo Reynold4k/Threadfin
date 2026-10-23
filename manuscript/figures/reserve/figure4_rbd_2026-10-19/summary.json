@@ -1,0 +1,369 @@
+{
+ "dataset": "GSE287123 RBD cohorts (Merkenschlager et al. 2025)",
+ "reproduction_max_abs_difference": {
+  "n_cells": 0.0,
+  "reliability": 1.1102230246251565e-16,
+  "x": 1.7763568394002505e-15,
+  "y": 8.881784197001252e-16
+ },
+ "n_cells": 36188,
+ "n_cells_in_profiled_clones": 9825,
+ "n_clones": 1887,
+ "n_clones_by_cohort": {
+  "protein": 1544,
+  "mRNA": 343
+ },
+ "n_mice_by_cohort": {
+  "mRNA": 5,
+  "protein": 5
+ },
+ "cells_by_cohort_and_gate": {
+  "mCherry-high": {
+   "RBD protein": 14224,
+   "mRNA": 2958
+  },
+  "mCherry-low": {
+   "RBD protein": 14985,
+   "mRNA": 4021
+  }
+ },
+ "tube_design": {
+  "A": {
+   "RBD protein": [
+    "RBD-_mCherry-low"
+   ],
+   "mRNA": [
+    "LZ_mCherry-high"
+   ]
+  },
+  "B": {
+   "RBD protein": [
+    "RBD-_mCherry-high"
+   ],
+   "mRNA": [
+    "LZ_mCherry-low"
+   ]
+  },
+  "C": {
+   "RBD protein": [
+    "RBD+_mCherry-low"
+   ],
+   "mRNA": [
+    "DZ_mCherry-high"
+   ]
+  },
+  "D": {
+   "RBD protein": [
+    "RBD+_mCherry-high"
+   ],
+   "mRNA": [
+    "DZ_mCherry-low"
+   ]
+  }
+ },
+ "pc1": {
+  "variance_explained": [
+   0.4243692733054934,
+   0.14985991875710467,
+   0.11255152745563467,
+   0.06217788739601943,
+   0.04783184892258045
+  ],
+  "orientation_sign": 1.0,
+  "spearman_with_modules": {
+   "dark zone / cycling": 0.8466459571301859,
+   "light zone": -0.4707777712261742,
+   "memory": -0.5872437840386726,
+   "naive": -0.5279583493079274,
+   "plasma cell": 0.3336424352376364
+  },
+  "spearman_with_clone_map": {
+   "x": -0.8577451900267787,
+   "y": 0.7313081016473095
+  },
+  "spearman_with_log_cells": 0.2152852728424989
+ },
+ "associations": {
+  "recently_divided_all": {
+   "r2": 0.08926946884217782,
+   "null_mean": 0.0010993347325507275,
+   "excess_r2": 0.0881701341096271,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1887,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_protein": {
+   "r2": 0.09243813363312288,
+   "null_mean": 0.0007217890752628017,
+   "excess_r2": 0.09171634455786008,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_mrna": {
+   "r2": 0.07180039736871291,
+   "null_mean": 0.0029640925882517865,
+   "excess_r2": 0.06883630478046113,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "rbd_binding_protein": {
+   "r2": 0.023828523149875897,
+   "null_mean": 0.0007432757412975355,
+   "excess_r2": 0.023085247408578362,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "dark_zone_mrna": {
+   "r2": 0.04000100465102827,
+   "null_mean": 0.002958497921284446,
+   "excess_r2": 0.037042506729743824,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  }
+ },
+ "crossover": {
+  "cosine": 0.8869012485409472,
+  "null_mean": 0.015239804090146664,
+  "null_q95": 0.6058665846505502,
+  "null_q99": 0.7592823005364836,
+  "null_min": -0.8966328718325575,
+  "null_max": 0.8866192741967508,
+  "p_value": 0.0004997501249375312,
+  "n_perm": 2000,
+  "permutation": "recently divided fraction among clones within each mouse",
+  "expected_if_tube_effect_only": -1.0,
+  "pc1_slopes_within_mouse": {
+   "protein": 0.10577300593485407,
+   "mRNA": 0.0987941065148775
+  },
+  "pc1_division_effect": 0.10228355622486579,
+  "pc1_tube_AC_vs_BD_effect": 0.003489449709988289,
+  "tube_effect_relative": 0.03411545158164907
+ },
+ "correlations": {
+  "cohort": {
+   "recently_divided|protein": {
+    "rho": 0.39349182128519444,
+    "p_value": 2.4151651954912583e-58,
+    "n": 1544,
+    "partial_rho_given_size": 0.3949586553632422
+   },
+   "recently_divided|mRNA": {
+    "rho": 0.2893231754954015,
+    "p_value": 4.872434417660767e-08,
+    "n": 343,
+    "partial_rho_given_size": 0.28932363767151537
+   },
+   "rbd_binding|protein": {
+    "rho": 0.19075417687170568,
+    "p_value": 4.065262670340661e-14,
+    "n": 1544
+   },
+   "dark_zone|mRNA": {
+    "rho": 0.18629839930183037,
+    "p_value": 0.0005241339049812139,
+    "n": 343
+   }
+  },
+  "mouse": {
+   "recently_divided|M1": {
+    "cohort": "protein",
+    "donor": "M1",
+    "rho": 0.45927078908683233,
+    "p_value": 1.4177594148457774e-26,
+    "n": 483
+   },
+   "recently_divided|M2": {
+    "cohort": "protein",
+    "donor": "M2",
+    "rho": 0.34994840305777136,
+    "p_value": 5.42199119085074e-09,
+    "n": 263
+   },
+   "recently_divided|M3": {
+    "cohort": "protein",
+    "donor": "M3",
+    "rho": 0.34281481611253267,
+    "p_value": 1.381693838269303e-09,
+    "n": 296
+   },
+   "recently_divided|M4": {
+    "cohort": "protein",
+    "donor": "M4",
+    "rho": 0.3620628082939477,
+    "p_value": 3.2216335601529028e-12,
+    "n": 348
+   },
+   "recently_divided|M5": {
+    "cohort": "protein",
+    "donor": "M5",
+    "rho": 0.4503614166324472,
+    "p_value": 4.616835447801636e-09,
+    "n": 154
+   },
+   "recently_divided|M10": {
+    "cohort": "mRNA",
+    "donor": "M10",
+    "rho": 0.23291999013028114,
+    "p_value": 0.034085451586331736,
+    "n": 83
+   },
+   "recently_divided|M6": {
+    "cohort": "mRNA",
+    "donor": "M6",
+    "rho": 0.3431487534529272,
+    "p_value": 0.028059960772776418,
+    "n": 41
+   },
+   "recently_divided|M7": {
+    "cohort": "mRNA",
+    "donor": "M7",
+    "rho": 0.4620915077614848,
+    "p_value": 0.0001066423940678983,
+    "n": 65
+   },
+   "recently_divided|M8": {
+    "cohort": "mRNA",
+    "donor": "M8",
+    "rho": 0.15657816346713394,
+    "p_value": 0.2932400281172234,
+    "n": 47
+   },
+   "recently_divided|M9": {
+    "cohort": "mRNA",
+    "donor": "M9",
+    "rho": 0.37451374552687644,
+    "p_value": 7.063402964953143e-05,
+    "n": 107
+   },
+   "rbd_binding|M1": {
+    "cohort": "protein",
+    "donor": "M1",
+    "rho": 0.2182033247989017,
+    "p_value": 1.288321082596568e-06,
+    "n": 483
+   },
+   "rbd_binding|M2": {
+    "cohort": "protein",
+    "donor": "M2",
+    "rho": 0.20580261679230158,
+    "p_value": 0.0007860121719133408,
+    "n": 263
+   },
+   "rbd_binding|M3": {
+    "cohort": "protein",
+    "donor": "M3",
+    "rho": 0.1327002688327895,
+    "p_value": 0.022400378286289376,
+    "n": 296
+   },
+   "rbd_binding|M4": {
+    "cohort": "protein",
+    "donor": "M4",
+    "rho": 0.18558662343476318,
+    "p_value": 0.00050160974149701,
+    "n": 348
+   },
+   "rbd_binding|M5": {
+    "cohort": "protein",
+    "donor": "M5",
+    "rho": 0.28695502042348897,
+    "p_value": 0.00030833889543173556,
+    "n": 154
+   },
+   "dark_zone|M10": {
+    "cohort": "mRNA",
+    "donor": "M10",
+    "rho": 0.038048553227566353,
+    "p_value": 0.7327230576677269,
+    "n": 83
+   },
+   "dark_zone|M6": {
+    "cohort": "mRNA",
+    "donor": "M6",
+    "rho": 0.36171425296242765,
+    "p_value": 0.020137561323745116,
+    "n": 41
+   },
+   "dark_zone|M7": {
+    "cohort": "mRNA",
+    "donor": "M7",
+    "rho": 0.2540305596477048,
+    "p_value": 0.04115652752401486,
+    "n": 65
+   },
+   "dark_zone|M8": {
+    "cohort": "mRNA",
+    "donor": "M8",
+    "rho": 0.09096953297709053,
+    "p_value": 0.5431044660365018,
+    "n": 47
+   },
+   "dark_zone|M9": {
+    "cohort": "mRNA",
+    "donor": "M9",
+    "rho": 0.14894830796265224,
+    "p_value": 0.1257220918439859,
+    "n": 107
+   }
+  }
+ },
+ "clones_without_recently_divided_cell_by_decile": {
+  "1": 0.7936507936507936,
+  "2": 0.4074074074074074,
+  "3": 0.18085106382978725,
+  "4": 0.164021164021164,
+  "5": 0.09523809523809523,
+  "6": 0.10638297872340426,
+  "7": 0.10052910052910052,
+  "8": 0.09574468085106383,
+  "9": 0.08465608465608465,
+  "10": 0.05291005291005291
+ },
+ "igm_igd_by_decile": {
+  "1": 0.4683960658501411,
+  "2": 0.24581758629377676,
+  "3": 0.12404385793506706,
+  "4": 0.12244501242322593,
+  "5": 0.10783966258493433,
+  "6": 0.10279539461720312,
+  "7": 0.18137982326410385,
+  "8": 0.11174379604098934,
+  "9": 0.16813217587027113,
+  "10": 0.09327095596936867
+ },
+ "cell_level_tube_contrasts": {
+  "A,C vs B,D": {
+   "norm_protein": 7.3432486981061045,
+   "norm_mrna": 5.165446566545075,
+   "cosine": -0.9201289992698096
+  },
+  "C,D vs A,B": {
+   "norm_protein": 4.507540174022557,
+   "norm_mrna": 3.2359887099855484,
+   "cosine": 0.14117790077353062
+  },
+  "A,D vs B,C": {
+   "norm_protein": 2.8475966035506257,
+   "norm_mrna": 2.2473641988113493,
+   "cosine": 0.22947611871205129
+  },
+  "division_decomposition": {
+   "division_norm": 6.132052225876134,
+   "tube_AC_vs_BD_norm": 1.6433214342185718
+  }
+ },
+ "seed": 0,
+ "n_perm": 2000,
+ "n_boot": 2000,
+ "threadfin_version": "4.3.0"
+}

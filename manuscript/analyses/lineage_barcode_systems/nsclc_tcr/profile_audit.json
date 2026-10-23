@@ -1,0 +1,37 @@
+{
+  "mean": {
+    "n_profiles": 10428,
+    "n_reliable": 10428,
+    "icc": 0.42352245422761253,
+    "parameters": {
+      "clone_key": "clone_cycle",
+      "basis": "X_threadfin",
+      "context_key": "patient",
+      "representation": "mean",
+      "n_features": 256,
+      "smooth": 0,
+      "random_state": 0,
+      "donor_key": "patient",
+      "min_cells": 2,
+      "n_components": 30
+    }
+  },
+  "kernel": {
+    "n_profiles": 10428,
+    "n_reliable": 10428,
+    "icc": 0.5359250816186573,
+    "parameters": {
+      "clone_key": "clone_cycle",
+      "basis": "X_threadfin",
+      "context_key": "patient",
+      "representation": "kernel",
+      "n_features": 256,
+      "smooth": 15,
+      "random_state": 0,
+      "bandwidth": 16.66287873325431,
+      "donor_key": "patient",
+      "min_cells": 2,
+      "n_components": 30
+    }
+  }
+}

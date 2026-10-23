@@ -1,0 +1,8 @@
+{
+  "population": "GC-annotated cells at nonpooled d28/35/60/110/201",
+  "unit": "family mean SHM within donor/date, then donor median; equal-weight donor mean at each date",
+  "comparison": "S+ author-identified family versus not identified S+ (source FALSE)",
+  "matching": "At each date require both labels in the donor; donors can differ between dates.",
+  "interval": "Interquartile range across donor medians, not a confidence interval.",
+  "limits": "Descriptive changing captured repertoire; no test of quantitative affinity, matched-family maturation or future fate."
+}

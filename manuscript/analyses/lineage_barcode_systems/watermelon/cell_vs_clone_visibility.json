@@ -1,0 +1,13 @@
+{
+ "early_cells_with_future_label": 8894,
+ "cell_umap_knn_r": 0.2215511371861276,
+ "cell_umap_null_mean": -0.0008605508167401094,
+ "cell_umap_null_max": 0.02456577491057155,
+ "clone_map_knn_r": 0.4024173908729047,
+ "clone_map_null_mean": 0.0018517704281189166,
+ "clone_map_null_max": 0.0451275462040133,
+ "n_clones_early_map_with_label": 1016,
+ "cell_umap_knn_r_excluding_same_clone": 0.2138322683881992,
+ "cell_null_excl_mean": -0.0037103646046236184,
+ "cell_null_excl_max": 0.024982652883494324
+}

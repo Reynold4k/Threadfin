@@ -7,19 +7,19 @@ dist/
 .ipynb_checkpoints/
 .coverage
 
-# data and large artifacts (download via case_studies/download.sh)
+# data and large artifacts (download via manuscript/case_studies/download.sh)
 data/
 *.h5ad
 *.h5mu
 *.h5
 manuscript.ipynb
 
-# lineage-tree working files: regenerate with case_studies/lineage_trees.py + run_gctree.sh
-case_studies/results/*/lineage/trees/
-case_studies/results/*/lineage/*.fasta
-case_studies/results/*/lineage/status.txt
-case_studies/logs/
-case_studies/results/*/matplotlib/
+# lineage-tree working files: regenerate with manuscript/case_studies/lineage_trees.py + run_gctree.sh
+manuscript/case_studies/results/*/lineage/trees/
+manuscript/case_studies/results/*/lineage/*.fasta
+manuscript/case_studies/results/*/lineage/status.txt
+manuscript/case_studies/logs/
+manuscript/case_studies/results/*/matplotlib/
 
 # quickstart and tutorial output, written to the folder they are run from (anchored to the
 # repository root so that the documentation images in docs/_static/ are not ignored)
@@ -28,26 +28,28 @@ case_studies/results/*/matplotlib/
 /threadfin_overview.pdf
 /tutorial_overview.png
 
-# private material that must never be published
-paper/MAIT/
-paper/figure_plan/report/
-paper/*.full.pdf
-paper/**/*.docx
-paper/manuscript_*/
+# end-to-end tutorial notebook: downloaded data and outputs
+docs/tutorials/data/
+docs/tutorials/threadfin_tutorial_output/
+
+# private material that must never be published: the manuscript text, third-party PDFs,
+# planning notes and the local validation workspace
+manuscript/preprint_*/
+manuscript/**/*.docx
+*.full.pdf
 promprt/
 internal_validation/
 
-# figure working directories stay local; only the figure code, provenance and supplementary
-# analyses of the manuscript are published
-paper/figure_plan/reserve/*
-!paper/figure_plan/reserve/source/
-!paper/figure_plan/reserve/provenance/
-!paper/figure_plan/reserve/revision_2026-10-17/
-paper/figure_plan/reserve/revision_2026-10-17/logs/
-paper/figure_plan/reserve/provenance/Figure_4_*
-paper/figure_plan/reserve/provenance/consolidated_manuscript.json
-
-# Figure 4 and the plan for further figures are set aside and kept local
-paper/figure_plan/Figure_4_measured_validation.*
-paper/figure_plan/FIGURE4_DESIGN_AND_LEGEND_*.md
-paper/figure_plan/FIGURE5_6_ANALYSIS_PLAN_*.md
+# figure working directories (drafts and layout iterations) stay local; the figure code, the
+# provenance records and the analyses behind the figures are published
+manuscript/figures/reserve/*
+!manuscript/figures/reserve/source/
+!manuscript/figures/reserve/provenance/
+!manuscript/figures/reserve/revision_2026-10-17/
+!manuscript/figures/reserve/figure4_rbd_2026-10-19/
+manuscript/figures/reserve/revision_2026-10-17/logs/
+manuscript/figures/reserve/figure4_rbd_2026-10-19/preview.png
+manuscript/figures/reserve/provenance/consolidated_manuscript.json
+manuscript/figures/reserve/provenance/Figure_4_measured_validation.json
+manuscript/figures/FIGURE5_6_ANALYSIS_PLAN_*.md
+manuscript/figures/report/

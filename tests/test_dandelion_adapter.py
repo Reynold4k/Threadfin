@@ -90,3 +90,57 @@ def test_mostly_untranslatable_input_is_refused_rather_than_merged():
     t["junction"] = "NN"
     with pytest.raises(ValueError, match="junction_aa"):
         _fill_junction_aa(t, verbose=False)
+
+
+# --------------------------------------------------------------------------- cells without a heavy chain
+# Dandelion also groups cells whose heavy chain was not recovered, by their light chain alone (ids such as
+# "B_VJ_..."). Light-chain rearrangements are far less diverse than heavy-chain ones, so such groups join
+# unrelated cells; in GSE287123 they were 740 of 2,626 groups of two or more cells. The adapter must leave
+# these cells without a clone unless asked otherwise.
+
+LIGHT_STEM = "TGTCAGCAGTATAATAGC"                         # translates to CQQYNS
+
+
+def paired_and_light_only():
+    """Two cells with the same heavy + light chain, and two cells that only have (the same) light chain."""
+    rows = []
+    for cell in ("p1", "p2"):
+        rows.append({"cell_id": cell, "locus": "IGH", "v_call": "IGHV1-2*02", "j_call": "IGHJ4*02",
+                     "junction": STEM + "TGG", "productive": "T", "umi_count": 10})
+        rows.append({"cell_id": cell, "locus": "IGK", "v_call": "IGKV1-5*01", "j_call": "IGKJ1*01",
+                     "junction": LIGHT_STEM + "TGGACG", "productive": "T", "umi_count": 8})
+    for cell in ("l1", "l2"):
+        rows.append({"cell_id": cell, "locus": "IGK", "v_call": "IGKV3-20*01", "j_call": "IGKJ2*01",
+                     "junction": LIGHT_STEM + "CCGTAC", "productive": "T", "umi_count": 8})
+    return pd.DataFrame(rows)
+
+
+def test_cells_with_heavy_chain_helper():
+    from threadfin.dandelion import _cells_with_heavy_chain
+
+    cells = set(_cells_with_heavy_chain(paired_and_light_only()))
+    assert cells == {"p1", "p2"}
+
+
+def test_light_only_cells_get_no_clone_by_default():
+    pytest.importorskip("dandelion")
+    from threadfin.dandelion import define_clones_dandelion
+
+    t = paired_and_light_only()
+    ids = define_clones_dandelion(t, verbose=False)
+    assert set(ids.index) == {"p1", "p2"}
+    assert ids["p1"] == ids["p2"]
+    assert ids.attrs["n_cells_without_heavy_chain"] == 2
+    kept = define_clones_dandelion(t, require_heavy_chain=False, verbose=False)
+    assert {"l1", "l2"} <= set(kept.index)
+
+
+def test_hash_seed_in_use_is_recorded(monkeypatch):
+    # Dandelion's clone calls depend on Python's string-hash seed; the result says which one was in use
+    pytest.importorskip("dandelion")
+    from threadfin.dandelion import define_clones_dandelion
+
+    monkeypatch.setenv("PYTHONHASHSEED", "0")
+    assert define_clones_dandelion(paired_and_light_only(), verbose=False).attrs["python_hash_seed"] == "0"
+    monkeypatch.delenv("PYTHONHASHSEED")
+    assert define_clones_dandelion(paired_and_light_only(), verbose=False).attrs["python_hash_seed"] is None

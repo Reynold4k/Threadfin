@@ -54,13 +54,26 @@ def _switched(values: pd.Series) -> np.ndarray:
     return np.where(known, iso.str.startswith(SWITCHED).astype(float), np.nan)
 
 
-def _theil_sen(x: np.ndarray, y: np.ndarray) -> float:
-    """Median pairwise slope; robust to the long right tail of mutation frequencies."""
+def _theil_sen(x: np.ndarray, y: np.ndarray, max_pairs: int = 5_000_000, random_state: int = 0) -> float:
+    """Median pairwise slope; robust to the long right tail of mutation frequencies.
+
+    All pairs are used up to ``max_pairs``; above that (about 3,200 cells) the median is taken over a
+    fixed-seed random sample of ``max_pairs`` pairs, so memory stays bounded (all pairs of 40,000 cells
+    would be 8 x 10^8).
+    """
     ok = np.isfinite(x) & np.isfinite(y)
     x, y = x[ok], y[ok]
     if x.size < 3 or np.ptp(x) == 0:
         return float("nan")
-    i, j = np.triu_indices(x.size, 1)
+    n_pairs = x.size * (x.size - 1) // 2
+    if n_pairs <= max_pairs:
+        i, j = np.triu_indices(x.size, 1)
+    else:
+        rng = np.random.default_rng(random_state)
+        i = rng.integers(0, x.size, max_pairs)
+        j = rng.integers(0, x.size, max_pairs)
+        distinct = i != j
+        i, j = i[distinct], j[distinct]
     dx = x[j] - x[i]
     keep = dx != 0
     if not keep.any():

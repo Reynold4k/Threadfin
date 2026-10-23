@@ -1,0 +1,106 @@
+{
+ "figure_3_run": {
+  "n_plasma_clones": 431,
+  "region_by_mouse": {
+   "bridge (P2)": {
+    "mouse2": 68,
+    "mouse3": 2,
+    "mouse4": 24
+   },
+   "lower arm (P2)": {
+    "mouse2": 12,
+    "mouse3": 136,
+    "mouse4": 0
+   },
+   "upper arm (P3)": {
+    "mouse2": 153,
+    "mouse3": 0,
+    "mouse4": 36
+   }
+  },
+  "pc_nonGC_share_by_mouse_all_pc_cells": {
+   "mouse2": 0.2373,
+   "mouse3": 0.0362,
+   "mouse4": 0.1386
+  },
+  "pc_nonGC_share_by_mouse_plasma_clones": {
+   "mouse2": 0.1869,
+   "mouse3": 0.0136,
+   "mouse4": 0.1231
+  },
+  "region_nonGC": {
+   "bridge (P2)": {
+    "n_clones": 94,
+    "n_pc": 177,
+    "observed_nonGC_share": 0.1695,
+    "expected_from_mouse_only": 0.1703,
+    "clones_gc_sort_below_0.5": 6,
+    "median_gc_sort": 1.0
+   },
+   "lower arm (P2)": {
+    "n_clones": 148,
+    "n_pc": 974,
+    "observed_nonGC_share": 0.0154,
+    "expected_from_mouse_only": 0.0173,
+    "clones_gc_sort_below_0.5": 2,
+    "median_gc_sort": 1.0
+   },
+   "upper arm (P3)": {
+    "n_clones": 189,
+    "n_pc": 1220,
+    "observed_nonGC_share": 0.173,
+    "expected_from_mouse_only": 0.1713,
+    "clones_gc_sort_below_0.5": 42,
+    "median_gc_sort": 1.0
+   }
+  },
+  "low_gc_clones_by_mouse": {
+   "mouse2": 39,
+   "mouse4": 9,
+   "mouse3": 2
+  },
+  "within_mouse_upper_vs_bridge": {
+   "mouse2": {
+    "upper_n": 153,
+    "bridge_n": 68,
+    "upper_pc_nonGC": 0.1866,
+    "bridge_pc_nonGC": 0.2029,
+    "fisher_p": 0.641593530199144,
+    "mannwhitney_p": 0.9390421693141262
+   },
+   "mouse4": {
+    "upper_n": 36,
+    "bridge_n": 24,
+    "upper_pc_nonGC": 0.1309,
+    "bridge_pc_nonGC": 0.0571,
+    "fisher_p": 0.28196380519640485,
+    "mannwhitney_p": 0.0033571630067619814
+   }
+  }
+ },
+ "no_centring_within_mouse": {
+  "k": 10,
+  "n_perm": 2000,
+  "features": "kernel PCs, no context centring",
+  "by_mouse": {
+   "mouse2": {
+    "n_clones": 233,
+    "n_with_nonGC_pc": 80,
+    "observed_rho": 0.7039,
+    "null_mean": -0.0164,
+    "p_perm_within_mouse": 0.0004997501249375312,
+    "null_mean_tissue_strata": 0.0674,
+    "p_perm_within_mouse_and_LP_stratum": 0.0004997501249375312
+   },
+   "mouse4": {
+    "n_clones": 60,
+    "n_with_nonGC_pc": 18,
+    "observed_rho": 0.455,
+    "null_mean": -0.0814,
+    "p_perm_within_mouse": 0.0004997501249375312,
+    "null_mean_tissue_strata": -0.0759,
+    "p_perm_within_mouse_and_LP_stratum": 0.0004997501249375312
+   }
+  }
+ }
+}

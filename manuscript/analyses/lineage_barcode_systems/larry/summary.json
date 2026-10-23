@@ -1,0 +1,102 @@
+{
+  "n_input_cells": 130887,
+  "n_barcodes": 5864,
+  "n_unique_barcode_cells": 49302,
+  "n_ambiguous_barcode_cells": 0,
+  "n_unlabelled_cells": 81585,
+  "state_counts": {
+    "Undifferentiated": 72193,
+    "Neutrophil": 22237,
+    "Monocyte": 19182,
+    "Baso": 10155,
+    "Mast": 2584,
+    "Meg": 2096,
+    "Lymphoid": 857,
+    "Erythroid": 686,
+    "Eos": 555,
+    "Ccr7_DC": 241,
+    "pDC": 101
+  },
+  "time_counts": {
+    "6": 54140,
+    "4": 48498,
+    "2": 28249
+  },
+  "input_expression": "Author total-count-normalised UMI values; not raw integer counts",
+  "source_manifest": "/data/scratch/projects/punim1236/threadfin_data/gse140802_larry/sources.json",
+  "status": "complete",
+  "all_time_profiles": {
+    "mean": {
+      "icc": 0.6339865244685453,
+      "n_profiles": 7575,
+      "n_reliable": 7575,
+      "parameters": {
+        "clone_key": "clone_day",
+        "basis": "X_threadfin",
+        "context_key": null,
+        "representation": "mean",
+        "n_features": 256,
+        "smooth": 0,
+        "random_state": 0,
+        "donor_key": null,
+        "min_cells": 2,
+        "n_components": 30
+      }
+    },
+    "kernel": {
+      "icc": 0.6524369395772108,
+      "n_profiles": 7575,
+      "n_reliable": 7575,
+      "parameters": {
+        "clone_key": "clone_day",
+        "basis": "X_threadfin",
+        "context_key": null,
+        "representation": "kernel",
+        "n_features": 256,
+        "smooth": 15,
+        "random_state": 0,
+        "bandwidth": 19.47551444460873,
+        "donor_key": null,
+        "min_cells": 2,
+        "n_components": 30
+      }
+    }
+  },
+  "future_prediction": {
+    "n_barcodes": 172,
+    "n_early_cells": 402,
+    "n_late_cells": 2286,
+    "early_day": 2,
+    "outcome_day": 6,
+    "min_early_cells": 2,
+    "min_late_cells": 4,
+    "fold_unit": "lineage barcode, 3 repeats x 5 folds",
+    "preprocessing": "Day-2 cells only; transductive unsupervised PCA/profiles; no day-6 cells",
+    "readout": "nested 3-fold ridge tuning within each outer training set; same folds for every method",
+    "methods": [
+      "Training_mean",
+      "RNA_mean",
+      "RNA_mean_variance",
+      "Size_only",
+      "Threadfin_mean",
+      "Threadfin_kernel"
+    ],
+    "RNA_mean_variance": "Concatenated day-2 PC means and per-PC population variances (ddof=0); same ridge grid.",
+    "limits": [
+      "Replicate folds are correlated, not independent biological replicates.",
+      "Later RNA-defined states are observed clone composition, not experimentally assayed fate potency.",
+      "No independent-donor validation is available in this in-vitro experiment."
+    ]
+  },
+  "split_sample": {
+    "n_calibration_profiles": 6089,
+    "n_evaluation_profiles": 250,
+    "n_evaluation_rows": 15000,
+    "kernel_bandwidth": 19.16588020324707,
+    "n_features": 256,
+    "smoothing": 0,
+    "variance_components_from": "disjoint calibration profiles",
+    "reference": "disjoint half of each evaluation clone-day-well",
+    "limits": "Same-experiment split-cell denoising check, not a calibration of absolute reliability or future fate."
+  }
+}

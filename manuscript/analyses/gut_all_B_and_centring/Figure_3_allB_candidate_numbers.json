@@ -1,0 +1,353 @@
+{
+ "removed_from_old_figure": [
+  "GSE284622 | Cell programmes",
+  "Clone programmes",
+  "Programme",
+  "Original GC/nonGC sort",
+  "PC cluster (zoom)",
+  "Original sort",
+  "GC-sort fraction per clone",
+  "GC fraction",
+  "958 clones; size = captured cells",
+  "PC cluster (zoom)",
+  "text:g",
+  "text:h",
+  "text:i",
+  "text:j",
+  "ConnectionPatch",
+  "ConnectionPatch"
+ ],
+ "variant": "none (context_key=None)",
+ "clone_map": {
+  "n_clones": 957,
+  "n_cells": 5720,
+  "map_params": {
+   "n_neighbors": 30,
+   "min_dist": 0.3
+  }
+ },
+ "g_counts": {
+  "B-": 5411,
+  "B+": 546,
+  "GC": 5502,
+  "PC": 3973
+ },
+ "h_regions": {
+  "GC": 373,
+  "PC": 264,
+  "GC + PC": 231,
+  "B only": 27
+ },
+ "j_isotype_classes": {
+  "unswitched": 37,
+  "switched": 858,
+  "no_igg1_iga": 62
+ },
+ "k_within_clone": {
+  "shm_Bexp_minus_GC": {
+   "n_clones": 61,
+   "median": -0.373134328,
+   "n_lower": 41,
+   "n_higher": 16
+  },
+  "shm_PC_minus_GC": {
+   "n_clones": 231,
+   "median": -0.925925926,
+   "n_lower": 195,
+   "n_higher": 23
+  },
+  "igg1_Bexp_minus_GC": {
+   "n_clones": 49,
+   "median": 0.0,
+   "n_lower": 12,
+   "n_higher": 4
+  },
+  "igg1_PC_minus_GC": {
+   "n_clones": 212,
+   "median": 0.0,
+   "n_lower": 93,
+   "n_higher": 8
+  }
+ },
+ "l_memory_by_class": {
+  "GC only": {
+   "k": 14,
+   "n": 387,
+   "observed": 0.0362,
+   "expected": 0.0546,
+   "lo": 0.0388,
+   "hi": 0.0724,
+   "p_two_sided": 0.0445
+  },
+  "GC + PC": {
+   "k": 37,
+   "n": 231,
+   "observed": 0.1602,
+   "expected": 0.1071,
+   "lo": 0.0779,
+   "hi": 0.1342,
+   "p_two_sided": 0.0015
+  },
+  "PC only": {
+   "k": 13,
+   "n": 282,
+   "observed": 0.0461,
+   "expected": 0.0644,
+   "lo": 0.0426,
+   "hi": 0.0851,
+   "p_two_sided": 0.1155
+  }
+ },
+ "l_peyers_patch_check": {
+  "n_clones": 481,
+  "with_pc": 164,
+  "rate_with_pc": 0.10975609756097561,
+  "rate_without_pc": 0.03470031545741325,
+  "mh_odds_ratio": 3.176959390512535,
+  "mh_p": 0.0028440507795218783
+ },
+ "l_heldout": {
+  "n_clones": 900,
+  "n_with_tdpos_B": 64
+ },
+ "story_stats": {
+  "cells": {
+   "n_B": 5957,
+   "n_tdpos": 546,
+   "auc_logistic": 0.976867092742162,
+   "auc_knn15": 0.9591337480359842,
+   "auc_logistic_resting": 0.9684970300815587,
+   "shm_tdpos": {
+    "n": 295,
+    "median": 0.011111111111111112,
+    "mean": 0.014862919008002176,
+    "frac_mutated": 0.7830508474576271
+   },
+   "shm_tdneg": {
+    "n": 4274,
+    "median": 0.0,
+    "mean": 0.00025251117304332844,
+    "frac_mutated": 0.022929340196537203
+   }
+  },
+  "b_only": {
+   "n": 27,
+   "cells": 58,
+   "frac_tdneg_cells": 0.8620689655172413,
+   "shm_median": 0.0,
+   "frac_clones_unmutated": 0.8518518518518519,
+   "IgM_D_mean": 0.8518518518518519,
+   "by_donor": {
+    "mouse2": 16,
+    "mouse4": 10,
+    "mouse3": 1
+   },
+   "activated_cells": 3
+  },
+  "held_out_memory": {
+   "n_clones": 900,
+   "n_with_B_tdpos": 64,
+   "n_with_B_tdneg": 13,
+   "by_output_class": {
+    "GC only": {
+     "n": 387,
+     "with_memB": 14,
+     "median_size": 2.0,
+     "frac": 0.03617571059431524
+    },
+    "GC + PC": {
+     "n": 231,
+     "with_memB": 37,
+     "median_size": 5.0,
+     "frac": 0.16017316017316016
+    },
+    "PC only": {
+     "n": 282,
+     "with_memB": 13,
+     "median_size": 3.0,
+     "frac": 0.04609929078014184
+    }
+   },
+   "logit_output_class": {
+    "Intercept": {
+     "coef": -3.9082867850189746,
+     "p": 2.137294435714614e-27,
+     "odds_ratio": 0.020074864175626
+    },
+    "C(oc, Treatment('GC only'))[T.GC + PC]": {
+     "coef": 1.0298952605524871,
+     "p": 0.0034777619987647413,
+     "odds_ratio": 2.800772467974908
+    },
+    "C(oc, Treatment('GC only'))[T.PC only]": {
+     "coef": 0.1349452341844611,
+     "p": 0.755271837463749,
+     "odds_ratio": 1.1444741045772753
+    },
+    "C(donor)[T.mouse3]": {
+     "coef": -0.8177396075942075,
+     "p": 0.0719003024085537,
+     "odds_ratio": 0.4414283288863503
+    },
+    "C(donor)[T.mouse4]": {
+     "coef": -0.6259943784957601,
+     "p": 0.06160299622639794,
+     "odds_ratio": 0.534729440607366
+    },
+    "log_n": {
+     "coef": 0.7375963823958909,
+     "p": 2.567658269212854e-07,
+     "odds_ratio": 2.090903736652089
+    }
+   },
+   "logit_axis_quadratic": {
+    "Intercept": {
+     "coef": -3.362359498737339,
+     "p": 4.089068790827413e-25
+    },
+    "C(donor)[T.mouse3]": {
+     "coef": -1.0166692365564323,
+     "p": 0.026848530250284483
+    },
+    "C(donor)[T.mouse4]": {
+     "coef": -0.5807093239887776,
+     "p": 0.08552406422096727
+    },
+    "kpc0": {
+     "coef": 1.0978437135383003,
+     "p": 0.054615387323550174
+    },
+    "I(kpc0 ** 2)": {
+     "coef": -6.312209007490691,
+     "p": 0.02778241896534979
+    },
+    "log_n": {
+     "coef": 0.9808044658115458,
+     "p": 3.880586175413819e-12
+    }
+   },
+   "logit_output_class_plus_LP": {
+    "Intercept": {
+     "coef": -3.9077442580144477,
+     "p": 2.3190595930234366e-27,
+     "odds_ratio": 0.020085758286460937
+    },
+    "C(oc, Treatment('GC only'))[T.GC + PC]": {
+     "coef": 1.1643760349431502,
+     "p": 0.005006594376704742,
+     "odds_ratio": 3.2039231233037713
+    },
+    "C(oc, Treatment('GC only'))[T.PC only]": {
+     "coef": 0.4304002080110428,
+     "p": 0.5092070094374592,
+     "odds_ratio": 1.5378728694492076
+    },
+    "C(donor)[T.mouse3]": {
+     "coef": -0.7442762609969515,
+     "p": 0.11416047548879868,
+     "odds_ratio": 0.47507800803133676
+    },
+    "C(donor)[T.mouse4]": {
+     "coef": -0.6244060016240901,
+     "p": 0.06247488305193585,
+     "odds_ratio": 0.5355794673861518
+    },
+    "log_n": {
+     "coef": 0.7366623826842305,
+     "p": 2.7864109252385123e-07,
+     "odds_ratio": 2.088951744886722
+    },
+    "frac_LP": {
+     "coef": -0.3596410808136214,
+     "p": 0.547232323914603,
+     "odds_ratio": 0.6979267804340895
+    }
+   },
+   "logit_output_class_plus_ntissues": {
+    "Intercept": {
+     "coef": -3.9004839150559163,
+     "p": 3.596606224418708e-27,
+     "odds_ratio": 0.020232118449775457
+    },
+    "C(oc, Treatment('GC only'))[T.GC + PC]": {
+     "coef": 0.6788081900637319,
+     "p": 0.17467338933399568,
+     "odds_ratio": 1.9715266464381935
+    },
+    "C(oc, Treatment('GC only'))[T.PC only]": {
+     "coef": 0.009893884133906631,
+     "p": 0.9826586622914439,
+     "odds_ratio": 1.009942990422563
+    },
+    "C(n_tis_GCPC)[T.2]": {
+     "coef": 0.4378392359995369,
+     "p": 0.3065613915789951,
+     "odds_ratio": 1.5493558067592006
+    },
+    "C(n_tis_GCPC)[T.3]": {
+     "coef": 0.3065345869179643,
+     "p": 0.6605344810955277,
+     "odds_ratio": 1.3587084602026285
+    },
+    "C(donor)[T.mouse3]": {
+     "coef": -0.8045322406549655,
+     "p": 0.08003506694582516,
+     "odds_ratio": 0.4472971050338358
+    },
+    "C(donor)[T.mouse4]": {
+     "coef": -0.6350707847846266,
+     "p": 0.05822955280905313,
+     "odds_ratio": 0.5298979782757477
+    },
+    "log_n": {
+     "coef": 0.7211816001965031,
+     "p": 9.949503536844496e-07,
+     "odds_ratio": 2.056862164072607
+    }
+   },
+   "mixed_clone_memB_rate": {
+    "observed": 0.16017316017316016,
+    "null_mean": 0.1073917748917749,
+    "null_q975": 0.13852813852813853,
+    "p_two_sided": 0.0005
+   }
+  },
+  "within_clone_shm": {
+   "B_tdpos_minus_GC": {
+    "n_clones": 61,
+    "median_diff": -0.003731343284,
+    "n_lower": 41,
+    "n_higher": 16,
+    "wilcoxon_p": 0.0005159354548455633
+   },
+   "B_tdpos_minus_PC": {
+    "n_clones": 66,
+    "median_diff": 0.000289745528,
+    "n_lower": 24,
+    "n_higher": 33,
+    "wilcoxon_p": 0.24428230713721077
+   },
+   "PC_minus_GC": {
+    "n_clones": 231,
+    "median_diff": -0.009259259259,
+    "n_lower": 195,
+    "n_higher": 23,
+    "wilcoxon_p": 8.037525064671234e-31
+   },
+   "B_tdneg_minus_GC": {
+    "n_clones": 8,
+    "median_diff": -0.009345238095,
+    "n_lower": 6,
+    "n_higher": 0,
+    "wilcoxon_p": 0.03125
+   },
+   "B_tdneg_minus_PC": {
+    "n_clones": 16,
+    "median_diff": -0.005104639956,
+    "n_lower": 10,
+    "n_higher": 4,
+    "wilcoxon_p": 0.13161850228465238
+   }
+  }
+ }
+}

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "case_studies"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "manuscript" / "case_studies"))
 import clone_state_sharing as css  # noqa: E402
 
 

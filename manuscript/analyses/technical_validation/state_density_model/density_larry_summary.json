@@ -1,0 +1,32 @@
+{
+  "n_reference_barcodes": 2920,
+  "n_reference_cells": 24464,
+  "n_evaluation_profiles": 250,
+  "n_evaluation_barcodes": 216,
+  "repeats": 20,
+  "n_states": 16,
+  "reference_query_barcodes_disjoint": true,
+  "fixed_strength": 2,
+  "automatic_strength": 1.0,
+  "rna_preprocessing": "shared precomputed embedding; transductive RNA coordinates",
+  "target": "independent half-sample region fractions; not full latent lineage potential",
+  "aggregation": "mean within biological barcode, then equal weight per barcode",
+  "official_clonotrace_comparison": false,
+  "mse_by_size": {
+    "2": {
+      "fixed_prior_2": 0.012693431056965729,
+      "raw_region_counts": 0.016889349576559826,
+      "reference_calibrated": 0.011751879861605067
+    },
+    "4": {
+      "fixed_prior_2": 0.008691073720695728,
+      "raw_region_counts": 0.00980242263318892,
+      "reference_calibrated": 0.008211979167345384
+    },
+    "8": {
+      "fixed_prior_2": 0.005951391468319999,
+      "raw_region_counts": 0.006239513759178324,
+      "reference_calibrated": 0.005773762775991438
+    }
+  }
+}

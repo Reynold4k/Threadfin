@@ -75,3 +75,18 @@ def test_unsequenced_clones_are_dropped_not_imputed():
     with pytest.raises(ValueError, match="both sides"):
         tf.tl.export_lag(a, state_key="state", source_states=["GC"], output_states=["PB"],
                          within=("timepoint",))
+
+
+def test_theil_sen_on_many_cells_uses_a_bounded_sample_and_agrees_with_all_pairs():
+    """All pairs of 40,000 cells would need 8 x 10^8 slopes; the sampled median must match the exact one."""
+    from threadfin.export import _theil_sen
+
+    rng = np.random.default_rng(1)
+    x = rng.integers(0, 200, 3000).astype(float)               # visits in days
+    y = 1e-3 * x + rng.normal(0, 0.01, x.size)                 # 0.1 % per day plus noise
+    exact = _theil_sen(x, y, max_pairs=10**8)
+    sampled = _theil_sen(x, y, max_pairs=200_000)
+    assert abs(sampled - exact) < 5e-5
+    big_x = rng.integers(0, 200, 40_000).astype(float)
+    big_y = 1e-3 * big_x + rng.normal(0, 0.01, big_x.size)
+    assert abs(_theil_sen(big_x, big_y) - 1e-3) < 5e-5

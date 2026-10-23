@@ -30,13 +30,21 @@ a figure can state which definition produced it.
 
 Dandelion is an optional dependency::
 
-    pip install sc-dandelion
+    pip install "threadfin[dandelion]"        # or: pip install sc-dandelion "matplotlib<3.9"
 
-It pins ``matplotlib < 3.9``, so it is usually easiest to keep it in its own environment, call
-:func:`define_clones_dandelion` there and carry the returned ids across as a table.
+Dandelion 0.5.7 imports ``matplotlib.cm.get_cmap``, which matplotlib 3.9 removed, but its package metadata
+does not pin matplotlib, so the extra pins ``matplotlib < 3.9`` for it.
+
+Dandelion's clone assignment depends on the order in which Python iterates over sets of sequences, which is
+randomised in every new Python session unless the environment variable ``PYTHONHASHSEED`` is fixed before
+Python starts. Repeated runs therefore differ by a few clones (GSE287123: 8,729 or 8,731 clones from the same
+contigs). Set ``PYTHONHASHSEED=0`` (for a Jupyter kernel: ``python -m ipykernel install ... --env
+PYTHONHASHSEED 0``) when clone ids must be reproducible; the value in use is recorded in the result.
 """
 
 from __future__ import annotations
+
+import os
 
 import pandas as pd
 
@@ -107,6 +115,12 @@ def _locus(contigs: pd.DataFrame) -> pd.Series:
     return contigs["v_call"].astype(str).str.upper().str[:3]
 
 
+def _cells_with_heavy_chain(t: pd.DataFrame, cell_key: str = "cell_id") -> pd.Index:
+    """Cells that carry at least one heavy-chain (IGH) contig in a contig-level table."""
+    locus = t["locus"] if "locus" in t.columns else _locus(t)
+    return pd.Index(pd.unique(t.loc[locus.astype(str).str.upper().eq("IGH").to_numpy(), cell_key].astype(str)))
+
+
 def _fill_junction_aa(t: pd.DataFrame, *, verbose: bool = True) -> pd.DataFrame:
     """Make sure `junction_aa` carries a real sequence for every contig.
 
@@ -158,6 +172,7 @@ def define_clones_dandelion(
     donor_key: str | None = None,
     cell_key: str = "cell_id",
     productive_only: bool = True,
+    require_heavy_chain: bool = True,
     out_col: str = "clone_id",
     verbose: bool = True,
 ) -> pd.Series:
@@ -180,10 +195,18 @@ def define_clones_dandelion(
         clone can span two animals or participants; the donor is prefixed to the id.
     productive_only
         Drop non-productive rearrangements before calling.
+    require_heavy_chain
+        ``True`` (default) returns clone ids only for cells with a (productive) heavy chain. Dandelion
+        also groups cells whose heavy chain was not recovered, by their light chain alone (ids such as
+        ``B_VJ_...``). Light-chain rearrangements are far less diverse than heavy-chain ones, so these
+        groups join unrelated cells and are not clones; in GSE287123 they were 5,276 of 21,939 cells and
+        740 of 2,626 groups of two or more cells. ``False`` keeps them.
 
     Returns
     -------
-    Series indexed by cell id. ``attrs`` records the settings and the resulting clone counts.
+    Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts and the
+    ``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
+    sessions, see the module notes).
     """
     ddl = _require_dandelion()
     missing = [c for c in REQUIRED if c not in contigs.columns]
@@ -227,6 +250,7 @@ def define_clones_dandelion(
         if col not in t.columns:
             t[col] = "T" if col == "productive" else ""
     t = _fill_junction_aa(t, verbose=verbose)
+    with_heavy = set(_cells_with_heavy_chain(t))
 
     groups = [(None, t)] if donor_key is None else list(t.groupby(donor_key, observed=True))
     out = {}
@@ -245,20 +269,32 @@ def define_clones_dandelion(
 
     s = pd.Series(out, name=out_col, dtype="object")
     s.index.name = "cell_id"
+    n_without_heavy = int((~s.index.isin(with_heavy)).sum())
+    if require_heavy_chain and n_without_heavy:
+        s = s[s.index.isin(with_heavy)]
+        if verbose:
+            log(f"{n_without_heavy:,} cells without a heavy chain were grouped by their light chain alone; "
+                "they are left without a clone (require_heavy_chain=False keeps them)")
     sizes = s.value_counts()
     s.attrs.update({
         "method": "dandelion",
         "dandelion_version": getattr(ddl, "__version__", "unknown"),
         "use_light_chain": bool(use_light_chain),
+        "require_heavy_chain": bool(require_heavy_chain),
+        "n_cells_without_heavy_chain": n_without_heavy,
         "identity": float(identity),
         "donor_key": donor_key,
         "n_cells": int(s.size),
         "n_clones": int(sizes.size),
         "n_clones_ge2": int((sizes >= 2).sum()),
         "largest_clone": int(sizes.max()) if sizes.size else 0,
+        "python_hash_seed": os.environ.get("PYTHONHASHSEED"),
     })
     if verbose:
         chains = "heavy + light" if use_light_chain else "heavy only"
         log(f"Dandelion ({chains}, identity {identity}): {s.size:,} cells, {sizes.size:,} clones, "
             f"{int((sizes >= 2).sum()):,} with >= 2 cells, largest {int(sizes.max()) if sizes.size else 0}")
+        if os.environ.get("PYTHONHASHSEED") is None:
+            log("PYTHONHASHSEED is not set, so Dandelion's clone calls can differ by a few clones between "
+                "Python sessions; set it (e.g. to 0) before starting Python for reproducible clone ids")
     return s

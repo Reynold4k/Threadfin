@@ -1,0 +1,465 @@
+{
+ "dataset": "GSE284622 gut GC reporter (Siniscalco et al. 2025 Immunity)",
+ "cells": {
+  "n_b_lineage": 15432,
+  "n_bcr": 11714,
+  "by_compartment": {
+   "B": 5957,
+   "GC": 5502,
+   "PC": 3973
+  },
+  "by_comp_fate": {
+   "B tdTom-": 5411,
+   "GC tdTom+": 5259,
+   "PC tdTom+": 3394,
+   "PC tdTom-": 579,
+   "B tdTom+": 546,
+   "GC tdTom-": 243
+  },
+  "other_cells_dropped_with_bcr": 9
+ },
+ "map_params": {
+  "n_neighbors": 30,
+  "min_dist": 0.3
+ },
+ "balanced_shift_norms": {
+  "mouse2": 0.60987866250561,
+  "mouse3": 2.0777555783358057,
+  "mouse4": 0.8819455527205805
+ },
+ "variants": {
+  "donor": {
+   "variant": "donor",
+   "basis": "X_threadfin",
+   "context_key": "donor",
+   "coherence": {
+    "icc": 0.32397756168965486,
+    "null_mean": 0.2196309745855245,
+    "null_q95": 0.2259521031046519,
+    "excess": 0.10434658710413036,
+    "p_value": 0.001996007984031936,
+    "n_clones": 957,
+    "n_cells": 5720,
+    "strata_key": "sample"
+   },
+   "profiles": {
+    "n_clones": 957,
+    "n_cells": 5720,
+    "bandwidth": 18.57564320194886
+   },
+   "programmes": {
+    "n": 3,
+    "stability": {
+     "P1": 0.884,
+     "P2": 0.513,
+     "P3": 0.588
+    },
+    "n_clones": {
+     "P1": 514,
+     "P2": 251,
+     "P3": 192
+    }
+   },
+   "label_effects": {
+    "gc_sort:GC": {
+     "r2": 0.07793203540529371,
+     "null_mean": 0.0013474637399813912,
+     "excess_r2": 0.07658457166531232,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:B_cell": {
+     "r2": 0.027553730026712457,
+     "null_mean": 0.0011634522495103051,
+     "excess_r2": 0.026390277777202154,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:GC_Bcell": {
+     "r2": 0.5291058614737174,
+     "null_mean": 0.008234814265050698,
+     "excess_r2": 0.5208710472086667,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:plasma": {
+     "r2": 0.5628326319082407,
+     "null_mean": 0.009284872791666657,
+     "excess_r2": 0.5535477591165741,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "isotype": {
+     "r2": 0.20334962078756388,
+     "null_mean": 0.004249085499988302,
+     "excess_r2": 0.19910053528757557,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 888,
+     "kind": "categorical"
+    },
+    "mutation_frequency": {
+     "r2": 0.049421870137301545,
+     "null_mean": 0.001495544066246732,
+     "excess_r2": 0.04792632607105481,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:LP": {
+     "r2": 0.47814668607888644,
+     "null_mean": 0.009346481243769815,
+     "excess_r2": 0.46880020483511664,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:PP": {
+     "r2": 0.28884754712579047,
+     "null_mean": 0.011124698355213363,
+     "excess_r2": 0.2777228487705771,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:MLN": {
+     "r2": 0.028761139316497368,
+     "null_mean": 0.0023085558223955634,
+     "excess_r2": 0.026452583494101803,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    }
+   },
+   "donor_mixing_profiles": {
+    "observed": 0.746151166840822,
+    "null_mean": 0.4316983629397423,
+    "null_q95": 0.4409090909090909,
+    "excess": 0.31445280390107977,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "donor_mixing_plasma_clones": {
+    "observed": 0.7933181473044799,
+    "null_mean": 0.40942748671222473,
+    "null_q95": 0.42173120728929386,
+    "excess": 0.3838906605922552,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "programme_by_donor": {
+    "table": {
+     "mouse2": {
+      "P1": 232,
+      "P2": 83,
+      "P3": 154
+     },
+     "mouse3": {
+      "P1": 39,
+      "P2": 132,
+      "P3": 2
+     },
+     "mouse4": {
+      "P1": 243,
+      "P2": 36,
+      "P3": 36
+     }
+    },
+    "chi2_p": 1.4156732488141632e-74,
+    "cramers_v": 0.4278880589420149
+   }
+  },
+  "none": {
+   "variant": "none",
+   "basis": "X_threadfin",
+   "context_key": null,
+   "coherence": {
+    "icc": 0.3863089335822259,
+    "null_mean": 0.28793690493162,
+    "null_q95": 0.29368181619664185,
+    "excess": 0.0983720286506059,
+    "p_value": 0.001996007984031936,
+    "n_clones": 957,
+    "n_cells": 5720,
+    "strata_key": "sample"
+   },
+   "profiles": {
+    "n_clones": 957,
+    "n_cells": 5720,
+    "bandwidth": 19.806282175175188
+   },
+   "programmes": {
+    "n": 2,
+    "stability": {
+     "P1": 0.877,
+     "P2": 0.864
+    },
+    "n_clones": {
+     "P1": 500,
+     "P2": 457
+    }
+   },
+   "label_effects": {
+    "gc_sort:GC": {
+     "r2": 0.0546756730553202,
+     "null_mean": 0.001466873078578655,
+     "excess_r2": 0.05320879997674154,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:B_cell": {
+     "r2": 0.02681191952266518,
+     "null_mean": 0.0015305001494674872,
+     "excess_r2": 0.02528141937319769,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:GC_Bcell": {
+     "r2": 0.6771970201330004,
+     "null_mean": 0.04558899113999162,
+     "excess_r2": 0.6316080289930088,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:plasma": {
+     "r2": 0.7488776126419718,
+     "null_mean": 0.05298788329809882,
+     "excess_r2": 0.695889729343873,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "isotype": {
+     "r2": 0.2258390575597327,
+     "null_mean": 0.006887469198050463,
+     "excess_r2": 0.21895158836168221,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 888,
+     "kind": "categorical"
+    },
+    "mutation_frequency": {
+     "r2": 0.05909595292689423,
+     "null_mean": 0.0040043422184922696,
+     "excess_r2": 0.05509161070840196,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:LP": {
+     "r2": 0.667408967483251,
+     "null_mean": 0.055041610620178476,
+     "excess_r2": 0.6123673568630725,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:PP": {
+     "r2": 0.441619004067759,
+     "null_mean": 0.0592431828768796,
+     "excess_r2": 0.38237582119087943,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:MLN": {
+     "r2": 0.02445524535351976,
+     "null_mean": 0.0023846583138171103,
+     "excess_r2": 0.02207058703970265,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    }
+   },
+   "donor_mixing_profiles": {
+    "observed": 0.571647509578544,
+    "null_mean": 0.4330512016718913,
+    "null_q95": 0.4428178335074887,
+    "excess": 0.13859630790665273,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "donor_mixing_plasma_clones": {
+    "observed": 0.5886104783599089,
+    "null_mean": 0.4094077448747153,
+    "null_q95": 0.4227942293090357,
+    "excess": 0.17920273348519355,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "programme_by_donor": {
+    "table": {
+     "mouse2": {
+      "P1": 226,
+      "P2": 243
+     },
+     "mouse3": {
+      "P1": 25,
+      "P2": 148
+     },
+     "mouse4": {
+      "P1": 249,
+      "P2": 66
+     }
+    },
+    "chi2_p": 1.335458603373815e-42,
+    "cramers_v": 0.4488911198860631
+   }
+  },
+  "balanced": {
+   "variant": "balanced",
+   "basis": "X_balanced",
+   "context_key": null,
+   "coherence": {
+    "icc": 0.38125577469183086,
+    "null_mean": 0.2819627602916525,
+    "null_q95": 0.287743895271862,
+    "excess": 0.09929301440017835,
+    "p_value": 0.001996007984031936,
+    "n_clones": 957,
+    "n_cells": 5720,
+    "strata_key": "sample"
+   },
+   "profiles": {
+    "n_clones": 957,
+    "n_cells": 5720,
+    "bandwidth": 19.718622885138075
+   },
+   "programmes": {
+    "n": 3,
+    "stability": {
+     "P1": 0.843,
+     "P2": 0.811,
+     "P3": 0.183
+    },
+    "n_clones": {
+     "P1": 478,
+     "P2": 345,
+     "P3": 134
+    }
+   },
+   "label_effects": {
+    "gc_sort:GC": {
+     "r2": 0.05652245930828811,
+     "null_mean": 0.0013372073257682557,
+     "excess_r2": 0.055185251982519855,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:B_cell": {
+     "r2": 0.02679518693835933,
+     "null_mean": 0.001457899583055291,
+     "excess_r2": 0.02533728735530404,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:GC_Bcell": {
+     "r2": 0.6812589917344922,
+     "null_mean": 0.044448856990592464,
+     "excess_r2": 0.6368101347438998,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "celltype:plasma": {
+     "r2": 0.7499535022473701,
+     "null_mean": 0.051484486701131815,
+     "excess_r2": 0.6984690155462383,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "isotype": {
+     "r2": 0.22385554713399317,
+     "null_mean": 0.0064392252975140705,
+     "excess_r2": 0.2174163218364791,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 888,
+     "kind": "categorical"
+    },
+    "mutation_frequency": {
+     "r2": 0.05938298285443952,
+     "null_mean": 0.0038614010128999532,
+     "excess_r2": 0.05552158184153957,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:LP": {
+     "r2": 0.6651131556506701,
+     "null_mean": 0.053184477101087646,
+     "excess_r2": 0.6119286785495824,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:PP": {
+     "r2": 0.44220364678684804,
+     "null_mean": 0.058142201435179855,
+     "excess_r2": 0.3840614453516682,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    },
+    "tissue:MLN": {
+     "r2": 0.023348465312403085,
+     "null_mean": 0.0023486537637878386,
+     "excess_r2": 0.020999811548615247,
+     "p_value": 0.0004997501249375312,
+     "n_clones": 957,
+     "kind": "numeric"
+    }
+   },
+   "donor_mixing_profiles": {
+    "observed": 0.5534656913967259,
+    "null_mean": 0.43331765935214206,
+    "null_q95": 0.4418181818181818,
+    "excess": 0.1201480320445838,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "donor_mixing_plasma_clones": {
+    "observed": 0.5829916476841306,
+    "null_mean": 0.4094472285497342,
+    "null_q95": 0.4234016704631739,
+    "excess": 0.1735444191343964,
+    "k": 15,
+    "n_perm": 200,
+    "p_value": 0.004975124378109453
+   },
+   "programme_by_donor": {
+    "table": {
+     "mouse2": {
+      "P1": 212,
+      "P2": 168,
+      "P3": 89
+     },
+     "mouse3": {
+      "P1": 24,
+      "P2": 140,
+      "P3": 9
+     },
+     "mouse4": {
+      "P1": 242,
+      "P2": 37,
+      "P3": 36
+     }
+    },
+    "chi2_p": 3.8294882970231684e-55,
+    "cramers_v": 0.36881576245743597
+   }
+  }
+ }
+}

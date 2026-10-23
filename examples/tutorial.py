@@ -77,5 +77,5 @@ print("\nwrote tutorial_overview.png")
 #   result = tf.run(adata, bcr="filtered_contig_annotations.csv",
 #                   donor_key="donor", sample_key="sample",
 #                   test=["isotype", "antigen_binding"], time_key="timepoint")
-# See case_studies/ for the analyses of public datasets, docs/tutorials/ for
+# See manuscript/case_studies/ for the analyses of public datasets, docs/tutorials/ for
 # worked tutorials and docs/METHODS.md for what each step does.

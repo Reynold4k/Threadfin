@@ -3,7 +3,7 @@ from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 import pandas as pd
 
-_SPEC = spec_from_file_location("case_dandelion_clones", Path(__file__).resolve().parents[1] / "case_studies/dandelion_clones.py")
+_SPEC = spec_from_file_location("case_dandelion_clones", Path(__file__).resolve().parents[1] / "manuscript/case_studies/dandelion_clones.py")
 ddl = module_from_spec(_SPEC)
 _SPEC.loader.exec_module(ddl)
 

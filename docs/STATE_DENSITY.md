@@ -131,9 +131,9 @@ clone PCA separate: the new density model uses neither graph diffusion nor
 RFF/PCA compression of clone features. It is not a complete ablation study
 of every legacy component.
 
-Reproducible validations are in case_studies/validate_density_model.py,
-validate_density_reporter.py and benchmark_representation_runtime.py;
-results are in case_studies/results/algorithm_revision/.
+Reproducible validations (`validate_density_model.py`, `validate_density_reporter.py`,
+`benchmark_representation_runtime.py`) and their result tables are in
+[`manuscript/analyses/technical_validation/state_density_model/`](../manuscript/analyses/technical_validation/state_density_model/).
 
 - Simulations include rare states, strong heterogeneity and pure clones.
   Fixed-prior shrinkage helps some regimes and hurts others. Posterior

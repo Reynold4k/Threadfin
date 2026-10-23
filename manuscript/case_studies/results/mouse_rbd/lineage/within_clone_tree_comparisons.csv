@@ -1,0 +1,3 @@
+comparison,measure,n_clones,mean_difference,median_difference,wilcoxon_p
+mCherry-low vs mCherry-high,depth,467,0.4615185593217374,0.19999999999999996,0.016156890648501815
+mCherry-low vs mCherry-high,ancestral,467,0.013134888001186796,0.0,0.10036124404900006

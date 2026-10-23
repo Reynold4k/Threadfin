@@ -1,0 +1,59 @@
+dataset,label,kind,r2,null_mean,excess_r2,p_value,n_clones,n_levels,strata_key,n_perm,note
+gut_gc_reporter,gc_sort:GC,numeric,0.066672554673118,0.0014208970306693,0.0652516576424486,0.0004997501249375,958,,donor,2000,"fraction of the clone's cells sorted GC-derived (tdTomato+ fate, measured FACS gate)"
+gut_gc_reporter,celltype:plasma,numeric,0.6055748118825894,0.0132137134961935,0.5923610983863958,0.0004997501249375,958,,donor,2000,fraction of the clone's cells annotated plasma (RNA-derived)
+gut_gc_reporter,celltype:GC_Bcell,numeric,0.5591835133413586,0.011816102516613,0.5473674108247456,0.0004997501249375,958,,donor,2000,fraction of the clone's cells annotated GC B (RNA-derived)
+gut_gc_reporter,isotype,categorical,0.2176968162208549,0.0047096995125426,0.2129871167083122,0.0004997501249375,890,4.0,donor,2000,heavy-chain isotype (sequential IgG1 -> IgA switching is the paper's central claim)
+gut_gc_reporter,mutation_frequency,numeric,0.0507989325416277,0.0016797102653667,0.0491192222762609,0.0004997501249375,958,,donor,2000,V-region mutation frequency
+gut_gc_reporter,tissue:LP,numeric,0.512352726754832,0.0136973815118981,0.4986553452429338,0.0004997501249375,958,,donor,2000,fraction of the clone's cells sampled in the lamina propria
+mouse_rbd,rbd_bait:RBD+,numeric,0.0238285231498758,0.0007432757412975,0.0230852474085783,0.0004997501249375,1544,,donor,2000,fraction of the clone's cells binding RBD bait (protein arm)
+mouse_rbd,division_gate:mCherry-low,numeric,0.0892694688421778,0.0010993347325507,0.0881701341096271,0.0004997501249375,1887,,donor,2000,fraction of the clone's cells in the mCherry-low gate
+mouse_rbd,zone_gate:DZ,numeric,0.0400010046510282,0.0029584979212844,0.0370425067297438,0.0004997501249375,343,,donor,2000,fraction of the clone's cells sorted as dark zone (mRNA arm)
+mouse_rbd,mutation_frequency,numeric,0.0032202917838796,0.0006167132370398,0.0026035785468398,0.0004997501249375,1887,,donor,2000,V-region mutation frequency
+mouse_rbd,isotype,categorical,0.0458120977676197,0.001905403527665,0.0439066942399546,0.0004997501249375,1736,4.0,donor,2000,heavy-chain isotype
+mouse_np,division_gate:mCherry-low,numeric,0.0819752404140807,0.0021256313142612,0.0798496090998195,0.0004997501249375,471,,donor,2000,fraction of the clone's cells that divided most (mCherry-low gate)
+mouse_np,w33l,categorical,0.0147441015647519,0.0131335547716906,0.0016105467930612,0.3143428285857071,82,2.0,donor,2000,VH186.2 W33L high-affinity mutation (IGHV1-72 clones)
+mouse_np,mutation_frequency,numeric,0.0015309715020699,0.0020819008680225,-0.0005509293659526,0.4857571214392803,471,,donor,2000,V-region mutation frequency
+mouse_np,isotype,categorical,0.0149779632311931,0.0044597520175852,0.0105182112136079,0.0069965017491254,450,3.0,donor,2000,heavy-chain isotype
+gc_np_pc,fate:plasma cell,numeric,0.776437100826033,0.026713984594235,0.749723116231798,0.0004997501249375,96,,donor,2000,fraction of the clone's cells sorted as plasma cells
+gc_np_pc,fate:Myc+ light zone,numeric,0.027331006407121,0.0027123549061935,0.0246186515009275,0.0004997501249375,96,,donor,2000,fraction of the clone's cells sorted as Myc-GFP+ light zone (recently positively selected; c-Myc-GFP mice)
+gc_np_pc,fate:dark zone,numeric,0.0309451714728423,0.0081470275921209,0.0227981438807214,0.0334832583708145,96,,donor,2000,fraction of the clone's cells sorted as dark zone
+gc_np_pc,w33l:W33L,numeric,0.0637868551666496,0.0131339912058894,0.0506528639607602,0.0194902548725637,74,,donor,2000,fraction of the clone's IGHV1-72 cells carrying the high-affinity W33L
+gc_np_pc,mutation_frequency,numeric,0.0015067985755268,0.0182596058325021,-0.0167528072569753,0.9325337331334332,96,,donor,2000,V-region mutation frequency
+malaria_late,cell_state:GC,numeric,0.3028193273010736,0.0432010947385832,0.2596182325624903,0.0004997501249375,1015,,donor,2000,fraction of the clone's cells in a germinal centre
+malaria_late,cell_state:PB,numeric,0.2779131095843864,0.0816224949117904,0.1962906146725959,0.0004997501249375,1015,,donor,2000,fraction of the clone's cells that are plasmablasts
+malaria_late,mutation_frequency,numeric,0.1712328168915204,0.0492047158505476,0.1220281010409728,0.0004997501249375,1015,,donor,2000,V-region mutation frequency
+malaria_late,isotype,categorical,0.1297374847353818,0.0061771620426773,0.1235603226927044,0.0004997501249375,948,4.0,donor,2000,heavy-chain isotype
+malaria_late,treatment,categorical,0.012072934558134,0.0019576395023927,0.0101152950557412,0.0004997501249375,1015,3.0,,2000,antimalarial treatment of the mouse (donor-level label: not separable from other donor differences)
+malaria,cell_state:GC,numeric,0.0463568680936337,0.0042048038009973,0.0421520642926364,0.0004997501249375,523,,donor,2000,fraction of the clone's cells in a germinal centre
+malaria,cell_state:PB,numeric,0.2649238817073273,0.1023683563923721,0.1625555253149551,0.0004997501249375,523,,donor,2000,fraction of the clone's cells that are plasmablasts
+malaria,cell_state:Memory,numeric,0.0471375805041135,0.0097816121939953,0.0373559683101182,0.0004997501249375,523,,donor,2000,fraction of the clone's cells that are memory cells
+malaria,mutation_frequency,numeric,0.0102029587000763,0.0031554425245655,0.0070475161755108,0.0059970014992503,523,,donor,2000,V-region mutation frequency
+malaria,isotype,categorical,0.1516999888090782,0.0799805639668497,0.0717194248422285,0.0004997501249375,462,4.0,donor,2000,heavy-chain isotype
+ln_vaccine,spike_binding,categorical,0.1275447460038651,0.0011152536704821,0.126429492333383,0.0004997501249375,1243,2.0,donor,2000,spike binding of the clone (probe sorting / mAb ELISA)
+ln_vaccine,elisa,categorical,0.0169514784522926,0.0027158644661284,0.0142356139861642,0.0004997501249375,481,2.0,donor,2000,ELISA of the clone's expressed mAb
+ln_vaccine,isotype,categorical,0.048495106391608,0.0040355123452142,0.0444595940463938,0.0004997501249375,1242,4.0,donor,2000,heavy-chain isotype
+ln_vaccine,mutation_frequency,numeric,0.0838325303144655,0.0035996012045972,0.0802329291098683,0.0004997501249375,1243,,donor,2000,V-region mutation frequency
+ln_vaccine,tissue:blood,numeric,0.4330291269265687,0.004445017523125,0.4285841094034436,0.0004997501249375,1243,,donor,2000,fraction of the clone's cells sampled in blood
+spont_gc,isotype,categorical,0.036924730084623,0.0087711623645265,0.0281535677200965,0.0004997501249375,999,3.0,donor,2000,heavy-chain isotype
+spont_gc,mutation_frequency,numeric,0.0471704499584988,0.0012566050485865,0.0459138449099122,0.0004997501249375,1051,,donor,2000,V-region mutation frequency
+spont_gc,condition,categorical,0.0339039519458995,0.0009543924591009,0.0329495594867985,0.0004997501249375,1051,2.0,,2000,autoimmune chimera vs NP-CGG immunised (donor-level label: not separable from other donor differences)
+covid_bcell,antigen_call,categorical,0.070098475260782,0.0406397676707197,0.0294587075900623,0.0004997501249375,482,5.0,donor,2000,dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)
+covid_bcell,isotype,categorical,0.1084383455946831,0.0282336830073714,0.0802046625873116,0.0004997501249375,512,4.0,donor,2000,heavy-chain isotype
+covid_bcell,disease_state,categorical,0.0499517572849967,0.0017201671820922,0.0482315901029045,0.0004997501249375,592,2.0,,2000,acute vs convalescent sampling (donor-level label: not separable from other donor differences)
+flu,isotype,categorical,0.16794345205669,0.0057896129478668,0.1621538391088231,0.0004997501249375,1770,4.0,donor,2000,heavy-chain isotype
+flu,mutation_frequency,numeric,0.0884193572755014,0.004713372930602,0.0837059843448993,0.0004997501249375,2078,,donor,2000,V-region mutation frequency
+flu,timepoint:d7,numeric,0.0672386601194363,0.0067076584250507,0.0605310016943855,0.0004997501249375,2080,,donor,2000,fraction of the clone's cells sampled at day 7
+flu,age_group,categorical,0.0061517385401693,0.0004605241293397,0.0056912144108295,0.0004997501249375,2080,2.0,,2000,donor age group (donor-level label: not separable from other donor differences)
+flu_lung,ha_binding:PR8HA,numeric,0.0040362122942077,0.0050263001258269,-0.0009900878316192,0.4712643678160919,201,,donor,2000,fraction of the clone's cells binding the infecting strain's haemagglutinin
+flu_lung,ha_binding:both strains,numeric,0.0033188707983505,0.0051517751532346,-0.0018329043548841,0.6156921539230384,201,,donor,2000,fraction of the clone's cells binding both strains (cross-reactive)
+flu_lung,tissue:Lung,numeric,0.2920770553145216,0.0073172808116381,0.2847597745028835,0.0004997501249375,201,,donor,2000,fraction of the clone's cells found in the infected lung
+flu_lung,mutation_frequency,numeric,0.0921764291303472,0.0049160140818949,0.0872604150484522,0.0004997501249375,201,,donor,2000,V-region mutation frequency
+flu_lung,isotype,categorical,0.0530430899197343,0.0101799103327099,0.0428631795870244,0.0014992503748125,196,3.0,donor,2000,heavy-chain isotype
+flu_lung,genotype,categorical,0.0183360552974459,0.0050869762551101,0.0132490790423358,0.0134932533733133,201,2.0,,2000,B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)
+tonsil,isotype,categorical,0.0412767193512873,0.0113546489679941,0.0299220703832931,0.000999500249875,320,4.0,donor,2000,heavy-chain isotype
+ebv,gfp:GFP+,numeric,0.0,0.0,0.0,1.0,5992,,donor,2000,fraction of the clone's d14/d21 cells that are EBV-GFP+
+ebv,isotype,categorical,0.1395650459800659,0.0005317631633583,0.1390332828167076,0.0004997501249375,5626,4.0,donor,2000,heavy-chain isotype
+bone_marrow_pc,sorted_as:plasma cells,numeric,0.3437879372996091,0.0025167997558786,0.3412711375437305,0.0004997501249375,6788,,donor,2000,fraction of the clone's cells sorted as plasma cells
+bone_marrow_pc,tissue:bone marrow,numeric,0.3241368698125008,0.0016714315606021,0.3224654382518987,0.0004997501249375,6788,,donor,2000,fraction of the clone's cells found in the bone marrow
+bone_marrow_pc,antigen,categorical,0.0065067866747872,0.0021452381867229,0.0043615484880642,0.0004997501249375,6786,3.0,donor,2000,antigen the clone's antibody was sorted on
+bone_marrow_pc,isotype,categorical,0.0389426455654369,0.0026384714741812,0.0363041740912556,0.0004997501249375,6315,5.0,donor,2000,heavy-chain isotype

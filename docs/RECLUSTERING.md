@@ -66,8 +66,8 @@ point area follows captured family size. Historical settings and seed 123
 were fixed before examining gates/markers; presets and both seeds are saved
 for comparison. The
 notebook's executed filtering/resolution also differ from its report methods.
-Figure provenance is recorded in
-[`legacy_gc_provenance.json`](../paper/figure_plan/assets/legacy_gc_provenance.json).
+Its figure provenance (`paper/figure_plan/assets/legacy_gc_provenance.json`) and panels belonged to an
+earlier figure set that was retired; they remain in the git history (commit `60294a9`).
 
 The default `cluster_on="distances"` graph uses the original clone distances. Changing
 `min_dist`, `spread`, `learning_rate`, `umap_n_neighbors` or `embedding_mode`
@@ -93,15 +93,16 @@ validated optimal configuration.
 For the real-data review, run:
 
 ```bash
-THREADFIN_DATA=/path/to/public-data python case_studies/run_gc_reclustering.py
-python paper/figure_plan/gc_reclustering_panels.py
+THREADFIN_DATA=/path/to/public-data python manuscript/analyses/technical_validation/filter_comparison/run_gc_reclustering.py
 ```
+
+(The panel script and the review images of the retired figure set, `paper/figure_plan/gc_reclustering_panels.py`
+and `paper/figure_plan/review/`, are in the git history at commit `60294a9`.)
 
 The script verifies raw-cell/metadata alignment against committed family
 calls and uses gates/markers only after clustering. The default notebook
 pipeline averages saved receptor-excluded cell coordinates. `--pipeline pca`
-retains the separate PCA/distance-graph analysis. The
-[clone embedding preview](../paper/figure_plan/review/GSE246382_clone_embedding.png)
-shows the primary three-cluster map. [The preset comparison](../paper/figure_plan/review/GSE246382_reclustering_presets.png)
-uses identical families across panels and yields two or four partitions.
+retains the separate PCA/distance-graph analysis. In the retired review images, the clone embedding showed
+the primary three-cluster map, and the preset comparison (identical families across panels) yielded two or
+four partitions.
 These exploratory partitions are not validated discrete programmes or future fates.

@@ -1,0 +1,165 @@
+{
+ "params": {
+  "min_cells": 5,
+  "k": 15,
+  "n_perm": 100,
+  "antigen_levels": [
+   "spike",
+   "rbd",
+   "np",
+   "orf8",
+   "none"
+  ]
+ },
+ "measurement_notes": {
+  "antigen_call": "Heuristic dominant raw SARS2 probe, max >=2 UMIs; no background/control normalization. A probe measurement, not a validated specificity call.",
+  "hcov_positive": "Raw probe threshold only; almost all measured cells pass. Not evidence of biological cross-reactivity.",
+  "plasma_split": "Below/above global median plasma marker score; low score is not a validated MBC annotation.",
+  "coordinates": "Frozen cell UMAP and clone map; no pipeline or Dandelion rerun."
+ },
+ "clone_repertoire": {
+  "n_clones": 77,
+  "dominant_counts": {
+   "none": 26,
+   "np": 24,
+   "orf8": 16,
+   "rbd": 8,
+   "spike": 3
+  },
+  "mean_purity": 0.7359154861207818,
+  "mean_entropy": 0.42502762872394306,
+  "dominant_frac_median": 0.8571428571428571
+ },
+ "frozen_input_validation": {
+  "plasma_score_median_matches_original": true
+ },
+ "visibility_knn15": {
+  "cell_umap_antigen_call": {
+   "agreement": 0.3854630715123095,
+   "null_mean": 0.2517788198515045,
+   "null_std": 0.005654254080771857,
+   "z": 23.64312776735988,
+   "p_perm": 0.009900990099009901,
+   "n": 853
+  },
+  "cell_umap_inherited_dominant": {
+   "agreement": 0.49034779210629154,
+   "null_mean": 0.29154279015240336,
+   "null_std": 0.004697976855914712,
+   "z": 42.31715226600029,
+   "p_perm": 0.009900990099009901,
+   "n": 853
+  },
+  "clone_map_dominant": {
+   "agreement": 0.43116883116883115,
+   "null_mean": 0.2591774891774892,
+   "null_std": 0.014875343295499268,
+   "z": 11.562176319210073,
+   "p_perm": 0.009900990099009901,
+   "n": 77
+  },
+  "cell_umap_antigen_call_excl_none": {
+   "agreement": 0.3738015607580825,
+   "null_mean": 0.3312263099219621,
+   "null_std": 0.0063400547395596535,
+   "z": 6.715281268861324,
+   "p_perm": 0.009900990099009901,
+   "n": 598
+  },
+  "clone_map_dominant_excl_none": {
+   "agreement": 0.3359477124183007,
+   "null_mean": 0.33682352941176474,
+   "null_std": 0.018630138551675116,
+   "z": -0.047010761140330544,
+   "p_perm": 0.4752475247524752,
+   "n": 51
+  },
+  "mbc_like_cell_umap": {
+   "agreement": 0.4215189873417722,
+   "null_mean": 0.37416877637130797,
+   "null_std": 0.013186390527953083,
+   "z": 3.590839424184289,
+   "p_perm": 0.009900990099009901,
+   "n": 158
+  },
+  "plasma_high_cell_umap": {
+   "agreement": 0.3847482014388489,
+   "null_mean": 0.2585525179856115,
+   "null_std": 0.0048759803526309655,
+   "z": 25.8810894070041,
+   "p_perm": 0.009900990099009901,
+   "n": 695
+  },
+  "plasma_score_genes": [
+   "PRDM1",
+   "XBP1",
+   "JCHAIN",
+   "MZB1",
+   "SDC1",
+   "TNFRSF17",
+   "IRF4",
+   "DERL3"
+  ],
+  "plasma_score_median": 0.14773115515708923
+ },
+ "hcov": {
+  "n_cells_measured": 3098,
+  "n_cells_positive": 3027,
+  "n_clones_measured": 28,
+  "n_clones_positive": 28,
+  "positive_clones": [
+   "R2|B_VDJ_22_3_1_VJ_3_1_1",
+   "R2|B_VDJ_30_2_3_VJ_72_5_1",
+   "R2|B_VDJ_4_1_1_VJ_37_2_1",
+   "R6|B_VDJ_10_1_1_VJ_20_1_1",
+   "R6|B_VDJ_11_1_1_VJ_33_1_1",
+   "R6|B_VDJ_12_1_1",
+   "R6|B_VDJ_14_1_1_VJ_25_1_1",
+   "R6|B_VDJ_20_1_1_VJ_22_1_1",
+   "R6|B_VDJ_21_1_1_VJ_9_1_1",
+   "R6|B_VDJ_21_2_1",
+   "R6|B_VDJ_29_1_1_VJ_12_1_1",
+   "R6|B_VDJ_2_1_1_VJ_11_2_1",
+   "R6|B_VDJ_30_1_1_VJ_17_1_1",
+   "R6|B_VDJ_30_2_1_VJ_8_1_1",
+   "R6|B_VDJ_30_3_1_VJ_19_2_1",
+   "R6|B_VDJ_4_1_1_VJ_11_1_2",
+   "R6|B_VDJ_5_1_1_VJ_18_1_1",
+   "R6|B_VDJ_7_1_1_VJ_2_1_1",
+   "R6|B_VDJ_8_1_1_VJ_12_2_1",
+   "R6|B_VDJ_8_2_1_VJ_11_1_1",
+   "R6|B_VDJ_9_1_1_VJ_23_1_1",
+   "early|B_VDJ_125_6_1_VJ_77_1_2",
+   "early|B_VDJ_12_6_1_VJ_111_3_2",
+   "early|B_VDJ_16_3_1_VJ_57_1_2",
+   "early|B_VDJ_46_1_1_VJ_28_1_5",
+   "early|B_VDJ_52_4_1_VJ_15_1_3",
+   "late|B_VDJ_12_1_1",
+   "late|B_VDJ_78_2_1_VJ_56_2_1"
+  ],
+  "proximity": {
+   "mean_min_dist_to_sars2_clone": 1.1410108534377061,
+   "null_mean": 1.141010853437706,
+   "null_std": 1.5222611172485233e-16,
+   "z": 1.4586499149789456,
+   "p_perm_smaller": 1.0,
+   "n_pool_clones": 28,
+   "n_sars2_clones": 51,
+   "self_matches_excluded": true,
+   "interpretation": "Exploratory geometry of raw probe calls; specificity not validated."
+  }
+ },
+ "disease_state_donor_level": {
+  "acute_clones": 28,
+  "convalescent_clones": 49,
+  "clone_map_knn15": {
+   "agreement": 0.7974025974025974,
+   "null_mean": 0.531896103896104,
+   "null_std": 0.015985329005899364,
+   "z": 16.609385606546393,
+   "p_perm": 0.009900990099009901,
+   "n": 77
+  },
+  "note": "donor-level label: agreement conflates donor identity with disease state"
+ }
+}

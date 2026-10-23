@@ -1,0 +1,93 @@
+{
+ "n_cells": 56419,
+ "n_clones_profiled": 2834,
+ "cells_with_barcode": 25370,
+ "clone_definition": "single WATERMELON lineage barcode per cell (multi-barcode cells excluded)",
+ "label_effects": {
+  "gate:mCherry-high": {
+   "label": "gate",
+   "kind": "numeric",
+   "r2": 0.15346169147097521,
+   "null_mean": 0.00047023059322962073,
+   "excess_r2": 0.1529914608777456,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 2168,
+   "n_levels": null,
+   "strata_key": null,
+   "n_perm": 2000,
+   "note": "fraction of the clone's day-14 cells in the non-cycling persister gate (mCherry-high, measured)"
+  },
+  "gate:mCherry-low": {
+   "label": "gate",
+   "kind": "numeric",
+   "r2": 0.08181771134678541,
+   "null_mean": 0.0004521798780937582,
+   "excess_r2": 0.08136553146869165,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 2168,
+   "n_levels": null,
+   "strata_key": null,
+   "n_perm": 2000,
+   "note": "fraction of the clone's day-14 cells in the cycling gate (mCherry-low, measured)"
+  }
+ },
+ "early_to_late": {
+  "n_early_cells": 29429,
+  "n_clones_profiled_early": 2089,
+  "n_clones_with_day14_label": 1466,
+  "label_effects": {
+   "gate14:mCherry-high": {
+    "label": "gate14:mCherry-high",
+    "kind": "numeric",
+    "r2": 0.052963779531935075,
+    "null_mean": 0.0009804241707100838,
+    "excess_r2": 0.05198335536122499,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1016,
+    "n_levels": null,
+    "strata_key": null,
+    "n_perm": 2000,
+    "note": "profiles from day 0/3/7 cells only; label = fraction of the clone's day-14 cells in the mCherry-high gate (measured; clones with >=2 day-14 cells)"
+   },
+   "gate14:mCherry-low": {
+    "label": "gate14:mCherry-low",
+    "kind": "numeric",
+    "r2": 0.02444600775041011,
+    "null_mean": 0.0009594746759246369,
+    "excess_r2": 0.023486533074485474,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1016,
+    "n_levels": null,
+    "strata_key": null,
+    "n_perm": 2000,
+    "note": "profiles from day 0/3/7 cells only; label = fraction of the clone's day-14 cells in the mCherry-low gate (measured; clones with >=2 day-14 cells)"
+   }
+  },
+  "label_effects_mean_profiles": {
+   "gate14:mCherry-high": {
+    "label": "gate14:mCherry-high",
+    "kind": "numeric",
+    "r2": 0.0760101236668036,
+    "null_mean": 0.0009749693240526834,
+    "excess_r2": 0.07503515434275092,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1016,
+    "n_levels": null,
+    "strata_key": null,
+    "n_perm": 2000
+   },
+   "gate14:mCherry-low": {
+    "label": "gate14:mCherry-low",
+    "kind": "numeric",
+    "r2": 0.025876116238675712,
+    "null_mean": 0.0009646335428363316,
+    "excess_r2": 0.02491148269583938,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1016,
+    "n_levels": null,
+    "strata_key": null,
+    "n_perm": 2000
+   }
+  }
+ }
+}

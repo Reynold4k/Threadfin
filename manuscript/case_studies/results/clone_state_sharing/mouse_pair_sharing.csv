@@ -1,0 +1,576 @@
+cohort,donor,day,treatment,clone_definition,threshold,state_a,state_b,pair,observed_shared,denominator_clones,observed_rate,n_clones,n_cells,null_type,null_model,null,denominator_definition,null_model_available,null_mean_rate,effect_rate_difference,enrichment_p,n_null_draws,n_null_valid_draws,null_zero_denominator_fraction
+malaria_early,D10_Hashtag1,D10,,threadfin,2,GC,PB,GC+PB,1,2,0.5,553,574,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5887786930654912,-0.08877869306549124,0.7214357937310415,1999,1977,0.011005502751375684
+malaria_early,D10_Hashtag1,D10,,threadfin,2,GC,PB,GC+PB,1,2,0.5,553,574,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6406129849526077,-0.14061298495260766,0.8165137614678899,1999,1961,0.019009504752376172
+malaria_early,D10_Hashtag1,D10,,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,553,574,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04084993295918941,-0.04084993295918941,1.0,1999,1977,0.011005502751375684
+malaria_early,D10_Hashtag1,D10,,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,553,574,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03214305950155007,-0.03214305950155007,1.0,1999,1961,0.019009504752376172
+malaria_early,D10_Hashtag1,D10,,threadfin,2,Memory,PB,Memory+PB,0,20,0.0,553,574,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.03871935967983992,-0.03871935967983992,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag1,D10,,threadfin,2,Memory,PB,Memory+PB,0,20,0.0,553,574,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.011030515257628815,-0.011030515257628815,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag2,D10,,threadfin,2,GC,PB,GC+PB,1,4,0.25,733,784,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6706595111297462,-0.4206595111297462,0.99,1999,1999,0.0
+malaria_early,D10_Hashtag2,D10,,threadfin,2,GC,PB,GC+PB,1,4,0.25,733,784,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.8046082226637782,-0.5546082226637782,0.9974987493746873,1999,1998,0.0005002501250624958
+malaria_early,D10_Hashtag2,D10,,threadfin,2,GC,Memory,GC+Memory,0,4,0.0,733,784,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04110224165251678,-0.04110224165251678,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag2,D10,,threadfin,2,GC,Memory,GC+Memory,0,4,0.0,733,784,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.017166703277814388,-0.017166703277814388,1.0,1999,1998,0.0005002501250624958
+malaria_early,D10_Hashtag2,D10,,threadfin,2,Memory,PB,Memory+PB,0,43,0.0,733,784,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.04169526623777005,-0.04169526623777005,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag2,D10,,threadfin,2,Memory,PB,Memory+PB,0,43,0.0,733,784,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.007527019323615296,-0.007527019323615296,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag3,D10,,threadfin,2,GC,PB,GC+PB,1,1,1.0,948,999,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7470524445261812,0.25294755547381875,0.1635,1999,1999,0.0
+malaria_early,D10_Hashtag3,D10,,threadfin,2,GC,PB,GC+PB,1,1,1.0,948,999,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.8337898886847309,0.16621011131526908,0.32232232232232233,1999,1997,0.0010005002501251026
+malaria_early,D10_Hashtag3,D10,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,948,999,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0419636544323888,-0.0419636544323888,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag3,D10,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,948,999,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04048218792835718,-0.04048218792835718,1.0,1999,1997,0.0010005002501251026
+malaria_early,D10_Hashtag3,D10,,threadfin,2,Memory,PB,Memory+PB,1,38,0.02631578947368421,948,999,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.043087333140254334,-0.016771543666570125,0.82,1999,1999,0.0
+malaria_early,D10_Hashtag3,D10,,threadfin,2,Memory,PB,Memory+PB,1,38,0.02631578947368421,948,999,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.015376109107185171,0.010939680366499038,0.469,1999,1999,0.0
+malaria_early,D10_Hashtag4,D10,,threadfin,2,Memory,PB,Memory+PB,0,43,0.0,895,946,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.049408425142803955,-0.049408425142803955,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag4,D10,,threadfin,2,Memory,PB,Memory+PB,0,43,0.0,895,946,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.008585688192933675,-0.008585688192933675,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,GC,PB,GC+PB,4,4,1.0,959,1024,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7346152340907265,0.2653847659092735,0.0605,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,GC,PB,GC+PB,4,4,1.0,959,1024,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.783466330095895,0.21653366990410505,0.169,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,GC,Memory,GC+Memory,0,4,0.0,959,1024,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04874376135558197,-0.04874376135558197,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,GC,Memory,GC+Memory,0,4,0.0,959,1024,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06390574644076395,-0.06390574644076395,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,Memory,PB,Memory+PB,0,56,0.0,959,1024,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.05672479096691203,-0.05672479096691203,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag5,D10,,threadfin,2,Memory,PB,Memory+PB,0,56,0.0,959,1024,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.016606517544486527,-0.016606517544486527,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,GC,PB,GC+PB,4,7,0.5714285714285714,1128,1186,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.2631969423442753,0.3082316290842961,0.0255,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,GC,PB,GC+PB,4,7,0.5714285714285714,1128,1186,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6802296862957787,-0.10880111486720734,0.855,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,GC,Memory,GC+Memory,0,7,0.0,1128,1186,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.15027888884689575,-0.15027888884689575,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,GC,Memory,GC+Memory,0,7,0.0,1128,1186,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0540213821289549,-0.0540213821289549,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,Memory,PB,Memory+PB,2,42,0.047619047619047616,1128,1186,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.054527263631815905,-0.006908216012768288,0.693,1999,1999,0.0
+malaria_early,D14_Hashtag1,D14,,threadfin,2,Memory,PB,Memory+PB,2,42,0.047619047619047616,1128,1186,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.03622049119797994,0.011398556421067678,0.477,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,GC,PB,GC+PB,2,5,0.4,1035,1090,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.3073550436973828,0.09264495630261721,0.2675,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,GC,PB,GC+PB,2,5,0.4,1035,1090,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6655997000185542,-0.26559970001855415,0.987,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,1035,1090,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.18834476464996447,-0.18834476464996447,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,1035,1090,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07533554979268935,-0.07533554979268935,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,Memory,PB,Memory+PB,1,36,0.027777777777777776,1035,1090,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.06742260018898338,-0.03964482241120561,0.926,1999,1999,0.0
+malaria_early,D14_Hashtag2,D14,,threadfin,2,Memory,PB,Memory+PB,1,36,0.027777777777777776,1035,1090,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.033655716747262525,-0.005877938969484749,0.743,1999,1999,0.0
+malaria_early,D14_Hashtag3,D14,,threadfin,2,GC,PB,GC+PB,1,3,0.3333333333333333,953,975,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.14347074926545125,0.18986258406788206,0.1985743380855397,1999,1963,0.01800900450225118
+malaria_early,D14_Hashtag3,D14,,threadfin,2,GC,PB,GC+PB,1,3,0.3333333333333333,953,975,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6002848827010908,-0.2669515493677575,0.9335,1999,1999,0.0
+malaria_early,D14_Hashtag3,D14,,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,953,975,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.14221209254321837,-0.14221209254321837,1.0,1999,1963,0.01800900450225118
+malaria_early,D14_Hashtag3,D14,,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,953,975,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06046988140534913,-0.06046988140534913,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag3,D14,,threadfin,2,Memory,PB,Memory+PB,4,19,0.21052631578947367,953,975,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.032437271267212554,0.17808904452226113,0.0035,1999,1999,0.0
+malaria_early,D14_Hashtag3,D14,,threadfin,2,Memory,PB,Memory+PB,4,19,0.21052631578947367,953,975,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.021958347594850054,0.18856796819462363,0.001,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,GC,PB,GC+PB,3,5,0.6,1005,1056,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.3347617278159755,0.26523827218402446,0.0705,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,GC,PB,GC+PB,3,5,0.6,1005,1056,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7077874790514408,-0.10778747905144082,0.848,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,1005,1056,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.13959038824486253,-0.13959038824486253,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,1005,1056,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.048363055653151604,-0.048363055653151604,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,Memory,PB,Memory+PB,0,33,0.0,1005,1056,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.058392832780026376,-0.058392832780026376,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag4,D14,,threadfin,2,Memory,PB,Memory+PB,0,33,0.0,1005,1056,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.029014507253626812,-0.029014507253626812,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,GC,PB,GC+PB,2,6,0.3333333333333333,874,925,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.3677280497002858,-0.03439471636695246,0.6155,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,GC,PB,GC+PB,2,6,0.3333333333333333,874,925,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7215137425702267,-0.3881804092368934,0.9975,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,GC,Memory,GC+Memory,0,6,0.0,874,925,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1500959638716017,-0.1500959638716017,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,GC,Memory,GC+Memory,0,6,0.0,874,925,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07388068573791078,-0.07388068573791078,1.0,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,Memory,PB,Memory+PB,2,38,0.05263157894736842,874,925,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.07663042047339459,-0.023998841526026174,0.8115,1999,1999,0.0
+malaria_early,D14_Hashtag5,D14,,threadfin,2,Memory,PB,Memory+PB,2,38,0.05263157894736842,874,925,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.044100997867354726,0.008530581080013692,0.5335,1999,1999,0.0
+malaria_early,D4_Hashtag2,D4,,threadfin,2,Memory,PB,Memory+PB,0,16,0.0,1649,1666,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag2,D4,,threadfin,2,Memory,PB,Memory+PB,0,16,0.0,1649,1666,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,3.12656328164082e-05,-3.12656328164082e-05,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag3,D4,,threadfin,2,Memory,PB,Memory+PB,0,30,0.0,2137,2172,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag3,D4,,threadfin,2,Memory,PB,Memory+PB,0,30,0.0,2137,2172,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag4,D4,,threadfin,2,GC,PB,GC+PB,0,1,0.0,1953,1985,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0,0.0,1.0,1999,780,0.6098049024512255
+malaria_early,D4_Hashtag4,D4,,threadfin,2,GC,PB,GC+PB,0,1,0.0,1953,1985,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0014577259475218659,-0.0014577259475218659,1.0,1999,686,0.6568284142071035
+malaria_early,D4_Hashtag4,D4,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,1953,1985,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.014102564102564103,-0.014102564102564103,1.0,1999,780,0.6098049024512255
+malaria_early,D4_Hashtag4,D4,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,1953,1985,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03741496598639456,-0.03741496598639456,1.0,1999,686,0.6568284142071035
+malaria_early,D4_Hashtag4,D4,,threadfin,2,Memory,PB,Memory+PB,0,29,0.0,1953,1985,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,1.7250004312501076e-05,-1.7250004312501076e-05,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag4,D4,,threadfin,2,Memory,PB,Memory+PB,0,29,0.0,1953,1985,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,5.175001293750323e-05,-5.175001293750323e-05,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag5,D4,,threadfin,2,Memory,PB,Memory+PB,0,32,0.0,2217,2252,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D4_Hashtag5,D4,,threadfin,2,Memory,PB,Memory+PB,0,32,0.0,2217,2252,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,3.12656328164082e-05,-3.12656328164082e-05,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag1,D7,,threadfin,2,Memory,PB,Memory+PB,0,11,0.0,720,733,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag1,D7,,threadfin,2,Memory,PB,Memory+PB,0,11,0.0,720,733,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag2,D7,,threadfin,2,Memory,PB,Memory+PB,0,9,0.0,658,667,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00011116669445834028,-0.00011116669445834028,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag2,D7,,threadfin,2,Memory,PB,Memory+PB,0,9,0.0,658,667,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00016675004168751042,-0.00016675004168751042,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag3,D7,,threadfin,2,GC,PB,GC+PB,0,1,0.0,611,615,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.00404040404040404,-0.00404040404040404,1.0,1999,495,0.752376188094047
+malaria_early,D7_Hashtag3,D7,,threadfin,2,GC,PB,GC+PB,0,1,0.0,611,615,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0024390243902439024,-0.0024390243902439024,1.0,1999,410,0.7948974487243622
+malaria_early,D7_Hashtag3,D7,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,611,615,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.026262626262626262,-0.026262626262626262,1.0,1999,495,0.752376188094047
+malaria_early,D7_Hashtag3,D7,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,611,615,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.01707317073170732,-0.01707317073170732,1.0,1999,410,0.7948974487243622
+malaria_early,D7_Hashtag3,D7,,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,611,615,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0001250625312656328,-0.0001250625312656328,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag3,D7,,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,611,615,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0001250625312656328,-0.0001250625312656328,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag4,D7,,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,769,781,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0002918125729531432,-0.0002918125729531432,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag4,D7,,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,769,781,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,4.1687510421877605e-05,-4.1687510421877605e-05,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag5,D7,,threadfin,2,GC,PB,GC+PB,0,1,0.0,703,715,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.009649122807017543,-0.009649122807017543,1.0,1999,760,0.6198099049524762
+malaria_early,D7_Hashtag5,D7,,threadfin,2,GC,PB,GC+PB,0,1,0.0,703,715,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.004934210526315789,-0.004934210526315789,1.0,1999,608,0.695847923961981
+malaria_early,D7_Hashtag5,D7,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,703,715,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04407894736842105,-0.04407894736842105,1.0,1999,760,0.6198099049524762
+malaria_early,D7_Hashtag5,D7,,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,703,715,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.02549342105263158,-0.02549342105263158,1.0,1999,608,0.695847923961981
+malaria_early,D7_Hashtag5,D7,,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,703,715,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0007503751875937969,-0.0007503751875937969,1.0,1999,1999,0.0
+malaria_early,D7_Hashtag5,D7,,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,703,715,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.000416875104218776,-0.000416875104218776,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,GC,PB,GC+PB,1,2,0.5,1212,1268,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5765207502049606,-0.07652075020496063,0.7089178356713427,1999,1995,0.002001000500250094
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,GC,PB,GC+PB,1,2,0.5,1212,1268,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.673201952910642,-0.173201952910642,0.8534136546184738,1999,1991,0.004002001000500299
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,1212,1268,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.038931050848344084,-0.038931050848344084,1.0,1999,1995,0.002001000500250094
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,1212,1268,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.028210968115538682,-0.028210968115538682,1.0,1999,1991,0.004002001000500299
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,1,51,0.0196078431372549,1212,1268,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.03737162698996557,-0.01776378385271067,0.861,1999,1999,0.0
+malaria_late,D10_Hashtag1,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,1,51,0.0196078431372549,1212,1268,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.028602536562398844,-0.008994693425143942,0.7655,1999,1999,0.0
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,GC,PB,GC+PB,2,2,1.0,953,973,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6668970814132105,0.33310291858678953,0.4519286125503742,1999,1736,0.13156578289144572
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,GC,PB,GC+PB,2,2,1.0,953,973,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7025321027287319,0.2974678972712681,0.4699606962380685,1999,1780,0.10955477738869435
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,953,973,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.12489439324116743,-0.12489439324116743,1.0,1999,1736,0.13156578289144572
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,953,973,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11317415730337078,-0.11317415730337078,1.0,1999,1780,0.10955477738869435
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,13,0.0,953,973,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.09470119675222226,-0.09470119675222226,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag2,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,13,0.0,953,973,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0622234194020087,-0.0622234194020087,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,GC,PB,GC+PB,1,1,1.0,896,919,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5737704653990804,0.4262295346009196,0.17190669371196754,1999,1971,0.014007003501750881
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,GC,PB,GC+PB,1,1,1.0,896,919,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.8036051932042856,0.19639480679571442,0.4183467741935484,1999,1983,0.008004002001000488
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,896,919,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04490730674140111,-0.04490730674140111,1.0,1999,1971,0.014007003501750881
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,896,919,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03343384496939716,-0.03343384496939716,1.0,1999,1983,0.008004002001000488
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,19,0.0,896,919,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.037387114609936545,-0.037387114609936545,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag3,D10,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,19,0.0,896,919,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.016824201574471443,-0.016824201574471443,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag4,D10,Saline,threadfin,2,Memory,PB,Memory+PB,0,29,0.0,854,889,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.046661261665315416,-0.046661261665315416,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag4,D10,Saline,threadfin,2,Memory,PB,Memory+PB,0,29,0.0,854,889,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.020372255093063778,-0.020372255093063778,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,GC,PB,GC+PB,1,1,1.0,953,991,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.8866841160255924,0.11331588397440762,0.720276008492569,1999,1883,0.05802901450725362
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,GC,PB,GC+PB,1,1,1.0,953,991,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.8757791119321291,0.1242208880678709,0.6903607969843835,1999,1856,0.071535767883942
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,953,991,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.013152770401841034,-0.013152770401841034,1.0,1999,1883,0.05802901450725362
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,GC,Memory,GC+Memory,0,1,0.0,953,991,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.01554353961412151,-0.01554353961412151,1.0,1999,1856,0.071535767883942
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,Memory,PB,Memory+PB,1,34,0.029411764705882353,953,991,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.018391548715534237,0.011020215990348116,0.4845,1999,1999,0.0
+malaria_late,D10_Hashtag5,D10,Saline,threadfin,2,Memory,PB,Memory+PB,1,34,0.029411764705882353,953,991,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.014051143218668157,0.015360621487214196,0.397,1999,1999,0.0
+malaria_late,D10_Hashtag6,D10,Saline,threadfin,2,Memory,PB,Memory+PB,0,20,0.0,1006,1028,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.022661330665332664,-0.022661330665332664,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag6,D10,Saline,threadfin,2,Memory,PB,Memory+PB,0,20,0.0,1006,1028,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.01928464232116058,-0.01928464232116058,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag7,D10,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,554,557,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0010005002501250625,-0.0010005002501250625,1.0,1999,1999,0.0
+malaria_late,D10_Hashtag7,D10,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,554,557,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,GC,PB,GC+PB,1,5,0.2,816,838,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.14282906243886734,0.05717093756113267,0.346,1999,1999,0.0
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,GC,PB,GC+PB,1,5,0.2,816,838,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1535750577417244,0.04642494225827562,0.4102051025512756,1999,1998,0.0005002501250624958
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,816,838,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1391061872927806,-0.1391061872927806,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,5,0.0,816,838,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.13402432013543125,-0.13402432013543125,1.0,1999,1998,0.0005002501250624958
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,14,0.0,816,838,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.02236832702065318,-0.02236832702065318,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag1,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,14,0.0,816,838,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.018437790323733293,-0.018437790323733293,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,GC,PB,GC+PB,1,17,0.058823529411764705,1113,1148,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11163544089225194,-0.052811911480487236,0.738,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,GC,PB,GC+PB,1,17,0.058823529411764705,1113,1148,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.25650743384192154,-0.19768390443015682,0.986,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,17,0.058823529411764705,1113,1148,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.14828482773172996,-0.08946129831996526,0.844,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,17,0.058823529411764705,1113,1148,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.10308241255371167,-0.04425888314194697,0.7765,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,25,0.0,1113,1148,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.02193096548274137,-0.02193096548274137,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag2,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,25,0.0,1113,1148,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.017048524262131066,-0.017048524262131066,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,GC,PB,GC+PB,0,4,0.0,418,430,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.10532071556107611,-0.10532071556107611,1.0,1999,1997,0.0010005002501251026
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,GC,PB,GC+PB,0,4,0.0,418,430,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.2852477826214695,-0.2852477826214695,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,4,0.25,418,430,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0901392673425723,0.1598607326574277,0.13913913913913914,1999,1997,0.0010005002501251026
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,4,0.25,418,430,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.10032498211587756,0.14967501788412244,0.138,1999,1999,0.0
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,418,430,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.014132066033016508,-0.014132066033016508,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag3,D14,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,12,0.0,418,430,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.01821744205436051,-0.01821744205436051,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,GC,PB,GC+PB,9,15,0.6,873,938,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.4147865086738364,0.1852134913261636,0.048,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,GC,PB,GC+PB,9,15,0.6,873,938,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5893881728532125,0.010611827146787434,0.462,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,15,0.0,873,938,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0714254586984608,-0.0714254586984608,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,15,0.0,873,938,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06389665415336519,-0.06389665415336519,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,Memory,PB,Memory+PB,2,47,0.0425531914893617,873,938,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.03856183410854363,0.0039913573808180725,0.5585,1999,1999,0.0
+malaria_late,D14_Hashtag4,D14,Saline,threadfin,2,Memory,PB,Memory+PB,2,47,0.0425531914893617,873,938,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.04181878173129117,0.0007344097580705283,0.6015,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,GC,PB,GC+PB,25,32,0.78125,1286,1470,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.6077066344365756,0.17354336556342442,0.006,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,GC,PB,GC+PB,25,32,0.78125,1286,1470,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.7874385100300644,-0.006188510030064376,0.5585,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,32,0.0,1286,1470,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05740945064452363,-0.05740945064452363,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,32,0.0,1286,1470,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.038533524851004704,-0.038533524851004704,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,Memory,PB,Memory+PB,2,114,0.017543859649122806,1286,1470,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.04123114188673284,-0.023687282237610033,0.9635,1999,1999,0.0
+malaria_late,D14_Hashtag5,D14,Saline,threadfin,2,Memory,PB,Memory+PB,2,114,0.017543859649122806,1286,1470,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0337405544877702,-0.016196694838647392,0.923,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,GC,PB,GC+PB,22,39,0.5641025641025641,1798,1937,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.3775449935583382,0.1865575705442259,0.003,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,GC,PB,GC+PB,22,39,0.5641025641025641,1798,1937,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5948662771812526,-0.030763713078688526,0.698,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,39,0.0,1798,1937,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.09347896733875849,-0.09347896733875849,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,GC,Memory,GC+Memory,0,39,0.0,1798,1937,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06299477284333518,-0.06299477284333518,1.0,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,Memory,PB,Memory+PB,7,101,0.06930693069306931,1798,1937,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.04498784045488092,0.024319090238188394,0.1625,1999,1999,0.0
+malaria_late,D14_Hashtag6,D14,Saline,threadfin,2,Memory,PB,Memory+PB,7,101,0.06930693069306931,1798,1937,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0402924234394425,0.029014507253626816,0.102,1999,1999,0.0
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,GC,PB,GC+PB,0,3,0.0,1324,1327,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.00798977309044423,-0.00798977309044423,1.0,1999,1043,0.47823911955977993
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,GC,PB,GC+PB,0,3,0.0,1324,1327,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0632816408204102,-0.0632816408204102,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,1324,1327,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.026526046660274846,-0.026526046660274846,1.0,1999,1043,0.47823911955977993
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,1324,1327,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04468901117225279,-0.04468901117225279,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,3,0.0,1324,1327,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0006670001667500417,-0.0006670001667500417,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag1,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,3,0.0,1324,1327,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.002001000500250125,-0.002001000500250125,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag2,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,2,0.0,1683,1689,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0005002501250625312,-0.0005002501250625312,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag2,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,2,0.0,1683,1689,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0012506253126563281,-0.0012506253126563281,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,GC,PB,GC+PB,0,2,0.0,1940,1948,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.017316017316017316,-0.017316017316017316,1.0,1999,1386,0.30665332666333167
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,GC,PB,GC+PB,0,2,0.0,1940,1948,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.052993163248290814,-0.052993163248290814,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,1940,1948,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04785954785954786,-0.04785954785954786,1.0,1999,1386,0.30665332666333167
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,1940,1948,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.08436718359179589,-0.08436718359179589,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,5,0.0,1940,1948,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0009004502251125562,-0.0009004502251125562,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag3,D21,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,5,0.0,1940,1948,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.002701350675337669,-0.002701350675337669,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,GC,PB,GC+PB,3,14,0.21428571428571427,1752,1769,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.019433376798995462,0.19485233748671882,0.04054738976178408,1999,1972,0.013506753376688385
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,GC,PB,GC+PB,3,14,0.21428571428571427,1752,1769,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.16949926289596123,0.04478645138975304,0.3505,1999,1999,0.0
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,GC,Memory,GC+Memory,0,14,0.0,1752,1769,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.016510713480794616,-0.016510713480794616,1.0,1999,1972,0.013506753376688385
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,GC,Memory,GC+Memory,0,14,0.0,1752,1769,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03834139014229059,-0.03834139014229059,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,Memory,PB,Memory+PB,0,17,0.0,1752,1769,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.000529676603007386,-0.000529676603007386,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag4,D21,Saline,threadfin,2,Memory,PB,Memory+PB,0,17,0.0,1752,1769,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00394314804461054,-0.00394314804461054,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,GC,PB,GC+PB,0,12,0.0,1449,1468,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.01942552903415924,-0.01942552903415924,1.0,1999,1993,0.0030015007503751967
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,GC,PB,GC+PB,0,12,0.0,1449,1468,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11173624885480814,-0.11173624885480814,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,GC,Memory,GC+Memory,0,12,0.0,1449,1468,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.01532884938554783,-0.01532884938554783,1.0,1999,1993,0.0030015007503751967
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,GC,Memory,GC+Memory,0,12,0.0,1449,1468,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07504396831560413,-0.07504396831560413,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,Memory,PB,Memory+PB,0,15,0.0,1449,1468,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0005002501250625312,-0.0005002501250625312,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag5,D21,Saline,threadfin,2,Memory,PB,Memory+PB,0,15,0.0,1449,1468,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.004402201100550275,-0.004402201100550275,1.0,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,GC,PB,GC+PB,9,28,0.32142857142857145,4575,4622,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04686429005087948,0.27456428137769195,0.005,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,GC,PB,GC+PB,9,28,0.32142857142857145,4575,4622,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.2924729898992247,0.02895558152934674,0.381,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,GC,Memory,GC+Memory,2,28,0.07142857142857142,4575,4622,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03228164198649442,0.039146929442077004,0.2635,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,GC,Memory,GC+Memory,2,28,0.07142857142857142,4575,4622,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07709232386556371,-0.005663752436992284,0.465,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,Memory,PB,Memory+PB,2,40,0.05,4575,4622,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0025387693846923463,0.04746123061530766,0.0045,1999,1999,0.0
+malaria_late,D21_Hashtag6,D21,Saline,threadfin,2,Memory,PB,Memory+PB,2,40,0.05,4575,4622,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.017008504252126064,0.03299149574787394,0.156,1999,1999,0.0
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,2,0.0,805,813,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.011302135533112328,-0.011302135533112328,1.0,1999,1853,0.0730365182591296
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,2,0.0,805,813,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03489557226399331,-0.03489557226399331,1.0,1999,1995,0.002001000500250094
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,805,813,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07530131318582477,-0.07530131318582477,1.0,1999,1853,0.0730365182591296
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,2,0.0,805,813,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.14673350041771094,-0.14673350041771094,1.0,1999,1995,0.002001000500250094
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,8,0.0,805,813,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0015007503751875938,-0.0015007503751875938,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag1,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,8,0.0,805,813,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0016258129064532266,-0.0016258129064532266,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,10,0.0,1326,1345,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.008146123837078611,-0.008146123837078611,1.0,1999,1990,0.004502251125562795
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,10,0.0,1326,1345,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05372475476277378,-0.05372475476277378,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,10,0.0,1326,1345,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05112450782048772,-0.05112450782048772,1.0,1999,1990,0.004502251125562795
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,10,0.0,1326,1345,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06938797959308214,-0.06938797959308214,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,17,0.0,1326,1345,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0008533678604007884,-0.0008533678604007884,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag2,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,17,0.0,1326,1345,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.001559603331077303,-0.001559603331077303,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,3,0.0,568,575,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.007289958082741023,-0.007289958082741023,1.0,1999,1829,0.08504252126063028
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,GC,PB,GC+PB,0,3,0.0,568,575,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.012929596262929595,-0.012929596262929595,1.0,1999,1998,0.0005002501250624958
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,568,575,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07891379624567157,-0.07891379624567157,1.0,1999,1829,0.08504252126063028
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,3,0.0,568,575,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11237070403737069,-0.11237070403737069,1.0,1999,1998,0.0005002501250624958
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,7,0.0,568,575,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0008575716429643392,-0.0008575716429643392,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag3,D28,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,7,0.0,568,575,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0013578217680268703,-0.0013578217680268703,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,GC,PB,GC+PB,5,27,0.18518518518518517,2787,2830,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04289977245160332,0.14228541273358186,0.046,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,GC,PB,GC+PB,5,27,0.18518518518518517,2787,2830,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.20758990602686414,-0.022404720841678966,0.643,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,GC,Memory,GC+Memory,1,27,0.037037037037037035,2787,2830,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06466820883984963,-0.02763117180281259,0.4645,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,GC,Memory,GC+Memory,1,27,0.037037037037037035,2787,2830,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.08370765407955837,-0.04667061704252133,0.869,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,35,0.0,2787,2830,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0042878582148216954,-0.0042878582148216954,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag4,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,35,0.0,2787,2830,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.01310655327663832,-0.01310655327663832,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,GC,PB,GC+PB,7,11,0.6363636363636364,1977,2012,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.16860657546000216,0.4677570609036342,0.0035,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,GC,PB,GC+PB,7,11,0.6363636363636364,1977,2012,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.5832550307575651,0.053108605606071224,0.317,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,GC,Memory,GC+Memory,1,11,0.09090909090909091,1977,2012,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.060239683889008556,0.030669407020082355,0.366,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,GC,Memory,GC+Memory,1,11,0.09090909090909091,1977,2012,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0817919436865237,0.009117147222567207,0.466,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,27,0.0,1977,2012,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.014118170196209215,-0.014118170196209215,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag5,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,27,0.0,1977,2012,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.05159987401107961,-0.05159987401107961,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,GC,PB,GC+PB,4,28,0.14285714285714285,2007,2046,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05112230049993201,0.09173484235721084,0.0755,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,GC,PB,GC+PB,4,28,0.14285714285714285,2007,2046,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.15760363184388163,-0.014746488986738776,0.5835,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,GC,Memory,GC+Memory,0,28,0.0,2007,2046,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05047635256844048,-0.05047635256844048,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,GC,Memory,GC+Memory,0,28,0.0,2007,2046,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06007438724692404,-0.06007438724692404,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,35,0.0,2007,2046,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.003701850925462731,-0.003701850925462731,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag6,D28,Saline,threadfin,2,Memory,PB,Memory+PB,0,35,0.0,2007,2046,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.007160723218752232,-0.007160723218752232,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag7,D28,Naive,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,771,775,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D28_Hashtag7,D28,Naive,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,771,775,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,11,0.0,2570,2606,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.023287374676263562,-0.023287374676263562,1.0,1999,1998,0.0005002501250624958
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,11,0.0,2570,2606,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.050353683751632725,-0.050353683751632725,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,11,0.0,2570,2606,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0707777999444666,-0.0707777999444666,1.0,1999,1998,0.0005002501250624958
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,11,0.0,2570,2606,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0964177511388617,-0.0964177511388617,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,23,0.0,2570,2606,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0018487504621876158,-0.0018487504621876158,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag1,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,23,0.0,2570,2606,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0034147508536877137,-0.0034147508536877137,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,7,0.0,1909,1933,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.012696360860786918,-0.012696360860786918,1.0,1999,1934,0.03251625812906456
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,7,0.0,1909,1933,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.10651139061594289,-0.10651139061594289,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,7,0.0,1909,1933,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.047454079873935094,-0.047454079873935094,1.0,1999,1934,0.03251625812906456
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,7,0.0,1909,1933,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11090774463710933,-0.11090774463710933,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,18,0.0,1909,1933,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0009727085765104773,-0.0009727085765104773,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag2,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,18,0.0,1909,1933,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00789283530654216,-0.00789283530654216,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,20,0.0,2391,2446,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.015809035739589253,-0.015809035739589253,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,GC,PB,GC+PB,0,20,0.0,2391,2446,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.05566747152715362,-0.05566747152715362,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,4,20,0.2,2391,2446,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.09461930754966978,0.10538069245033023,0.169,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,GC,Memory,GC+Memory,4,20,0.2,2391,2446,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.17542530186359165,0.024574698136408363,0.365,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,33,0.0,2391,2446,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0017432958903694272,-0.0017432958903694272,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag3,D35,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,33,0.0,2391,2446,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.006139433353040157,-0.006139433353040157,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,GC,PB,GC+PB,8,52,0.15384615384615385,2547,2627,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04784304563694853,0.10600310820920533,0.012,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,GC,PB,GC+PB,8,52,0.15384615384615385,2547,2627,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.17487837920075053,-0.021032225354596673,0.6675,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,GC,Memory,GC+Memory,5,52,0.09615384615384616,2547,2627,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0699044326144873,0.026249413539358862,0.2665,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,GC,Memory,GC+Memory,5,52,0.09615384615384616,2547,2627,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.13651080796193968,-0.04035696180809352,0.8145,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,Memory,PB,Memory+PB,1,67,0.014925373134328358,2547,2627,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.004711310879320257,0.010214062255008101,0.2735,1999,1999,0.0
+malaria_late,D35_Hashtag4,D35,Saline,threadfin,2,Memory,PB,Memory+PB,1,67,0.014925373134328358,2547,2627,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.017351959561870484,-0.0024265864275421264,0.6985,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,GC,PB,GC+PB,1,14,0.07142857142857142,1049,1075,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03612805820159497,0.03530051322697646,0.2655,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,GC,PB,GC+PB,1,14,0.07142857142857142,1049,1075,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.15720182070526362,-0.08577324927669219,0.875,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,GC,Memory,GC+Memory,1,14,0.07142857142857142,1049,1075,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07312818774799765,-0.0016996163194262226,0.4635,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,GC,Memory,GC+Memory,1,14,0.07142857142857142,1049,1075,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1298648876356848,-0.05843631620711337,0.8115,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,Memory,PB,Memory+PB,1,21,0.047619047619047616,1049,1075,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0034302865718573564,0.04418876104719026,0.07,1999,1999,0.0
+malaria_late,D35_Hashtag5,D35,Saline,threadfin,2,Memory,PB,Memory+PB,1,21,0.047619047619047616,1049,1075,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.011196074227589985,0.03642297339145763,0.2145,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,GC,PB,GC+PB,1,31,0.03225806451612903,2033,2082,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.024737553533785844,0.007520510982343187,0.3475,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,GC,PB,GC+PB,1,31,0.03225806451612903,2033,2082,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.09125575268222406,-0.05899768816609503,0.8745,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,GC,Memory,GC+Memory,2,31,0.06451612903225806,2033,2082,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07278733616920781,-0.008271207136949746,0.471,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,GC,Memory,GC+Memory,2,31,0.06451612903225806,2033,2082,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1514195158555373,-0.08690338682327925,0.92,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,Memory,PB,Memory+PB,0,39,0.0,2033,2082,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00218057746822129,-0.00218057746822129,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag6,D35,Saline,threadfin,2,Memory,PB,Memory+PB,0,39,0.0,2033,2082,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.009581713933890021,-0.009581713933890021,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag7,D35,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,866,867,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D35_Hashtag7,D35,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,866,867,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,GC,PB,GC+PB,1,6,0.16666666666666666,817,829,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.044801061007957554,0.1218656056587091,0.1033934252386002,1999,1885,0.057028514257128515
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,GC,PB,GC+PB,1,6,0.16666666666666666,817,829,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.12588525645611273,0.040781410210553926,0.34484484484484484,1999,1997,0.0010005002501251026
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,6,0.0,817,829,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.09460654288240494,-0.09460654288240494,1.0,1999,1885,0.057028514257128515
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,0,6,0.0,817,829,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.1943140901828934,-0.1943140901828934,1.0,1999,1997,0.0010005002501251026
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,9,0.0,817,829,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.006058584847979545,-0.006058584847979545,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag1,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,9,0.0,817,829,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.011116669445834029,-0.011116669445834029,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,GC,PB,GC+PB,0,1,0.0,514,519,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.014373716632443531,-0.014373716632443531,1.0,1999,974,0.5127563781890945
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,GC,PB,GC+PB,0,1,0.0,514,519,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.026943382486801382,-0.026943382486801382,1.0,1999,1831,0.08404202101050529
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,1,1.0,514,519,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.09702258726899383,0.9029774127310062,0.08,1999,974,0.5127563781890945
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,1,1.0,514,519,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.2213726561077735,0.7786273438922264,0.2101528384279476,1999,1831,0.08404202101050529
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,514,519,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0015007503751875938,-0.0015007503751875938,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag2,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,0,4,0.0,514,519,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0025012506253126563,-0.0025012506253126563,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,GC,PB,GC+PB,3,6,0.5,1264,1279,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.02640648011782032,0.4735935198821797,0.021638330757341576,1999,1940,0.02951475737868936
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,GC,PB,GC+PB,3,6,0.5,1264,1279,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.04006229305128754,0.45993770694871244,0.0065,1999,1999,0.0
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,6,0.16666666666666666,1264,1279,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.11030068728522337,0.05636597938144329,0.2792375064399794,1999,1940,0.02951475737868936
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,GC,Memory,GC+Memory,1,6,0.16666666666666666,1264,1279,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.15661620492786074,0.010050461738805916,0.491,1999,1999,0.0
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,1,10,0.1,1264,1279,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.003801900950475238,0.09619809904952477,0.0375,1999,1999,0.0
+malaria_late,D42_Hashtag3,D42,Artesunate,threadfin,2,Memory,PB,Memory+PB,1,10,0.1,1264,1279,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.005152576288144073,0.09484742371185594,0.0505,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,GC,PB,GC+PB,0,18,0.0,1618,1644,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.007685474300031578,-0.007685474300031578,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,GC,PB,GC+PB,0,18,0.0,1618,1644,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.03789682285466555,-0.03789682285466555,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,GC,Memory,GC+Memory,2,18,0.1111111111111111,1618,1644,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.06659031730317372,0.04452079380793739,0.315,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,GC,Memory,GC+Memory,2,18,0.1111111111111111,1618,1644,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.18633496303546498,-0.07522385192435388,0.7995,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,Memory,PB,Memory+PB,0,23,0.0,1618,1644,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0006742501685625421,-0.0006742501685625421,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag4,D42,Saline,threadfin,2,Memory,PB,Memory+PB,0,23,0.0,1618,1644,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.004828501207125302,-0.004828501207125302,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,GC,PB,GC+PB,6,36,0.16666666666666666,1243,1305,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.07096332502947351,0.09570334163719314,0.037,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,GC,PB,GC+PB,6,36,0.16666666666666666,1243,1305,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.16282073414786857,0.003845932518798084,0.4855,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,GC,Memory,GC+Memory,1,36,0.027777777777777776,1243,1305,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.0959079949104289,-0.06813021713265112,0.9435,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,GC,Memory,GC+Memory,1,36,0.027777777777777776,1243,1305,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.13116880927218724,-0.10339103149440947,0.9785,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,Memory,PB,Memory+PB,0,44,0.0,1243,1305,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.00895902496702897,-0.00895902496702897,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag5,D42,Saline,threadfin,2,Memory,PB,Memory+PB,0,44,0.0,1243,1305,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.018031743144299422,-0.018031743144299422,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,GC,PB,GC+PB,0,18,0.0,1738,1772,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.025779887954996403,-0.025779887954996403,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,GC,PB,GC+PB,0,18,0.0,1738,1772,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.059558604455944596,-0.059558604455944596,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,GC,Memory,GC+Memory,3,18,0.16666666666666666,1738,1772,within_mouse,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.10952710159072242,0.05713956507594424,0.2705,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,GC,Memory,GC+Memory,3,18,0.16666666666666666,1738,1772,within_mouse_isotype,cell_state_label_permutation,state_labels,GC-bearing size>=2,True,0.19508649435660488,-0.028419827689938226,0.629,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,Memory,PB,Memory+PB,1,27,0.037037037037037035,1738,1772,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0035758620050766123,0.03346117503196042,0.0945,1999,1999,0.0
+malaria_late,D42_Hashtag6,D42,Saline,threadfin,2,Memory,PB,Memory+PB,1,27,0.037037037037037035,1738,1772,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.007522279658347692,0.029514757378689343,0.185,1999,1999,0.0
+malaria_late,D42_Hashtag7,D42,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,624,625,within_mouse,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_late,D42_Hashtag7,D42,Naive,threadfin,2,Memory,PB,Memory+PB,0,1,0.0,624,625,within_mouse_isotype,cell_state_label_permutation,state_labels,all clones size>=2,True,0.0,0.0,1.0,1999,1999,0.0
+malaria_early,D10_Hashtag1,D10,,strict_igh,2,GC,PB,GC+PB,0,1,0.0,535,555,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag1,D10,,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,535,555,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag1,D10,,strict_igh,2,Memory,PB,Memory+PB,0,19,0.0,535,555,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh,2,GC,PB,GC+PB,3,5,0.6,716,765,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh,2,GC,Memory,GC+Memory,0,5,0.0,716,765,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh,2,Memory,PB,Memory+PB,0,40,0.0,716,765,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag3,D10,,strict_igh,2,GC,PB,GC+PB,0,1,0.0,920,968,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag3,D10,,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,920,968,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag3,D10,,strict_igh,2,Memory,PB,Memory+PB,1,35,0.02857142857142857,920,968,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag4,D10,,strict_igh,2,Memory,PB,Memory+PB,0,37,0.0,880,924,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh,2,GC,PB,GC+PB,3,3,1.0,916,982,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh,2,GC,Memory,GC+Memory,0,3,0.0,916,982,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh,2,Memory,PB,Memory+PB,0,57,0.0,916,982,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh,2,GC,PB,GC+PB,4,8,0.5,1076,1137,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh,2,GC,Memory,GC+Memory,0,8,0.0,1076,1137,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh,2,Memory,PB,Memory+PB,2,44,0.045454545454545456,1076,1137,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh,2,GC,PB,GC+PB,2,5,0.4,981,1042,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh,2,GC,Memory,GC+Memory,0,5,0.0,981,1042,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh,2,Memory,PB,Memory+PB,1,40,0.025,981,1042,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh,2,GC,PB,GC+PB,1,3,0.3333333333333333,913,940,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh,2,GC,Memory,GC+Memory,0,3,0.0,913,940,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh,2,Memory,PB,Memory+PB,4,23,0.17391304347826086,913,940,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh,2,GC,PB,GC+PB,4,6,0.6666666666666666,956,1007,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh,2,GC,Memory,GC+Memory,0,6,0.0,956,1007,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh,2,Memory,PB,Memory+PB,0,32,0.0,956,1007,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh,2,GC,PB,GC+PB,2,5,0.4,837,888,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh,2,GC,Memory,GC+Memory,0,5,0.0,837,888,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh,2,Memory,PB,Memory+PB,3,38,0.07894736842105263,837,888,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag2,D4,,strict_igh,2,Memory,PB,Memory+PB,0,16,0.0,1574,1591,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag3,D4,,strict_igh,2,Memory,PB,Memory+PB,0,32,0.0,2060,2096,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh,2,GC,PB,GC+PB,0,1,0.0,1865,1897,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,1865,1897,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh,2,Memory,PB,Memory+PB,0,31,0.0,1865,1897,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag5,D4,,strict_igh,2,Memory,PB,Memory+PB,0,31,0.0,2111,2145,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag1,D7,,strict_igh,2,Memory,PB,Memory+PB,0,13,0.0,695,708,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag2,D7,,strict_igh,2,Memory,PB,Memory+PB,0,11,0.0,627,638,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh,2,GC,PB,GC+PB,0,1,0.0,575,579,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,575,579,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh,2,Memory,PB,Memory+PB,0,4,0.0,575,579,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag4,D7,,strict_igh,2,Memory,PB,Memory+PB,0,11,0.0,736,747,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh,2,GC,PB,GC+PB,0,1,0.0,661,672,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,661,672,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh,2,Memory,PB,Memory+PB,0,11,0.0,661,672,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh,2,GC,PB,GC+PB,1,2,0.5,1177,1231,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,2,0.0,1177,1231,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh,2,Memory,PB,Memory+PB,1,48,0.020833333333333332,1177,1231,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh,2,GC,PB,GC+PB,2,2,1.0,927,947,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,2,0.0,927,947,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,13,0.0,927,947,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag3,D10,Artesunate,strict_igh,2,GC,PB,GC+PB,0,1,0.0,871,893,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag3,D10,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,871,893,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag3,D10,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,17,0.0,871,893,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag4,D10,Saline,strict_igh,2,Memory,PB,Memory+PB,0,24,0.0,846,873,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh,2,GC,PB,GC+PB,1,1,1.0,934,969,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,934,969,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh,2,Memory,PB,Memory+PB,1,31,0.03225806451612903,934,969,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag6,D10,Saline,strict_igh,2,Memory,PB,Memory+PB,0,15,0.0,983,1002,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag7,D10,Naive,strict_igh,2,Memory,PB,Memory+PB,0,1,0.0,532,535,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh,2,GC,PB,GC+PB,1,2,0.5,796,814,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,2,0.0,796,814,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,12,0.0,796,814,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh,2,GC,PB,GC+PB,1,7,0.14285714285714285,1080,1107,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,7,0.0,1080,1107,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh,2,Memory,PB,Memory+PB,1,15,0.06666666666666667,1080,1107,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh,2,GC,PB,GC+PB,0,4,0.0,406,420,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh,2,GC,Memory,GC+Memory,1,4,0.25,406,420,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,13,0.0,406,420,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh,2,GC,PB,GC+PB,7,12,0.5833333333333334,866,921,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh,2,GC,Memory,GC+Memory,0,12,0.0,866,921,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh,2,Memory,PB,Memory+PB,1,42,0.023809523809523808,866,921,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh,2,GC,PB,GC+PB,17,19,0.8947368421052632,1261,1425,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh,2,GC,Memory,GC+Memory,0,19,0.0,1261,1425,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh,2,Memory,PB,Memory+PB,1,99,0.010101010101010102,1261,1425,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh,2,GC,PB,GC+PB,21,25,0.84,1772,1890,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh,2,GC,Memory,GC+Memory,1,25,0.04,1772,1890,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh,2,Memory,PB,Memory+PB,4,84,0.047619047619047616,1772,1890,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag1,D21,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,2,0.0,1277,1279,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag2,D21,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,3,0.0,1622,1628,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh,2,GC,PB,GC+PB,0,1,0.0,1876,1884,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,1876,1884,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,5,0.0,1876,1884,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh,2,GC,PB,GC+PB,2,7,0.2857142857142857,1684,1694,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh,2,GC,Memory,GC+Memory,0,7,0.0,1684,1694,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh,2,Memory,PB,Memory+PB,0,10,0.0,1684,1694,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh,2,GC,PB,GC+PB,0,5,0.0,1407,1416,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh,2,GC,Memory,GC+Memory,0,5,0.0,1407,1416,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh,2,Memory,PB,Memory+PB,0,8,0.0,1407,1416,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh,2,GC,PB,GC+PB,5,20,0.25,4415,4445,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh,2,GC,Memory,GC+Memory,1,20,0.05,4415,4445,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh,2,Memory,PB,Memory+PB,1,26,0.038461538461538464,4415,4445,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag1,D28,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,5,0.0,779,784,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh,2,GC,PB,GC+PB,0,3,0.0,1275,1287,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,3,0.0,1275,1287,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,10,0.0,1275,1287,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh,2,GC,PB,GC+PB,0,2,0.0,549,552,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,2,0.0,549,552,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,3,0.0,549,552,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh,2,GC,PB,GC+PB,1,11,0.09090909090909091,2710,2735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh,2,GC,Memory,GC+Memory,1,11,0.09090909090909091,2710,2735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh,2,Memory,PB,Memory+PB,0,19,0.0,2710,2735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh,2,GC,PB,GC+PB,0,5,0.0,1935,1955,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh,2,GC,Memory,GC+Memory,1,5,0.2,1935,1955,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh,2,Memory,PB,Memory+PB,0,17,0.0,1935,1955,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh,2,GC,PB,GC+PB,2,11,0.18181818181818182,1950,1970,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh,2,GC,Memory,GC+Memory,1,11,0.09090909090909091,1950,1970,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh,2,Memory,PB,Memory+PB,0,20,0.0,1950,1970,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag7,D28,Naive,strict_igh,2,Memory,PB,Memory+PB,0,4,0.0,741,745,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh,2,GC,PB,GC+PB,0,7,0.0,2491,2518,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,7,0.0,2491,2518,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,18,0.0,2491,2518,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh,2,GC,PB,GC+PB,0,3,0.0,1862,1880,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,3,0.0,1862,1880,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,11,0.0,1862,1880,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh,2,GC,PB,GC+PB,0,10,0.0,2314,2352,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh,2,GC,Memory,GC+Memory,2,10,0.2,2314,2352,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,23,0.0,2314,2352,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh,2,GC,PB,GC+PB,3,28,0.10714285714285714,2492,2535,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh,2,GC,Memory,GC+Memory,2,28,0.07142857142857142,2492,2535,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh,2,Memory,PB,Memory+PB,1,40,0.025,2492,2535,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh,2,GC,PB,GC+PB,0,5,0.0,1026,1039,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh,2,GC,Memory,GC+Memory,0,5,0.0,1026,1039,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh,2,Memory,PB,Memory+PB,0,11,0.0,1026,1039,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh,2,GC,PB,GC+PB,0,13,0.0,1981,2004,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh,2,GC,Memory,GC+Memory,0,13,0.0,1981,2004,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh,2,Memory,PB,Memory+PB,0,21,0.0,1981,2004,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag7,D35,Naive,strict_igh,2,Memory,PB,Memory+PB,0,1,0.0,829,830,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag1,D42,Artesunate,strict_igh,2,GC,PB,GC+PB,0,1,0.0,791,797,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag1,D42,Artesunate,strict_igh,2,GC,Memory,GC+Memory,0,1,0.0,791,797,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag1,D42,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,3,0.0,791,797,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag2,D42,Artesunate,strict_igh,2,Memory,PB,Memory+PB,0,2,0.0,499,502,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh,2,GC,PB,GC+PB,1,4,0.25,1216,1224,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh,2,GC,Memory,GC+Memory,1,4,0.25,1216,1224,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh,2,Memory,PB,Memory+PB,1,7,0.14285714285714285,1216,1224,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh,2,GC,PB,GC+PB,0,9,0.0,1566,1580,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh,2,GC,Memory,GC+Memory,1,9,0.1111111111111111,1566,1580,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh,2,Memory,PB,Memory+PB,0,12,0.0,1566,1580,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh,2,GC,PB,GC+PB,0,15,0.0,1232,1255,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh,2,GC,Memory,GC+Memory,1,15,0.06666666666666667,1232,1255,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh,2,Memory,PB,Memory+PB,0,20,0.0,1232,1255,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag6,D42,Saline,strict_igh,2,GC,PB,GC+PB,0,2,0.0,1700,1708,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag6,D42,Saline,strict_igh,2,GC,Memory,GC+Memory,0,2,0.0,1700,1708,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag6,D42,Saline,strict_igh,2,Memory,PB,Memory+PB,0,6,0.0,1700,1708,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag7,D42,Naive,strict_igh,2,Memory,PB,Memory+PB,0,1,0.0,592,593,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag1,D10,,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,511,530,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag1,D10,,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,511,530,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag1,D10,,strict_igh_light,2,Memory,PB,Memory+PB,0,18,0.0,511,530,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh_light,2,GC,PB,GC+PB,1,3,0.3333333333333333,678,718,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh_light,2,GC,Memory,GC+Memory,0,3,0.0,678,718,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag2,D10,,strict_igh_light,2,Memory,PB,Memory+PB,0,35,0.0,678,718,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag3,D10,,strict_igh_light,2,Memory,PB,Memory+PB,1,32,0.03125,863,907,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag4,D10,,strict_igh_light,2,Memory,PB,Memory+PB,0,32,0.0,818,854,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh_light,2,GC,PB,GC+PB,3,3,1.0,864,919,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh_light,2,GC,Memory,GC+Memory,0,3,0.0,864,919,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D10_Hashtag5,D10,,strict_igh_light,2,Memory,PB,Memory+PB,0,48,0.0,864,919,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh_light,2,GC,PB,GC+PB,2,7,0.2857142857142857,979,1022,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh_light,2,GC,Memory,GC+Memory,0,7,0.0,979,1022,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag1,D14,,strict_igh_light,2,Memory,PB,Memory+PB,2,35,0.05714285714285714,979,1022,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh_light,2,GC,PB,GC+PB,1,3,0.3333333333333333,875,923,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh_light,2,GC,Memory,GC+Memory,0,3,0.0,875,923,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag2,D14,,strict_igh_light,2,Memory,PB,Memory+PB,1,29,0.034482758620689655,875,923,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh_light,2,GC,PB,GC+PB,0,2,0.0,824,844,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,824,844,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag3,D14,,strict_igh_light,2,Memory,PB,Memory+PB,4,17,0.23529411764705882,824,844,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh_light,2,GC,PB,GC+PB,3,4,0.75,859,901,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh_light,2,GC,Memory,GC+Memory,0,4,0.0,859,901,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag4,D14,,strict_igh_light,2,Memory,PB,Memory+PB,0,25,0.0,859,901,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh_light,2,GC,PB,GC+PB,1,4,0.25,766,805,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh_light,2,GC,Memory,GC+Memory,0,4,0.0,766,805,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D14_Hashtag5,D14,,strict_igh_light,2,Memory,PB,Memory+PB,2,29,0.06896551724137931,766,805,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag2,D4,,strict_igh_light,2,Memory,PB,Memory+PB,0,16,0.0,1452,1469,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag3,D4,,strict_igh_light,2,Memory,PB,Memory+PB,0,29,0.0,1895,1927,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,1718,1744,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,1718,1744,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag4,D4,,strict_igh_light,2,Memory,PB,Memory+PB,0,25,0.0,1718,1744,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D4_Hashtag5,D4,,strict_igh_light,2,Memory,PB,Memory+PB,0,27,0.0,1939,1968,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag1,D7,,strict_igh_light,2,Memory,PB,Memory+PB,0,11,0.0,640,651,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag2,D7,,strict_igh_light,2,Memory,PB,Memory+PB,0,10,0.0,566,576,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,526,529,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,526,529,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag3,D7,,strict_igh_light,2,Memory,PB,Memory+PB,0,3,0.0,526,529,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag4,D7,,strict_igh_light,2,Memory,PB,Memory+PB,0,9,0.0,672,681,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,592,600,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,592,600,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_early,D7_Hashtag5,D7,,strict_igh_light,2,Memory,PB,Memory+PB,0,8,0.0,592,600,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh_light,2,GC,PB,GC+PB,1,2,0.5,1085,1135,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,1085,1135,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag1,D10,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,1,46,0.021739130434782608,1085,1135,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh_light,2,GC,PB,GC+PB,2,2,1.0,841,857,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,841,857,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag2,D10,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,10,0.0,841,857,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag3,D10,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,15,0.0,796,815,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag4,D10,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,22,0.0,784,808,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh_light,2,GC,PB,GC+PB,1,1,1.0,882,914,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,882,914,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag5,D10,Saline,strict_igh_light,2,Memory,PB,Memory+PB,1,28,0.03571428571428571,882,914,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag6,D10,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,12,0.0,903,916,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D10_Hashtag7,D10,Naive,strict_igh_light,2,Memory,PB,Memory+PB,0,1,0.0,466,469,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,721,735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,721,735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag1,D14,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,10,0.0,721,735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh_light,2,GC,PB,GC+PB,1,4,0.25,977,993,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,4,0.0,977,993,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag2,D14,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,10,0.0,977,993,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,369,377,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,1,1,1.0,369,377,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag3,D14,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,8,0.0,369,377,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh_light,2,GC,PB,GC+PB,3,6,0.5,798,840,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,6,0.0,798,840,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag4,D14,Saline,strict_igh_light,2,Memory,PB,Memory+PB,1,32,0.03125,798,840,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh_light,2,GC,PB,GC+PB,12,13,0.9230769230769231,1192,1332,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,13,0.0,1192,1332,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag5,D14,Saline,strict_igh_light,2,Memory,PB,Memory+PB,1,86,0.011627906976744186,1192,1332,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh_light,2,GC,PB,GC+PB,14,17,0.8235294117647058,1651,1749,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,17,0.0,1651,1749,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D14_Hashtag6,D14,Saline,strict_igh_light,2,Memory,PB,Memory+PB,4,66,0.06060606060606061,1651,1749,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag2,D21,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,2,0.0,1299,1304,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,1,0.0,1587,1591,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,1,0.0,1587,1591,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag3,D21,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,4,0.0,1587,1591,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh_light,2,GC,PB,GC+PB,2,5,0.4,1271,1278,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,5,0.0,1271,1278,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag4,D21,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,7,0.0,1271,1278,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh_light,2,GC,PB,GC+PB,0,4,0.0,1121,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,4,0.0,1121,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag5,D21,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,6,0.0,1121,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh_light,2,GC,PB,GC+PB,2,8,0.25,3772,3787,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh_light,2,GC,Memory,GC+Memory,1,8,0.125,3772,3787,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D21_Hashtag6,D21,Saline,strict_igh_light,2,Memory,PB,Memory+PB,1,14,0.07142857142857142,3772,3787,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag1,D28,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,3,0.0,707,710,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,3,0.0,1189,1198,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,3,0.0,1189,1198,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag2,D28,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,8,0.0,1189,1198,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,2,0.0,516,519,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,516,519,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag3,D28,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,3,0.0,516,519,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh_light,2,GC,PB,GC+PB,0,4,0.0,2424,2440,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh_light,2,GC,Memory,GC+Memory,1,4,0.25,2424,2440,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag4,D28,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,11,0.0,2424,2440,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh_light,2,GC,PB,GC+PB,0,2,0.0,1778,1788,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh_light,2,GC,Memory,GC+Memory,1,2,0.5,1778,1788,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag5,D28,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,9,0.0,1778,1788,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh_light,2,GC,PB,GC+PB,1,7,0.14285714285714285,1788,1802,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,7,0.0,1788,1802,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag6,D28,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,14,0.0,1788,1802,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D28_Hashtag7,D28,Naive,strict_igh_light,2,Memory,PB,Memory+PB,0,2,0.0,682,684,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,2,0.0,2300,2320,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,2300,2320,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag1,D35,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,12,0.0,2300,2320,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,2,0.0,1694,1709,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,0,2,0.0,1694,1709,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag2,D35,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,9,0.0,1694,1709,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh_light,2,GC,PB,GC+PB,0,7,0.0,2164,2192,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,2,7,0.2857142857142857,2164,2192,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag3,D35,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,15,0.0,2164,2192,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh_light,2,GC,PB,GC+PB,1,13,0.07692307692307693,2295,2319,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh_light,2,GC,Memory,GC+Memory,1,13,0.07692307692307693,2295,2319,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag4,D35,Saline,strict_igh_light,2,Memory,PB,Memory+PB,1,22,0.045454545454545456,2295,2319,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh_light,2,GC,PB,GC+PB,0,3,0.0,936,946,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,3,0.0,936,946,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag5,D35,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,8,0.0,936,946,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh_light,2,GC,PB,GC+PB,0,5,0.0,1861,1872,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,5,0.0,1861,1872,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag6,D35,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,11,0.0,1861,1872,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D35_Hashtag7,D35,Naive,strict_igh_light,2,Memory,PB,Memory+PB,0,1,0.0,772,773,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag1,D42,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,2,0.0,730,735,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag2,D42,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,0,2,0.0,455,458,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh_light,2,GC,PB,GC+PB,1,3,0.3333333333333333,1120,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh_light,2,GC,Memory,GC+Memory,1,3,0.3333333333333333,1120,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag3,D42,Artesunate,strict_igh_light,2,Memory,PB,Memory+PB,1,6,0.16666666666666666,1120,1127,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh_light,2,GC,PB,GC+PB,0,4,0.0,1442,1449,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,4,0.0,1442,1449,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag4,D42,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,7,0.0,1442,1449,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh_light,2,GC,PB,GC+PB,0,8,0.0,1146,1158,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh_light,2,GC,Memory,GC+Memory,0,8,0.0,1146,1158,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag5,D42,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,11,0.0,1146,1158,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag6,D42,Saline,strict_igh_light,2,Memory,PB,Memory+PB,0,4,0.0,1590,1596,not_assessed,not_assessed,not_assessed,,False,,,,0,0,
+malaria_late,D42_Hashtag7,D42,Naive,strict_igh_light,2,Memory,PB,Memory+PB,0,1,0.0,541,542,not_assessed,not_assessed,not_assessed,,False,,,,0,0,

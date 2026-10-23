@@ -1,0 +1,4 @@
+dataset,outcome,clones,share
+mouse_np,ok,220,0.9401709401709402
+mouse_np,trivial,11,0.04700854700854701
+mouse_np,gctree-fail,3,0.01282051282051282

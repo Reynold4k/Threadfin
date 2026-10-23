@@ -1,0 +1,250 @@
+{
+  "n_exported_tcr_annotated_cells": 195685,
+  "n_cells_exact_paired_tcr": 124534,
+  "n_patients": 10,
+  "n_common_genes": 17178,
+  "cycle_labels": [
+    {
+      "cycle_raw": "pt12cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt12cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt12cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt12cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt13cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt13cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt13cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt13cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt25cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt25cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt25cy5",
+      "cycle": 5
+    },
+    {
+      "cycle_raw": "pt25cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt27cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt27cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt27cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt27cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt3cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt3cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt3cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt3cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt38cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt38cy3",
+      "cycle": 3
+    },
+    {
+      "cycle_raw": "pt38cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt38cy7",
+      "cycle": 7
+    },
+    {
+      "cycle_raw": "pt4cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt4cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt4cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt4cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt6cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt6cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt6cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt6cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt69cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt69cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt69cy5",
+      "cycle": 5
+    },
+    {
+      "cycle_raw": "pt69cy6",
+      "cycle": 6
+    },
+    {
+      "cycle_raw": "pt7cy1",
+      "cycle": 1
+    },
+    {
+      "cycle_raw": "pt7cy2",
+      "cycle": 2
+    },
+    {
+      "cycle_raw": "pt7cy4",
+      "cycle": 4
+    },
+    {
+      "cycle_raw": "pt7cy6",
+      "cycle": 6
+    }
+  ],
+  "modules": {
+    "cytotoxic": [
+      "NKG7",
+      "PRF1",
+      "GZMB",
+      "GNLY",
+      "CTSW"
+    ],
+    "memory": [
+      "IL7R",
+      "CCR7",
+      "TCF7",
+      "LEF1",
+      "LTB"
+    ],
+    "activation": [
+      "IFNG",
+      "FOS",
+      "EGR1",
+      "CD69",
+      "TNFRSF9"
+    ],
+    "cycling": [
+      "MKI67",
+      "TOP2A",
+      "TYMS",
+      "STMN1"
+    ]
+  },
+  "embedding": "Global 30-PC receptor-excluded RNA; no patient/cycle integration",
+  "profile_context": "patient; not patient x cycle, so longitudinal changes are retained",
+  "cohort_scope": "All 10 public patient objects; not the paper's selected 8-patient response comparison",
+  "limits": [
+    "No audited clinical-response mapping; no efficacy or responder claims.",
+    "Exact paired TRA/TRB amino-acid identity is used within patient.",
+    "Module scores reuse expression and are not orthogonal validation.",
+    "Longitudinal distribution changes do not establish cellular differentiation."
+  ],
+  "status": "complete",
+  "profiles": {
+    "mean": {
+      "n_profiles": 10428,
+      "n_reliable": 10428,
+      "icc": 0.42352245422761253,
+      "parameters": {
+        "clone_key": "clone_cycle",
+        "basis": "X_threadfin",
+        "context_key": "patient",
+        "representation": "mean",
+        "n_features": 256,
+        "smooth": 0,
+        "random_state": 0,
+        "donor_key": "patient",
+        "min_cells": 2,
+        "n_components": 30
+      }
+    },
+    "kernel": {
+      "n_profiles": 10428,
+      "n_reliable": 10428,
+      "icc": 0.5359250816186573,
+      "parameters": {
+        "clone_key": "clone_cycle",
+        "basis": "X_threadfin",
+        "context_key": "patient",
+        "representation": "kernel",
+        "n_features": 256,
+        "smooth": 15,
+        "random_state": 0,
+        "bandwidth": 16.66287873325431,
+        "donor_key": "patient",
+        "min_cells": 2,
+        "n_components": 30
+      }
+    }
+  },
+  "longitudinal": {
+    "n_patient_intervals": 29,
+    "min_cells_per_cycle": 4,
+    "null": "200 no-fixed-point permutations within patient, cycle pair and target log2 size bin",
+    "cohort_selection": "Same clone pairs across all three methods; no reliability filtering"
+  }
+}
