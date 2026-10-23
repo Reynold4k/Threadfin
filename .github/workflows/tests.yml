@@ -24,6 +24,24 @@ jobs:
       - name: Tutorial on simulated data
         run: python examples/tutorial.py
 
+  other-systems:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e ".[test]"
+      - name: Run tests
+        run: python -m pytest tests/ -q
+      - name: Tutorial on simulated data
+        run: python examples/tutorial.py
+
   oldest-dependencies:
     # the oldest versions that pyproject.toml allows, so the declared minimum versions stay true
     runs-on: ubuntu-latest

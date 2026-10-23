@@ -84,12 +84,12 @@ def render() -> str:
 def main(check: bool) -> int:
     text = render()
     if check:
-        current = OUT.read_text() if OUT.exists() else ""
+        current = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
         if current != text:
             print("docs/API.md is out of date: run python docs/make_api_reference.py")
             return 1
         return 0
-    OUT.write_text(text)
+    OUT.write_text(text, encoding="utf-8")
     print(f"wrote {OUT}")
     return 0
 

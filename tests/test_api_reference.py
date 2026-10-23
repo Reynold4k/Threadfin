@@ -10,4 +10,4 @@ def test_api_reference_is_current():
     spec = importlib.util.spec_from_file_location("make_api_reference", DOCS / "make_api_reference.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    assert (DOCS / "API.md").read_text() == mod.render(), "run: python docs/make_api_reference.py"
+    assert (DOCS / "API.md").read_text(encoding="utf-8") == mod.render(), "run: python docs/make_api_reference.py"

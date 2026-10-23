@@ -55,7 +55,7 @@ def test_loaders_do_not_reference_deleted_constants():
     import ast
     import re
 
-    src = (HERE / "datasets.py").read_text()
+    src = (HERE / "datasets.py").read_text(encoding="utf-8")
     tree = ast.parse(src)
     module_level = {t.id for n in tree.body if isinstance(n, ast.Assign)
                     for t in n.targets if isinstance(t, ast.Name)}
