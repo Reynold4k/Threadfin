@@ -3,7 +3,7 @@
  "two_cell": "the same for clones of exactly two cells.",
  "datasets": "datasets (of 11) on which the tool produced a result.",
  "traits": "measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05.",
- "traits_disjoint": "as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions); sign test over annotations.",
+ "traits_disjoint": "as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions; Clonotrace and Benisse: split 0 only); sign test over annotations.",
  "reid": "share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets.",
  "fate": "LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones.",
  "sim_groups": "simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets.",

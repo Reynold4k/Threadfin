@@ -5,7 +5,7 @@ Threadfin,Datasets it could analyse,ref,11 of 11,,11.0,
 Threadfin,Predicts measured clone traits,ref,reference,,,
 Threadfin,… when traits come from other cells,ref,reference,,,
 Threadfin,Recognises a clone from other cells,ref,11 %,,,
-Threadfin,Links day-2 clones to day 6,ref,0.030,,,
+Threadfin,Links day-4 clones to day 6,ref,0.030,,,
 Threadfin,Finds planted clone groups,ref,0.75,,,
 Threadfin,Tells mixed from in-between clones,ref,0.89,,,
 Threadfin,Run time,ref,3.1 s (median),,,
@@ -19,7 +19,7 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "clone2vec, its default (clones ≥ 3 cells)",Predicts measured clone traits,similar,10 better 3 worse,"10 better, 3 worse, 35 annotations",35.0,0.09228515625
 "clone2vec, its default (clones ≥ 3 cells)",… when traits come from other cells,similar,11 better 7 worse,18 annotations,18.0,0.480682373046875
 "clone2vec, its default (clones ≥ 3 cells)",Recognises a clone from other cells,similar,31 % vs 55 %,5 datasets,5.0,0.0625
-"clone2vec, its default (clones ≥ 3 cells)",Links day-2 clones to day 6,similar,0.110 vs 0.087,"95 % CI of difference [-0.019, 0.062]",164.0,
+"clone2vec, its default (clones ≥ 3 cells)",Links day-4 clones to day 6,similar,0.110 vs 0.087,"95 % CI of difference [-0.019, 0.062]",164.0,
 "clone2vec, its default (clones ≥ 3 cells)",Finds planted clone groups,better,0.93 vs 0.86,6 simulated datasets,6.0,0.03125
 "clone2vec, its default (clones ≥ 3 cells)",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
 "clone2vec, its default (clones ≥ 3 cells)",Run time,worse,27× slower,11 datasets,11.0,0.0009765625
@@ -33,7 +33,7 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 5 worse,"5 better, 5 worse, 35 annotations",35.0,1.0
 "clone2vec, forced to clones ≥ 2 cells",… when traits come from other cells,similar,17 better 12 worse,29 annotations,29.0,0.45825831964612007
 "clone2vec, forced to clones ≥ 2 cells",Recognises a clone from other cells,worse,3.6 % vs 11 %,10 datasets,10.0,0.001953125
-"clone2vec, forced to clones ≥ 2 cells",Links day-2 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.004, 0.017]",1251.0,
+"clone2vec, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.004, 0.017]",1251.0,
 "clone2vec, forced to clones ≥ 2 cells",Finds planted clone groups,similar,0.76 vs 0.75,12 simulated datasets,12.0,0.67724609375
 "clone2vec, forced to clones ≥ 2 cells",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
 "clone2vec, forced to clones ≥ 2 cells",Run time,worse,34× slower,11 datasets,11.0,
@@ -47,7 +47,7 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "Clonotrace, its default (clones ≥ 10 cells)",Predicts measured clone traits,worse,0 better 6 worse,"0 better, 6 worse, 24 annotations",24.0,0.03125
 "Clonotrace, its default (clones ≥ 10 cells)",… when traits come from other cells,similar,6 better 12 worse,18 annotations,18.0,0.237884521484375
 "Clonotrace, its default (clones ≥ 10 cells)",Recognises a clone from other cells,similar,39 % vs 55 %,5 datasets,5.0,0.3125
-"Clonotrace, its default (clones ≥ 10 cells)",Links day-2 clones to day 6,similar,0.098 vs 0.087,"95 % CI of difference [-0.014, 0.032]",164.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Links day-4 clones to day 6,similar,0.098 vs 0.087,"95 % CI of difference [-0.014, 0.032]",164.0,
 "Clonotrace, its default (clones ≥ 10 cells)",Finds planted clone groups,worse,0.81 vs 0.86,6 simulated datasets,6.0,0.03125
 "Clonotrace, its default (clones ≥ 10 cells)",Tells mixed from in-between clones,worse,0.63 vs 0.89,6 simulated datasets,6.0,0.03125
 "Clonotrace, its default (clones ≥ 10 cells)",Run time,worse,"2,436× slower",3 datasets,3.0,
@@ -61,7 +61,7 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,1 better 5 worse,"1 better, 5 worse, 29 annotations",29.0,0.21875
 "Clonotrace, forced to clones ≥ 2 cells",… when traits come from other cells,similar,12 better 9 worse,21 annotations,21.0,0.6636238098144531
 "Clonotrace, forced to clones ≥ 2 cells",Recognises a clone from other cells,similar,8.9 % vs 14 %,7 datasets,7.0,0.9375
-"Clonotrace, forced to clones ≥ 2 cells",Links day-2 clones to day 6,better,0.039 vs 0.030,"95 % CI of difference [0.003, 0.015]",1251.0,
+"Clonotrace, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.039 vs 0.030,"95 % CI of difference [0.003, 0.015]",1251.0,
 "Clonotrace, forced to clones ≥ 2 cells",Finds planted clone groups,worse,0.51 vs 0.61,6 simulated datasets,6.0,0.03125
 "Clonotrace, forced to clones ≥ 2 cells",Tells mixed from in-between clones,na,—,,,
 "Clonotrace, forced to clones ≥ 2 cells",Run time,worse,"≥ 286× slower, 1 stopped",5 datasets,5.0,
@@ -75,7 +75,7 @@ Benisse,Datasets it could analyse,worse,9 of 11 2 without BCR,2 without BCR,11.0
 Benisse,Predicts measured clone traits,worse,3 better 23 worse,"3 better, 23 worse, 32 annotations",32.0,8.797645568847656e-05
 Benisse,… when traits come from other cells,worse,5 better 16 worse,21 annotations,21.0,0.02660369873046875
 Benisse,Recognises a clone from other cells,similar,8.3 % vs 10 %,6 datasets,6.0,0.6875
-Benisse,Links day-2 clones to day 6,na,no BCR,,,
+Benisse,Links day-4 clones to day 6,na,no BCR,,,
 Benisse,Finds planted clone groups,na,no BCR,,,
 Benisse,Tells mixed from in-between clones,na,no BCR,,,
 Benisse,Run time,worse,33× slower,9 datasets,9.0,0.00390625
@@ -89,7 +89,7 @@ CoNGA's one-cell-per-clone rule,Datasets it could analyse,similar,11 of 11,,11.0
 CoNGA's one-cell-per-clone rule,Predicts measured clone traits,worse,1 better 15 worse,"1 better, 15 worse, 35 annotations",35.0,0.000518798828125
 CoNGA's one-cell-per-clone rule,… when traits come from other cells,similar,9 better 20 worse,29 annotations,29.0,0.06142834573984146
 CoNGA's one-cell-per-clone rule,Recognises a clone from other cells,similar,3.3 % vs 11 %,10 datasets,10.0,0.10546875
-CoNGA's one-cell-per-clone rule,Links day-2 clones to day 6,worse,0.019 vs 0.030,"95 % CI of difference [-0.017, -0.003]",1251.0,
+CoNGA's one-cell-per-clone rule,Links day-4 clones to day 6,worse,0.019 vs 0.030,"95 % CI of difference [-0.017, -0.003]",1251.0,
 CoNGA's one-cell-per-clone rule,Finds planted clone groups,worse,0.44 vs 0.75,12 simulated datasets,12.0,0.00048828125
 CoNGA's one-cell-per-clone rule,Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
 CoNGA's one-cell-per-clone rule,Run time,na,not timed,,,
@@ -103,7 +103,7 @@ Mean of the embedding (baseline),Datasets it could analyse,similar,11 of 11,,11.
 Mean of the embedding (baseline),Predicts measured clone traits,similar,7 better 5 worse,"7 better, 5 worse, 35 annotations",35.0,0.7744140625
 Mean of the embedding (baseline),… when traits come from other cells,similar,16 better 13 worse,29 annotations,29.0,0.711071103811264
 Mean of the embedding (baseline),Recognises a clone from other cells,similar,8.2 % vs 11 %,10 datasets,10.0,0.431640625
-Mean of the embedding (baseline),Links day-2 clones to day 6,similar,0.034 vs 0.030,"95 % CI of difference [-0.000, 0.010]",1251.0,
+Mean of the embedding (baseline),Links day-4 clones to day 6,similar,0.034 vs 0.030,"95 % CI of difference [-0.000, 0.010]",1251.0,
 Mean of the embedding (baseline),Finds planted clone groups,worse,0.70 vs 0.75,12 simulated datasets,12.0,0.00048828125
 Mean of the embedding (baseline),Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
 Mean of the embedding (baseline),Run time,na,not timed,,,
@@ -117,7 +117,7 @@ Cluster composition (baseline),Datasets it could analyse,similar,11 of 11,,11.0,
 Cluster composition (baseline),Predicts measured clone traits,worse,1 better 20 worse,"1 better, 20 worse, 35 annotations",35.0,2.09808349609375e-05
 Cluster composition (baseline),… when traits come from other cells,worse,4 better 25 worse,29 annotations,29.0,0.00010371580719947815
 Cluster composition (baseline),Recognises a clone from other cells,similar,3.4 % vs 11 %,10 datasets,10.0,0.193359375
-Cluster composition (baseline),Links day-2 clones to day 6,better,0.059 vs 0.030,"95 % CI of difference [0.018, 0.042]",1251.0,
+Cluster composition (baseline),Links day-4 clones to day 6,better,0.059 vs 0.030,"95 % CI of difference [0.018, 0.042]",1251.0,
 Cluster composition (baseline),Finds planted clone groups,similar,0.77 vs 0.75,12 simulated datasets,12.0,0.1513671875
 Cluster composition (baseline),Tells mixed from in-between clones,similar,0.95 vs 0.89,6 simulated datasets,6.0,0.09375
 Cluster composition (baseline),Run time,na,not timed,,,

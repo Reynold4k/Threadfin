@@ -2,7 +2,7 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-24 10:09, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-25 21:52, Melbourne time).*
 
 Still running: none.
 
@@ -309,9 +309,9 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Keeps two-cell clones | the same for clones of exactly two cells. |
 | Datasets it could analyse | datasets (of 11) on which the tool produced a result. |
 | Predicts measured clone traits | measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05. |
-| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions); sign test over annotations. |
+| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions; Clonotrace and Benisse: split 0 only); sign test over annotations. |
 | Recognises a clone from other cells | share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets. |
-| Links day-2 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
+| Links day-4 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
 | Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
 | Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
 | Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |

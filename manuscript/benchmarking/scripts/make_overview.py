@@ -53,7 +53,7 @@ COLUMNS = [  # key, group, label
     ("traits", "How well it describes clones", "Predicts\nmeasured\nclone traits"),
     ("traits_disjoint", "How well it describes clones", "… when traits\ncome from\nother cells"),
     ("reid", "How well it describes clones", "Recognises\na clone from\nother cells"),
-    ("fate", "How well it describes clones", "Links day-2\nclones to\nday 6"),
+    ("fate", "How well it describes clones", "Links day-4\nclones to\nday 6"),
     ("sim_groups", "How well it describes clones", "Finds\nplanted clone\ngroups"),
     ("sim_mixed", "How well it describes clones", "Tells mixed\nfrom in-between\nclones"),
     ("time", "Computer resources", "Run\ntime"),
@@ -74,7 +74,8 @@ RULES = {
               "on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column "
               "verdict: two-sided sign test of better vs worse annotations, P < 0.05.",
     "traits_disjoint": "as above, but the representation and the annotation come from disjoint halves of each "
-                       "clone's cells (3 random splits, both directions); sign test over annotations.",
+                       "clone's cells (3 random splits, both directions; Clonotrace and Benisse: split 0 only); sign "
+                       "test over annotations.",
     "reid": "share of clones whose representation from one half of their cells is nearest to their own other half "
             "(median over datasets); Wilcoxon signed-rank test over datasets.",
     "fate": "LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired "

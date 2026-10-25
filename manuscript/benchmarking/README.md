@@ -53,7 +53,7 @@ s43588-026-00977-z, Fig. 4): 1 = yes, 0.5 = partly, 0 = no, with the evidence fo
   rule and cluster composition recover fewer as well.
 * **Threadfin is not best everywhere.** In simulation, clone2vec separates mixed from in-between clones
   better and, at its default, also groups clones by their planted programme better; clone2vec, Clonotrace
-  forced to two-cell clones and the cluster-composition baseline link day-2 LARRY clones to their day-6
+  forced to two-cell clones and the cluster-composition baseline link day-4 LARRY clones to their day-6
   descendants slightly better; clone2vec's run time grows more slowly with the number of clones; and
   Clonotrace gains more from extra cores (2.7 times faster from 4 to 16 cores, against Threadfin's 2.0 from 1
   to 16).
@@ -75,9 +75,9 @@ How each column's verdict is reached:
 | Keeps two-cell clones | the same for clones of exactly two cells. |
 | Datasets it could analyse | datasets (of 11) on which the tool produced a result. |
 | Predicts measured clone traits | measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05. |
-| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions); sign test over annotations. |
+| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions; Clonotrace and Benisse: split 0 only); sign test over annotations. |
 | Recognises a clone from other cells | share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets. |
-| Links day-2 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
+| Links day-4 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
 | Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
 | Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
 | Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |
@@ -125,7 +125,7 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   with ≥ 2 cells; clone2vec (≥ 3 cells) leaves out every two-cell clone — 28–86 % of the analysable clones
   depending on the dataset — and Clonotrace (≥ 10 cells) can describe only the 5–18 % of clones that reach
   ten cells and cannot run at all on 4 of the 11 datasets. Forced down to two-cell clones, clone2vec covers
-  everything, but Clonotrace still discards 24–47 % of the clones (39–84 % of the two-cell clones) after
+  everything, but Clonotrace still discards 24–48 % of the clones (39–84 % of the two-cell clones) after
   label spreading.
 * **Two-cell clones do carry information — and not only for Threadfin.** On two-cell clones alone, the
   measured annotations are predicted with a median R² of 0.25 by Threadfin, 0.26 by clone2vec when it is
@@ -134,9 +134,9 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   were sampled, and tests them at the right error rate. The statement "only Threadfin can use two-cell
   clones" is true of the tools' **defaults**, not of what the data allow.
 * **No representation is uniformly best at recovering measured annotations.** Scored on the same clones,
-  clone2vec forced to ≥ 2 cells beat Threadfin on 6 of 41 annotations and lost on 10; at its own
+  clone2vec forced to ≥ 2 cells beat Threadfin on 5 of 41 annotations and lost on 10; at its own
   default (≥ 3 cells) it won 10 and lost 7. A plain mean of the embedding won 7 and lost 10. Clonotrace
-  won 1 and lost 8 of 30 when forced to ≥ 2 cells, and won none and lost 8 of 26 at its default (≥ 10
+  won 1 and lost 10 of 34 when forced to ≥ 2 cells, and won none and lost 8 of 26 at its default (≥ 10
   cells), with its default distance. Benisse lost 22 of 31, but won
   the three annotations that are properties of the receptor sequence (RBD-bait binding, V-region mutation,
   the W33L affinity mutation) — the question it was built for.
@@ -149,14 +149,15 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   with a plain mean (chance under 1 %), 3 % with clone2vec, and about as often as Threadfin with Clonotrace
   on the datasets where both ran; Benisse keeps the clone–clone distances best, by construction, because
   both halves share the receptor sequence it is built from. Recognising a LARRY barcode two days later is hard
-  for every method (top-1 at most 6 % among thousands of candidates, all far above chance).
+  for every method (top-1 at most 6 % among 863 to 2,643 candidates, all far above chance).
 * **On simulated data with a known answer, Threadfin is not the best at grouping clones.** clone2vec and a
   cell-cluster-composition baseline group clones by their true programme more accurately, and separate a
   "mixed" clone (half GC, half plasma cells) from an "intermediate" clone (all cells halfway) better —
   the distinction Threadfin's kernel profile was designed for (AUROC with ≥ 10 cells per clone: 0.99 and
   0.96 vs 0.88; Clonotrace 0.62 with its default distance, 0.81 with the published one). With small clones
   no method separates the two (AUROC 0.39–0.66). Threadfin's donor
-  centring removes an additive donor shift exactly (results identical with and without it), but the
+  centring removes an additive donor shift (results identical with and without it for large clones, nearly so for
+  small clones), but the
   simulated donor effect is purely additive, the easiest possible case, and centring itself creates some
   same-donor structure when donors differ in clone composition.
 * **Cost.** Building Threadfin's clone profiles took 0.2–43 s and < 2.5 GB per dataset; clone2vec
@@ -166,7 +167,7 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   of clones and with how widely label spreading spreads each clone — 7 h for only 31 expanded clones in
   GSE171703, where each of them spreads over much of the graph. With 16 instead of 1 core, Threadfin's
   complete analysis ran 2.0 times faster, clone2vec 1.2 times and Benisse 2.9 times slower; for ten times
-  more clones, Threadfin's clone profiles took 20 times longer, clone2vec 6 times, Clonotrace 110 and
+  more clones, Threadfin's clone profiles took 20 times longer, clone2vec 6 times, Clonotrace 164 and
   Benisse 123 times (section 6.9). Threadfin and Clonotrace gave identical results with any number of cores;
   clone2vec and Benisse differed slightly (clone-distance correlation ≥ 0.9999).
 
@@ -174,7 +175,7 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-24 10:09, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-25 21:52, Melbourne time).*
 
 Still running: none.
 
@@ -212,11 +213,13 @@ representation).
 
 1. **Identical inputs.** Every tool received the same cell embedding (30 principal components of
    log-normalised expression with immunoglobulin and T-cell-receptor genes removed — the embedding of the
-   manuscript), the same clone ids (Dandelion, heavy + light chain, called within donors), the same donors
-   and samples ([`scripts/prepare_inputs.py`](scripts/prepare_inputs.py)). Benisse needs receptor sequences
-   and expression values, so it also received each cell's heavy-chain V gene, J gene and CDR3 amino-acid
-   sequence and the log-normalised expression of the same 3,000 highly variable genes from which the
-   embedding was computed.
+   manuscript; integrated over donors with Harmony for GSE195673 and GSE171703), the same clone ids
+   (Dandelion, heavy + light chain, called within donors), the same donors and samples
+   ([`scripts/prepare_inputs.py`](scripts/prepare_inputs.py)). Benisse needs receptor sequences and
+   expression values, so it also received each cell's heavy-chain V gene, J gene and CDR3 amino-acid sequence
+   and the log-normalised expression of 3,000 highly variable genes chosen as for the embedding (receptor
+   genes removed; per donor for GSE195673). For GSE171703 the embedding chose its genes per donor and
+   Benisse's input did not, so the two gene sets differ there.
 2. **Each tool's documented defaults**, taken from its tutorial or README at the version above, and
    recorded per run in `run.json`. Where a default could not be run on these data, the change is listed in
    the table below — none of the changes was chosen by looking at a benchmark result.
@@ -236,13 +239,14 @@ representation).
 7. **Every failure is reported.** Runs that failed or could not be started are listed with the reason. A
    failed run was repeated only to apply the remedy the tool itself prints (a larger cell graph when
    Clonotrace reports a disconnected graph), never to obtain a better score.
-8. **Same resources.** Each tool ran with 4 CPU threads (Clonotrace: 4 parallel R sessions) on the same
+8. **Same resources.** Each tool ran with 4 CPU threads (Clonotrace: 4 parallel R sessions, with the exceptions
+   listed in the table below) on the same
    type of node (University of Melbourne Spartan cluster, 128-core Intel Xeon Sapphire Rapids nodes with
    1–4 TB of memory, shared with other jobs, so times are indicative to within a factor of about two).
 
 | tool | change from its tutorial, and why |
 |---|---|
-| Clonotrace | Label spreading, sparsification and the approximate clone distance exactly as in the vignette. (a) When the default cell graph for distances (k = 10) was disconnected, Clonotrace stops and advises a larger k; the run then retried k = 30 and k = 50 and recorded the k used. (b) Clones that keep no cell with probability ≥ 0.1 after label spreading make `clone_disance()` stop; they are removed and counted as lost coverage. (c) The first full-data runs computed the clone distances in one R session instead of the vignette's parallel plan; the distances are identical (verified pair by pair on the NP dataset, 49,455 pairs, and on LARRY days 4/6, 648,091 pairs) but those runs' times are single-process and are marked † in the runtime table. Later runs use 4 parallel sessions (6 for the LARRY run forced to ≥ 2 cells); where both versions exist, the tables use the parallel one. (d) The run forced to ≥ 2 cells on GSE195673 (11,141 clones) was stopped after 72 h (15 h of label spreading, then 57 h of clone distances in one process). |
+| Clonotrace | Label spreading, sparsification and the approximate clone distance exactly as in the vignette. (a) When the default cell graph for distances (k = 10) was disconnected, Clonotrace stops and advises a larger k; the run then retried k = 30 and k = 50 (k = 100 for the Plasmodium d10-42 run forced to ≥ 2 cells) and recorded the k used. (b) Clones that keep no cell with probability ≥ 0.1 after label spreading make `clone_disance()` stop; they are removed and counted as lost coverage. (c) The first full-data runs computed the clone distances in one R session instead of the vignette's parallel plan; the distances are identical (verified pair by pair on the NP dataset, 49,455 pairs, and on LARRY days 4/6, 648,091 pairs) but those runs' times are single-process and are marked † in the runtime table. Later runs use 4 parallel sessions (6 for the LARRY run forced to ≥ 2 cells, 8 for the Plasmodium d10-42 run forced to ≥ 2 cells); where both versions exist, the tables use the parallel one. (d) The run forced to ≥ 2 cells on GSE195673 (11,141 clones) was stopped after 72 h (15 h of label spreading, then 57 h of clone distances in one process). |
 | clone2vec | Documented defaults (`clonal_nn` k = 15, 10 dimensions). Its `split_by` option was not used: it builds a separate graph per category, which for donor-private clones disconnects the clone graph. |
 | Benisse | Its README allows a dimension reduction instead of expression, but its initialisation takes 10 principal components of the 10 % most variable rows, which fails on a 30-dimensional embedding; it therefore received log-normalised expression of the 3,000 highly variable genes (as its README recommends). Benisse's unit is the exact clonotype (V + CDR3 + J), finer than a clone; clone-to-clone distances are the mean latent distance over all pairs of the two clones' cells. Run on clones ≥ 2 cells, except ≥ 10 cells on the largest dataset (11,141 clones; its optimisation scales with the square of the number of clonotypes). Not run on LARRY (no receptor). |
 | CoNGA rule | Applied to the shared embedding; CoNGA's own pipeline recomputes 50 principal components on its own normalisation. |
@@ -292,12 +296,12 @@ left in place).
 |---|---|---|
 | **T1 Coverage** | how many of a dataset's clones with ≥ 2 cells (and with exactly 2) a tool represents | a clone that is not represented cannot be studied; most clones in B-cell data are small |
 | **T2 Annotation recovery** | each clone's measured annotation (e.g. fraction of its cells in a sort gate) predicted as the mean over its 10 nearest clones in the tool's representation; R² against the truth, permutation null (values shuffled among clones of the same donor, 199 permutations), and a paired bootstrap interval (1,000 resamples of clones) of the difference to Threadfin; also R² on two-cell clones only | a representation is useful if clones that are close in it are biologically alike in ways that were measured independently |
-| **T3 Annotation recovery with disjoint cells** | as T2, but the representation is built from one half of every clone's cells and the annotation measured on the other half (3 random splits × 2 directions) | rules out that a tool scores well only because the same cells define both the representation and the annotation |
+| **T3 Annotation recovery with disjoint cells** | as T2, but the representation is built from one half of every clone's cells and the annotation measured on the other half (3 random splits × 2 directions; Clonotrace and Benisse: split 0 only; clones with at least two cells in each half) | rules out that a tool scores well only because the same cells define both the representation and the annotation |
 | **T4 Split-half reproducibility** | the same clones represented from two disjoint halves of their cells: Spearman correlation of all clone–clone distances, overlap of the 10 nearest clones, and how often a clone's own half is its best match among all clones (re-identification) | a representation that changes when other cells of the same clone are sampled describes sampling noise, not the clone |
 | **T5 LARRY clone linking** | each day-4 barcode clone's distance to all day-6 clones; is its own barcode's day-6 clone the nearest (top-1), among the 10 nearest (top-10), and mean reciprocal rank | the barcode is ground truth: a good representation of a clone's state should recognise the same clone two days later |
 | **T6 Later fate from early state (LARRY)** | day-2 clone representation predicts the fractions of that barcode's day-6 cells that became neutrophils or monocytes (scored as T2) | Clonotrace's motivating question, with an outcome measured on other cells days later |
 | **T7 Simulation** | repertoires with known programmes, clone sizes and donor shifts (12 datasets, section 6.7): purity of the 10 nearest clones by true programme, separation of "mixture" from "intermediate" clones (AUROC), excess of same-donor neighbours | the only task with a known right answer |
-| **T8 Test calibration and power** | real data with clone labels shuffled (within sample, or across the dataset), 50 replicates each, and with 10–50 % of cells keeping their real label: how often each test reports clonal structure | a test that reports structure in shuffled data cannot be trusted on real data |
+| **T8 Test calibration and power** | real data with clone labels shuffled (within sample, or across the dataset), 50 replicates each, and with 10–50 % of cells keeping their real label (10 replicates per fraction): how often each test reports clonal structure | a test that reports structure in shuffled data cannot be trusted on real data |
 | **T9 Cost** | wall time and peak memory of each tool's representation step | what it takes to run |
 
 **How to read R² here.** R² = 1 − (squared error of the prediction) / (variance of the annotation). With
@@ -480,9 +484,10 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
   cells (clone2vec's default) clone2vec wins slightly more often than it loses; including the two-cell
   clones tips the balance towards Threadfin.
 * **Threadfin vs Clonotrace.** On the clones Clonotrace keeps, its default (revised) distance and Threadfin
-  are mostly indistinguishable; of the nine annotations where they differ (forced to ≥ 2 cells), Threadfin
-  is better on eight (lamina propria and plasma cells in the gut, four in the Plasmodium days 0–14 data,
-  IgA after SARS-CoV-2 infection, LARRY neutrophil fate) and Clonotrace on one (V-region mutation in the NP
+  are mostly indistinguishable; of the eleven annotations where they differ (forced to ≥ 2 cells), Threadfin
+  is better on ten (lamina propria and plasma cells in the gut, GC B cells and plasmablasts in the Plasmodium
+  days 10–42 data, four in the Plasmodium days 0–14 data, IgA after SARS-CoV-2 infection, LARRY neutrophil
+  fate) and Clonotrace on one (V-region mutation in the NP
   dataset); at Clonotrace's default (≥ 10 cells) Threadfin is better on 8 of 26 and never worse.
   Clonotrace's published (unrevised) distance does worse than its revised default.
 * **Threadfin vs Benisse.** Benisse's representation is anchored on receptor sequence, so it carries
@@ -516,8 +521,9 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
 <!-- END:disjoint -->
 
 *Reading.* With the annotation measured on cells that the representation never saw, every score falls
-(median R² about 0.05 instead of 0.3), because each half holds half of a clone's cells and two-cell clones
-contribute one cell to each half. Threadfin, a plain mean of the embedding, clone2vec (forced to ≥ 2 cells)
+(median R² about 0.05 instead of 0.3), because each half holds only half of a clone's cells (the test needs at
+least two cells of a clone in each half, so two-cell clones are not part of it). Threadfin, a plain mean of the
+embedding, clone2vec (forced to ≥ 2 cells)
 and Clonotrace's default distance are close; Clonotrace's published distance, cluster composition, the
 one-cell reduction and Benisse are lower. Among Threadfin's own variants, switching off neighbour smoothing
 (higher on 26 of 35 annotations) and using the mean profile (25 of 35) help here more clearly than with
@@ -551,8 +557,8 @@ sequence, which both halves of a clone share, so its stability says nothing abou
 representations of cell state, Threadfin and the plain mean re-identify a clone from its other half most
 often (median 8 % of clones are their own best match, against under 1 % by chance), clone2vec about 3 %;
 Clonotrace, on the clones it keeps, is close to Threadfin (higher on four of seven datasets, lower on two;
-most differences are a few clones). Representations without donor centring keep more of the
-clone–clone distance structure (higher Spearman correlation), because the differences between donors are
+most differences are a few clones). Threadfin without donor centring keeps more of the
+clone–clone distance structure than Threadfin (Spearman correlation 0.719 vs 0.650), because the differences between donors are
 shared by both halves of every clone.
 
 ![LARRY linking](figures/fig10_larry_linking.png)
@@ -706,8 +712,8 @@ have 2 + Geometric(0.55) cells (half have two cells); "large" clones 10 + Geomet
   cannot — but clone2vec (0.99) and cluster composition (0.96) do it better, and Clonotrace's published
   distance reaches 0.81. With half the clones at two cells no method succeeds (0.39–0.66); two cells cannot
   show whether a clone is a mixture.
-* **Donor shift.** Centring on the donor removes an additive donor shift exactly: Threadfin's results are
-  identical with and without the shift, while the uncentred representations fill their neighbourhoods with
+* **Donor shift.** Centring on the donor removes an additive donor shift: with large clones Threadfin's results
+  are identical with and without the shift (with small clones nearly so: purity 0.626 and 0.623), while the uncentred representations fill their neighbourhoods with
   same-donor clones (same-donor excess 0.43–0.81 for clone2vec, Clonotrace, the mean and Threadfin without
   centring).
   Two cautions: real donor effects are not purely additive, so this is the most favourable case for
@@ -734,7 +740,7 @@ have 2 + Geometric(0.55) cells (half have two cells); "large" clones 10 + Geomet
 
 *Reading.* Centring on the donor is the component that helps annotation recovery most: without it,
 Threadfin loses on 13 annotations — tissue (lamina propria, blood vs lymph node), plasma-cell and GC
-compartments, time since vaccination — and wins on 2. The kernel mean embedding and shrinkage make little
+compartments, time since vaccination — and wins on 1. The kernel mean embedding and shrinkage make little
 difference to these readouts. Neighbour smoothing (each cell averaged with its 15 nearest cells) helps
 slightly for the expression-defined compartments but costs more for properties that differ between
 neighbouring clones — isotype, V-region mutation, bait binding, time since vaccination, LARRY neutrophil
@@ -788,7 +794,8 @@ and nothing beyond 8 cores, because each stage of the clone-map search lays out 
 its clone profiles alone take seconds and grow slightly faster than the number of clones. clone2vec trains
 with PyTorch threads and gains little from more cores, but its time grows slowly with the data. Clonotrace's
 parallel R sessions scale well (2.7 times from 4 to 16), yet its time grows with about the square of the number
-of clones, which is why the full GSE195673 run did not finish in 72 h on 4 sessions. Benisse became slower with
+of clones, which is why the full GSE195673 run did not finish in 72 h (label spreading on 4 sessions, clone
+distances in one). Benisse became slower with
 more threads: its Python and R parts both use multithreaded linear algebra, which oversubscribes the cores;
 limiting it to 1–4 threads (`OMP_NUM_THREADS`) avoids this. Its memory grows with the square of the number of
 clonotypes (35 GB at 5,570 clones).
@@ -982,7 +989,7 @@ python summarise.py                      # results/summary_tables.md and the tab
 `profile_threadfin_run.py <dataset> <n_jobs|none> <out.json>` times every step of the complete Threadfin
 analysis; `make_resource_jobs.py` calls it for the core-count and data-size runs.
 
-On the authors' cluster the full set took about a day of wall time, almost all of it Clonotrace on the
+On the authors' cluster most steps took minutes to hours; Clonotrace took 18–31 h per run on the
 largest datasets.
 
 ---
