@@ -72,14 +72,16 @@ conda activate threadfin
 # 2. Threadfin and Dandelion from PyPI, and Jupyter
 pip install threadfin "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
 
-# 3. make the environment available as a Jupyter kernel (with a fixed hash seed, see below), then open
-#    the notebook
+# 3. make the environment available as a Jupyter kernel (with a fixed hash seed, see below)
 python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)" --env PYTHONHASHSEED 0
-jupyter lab docs/tutorials/05_end_to_end_tutorial.ipynb
+
+# 4. get this notebook (or clone the whole repository: git clone https://github.com/Reynold4k/Threadfin)
+curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/05_end_to_end_tutorial.ipynb
+jupyter lab 05_end_to_end_tutorial.ipynb
 ```
 
-The same environment can be created from [`environment.yml`](environment.yml) with
-`conda env create -f docs/tutorials/environment.yml`.
+The same environment can be created from [`environment.yml`](environment.yml) (download it the same way, or
+from a clone of the repository) with `conda env create -f environment.yml`.
 
 **Why.**
 
@@ -88,6 +90,9 @@ The same environment can be created from [`environment.yml`](environment.yml) wi
 * *`matplotlib<3.9`* is needed by Dandelion 0.5.7, which uses a matplotlib function removed in version 3.9
   (`matplotlib.cm.get_cmap`); Dandelion's package metadata does not say so, so pip would otherwise install a
   newer matplotlib and `import dandelion` would fail. Threadfin itself works with matplotlib 3.7 and later.
+* *`sc-dandelion==0.5.7`* is the version the tutorial and the manuscript used. Dandelion 1.0 (October 2026)
+  calls clones differently (on these data about 7,200 instead of 8,700 clones), so the numbers below would not
+  match; Threadfin warns when it finds Dandelion 1.x.
 * *Python 3.11* is the version the manuscript analyses used; Threadfin supports 3.10–3.14.
 * *Dandelion* is only needed to define clones. If you already have clone ids (one per cell), you can skip it
   and put them in `adata.obs["clone_id"]`.
@@ -124,7 +129,7 @@ with warnings.catch_warnings():               # silence import-time notices of t
         print(f"{module:12s} {version(dist)}")
 
 import threadfin as tf
-assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 0), "this tutorial needs threadfin >= 4.5.0"
+assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 1), "this tutorial needs threadfin >= 4.5.1"
 seed = os.environ.get("PYTHONHASHSEED")
 print(f"\nPYTHONHASHSEED = {seed}" if seed is not None else
       "\nPYTHONHASHSEED is not set: clone calls may differ slightly between runs (see Step 0)")
@@ -229,7 +234,8 @@ Cell barcodes repeat between libraries (the same 16-letter barcode can occur in 
 barcode is prefixed with its tube (`A|AAACCAAAG...-1`). The same prefix is added to the BCR table later, so
 the two can be matched.
 
-**What to look for.** About 8,000–13,000 barcodes per tube, 32,285 genes and 10 hashtags.
+**What to look for.** Between about 5,900 and 19,300 barcodes per tube (tube C, the smallest, has 5,870),
+32,285 genes and 10 hashtags.
 """)
 
 code(r"""
@@ -266,7 +272,9 @@ once, so they must not reach the clone analysis.
 The hashtag *names* also carry the sorting gate of that tube, e.g. `M1_RBD_neg_mCherry_low` means mouse 1,
 RBD-bait-negative, mCherry-low (recently divided).
 
-**What to look for.** Most barcodes should be singlets; a few percent doublets and negatives are normal.
+**What to look for.** Most barcodes should be singlets. With ten hashtags pooled in one lane, 18–34 % of the
+barcodes per tube are doublets or negatives here (tube A: 13,141 singlets, 3,079 doublets, 3,067 negatives);
+that is typical of hashtag-pooled lanes and is why demultiplexing matters. About 36,200 singlets remain.
 """)
 
 code(r"""
@@ -424,8 +432,10 @@ two** cells: a clone seen once has no second cell to compare, so it cannot answe
 share a state. Clones of two or three cells are kept — Threadfin shrinks their profiles instead of
 discarding them (Step 9). Expect about 8,700 clones, of which about 1,880 have ≥ 2 cells (the manuscript
 analysed 1,887), a log line saying that about 5,300 cells without a heavy chain were left without a clone, and
-one saying that about 150 contigs were renamed because their barcode occurs in two tubes. With `PYTHONHASHSEED=0` (Step 0) you get exactly the numbers shown here; without it, a few clones
-more or fewer.
+one saying that about 150 contigs were renamed because their barcode occurs in two tubes. With `PYTHONHASHSEED=0` (Step 0) you get exactly the clone numbers shown here; without it, a few clones
+more or fewer. From Step 9 on, the automatically chosen map settings and the bootstrap stabilities can differ
+slightly between computers (different CPUs and numerical libraries); the clones, the programmes' sizes and the
+conclusions do not.
 """)
 
 code(r"""
@@ -556,7 +566,8 @@ md(r"""
 ## Step 12 — The clone map
 
 **What.** Draw the overview figure, then the clone map coloured by the fraction of each clone's cells that
-had recently divided.
+had recently divided. Panel b of the overview shows the coherence test of `result` (Step 10), not the
+additional test of Step 11.
 
 **How to read a clone map.** One dot is one clone; dot size grows with the number of cells sampled. Clones
 close together have similar *distributions* of cell states. The map is a display: no statistic uses its

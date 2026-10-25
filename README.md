@@ -24,11 +24,12 @@ distribution of its cells' transcriptional states, so that clones, not cells, ca
 
 ```bash
 pip install threadfin                  # Python 3.10–3.14 on Linux, macOS or Windows; no GPU or R needed
-pip install "threadfin[dandelion]"     # also installs Dandelion, to call clones from BCR or TCR contigs
+pip install "threadfin[dandelion]"     # also installs Dandelion (0.5.x), to call clones from BCR or TCR contigs
 ```
 
 Scanpy, Leiden, UMAP and Harmony are installed with it. Dandelion's clone calls depend on Python's hash seed:
-start Python with `PYTHONHASHSEED=0` when clone ids must be identical run after run. The development version
+start Python with `PYTHONHASHSEED=0` when clone ids must be identical run after run. Threadfin is validated with
+Dandelion 0.5.x; Dandelion 1.0 (October 2026) calls clones differently, so the extra installs `sc-dandelion<1`. The development version
 installs with `pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
 
 ### 2. Run
@@ -47,14 +48,15 @@ result = tf.run(
     adata,
     bcr="filtered_contig_annotations.csv",     # Cell Ranger VDJ output or an AIRR .tsv
     donor_key="donor",                         # the individual each cell came from
-    sample_key="sample",                       # the sample or library each cell came from
+    sample_key="sample",                       # the sample or library each cell came from (never a sort gate,
+                                               # tissue or time point you want to compare: those go in test=)
+    n_jobs=8,                                  # CPU cores to use; the result is the same with any number
 )
 ```
 
 `tf.run` calls clones within each donor (Dandelion, paired chains), builds an expression embedding without the
 receptor genes, estimates one profile per clone, tests clonal coherence, lays out the clone map and looks for
-clonal programmes. On the 16 public datasets tested (up to 206,000 cells) it took 1 to 15 minutes with 8 cores
-(`n_jobs=8`).
+clonal programmes. On the 16 public datasets tested (up to 206,000 cells) it took 1 to 15 minutes with 8 cores.
 
 ### 3. Read the results
 
@@ -79,14 +81,17 @@ result.clones.to_csv("clones.csv")      # one row per clone: size, reliability, 
 
 ### Common variations
 
-* **Your own labels** (antigen binding, isotype, sort gate): `tf.run(..., test=["antigen_binding", "isotype"])`.
+* **Your own labels** (antigen binding, isotype, sort gate): any `adata.obs` columns, e.g.
+  `tf.run(..., test=["antigen_binding", "isotype"])`.
 * **Time points or tissues**, to ask whether clones keep their state: `tf.run(..., time_key="timepoint")`.
 * **T cells**: pass the TCR contigs as `bcr`; clones are called on identical beta and alpha junctions.
 * **scirpy users**: pass your scirpy AnnData or MuData as `bcr`.
 * **Clones defined elsewhere**: put them in `adata.obs["clone_id"]` and leave out `bcr`.
 * **Large data**: `n_jobs=-1` uses every CPU core and gives the same result; a million cells take about an hour
   on 8 cores.
-* **No data at hand**: `adata = tf.sim.simulate_repertoire()` makes a repertoire with a known answer.
+* **No data at hand**: `adata = tf.sim.simulate_repertoire()` makes a repertoire with a known answer; it already
+  has clone ids and an embedding, so run it with
+  `tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca")` (tutorial 1).
 
 ### Tutorials
 
@@ -98,7 +103,7 @@ result.clones.to_csv("clones.csv")      # one row per clone: size, reliability, 
 | [4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
 | [5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset (GSE287123) end to end: download, hashtag demultiplexing, clones, embedding, Threadfin and interpretation; executed in a fresh environment before every release (about 6 minutes on 8 cores) |
 
-New in 4.5.0: T cells, scirpy input, `result.methods()` and gene-level summaries of the clone landscape
+4.5.1 pins Dandelion below 1.0 and fixes T-cell contig files passed as a path. New in 4.5.0: T cells, scirpy input, `result.methods()` and gene-level summaries of the clone landscape
 ([changelog](https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md)).
 
 ---

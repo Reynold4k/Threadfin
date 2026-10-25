@@ -2,8 +2,48 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
-## Unreleased
+## 4.5.1 — 2026-10-25
 
+Fixes found by a first-time user following the README and every tutorial in new environments installed from PyPI.
+
+*What this means for you:* if you installed `threadfin[dandelion]` on or after 2026-10-25, check
+`pip show sc-dandelion`. Version 1.0 calls clones differently from the 0.5.x that Threadfin is validated with (on
+the GSE287123 tutorial data: 7,208 instead of 8,736 clones, largest clone 494 instead of 252 cells), and every
+downstream number changes with it. Run `pip install "sc-dandelion<1"`, or upgrade Threadfin, and call the clones
+again. Results obtained with Dandelion 0.5.x are unchanged.
+
+### Fixed
+
+- **Dandelion is pinned below 1.0** in the `[dandelion]` extra (`sc-dandelion>=0.5.7,<1`), and clone calling warns
+  when Dandelion 1.x is installed.
+- **T-cell contig files passed as a path.** `tf.run(adata, bcr="tcr_filtered_contig_annotations.csv", ...)` called
+  the clones and then stopped with "No productive BCR contigs left after filtering": the per-cell summary that is
+  attached after clone calling read B-cell chains only. T-cell files now keep the clone ids only, as DataFrames and
+  scirpy objects already did.
+- **`result.plot()` panel b** showed the most recent coherence test run on the object (in the end-to-end tutorial,
+  the additional test of Step 11) instead of `result.coherence`. `plot.overview` takes `coherence_result=`.
+- **`result.plot()` without programmes** (too few reliably profiled clones) raised a KeyError; it now draws the
+  clone map coloured by clone size and says that there are no programmes.
+- **`tf.define_clones_dandelion`** accepts Cell Ranger's column names (`barcode`, `v_gene`, `j_gene`, `cdr3_nt`)
+  as its docstring said, by passing the table through `tf.read_contigs`.
+- **`clone_labels(..., how="fraction:<level>")`** warns when the level never occurs (for example `IGHA` in a column
+  holding `IGHA1` and `IGHA2`), instead of returning 0 for every clone without a word.
+- The summary warns when fewer than 10 clones have two or more cells, and says "1 cell" rather than "1 cells".
+- The warning "No resolution reached stability" now says it refers to the clone-weighted mean over programmes and
+  that single programmes can still be stable.
+- Docstrings of `clone_profiles`, `profile_association`, `find_programmes` and `embed_clones` no longer contain a
+  mis-indented paragraph of development history.
+
+### Documentation
+
+- README: the simulated-data call works as written (`sample_key="context", basis="X_pca"`); `sample_key` must
+  never be a sort gate, tissue or time point; `n_jobs=8` appears in the example whose timing it describes.
+- Tutorial 2: calling clones yourself uses `tf.read_contigs` and a donor column; how to make an `isotype` column
+  from the heavy-chain constant gene; barcode mismatches are fixed in the contig table, not with `read_bcr`; new
+  troubleshooting rows for Dandelion 1.x and the stability warning.
+- Tutorial 5: how to get the notebook without cloning the repository; the real barcode, doublet and negative counts
+  per tube; map settings and stabilities can differ slightly between computers; panel b shows Step 10's test.
+- Tutorial 1: the link to the installation section works.
 - Threadfin is on PyPI: `pip install threadfin` (with Dandelion: `pip install "threadfin[dandelion]"`). The
   README, the tutorials, the tutorial environment and the install hint shown when Dandelion is missing use it.
 

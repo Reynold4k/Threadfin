@@ -238,15 +238,18 @@ def _legacy_clone_map(adata, color="clone_cluster", size_by="n_cells", size_rang
 # --------------------------------------------------------------------------- statistics panels
 
 
-def coherence(adata, *, ax=None, save=None):
+def coherence(adata, *, result: dict | None = None, ax=None, save=None):
     """Observed clonal ICC next to the within-stratum permutation null.
 
     Two bars: the share of variance explained by clone identity, and the same
     statistic after shuffling clone labels within strata (whisker = 95% of
     permutations). The excess of the first over the second is the clonal
     signal beyond sampling.
+
+    ``result`` is a :func:`threadfin.tl.clonal_coherence` result to draw; by default the most recent one
+    stored in ``adata.uns``.
     """
-    res = adata.uns.get("threadfin", {}).get("coherence")
+    res = result if result is not None else adata.uns.get("threadfin", {}).get("coherence")
     if res is None:
         raise ValueError("Run threadfin.tl.clonal_coherence() first.")
     fig, ax = _ax(ax, figsize=(2.2, 2.2))
@@ -424,28 +427,46 @@ def heritability(table: pd.DataFrame, *, highlight: dict | None = None, n_label:
     return _finish(fig, save)
 
 
-def overview(adata, *, state_key: str | None = None, save=None):
-    """Four-panel summary of a :func:`threadfin.run` result."""
+def overview(adata, *, state_key: str | None = None, coherence_result: dict | None = None, save=None):
+    """Four-panel summary of a :func:`threadfin.run` result.
+
+    ``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
+    ``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
+    ``adata.uns``.
+    """
     set_style()
     fig = plt.figure(figsize=(7.2, 5.2))
     gs = fig.add_gridspec(2, 3, width_ratios=[1.25, 1, 1], hspace=0.55, wspace=0.6)
     sub = fig.add_subfigure(gs[:, 0])
-    clone_map(adata, fig=sub, ncols=2, facet=True)
-    sub.suptitle("a  clonal programmes on the clone map", x=0.02, ha="left", color=INK, fontweight="bold")
+    table = _clone_table(adata)
+    summ = adata.uns.get("threadfin", {}).get("programmes", {}).get("summary")
+    has_programmes = summ is not None and len(summ) > 0 and table is not None and "clone_programme" in table
+    if has_programmes:
+        clone_map(adata, fig=sub, ncols=2, facet=True)
+        sub.suptitle("a  clonal programmes on the clone map", x=0.02, ha="left", color=INK, fontweight="bold")
+    elif table is not None and "x" in table.columns:
+        # no programmes (too few reliably profiled clones): the map itself, coloured by clone size
+        clone_map(adata, "n_cells", ax=sub.add_subplot(1, 1, 1))
+        sub.suptitle("a  clone map (no programmes)", x=0.02, ha="left", color=INK, fontweight="bold")
     ax_b = fig.add_subplot(gs[0, 1])
-    coherence(adata, ax=ax_b)
+    coherence(adata, result=coherence_result, ax=ax_b)
     ax_c = fig.add_subplot(gs[0, 2])
-    stability(adata, ax=ax_c)
     ax_d = fig.add_subplot(gs[1, 1:])
-    if state_key is not None:
-        programme_composition(adata, state_key, ax=ax_d)
-        ax_d.set_title("programme composition by cell state", color=INK)
+    if not has_programmes:
+        for ax in (ax_c, ax_d):
+            ax.axis("off")
+            ax.text(0.5, 0.5, "no clonal programmes:\ntoo few reliably profiled clones", ha="center",
+                    va="center", color=INK_2, transform=ax.transAxes)
     else:
-        summ = adata.uns["threadfin"]["programmes"]["summary"]
-        ax_d.bar(range(len(summ)), summ["n_clones"], width=0.6, color=PALETTE[0])
-        ax_d.set_xticks(range(len(summ)), [str(i) for i in summ.index])
-        ax_d.set_ylabel("clones")
-        ax_d.set_title("programme sizes", color=INK)
+        stability(adata, ax=ax_c)
+        if state_key is not None:
+            programme_composition(adata, state_key, ax=ax_d)
+            ax_d.set_title("programme composition by cell state", color=INK)
+        else:
+            ax_d.bar(range(len(summ)), summ["n_clones"], width=0.6, color=PALETTE[0])
+            ax_d.set_xticks(range(len(summ)), [str(i) for i in summ.index])
+            ax_d.set_ylabel("clones")
+            ax_d.set_title("programme sizes", color=INK)
     for ax, lab, dx in ((ax_b, "b", -0.28), (ax_c, "c", -0.28), (ax_d, "d", -0.12)):
         ax.text(dx, 1.12, lab, transform=ax.transAxes, fontweight="bold", color=INK,
                 fontsize=mpl.rcParams["font.size"] + 2)

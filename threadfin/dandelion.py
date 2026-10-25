@@ -30,7 +30,7 @@ a figure can state which definition produced it.
 
 Dandelion is an optional dependency::
 
-    pip install "threadfin[dandelion]"        # or: pip install sc-dandelion "matplotlib<3.9"
+    pip install "threadfin[dandelion]"        # or: pip install "sc-dandelion<1" "matplotlib<3.9"
 
 Dandelion 0.5.7 imports ``matplotlib.cm.get_cmap``, which matplotlib 3.9 removed, but its package metadata
 does not pin matplotlib, so the extra pins ``matplotlib < 3.9`` for it.
@@ -159,10 +159,20 @@ def _require_dandelion():
     except ImportError as exc:  # pragma: no cover - exercised only without the optional dependency
         raise ImportError(
             "Clone calling needs the Dandelion package: pip install \"threadfin[dandelion]\" (or: pip install "
-            "sc-dandelion \"matplotlib<3.9\"; "
+            "\"sc-dandelion<1\" \"matplotlib<3.9\"; "
             "Dandelion 0.5.7 needs matplotlib < 3.9 but does not say so). Alternatively call clones elsewhere and "
             "put the ids in adata.obs['clone_id']."
         ) from exc
+    major = _dandelion_version(ddl).split(".")[0]
+    if major.isdigit() and int(major) >= 1:
+        from . import __version__
+
+        warnings.warn(
+            f"sc-dandelion {_dandelion_version(ddl)} is installed; Threadfin {__version__} is validated with "
+            "sc-dandelion 0.5.x. Dandelion 1.0 calls clones differently (on the GSE287123 tutorial data: 7,208 "
+            "instead of 8,736 clones, largest clone 494 instead of 252 cells), so results will not match the "
+            "documentation or the manuscript. Install the validated version with: pip install \"sc-dandelion<1\"",
+            UserWarning, stacklevel=3)
     return ddl
 
 
@@ -317,6 +327,10 @@ def define_clones_dandelion(
     sessions, see the module notes).
     """
     required = [cell_key if c == "cell_id" else c for c in REQUIRED]
+    if any(c not in contigs.columns for c in required) and cell_key == "cell_id":
+        # Cell Ranger's filtered_contig_annotations.csv names the columns barcode, v_gene, j_gene, cdr3_nt;
+        # read_contigs renames them to AIRR names (and keeps is_cell / high_confidence contigs only)
+        contigs = read_contigs(contigs)
     missing = [c for c in required if c not in contigs.columns]
     if missing:
         raise ValueError(f"contigs is missing {missing}; this function needs a contig-level AIRR table "

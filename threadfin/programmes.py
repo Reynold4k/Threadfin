@@ -356,9 +356,8 @@ def embed_clones(
     This is the clone map the rest of the package is built around, and it is deliberately separate from
     :func:`find_programmes`. Programme discovery is a clustering problem and needs reasonably estimated
     profiles, so it keeps its ``min_reliability`` gate. The map is a *display* of the clones that exist,
-    and filtering it by reliability throws away the data the map is meant to show: on GSE287123 the 0.5
-    gate removes 75 % (RBD) and 90 % (NP-OVA) of profiled clones, and on GSE246382 it removes all of
-    them, which is why that dataset appeared to have no clone map at all.
+    and filtering it by reliability would throw away the data the map is meant to show (a floor of 0.5
+    removes 75-100 % of the profiled clones in the germinal-centre datasets of the manuscript).
 
     The map does not change any statistic: profiles, coherence, programmes and tests are computed in
     profile space, never on the map.
@@ -483,13 +482,11 @@ def find_programmes(
         weighted run recovers the single true programme.
     min_reliability
         Reliability floor for clustering; ``0.0`` (the default) clusters every profiled clone.
-        Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
-    the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
-    population mean by the variance-component model, so its influence is down-weighted in proportion to
-    how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
-    twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
-    profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
-    though it had no clone structure when its map separates the sorted gate at p < 0.001.
+        Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
+        few cells is pulled towards the population mean, so its influence is down-weighted in
+        proportion to how little was seen. A reliability floor on top of that discards the same
+        information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
+        75-100 % of the profiled clones.
     n_boot
         Bootstrap replicates for stability (0 disables stability, which is
         only allowed with a fixed ``resolution``).
@@ -601,9 +598,10 @@ def find_programmes(
         elif not multi.empty:
             best = multi.sort_values("stability_weighted", ascending=False).iloc[0]
             if boot_graphs:     # without bootstrap replicates there is no stability to fall short of
-                caution = (f"No resolution reached stability {stability_threshold}; using the most stable "
-                           f"partition (stability {best['stability_weighted']:.2f}). Interpret programmes "
-                           "cautiously.")
+                caution = (f"No resolution reached a clone-weighted mean stability of {stability_threshold} "
+                           f"across programmes; using the most stable partition (mean stability "
+                           f"{best['stability_weighted']:.2f}). Single programmes can still be stable: judge "
+                           "each by its own stability (result.programmes['stability']).")
         else:
             best = scan.iloc[0]
         chosen = float(best["resolution"])

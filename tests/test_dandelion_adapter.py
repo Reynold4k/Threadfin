@@ -279,3 +279,12 @@ def test_receptor_data_can_come_from_a_scirpy_object():
     t = read_contigs(adata)
     assert len(t) == 5 and set(t["cell_id"]) == {"cell0", "cell1", "cell2"}
     assert {"v_call", "j_call", "junction", "locus"} <= set(t.columns)
+
+
+def test_dandelion_1x_is_flagged(monkeypatch):
+    """sc-dandelion 1.0 calls clones differently from the validated 0.5.x; using it must not be silent."""
+    pytest.importorskip("dandelion")
+    import threadfin.dandelion as tfd
+    monkeypatch.setattr(tfd, "_dandelion_version", lambda ddl: "1.0.0")
+    with pytest.warns(UserWarning, match="validated with sc-dandelion 0.5.x"):
+        tfd._require_dandelion()

@@ -31,11 +31,11 @@ Threadfin therefore describes each clone by the distribution of its cells, and c
 > Treating cells as independent makes large clones dominate and makes P values far too small; Threadfin uses
 > the clone as the unit of every test.
 
-Check your installation first (see the [README](../../README.md#installation)):
+Check your installation first (see the [README](../../README.md#1-install)):
 
 ```python
 import threadfin as tf
-print(tf.__version__)          # 4.5.0 or later
+print(tf.__version__)          # 4.5.1 or later
 ```
 
 ---

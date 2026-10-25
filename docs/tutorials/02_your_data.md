@@ -37,7 +37,8 @@ complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_t
 Clones are defined with Dandelion's paired heavy- and light-chain definition (Suo et al. 2024), which needs
 the `sc-dandelion` package. Dandelion 0.5.7 uses a matplotlib function that was removed in matplotlib 3.9,
 so install both together: `pip install "threadfin[dandelion]"`
-or `pip install sc-dandelion "matplotlib<3.9"` (Threadfin works with matplotlib 3.7 and later). If you prefer,
+or `pip install "sc-dandelion>=0.5.7,<1" "matplotlib<3.9"` (Threadfin works with matplotlib 3.7 and later; it is
+validated with Dandelion 0.5.x, and Dandelion 1.0 calls clones differently). If you prefer,
 define clones in a separate environment or with another clone caller and pass the clone ids directly
 (section 6).
 
@@ -235,8 +236,19 @@ adata.obs["clone_id"] = ids.reindex(adata.obs_names).to_numpy()
 result = tf.run(adata, donor_key="donor", sample_key="sample")
 ```
 
-Clone ids must not be shared across donors. With Dandelion, `tf.define_clones_dandelion(contigs,
-donor_key="donor")` prefixes the donor to every id.
+Clone ids must not be shared across donors. To call them yourself with Threadfin's settings (for example to
+inspect or save them before the analysis), give every contig its donor and let `tf.define_clones_dandelion`
+prefix the donor to every id:
+
+```python
+contigs = tf.read_contigs(contigs)                    # a path or the table of section 4; AIRR column names
+contigs = contigs[contigs["cell_id"].isin(adata.obs_names)]
+contigs["donor"] = contigs["cell_id"].map(adata.obs["donor"].astype(str))
+ids = tf.define_clones_dandelion(contigs, donor_key="donor")      # one clone id per cell
+adata.obs["clone_id"] = ids.reindex(adata.obs_names).to_numpy()
+result = tf.run(adata, donor_key="donor", sample_key="sample")
+print(result.methods(ids))                            # describes the clone calling too
+```
 
 > **Why paired chains?** Defining clones on the heavy chain alone merges unrelated cells that happen to use
 > similar heavy chains. In the published datasets analysed with Threadfin, adding the light chain split
@@ -248,7 +260,14 @@ donor_key="donor")` prefixes the donor to every id.
 ## 7. Your own labels
 
 Anything measured per cell can be tested against the clones: antigen binding, isotype, mutation load, sort
-gate, tissue or time point.
+gate, tissue or time point. `test=` takes columns of `adata.obs`, so add them before the run. Isotype, for
+example, comes from the constant gene of the heavy-chain contig (Cell Ranger's `c_gene`: IGHM, IGHA1, IGHG2B …);
+the first four letters give the class:
+
+```python
+heavy = contigs[contigs["chain"] == "IGH"].drop_duplicates("barcode").set_index("barcode")
+adata.obs["isotype"] = heavy["c_gene"].reindex(adata.obs_names).str[:4].to_numpy()   # IGHM, IGHA, IGHG ...
+```
 
 ```python
 result = tf.run(adata, bcr=contigs, donor_key="donor", sample_key="sample",
@@ -265,7 +284,8 @@ Labels are shuffled among the clones of each donor, so a label that differs only
 appear clonal.
 
 * A **categorical label** (isotype) is summarised per clone as its majority value; use
-  `tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")` to test the fraction of one level.
+  `tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")` to test the fraction of one level (the
+  level must be spelled as in the column; Threadfin warns when it never occurs).
 * A **numeric label** (mutation frequency) is summarised as the clone mean.
 * Labels **constant within a donor** (age, sex, disease group) cannot be separated from other differences
   between donors; compare donors for those.
@@ -297,15 +317,17 @@ of a paper. Check it against your own description of the data.
 
 | Message or symptom | Cause | Fix |
 |---|---|---|
-| `No barcode of the receptor data matches adata.obs_names` | the barcode formats differ (prefix, `-1` suffix) | harmonise them as in section 4; `tf.read_bcr(path, barcode_prefix=..., barcode_suffix=...)` helps |
+| `No barcode of the receptor data matches adata.obs_names` | the barcode formats differ (prefix, `-1` suffix) | give the `barcode` (or AIRR `cell_id`) column of the contig table the same prefix or suffix as `adata.obs_names`, as in section 4, and pass the table |
 | `A per-cell BCR table cannot be used for clone definition` | a one-row-per-cell table was passed | pass the contig-level table (`filtered_contig_annotations.csv` or AIRR) |
 | `Only N clone(s) have two or more cells` | too few cells per clone were captured, or BCRs were not attached | check the match rate (section 4); check that clones were called within donors; a dataset with very few repeated clones cannot be profiled |
 | `N clone id(s) occur in more than one donor` | clone ids were not made donor-private | prefix the donor (the message shows the one-line fix), or call clones with `donor_key` |
 | `Counts contain NaN, infinite, or negative values` | `adata.X` holds normalised or scaled data | put raw counts in `X` (or `layers["counts"]` with `counts_layer=`), or pass your own embedding with `basis=` |
 | `'X_...' has NaN or infinite values in N of M cells` | your own embedding (`basis=`) has missing values | drop those cells first; the message shows the line of code |
 | `'donor' not found in adata.obs` (or any other column) | a column name is misspelled or missing | the message names the column; check `adata.obs.columns` |
-| `Clone calling needs the Dandelion package` | Dandelion is not installed | `pip install sc-dandelion "matplotlib<3.9"`, or pass clone ids yourself (section 6) |
+| `Clone calling needs the Dandelion package` | Dandelion is not installed | `pip install "threadfin[dandelion]"`, or pass clone ids yourself (section 6) |
+| `sc-dandelion 1.x is installed; Threadfin … is validated with sc-dandelion 0.5.x` | Dandelion 1.0 calls clones differently | `pip install "sc-dandelion<1"`; results then match the documentation |
 | `cannot import name 'get_cmap' from 'matplotlib.cm'` | Dandelion 0.5.7 with matplotlib ≥ 3.9 | `pip install "matplotlib<3.9"` |
+| `No resolution reached a clone-weighted mean stability of 0.75` | the programmes are, on average, less stable than the threshold | judge each programme by its own stability (`result.programmes`); the summary marks those below 0.6 as unstable |
 | coherence high but the shuffled value is also high (> 10 %) | samples differ strongly in composition | expected; Threadfin accounts for it — make sure `sample_key` is set |
 | a programme is dominated by one donor | donors differ in their sampled composition, and centring shifts all clones of a donor together | look at programmes by donor; compare with `sample_key=None` (no centring); see Methods, "centring on the sampling context" |
 

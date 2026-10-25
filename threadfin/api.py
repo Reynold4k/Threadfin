@@ -150,8 +150,14 @@ class ThreadfinResult:
         vc = VarianceComponents(np.asarray(prof_vc["sigma2"]), np.asarray(prof_vc["tau2"]),
                                 prof_vc["n0"], prof_vc["n_clones"], prof_vc["n_cells"],
                                 np.zeros(len(prof_vc["tau2"])))
+        n_half = vc.min_cells_for(0.5)
         lines.append(f"   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at "
-                     f"{vc.min_cells_for(0.5)} cells. No clone is filtered out on reliability.")
+                     f"{n_half} {'cell' if n_half == 1 else 'cells'}. No clone is filtered out on reliability.")
+        n_profiled = int(prof_vc["n_clones"])
+        if n_profiled < 10:
+            lines.append(f"   Caution: only {n_profiled} clones have two or more cells. Estimates from so few clones "
+                         "are unstable; Threadfin's power analyses need about 10 clones to detect a clonal ICC "
+                         "of 0.1, and more for weaker effects.")
         prog = self.programmes
         lines += ["", "2. Which clones behave alike? (clonal programmes)"]
         if prog.empty:
@@ -408,7 +414,7 @@ class ThreadfinResult:
         """Overview figure (clone map, coherence test, programme composition, stability)."""
         from .plotting import overview
 
-        return overview(self.adata, state_key=self.settings.get("state_key"), save=save)
+        return overview(self.adata, state_key=self.settings.get("state_key"), coherence_result=self.coherence, save=save)
 
 
 # --------------------------------------------------------------------------- the pipeline
@@ -553,7 +559,7 @@ def run(
             raise ValueError(
                 "No barcode of the receptor data matches adata.obs_names. Check that both use the same barcode "
                 "format; for multi-sample data, harmonise the barcodes first (see "
-                "barcode_prefix/barcode_suffix in threadfin.read_bcr())."
+                "tutorial 2, section 4: prefix the cell_id column of the contig table)."
             )
         if donor_key is not None:
             donor_of_cell = pd.Series(adata.obs[donor_key].astype(str).to_numpy(),
@@ -568,7 +574,9 @@ def run(
                 "Matched receptor contigs produced no clone calls. Each retained cell needs "
                 "heavy-chain (TCR: beta or delta) V and J calls plus a non-empty junction/CDR3 sequence."
             )
-        if not isinstance(bcr, (str, Path)):          # a DataFrame or a scirpy object: clone ids only
+        if not isinstance(bcr, (str, Path)) or receptor != "BCR":
+            # a DataFrame or a scirpy object, or T-cell contigs (read_bcr summarises B-cell chains only):
+            # clone ids only
             table = ids.rename(clone_key).to_frame()
             table.index.name = "barcode"
         else:

@@ -14,6 +14,8 @@ Two principles run through this module:
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -133,7 +135,14 @@ def clone_labels(
         out = grouped.mean() if how == "mean" else grouped.median()
     elif how.startswith("fraction:"):
         level = how.split(":", 1)[1]
-        out = df[label_key].astype(str).eq(level).groupby(df["_clone"]).mean()
+        values = df[label_key].astype(str)
+        if not values.eq(level).any():
+            similar = sorted(v for v in values.unique() if v.startswith(level))[:6]
+            hint = (f" Levels starting with '{level}': {', '.join(similar)}; to pool them, add a column such as "
+                    f"adata.obs['{label_key}'].str[:{len(level)}] and use that.") if similar else ""
+            warnings.warn(f"'{level}' never occurs in adata.obs['{label_key}'], so its fraction is 0 for every "
+                          f"clone.{hint}", UserWarning, stacklevel=2)
+        out = values.eq(level).groupby(df["_clone"]).mean()
     elif how == "majority":
         def _maj(s):
             vc = s.astype(str).value_counts(normalize=True)
@@ -301,13 +310,11 @@ def profile_association(
         ``"auto"`` uses the donor when available.
     min_reliability
         Reliability floor; ``0.0`` (the default) uses every profiled clone.
-        Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
-    the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
-    population mean by the variance-component model, so its influence is down-weighted in proportion to
-    how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
-    twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
-    profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
-    though it had no clone structure when its map separates the sorted gate at p < 0.001.
+        Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
+        few cells is pulled towards the population mean, so its influence is down-weighted in
+        proportion to how little was seen. A reliability floor on top of that discards the same
+        information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
+        75-100 % of the profiled clones.
 
     Returns
     -------

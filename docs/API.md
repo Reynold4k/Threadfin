@@ -1,4 +1,4 @@
-# API reference (threadfin 4.5.0)
+# API reference (threadfin 4.5.1)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -738,13 +738,11 @@ min_cells
     are 75 to 98 % of clones in these deposits, so including them turns the clone embedding back
     into the cell UMAP it is supposed to summarise. Set 1 to include them; they are then drawn as
     triangles rather than circles so a reader can see how much of a map rests on a single cell.
-    Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
-the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
-population mean by the variance-component model, so its influence is down-weighted in proportion to
-how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
-twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
-profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
-though it had no clone structure when its map separates the sorted gate at p < 0.001.
+    Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
+    few cells is pulled towards the population mean, so its influence is down-weighted in
+    proportion to how little was seen. A reliability floor on top of that discards the same
+    information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
+    75-100 % of the profiled clones.
 
 Returns
 -------
@@ -880,9 +878,8 @@ Lay the clone profiles out in two dimensions — **every** profiled clone, by de
 This is the clone map the rest of the package is built around, and it is deliberately separate from
 :func:`find_programmes`. Programme discovery is a clustering problem and needs reasonably estimated
 profiles, so it keeps its ``min_reliability`` gate. The map is a *display* of the clones that exist,
-and filtering it by reliability throws away the data the map is meant to show: on GSE287123 the 0.5
-gate removes 75 % (RBD) and 90 % (NP-OVA) of profiled clones, and on GSE246382 it removes all of
-them, which is why that dataset appeared to have no clone map at all.
+and filtering it by reliability would throw away the data the map is meant to show (a floor of 0.5
+removes 75-100 % of the profiled clones in the germinal-centre datasets of the manuscript).
 
 The map does not change any statistic: profiles, coherence, programmes and tests are computed in
 profile space, never on the map.
@@ -1003,13 +1000,11 @@ weight_by_reliability
     weighted run recovers the single true programme.
 min_reliability
     Reliability floor for clustering; ``0.0`` (the default) clusters every profiled clone.
-    Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
-the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
-population mean by the variance-component model, so its influence is down-weighted in proportion to
-how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
-twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
-profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
-though it had no clone structure when its map separates the sorted gate at p < 0.001.
+    Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
+    few cells is pulled towards the population mean, so its influence is down-weighted in
+    proportion to how little was seen. A reliability floor on top of that discards the same
+    information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
+    75-100 % of the profiled clones.
 n_boot
     Bootstrap replicates for stability (0 disables stability, which is
     only allowed with a fixed ``resolution``).
@@ -1344,13 +1339,11 @@ strata_key
     ``"auto"`` uses the donor when available.
 min_reliability
     Reliability floor; ``0.0`` (the default) uses every profiled clone.
-    Threadfin does not filter clones. Every clone, and every cell in it, is measured data, and
-the profiles are already **shrunk**: a clone seen in few cells has its profile pulled towards the
-population mean by the variance-component model, so its influence is down-weighted in proportion to
-how little was seen. Cutting on reliability *on top of* that shrinkage discards the same information
-twice, and it discards it silently — on GSE287123 a 0.5 floor removes 75 % (RBD) and 90 % (NP-OVA) of
-profiled clones, and on GSE246382 it removes all of them, which is how that dataset came to look as
-though it had no clone structure when its map separates the sorted gate at p < 0.001.
+    Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
+    few cells is pulled towards the population mean, so its influence is down-weighted in
+    proportion to how little was seen. A reliability floor on top of that discards the same
+    information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
+    75-100 % of the profiled clones.
 
 Returns
 -------
@@ -1541,7 +1534,7 @@ Falls back to the v3 layout (``uns['threadfin']['clone_map']`` from
 ### tf.pl.coherence
 
 ```python
-tf.pl.coherence(adata, *, ax=None, save=None)
+tf.pl.coherence(adata, *, result: 'dict | None' = None, ax=None, save=None)
 ```
 
 ```text
@@ -1551,6 +1544,9 @@ Two bars: the share of variance explained by clone identity, and the same
 statistic after shuffling clone labels within strata (whisker = 95% of
 permutations). The excess of the first over the second is the clonal
 signal beyond sampling.
+
+``result`` is a :func:`threadfin.tl.clonal_coherence` result to draw; by default the most recent one
+stored in ``adata.uns``.
 ```
 
 ### tf.pl.programme_composition
@@ -1630,11 +1626,16 @@ Genes ranked by clonal ICC; optional gene sets highlighted (<= 3 sets).
 ### tf.pl.overview
 
 ```python
-tf.pl.overview(adata, *, state_key: 'str | None' = None, save=None)
+tf.pl.overview(adata, *, state_key: 'str | None' = None, coherence_result: 'dict | None' = None,
+    save=None)
 ```
 
 ```text
 Four-panel summary of a :func:`threadfin.run` result.
+
+``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
+``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
+``adata.uns``.
 ```
 
 ### tf.pl.cells
