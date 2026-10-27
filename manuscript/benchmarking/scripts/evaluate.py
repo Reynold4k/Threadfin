@@ -594,6 +594,13 @@ def time_file(path):
     return wall, rss
 
 
+def failed_attempts(info):
+    """graph_k settings that failed before a Clonotrace run completed; R's jsonlite writes a single attempt as a string
+    and no attempt as "none"."""
+    a = info.get("graph_k_failed_attempts", [])
+    return [] if a in ("none", None) else [a] if isinstance(a, str) else list(a)
+
+
 def coverage_rows(datasets):
     rows = []
     for ds in datasets:
@@ -615,9 +622,11 @@ def coverage_rows(datasets):
                         info["reason"] += " A rerun with more workers was still running when this table was made."
                 else:
                     info = {"status": "not run", "reason": not_run_reason(ds, m, sizes)}
-            elif info.get("graph_k_failed_attempts"):
-                tried = ", ".join(a.split(":")[0] for a in info["graph_k_failed_attempts"])
-                info["reason"] = (f"completed only with graph_k={info['graph_k_used']}: the default and the next settings "
+            elif failed_attempts(info):
+                att = failed_attempts(info)
+                tried = ", ".join(a.split(":")[0] for a in att)
+                which = "the default setting" if len(att) == 1 else "the default and the next settings"
+                info["reason"] = (f"completed only with graph_k={info['graph_k_used']}: {which} "
                                   f"({tried}) gave a cell graph whose clone-bearing parts were disconnected")
             rows.append({"dataset": ds, "method": m, "status": info.get("status"), "reason": info.get("reason", ""),
                          "n_clones_represented": n, "n_clones_ge2": int((sizes >= 2).sum()),
@@ -740,7 +749,7 @@ def run_status_rows(datasets):
                     continue
                 rows.append({"dataset": ds, "variant": variant, "tool_run": sub, "status": info.get("status"),
                              "graph_k_used": info.get("graph_k_used"),
-                             "graph_k_failed_attempts": len(info.get("graph_k_failed_attempts", [])),
+                             "graph_k_failed_attempts": len(failed_attempts(info)),
                              "seconds": float(sum(info.get("seconds", {}).values())) if info.get("seconds") else None,
                              "reason": str(info.get("reason", ""))[:300]})
     return rows

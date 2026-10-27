@@ -30,7 +30,7 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "clone2vec, forced to clones ≥ 2 cells",Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 "clone2vec, forced to clones ≥ 2 cells",Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 "clone2vec, forced to clones ≥ 2 cells",Datasets it could analyse,similar,11 of 11,,11.0,
-"clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 5 worse,"5 better, 5 worse, 35 annotations",35.0,1.0
+"clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 6 worse,"5 better, 6 worse, 35 annotations",35.0,1.0
 "clone2vec, forced to clones ≥ 2 cells",… when traits come from other cells,similar,17 better 12 worse,29 annotations,29.0,0.45825831964612007
 "clone2vec, forced to clones ≥ 2 cells",Recognises a clone from other cells,worse,3.6 % vs 11 %,10 datasets,10.0,0.001953125
 "clone2vec, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.004, 0.017]",1251.0,
@@ -55,20 +55,20 @@ Threadfin,Runs that ended with- out help,ref,77 of 77,,,
 "Clonotrace, its default (clones ≥ 10 cells)",Gain from 16 CPU cores,better,9.0× faster Threadfin 2.0×,Threadfin 2.0×,,
 "Clonotrace, its default (clones ≥ 10 cells)",Slow-down as data grow,worse,164× time for 10× clones,exponent 2.22 vs 1.29,,
 "Clonotrace, its default (clones ≥ 10 cells)",Runs that ended with- out help,worse,19 of 21 2 re-run,2 re-run,21.0,
-"Clonotrace, forced to clones ≥ 2 cells",Share of clones it describes,worse,64 %,"per dataset: 64 %, 62 %, 67 %, 60 %, 52 %, 53 %, 0 %, 73 %, 69 %, 72 %, 76 %",11.0,
-"Clonotrace, forced to clones ≥ 2 cells",Keeps two-cell clones,worse,32 %,"per dataset: 16 %, 25 %, 23 %, 39 %, 42 %, 45 %, 0 %, 32 %, 55 %, 61 %, 16 %",11.0,
-"Clonotrace, forced to clones ≥ 2 cells",Datasets it could analyse,worse,10 of 11 1 stopped,1 stopped,11.0,
-"Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,1 better 5 worse,"1 better, 5 worse, 29 annotations",29.0,0.21875
+"Clonotrace, forced to clones ≥ 2 cells",Share of clones it describes,worse,64 %,"per dataset: 64 %, 62 %, 67 %, 60 %, 52 %, 53 %, 64 %, 73 %, 69 %, 72 %, 76 %",11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Keeps two-cell clones,worse,32 %,"per dataset: 16 %, 25 %, 23 %, 39 %, 42 %, 45 %, 22 %, 32 %, 55 %, 61 %, 16 %",11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Datasets it could analyse,similar,11 of 11,,11.0,
+"Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,2 better 7 worse,"2 better, 7 worse, 35 annotations",35.0,0.1796875
 "Clonotrace, forced to clones ≥ 2 cells",… when traits come from other cells,similar,12 better 9 worse,21 annotations,21.0,0.6636238098144531
 "Clonotrace, forced to clones ≥ 2 cells",Recognises a clone from other cells,similar,8.9 % vs 14 %,7 datasets,7.0,0.9375
 "Clonotrace, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.039 vs 0.030,"95 % CI of difference [0.003, 0.015]",1251.0,
 "Clonotrace, forced to clones ≥ 2 cells",Finds planted clone groups,worse,0.51 vs 0.61,6 simulated datasets,6.0,0.03125
 "Clonotrace, forced to clones ≥ 2 cells",Tells mixed from in-between clones,na,—,,,
-"Clonotrace, forced to clones ≥ 2 cells",Run time,worse,"≥ 286× slower, 1 stopped",5 datasets,5.0,
-"Clonotrace, forced to clones ≥ 2 cells",Peak memory,worse,2.0× more,4 datasets,4.0,
+"Clonotrace, forced to clones ≥ 2 cells",Run time,worse,286× slower,5 datasets,5.0,
+"Clonotrace, forced to clones ≥ 2 cells",Peak memory,worse,2.1× more,5 datasets,5.0,
 "Clonotrace, forced to clones ≥ 2 cells",Gain from 16 CPU cores,better,9.0× faster Threadfin 2.0×,Threadfin 2.0×,,
 "Clonotrace, forced to clones ≥ 2 cells",Slow-down as data grow,worse,164× time for 10× clones,exponent 2.22 vs 1.29,,
-"Clonotrace, forced to clones ≥ 2 cells",Runs that ended with- out help,worse,"26 of 29 1 stopped, 2 re-run",1 stopped; 2 re-run,29.0,
+"Clonotrace, forced to clones ≥ 2 cells",Runs that ended with- out help,worse,26 of 29 3 re-run,3 re-run,29.0,
 Benisse,Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 11 %, 100 %, 100 %",9.0,
 Benisse,Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 0 %, 100 %, 100 %",9.0,
 Benisse,Datasets it could analyse,worse,9 of 11 2 without BCR,2 without BCR,11.0,

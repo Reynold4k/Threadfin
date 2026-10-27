@@ -58,8 +58,8 @@ s43588-026-00977-z, Fig. 4): 1 = yes, 0.5 = partly, 0 = no, with the evidence fo
   Clonotrace gains more from extra cores (2.7 times faster from 4 to 16 cores, against Threadfin's 2.0 from 1
   to 16).
 * **Cost and reliability.** clone2vec takes about 30 times and Benisse 33 times Threadfin's time for the
-  clone representation; Clonotrace 290–2,400 times. One Clonotrace run (11,141 clones) was stopped after
-  72 h and four needed a larger cell graph to finish; clone2vec at its default failed on 12 of 77 runs (small
+  clone representation; Clonotrace 290–2,400 times (101 h on 32 workers for
+  its largest run, 11,141 clones). Five Clonotrace runs needed a larger cell graph to finish; clone2vec at its default failed on 12 of 77 runs (small
   inputs) and Benisse on 1 of 27. Benisse becomes slower with more cores (2.9 times slower on 16 cores than on
   one) and needed 35 GB for 5,570 clones. The complete Threadfin analysis — profiles, test, clone map,
   programmes — takes 18 s to 9.5 min in one process and under 2.3 GB (section 6.9).
@@ -134,9 +134,9 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   were sampled, and tests them at the right error rate. The statement "only Threadfin can use two-cell
   clones" is true of the tools' **defaults**, not of what the data allow.
 * **No representation is uniformly best at recovering measured annotations.** Scored on the same clones,
-  clone2vec forced to ≥ 2 cells beat Threadfin on 5 of 41 annotations and lost on 10; at its own
+  clone2vec forced to ≥ 2 cells beat Threadfin on 5 of 41 annotations and lost on 11; at its own
   default (≥ 3 cells) it won 10 and lost 7. A plain mean of the embedding won 7 and lost 10. Clonotrace
-  won 1 and lost 10 of 34 when forced to ≥ 2 cells, and won none and lost 8 of 26 at its default (≥ 10
+  won 2 and lost 13 of 41 when forced to ≥ 2 cells, and won none and lost 8 of 26 at its default (≥ 10
   cells), with its default distance. Benisse lost 22 of 31, but won
   the three annotations that are properties of the receptor sequence (RBD-bait binding, V-region mutation,
   the W33L affinity mutation) — the question it was built for.
@@ -161,9 +161,9 @@ The usability checklist as a table (evidence for every entry in `scripts/usabili
   simulated donor effect is purely additive, the easiest possible case, and centring itself creates some
   same-donor structure when donors differ in clone composition.
 * **Cost.** Building Threadfin's clone profiles took 0.2–43 s and < 2.5 GB per dataset; clone2vec
-  0.5–11 min; Benisse 6 s–19 min (up to 32 GB); Clonotrace from a minute to more than a day: 18 h for the
-  1,139 expanded LARRY clones and 31 h for the 6,174 LARRY clones forced to ≥ 2 cells (4–6 workers), and the
-  run on the 11,141 lymph-node clones was stopped after 72 h. Its clone-distance step grows with the number
+  0.5–11 min; Benisse 6 s–19 min (up to 32 GB); Clonotrace from a minute to more than four days: 18 h for
+  the 1,139 expanded LARRY clones and 31 h for the 6,174 LARRY clones forced to ≥ 2 cells (4–6 workers), and
+  101 h for the 11,141 lymph-node clones forced to ≥ 2 cells (32 workers). Its clone-distance step grows with the number
   of clones and with how widely label spreading spreads each clone — 7 h for only 31 expanded clones in
   GSE171703, where each of them spreads over much of the graph. With 16 instead of 1 core, Threadfin's
   complete analysis ran 2.0 times faster, clone2vec 1.2 times and Benisse 2.9 times slower; for ten times
@@ -175,13 +175,11 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-25 21:52, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-27 21:13, Melbourne time).*
 
 Still running: none.
 
 Failed (each with the reason the tool gave): none.
-
-Stopped before completion: Clonotrace (forced to ≥ 2 cells) on Human LN vaccine — stopped after 72 h: bootstrap label spreading took 15 h on 4 workers; the clone-distance step (one process in this run) had been running for 57 h when it was stopped on 2026-10-23. For comparison, LARRY days 4/6 (6,174 eligible clones, 4,693 kept) needed 29 h of clone distances on 6 workers; this dataset has 11,141 eligible clones. A rerun with more workers was still running when this table was made.
 
 Split-half runs still running (sections 6.4–6.5 use the halves that are complete): none.
 
@@ -246,7 +244,7 @@ representation).
 
 | tool | change from its tutorial, and why |
 |---|---|
-| Clonotrace | Label spreading, sparsification and the approximate clone distance exactly as in the vignette. (a) When the default cell graph for distances (k = 10) was disconnected, Clonotrace stops and advises a larger k; the run then retried k = 30 and k = 50 (k = 100 for the Plasmodium d10-42 run forced to ≥ 2 cells) and recorded the k used. (b) Clones that keep no cell with probability ≥ 0.1 after label spreading make `clone_disance()` stop; they are removed and counted as lost coverage. (c) The first full-data runs computed the clone distances in one R session instead of the vignette's parallel plan; the distances are identical (verified pair by pair on the NP dataset, 49,455 pairs, and on LARRY days 4/6, 648,091 pairs) but those runs' times are single-process and are marked † in the runtime table. Later runs use 4 parallel sessions (6 for the LARRY run forced to ≥ 2 cells, 8 for the Plasmodium d10-42 run forced to ≥ 2 cells); where both versions exist, the tables use the parallel one. (d) The run forced to ≥ 2 cells on GSE195673 (11,141 clones) was stopped after 72 h (15 h of label spreading, then 57 h of clone distances in one process). |
+| Clonotrace | Label spreading, sparsification and the approximate clone distance exactly as in the vignette. (a) When the default cell graph for distances (k = 10) was disconnected, Clonotrace stops and advises a larger k; the run then retried k = 30 and k = 50 (k = 100 for the Plasmodium d10-42 run forced to ≥ 2 cells) and recorded the k used. (b) Clones that keep no cell with probability ≥ 0.1 after label spreading make `clone_disance()` stop; they are removed and counted as lost coverage. (c) The first full-data runs computed the clone distances in one R session instead of the vignette's parallel plan; the distances are identical (verified pair by pair on the NP dataset, 49,455 pairs, and on LARRY days 4/6, 648,091 pairs) but those runs' times are single-process and are marked † in the runtime table. Later runs use 4 parallel sessions (6 for the LARRY run forced to ≥ 2 cells, 8 for the Plasmodium d10-42 run forced to ≥ 2 cells, 32 for the GSE195673 run forced to ≥ 2 cells); where both versions exist, the tables use the parallel one. (d) The first run forced to ≥ 2 cells on GSE195673 (11,141 clones) was stopped after 72 h (15 h of label spreading, then 57 h of clone distances in one process); the rerun with 32 parallel sessions finished in 101 h (4.7 h of label spreading, 95.7 h of clone distances) with k = 30, because the k = 10 graph was disconnected. |
 | clone2vec | Documented defaults (`clonal_nn` k = 15, 10 dimensions). Its `split_by` option was not used: it builds a separate graph per category, which for donor-private clones disconnects the clone graph. |
 | Benisse | Its README allows a dimension reduction instead of expression, but its initialisation takes 10 principal components of the 10 % most variable rows, which fails on a 30-dimensional embedding; it therefore received log-normalised expression of the 3,000 highly variable genes (as its README recommends). Benisse's unit is the exact clonotype (V + CDR3 + J), finer than a clone; clone-to-clone distances are the mean latent distance over all pairs of the two clones' cells. Run on clones ≥ 2 cells, except ≥ 10 cells on the largest dataset (11,141 clones; its optimisation scales with the square of the number of clonotypes). Not run on LARRY (no receptor). |
 | CoNGA rule | Applied to the shared embedding; CoNGA's own pipeline recomputes 50 principal components on its own normalisation. |
@@ -328,7 +326,7 @@ donor*.
 | GC + plasma cells | 96 | 62 | 96 (62 two-cell) | 34 (0 two-cell) | 96 (62 two-cell) | n/a (< 3 clones ≥ 10 cells) | 58 (24 two-cell) | 96 (62 two-cell) |
 | Plasmodium d10-42 | 1,015 | 830 | 1,015 (830 two-cell) | 185 (0 two-cell) | 1,015 (830 two-cell) | n/a (< 3 clones ≥ 10 cells) | 531 (346 two-cell) | 1,015 (830 two-cell) |
 | Plasmodium d0-14 | 523 | 450 | 523 (450 two-cell) | 73 (0 two-cell) | 523 (450 two-cell) | n/a (< 3 clones ≥ 10 cells) | 275 (202 two-cell) | 523 (450 two-cell) |
-| Human LN vaccine | 11,141 | 5,083 | 11,141 (5,083 two-cell) | 6,058 (0 two-cell) | 11,141 (5,083 two-cell) | 1,243 (0 two-cell) | stopped after 72 h | 1,243 (0 two-cell) [≥ 10 cells] |
+| Human LN vaccine | 11,141 | 5,083 | 11,141 (5,083 two-cell) | 6,058 (0 two-cell) | 11,141 (5,083 two-cell) | 1,243 (0 two-cell) | 7,158 (1,106 two-cell) | 1,243 (0 two-cell) [≥ 10 cells] |
 | Spontaneous GC | 1,051 | 411 | 1,051 (411 two-cell) | 640 (0 two-cell) | 1,051 (411 two-cell) | 127 (0 two-cell) | 770 (130 two-cell) | 1,051 (411 two-cell) |
 | Human COVID-19 | 592 | 400 | 592 (400 two-cell) | 192 (0 two-cell) | 592 (400 two-cell) | 31 (0 two-cell) | 411 (219 two-cell) | 592 (400 two-cell) |
 | LARRY d2 | 1,401 | 990 | 1,401 (990 two-cell) | 411 (0 two-cell) | 1,401 (990 two-cell) | n/a (< 3 clones ≥ 10 cells) | 1,015 (604 two-cell) | n/a (no BCR sequences) |
@@ -352,7 +350,7 @@ two-cell clones in crowded regions of the graph (for example 714 of 946 two-cell
 | tool | annotations | median R² on two-cell clones, tool | median R² on the same clones, Threadfin | tool higher | Threadfin higher | annotations with R² > 0.1 for the tool |
 |---|---|---|---|---|---|---|
 | clone2vec (forced to ≥ 2 cells) | 41 | 0.259 | 0.246 | 15 | 26 | 30 |
-| Clonotrace (forced to ≥ 2 cells) | 32 | 0.221 | 0.278 | 10 | 22 | 19 |
+| Clonotrace (forced to ≥ 2 cells) | 39 | 0.236 | 0.304 | 11 | 28 | 26 |
 | Benisse | 31 | -0.084 | 0.246 | 5 | 26 | 1 |
 | Mean of the embedding (baseline) | 41 | 0.259 | 0.246 | 20 | 21 | 33 |
 | Cluster composition (baseline) | 41 | 0.120 | 0.246 | 3 | 38 | 23 |
@@ -382,9 +380,9 @@ calibrated with many small clones (section 6.6).
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 10 | 26 | -0.018 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 9 | 34 | 1 | 10 | 23 | -0.041 | 471 |
-| Clonotrace, published distance (≥ 2) | 9 | 34 | 2 | 18 | 14 | -0.108 | 471 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 11 | 25 | -0.018 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 41 | 2 | 13 | 26 | -0.040 | 531 |
+| Clonotrace, published distance (≥ 2) | 10 | 41 | 2 | 25 | 14 | -0.146 | 531 |
 | Benisse | 8 | 31 | 3 | 22 | 6 | -0.372 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
 | Cluster composition (baseline) | 10 | 41 | 1 | 25 | 15 | -0.101 | 958 |
@@ -398,9 +396,9 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 5 | 25 | -0.006 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 9 | 29 | 1 | 5 | 23 | -0.035 | 411 |
-| Clonotrace, published distance (≥ 2) | 9 | 29 | 2 | 13 | 14 | -0.095 | 411 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 6 | 24 | -0.006 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 35 | 2 | 7 | 26 | -0.032 | 609 |
+| Clonotrace, published distance (≥ 2) | 10 | 35 | 2 | 19 | 14 | -0.119 | 609 |
 | Benisse | 8 | 26 | 3 | 17 | 6 | -0.284 | 958 |
 | Mean of the embedding (baseline) | 10 | 35 | 7 | 5 | 23 | +0.001 | 958 |
 | Cluster composition (baseline) | 10 | 35 | 1 | 20 | 14 | -0.095 | 958 |
@@ -455,13 +453,13 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
 | Plasmodium d0-14 | GC B cell (RNA) | 0.69 vs 0.70 | 0.32 vs 0.53 ▼ | -0.15 vs 0.70 ▼ | 0.64 vs 0.70 |
 | Plasmodium d0-14 | plasmablast (RNA) | 0.53 vs 0.63 ▼ | 0.33 vs 0.60 ▼ | -0.35 vs 0.63 ▼ | 0.53 vs 0.63 ▼ |
 | Plasmodium d0-14 | IgG | 0.20 vs 0.23 | 0.10 vs 0.25 ▼ | -0.31 vs 0.23 ▼ | 0.23 vs 0.23 |
-| Human LN vaccine | blood (vs lymph node) | 0.88 vs 0.97 ▼ | — | — | 0.87 vs 0.97 ▼ |
-| Human LN vaccine | V-region mutation | 0.39 vs 0.35 ▲ | — | — | 0.39 vs 0.35 ▲ |
-| Human LN vaccine | IgG | 0.40 vs 0.39 | — | — | 0.40 vs 0.39 ▲ |
-| Human LN vaccine | GC B cell (RNA) | 0.84 vs 0.96 ▼ | — | — | 0.91 vs 0.96 ▼ |
-| Human LN vaccine | IgA | 0.17 vs 0.15 | — | — | 0.17 vs 0.15 ▲ |
-| Human LN vaccine | spike binding | 0.32 vs 0.32 | — | — | 0.32 vs 0.32 |
-| Human LN vaccine | days after vaccination | 0.50 vs 0.47 ▲ | — | — | 0.45 vs 0.47 ▼ |
+| Human LN vaccine | blood (vs lymph node) | 0.88 vs 0.97 ▼ | 0.86 vs 0.97 ▼ | — | 0.87 vs 0.97 ▼ |
+| Human LN vaccine | V-region mutation | 0.39 vs 0.35 ▲ | 0.37 vs 0.35 ▲ | — | 0.39 vs 0.35 ▲ |
+| Human LN vaccine | IgG | 0.40 vs 0.39 | 0.34 vs 0.33 | — | 0.40 vs 0.39 ▲ |
+| Human LN vaccine | GC B cell (RNA) | 0.84 vs 0.96 ▼ | 0.90 vs 0.96 ▼ | — | 0.91 vs 0.96 ▼ |
+| Human LN vaccine | IgA | 0.17 vs 0.15 | 0.16 vs 0.16 | — | 0.17 vs 0.15 ▲ |
+| Human LN vaccine | spike binding | 0.32 vs 0.32 | 0.32 vs 0.32 | — | 0.32 vs 0.32 |
+| Human LN vaccine | days after vaccination | 0.50 vs 0.47 ▲ | 0.44 vs 0.48 ▼ | — | 0.45 vs 0.47 ▼ |
 | Spontaneous GC | V-region mutation | 0.06 vs 0.06 | 0.06 vs 0.03 | 0.04 vs 0.06 | 0.05 vs 0.06 |
 | Spontaneous GC | IgA | 0.36 vs 0.19 ▲ | 0.23 vs 0.16 | 0.04 vs 0.19 ▼ | 0.30 vs 0.19 ▲ |
 | Spontaneous GC | IgG | 0.38 vs 0.27 ▲ | 0.31 vs 0.30 | -0.11 vs 0.27 ▼ | 0.35 vs 0.27 ▲ |
@@ -469,7 +467,7 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
 | Human COVID-19 | IgG | 0.23 vs 0.22 | 0.14 vs 0.18 | -0.30 vs 0.22 ▼ | 0.22 vs 0.22 |
 | LARRY d2 | day-6 neutrophil fraction | 0.16 vs 0.19 | 0.16 vs 0.30 ▼ | — | 0.16 vs 0.19 |
 | LARRY d2 | day-6 monocyte fraction | 0.11 vs 0.14 | 0.05 vs 0.10 | — | 0.10 vs 0.14 |
-| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
+| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 ▼ | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
 
 <!-- END:pairwise_detail -->
 
@@ -484,11 +482,11 @@ The same, leaving out the annotations derived from expression ("(RNA)"), which a
   cells (clone2vec's default) clone2vec wins slightly more often than it loses; including the two-cell
   clones tips the balance towards Threadfin.
 * **Threadfin vs Clonotrace.** On the clones Clonotrace keeps, its default (revised) distance and Threadfin
-  are mostly indistinguishable; of the eleven annotations where they differ (forced to ≥ 2 cells), Threadfin
-  is better on ten (lamina propria and plasma cells in the gut, GC B cells and plasmablasts in the Plasmodium
+  are mostly indistinguishable; of the 15 annotations where they differ (forced to ≥ 2 cells), Threadfin
+  is better on 13 (lamina propria and plasma cells in the gut, GC B cells and plasmablasts in the Plasmodium
   days 10–42 data, four in the Plasmodium days 0–14 data, IgA after SARS-CoV-2 infection, LARRY neutrophil
-  fate) and Clonotrace on one (V-region mutation in the NP
-  dataset); at Clonotrace's default (≥ 10 cells) Threadfin is better on 8 of 26 and never worse.
+  fate, and blood vs lymph node, GC B cells and time since vaccination in the lymph-node data) and
+  Clonotrace on two (V-region mutation in the NP and lymph-node data); at Clonotrace's default (≥ 10 cells) Threadfin is better on 8 of 26 and never worse.
   Clonotrace's published (unrevised) distance does worse than its revised default.
 * **Threadfin vs Benisse.** Benisse's representation is anchored on receptor sequence, so it carries
   little of the cell-state annotations, and wins exactly where the annotation is a property of the
@@ -730,10 +728,10 @@ have 2 + Geometric(0.55) cells (half have two cells); "large" clones 10 + Geomet
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| Threadfin, mean profile | 10 | 41 | 8 | 6 | 27 | +0.003 | 958 |
+| Threadfin, mean profile | 10 | 41 | 8 | 5 | 28 | +0.003 | 958 |
 | Threadfin, no centring | 10 | 41 | 1 | 13 | 27 | -0.010 | 958 |
 | Threadfin, no smoothing | 10 | 41 | 14 | 4 | 23 | +0.010 | 958 |
-| Threadfin, no shrinkage | 10 | 41 | 6 | 1 | 34 | +0.002 | 958 |
+| Threadfin, no shrinkage | 10 | 41 | 6 | 2 | 33 | +0.002 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
 
 <!-- END:pairwise_ablation -->
@@ -794,8 +792,7 @@ and nothing beyond 8 cores, because each stage of the clone-map search lays out 
 its clone profiles alone take seconds and grow slightly faster than the number of clones. clone2vec trains
 with PyTorch threads and gains little from more cores, but its time grows slowly with the data. Clonotrace's
 parallel R sessions scale well (2.7 times from 4 to 16), yet its time grows with about the square of the number
-of clones, which is why the full GSE195673 run did not finish in 72 h (label spreading on 4 sessions, clone
-distances in one). Benisse became slower with
+of clones, which is why the full GSE195673 run took 101 h even on 32 sessions. Benisse became slower with
 more threads: its Python and R parts both use multithreaded linear algebra, which oversubscribes the cores;
 limiting it to 1–4 threads (`OMP_NUM_THREADS`) avoids this. Its memory grows with the square of the number of
 clonotypes (35 GB at 5,570 clones).
@@ -846,7 +843,7 @@ results and runs the clone-map search and the programme bootstrap on several cor
 | GC + plasma cells | 0.2 s, 0.2 GB | 33.3 s, 1.1 GB | 32.5 s, 1.1 GB | — | 28.6 s, 0.4 GB † | 5.7 s, 0.3 GB |
 | Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | 18.8 min, 2.7 GB | 2.0 min, 0.8 GB |
 | Plasmodium d0-14 | 5.8 s, 0.6 GB | 36.1 s, 1.1 GB | 53.4 s, 1.1 GB | — | 11.5 min, 1.4 GB † | 20.0 s, 0.3 GB |
-| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | — | 19.0 min, 31.6 GB |
+| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | 100.7 h, 67.3 GB | 19.0 min, 31.6 GB |
 | Spontaneous GC | 1.2 s, 0.4 GB | 53.8 s, 1.1 GB | 1.0 min, 1.1 GB | 43.6 min, 1.0 GB † | 29.7 min, 1.4 GB † | 3.3 min, 1.9 GB |
 | Human COVID-19 | 27.3 s, 1.2 GB | 1.2 min, 1.1 GB | 1.0 min, 1.1 GB | 7.4 h, 2.2 GB | 22.7 min, 2.2 GB | 32.2 s, 0.4 GB |
 | LARRY d2 | 1.4 s, 0.4 GB | 1.1 min, 1.1 GB | 1.6 min, 1.1 GB | — | 22.6 min, 1.6 GB † | — |
@@ -872,6 +869,7 @@ Clonotrace's stages, per run:
 | Plasmodium d10-42 | forced ≥ 2 | 1,015 | 531 | 16.4 min | 35.3 s (8 workers) | 100 |
 | Plasmodium d0-14 | forced ≥ 2 | 523 | 275 | 10.5 min | 8.7 s (1 process) |  |
 | Human LN vaccine | default ≥ 10 | 1,243 | 1,243 | 2.6 h | 26.1 h (4 workers) | 10 |
+| Human LN vaccine | forced ≥ 2 | 11,141 | 7,158 | 4.7 h | 95.7 h (32 workers) | 30 |
 | Spontaneous GC | default ≥ 10 | 127 | 127 | 1.7 min | 41.6 min (1 process) |  |
 | Spontaneous GC | forced ≥ 2 | 1,051 | 770 | 14.7 min | 14.6 min (1 process) |  |
 | GC + plasma cells | forced ≥ 2 | 96 | 58 | 27.4 s | 0.8 s (1 process) |  |
@@ -901,7 +899,7 @@ smoothing neighbourhood of 5–30 cells or on 50 instead of 30 principal compone
 by a median of less than 0.006 in R², and re-identification by less than 1 percentage point. Ten principal
 components lose information (12 of 35 annotations worse, none better). Two settings trade one readout for
 another. A narrower kernel (bandwidth × 0.5) separates mixed from in-between clones better in simulation
-(AUROC + 0.08) but recovers measured annotations slightly worse (2 better, 5 worse); a wider one (× 2) loses
+(AUROC + 0.08) but recovers measured annotations slightly worse (2 better, 6 worse); a wider one (× 2) loses
 that separation (− 0.30), because the kernel profile then approaches the plain mean. Without smoothing,
 measured annotations are recovered better (14 better, 1 worse) but planted programmes worse (purity − 0.03).
 The defaults (median-distance bandwidth, 15-cell smoothing) sit between these ends; the manuscript keeps them.

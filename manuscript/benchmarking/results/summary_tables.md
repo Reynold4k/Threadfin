@@ -2,13 +2,11 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-25 21:52, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-27 21:13, Melbourne time).*
 
 Still running: none.
 
 Failed (each with the reason the tool gave): none.
-
-Stopped before completion: Clonotrace (forced to ≥ 2 cells) on Human LN vaccine — stopped after 72 h: bootstrap label spreading took 15 h on 4 workers; the clone-distance step (one process in this run) had been running for 57 h when it was stopped on 2026-10-23. For comparison, LARRY days 4/6 (6,174 eligible clones, 4,693 kept) needed 29 h of clone distances on 6 workers; this dataset has 11,141 eligible clones. A rerun with more workers was still running when this table was made.
 
 Split-half runs still running (sections 6.4–6.5 use the halves that are complete): none.
 
@@ -38,7 +36,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | GC + plasma cells | 96 | 62 | 96 (62 two-cell) | 34 (0 two-cell) | 96 (62 two-cell) | n/a (< 3 clones ≥ 10 cells) | 58 (24 two-cell) | 96 (62 two-cell) |
 | Plasmodium d10-42 | 1,015 | 830 | 1,015 (830 two-cell) | 185 (0 two-cell) | 1,015 (830 two-cell) | n/a (< 3 clones ≥ 10 cells) | 531 (346 two-cell) | 1,015 (830 two-cell) |
 | Plasmodium d0-14 | 523 | 450 | 523 (450 two-cell) | 73 (0 two-cell) | 523 (450 two-cell) | n/a (< 3 clones ≥ 10 cells) | 275 (202 two-cell) | 523 (450 two-cell) |
-| Human LN vaccine | 11,141 | 5,083 | 11,141 (5,083 two-cell) | 6,058 (0 two-cell) | 11,141 (5,083 two-cell) | 1,243 (0 two-cell) | stopped after 72 h | 1,243 (0 two-cell) [≥ 10 cells] |
+| Human LN vaccine | 11,141 | 5,083 | 11,141 (5,083 two-cell) | 6,058 (0 two-cell) | 11,141 (5,083 two-cell) | 1,243 (0 two-cell) | 7,158 (1,106 two-cell) | 1,243 (0 two-cell) [≥ 10 cells] |
 | Spontaneous GC | 1,051 | 411 | 1,051 (411 two-cell) | 640 (0 two-cell) | 1,051 (411 two-cell) | 127 (0 two-cell) | 770 (130 two-cell) | 1,051 (411 two-cell) |
 | Human COVID-19 | 592 | 400 | 592 (400 two-cell) | 192 (0 two-cell) | 592 (400 two-cell) | 31 (0 two-cell) | 411 (219 two-cell) | 592 (400 two-cell) |
 | LARRY d2 | 1,401 | 990 | 1,401 (990 two-cell) | 411 (0 two-cell) | 1,401 (990 two-cell) | n/a (< 3 clones ≥ 10 cells) | 1,015 (604 two-cell) | n/a (no BCR sequences) |
@@ -48,9 +46,9 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 10 | 26 | -0.018 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 9 | 34 | 1 | 10 | 23 | -0.041 | 471 |
-| Clonotrace, published distance (≥ 2) | 9 | 34 | 2 | 18 | 14 | -0.108 | 471 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 11 | 25 | -0.018 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 41 | 2 | 13 | 26 | -0.040 | 531 |
+| Clonotrace, published distance (≥ 2) | 10 | 41 | 2 | 25 | 14 | -0.146 | 531 |
 | Benisse | 8 | 31 | 3 | 22 | 6 | -0.372 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
 | Cluster composition (baseline) | 10 | 41 | 1 | 25 | 15 | -0.101 | 958 |
@@ -60,9 +58,9 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 5 | 25 | -0.006 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 9 | 29 | 1 | 5 | 23 | -0.035 | 411 |
-| Clonotrace, published distance (≥ 2) | 9 | 29 | 2 | 13 | 14 | -0.095 | 411 |
+| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 6 | 24 | -0.006 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 35 | 2 | 7 | 26 | -0.032 | 609 |
+| Clonotrace, published distance (≥ 2) | 10 | 35 | 2 | 19 | 14 | -0.119 | 609 |
 | Benisse | 8 | 26 | 3 | 17 | 6 | -0.284 | 958 |
 | Mean of the embedding (baseline) | 10 | 35 | 7 | 5 | 23 | +0.001 | 958 |
 | Cluster composition (baseline) | 10 | 35 | 1 | 20 | 14 | -0.095 | 958 |
@@ -81,10 +79,10 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 
 | tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
 |---|---|---|---|---|---|---|---|
-| Threadfin, mean profile | 10 | 41 | 8 | 6 | 27 | +0.003 | 958 |
+| Threadfin, mean profile | 10 | 41 | 8 | 5 | 28 | +0.003 | 958 |
 | Threadfin, no centring | 10 | 41 | 1 | 13 | 27 | -0.010 | 958 |
 | Threadfin, no smoothing | 10 | 41 | 14 | 4 | 23 | +0.010 | 958 |
-| Threadfin, no shrinkage | 10 | 41 | 6 | 1 | 34 | +0.002 | 958 |
+| Threadfin, no shrinkage | 10 | 41 | 6 | 2 | 33 | +0.002 | 958 |
 | Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
 
 ## two_cell
@@ -92,7 +90,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | tool | annotations | median R² on two-cell clones, tool | median R² on the same clones, Threadfin | tool higher | Threadfin higher | annotations with R² > 0.1 for the tool |
 |---|---|---|---|---|---|---|
 | clone2vec (forced to ≥ 2 cells) | 41 | 0.259 | 0.246 | 15 | 26 | 30 |
-| Clonotrace (forced to ≥ 2 cells) | 32 | 0.221 | 0.278 | 10 | 22 | 19 |
+| Clonotrace (forced to ≥ 2 cells) | 39 | 0.236 | 0.304 | 11 | 28 | 26 |
 | Benisse | 31 | -0.084 | 0.246 | 5 | 26 | 1 |
 | Mean of the embedding (baseline) | 41 | 0.259 | 0.246 | 20 | 21 | 33 |
 | Cluster composition (baseline) | 41 | 0.120 | 0.246 | 3 | 38 | 23 |
@@ -130,13 +128,13 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Plasmodium d0-14 | GC B cell (RNA) | 0.69 vs 0.70 | 0.32 vs 0.53 ▼ | -0.15 vs 0.70 ▼ | 0.64 vs 0.70 |
 | Plasmodium d0-14 | plasmablast (RNA) | 0.53 vs 0.63 ▼ | 0.33 vs 0.60 ▼ | -0.35 vs 0.63 ▼ | 0.53 vs 0.63 ▼ |
 | Plasmodium d0-14 | IgG | 0.20 vs 0.23 | 0.10 vs 0.25 ▼ | -0.31 vs 0.23 ▼ | 0.23 vs 0.23 |
-| Human LN vaccine | blood (vs lymph node) | 0.88 vs 0.97 ▼ | — | — | 0.87 vs 0.97 ▼ |
-| Human LN vaccine | V-region mutation | 0.39 vs 0.35 ▲ | — | — | 0.39 vs 0.35 ▲ |
-| Human LN vaccine | IgG | 0.40 vs 0.39 | — | — | 0.40 vs 0.39 ▲ |
-| Human LN vaccine | GC B cell (RNA) | 0.84 vs 0.96 ▼ | — | — | 0.91 vs 0.96 ▼ |
-| Human LN vaccine | IgA | 0.17 vs 0.15 | — | — | 0.17 vs 0.15 ▲ |
-| Human LN vaccine | spike binding | 0.32 vs 0.32 | — | — | 0.32 vs 0.32 |
-| Human LN vaccine | days after vaccination | 0.50 vs 0.47 ▲ | — | — | 0.45 vs 0.47 ▼ |
+| Human LN vaccine | blood (vs lymph node) | 0.88 vs 0.97 ▼ | 0.86 vs 0.97 ▼ | — | 0.87 vs 0.97 ▼ |
+| Human LN vaccine | V-region mutation | 0.39 vs 0.35 ▲ | 0.37 vs 0.35 ▲ | — | 0.39 vs 0.35 ▲ |
+| Human LN vaccine | IgG | 0.40 vs 0.39 | 0.34 vs 0.33 | — | 0.40 vs 0.39 ▲ |
+| Human LN vaccine | GC B cell (RNA) | 0.84 vs 0.96 ▼ | 0.90 vs 0.96 ▼ | — | 0.91 vs 0.96 ▼ |
+| Human LN vaccine | IgA | 0.17 vs 0.15 | 0.16 vs 0.16 | — | 0.17 vs 0.15 ▲ |
+| Human LN vaccine | spike binding | 0.32 vs 0.32 | 0.32 vs 0.32 | — | 0.32 vs 0.32 |
+| Human LN vaccine | days after vaccination | 0.50 vs 0.47 ▲ | 0.44 vs 0.48 ▼ | — | 0.45 vs 0.47 ▼ |
 | Spontaneous GC | V-region mutation | 0.06 vs 0.06 | 0.06 vs 0.03 | 0.04 vs 0.06 | 0.05 vs 0.06 |
 | Spontaneous GC | IgA | 0.36 vs 0.19 ▲ | 0.23 vs 0.16 | 0.04 vs 0.19 ▼ | 0.30 vs 0.19 ▲ |
 | Spontaneous GC | IgG | 0.38 vs 0.27 ▲ | 0.31 vs 0.30 | -0.11 vs 0.27 ▼ | 0.35 vs 0.27 ▲ |
@@ -144,7 +142,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Human COVID-19 | IgG | 0.23 vs 0.22 | 0.14 vs 0.18 | -0.30 vs 0.22 ▼ | 0.22 vs 0.22 |
 | LARRY d2 | day-6 neutrophil fraction | 0.16 vs 0.19 | 0.16 vs 0.30 ▼ | — | 0.16 vs 0.19 |
 | LARRY d2 | day-6 monocyte fraction | 0.11 vs 0.14 | 0.05 vs 0.10 | — | 0.10 vs 0.14 |
-| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
+| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 ▼ | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
 
 ## tests
 
@@ -219,7 +217,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | GC + plasma cells | 0.2 s, 0.2 GB | 33.3 s, 1.1 GB | 32.5 s, 1.1 GB | — | 28.6 s, 0.4 GB † | 5.7 s, 0.3 GB |
 | Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | 18.8 min, 2.7 GB | 2.0 min, 0.8 GB |
 | Plasmodium d0-14 | 5.8 s, 0.6 GB | 36.1 s, 1.1 GB | 53.4 s, 1.1 GB | — | 11.5 min, 1.4 GB † | 20.0 s, 0.3 GB |
-| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | — | 19.0 min, 31.6 GB |
+| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | 100.7 h, 67.3 GB | 19.0 min, 31.6 GB |
 | Spontaneous GC | 1.2 s, 0.4 GB | 53.8 s, 1.1 GB | 1.0 min, 1.1 GB | 43.6 min, 1.0 GB † | 29.7 min, 1.4 GB † | 3.3 min, 1.9 GB |
 | Human COVID-19 | 27.3 s, 1.2 GB | 1.2 min, 1.1 GB | 1.0 min, 1.1 GB | 7.4 h, 2.2 GB | 22.7 min, 2.2 GB | 32.2 s, 0.4 GB |
 | LARRY d2 | 1.4 s, 0.4 GB | 1.1 min, 1.1 GB | 1.6 min, 1.1 GB | — | 22.6 min, 1.6 GB † | — |
@@ -238,6 +236,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Plasmodium d10-42 | forced ≥ 2 | 1,015 | 531 | 16.4 min | 35.3 s (8 workers) | 100 |
 | Plasmodium d0-14 | forced ≥ 2 | 523 | 275 | 10.5 min | 8.7 s (1 process) |  |
 | Human LN vaccine | default ≥ 10 | 1,243 | 1,243 | 2.6 h | 26.1 h (4 workers) | 10 |
+| Human LN vaccine | forced ≥ 2 | 11,141 | 7,158 | 4.7 h | 95.7 h (32 workers) | 30 |
 | Spontaneous GC | default ≥ 10 | 127 | 127 | 1.7 min | 41.6 min (1 process) |  |
 | Spontaneous GC | forced ≥ 2 | 1,051 | 770 | 14.7 min | 14.6 min (1 process) |  |
 | GC + plasma cells | forced ≥ 2 | 96 | 58 | 27.4 s | 0.8 s (1 process) |  |

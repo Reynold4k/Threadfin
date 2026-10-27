@@ -638,9 +638,11 @@ def runtime_figure():
     fig.suptitle("Computing resources, each tool relative to Threadfin: time and memory per dataset, gain from more "
                  "cores and growth with the data (1 = same as Threadfin)", x=0.01, ha="left", fontsize=9.5,
                  fontweight="bold")
+    stopped = any(note.startswith("stopped") for _, _, cells in rows for _, note, _ in cells.values())
     fig.text(0.01, -0.01, "Hollow: Clonotrace runs whose clone distances used one R session (slower than its parallel "
-             "plan). Counts at the bottom: differences of less than 25 % are not counted. Clonotrace's run on the "
-             "11,141 GSE195673 clones was stopped after 72 h; the arrow marks a lower bound.", fontsize=7, color=INK2)
+             "plan). Counts at the bottom: differences of less than 25 % are not counted."
+             + (" A run stopped at 72 h is drawn at 72 h; the arrow marks a lower bound." if stopped else ""),
+             fontsize=7, color=INK2)
     save(fig, "fig11_runtime_memory.png")
 
 
