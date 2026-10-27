@@ -639,10 +639,16 @@ def runtime_figure():
                  "cores and growth with the data (1 = same as Threadfin)", x=0.01, ha="left", fontsize=9.5,
                  fontweight="bold")
     stopped = any(note.startswith("stopped") for _, _, cells in rows for _, note, _ in cells.values())
+    cov = read("coverage_runtime.csv")
+    many = cov[cov["method"].str.startswith("clonotrace_revised") & cov["dataset"].isin(ORDER)
+               & cov["status"].eq("completed") & cov["distance_workers"].gt(4)]
+    many = "; ".join(f"{DATASET[r.dataset].split(' (')[0].split(',')[0]}, ≥ {10 if r.method.endswith('min10') else 2} "
+                     f"cells ({int(r.distance_workers)})" for r in many.itertuples())
     fig.text(0.01, -0.01, "Hollow: Clonotrace runs whose clone distances used one R session (slower than its parallel "
              "plan). Counts at the bottom: differences of less than 25 % are not counted."
-             + (" A run stopped at 72 h is drawn at 72 h; the arrow marks a lower bound." if stopped else ""),
-             fontsize=7, color=INK2)
+             + (" A run stopped at 72 h is drawn at 72 h; the arrow marks a lower bound." if stopped else "")
+             + (f"\nClonotrace runs whose clone distances used more than 4 R sessions: {many}." if many else ""),
+             fontsize=7, color=INK2, va="top")
     save(fig, "fig11_runtime_memory.png")
 
 

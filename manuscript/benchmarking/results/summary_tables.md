@@ -2,7 +2,7 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-27 21:13, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-27 21:23, Melbourne time).*
 
 Still running: none.
 

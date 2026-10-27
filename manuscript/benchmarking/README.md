@@ -175,7 +175,7 @@ What this means for the manuscript is in section 7 and in [`../README.md`](../RE
 
 <!-- BEGIN:status -->
 
-*Status of the full-data runs when these tables were generated (2026-10-27 21:13, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-27 21:23, Melbourne time).*
 
 Still running: none.
 
@@ -831,7 +831,7 @@ results and runs the clone-map search and the programme bootstrap on several cor
 
 <!-- END:threadfin_full_run -->
 
-**Clone representation per dataset** (4 cores per tool):
+**Clone representation per dataset** (4 cores per tool; Clonotrace forced to ≥ 2 cells used 6, 8 and 32 R sessions for the clone distances on LARRY days 4/6, Plasmodium days 10–42 and GSE195673):
 
 <!-- BEGIN:runtime -->
 
