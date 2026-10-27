@@ -74,7 +74,8 @@ jobs:
       - name: Install with Dandelion and scirpy
         run: pip install -e ".[test,dandelion]" scirpy
       - name: Dandelion and scirpy are importable (otherwise their tests would be skipped)
-        run: python -c "import dandelion, scirpy; print('sc-dandelion', dandelion.__version__, 'scirpy', scirpy.__version__)"
+        # the installed versions; dandelion.__version__ asks setuptools-scm first and reports the checkout's git state
+        run: python -c "import dandelion, scirpy; from importlib.metadata import version; print('sc-dandelion', version('sc-dandelion'), 'scirpy', version('scirpy'))"
       - name: Run tests
         run: python -m pytest tests/ -q -rs
       - name: Tutorial on simulated data
