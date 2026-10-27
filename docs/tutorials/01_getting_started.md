@@ -115,9 +115,9 @@ print(result.summary())
 
 **Each argument, and why it matters.**
 
-* `donor_key` — the column naming the individual. Clones never span two individuals, and every test shuffles
-  labels only among clones of the *same* individual, so a difference between individuals can never look
-  like a difference between clones.
+* `donor_key` — the column naming the individual. Clones never span two individuals, and the tests of your
+  labels shuffle them only among clones of the *same* individual, so a difference between individuals can
+  never look like a difference between clones.
 * `sample_key` — the column naming the sampling context (library, sort, time point). Each cell is described
   **relative to the other cells of its sample**: if one library was sequenced more deeply or one sample was
   enriched for plasma cells, that difference is removed before clones are compared. *Choose a nuisance
@@ -180,7 +180,7 @@ Cells with a clone id: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cel
 3. **Programmes.** Threadfin found four programmes, and every split between them passed a test against a
    single group. *Stability* is how reproducibly each programme is recovered when cells are resampled
    (bootstrap Jaccard index): **≥ 0.75 stable; 0.6–0.75 present but blurred; < 0.6 do not interpret**.
-   The percentages are the cell states of each programme, with each clone weighted equally.
+   The percentages are the shares of each programme's cells in each cell state.
 4. **Tests.** `true_programme` explains 56% of the variation between clone profiles, against 0.3% for
    shuffled labels — expected here, because it is the simulated truth. On real data the same line tells you
    whether, for example, antigen binding explains where clones sit.
@@ -233,8 +233,8 @@ result.plot("threadfin_overview.png")
   bar mean clone identity matters.
 * **c — programme stability.** One bar per programme; the upper line marks 0.75 (stable), the lower 0.6
   (do not interpret below).
-* **d — programme composition.** The cell states that make up each programme, with every clone weighted
-  equally, so a single large clone cannot dominate.
+* **d — programme composition.** The share of each programme's cells in each cell state (a large clone counts
+  with all of its cells).
 
 > **Three common misreadings.**
 > 1. *Proximity on the clone map is not ancestry.* Two clones are close because their cells are distributed

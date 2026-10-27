@@ -13,9 +13,10 @@ has coordinates in an expression space built without immunoglobulin genes. A clo
 distribution of its cells in that space, measured relative to the other cells sampled with it and shrunk
 towards the sample average when the clone was seen in few cells (the *clone profile*). Clone profiles are then
 compared: in a two-dimensional *clone map*, in groups of similar clones (*programmes*, kept only if they pass a
-test and are reproducible), and in permutation tests that ask whether clone identity explains cell state
-(*coherence*) and whether an annotation explains differences between clones (*association*). Every test uses
-clones, not cells, as the unit, and shuffles labels only within the strata of the sampling design.
+split test, each reported with how reproducible it is), and in permutation tests that ask whether clone identity
+explains cell state (*coherence*) and whether an annotation explains differences between clones (*association*).
+Annotations are tested with clones, not cells, as the unit, and every permutation shuffles labels only within the
+strata of the sampling design.
 
 **Symbols used below.** *i* a cell; *c(i)* its clone; *s(i)* its sampling context; *x* a cell's embedding
 coordinates; *n_c* the number of cells of clone *c*; *τ²* variance between clones; *σ²* variance within
@@ -104,11 +105,15 @@ noise. From it Threadfin obtains
   needs at least two cells, because a single cell cannot show whether cells
   of the same clone share a state.
 
-By default for programmes (`representation="kernel"`), a clone's profile
-describes the **whole distribution** of its cells, not only their average
-(a kernel mean embedding; Rahimi & Recht 2007; Muandet et al. 2017). A clone
-split between two states is then different from a clone sitting in between.
-Each cell is first averaged with its 15 nearest cells to reduce noise.
+By default (`representation="kernel"`), the profile that the clone map, the
+programmes and the clone-level tests use describes the **whole distribution**
+of a clone's cells, not only their average (a kernel mean embedding; Rahimi &
+Recht 2007; Muandet et al. 2017). A clone split between two states is then
+different from a clone sitting in between. For this profile each cell is first
+averaged over its 15 nearest cells (itself included) to reduce noise, and the
+shrinkage and the reliabilities are computed from these smoothed kernel
+features. The ICC is computed on the unsmoothed embedding coordinates, and
+the clonal memory index (section 8) on unsmoothed kernel features.
 
 ## 4. Clonal coherence (`clonal_coherence`)
 
@@ -174,7 +179,8 @@ confirmed as well and, if necessary, laid out with weaker repulsion between clon
 Kobak 2022). During the search, layouts use 200 optimisation epochs. Above 3,000 clones the search runs
 on a random subset, `n_neighbors` is scaled to the full data in proportion to the number of clones, and
 the best settings are confirmed again on all clones before one is chosen.
-Finally, the map that is returned is laid out at UMAP's default settings and checked: if it falls short
+Finally, the map that is returned is laid out with the chosen settings and UMAP's default number of
+epochs, and checked: if it falls short
 of the target, two further seeds and then the next confirmed settings are tried, and the most coherent
 layout is kept.
 
@@ -187,14 +193,17 @@ perturbation gradient estimates, Spall 1992) and ends with the same confirmation
 ## 6. Clonal programmes (`find_programmes`)
 
 *In plain words.* Groups of clones with similar profiles — but only groups that are better than one big
-group (a split test) and that come back when the cells are resampled (stability). If clones vary along a
-continuum, Threadfin says so instead of inventing groups.
+group (a split test). How often each group comes back when the cells are resampled is reported as its
+stability. If no split passes the test, Threadfin reports a single programme instead of inventing groups.
 
 *Which clones behave alike?* Clones are connected to their 15 most similar
 clones, with each connection weighted by the reliability of the two clones,
-and grouped by Leiden community detection (Traag et al. 2019); the resolution
-is the finest one whose programmes are stable under resampling. Two
-safeguards keep the groups meaningful:
+and grouped by Leiden community detection (Traag et al. 2019). Among the
+resolutions that give at least two groups of five or more clones, with at most
+10 % of clones in smaller groups, the one with the most groups whose
+clone-weighted mean stability under resampling is at least 0.75 is used; if no
+resolution reaches 0.75, the most stable one is used and a warning says so.
+Two safeguards keep the groups meaningful:
 
 * **Approximate split diagnostics.** Community detection always returns groups,
   even when clones vary continuously. Every split is therefore tested
@@ -204,15 +213,21 @@ safeguards keep the groups meaningful:
   The full selected Leiden/tree/resolution process is not repeated in the null;
   normal-tail calibration is approximate, so FWER control is not established. Groups that
   are not significantly separated are merged. If no split survives, Threadfin
-  reports a **continuum**: clones differ, but not as distinct groups.
-* **Stability.** The cells are resampled 30-50 times and the whole procedure
-  repeated; each programme's stability is how well it is recovered (mean
-  Jaccard overlap; Hennig 2007). Programmes with stability >= 0.75 are
-  stable; below 0.6 they should not be interpreted.
+  reports a single programme: the clones differ, but not as distinct groups the
+  test can detect (which is not in itself evidence of a continuum; see the note
+  at the end of this page).
+* **Stability.** The cells of every clone are resampled (a Poisson bootstrap,
+  30 replicates by default) and, with the fitted profile model held fixed, the
+  clone graph, Leiden clustering at the chosen resolution and the split test
+  are repeated; each programme's stability is how well it is recovered (mean
+  Jaccard overlap; Hennig 2007). Programmes are not removed for low stability:
+  stability >= 0.75 is stable, 0.6–0.75 present but blurred, and below 0.6 a
+  programme should not be interpreted.
 
-When programmes are defined on a subset of clones (`min_reliability` above
-0), the remaining clones are afterwards assigned to the most likely programme,
-taking their size into account (`clone_programme_assigned`).
+Clones left out when the programmes are defined (below `min_reliability`, or in
+Leiden groups of fewer than five clones) are afterwards assigned to the most
+likely programme, taking their size into account, when the posterior
+probability is at least 0.7 (`clone_programme_assigned`).
 Marker genes of each programme (`programme_markers`) are found by comparing
 clone averages, so a large clone counts once. Programmes usually differ in which cell states their clones
 contain, so these markers are largely the markers of those states; with `state_key` and `state`, each clone is
@@ -250,7 +265,9 @@ of a clone's cells in a gate). Two questions are then asked, always with
   rate control (Benjamini & Hochberg 1995).
 
 Labels that are fixed for a donor (age, sex, disease severity) cannot be
-separated from other differences between donors and are reported as such.
+separated from other differences between donors: shuffling them within donors
+changes nothing, so these tests are not run, and the summary lists them with
+this reason. Compare such labels across donors, with one value per donor.
 
 ## 8. Clonal memory (`clonal_memory`)
 
@@ -301,6 +318,23 @@ which stays valid when units differ in variance.
 Because `h2` is a variance share and not a test statistic, `lineage_power` plants a component of known size on
 the same trees and reports what the data could have detected.
 
+## 11. Export lag (`export_lag`)
+
+*In plain words.* "How much less mutated are a clone's plasma cells than its own germinal-centre cells?"
+Somatic hypermutation only accumulates, so within one clone this gap dates the output against the germinal
+centre that was sampled.
+
+For every clone captured in both compartments (the germinal-centre states and the output states named by the
+user; by default class-switched cells only, because switching is an irreversible event that mutation counts do
+not describe; and matched on the columns given in `within`, such as visit and tissue), the lag is the mean
+V-region mutation frequency of the clone's output cells minus that of its germinal-centre cells. Each clone is
+compared with itself, so differences between donors, visits and sorts do not enter. The median lag is reported
+with a bootstrap interval over clones (1,000 resamples), together with the number of clones whose output is less
+or more mutated than their germinal-centre cells. With a time column, the slope of mutation against time in the
+germinal-centre compartment (Theil–Sen; Theil 1950, Sen 1968) converts each lag into days, which assumes that a
+clone matures at the rate of the population. The lag does not establish a parent–offspring relation between
+particular cells.
+
 ### Centring on the sampling context, and when it misleads
 
 Centring removes each context's average before clones are compared. This removes technical differences
@@ -311,8 +345,7 @@ plasma-cell clones of one mouse, whose sampled response was dominated by lamina-
 branch of their own (manuscript, Supplementary Fig. 5). Three habits avoid misreading such a result:
 
 1. examine programmes and map regions **by donor** (`tf.pl.clone_map(adata, color="donor")`);
-2. repeat the analysis **without centring** (`context_key=None`) or with a composition-balanced reference,
-   and keep only conclusions that survive;
+2. repeat the analysis **without centring** (`context_key=None`) and keep only conclusions that survive;
 3. choose as the context a **nuisance** variable (donor, library), never the biology under study.
 
 ### A note on counting programmes
@@ -342,8 +375,10 @@ pass a demanding test. See `split_test` for the measured calibration of both ava
 * Phipson B, Smyth GK. Permutation p-values should never be zero. *Stat Appl Genet Mol Biol* 2010;9:39.
 * Rahimi A, Recht B. Random features for large-scale kernel machines. *NeurIPS* 2007.
 * Searle SR, Casella G, McCulloch CE. *Variance Components*. Wiley, 1992.
+* Sen PK. Estimates of the regression coefficient based on Kendall's tau. *J Am Stat Assoc* 1968;63:1379-1389.
 * Spall JC. Multivariate stochastic approximation using a simultaneous perturbation gradient approximation. *IEEE Trans Autom Control* 1992;37:332-341.
 * Suo C et al. Dandelion uses the single-cell adaptive immune receptor repertoire to explore lymphocyte developmental origins. *Nat Biotechnol* 2024;42:40-51.
+* Theil H. A rank-invariant method of linear and polynomial regression analysis. *Proc K Ned Akad Wet* 1950;53:386-392, 521-525, 1397-1412.
 * Traag VA, Waltman L, van Eck NJ. From Louvain to Leiden: guaranteeing well-connected communities. *Sci Rep* 2019;9:5233.
 
 ## Optional frozen-reference state distributions

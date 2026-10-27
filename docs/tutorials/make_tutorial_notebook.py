@@ -529,11 +529,11 @@ md(r"""
 1. **Clonal coherence** — the share of transcriptional variance explained by clone identity (an intraclass
    correlation, ICC), next to what shuffled clone labels give. If the observed value is far above the
    shuffled one, cells of a clone share their state more than chance.
-2. **Reliability** — a profile's expected correlation with the true profile; the report says how many cells a
-   clone needs to reach 0.5. Nothing is filtered on reliability.
+2. **Reliability** — a profile's expected squared correlation with the true profile; the report says how many
+   cells a clone needs to reach 0.5. Nothing is filtered on reliability.
 3. **Clonal programmes** — groups of clones with similar profiles. Look at their **stability** (mean
-   bootstrap Jaccard index): ≥ 0.75 is stable, < 0.6 should not be interpreted. Unstable programmes mean the
-   clones vary along a continuum rather than falling into groups.
+   bootstrap Jaccard index): ≥ 0.75 is stable, < 0.6 should not be interpreted. Unstable programmes suggest that the
+   clones vary continuously rather than falling into groups.
 4. **Clone-level tests** — for each annotation, how much of the variation between clone profiles it
    explains (R²) and its permutation P value.
 """)
@@ -664,8 +664,8 @@ cycling gene score.
 continuous axis of variation between clones and ask what it tracks. The gene score only orients the axis;
 the division gate was never used to compute it.
 
-**What to look for.** In both cohorts the recently divided fraction rises steadily from the lowest to the
-highest decile (manuscript: from about 0.1 to 0.7–0.9).
+**What to look for.** In both cohorts the recently divided fraction rises from about 0.1 in the lowest decile
+to 0.7–0.9 in the highest, most of the rise within the first three deciles (as in the manuscript).
 """)
 
 code(r"""
@@ -707,7 +707,7 @@ are built from the same expression, so this describes the landscape; it is not a
 
 **What to look for.** One end of the main axis carries dark-zone and cell-cycle genes (*Mki67*, *Top2a*,
 *Hmgb2*), the other genes of B cells outside the dark zone, resting or activated (*Fcer2a*, *Cd83*, *Bank1*,
-*Ccr6*): the axis that follows division history in Step 14. With almost 2,000 clones most expressed genes
+*Cd74*): the axis that follows division history in Step 14. With almost 2,000 clones most expressed genes
 pass FDR < 0.05, so read Moran's I (here at least 0.3) rather than the number of significant genes.
 """)
 

@@ -26,8 +26,9 @@ cells + clone ids + embedding
 ```
 
 Every later step reads the profiles stored by step 1 in `adata.uns["threadfin"]["profiles"]`, so step 1
-comes first; the others can be run in any order. If you change the cells, clone ids or embedding, rerun
-step 1 — Threadfin checks this and refuses to mix results from different inputs.
+comes first, and `association_test` also needs the programmes of step 4; the others can be run in any order.
+If you change the cells, clone ids or embedding, rerun everything from step 1: coherence, programmes and
+memory refuse to run on profiles fitted to different inputs, but the other functions do not check.
 
 ---
 
@@ -70,8 +71,8 @@ clone, used by the tests); `representation` (`"kernel"`, what `threadfin.run` us
 between the estimated and the true profile), the donor and the number of contexts the clone was seen in.
 The profiles themselves are in `adata.uns["threadfin"]["profiles"]["features"]`.
 
-> **Watch out.** The ICC printed here is computed from the kernel features and smoothed cells; the coherence
-> statistic you should report comes from step 2, which uses unsmoothed cells in the embedding itself.
+> **Watch out.** The reliabilities come from the smoothed kernel features of the profiles; the clonal ICC to
+> report comes from step 2, which uses unsmoothed cells in the embedding itself.
 
 ## 2. Clonal coherence
 
@@ -183,11 +184,11 @@ programme with probability 0.8). The same call works across tissues or sort gate
 | Function | Question | What it needs |
 |---|---|---|
 | `tl.gene_heritability`, `tl.geneset_heritability` | Which genes are clonally inherited? | gene expression in `adata.X` or a layer |
-| `tl.lineage_forest`, `tl.lineage_heritability` | Within a clone, do close relatives on the mutation lineage tree share state? | per-cell V-region sequences and germlines |
+| `tl.lineage_forest`, `tl.lineage_heritability` | Within a clone, do close relatives on the mutation lineage tree share state? | lineage trees built elsewhere: within-clone cell pairs with their tree distances, and root-to-tip depths |
 | `tl.export_lag` | How far behind its germinal-centre relatives is a clone's output, in somatic mutations? | cell states (GC vs output), mutation frequency, isotype |
 | `tl.programme_markers` | Which genes mark each programme, with clones as replicates? With `state_key=` and `state=`: which genes differ between programmes *within* one cell state? | gene expression |
 | `tl.landscape_genes` | Which genes change smoothly across the clones, when there are no distinct programmes? | gene expression |
-| `tl.programme_composition` | Which cell states make up each programme, with clones weighted equally? | a cell-state annotation |
+| `tl.programme_composition` | Which cell states make up each programme (as shares of its cells)? | a cell-state annotation |
 | `tl.map_quality` | Is a clone map faithful and connected? | profiles and map coordinates |
 
 The statistical model behind each step is described in [Methods](../METHODS.md). A complete analysis of a

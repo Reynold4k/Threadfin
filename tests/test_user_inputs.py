@@ -199,3 +199,48 @@ def test_overview_is_drawn_when_no_programmes_were_found():
     res = tf.run(adata, basis="X_pca", donor_key="donor", sample_key="context", n_perm=10, n_boot=3, verbose=False)
     assert res.programmes.empty
     assert res.plot() is not None
+
+
+def test_run_builds_the_embedding_from_a_counts_layer(synthetic):
+    """Scanpy's usual layout - normalised values in X, raw counts in a layer - works with counts_layer=."""
+    import warnings
+
+    import scanpy as sc
+
+    adata, bcr, _ = synthetic
+    adata.obs["clone_id"] = bcr["clone_id"].reindex(adata.obs_names).to_numpy()
+    kw = dict(n_perm=10, n_boot=5, map_n_neighbors=15, map_min_dist=0.5, verbose=False)
+    raw, layered = adata.copy(), adata.copy()
+    layered.layers["counts"] = layered.X.copy()
+    sc.pp.normalize_total(layered)
+    sc.pp.log1p(layered)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        tf.run(raw, **kw)
+        tf.run(layered, counts_layer="counts", **kw)
+    np.testing.assert_allclose(layered.obsm["X_threadfin"], raw.obsm["X_threadfin"])
+    with pytest.raises(KeyError, match="counts_layer 'raw' is not in adata.layers"):
+        tf.run(adata.copy(), counts_layer="raw", **kw)
+
+
+def test_a_label_fixed_within_each_donor_is_reported_as_untestable():
+    """Shuffling within donors cannot test a donor's age or sex: the run says so instead of reporting p = 1, and
+    the summary numbers its sections in the order they appear."""
+    import warnings
+
+    adata = tf.sim.simulate_repertoire(n_clones=1500, n_timepoints=2, random_state=2)
+    donors = sorted(adata.obs["donor"].astype(str).unique())
+    age = {d: ("old", "young")[i % 2] for i, d in enumerate(donors)}
+    adata.obs["age_group"] = adata.obs["donor"].astype(str).map(age)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        result = tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca", n_perm=20, n_boot=5,
+                        test=["age_group"], time_key="timepoint", map_n_neighbors=30, map_min_dist=0.5,
+                        verbose=False)
+    assert "age_group" not in result.profile_tests and "age_group" not in result.tests
+    assert "does not vary among the clones of any single 'donor'" in result.skipped["clone-level test of 'age_group'"]
+    assert "programme test of 'age_group'" not in result.skipped        # the same reason is given once
+    text = result.summary()
+    assert "3. Do clones keep their state over 'timepoint'?" in text and "\n4. " not in text
+    with pytest.raises(ValueError, match="does not vary among the clones of any single 'donor'"):
+        tf.tl.profile_association(adata, "age_group", verbose=False)

@@ -23,8 +23,9 @@ continuously without forming groups. Two safeguards address this:
    work (Meinshausen 2008; sc-SHC, Grabski et al. 2023), but this implementation
    does not establish family-wise error control for the selected tree. Communities below a non-significant
    node are merged. When even the root is not significant, the clones form
-   a single programme: they differ (see the coherence test) but along a
-   continuum rather than in distinct groups.
+   a single programme: they differ (see the coherence test), but not as
+   groups the test can separate. This alone is not evidence of a continuum
+   (see :func:`split_test`).
 2. **Bootstrap stability.** Cells are resampled within clones (Poisson
    bootstrap), profiles are re-estimated and the whole procedure (graph,
    Leiden, split test) is repeated; each programme is matched to its best
@@ -33,7 +34,8 @@ continuously without forming groups. Two safeguards address this:
    not be interpreted.
 
 The Leiden resolution is chosen as the finest one whose size-weighted
-stability reaches the threshold, instead of being fixed by hand.
+stability reaches the threshold (otherwise the most stable one, with a
+warning), instead of being fixed by hand.
 """
 
 from __future__ import annotations
@@ -704,8 +706,8 @@ def find_programmes(
     extra = (f"; {int(table[f'{key_added}_assigned'].notna().sum())} of {len(table)} profiled clones "
              f"assigned with posterior >= {min_posterior}" if assign_remaining else "")
     if summary.shape[0] == 1:
-        log(f"programmes: no significant split among {eligible.size} core clones (resolution {chosen}): the "
-            "clones differ, but along a continuum rather than in distinct programmes.", verbose)
+        log(f"programmes: no significant split among {eligible.size} core clones (resolution {chosen}): one "
+            "programme. The clones differ, but not as groups the split test can separate.", verbose)
     else:
         n_merged = int((~split_tests["split"]).sum()) if not split_tests.empty else 0
         merged_txt = f" after merging {n_merged} non-significant split(s)" if n_merged else ""

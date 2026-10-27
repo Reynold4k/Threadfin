@@ -14,7 +14,7 @@ complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_t
 |---|---|
 | Do I have **gene expression** and **BCR** for the *same* cells (5′ 10x, or plate-based with TRUST4/MiXCR)? | Clones come from the BCR; states come from the RNA; the two are linked by the cell barcode. |
 | Do I have the **contig-level** BCR table — one row per receptor chain? | Clones are defined from heavy *and* light chain; a per-cell summary cannot be paired. Cell Ranger's `filtered_contig_annotations.csv` and `airr_rearrangement.tsv` are contig-level. |
-| Do I know which **individual** (donor, mouse) each cell came from? | Clones are defined within individuals and every test shuffles labels within individuals. |
+| Do I know which **individual** (donor, mouse) each cell came from? | Clones are defined within individuals, and the tests of your labels shuffle them within individuals. |
 | Do I know the **sample** (library / sort / time point) of each cell? | Each clone is compared with the cells sampled with it. |
 | Are there enough clones with **two or more cells**? | With 40 such clones the coherence test detects a clonal ICC of 0.05 nine times in ten, and about 10 clones suffice for an ICC of 0.1 ([power simulation](../../manuscript/analyses/technical_validation/power/README.md)); programmes and label tests ask for more, typically hundreds. The 15 public datasets analysed with Threadfin have 96–11,141. |
 | Are **plasma cells and memory B cells** included, if they were sampled? | Clones span these states; removing them removes exactly the clone structure Threadfin describes. |
@@ -29,7 +29,7 @@ complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_t
 
 | Input | Format | Notes |
 |---|---|---|
-| expression | `AnnData`, one row per cell, **raw counts** in `X` (or `layers["counts"]`) | B cells (including plasma cells); doublets and low-quality cells removed |
+| expression | `AnnData`, one row per cell, **raw counts** in `X`, or in a layer named with `counts_layer=` (for example `tf.run(..., counts_layer="counts")`) | B cells (including plasma cells); doublets and low-quality cells removed |
 | `obs["donor"]` | the individual each cell came from | mouse id, participant id |
 | `obs["sample"]` | the library, sort or time point each cell was sequenced in | used as the sampling context — see section 5 |
 | BCR | Cell Ranger `filtered_contig_annotations.csv`, an AIRR `.tsv`, a contig-level `DataFrame`, or a scirpy object | one row per receptor chain, so that heavy and light chains can be paired |
@@ -261,12 +261,14 @@ print(result.methods(ids))                            # describes the clone call
 
 Anything measured per cell can be tested against the clones: antigen binding, isotype, mutation load, sort
 gate, tissue or time point. `test=` takes columns of `adata.obs`, so add them before the run. Isotype, for
-example, comes from the constant gene of the heavy-chain contig (Cell Ranger's `c_gene`: IGHM, IGHA1, IGHG2B …);
-the first four letters give the class:
+example, comes from the constant gene of the heavy-chain contig (Cell Ranger's `c_gene`, AIRR `c_call`: IGHM,
+IGHA1, IGHG2B …); the first four letters give the class. `tf.read_contigs` gives the table AIRR column names,
+whether or not you ran the snippet of section 6:
 
 ```python
-heavy = contigs[contigs["chain"] == "IGH"].drop_duplicates("barcode").set_index("barcode")
-adata.obs["isotype"] = heavy["c_gene"].reindex(adata.obs_names).str[:4].to_numpy()   # IGHM, IGHA, IGHG ...
+airr = tf.read_contigs(contigs)
+heavy = airr[airr["locus"] == "IGH"].drop_duplicates("cell_id").set_index("cell_id")
+adata.obs["isotype"] = heavy["c_call"].reindex(adata.obs_names).str[:4].to_numpy()   # IGHM, IGHA, IGHG ...
 ```
 
 ```python
@@ -302,7 +304,7 @@ one coarse measurement, the profile describes the whole transcriptome.
 ## 8. Saving
 
 ```python
-result.clones.to_csv("threadfin_clones.csv")       # one row per clone
+result.clones.to_csv("threadfin_clones.csv")       # one row per clone with >= 2 cells
 adata.write_h5ad("threadfin_result.h5ad")          # everything, including adata.uns["threadfin"]
 print(result.methods())                            # a Methods paragraph with the settings and versions used
 ```
@@ -321,7 +323,7 @@ of a paper. Check it against your own description of the data.
 | `A per-cell BCR table cannot be used for clone definition` | a one-row-per-cell table was passed | pass the contig-level table (`filtered_contig_annotations.csv` or AIRR) |
 | `Only N clone(s) have two or more cells` | too few cells per clone were captured, or BCRs were not attached | check the match rate (section 4); check that clones were called within donors; a dataset with very few repeated clones cannot be profiled |
 | `N clone id(s) occur in more than one donor` | clone ids were not made donor-private | prefix the donor (the message shows the one-line fix), or call clones with `donor_key` |
-| `Counts contain NaN, infinite, or negative values` | `adata.X` holds normalised or scaled data | put raw counts in `X` (or `layers["counts"]` with `counts_layer=`), or pass your own embedding with `basis=` |
+| `Counts contain NaN, infinite, or negative values` | `adata.X` holds normalised or scaled data | put raw counts in `X`, or name the layer that holds them with `counts_layer=` (Threadfin 4.5.2 or later), or pass your own embedding with `basis=` |
 | `'X_...' has NaN or infinite values in N of M cells` | your own embedding (`basis=`) has missing values | drop those cells first; the message shows the line of code |
 | `'donor' not found in adata.obs` (or any other column) | a column name is misspelled or missing | the message names the column; check `adata.obs.columns` |
 | `Clone calling needs the Dandelion package` | Dandelion is not installed | `pip install "threadfin[dandelion]"`, or pass clone ids yourself (section 6) |

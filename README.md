@@ -12,7 +12,7 @@
   <a href="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml"><img src="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue.svg" alt="Python 3.10 to 3.14"></a>
   <a href="https://pypi.org/project/threadfin/"><img src="https://img.shields.io/pypi/v/threadfin.svg" alt="PyPI version"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
+  <a href="https://github.com/Reynold4k/Threadfin/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
 </p>
 
 Threadfin takes paired single-cell RNA and receptor (BCR or TCR) sequencing and describes every clone by the
@@ -55,16 +55,17 @@ result = tf.run(
 ```
 
 `tf.run` calls clones within each donor (Dandelion, paired chains), builds an expression embedding without the
-receptor genes, estimates one profile per clone, tests clonal coherence, lays out the clone map and looks for
-clonal programmes. On the 16 public datasets tested (up to 206,000 cells) it took 1 to 15 minutes with 8 cores.
+receptor genes, estimates one profile per clone with two or more cells, tests clonal coherence, lays out the
+clone map and looks for clonal programmes. On the 16 public datasets tested (up to 206,000 cells) it took 1 to
+15 minutes with 8 cores.
 
 ### 3. Read the results
 
 ```python
 print(result.summary())                 # plain-language report
-result.plot("threadfin_overview.pdf")   # clone map, coherence, stability, composition
+result.plot("threadfin_overview.pdf")   # clone map, coherence, stability, programme sizes or composition
 print(result.methods())                 # a Methods paragraph with the settings and versions used
-result.clones.to_csv("clones.csv")      # one row per clone: size, reliability, programme, map position
+result.clones.to_csv("clones.csv")      # per clone with >= 2 cells: size, reliability, programme, map position
 ```
 
 <p align="center">
@@ -103,7 +104,9 @@ result.clones.to_csv("clones.csv")      # one row per clone: size, reliability, 
 | [4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
 | [5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset (GSE287123) end to end: download, hashtag demultiplexing, clones, embedding, Threadfin and interpretation; executed in a fresh environment before every release (about 6 minutes on 8 cores) |
 
-4.5.1 pins Dandelion below 1.0 and fixes T-cell contig files passed as a path. New in 4.5.0: T cells, scirpy input, `result.methods()` and gene-level summaries of the clone landscape
+4.5.2 lists labels that are fixed within each donor (age, sex) as not testable instead of reporting p = 1, and
+reads raw counts from a layer (`counts_layer=`); 4.5.1 pins Dandelion below 1.0. New in 4.5.0: T cells, scirpy
+input, `result.methods()` and gene-level summaries of the clone landscape
 ([changelog](https://github.com/Reynold4k/Threadfin/blob/main/CHANGELOG.md)).
 
 ---
@@ -130,9 +133,11 @@ state* need the clone as the unit of representation and of statistical inference
 repertoires sampled *in vivo* make this difficult, and Threadfin addresses each:
 
 * **Most clones are captured as one or a few cells.** Profiles are shrunk according to the number of cells
-  sampled, and each clone carries a reliability score. No clone is discarded for being small.
+  sampled, and every clone with two or more cells carries a reliability score: none is discarded for being
+  small.
 * **Clone membership is confounded with donor, sample, tissue and sorting gate.** Each clone is described
-  relative to the cells sampled with it, and every test shuffles labels within the sampling design.
+  relative to the cells sampled with it, and every permutation test shuffles labels within the sampling
+  design.
 * **Treating cells as independent inflates significance.** Tests use clones, not cells, as replicates.
 
 ## What Threadfin answers
@@ -239,7 +244,7 @@ error rate when samples differ, where per-clone graph scores and cell-level test
 measured clone annotations Threadfin is comparable to clone2vec and to a simple mean of the cells'
 coordinates, and better than Clonotrace at its default and than Benisse; in simulation, clone2vec groups clones by their
 planted programme and tells mixed from in-between clones more accurately. Threadfin needs a fraction of the
-others' time (its clone profiles take seconds; clone2vec about 30 times longer, Clonotrace 300 to 2,400
+others' time (its clone profiles take seconds; clone2vec about 30 times longer, Clonotrace 290 to 2,400
 times) and finished every run without help; a million cells take about an hour on 8 cores
 ([scalability](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/analyses/technical_validation/scalability/README.md)).
 The benchmark reports every result, including those where Threadfin is not the best.

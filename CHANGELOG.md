@@ -2,6 +2,53 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.5.2 — 2026-10-27
+
+Fixes found by checking the documentation, sentence by sentence, against the code.
+
+*What this means for you:* no number changes. Two messages do: a run with a single programme no longer describes
+the clones as a continuum, and a label that is fixed within every donor (age, sex, disease group) is listed as not
+testable instead of being reported as not significant with p = 1. Raw counts kept in a layer can now be passed to
+`tf.run` with `counts_layer=`.
+
+### Fixed
+
+- **Labels fixed within every donor** were tested by shuffling them among the clones of each donor, which changes
+  nothing, so `tf.run` reported "does not significantly explain clone states" with p = 1. `tl.profile_association`
+  and `tl.association_test` now raise a `ValueError` that says why, and `tf.run` lists the label under "Not run" in
+  the summary, as the Methods page already said.
+- **One programme is not a continuum.** When no split passed the split test, the summary and the log said that the
+  clones vary "along a continuum". The split test is conservative (Methods, "A note on counting programmes"), so
+  they now say that no split into separate groups was significant.
+- **`tf.run(..., counts_layer="counts")`.** The documentation said raw counts could be kept in `layers["counts"]`,
+  but `tf.run` could not read them; it now passes `counts_layer` to `tf.pp.prepare_embedding`.
+- **A programme test that cannot be run** (`association_test` raising `ValueError`) no longer stops `tf.run`; like
+  the other optional tests it is listed under "Not run".
+- The summary numbers its optional sections in order (clonal memory was numbered 4 even without label tests).
+
+### Documentation
+
+- Methods: how the Leiden resolution is chosen (the most programmes whose clone-weighted mean stability reaches
+  0.75; otherwise the most stable partition, with a warning); programmes are kept for passing the split test and
+  reported with their stability, not removed for low stability; the bootstrap holds the fitted profile model
+  fixed; which clones are assigned to a programme afterwards; the ICC uses unsmoothed coordinates, the
+  reliabilities the smoothed kernel features; the returned map uses the chosen settings; a new section on the
+  export lag; an option that does not exist (a composition-balanced reference) removed.
+- Programme composition (summary, `tl.programme_composition`, overview panel d) is the share of each programme's
+  cells in each state; Tutorials 1 and 4 said that clones were weighted equally.
+- The coherence test shuffles clone labels within samples; only the tests of your labels shuffle within donors
+  (Tutorials 1 and 2).
+- Tutorial 2: the isotype snippet works whether or not the contig table was converted to AIRR names in section 6.
+- Tutorial 4: `association_test` needs the programmes; only coherence, programmes and memory detect changed
+  inputs; the lineage functions take trees built elsewhere.
+- README and Tutorial 2: profiles, reliabilities and `result.clones` cover clones with two or more cells; panel d
+  of `result.plot()` shows programme sizes unless `state_key` is given; the licence link works on PyPI.
+- Tutorial 5: reliability is the expected *squared* correlation; the genes named for the main axis are among
+  those printed; the division curve rises mostly over the first three deciles.
+- Compatibility: the verification of 4.5.1.
+- Continuous integration also installs Dandelion and scirpy, so the README's main path (clones called from
+  contigs) is tested on every change, and runs every week so that a change in a dependency is noticed.
+
 ## 4.5.1 — 2026-10-25
 
 Fixes found by a first-time user following the README and every tutorial in new environments installed from PyPI.

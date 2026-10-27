@@ -178,6 +178,18 @@ def _mantel_haenszel(a, b, c, d):
     return float(np.exp(lor)), float(np.exp(lor - half)), float(np.exp(lor + half))
 
 
+def _require_variation_within_strata(labels: pd.Series, strata, label_key: str, strata_key: str | None) -> None:
+    """Refuse a label that never varies among the clones of one stratum: shuffling within strata cannot test it."""
+    df = pd.DataFrame({"label": np.asarray(labels), "stratum": np.asarray(strata)})
+    if strata_key is None or df["label"].nunique() < 2:   # one value overall is reported by the caller
+        return
+    if not df.groupby("stratum")["label"].nunique().gt(1).any():
+        raise ValueError(
+            f"'{label_key}' does not vary among the clones of any single '{strata_key}', so shuffling it within "
+            f"'{strata_key}' cannot test it: it is a property of each {strata_key}. Compare the {strata_key}s "
+            f"instead, with one value per {strata_key}.")
+
+
 def _assoc_table(adata, label_key, programme_key, clone_key, strata_key, how, min_frac):
     prof = get_profiles(adata)
     table = prof["clone_table"]
@@ -219,6 +231,8 @@ def association_test(
     clone (:func:`clone_labels`). P-values come from permuting clone labels
     within strata (default: donor), which keeps every donor's label
     frequencies fixed; Benjamini-Hochberg FDR is computed across all rows.
+    A label that never varies within a stratum (a donor's age or sex) cannot
+    be tested this way and raises ``ValueError``.
 
     *Categorical labels* (e.g. antigen specificity, isotype, infection
     status) give one row per (programme, level) with the observed and
@@ -250,6 +264,7 @@ def association_test(
     df = _assoc_table(adata, label_key, programme_key, clone_key, strata_key, how, min_frac)
     if df.empty:
         raise ValueError(f"No clones with both a programme and a '{label_key}' value.")
+    _require_variation_within_strata(df["label"], df["stratum"], label_key, strata_key)
     rng = np.random.default_rng(random_state)
     prog_codes, progs = codes(df["programme"])
     if len(progs) < 2:
@@ -299,6 +314,8 @@ def profile_association(
     captured by a linear trend in the label (numeric labels, as in
     distance-based redundancy analysis; McArdle & Anderson 2001). The
     p-value comes from permuting labels among clones within strata (donors).
+    A label that never varies within a stratum (a donor's age or sex) cannot
+    be tested this way and raises ``ValueError``.
 
     Parameters
     ----------
@@ -346,6 +363,7 @@ def profile_association(
     y = labels.loc[use]
     strata = (codes(table.loc[use, strata_key].astype(str))[0] if strata_key is not None
               else np.zeros(use.size, dtype=np.int64))
+    _require_variation_within_strata(y, strata, label_key, strata_key)
     numeric = pd.api.types.is_numeric_dtype(y) and not pd.api.types.is_bool_dtype(y)
     rng = np.random.default_rng(random_state)
 

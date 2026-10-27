@@ -1,4 +1,4 @@
-# API reference (threadfin 4.5.1)
+# API reference (threadfin 4.5.2)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -27,10 +27,11 @@ The complete analysis and its result.
 ```python
 tf.run(adata, bcr=None, *, donor_key: 'str | None' = None, sample_key: 'str | None' = None,
     batch_key: 'str | None' = None, state_key: 'str | None' = None, time_key: 'str | None' = None,
-    test=None, clone_key: 'str' = 'clone_id', basis: 'str | None' = None, representation: 'str' =
-    'kernel', map_n_neighbors: 'int | str' = 'auto', map_min_dist: 'float | str' = 'auto', n_perm:
-    'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0, n_jobs: 'int | None' = 1,
-    clone_options: 'dict | None' = None, verbose: 'bool' = True) -> 'ThreadfinResult'
+    test=None, clone_key: 'str' = 'clone_id', basis: 'str | None' = None, counts_layer: 'str | None'
+    = None, representation: 'str' = 'kernel', map_n_neighbors: 'int | str' = 'auto', map_min_dist:
+    'float | str' = 'auto', n_perm: 'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0,
+    n_jobs: 'int | None' = 1, clone_options: 'dict | None' = None, verbose: 'bool' = True) ->
+    'ThreadfinResult'
 ```
 
 ```text
@@ -40,7 +41,8 @@ Parameters
 ----------
 adata
     AnnData of B cells, or T cells (one row per cell). Needs raw counts in
-    ``X`` (or ``layers['counts']``) unless you pass a ready-made ``basis``.
+    ``X`` (or in the layer named by ``counts_layer``) unless you pass a
+    ready-made ``basis``.
 bcr
     Receptor data, BCR or TCR: a path to a Cell Ranger
     ``filtered_contig_annotations.csv`` or an AIRR ``.tsv``, a contig-level
@@ -74,6 +76,10 @@ basis
     Existing ``obsm`` embedding to use instead of building one. It
     should exclude immunoglobulin genes (see
     :func:`threadfin.pp.ig_gene_mask`).
+counts_layer
+    ``layers`` key holding the raw counts, when ``X`` holds normalised
+    values (for example ``"counts"`` after Scanpy's preprocessing). Used
+    only to build the embedding (:func:`threadfin.pp.prepare_embedding`).
 representation
     How each clone is summarised for grouping into programmes:
     ``"kernel"`` (default; the whole distribution of the clone's cells,
@@ -555,6 +561,8 @@ Each clone contributes once. Cell-level labels are first collapsed per
 clone (:func:`clone_labels`). P-values come from permuting clone labels
 within strata (default: donor), which keeps every donor's label
 frequencies fixed; Benjamini-Hochberg FDR is computed across all rows.
+A label that never varies within a stratum (a donor's age or sex) cannot
+be tested this way and raises ``ValueError``.
 
 *Categorical labels* (e.g. antigen specificity, isotype, infection
 status) give one row per (programme, level) with the observed and
@@ -1328,6 +1336,8 @@ label groups (categorical labels, as in PERMANOVA; Anderson 2001) or
 captured by a linear trend in the label (numeric labels, as in
 distance-based redundancy analysis; McArdle & Anderson 2001). The
 p-value comes from permuting labels among clones within strata (donors).
+A label that never varies within a stratum (a donor's age or sex) cannot
+be tested this way and raises ``ValueError``.
 
 Parameters
 ----------

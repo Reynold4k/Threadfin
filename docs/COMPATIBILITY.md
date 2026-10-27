@@ -1,5 +1,32 @@
 # Verified compatibility
 
+## Version 4.5.2 — 27 October 2026
+
+* **The user's path.** A new environment was built as Tutorial 2 describes (Python 3.11,
+  `pip install "threadfin[dandelion]"` from this version: sc-dandelion 0.5.7, numpy 2.4, pandas 2.3, anndata 0.12,
+  scanpy 1.11, matplotlib 3.8), and `tf.run` was called on the same 16 datasets: every clone table is identical,
+  byte for byte, to that of 4.5.1; the summaries differ only in the sentence about a single programme (3 datasets),
+  and the Methods paragraphs only in the version numbers. Every code block of Tutorials 1, 3 and 4 ran (22 of 22).
+* **The tutorial notebook** ran end to end in a separately built conda environment: no error, 6.0 minutes on 8
+  cores, 7.6 GB; every printed number is the same as with 4.5.1.
+* **Tests.** In that environment 268 passed and 1 was skipped (scirpy was not installed). With Python 3.12,
+  sc-dandelion 0.5.7 and scirpy 0.25.1, the setting of the new continuous-integration job, all 269 passed and the
+  tutorial on simulated data ran.
+
+## Version 4.5.1 — 25 October 2026
+
+* **The user's path, repeated with Dandelion pinned below 1.0.** A new environment was built as Tutorial 2
+  describes (Python 3.11, `pip install "threadfin[dandelion]"`, which now installs sc-dandelion 0.5.7 rather than
+  1.0; numpy 2.4, pandas 2.3, scipy 1.17, scikit-learn 1.9, anndata 0.12, scanpy 1.11, umap-learn 0.5.12, harmonypy
+  2.1, matplotlib 3.8), and `tf.run` was called on the same 16 datasets: every clone table is identical, byte for
+  byte, to that of 4.5.0, and the summaries differ only where 4.5.0 wrote "1 cells". Every code block of Tutorials
+  1, 3 and 4 ran (22 of 22).
+* **The tutorial notebook** ran end to end in a separately built conda environment: no error, 5.5 minutes on 8
+  cores, 7.2 GB; 8,736 clones, as with Dandelion 0.5.x before.
+* **Tests.** 266 passed; 1 skipped (scirpy was not installed in that environment).
+* **Continuous integration** (Linux with Python 3.10–3.14 and with the oldest allowed dependencies, macOS,
+  Windows): passed.
+
 ## Version 4.5.0 — 24 October 2026
 
 * **The user's path on real data.** A new environment was built as Tutorial 2 describes (Python 3.11,

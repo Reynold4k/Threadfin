@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "0 3 * * 1"   # every Monday, so that a new release of a dependency that breaks Threadfin is noticed
+  workflow_dispatch:
 
 jobs:
   pytest:
@@ -59,3 +62,20 @@ jobs:
         run: .venv-oldest/bin/python -m pytest tests/ -q
       - name: Tutorial on simulated data
         run: .venv-oldest/bin/python examples/tutorial.py
+
+  dandelion:
+    # the README's main path: clones called from receptor contigs with Dandelion, and scirpy input
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install with Dandelion and scirpy
+        run: pip install -e ".[test,dandelion]" scirpy
+      - name: Dandelion and scirpy are importable (otherwise their tests would be skipped)
+        run: python -c "import dandelion, scirpy; print('sc-dandelion', dandelion.__version__, 'scirpy', scirpy.__version__)"
+      - name: Run tests
+        run: python -m pytest tests/ -q -rs
+      - name: Tutorial on simulated data
+        run: python examples/tutorial.py

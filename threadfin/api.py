@@ -10,8 +10,9 @@ RNA-seq + BCR-seq dataset, in this order:
    into *clonal programmes* by the state bias of their cells (for example
    "plasmablast-biased" or "germinal-centre-retained" clones). Every split
    between programmes must pass a significance test, and every programme
-   gets a bootstrap stability score; if no split is significant, the clones
-   vary along a continuum and a single programme is reported.
+   gets a bootstrap stability score; if no split is significant, a single
+   programme is reported (the clones differ, but not as groups the test can
+   separate).
 3. **Do your labels explain how clones differ?** - optional clone-level
    tests against any labels you have (antigen specificity, isotype,
    infection, disease group): first whether the label explains clone
@@ -166,7 +167,7 @@ class ThreadfinResult:
             tests = get_programmes(ad).get("split_tests", pd.DataFrame())
             p_root = f" (split test p = {tests['pvalue'].iloc[0]:.2g})" if not tests.empty else ""
             lines.append(f"   No distinct programmes: the {int(prog['n_clones'].sum()):,} reliable clones differ, "
-                         f"but along a continuum rather than in separate groups{p_root}.")
+                         f"but no split into separate groups was significant{p_root}.")
         else:
             params = get_programmes(ad)["params"]
             n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
@@ -182,8 +183,10 @@ class ThreadfinResult:
             flag = "" if row["stability"] >= 0.6 else "  [unstable - do not interpret]"
             lines.append(f"   {name}: {int(row['n_clones']):,} clones, {int(row['n_cells']):,} cells, "
                          f"stability {row['stability']:.2f}{desc}{flag}")
+        section = 3                     # the optional sections are numbered in the order they appear
         if self.profile_tests or self.tests:
-            lines += ["", "3. Do your labels explain how clones differ? (clone-level tests)"]
+            lines += ["", f"{section}. Do your labels explain how clones differ? (clone-level tests)"]
+            section += 1
         for label, r in self.profile_tests.items():
             verdict = "explains" if r["p_value"] < 0.05 else "does not significantly explain"
             lines.append(f"   {label} {verdict} clone states: {100 * r['r2']:.1f}% of clone-profile variance "
@@ -211,7 +214,7 @@ class ThreadfinResult:
             lo, hi = m["memory_index_ci"]
             lines += [
                 "",
-                f"4. Do clones keep their state over '{m['time_key']}'? (clonal memory)",
+                f"{section}. Do clones keep their state over '{m['time_key']}'? (clonal memory)",
                 f"   {m['n_clones']} clones seen at >= 2 levels: memory index {m['memory_index']:.2f} "
                 f"[{lo:.2f}, {hi:.2f}], p = {m['p_value']:.3g} (1 = clones stay as distinct as they were, "
                 "0 = no more similar to their earlier self than to a random clone).",
@@ -432,6 +435,7 @@ def run(
     test=None,
     clone_key: str = "clone_id",
     basis: str | None = None,
+    counts_layer: str | None = None,
     representation: str = "kernel",
     map_n_neighbors: int | str = "auto",
     map_min_dist: float | str = "auto",
@@ -448,7 +452,8 @@ def run(
     ----------
     adata
         AnnData of B cells, or T cells (one row per cell). Needs raw counts in
-        ``X`` (or ``layers['counts']``) unless you pass a ready-made ``basis``.
+        ``X`` (or in the layer named by ``counts_layer``) unless you pass a
+        ready-made ``basis``.
     bcr
         Receptor data, BCR or TCR: a path to a Cell Ranger
         ``filtered_contig_annotations.csv`` or an AIRR ``.tsv``, a contig-level
@@ -482,6 +487,10 @@ def run(
         Existing ``obsm`` embedding to use instead of building one. It
         should exclude immunoglobulin genes (see
         :func:`threadfin.pp.ig_gene_mask`).
+    counts_layer
+        ``layers`` key holding the raw counts, when ``X`` holds normalised
+        values (for example ``"counts"`` after Scanpy's preprocessing). Used
+        only to build the embedding (:func:`threadfin.pp.prepare_embedding`).
     representation
         How each clone is summarised for grouping into programmes:
         ``"kernel"`` (default; the whole distribution of the clone's cells,
@@ -536,6 +545,9 @@ def run(
     require_obs(adata, donor_key, sample_key, state_key, time_key, batch_key, *test_cols,
                 context="threadfin.run()")
     require_complete_groups(adata, donor_key, sample_key, batch_key, context="threadfin.run()")
+    if counts_layer is not None and counts_layer not in adata.layers:
+        raise KeyError(f"counts_layer '{counts_layer}' is not in adata.layers (layers: "
+                       f"{', '.join(map(repr, adata.layers.keys())) or 'none'}).")
     require_positive_int(n_perm, "n_perm")
     require_positive_int(n_boot, "n_boot")
     if representation not in {"mean", "kernel"}:
@@ -604,7 +616,8 @@ def run(
     if basis is None:
         basis = "X_threadfin"
         if basis not in adata.obsm:
-            prepare_embedding(adata, batch_key=batch_key, random_state=random_state, verbose=verbose)
+            prepare_embedding(adata, counts_layer=counts_layer, batch_key=batch_key, random_state=random_state,
+                              verbose=verbose)
 
     # Step 3 - one profile per clone, relative to its own sample
     clone_profiles(adata, clone_key=clone_key, basis=basis, context_key=sample_key,
@@ -642,7 +655,12 @@ def run(
             skipped[f"clone-level test of '{col}'"] = str(e)
             log(f"profile test '{col}' skipped: {e}", verbose)
         if programmes.shape[0] >= 2:  # which programmes differ? (needs >= 2 programmes)
-            tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
+            try:
+                tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
+            except ValueError as e:
+                if str(e) not in skipped.values():  # the profile test already reported the same reason
+                    skipped[f"programme test of '{col}'"] = str(e)
+                log(f"programme test '{col}' skipped: {e}", verbose)
     memory = None
     if time_key is not None:
         # optional like the label tests: a time point or tissue column that cannot be tested (e.g. no clone seen at
