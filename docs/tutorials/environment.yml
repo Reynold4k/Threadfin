@@ -10,7 +10,7 @@ dependencies:
   - python=3.11
   - pip
   - pip:
-      - threadfin>=4.5.0
+      - threadfin>=4.5.1        # the notebook checks for 4.5.1 or later
       - sc-dandelion==0.5.7
       - matplotlib<3.9          # Dandelion 0.5.7 uses matplotlib.cm.get_cmap, removed in matplotlib 3.9
       - jupyterlab
