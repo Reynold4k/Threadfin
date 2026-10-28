@@ -1,5 +1,26 @@
 # Verified compatibility
 
+## Version 4.5.3 — 28 October 2026
+
+* **Why this version.** Every tutorial was followed again in new environments that saw nothing of the testing
+  account (no settings, caches or packages; Python packages from PyPI, tutorial files from GitHub). The notebook
+  stopped at Step 8: pynndescent 0.7.0, released the day before, returns sparse arrays that scanpy 1.11.5 cannot
+  read (`sc.pp.neighbors` on 8,192 or more cells). On the same 60,000 simulated cells and seed, pynndescent 0.7.0
+  also returned other approximate neighbours than 0.6.0 (22% of the rows of the 15-neighbour graph identical) and
+  another UMAP layout; with pynndescent 0.6.0, numba 0.68.0 and 0.68.1 gave identical results. Threadfin now
+  requires pynndescent < 0.7.
+* **The release candidate.** A new environment (Python 3.11 from conda-forge only, `pip install
+  "threadfin[dandelion]"` from this version: pynndescent 0.6.0, numba 0.68.1, scanpy 1.11.5, sc-dandelion 0.5.7,
+  matplotlib 3.8.4) gave clone tables and summaries identical, byte for byte, to those of 4.5.2 for the three
+  datasets whose smoothing uses pynndescent (61,423, 72,359 and 115,144 cells; the last also lays out 6,583 clones,
+  for which UMAP uses pynndescent too); the tests passed (268, 1 skipped without scirpy);
+  every code block of Tutorials 1, 3 and 4 ran (22 of 22); the regenerated notebook ran end to end (7.8 minutes on
+  8 cores including the download, 7.6 GB) and printed the same numbers as with 4.5.2.
+* **Python 3.14.** `pip install threadfin` installed on Python 3.14 (numpy 2.5, pandas 3.1, anndata 0.13, scanpy
+  1.12, matplotlib 3.11); every code block of Tutorials 1, 3 and 4 and `examples/tutorial.py` ran and printed the
+  same numbers as on Python 3.11. `pip install "threadfin[dandelion]"` failed there, because matplotlib < 3.9,
+  which Dandelion 0.5 needs, has no packages for Python 3.13 or later: the Dandelion extra needs Python 3.10–3.12.
+
 ## Version 4.5.2 — 27 October 2026
 
 * **The user's path.** A new environment was built as Tutorial 2 describes (Python 3.11,

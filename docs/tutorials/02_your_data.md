@@ -35,8 +35,9 @@ complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_t
 | BCR | Cell Ranger `filtered_contig_annotations.csv`, an AIRR `.tsv`, a contig-level `DataFrame`, or a scirpy object | one row per receptor chain, so that heavy and light chains can be paired |
 
 Clones are defined with Dandelion's paired heavy- and light-chain definition (Suo et al. 2024), which needs
-the `sc-dandelion` package. Dandelion 0.5.7 uses a matplotlib function that was removed in matplotlib 3.9,
-so install both together: `pip install "threadfin[dandelion]"`
+the `sc-dandelion` package. Dandelion 0.5.7 imports nxviz, which uses a matplotlib function that was removed in
+matplotlib 3.9, so install both together (Python 3.10–3.12; matplotlib < 3.9 has no packages for later Python
+versions): `pip install "threadfin[dandelion]"`
 or `pip install "sc-dandelion>=0.5.7,<1" "matplotlib<3.9"` (Threadfin works with matplotlib 3.7 and later; it is
 validated with Dandelion 0.5.x, and Dandelion 1.0 calls clones differently). If you prefer,
 define clones in a separate environment or with another clone caller and pass the clone ids directly
@@ -329,6 +330,8 @@ of a paper. Check it against your own description of the data.
 | `Clone calling needs the Dandelion package` | Dandelion is not installed | `pip install "threadfin[dandelion]"`, or pass clone ids yourself (section 6) |
 | `sc-dandelion 1.x is installed; Threadfin … is validated with sc-dandelion 0.5.x` | Dandelion 1.0 calls clones differently | `pip install "sc-dandelion<1"`; results then match the documentation |
 | `cannot import name 'get_cmap' from 'matplotlib.cm'` | Dandelion 0.5.7 with matplotlib ≥ 3.9 | `pip install "matplotlib<3.9"` |
+| `Failed building wheel for matplotlib` while installing `threadfin[dandelion]` | Python 3.13 or later: matplotlib < 3.9, which Dandelion 0.5 needs, has no packages for it | use Python 3.10–3.12 for clone calling, or pass clone ids yourself (section 6) |
+| `'csr_array' object has no attribute 'getnnz'` from `sc.pp.neighbors` | pynndescent 0.7 (October 2026) returns a sparse type that scanpy's neighbour search (for 8,192 or more cells) cannot yet read | `pip install "pynndescent<0.7"`; Threadfin 4.5.3 and later install it |
 | `No resolution reached a clone-weighted mean stability of 0.75` | the programmes are, on average, less stable than the threshold | judge each programme by its own stability (`result.programmes`); the summary marks those below 0.6 as unstable |
 | coherence high but the shuffled value is also high (> 10 %) | samples differ strongly in composition | expected; Threadfin accounts for it — make sure `sample_key` is set |
 | a programme is dominated by one donor | donors differ in their sampled composition, and centring shifts all clones of a donor together | look at programmes by donor; compare with `sample_key=None` (no centring); see Methods, "centring on the sampling context" |

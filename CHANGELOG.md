@@ -2,6 +2,38 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.5.3 — 2026-10-28
+
+A dependency released on 27 October 2026 stopped new installations from running the tutorial notebook and from
+reproducing the published numbers.
+
+*What this means for you:* if you installed Threadfin on or after 27 October 2026, run `pip install -U threadfin`
+(or `pip install "pynndescent<0.7"`); results then match the documentation again. Nothing else changes.
+
+### Fixed
+
+- **pynndescent 0.7** (27 October 2026) broke two things, so Threadfin now requires `pynndescent<0.7`:
+  - scanpy's neighbour search (`sc.pp.neighbors`, which the tutorial notebook calls, as do many analyses) uses
+    pynndescent for 8,192 cells or more and stopped with "'csr_array' object has no attribute 'getnnz'": scanpy
+    1.11.5 and 1.12.4 cannot read the sparse arrays that pynndescent 0.7 returns;
+  - pynndescent 0.7 finds different approximate neighbours (on 60,000 simulated cells with the same seed, 22% of
+    the rows of the 15-nearest-neighbour graph were identical; 90.3% and 91.3% of the exact neighbours were
+    found), which changes Threadfin's smoothing of datasets with more than 50,000 cells and the clone-map layout
+    of more than 4,096 clones. numba 0.68.1 instead of 0.68.0 changed nothing.
+- **The Dandelion extra needs Python 3.10–3.12.** On Python 3.13 and 3.14, `pip install "threadfin[dandelion]"`
+  fails while building matplotlib: Dandelion 0.5 imports nxviz, which needs matplotlib < 3.9, and matplotlib < 3.9
+  has no packages for those versions. The README, Tutorial 2 and the Methods now say so. Threadfin without
+  Dandelion runs on 3.10–3.14 (Tutorials 1, 3 and 4 print the same numbers on Python 3.11 and 3.14).
+
+### Documentation
+
+- Tutorial notebook, Step 0: conda takes packages from conda-forge only (`--override-channels`, and `nodefaults`
+  in `environment.yml`), so newer conda versions do not ask you to accept the terms of Anaconda's own channels;
+  the download command for `environment.yml` is given; the first cell also prints the pynndescent version and
+  checks for Threadfin 4.5.3 or later.
+- Tutorial 2, troubleshooting: what to do about the `getnnz` error and about the matplotlib build failure on
+  Python 3.13 or later.
+
 ## 4.5.2 — 2026-10-27
 
 Fixes found by checking the documentation, sentence by sentence, against the code.

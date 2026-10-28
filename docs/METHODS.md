@@ -31,9 +31,10 @@ sc-dandelion; Suo et al. 2024), through :func:`threadfin.define_clones_dandelion
 are grouped within each donor with ``dandelion.tl.find_clones`` (default junction identity
 0.85 for BCR and 1.0 for TCR), and the composite heavy+light clone id is returned per cell. Dandelion is an optional
 dependency: only clone calling needs it, and clone ids made by any other caller can be supplied
-directly in ``adata.obs``. Dandelion 0.5.7 uses ``matplotlib.cm.get_cmap``, which matplotlib 3.9
-removed, so install it with ``pip install "threadfin[dandelion]"`` (or ``pip install "sc-dandelion<1"
-"matplotlib<3.9"``; Threadfin is validated with Dandelion 0.5.x) or run it in its own environment. Dandelion's assignment depends on Python's string-hash
+directly in ``adata.obs``. Dandelion 0.5.7 imports nxviz, and nxviz uses ``matplotlib.cm.get_cmap``,
+which matplotlib 3.9 removed, so install it with ``pip install "threadfin[dandelion]"`` (or ``pip install "sc-dandelion<1"
+"matplotlib<3.9"``; Threadfin is validated with Dandelion 0.5.x; matplotlib < 3.9 needs Python 3.10–3.12) or run it in
+its own environment. Dandelion's assignment depends on Python's string-hash
 seed (set iteration order), so clone ids are identical between sessions only when ``PYTHONHASHSEED`` is fixed;
 the seed in use is recorded with the result.
 

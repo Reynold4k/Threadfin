@@ -66,7 +66,7 @@ sequences) and Jupyter.
 
 ```bash
 # 1. a fresh environment, so nothing else on your computer interferes
-conda create -n threadfin -c conda-forge python=3.11 pip -y
+conda create -n threadfin -c conda-forge --override-channels python=3.11 pip -y
 conda activate threadfin
 
 # 2. Threadfin and Dandelion from PyPI, and Jupyter
@@ -80,20 +80,28 @@ curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutoria
 jupyter lab 05_end_to_end_tutorial.ipynb
 ```
 
-The same environment can be created from [`environment.yml`](environment.yml) (download it the same way, or
-from a clone of the repository) with `conda env create -f environment.yml`.
+The same environment can be created from [`environment.yml`](environment.yml), which also lists the kernel
+command of step 3:
+
+```bash
+curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/environment.yml
+conda env create -f environment.yml
+```
 
 **Why.**
 
 * *An isolated environment* keeps the package versions this tutorial was tested with (listed in the last
   cell) and keeps Threadfin's dependencies from changing packages that other projects rely on.
-* *`matplotlib<3.9`* is needed by Dandelion 0.5.7, which uses a matplotlib function removed in version 3.9
-  (`matplotlib.cm.get_cmap`); Dandelion's package metadata does not say so, so pip would otherwise install a
+* *`matplotlib<3.9`* is needed by Dandelion 0.5.7, which imports nxviz, which uses a matplotlib function removed
+  in version 3.9 (`matplotlib.cm.get_cmap`); neither package's metadata says so, so pip would otherwise install a
   newer matplotlib and `import dandelion` would fail. Threadfin itself works with matplotlib 3.7 and later.
 * *`sc-dandelion==0.5.7`* is the version the tutorial and the manuscript used. Dandelion 1.0 (October 2026)
   calls clones differently (on these data about 7,200 instead of 8,700 clones), so the numbers below would not
   match; Threadfin warns when it finds Dandelion 1.x.
-* *Python 3.11* is the version the manuscript analyses used; Threadfin supports 3.10–3.14.
+* *Python 3.11* is the version the manuscript analyses used. Threadfin supports 3.10–3.14, Dandelion 0.5 only
+  3.10–3.12 (matplotlib < 3.9 has no packages for later versions).
+* *`--override-channels`* takes every conda package from conda-forge only, so conda never consults Anaconda's
+  own channels (whose terms of service newer conda versions ask you to accept).
 * *Dandelion* is only needed to define clones. If you already have clone ids (one per cell), you can skip it
   and put them in `adata.obs["clone_id"]`.
 * *`--env PYTHONHASHSEED 0`* makes clone calling reproducible. Dandelion's clone assignment depends on the
@@ -105,7 +113,9 @@ from a clone of the repository) with `conda env create -f environment.yml`.
 
 *If `pip install` fails on a cluster, check that you are inside the activated environment (`which python`
 should point into it). If `import dandelion` fails with "cannot import name 'get_cmap'", run
-`pip install "matplotlib<3.9"`.*
+`pip install "matplotlib<3.9"`. If `sc.pp.neighbors` (Step 8) fails with "'csr_array' object has no attribute
+'getnnz'", the environment has pynndescent 0.7, whose output scanpy cannot yet read: run
+`pip install "pynndescent<0.7"` (Threadfin 4.5.3 and later install it).*
 
 **What to look for.** The next cell should print the versions without errors.
 """)
@@ -124,12 +134,12 @@ with warnings.catch_warnings():               # silence import-time notices of t
     for module, dist in [("threadfin", "threadfin"), ("dandelion", "sc-dandelion"), ("scanpy", "scanpy"),
                          ("anndata", "anndata"), ("numpy", "numpy"), ("pandas", "pandas"), ("scipy", "scipy"),
                          ("sklearn", "scikit-learn"), ("umap", "umap-learn"), ("leidenalg", "leidenalg"),
-                         ("igraph", "igraph"), ("matplotlib", "matplotlib")]:
+                         ("igraph", "igraph"), ("pynndescent", "pynndescent"), ("matplotlib", "matplotlib")]:
         importlib.import_module(module)
         print(f"{module:12s} {version(dist)}")
 
 import threadfin as tf
-assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 1), "this tutorial needs threadfin >= 4.5.1"
+assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 3), "this tutorial needs threadfin >= 4.5.3"
 seed = os.environ.get("PYTHONHASHSEED")
 print(f"\nPYTHONHASHSEED = {seed}" if seed is not None else
       "\nPYTHONHASHSEED is not set: clone calls may differ slightly between runs (see Step 0)")

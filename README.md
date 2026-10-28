@@ -24,12 +24,13 @@ distribution of its cells' transcriptional states, so that clones, not cells, ca
 
 ```bash
 pip install threadfin                  # Python 3.10–3.14 on Linux, macOS or Windows; no GPU or R needed
-pip install "threadfin[dandelion]"     # also installs Dandelion (0.5.x), to call clones from BCR or TCR contigs
+pip install "threadfin[dandelion]"     # also installs Dandelion (0.5.x), to call clones from BCR or TCR contigs; Python 3.10–3.12
 ```
 
 Scanpy, Leiden, UMAP and Harmony are installed with it. Dandelion's clone calls depend on Python's hash seed:
 start Python with `PYTHONHASHSEED=0` when clone ids must be identical run after run. Threadfin is validated with
-Dandelion 0.5.x; Dandelion 1.0 (October 2026) calls clones differently, so the extra installs `sc-dandelion<1`. The development version
+Dandelion 0.5.x; Dandelion 1.0 (October 2026) calls clones differently, so the extra installs `sc-dandelion<1`,
+with matplotlib < 3.9 (which Dandelion 0.5 needs, and which has no packages for Python 3.13 or later). The development version
 installs with `pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
 
 ### 2. Run

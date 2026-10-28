@@ -1,4 +1,4 @@
-# API reference (threadfin 4.5.2)
+# API reference (threadfin 4.5.3)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
