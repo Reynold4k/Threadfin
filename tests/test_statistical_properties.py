@@ -225,7 +225,7 @@ def test_coherence_strata_default_to_the_profile_context():
     assert default["p_value"] == explicit["p_value"]
 
 
-def test_coherence_strata_stay_within_the_profile_context():
+def test_coherence_strata_stay_within_donors():
     """Guards clone labels shuffled between donors when one library pools several donors."""
     adata = _nested_null(0)
     tf.tl.clone_profiles(adata, basis="X_pca", context_key="donor", donor_key="donor", verbose=False)
@@ -249,6 +249,11 @@ def test_coherence_strata_stay_within_the_profile_context():
     assert name == "donor x library"
     assert (pd.Series(donor).groupby(strata).nunique() == 1).all()
     np.testing.assert_array_equal(strata, codes(adata.obs["context"])[0])
+    # strata coarser than the centring groups but within donors are used as given
+    tf.tl.clone_profiles(adata, basis="X_pca", context_key="context", donor_key="donor", verbose=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert tf.tl.clonal_coherence(adata, strata_key="donor", n_perm=5, verbose=False)["strata_key"] == "donor"
 
 
 def test_coherence_is_measured_on_unsmoothed_context_centred_cells():

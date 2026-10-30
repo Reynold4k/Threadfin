@@ -61,9 +61,12 @@ GC/nonGC label is a sorting gate, not a continuous tdTomato intensity.
 |---|---|
 | `allB_threadfin_run.py`, `allB_threadfin_run.sbatch` | the all-B re-run with three centring variants |
 | `allB_story_analysis.py` | path and clone classes along the clone-profile axis, per variant |
-| `check_plasma_arms.py`, `plasma_arms_by_mouse.py`, `plasma_arms_by_mouse.png` | mouse composition of the plasma-cell branches |
+| `check_plasma_arms.py`, `plasma_arms_by_mouse.py`, `plasma_arms_by_mouse.png` (`.pdf`) | mouse composition of the plasma-cell branches |
 | `map_gc_derived_to_scrna_umap.py`, `gc_derived_umap_summary.json`, `gc_sort_fraction_validation.csv` | GC-sort label on the cell embedding; recomputation of the clone-level fraction |
-| `embedding_by_*.png` | the Figure 3 clone embedding coloured by compartment, GC sort, isotype and tissue |
+| `scrna_umap_gc_sort_label.pdf`, `scrna_umap_gc_derived_fraction.pdf` | the authors' cell embedding coloured by the GC-sort label of each cell and by its clone's GC-sorted fraction |
+| `embedding_by_*.png` | the Figure 3 clone embedding coloured by compartment, GC sort, isotype, tissue and mutation frequency |
+| `embedding_display_windows.png` | the same clone map with clones of at least 2, 5 and 10 cells shown (display only; every clone is analysed) |
+| `cells_context.png` | the 11,723 cells with a receptor on the cell embedding, coloured by the authors' cell-type annotation |
 | `Figure_3_allB_candidate_numbers.json` | numbers of a candidate all-B Figure 3 (not adopted) |
 | `allB_threadfin/<variant>/` | `summary.json`, programmes, label effects, clone tables of each centring variant |
 | `allB_threadfin/story/` | per-variant path statistics and the plasma-branch check (`plasma_arms_check.json`) |

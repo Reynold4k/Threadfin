@@ -167,8 +167,8 @@ def gene_heritability(
         Default to the values used by :func:`threadfin.tl.clone_profiles`
         (``context_key="auto"``); pass ``None`` to disable context centring.
     strata_key
-        Permutation strata (defaults to the context), kept within the context
-        groups as in :func:`threadfin.tl.clonal_coherence`.
+        Permutation strata (defaults to the context), kept within donors as in
+        :func:`threadfin.tl.clonal_coherence`.
     layer
         Log-normalised expression layer (``None`` uses ``adata.X``).
     genes
@@ -260,7 +260,7 @@ def gene_heritability(
     if exclude_receptor_genes:
         gene_idx = gene_idx[~receptor]
 
-    strata = nested_strata(adata.obs, strata_key, context_key)[0]
+    strata = nested_strata(adata.obs, strata_key, params.get("donor_key"))[0]
     if strata is not None:
         strata = strata[cells]
     cl = clone_codes[cells]

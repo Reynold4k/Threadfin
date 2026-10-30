@@ -1,0 +1,152 @@
+{
+ "threadfin": "4.6.0",
+ "reproduction_max_abs_difference": {
+  "n_cells": 0.0,
+  "reliability": 1.1102230246251565e-16,
+  "x": 1.7763568394002505e-15,
+  "y": 8.881784197001252e-16
+ },
+ "n_perm": 2000,
+ "seed": 0,
+ "v460": {
+  "recently_divided_all": {
+   "r2": 0.08926946884217782,
+   "null_mean": 0.0020320759421963777,
+   "excess_r2": 0.08723739289998145,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1887,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_protein": {
+   "r2": 0.09243813363312288,
+   "null_mean": 0.0011361729353554426,
+   "excess_r2": 0.09130196069776744,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_mrna": {
+   "r2": 0.07180039736871291,
+   "null_mean": 0.0043740828123288705,
+   "excess_r2": 0.06742631455638404,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "rbd_binding_protein": {
+   "r2": 0.023828523149875897,
+   "null_mean": 0.002418831063347149,
+   "excess_r2": 0.021409692086528747,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "dark_zone_mrna": {
+   "r2": 0.04000100465102827,
+   "null_mean": 0.002973486523164023,
+   "excess_r2": 0.03702751812786425,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  }
+ },
+ "legacy_size_strata_false": {
+  "recently_divided_all": {
+   "r2": 0.08926946884217782,
+   "null_mean": 0.0010993347325507275,
+   "excess_r2": 0.0881701341096271,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1887,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_protein": {
+   "r2": 0.09243813363312288,
+   "null_mean": 0.0007217890752628017,
+   "excess_r2": 0.09171634455786008,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_mrna": {
+   "r2": 0.07180039736871291,
+   "null_mean": 0.0029640925882517865,
+   "excess_r2": 0.06883630478046113,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "rbd_binding_protein": {
+   "r2": 0.023828523149875897,
+   "null_mean": 0.0007432757412975355,
+   "excess_r2": 0.023085247408578362,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "dark_zone_mrna": {
+   "r2": 0.04000100465102827,
+   "null_mean": 0.002958497921284446,
+   "excess_r2": 0.037042506729743824,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  }
+ },
+ "saved_figure4": {
+  "recently_divided_all": {
+   "r2": 0.08926946884217782,
+   "null_mean": 0.0010993347325507275,
+   "excess_r2": 0.0881701341096271,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1887,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_protein": {
+   "r2": 0.09243813363312288,
+   "null_mean": 0.0007217890752628017,
+   "excess_r2": 0.09171634455786008,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "recently_divided_mrna": {
+   "r2": 0.07180039736871291,
+   "null_mean": 0.0029640925882517865,
+   "excess_r2": 0.06883630478046113,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "rbd_binding_protein": {
+   "r2": 0.023828523149875897,
+   "null_mean": 0.0007432757412975355,
+   "excess_r2": 0.023085247408578362,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 1544,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  },
+  "dark_zone_mrna": {
+   "r2": 0.04000100465102827,
+   "null_mean": 0.002958497921284446,
+   "excess_r2": 0.037042506729743824,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 343,
+   "n_perm": 2000,
+   "strata_key": "donor"
+  }
+ }
+}

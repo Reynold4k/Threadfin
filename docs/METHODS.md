@@ -149,9 +149,10 @@ tissue sample. By default they are the sampling context (`sample_key` in
 design that compares tissues or sort gates within donors — name the libraries
 with `strata_key`: cells of one clone are sequenced together, so shuffling
 across libraries would count the differences between libraries as clonal.
-Strata never cross the contexts: when a library pools cells of several donors
-(hashtag-multiplexed samples, for example), clone labels are shuffled within
-each donor × library combination, with a warning. The
+Strata never cross donors, because a clone lies within one donor: when a
+library pools cells of several donors (hashtag-multiplexed samples, for
+example), clone labels are shuffled within each donor × library combination,
+with a warning. The
 result is reported as the variance explained by clone, the shuffled value,
 their difference (the excess, which the summary gives in percentage points,
 together with the strata used) and a permutation p-value (Phipson & Smyth 2010).

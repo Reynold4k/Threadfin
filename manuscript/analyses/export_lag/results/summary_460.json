@@ -1,0 +1,224 @@
+{
+ "threadfin": "4.6.0",
+ "malaria_late": {
+  "n_clones": 92,
+  "n_output_earlier": 65,
+  "n_output_later": 8,
+  "n_equal": 19,
+  "median_lag": -0.00375235842415025,
+  "median_lag_ci": [
+   -0.007407407407407399,
+   -0.0037037037037037
+  ],
+  "sign_test_pvalue": 3.230981506909271e-12,
+  "maturation_slope": 0.0010087227142820821,
+  "maturation_slope_ci": [
+   0.0007936507936507928,
+   0.0013468013468013454
+  ],
+  "n_timepoints": 6,
+  "median_lag_days": -3.7199107059077585,
+  "median_lag_days_ci": [
+   -9.333333333333334,
+   -2.75
+  ],
+  "settings": {
+   "source_states": [
+    "GC"
+   ],
+   "output_states": [
+    "PB"
+   ],
+   "within": [
+    "timepoint"
+   ],
+   "switched_only": true,
+   "min_cells": 1,
+   "time_key": "timepoint",
+   "donor_key": "donor",
+   "clock": "medians",
+   "interval": "order statistics inverting the sign test (clones as units, conditional on the donors sampled); days: Bonferroni rectangle of the 97.5 % gap and rate intervals"
+  },
+  "median_lag_across_donors": -0.0071558411633682,
+  "median_lag_across_donors_ci": [
+   -0.0149253731343283,
+   -0.0027985856835397
+  ],
+  "dataset": "malaria_late",
+  "title": "Plasmodium infection, days 10-42 (GSE286215 exp. 2)",
+  "original_script_clock_per_day": 0.0010087227142820821,
+  "original_script_clock_ci_scipy": [
+   0.0007936507936507928,
+   0.0013468013468013454
+  ],
+  "donors_negative": 13,
+  "donors_positive": 1,
+  "donors_zero": 2,
+  "n_donors": 16,
+  "original_summary": {
+   "n_clones": 92,
+   "n_output_earlier": 65,
+   "n_output_later": 8,
+   "n_equal": 19,
+   "median_lag": -0.00375235842415025,
+   "median_lag_ci": [
+    -0.00730082600586195,
+    -0.0037037037037037
+   ],
+   "gc_clock_per_day": 0.0010087227142820821,
+   "gc_clock_ci": [
+    0.0007936507936507928,
+    0.0013468013468013454
+   ],
+   "median_lag_days": -3.7199107059077585
+  }
+ },
+ "malaria": {
+  "n_clones": 9,
+  "n_output_earlier": 4,
+  "n_output_later": 1,
+  "n_equal": 4,
+  "median_lag": 0.0,
+  "median_lag_ci": [
+   -0.0111940298507462,
+   0.0
+  ],
+  "sign_test_pvalue": 0.375,
+  "maturation_slope": -0.0009148886188849082,
+  "maturation_slope_ci": [
+   NaN,
+   NaN
+  ],
+  "n_timepoints": 4,
+  "median_lag_days": NaN,
+  "median_lag_days_ci": [
+   NaN,
+   NaN
+  ],
+  "settings": {
+   "source_states": [
+    "GC"
+   ],
+   "output_states": [
+    "PB"
+   ],
+   "within": [
+    "timepoint"
+   ],
+   "switched_only": true,
+   "min_cells": 1,
+   "time_key": "timepoint",
+   "donor_key": "donor",
+   "clock": "medians",
+   "interval": "order statistics inverting the sign test (clones as units, conditional on the donors sampled); days: Bonferroni rectangle of the 97.5 % gap and rate intervals"
+  },
+  "median_lag_across_donors": 0.0,
+  "median_lag_across_donors_ci": [
+   -0.0148148148148148,
+   0.0037037037037036995
+  ],
+  "dataset": "malaria",
+  "title": "Plasmodium infection, days 0-14 (GSE286215 exp. 1)",
+  "original_script_clock_per_day": -0.0009148886188849082,
+  "original_script_clock_ci_scipy": [
+   -0.004956629491945467,
+   0.0018282085561497124
+  ],
+  "donors_negative": 3,
+  "donors_positive": 1,
+  "donors_zero": 3,
+  "n_donors": 7,
+  "original_summary": {
+   "n_clones": 9,
+   "n_output_earlier": 4,
+   "n_output_later": 1,
+   "n_equal": 4,
+   "median_lag": 0.0,
+   "median_lag_ci": [
+    -0.0111940298507462,
+    0.0
+   ],
+   "gc_clock_per_day": -0.0009148886188849082,
+   "gc_clock_ci": [
+    -0.004956629491945467,
+    0.0018282085561497124
+   ],
+   "median_lag_days": null
+  }
+ },
+ "ln_vaccine": {
+  "n_clones": 2564,
+  "n_output_earlier": 1536,
+  "n_output_later": 821,
+  "n_equal": 207,
+  "median_lag": -0.0018518499999999995,
+  "median_lag_ci": [
+   -0.0018726579999999993,
+   -0.0016185080329153608
+  ],
+  "sign_test_pvalue": 1.0461747971149738e-49,
+  "maturation_slope": 0.00022984188064759038,
+  "maturation_slope_ci": [
+   2.3257142857142773e-05,
+   0.00029629640000000007
+  ],
+  "n_timepoints": 5,
+  "median_lag_days": -8.057060770571162,
+  "median_lag_days_ci": [
+   -84.0485991673495,
+   -5.357130803575648
+  ],
+  "settings": {
+   "source_states": [
+    "GC"
+   ],
+   "output_states": [
+    "PB",
+    "LNPC"
+   ],
+   "within": [
+    "timepoint",
+    "tissue"
+   ],
+   "switched_only": true,
+   "min_cells": 1,
+   "time_key": "timepoint",
+   "donor_key": "donor",
+   "clock": "medians",
+   "interval": "order statistics inverting the sign test (clones as units, conditional on the donors sampled); days: Bonferroni rectangle of the 97.5 % gap and rate intervals"
+  },
+  "median_lag_across_donors": -0.0018416764999999993,
+  "median_lag_across_donors_ci": [
+   -0.0027777800000000005,
+   -0.0006173601679219662
+  ],
+  "dataset": "ln_vaccine",
+  "title": "Human lymph node after mRNA vaccination (GSE195673)",
+  "original_script_clock_per_day": 0.00022984188064759038,
+  "original_script_clock_ci_scipy": [
+   2.3257142857142773e-05,
+   0.00029629640000000007
+  ],
+  "donors_negative": 8,
+  "donors_positive": 0,
+  "donors_zero": 0,
+  "n_donors": 8,
+  "original_summary": {
+   "n_clones": 2564,
+   "n_output_earlier": 1536,
+   "n_output_later": 821,
+   "n_equal": 207,
+   "median_lag": -0.0018518499999999995,
+   "median_lag_ci": [
+    -0.0018726577993878756,
+    -0.0016538065696428577
+   ],
+   "gc_clock_per_day": 0.00022984188064759038,
+   "gc_clock_ci": [
+    2.3257142857142773e-05,
+    0.00029629640000000007
+   ],
+   "median_lag_days": -8.057060770571162
+  }
+ }
+}

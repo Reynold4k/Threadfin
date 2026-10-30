@@ -1,0 +1,8 @@
+donor,n_clones,n_output_earlier,n_output_later,n_equal,median_lag,ci_low,ci_high,sign_test_pvalue
+D10_Hashtag3,1,1,0,0,-0.0111111111111111,,,1.0
+D10_Hashtag5,2,0,0,2,0.0,,,
+D14_Hashtag1,2,2,0,0,-0.01115257048092865,,,0.5
+D14_Hashtag2,1,0,1,0,0.0037037037037036995,,,1.0
+D14_Hashtag3,1,0,0,1,0.0,,,
+D14_Hashtag4,1,0,0,1,0.0,,,
+D14_Hashtag5,1,1,0,0,-0.0148148148148148,,,1.0

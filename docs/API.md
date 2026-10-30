@@ -676,9 +676,9 @@ strata_key
     ``obs`` column defining permutation strata. Defaults to the
     ``context_key`` used for :func:`threadfin.tl.clone_profiles`; with
     neither, labels are shuffled globally (not recommended). Strata
-    stay within the ``context_key`` groups: if a stratum holds cells of
-    several of them (a library pooling donors), the strata are the
-    ``context_key`` x ``strata_key`` combinations, with a warning.
+    stay within donors (the ``donor_key`` of the profiles): if a stratum
+    holds cells of several donors (a library pooling donors), the strata
+    are the donor x ``strata_key`` combinations, with a warning.
 n_perm
     Number of permutations.
 
@@ -1218,8 +1218,8 @@ clone_key, context_key
     Default to the values used by :func:`threadfin.tl.clone_profiles`
     (``context_key="auto"``); pass ``None`` to disable context centring.
 strata_key
-    Permutation strata (defaults to the context), kept within the context
-    groups as in :func:`threadfin.tl.clonal_coherence`.
+    Permutation strata (defaults to the context), kept within donors as in
+    :func:`threadfin.tl.clonal_coherence`.
 layer
     Log-normalised expression layer (``None`` uses ``adata.X``).
 genes

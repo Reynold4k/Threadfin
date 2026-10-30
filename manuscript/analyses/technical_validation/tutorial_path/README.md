@@ -55,8 +55,8 @@ not significant (P = 0.24). Every figure that Threadfin draws for these runs is 
 <!-- END:table -->
 
 **What this found and fixed** (threadfin 4.6.0): in GSE171703 three of the 36 libraries pool cells of several
-donors, so shuffling clone labels within libraries moved them between donors; strata now stay within the centring
-groups (here donor × library, with a warning), which raised the shuffled ICC from 0.035 to 0.052 there and changed
+donors, so shuffling clone labels within libraries moved them between donors; strata now stay within donors (here
+donor × library, with a warning), which raised the shuffled ICC from 0.035 to 0.052 there and changed
 nothing in the other datasets. A label fixed within each sample was reported twice by `tf.run` (once by each label
 test); it is now reported once. The gallery's descriptions of the label tests, the clone-weighted composition and
 the memory index were brought up to 4.6.0.

@@ -52,9 +52,9 @@ def clonal_coherence(
         ``obs`` column defining permutation strata. Defaults to the
         ``context_key`` used for :func:`threadfin.tl.clone_profiles`; with
         neither, labels are shuffled globally (not recommended). Strata
-        stay within the ``context_key`` groups: if a stratum holds cells of
-        several of them (a library pooling donors), the strata are the
-        ``context_key`` x ``strata_key`` combinations, with a warning.
+        stay within donors (the ``donor_key`` of the profiles): if a stratum
+        holds cells of several donors (a library pooling donors), the strata
+        are the donor x ``strata_key`` combinations, with a warning.
     n_perm
         Number of permutations.
 
@@ -69,11 +69,10 @@ def clonal_coherence(
     # the ICC is always measured on unsmoothed cells in the embedding itself, so it reads
     # as "share of transcriptional variance explained by clone" whatever the profile type
     model = model_from_adata(adata, unsmoothed=True, representation="mean")
-    context_key = prof["params"].get("context_key")
-    strata_key = strata_key or context_key
+    strata_key = strata_key or prof["params"].get("context_key")
     if strata_key is not None:
         require_complete_groups(adata, strata_key, context="coherence permutations")
-    strata, strata_key = nested_strata(adata.obs, strata_key, context_key)
+    strata, strata_key = nested_strata(adata.obs, strata_key, prof["params"].get("donor_key"))
 
     observed = model.vc.icc
     rng = np.random.default_rng(random_state)
@@ -290,8 +289,8 @@ def _sample_level(adata, label_key: str, clone_key: str, clones, sample_key, con
         return out
     require_obs(adata, sample_key, context="the sample-level check of a label test")
     obs = adata.obs
-    keep = (obs[clone_key].notna() & obs[label_key].notna() & obs[sample_key].notna()).to_numpy()
-    keep &= obs[clone_key].astype(str).isin(pd.Index(clones).astype(str)).to_numpy()
+    keep = (obs[clone_key].notna() & obs[label_key].notna() & obs[sample_key].notna()
+            & obs[clone_key].astype(str).isin(pd.Index(clones).astype(str))).to_numpy()
     if not keep.any():
         return out
     lab = pd.Series(obs.loc[keep, label_key].astype(str).to_numpy())

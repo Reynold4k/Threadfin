@@ -34,7 +34,9 @@ automatically, without any annotation?
    neighbours) and global fidelity (Spearman correlation of distances), minus 5 × the shortfall of coherence
    (fraction of clones in one connected piece) below a target given by the profiles themselves (the largest
    component of their mutual 15-nearest-neighbour graph, capped at 0.99). This objective ranked the settings
-   the authors had chosen by hand at or near the top.
+   the authors had chosen by hand at or near the top (`gallery_bal30_C1.5_adapt.png`: for seven datasets, the
+   map at the previous fixed default, at the settings chosen by hand, and at the best and second-best
+   settings under this objective; each title gives the settings and their scores).
 2. *Gradient search* (Adam with simultaneous-perturbation gradients) found reasonable regions but wandered on
    flat optima and missed distant coherent regions; it is kept as an option (`method="adam"`).
 3. *Robustness* (`validate.py`, `validate2.py`): settings that were most faithful on one layout often broke

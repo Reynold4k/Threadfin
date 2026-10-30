@@ -1,0 +1,257 @@
+{
+ "threadfin": "4.6.0",
+ "reproduction": {
+  "n_clones": 958,
+  "max_abs_dx": 1.7763568394002505e-15,
+  "max_abs_dy": 8.881784197001252e-16,
+  "icc_mean_profiles": 0.40096671405466844,
+  "icc_saved": 0.40096671405466844
+ },
+ "n_perm": 2000,
+ "v460": {
+  "GC-sorted proportion": {
+   "r2": 0.066672554673118,
+   "null_mean": 0.001302563709630565,
+   "excess_r2": 0.06536999096348743,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Plasma-cell proportion": {
+   "r2": 0.6055748118825894,
+   "null_mean": 0.01598675055204472,
+   "excess_r2": 0.5895880613305448,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "GC B-cell proportion": {
+   "r2": 0.5591835133413586,
+   "null_mean": 0.013451766429795911,
+   "excess_r2": 0.5457317469115627,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Lamina-propria proportion": {
+   "r2": 0.512352726754832,
+   "null_mean": 0.01589575634746391,
+   "excess_r2": 0.4964569704073681,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Peyer's-patch proportion": {
+   "r2": 0.3158276344306661,
+   "null_mean": 0.017853083731966316,
+   "excess_r2": 0.29797455069869977,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "IgA proportion": {
+   "r2": 0.17675888059773243,
+   "null_mean": 0.002300215936554294,
+   "excess_r2": 0.17445866466117813,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "IgG1 proportion": {
+   "r2": 0.07530016147184385,
+   "null_mean": 0.002502406128265311,
+   "excess_r2": 0.07279775534357853,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "V-region mutation frequency": {
+   "r2": 0.05079893254162766,
+   "null_mean": 0.0017410480959544666,
+   "excess_r2": 0.04905788444567319,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone contains GC B and plasma cells": {
+   "r2": 0.013279157155053069,
+   "null_mean": 0.0025495526520886262,
+   "excess_r2": 0.010729604502964443,
+   "p_value": 0.001999000499750125,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone spans PP/MLN and LP": {
+   "r2": 0.07054903772450212,
+   "null_mean": 0.0034478550265916244,
+   "excess_r2": 0.06710118269791049,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  }
+ },
+ "legacy_size_strata_false": {
+  "GC-sorted proportion": {
+   "r2": 0.066672554673118,
+   "null_mean": 0.0014208970306693396,
+   "excess_r2": 0.06525165764244865,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Plasma-cell proportion": {
+   "r2": 0.6055748118825894,
+   "null_mean": 0.013213713496193581,
+   "excess_r2": 0.5923610983863958,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "GC B-cell proportion": {
+   "r2": 0.5591835133413586,
+   "null_mean": 0.011816102516613053,
+   "excess_r2": 0.5473674108247456,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Lamina-propria proportion": {
+   "r2": 0.512352726754832,
+   "null_mean": 0.013697381511898197,
+   "excess_r2": 0.4986553452429338,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Peyer's-patch proportion": {
+   "r2": 0.3158276344306661,
+   "null_mean": 0.015477946494242577,
+   "excess_r2": 0.3003496879364235,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "IgA proportion": {
+   "r2": 0.17675888059773243,
+   "null_mean": 0.0022564410514559737,
+   "excess_r2": 0.17450243954627645,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "IgG1 proportion": {
+   "r2": 0.07530016147184385,
+   "null_mean": 0.002186899572785965,
+   "excess_r2": 0.07311326189905788,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "V-region mutation frequency": {
+   "r2": 0.05079893254162766,
+   "null_mean": 0.0016797102653667306,
+   "excess_r2": 0.04911922227626093,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone contains GC B and plasma cells": {
+   "r2": 0.013279157155053069,
+   "null_mean": 0.0013216749858378151,
+   "excess_r2": 0.011957482169215255,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone spans PP/MLN and LP": {
+   "r2": 0.07054903772450212,
+   "null_mean": 0.00131057062346665,
+   "excess_r2": 0.06923846710103547,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  }
+ },
+ "saved": {
+  "GC-sorted proportion": {
+   "r2": 0.06667255467311804,
+   "null_mean": 0.0014208970306693392,
+   "excess_r2": 0.06525165764244871,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Plasma-cell proportion": {
+   "r2": 0.605574811882589,
+   "null_mean": 0.013213713496193578,
+   "excess_r2": 0.5923610983863954,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "GC B-cell proportion": {
+   "r2": 0.5591835133413582,
+   "null_mean": 0.01181610251661305,
+   "excess_r2": 0.5473674108247452,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Lamina-propria proportion": {
+   "r2": 0.5123527267548317,
+   "null_mean": 0.013697381511898195,
+   "excess_r2": 0.4986553452429335,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Peyer's-patch proportion": {
+   "r2": 0.31582763443066597,
+   "null_mean": 0.015477946494242573,
+   "excess_r2": 0.3003496879364234,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "IgA proportion": {
+   "r2": 0.17675888059773234,
+   "null_mean": 0.0022564410514559737,
+   "excess_r2": 0.17450243954627637,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "IgG1 proportion": {
+   "r2": 0.07530016147184383,
+   "null_mean": 0.002186899572785965,
+   "excess_r2": 0.07311326189905787,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 957,
+   "strata_key": "donor"
+  },
+  "V-region mutation frequency": {
+   "r2": 0.050798932541627644,
+   "null_mean": 0.0016797102653667304,
+   "excess_r2": 0.049119222276260914,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone contains GC B and plasma cells": {
+   "r2": 0.013279157155053062,
+   "null_mean": 0.0013216749858378143,
+   "excess_r2": 0.011957482169215248,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  },
+  "Clone spans PP/MLN and LP": {
+   "r2": 0.07054903772450204,
+   "null_mean": 0.0013105706234666497,
+   "excess_r2": 0.06923846710103539,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 958,
+   "strata_key": "donor"
+  }
+ }
+}

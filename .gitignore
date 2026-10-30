@@ -47,6 +47,11 @@ manuscript/figures/reserve/*
 !manuscript/figures/reserve/provenance/
 !manuscript/figures/reserve/revision_2026-10-17/
 !manuscript/figures/reserve/figure4_rbd_2026-10-19/
+# the Threadfin fish of Figure 1, so that figure1_overview.py can rebuild the figure; the other assets are
+# third-party images and stay local
+!manuscript/figures/reserve/assets/
+manuscript/figures/reserve/assets/*
+!manuscript/figures/reserve/assets/threadfin_fish_cartoon.png
 manuscript/figures/reserve/revision_2026-10-17/logs/
 manuscript/figures/reserve/figure4_rbd_2026-10-19/preview.png
 manuscript/figures/reserve/provenance/consolidated_manuscript.json
