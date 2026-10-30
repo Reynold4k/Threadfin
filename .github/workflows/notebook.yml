@@ -18,7 +18,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install as in Step 0
-        run: pip install . "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
+        run: |
+          pip install . "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
+          python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)"
       - name: Build and run the notebook
         working-directory: ${{ runner.temp }}
         run: |
