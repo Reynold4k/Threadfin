@@ -41,7 +41,7 @@
    "bytes": 276001,
    "width": 2211,
    "height": 1482,
-   "seconds": 1.0
+   "seconds": 0.9
   },
   {
    "name": "coherence",
@@ -96,7 +96,7 @@
    "bytes": 555755,
    "width": 1657,
    "height": 2405,
-   "seconds": 1.4
+   "seconds": 1.3
   },
   {
    "name": "clone_map_cell_state",
@@ -107,7 +107,7 @@
    "bytes": 319739,
    "width": 1657,
    "height": 1491,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   {
    "name": "clone_map_isotype",
@@ -118,7 +118,7 @@
    "bytes": 147555,
    "width": 1657,
    "height": 578,
-   "seconds": 0.5
+   "seconds": 0.3
   },
   {
    "name": "stability",
@@ -195,7 +195,7 @@
    "bytes": 27757,
    "width": 2577,
    "height": 630,
-   "seconds": 0.6
+   "seconds": 0.5
   },
   {
    "name": "association_isotype",
@@ -206,7 +206,7 @@
    "bytes": 51634,
    "width": 2572,
    "height": 1299,
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "name": "heritability",
@@ -217,7 +217,7 @@
    "bytes": 72991,
    "width": 961,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "cells_programmes",
@@ -228,7 +228,7 @@
    "bytes": 126577,
    "width": 2031,
    "height": 562,
-   "seconds": 0.7
+   "seconds": 0.5
   },
   {
    "name": "cells_cell_state",
@@ -239,7 +239,7 @@
    "bytes": 371962,
    "width": 2228,
    "height": 1679,
-   "seconds": 1.8
+   "seconds": 1.7
   },
   {
    "name": "cells_isotype",
@@ -261,9 +261,9 @@
    "bytes": 93397,
    "width": 1751,
    "height": 915,
-   "seconds": 0.5
+   "seconds": 0.4
   }
  ],
  "not_drawn": [],
- "seconds": 17.8
+ "seconds": 66.4
 }

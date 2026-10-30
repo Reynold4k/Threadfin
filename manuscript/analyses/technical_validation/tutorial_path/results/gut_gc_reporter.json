@@ -3,9 +3,9 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 5.4,
-  "threadfin_run": 62.6,
-  "plot_and_save": 0.8
+  "user_inputs": 5.5,
+  "threadfin_run": 64.4,
+  "plot_and_save": 0.9
  },
  "warnings": [
   {
@@ -30,13 +30,13 @@
    "category": "UserWarning",
    "message": "'gc_sort' is the same for every cell of each 'sample', so this test compares 17 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'gc_sort', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   },
   {
    "category": "UserWarning",
    "message": "'tissue' is the same for every cell of each 'sample', so this test compares 17 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'tissue', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples w",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   },
   {
    "category": "UserWarning",
@@ -82,6 +82,6 @@
   "n_neighbors": 56,
   "min_dist": 0.95
  },
- "seconds_total": 68.9,
- "peak_rss_gb": 1.59
+ "seconds_total": 70.8,
+ "peak_rss_gb": 1.61
 }

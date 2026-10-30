@@ -20,7 +20,7 @@ instead of a BCR and follow section 6 of Tutorial 2 (clone ids defined elsewhere
 ran every Python block of Tutorials 1, 3 and 4 in order, as written, and compared what they print with the
 output shown in the tutorials; Tutorial 5 (the notebook) was executed end to end in a fresh environment.
 
-**Result.** No error on any dataset, in any of the 23 tutorial blocks or in the notebook (5.5 minutes, 7.2 GB).
+**Result.** No error on any dataset, in any of the 23 tutorial blocks or in the notebook (5.6 minutes, 7.2 GB).
 Every clone table — clone calls, profile reliabilities, clone-map coordinates and programmes — is identical, byte for
 byte, to that of threadfin 4.5.2, and so is every clonal ICC. The clones and the ICC agree with the case studies (in
 brackets); the small differences in clone numbers come from Dandelion's dependence on the hash seed in the case
@@ -36,20 +36,20 @@ not significant (P = 0.24). Every figure that Threadfin draws for these runs is 
 | dataset | errors | cells | contigs matching a cell | clones ≥ 2 cells (case study) | clonal ICC (case study) | minutes | peak memory | figures |
 |---|---|---|---|---|---|---|---|---|
 | GSE253857 bone-marrow plasma cells | 0 | 115,144 | 70 % | 6,583 (6,583) | 0.427 (0.427) | 5.3 | 6.85 GB | [32](figures/bone_marrow_pc/README.md) |
-| GSE171703 SARS-CoV-2 bait-sorted B cells | 0 | 61,423 | 91 % | 588 (588) | 0.400 (0.400) | 2.2 | 3.82 GB | [12](figures/covid_bcell/README.md) |
-| GSE317492 EBV tonsil organoids | 0 | 205,630 | 100 % | 6,124 (6,124) | 0.158 (0.158) | 7.7 | 25.53 GB | [21](figures/ebv/README.md) |
-| GSE175522 blood, influenza vaccine | 0 | 123,693 | 87 % | 2,082 (2,082) | 0.561 (0.561) | 4.5 | 8.17 GB | [22](figures/flu/README.md) |
+| GSE171703 SARS-CoV-2 bait-sorted B cells | 0 | 61,423 | 91 % | 588 (588) | 0.400 (0.400) | 2.1 | 3.89 GB | [12](figures/covid_bcell/README.md) |
+| GSE317492 EBV tonsil organoids | 0 | 205,630 | 100 % | 6,124 (6,124) | 0.158 (0.158) | 7.8 | 25.55 GB | [21](figures/ebv/README.md) |
+| GSE175522 blood, influenza vaccine | 0 | 123,693 | 87 % | 2,082 (2,082) | 0.561 (0.561) | 4.4 | 8.17 GB | [22](figures/flu/README.md) |
 | GSE317692 influenza lung | 0 | 4,121 | 24 % | 204 (204) | 0.162 (0.162) | 1.0 | 1.13 GB | [14](figures/flu_lung/README.md) |
-| GSE246382 GC + plasma cells (Smart-seq2, TRUST4) | 0 | 884 | 85 % | 92 (96) | 0.049 (0.048) | 0.5 | 0.55 GB | [19](figures/gc_np_pc/README.md) |
-| GSE284622 gut GC-fate reporter | 0 | 16,619 | 93 % | 964 (958) | 0.401 (0.401) | 1.1 | 1.59 GB | [31](figures/gut_gc_reporter/README.md) |
+| GSE246382 GC + plasma cells (Smart-seq2, TRUST4) | 0 | 884 | 85 % | 92 (96) | 0.049 (0.048) | 0.4 | 0.55 GB | [19](figures/gc_np_pc/README.md) |
+| GSE284622 gut GC-fate reporter | 0 | 16,619 | 93 % | 964 (958) | 0.401 (0.401) | 1.2 | 1.61 GB | [31](figures/gut_gc_reporter/README.md) |
 | GSE140802 LARRY day 2 (clone ids given) | 0 | 28,249 | — | 1,401 (—) | 0.680 (—) | 0.9 | 0.62 GB | [11](figures/larry_d2/README.md) |
 | GSE140802 LARRY days 4/6 (clone ids given) | 0 | 44,664 | — | 6,174 (—) | 0.598 (—) | 2.7 | 0.9 GB | [11](figures/larry_d46/README.md) |
-| GSE195673 lymph node, mRNA vaccine | 0 | 193,442 | 76 % | 11,126 (11,141) | 0.326 (0.326) | 11.1 | 23.66 GB | [26](figures/ln_vaccine/README.md) |
+| GSE195673 lymph node, mRNA vaccine | 0 | 193,442 | 76 % | 11,126 (11,141) | 0.326 (0.326) | 11.0 | 23.67 GB | [26](figures/ln_vaccine/README.md) |
 | GSE286215 Plasmodium d0-14 | 0 | 40,623 | 91 % | 523 (523) | 0.735 (0.736) | 1.8 | 3.64 GB | [21](figures/malaria/README.md) |
-| GSE286215 Plasmodium d10-42 | 0 | 72,359 | 100 % | 1,007 (1,015) | 0.454 (0.451) | 4.1 | 6.5 GB | [21](figures/malaria_late/README.md) |
+| GSE286215 Plasmodium d10-42 | 0 | 72,359 | 100 % | 1,007 (1,015) | 0.454 (0.451) | 4.1 | 6.49 GB | [21](figures/malaria_late/README.md) |
 | GSE287123 NP reporter | 0 | 10,109 | 47 % | 470 (471) | 0.117 (0.120) | 0.9 | 1.62 GB | [12](figures/mouse_np/README.md) |
 | GSE287123 RBD reporter (Tutorial 5) | 0 | 36,188 | 44 % | 1,881 (1,887) | 0.169 (0.169) | 2.2 | 7.9 GB | [32](figures/mouse_rbd/README.md) |
-| GSE203132 spontaneous GCs | 0 | 22,898 | 100 % | 1,053 (1,051) | 0.279 (0.279) | 0.9 | 2.22 GB | [16](figures/spont_gc/README.md) |
+| GSE203132 spontaneous GCs | 0 | 22,898 | 100 % | 1,053 (1,051) | 0.279 (0.279) | 0.9 | 2.26 GB | [16](figures/spont_gc/README.md) |
 | E-MTAB-9005 paediatric tonsil | 0 | 22,478 | 80 % | 361 (361) | 0.253 (0.253) | 0.9 | 2.43 GB | [20](figures/tonsil/README.md) |
 
 <!-- END:table -->

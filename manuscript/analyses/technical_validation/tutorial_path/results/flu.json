@@ -3,8 +3,8 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 26.8,
-  "threadfin_run": 241.4,
+  "user_inputs": 26.5,
+  "threadfin_run": 234.4,
   "plot_and_save": 2.2
  },
  "warnings": [
@@ -24,7 +24,7 @@
    "category": "UserWarning",
    "message": "'timepoint' is the same for every cell of each 'sample', so this test compares 12 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'timepoint', and the p-value counts clones as replicates. Read it as descriptive, or compare the sam",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   }
  ],
  "error": null,
@@ -63,6 +63,6 @@
   "n_neighbors": 180,
   "min_dist": 0.8
  },
- "seconds_total": 270.4,
+ "seconds_total": 263.2,
  "peak_rss_gb": 8.17
 }

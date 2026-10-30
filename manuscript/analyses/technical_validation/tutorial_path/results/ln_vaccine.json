@@ -3,9 +3,9 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 107.7,
-  "threadfin_run": 554.2,
-  "plot_and_save": 5.0
+  "user_inputs": 108.3,
+  "threadfin_run": 549.4,
+  "plot_and_save": 4.9
  },
  "warnings": [
   {
@@ -612,7 +612,7 @@
    "category": "UserWarning",
    "message": "'tissue' is the same for every cell of each 'sample', so this test compares 56 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'tissue', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples w",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   }
  ],
  "error": null,
@@ -651,6 +651,6 @@
   "n_neighbors": 37,
   "min_dist": 0.95
  },
- "seconds_total": 667.2,
- "peak_rss_gb": 23.66
+ "seconds_total": 662.8,
+ "peak_rss_gb": 23.67
 }

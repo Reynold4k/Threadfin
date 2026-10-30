@@ -19,8 +19,6 @@ Cells with a BCR: 772 of 884, in 609 clones (92 clones have two or more cells an
    Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
    fate: P1 enriched for 'light zone' (61% vs 26% of clones; OR 12.58 [1.57, > 100], FDR 0.001)
    fate: P1 depleted for 'plasma cell' (0% vs 70% of clones; OR < 0.01, FDR 0.001)
-   fate: P2 depleted for 'light zone' (26% vs 61% of clones; OR 0.08 [< 0.01, 0.64], FDR 0.001)
-   fate: P2 enriched for 'plasma cell' (70% vs 0% of clones; OR > 100, FDR 0.001)
    isotype: no significant programme effect.
 
 Not run (everything above is complete):

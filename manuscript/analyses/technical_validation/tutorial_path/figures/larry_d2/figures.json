@@ -38,7 +38,7 @@
    "bytes": 476920,
    "width": 2216,
    "height": 1482,
-   "seconds": 1.1
+   "seconds": 1.0
   },
   {
    "name": "coherence",
@@ -93,7 +93,7 @@
    "bytes": 666131,
    "width": 1657,
    "height": 1491,
-   "seconds": 1.2
+   "seconds": 1.1
   },
   {
    "name": "stability",
@@ -126,7 +126,7 @@
    "bytes": 32643,
    "width": 1034,
    "height": 590,
-   "seconds": 0.2
+   "seconds": 0.4
   },
   {
    "name": "cells_programmes",
@@ -148,9 +148,9 @@
    "bytes": 393293,
    "width": 2228,
    "height": 1679,
-   "seconds": 2.0
+   "seconds": 1.8
   }
  ],
  "not_drawn": [],
- "seconds": 7.3
+ "seconds": 45.2
 }

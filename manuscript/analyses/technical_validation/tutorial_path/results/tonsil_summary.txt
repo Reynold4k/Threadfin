@@ -17,6 +17,5 @@ Cells with a BCR: 11,570 of 22,478, in 11,075 clones (361 clones have two or mor
    isotype explains clone states: 3.8% of clone-profile variance vs 1.1% for shuffled labels (p = 0.0005, 317 clones; 42 clones without a majority level left out).
    Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
    isotype: P1 depleted for 'IGHG' (40% vs 65% of clones; OR 0.32 [0.17, 0.61], FDR 0.002)
-   isotype: P2 enriched for 'IGHG' (65% vs 40% of clones; OR 3.09 [1.65, 5.81], FDR 0.002)
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

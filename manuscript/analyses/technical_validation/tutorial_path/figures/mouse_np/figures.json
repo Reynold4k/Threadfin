@@ -41,7 +41,7 @@
    "bytes": 184045,
    "width": 2204,
    "height": 1438,
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "name": "coherence",
@@ -74,7 +74,7 @@
    "bytes": 105564,
    "width": 916,
    "height": 770,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "clone_map_donor",
@@ -85,7 +85,7 @@
    "bytes": 300212,
    "width": 1657,
    "height": 1034,
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "name": "clone_map_division_gate",
@@ -96,7 +96,7 @@
    "bytes": 114222,
    "width": 843,
    "height": 578,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "clone_map_isotype",
@@ -118,7 +118,7 @@
    "bytes": 30790,
    "width": 1433,
    "height": 527,
-   "seconds": 0.2
+   "seconds": 0.1
   },
   {
    "name": "memory_division_gate",
@@ -140,7 +140,7 @@
    "bytes": 79245,
    "width": 970,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.6
   },
   {
    "name": "cells_division_gate",
@@ -162,9 +162,9 @@
    "bytes": 195961,
    "width": 2031,
    "height": 562,
-   "seconds": 0.6
+   "seconds": 0.5
   }
  ],
  "not_drawn": [],
- "seconds": 5.4
+ "seconds": 43.3
 }

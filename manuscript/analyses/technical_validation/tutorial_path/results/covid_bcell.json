@@ -4,7 +4,7 @@
  "python_hash_seed": "0",
  "steps": {
   "user_inputs": 7.2,
-  "threadfin_run": 122.4,
+  "threadfin_run": 119.8,
   "plot_and_save": 1.2
  },
  "warnings": [
@@ -16,7 +16,7 @@
   },
   {
    "category": "UserWarning",
-   "message": "3 of 36 'sample' groups contain cells of more than one 'donor' (for example libraries that pool several donors). Clone labels are shuffled within each 'donor' x 'sample' combination, so they never move between 'donor' groups.",
+   "message": "3 of 36 'sample' groups contain cells of more than one 'donor' (for example libraries that pool several donors). Clone labels are shuffled within each 'donor' x 'sample' combination, because a clone lies within one 'donor'.",
    "file": "api.py",
    "count": 1
   },
@@ -75,6 +75,6 @@
   "n_neighbors": 56,
   "min_dist": 0.95
  },
- "seconds_total": 131.0,
- "peak_rss_gb": 3.82
+ "seconds_total": 128.3,
+ "peak_rss_gb": 3.89
 }

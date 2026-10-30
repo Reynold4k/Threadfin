@@ -63,7 +63,7 @@
    "bytes": 97117,
    "width": 908,
    "height": 770,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "clone_map_reliability",
@@ -85,7 +85,7 @@
    "bytes": 765120,
    "width": 1104,
    "height": 2821,
-   "seconds": 6.3
+   "seconds": 6.5
   },
   {
    "name": "clone_map_antigen_call",
@@ -96,7 +96,7 @@
    "bytes": 230217,
    "width": 1657,
    "height": 1034,
-   "seconds": 0.6
+   "seconds": 0.5
   },
   {
    "name": "clone_map_isotype",
@@ -166,5 +166,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 23.7
+ "seconds": 81.2
 }

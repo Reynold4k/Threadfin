@@ -18,13 +18,10 @@ Cells with a BCR: 123,369 of 205,630, in 87,396 clones (6,124 clones have two or
    isotype explains clone states: 9.2% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 6035 clones; 88 clones without a majority level left out).
    Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
    gfp: P1 depleted for 'GFP-' (36% vs 44% of clones; OR 0.74 [0.66, 0.84], FDR 0.0005)
-   gfp: P2 enriched for 'GFP-' (44% vs 36% of clones; OR 1.34 [1.19, 1.51], FDR 0.0005)  [unstable programme]
    isotype: P1 depleted for 'IGHA' (6% vs 19% of clones; OR 0.28 [0.24, 0.33], FDR 0.0005)
    isotype: P1 depleted for 'IGHD' (0% vs 1% of clones; OR 0.16 [0.08, 0.36], FDR 0.0005)
    isotype: P1 depleted for 'IGHG' (14% vs 50% of clones; OR 0.17 [0.15, 0.19], FDR 0.0005)
    isotype: P1 enriched for 'IGHM' (80% vs 30% of clones; OR 8.92 [7.92, 10.05], FDR 0.0005)
-   isotype: P2 enriched for 'IGHA' (19% vs 6% of clones; OR 3.57 [3.01, 4.22], FDR 0.0005)  [unstable programme]
-   isotype: P2 enriched for 'IGHD' (1% vs 0% of clones; OR 6.09 [2.81, 13.21], FDR 0.0005)  [unstable programme]
 
 4. Do clones keep their state over 'timepoint'? (clonal memory; levels in the order d0 -> d4 -> d7 -> d14 -> d21)
    730 clones seen at >= 2 levels: memory index 0.25 [0.17, 0.34], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to another clone of its donor seen at the same levels; sampling noise can put it outside 0-1).

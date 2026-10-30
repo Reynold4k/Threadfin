@@ -3,8 +3,8 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 44.6,
-  "threadfin_run": 411.6,
+  "user_inputs": 44.3,
+  "threadfin_run": 414.8,
   "plot_and_save": 5.6
  },
  "warnings": [
@@ -30,7 +30,7 @@
    "category": "UserWarning",
    "message": "'gfp' is the same for every cell of each 'sample', so this test compares 4 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'gfp', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples with one",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   }
  ],
  "error": null,
@@ -69,6 +69,6 @@
   "n_neighbors": 65,
   "min_dist": 0.8
  },
- "seconds_total": 462.1,
- "peak_rss_gb": 25.53
+ "seconds_total": 465.0,
+ "peak_rss_gb": 25.55
 }

@@ -54,7 +54,7 @@
    "bytes": 29063,
    "width": 641,
    "height": 668,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "clone_map_programmes",
@@ -98,7 +98,7 @@
    "bytes": 127034,
    "width": 1657,
    "height": 1491,
-   "seconds": 0.7
+   "seconds": 0.5
   },
   {
    "name": "clone_map_fate",
@@ -197,7 +197,7 @@
    "bytes": 82040,
    "width": 1032,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "cells_programmes",
@@ -208,7 +208,7 @@
    "bytes": 41747,
    "width": 891,
    "height": 562,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "cells_fate",
@@ -219,7 +219,7 @@
    "bytes": 69324,
    "width": 2017,
    "height": 562,
-   "seconds": 0.4
+   "seconds": 0.3
   },
   {
    "name": "cells_isotype",
@@ -230,7 +230,7 @@
    "bytes": 88524,
    "width": 2097,
    "height": 1120,
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "name": "signatures",
@@ -241,7 +241,7 @@
    "bytes": 79858,
    "width": 1735,
    "height": 910,
-   "seconds": 0.4
+   "seconds": 0.3
   }
  ],
  "not_drawn": [
@@ -254,5 +254,5 @@
    "error": "every odds ratio of `isotype` is 0 or infinite, so none can be placed on a log axis (IGHG)"
   }
  ],
- "seconds": 5.8
+ "seconds": 14.6
 }

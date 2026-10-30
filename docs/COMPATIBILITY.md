@@ -11,10 +11,13 @@
   GSE171703 three libraries pool several donors; the strata there are donor × library (a fix this run found).
   Every code block of Tutorials 1, 3 and 4 ran (23 of 23) and printed what the tutorials show, apart from timings.
 * **The tutorial notebook** ran end to end in a separately built conda environment without `PYTHONHASHSEED`:
-  no error, 5.5 minutes on 8 cores including the download, 7.2 GB; the same 8,736 clones, 1,881 of them profiled,
+  no error, 5.6 minutes on 8 cores including the download, 7.2 GB; the same 8,736 clones, 1,881 of them profiled,
   and the same ICC (0.169) as with 4.5.3. Every package version of that run is in
   `docs/tutorials/requirements-lock.txt`.
-* **Tests.** In that environment 353 passed and 1 was skipped (scirpy was not installed).
+* **Tests.** In that environment 359 passed and 1 was skipped (scirpy was not installed). With the newest releases
+  of the dependencies (Python 3.12, pandas 3.1, numpy 2.5, anndata 0.13, scanpy 1.12), 345 passed and 15 that need
+  Dandelion or scirpy were skipped; continuous integration passed on Python 3.10–3.14, macOS, Windows, the oldest
+  allowed dependencies and with Dandelion on Python 3.12–3.14.
 * **Python 3.13 and 3.14 with Dandelion.** The Dandelion extra no longer asks for matplotlib < 3.9 on Python 3.13
   and later, where importing Threadfin restores the `matplotlib.cm.get_cmap` that Dandelion 0.5.7 needs. With
   sc-dandelion 0.5.7 and matplotlib 3.11.2, clone calls on three datasets (GSE246382, GSE287123 RBD, GSE286215

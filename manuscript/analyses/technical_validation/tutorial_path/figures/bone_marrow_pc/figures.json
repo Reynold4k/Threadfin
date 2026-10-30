@@ -43,7 +43,7 @@
    "bytes": 522448,
    "width": 2204,
    "height": 1438,
-   "seconds": 1.0
+   "seconds": 0.9
   },
   {
    "name": "coherence",
@@ -109,7 +109,7 @@
    "bytes": 574182,
    "width": 1756,
    "height": 1034,
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "name": "clone_map_tissue",
@@ -131,7 +131,7 @@
    "bytes": 364348,
    "width": 1250,
    "height": 578,
-   "seconds": 0.5
+   "seconds": 0.4
   },
   {
    "name": "clone_map_isotype",
@@ -142,7 +142,7 @@
    "bytes": 568248,
    "width": 1657,
    "height": 1034,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   {
    "name": "stability",
@@ -175,7 +175,7 @@
    "bytes": 39228,
    "width": 1247,
    "height": 532,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "composition_tissue_cells",
@@ -219,7 +219,7 @@
    "bytes": 27241,
    "width": 1072,
    "height": 532,
-   "seconds": 0.4
+   "seconds": 0.2
   },
   {
    "name": "composition_isotype_cells",
@@ -263,7 +263,7 @@
    "bytes": 79380,
    "width": 2572,
    "height": 1167,
-   "seconds": 1.0
+   "seconds": 0.8
   },
   {
    "name": "association_tissue",
@@ -274,7 +274,7 @@
    "bytes": 23618,
    "width": 1707,
    "height": 564,
-   "seconds": 0.4
+   "seconds": 0.6
   },
   {
    "name": "association_antigen",
@@ -285,7 +285,7 @@
    "bytes": 43330,
    "width": 2577,
    "height": 564,
-   "seconds": 0.5
+   "seconds": 0.4
   },
   {
    "name": "association_isotype",
@@ -296,7 +296,7 @@
    "bytes": 46344,
    "width": 2572,
    "height": 1167,
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "name": "memory_tissue",
@@ -318,7 +318,7 @@
    "bytes": 78122,
    "width": 1032,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.3
   },
   {
    "name": "cells_programmes",
@@ -362,7 +362,7 @@
    "bytes": 115942,
    "width": 1397,
    "height": 562,
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "name": "cells_isotype",
@@ -373,7 +373,7 @@
    "bytes": 249461,
    "width": 2120,
    "height": 1120,
-   "seconds": 1.2
+   "seconds": 1.4
   },
   {
    "name": "signatures",
@@ -388,5 +388,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 51.7
+ "seconds": 199.4
 }

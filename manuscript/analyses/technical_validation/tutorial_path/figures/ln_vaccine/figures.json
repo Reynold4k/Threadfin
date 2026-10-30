@@ -41,7 +41,7 @@
    "bytes": 606540,
    "width": 2204,
    "height": 1482,
-   "seconds": 1.3
+   "seconds": 1.2
   },
   {
    "name": "coherence",
@@ -96,7 +96,7 @@
    "bytes": 879907,
    "width": 1657,
    "height": 1034,
-   "seconds": 1.4
+   "seconds": 1.2
   },
   {
    "name": "clone_map_state",
@@ -129,7 +129,7 @@
    "bytes": 474164,
    "width": 1657,
    "height": 578,
-   "seconds": 0.7
+   "seconds": 0.9
   },
   {
    "name": "stability",
@@ -206,7 +206,7 @@
    "bytes": 22343,
    "width": 913,
    "height": 590,
-   "seconds": 0.4
+   "seconds": 0.2
   },
   {
    "name": "label_effects",
@@ -228,7 +228,7 @@
    "bytes": 22461,
    "width": 1703,
    "height": 630,
-   "seconds": 0.5
+   "seconds": 0.4
   },
   {
    "name": "association_isotype",
@@ -239,7 +239,7 @@
    "bytes": 50250,
    "width": 2577,
    "height": 1299,
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "name": "memory_timepoint",
@@ -261,7 +261,7 @@
    "bytes": 78003,
    "width": 1000,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.6
   },
   {
    "name": "cells_programmes",
@@ -272,7 +272,7 @@
    "bytes": 189783,
    "width": 2031,
    "height": 562,
-   "seconds": 1.1
+   "seconds": 1.0
   },
   {
    "name": "cells_state",
@@ -283,7 +283,7 @@
    "bytes": 227204,
    "width": 2228,
    "height": 1120,
-   "seconds": 1.9
+   "seconds": 1.8
   },
   {
    "name": "cells_tissue",
@@ -294,7 +294,7 @@
    "bytes": 62962,
    "width": 891,
    "height": 562,
-   "seconds": 0.7
+   "seconds": 0.5
   },
   {
    "name": "cells_isotype",
@@ -305,7 +305,7 @@
    "bytes": 310504,
    "width": 2120,
    "height": 1120,
-   "seconds": 1.6
+   "seconds": 1.5
   },
   {
    "name": "signatures",
@@ -320,5 +320,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 67.3
+ "seconds": 484.0
 }

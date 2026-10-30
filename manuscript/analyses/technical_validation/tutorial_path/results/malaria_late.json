@@ -3,9 +3,9 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 33.8,
-  "threadfin_run": 210.1,
-  "plot_and_save": 1.9
+  "user_inputs": 33.6,
+  "threadfin_run": 211.5,
+  "plot_and_save": 1.8
  },
  "warnings": [
   {
@@ -57,6 +57,6 @@
   "n_neighbors": 32,
   "min_dist": 0.8
  },
- "seconds_total": 245.9,
- "peak_rss_gb": 6.5
+ "seconds_total": 247.0,
+ "peak_rss_gb": 6.49
 }

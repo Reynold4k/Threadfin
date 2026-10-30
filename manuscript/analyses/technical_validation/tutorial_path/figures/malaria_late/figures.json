@@ -41,7 +41,7 @@
    "bytes": 364237,
    "width": 2211,
    "height": 1482,
-   "seconds": 1.1
+   "seconds": 0.9
   },
   {
    "name": "coherence",
@@ -96,7 +96,7 @@
    "bytes": 981972,
    "width": 1104,
    "height": 3125,
-   "seconds": 7.0
+   "seconds": 7.2
   },
   {
    "name": "clone_map_cell_state",
@@ -107,7 +107,7 @@
    "bytes": 514849,
    "width": 1657,
    "height": 1491,
-   "seconds": 0.9
+   "seconds": 1.0
   },
   {
    "name": "clone_map_isotype",
@@ -129,7 +129,7 @@
    "bytes": 27032,
    "width": 994,
    "height": 592,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "composition_cell_state_cells",
@@ -173,7 +173,7 @@
    "bytes": 21389,
    "width": 913,
    "height": 590,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "label_effects",
@@ -184,7 +184,7 @@
    "bytes": 30269,
    "width": 1390,
    "height": 527,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "association_cell_state",
@@ -195,7 +195,7 @@
    "bytes": 56841,
    "width": 2577,
    "height": 1299,
-   "seconds": 0.9
+   "seconds": 1.0
   },
   {
    "name": "association_isotype",
@@ -206,7 +206,7 @@
    "bytes": 22290,
    "width": 1707,
    "height": 630,
-   "seconds": 0.5
+   "seconds": 0.4
   },
   {
    "name": "heritability",
@@ -250,7 +250,7 @@
    "bytes": 260634,
    "width": 2120,
    "height": 1120,
-   "seconds": 1.1
+   "seconds": 1.0
   },
   {
    "name": "signatures",
@@ -265,5 +265,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 35.8
+ "seconds": 106.5
 }

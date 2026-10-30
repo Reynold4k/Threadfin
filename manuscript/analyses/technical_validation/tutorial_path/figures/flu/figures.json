@@ -41,7 +41,7 @@
    "bytes": 447430,
    "width": 2204,
    "height": 1438,
-   "seconds": 1.0
+   "seconds": 0.9
   },
   {
    "name": "coherence",
@@ -129,7 +129,7 @@
    "bytes": 27579,
    "width": 994,
    "height": 592,
-   "seconds": 0.1
+   "seconds": 0.4
   },
   {
    "name": "composition_timepoint_cells",
@@ -162,7 +162,7 @@
    "bytes": 26347,
    "width": 921,
    "height": 648,
-   "seconds": 0.3
+   "seconds": 0.2
   },
   {
    "name": "composition_isotype_clones",
@@ -206,7 +206,7 @@
    "bytes": 53666,
    "width": 2577,
    "height": 1431,
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "name": "memory_timepoint",
@@ -261,7 +261,7 @@
    "bytes": 352270,
    "width": 2120,
    "height": 1679,
-   "seconds": 2.2
+   "seconds": 2.3
   },
   {
    "name": "signatures",
@@ -272,9 +272,9 @@
    "bytes": 101393,
    "width": 1751,
    "height": 915,
-   "seconds": 0.5
+   "seconds": 0.4
   }
  ],
  "not_drawn": [],
- "seconds": 36.0
+ "seconds": 150.6
 }

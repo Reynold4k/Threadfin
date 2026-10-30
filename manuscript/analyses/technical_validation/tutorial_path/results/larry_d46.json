@@ -4,7 +4,7 @@
  "python_hash_seed": "0",
  "steps": {
   "user_inputs": 0.1,
-  "threadfin_run": 162.7,
+  "threadfin_run": 159.6,
   "plot_and_save": 0.8
  },
  "warnings": [
@@ -52,6 +52,6 @@
   "n_neighbors": 66,
   "min_dist": 0.55
  },
- "seconds_total": 163.6,
+ "seconds_total": 160.5,
  "peak_rss_gb": 0.9
 }

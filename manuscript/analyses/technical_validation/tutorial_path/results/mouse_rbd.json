@@ -3,9 +3,9 @@
  "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 43.9,
+  "user_inputs": 44.0,
   "threadfin_run": 88.2,
-  "plot_and_save": 1.4
+  "plot_and_save": 1.5
  },
  "warnings": [
   {
@@ -30,19 +30,19 @@
    "category": "UserWarning",
    "message": "'rbd_bait' is the same for every cell of each 'sample', so this test compares 20 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'rbd_bait', and the p-value counts clones as replicates. Read it as descriptive, or compare the sampl",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   },
   {
    "category": "UserWarning",
    "message": "'division_gate' is the same for every cell of each 'sample', so this test compares 40 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'division_gate', and the p-value counts clones as replicates. Read it as descriptive, or compare",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   },
   {
    "category": "UserWarning",
    "message": "'zone_gate' is the same for every cell of each 'sample', so this test compares 20 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'zone_gate', and the p-value counts clones as replicates. Read it as descriptive, or compare the sam",
    "file": "stats.py",
-   "count": 2
+   "count": 1
   },
   {
    "category": "UserWarning",
@@ -89,6 +89,6 @@
   "n_neighbors": 10,
   "min_dist": 0.95
  },
- "seconds_total": 133.6,
+ "seconds_total": 133.7,
  "peak_rss_gb": 7.9
 }

@@ -54,7 +54,7 @@
    "bytes": 34602,
    "width": 664,
    "height": 668,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "clone_map_programmes",
@@ -65,7 +65,7 @@
    "bytes": 306647,
    "width": 1250,
    "height": 578,
-   "seconds": 0.5
+   "seconds": 0.4
   },
   {
    "name": "clone_map_clone_size",
@@ -76,7 +76,7 @@
    "bytes": 182262,
    "width": 923,
    "height": 770,
-   "seconds": 0.3
+   "seconds": 0.4
   },
   {
    "name": "clone_map_reliability",
@@ -87,7 +87,7 @@
    "bytes": 222333,
    "width": 916,
    "height": 770,
-   "seconds": 0.3
+   "seconds": 0.4
   },
   {
    "name": "clone_map_donor",
@@ -98,7 +98,7 @@
    "bytes": 844916,
    "width": 1657,
    "height": 1491,
-   "seconds": 1.2
+   "seconds": 1.3
   },
   {
    "name": "clone_map_rbd_bait",
@@ -142,7 +142,7 @@
    "bytes": 390365,
    "width": 1657,
    "height": 578,
-   "seconds": 0.5
+   "seconds": 0.6
   },
   {
    "name": "stability",
@@ -153,7 +153,7 @@
    "bytes": 25886,
    "width": 994,
    "height": 592,
-   "seconds": 0.1
+   "seconds": 0.3
   },
   {
    "name": "composition_rbd_bait_cells",
@@ -197,7 +197,7 @@
    "bytes": 22822,
    "width": 1007,
    "height": 532,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "composition_zone_gate_cells",
@@ -208,7 +208,7 @@
    "bytes": 18393,
    "width": 879,
    "height": 532,
-   "seconds": 0.2
+   "seconds": 0.1
   },
   {
    "name": "composition_zone_gate_clones",
@@ -241,7 +241,7 @@
    "bytes": 20335,
    "width": 913,
    "height": 532,
-   "seconds": 0.1
+   "seconds": 0.2
   },
   {
    "name": "label_effects",
@@ -263,7 +263,7 @@
    "bytes": 19722,
    "width": 1702,
    "height": 564,
-   "seconds": 0.3
+   "seconds": 0.4
   },
   {
    "name": "association_division_gate",
@@ -285,7 +285,7 @@
    "bytes": 20234,
    "width": 1702,
    "height": 564,
-   "seconds": 0.4
+   "seconds": 0.3
   },
   {
    "name": "association_isotype",
@@ -296,7 +296,7 @@
    "bytes": 25667,
    "width": 2577,
    "height": 564,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "memory_division_gate",
@@ -318,7 +318,7 @@
    "bytes": 73798,
    "width": 970,
    "height": 730,
-   "seconds": 0.4
+   "seconds": 0.6
   },
   {
    "name": "cells_programmes",
@@ -329,7 +329,7 @@
    "bytes": 127736,
    "width": 1461,
    "height": 562,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "cells_rbd_bait",
@@ -351,7 +351,7 @@
    "bytes": 76067,
    "width": 832,
    "height": 562,
-   "seconds": 0.4
+   "seconds": 0.3
   },
   {
    "name": "cells_zone_gate",
@@ -388,5 +388,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 15.4
+ "seconds": 100.6
 }

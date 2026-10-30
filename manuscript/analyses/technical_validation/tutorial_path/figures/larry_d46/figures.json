@@ -71,7 +71,7 @@
    "bytes": 294978,
    "width": 923,
    "height": 770,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "clone_map_reliability",
@@ -82,7 +82,7 @@
    "bytes": 401025,
    "width": 931,
    "height": 770,
-   "seconds": 0.4
+   "seconds": 0.5
   },
   {
    "name": "clone_map_state",
@@ -93,7 +93,7 @@
    "bytes": 760214,
    "width": 1381,
    "height": 1242,
-   "seconds": 2.9
+   "seconds": 3.0
   },
   {
    "name": "stability",
@@ -137,7 +137,7 @@
    "bytes": 350760,
    "width": 2031,
    "height": 1120,
-   "seconds": 1.4
+   "seconds": 1.2
   },
   {
    "name": "cells_state",
@@ -152,5 +152,5 @@
   }
  ],
  "not_drawn": [],
- "seconds": 12.0
+ "seconds": 54.9
 }
