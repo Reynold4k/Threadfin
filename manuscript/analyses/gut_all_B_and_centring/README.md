@@ -18,6 +18,9 @@ in all mice).
 958, because 96 % of the BCR-carrying non-GC B cells are singletons and cannot be profiled. The
 mouse-centred run reproduces Figure 3 (three programmes, stability 0.88 / 0.51 / 0.59; the GC-fate sort
 fraction explains 7.7 % of profile variation, lamina-propria fraction 47 %, isotype 20 %; all P = 0.0005).
+With Threadfin 4.6.0, which shuffles each label among clones of the same mouse and similar size, all nine label
+tests of this run still give P = 0.0005 (`allB_threadfin/donor/label_effects_460.csv`, re-derived on
+2026-10-30; the permutation means change by at most 0.0023, the excess R² of the plasma-cell fraction from 0.554 to 0.551).
 
 ## 2. Are the two plasma-cell branches two kinds of clones?
 

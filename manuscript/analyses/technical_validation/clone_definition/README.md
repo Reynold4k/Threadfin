@@ -38,6 +38,11 @@ python clone_definition_sensitivity.py --plot results
 | gut | 0.85 | yes | 964 | 5,724 | 0.401 (0.278) | 0.065 |
 
 Every clonal ICC exceeded all 200 shuffles (p = 0.005) and every label effect all 1,000 shuffles (p = 0.001).
+With Threadfin 4.6.0 (the same script re-run on 2026-10-30, `results_460/clone_definition_sensitivity.csv`),
+which shuffles the label among clones of the same mouse and similar size, the label excess R² is RBD 0.102,
+0.094, 0.085, 0.083, 0.083, 0.083 (identities 0.75–1.0) and 0.085 (contig check), gut 0.074, 0.072, 0.065,
+0.060, 0.043, 0.043 and 0.065; every label effect still exceeds all 1,000 shuffles, and the clone counts and
+ICCs are unchanged.
 Bold rows are the setting of the manuscript. Their clonal ICCs equal the published ones to three decimals (RBD
 0.169, gut 0.401); the numbers of clones differ by six from the case studies (1,887 and 958), because Dandelion's
 calls depend on Python's hash seed and Threadfin ≥ 4.4 renames contig ids that two libraries share

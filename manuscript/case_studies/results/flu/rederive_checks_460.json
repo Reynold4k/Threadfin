@@ -1,0 +1,427 @@
+{
+ "dataset": "flu",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "isotype": {
+   "legacy_size_strata_false": {
+    "r2": 0.1685349668940174,
+    "null_mean": 0.00577009060461613,
+    "excess_r2": 0.16276487628940126,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1771,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 281,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7508896797153025
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 77,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7142857142857143
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 256,
+      "median_cells": 2.0,
+      "frac_2cell": 0.65234375
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 1157,
+      "median_cells": 2.0,
+      "frac_2cell": 0.756266205704408
+     }
+    ],
+    "n_without_majority": 308
+   },
+   "v460": {
+    "r2": 0.1685349668940174,
+    "null_mean": 0.010200812561447415,
+    "excess_r2": 0.15833415433256998,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1771,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 281,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7508896797153025
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 77,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7142857142857143
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 256,
+      "median_cells": 2.0,
+      "frac_2cell": 0.65234375
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 1157,
+      "median_cells": 2.0,
+      "frac_2cell": 0.756266205704408
+     }
+    ],
+    "n_without_majority": 308
+   }
+  },
+  "mutation_frequency": {
+   "legacy_size_strata_false": {
+    "r2": 0.08764951375697418,
+    "null_mean": 0.004515972588667566,
+    "excess_r2": 0.08313354116830661,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2080,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 2080,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7697115384615385,
+      "spearman_with_clone_size": 0.12044014259637861
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.08764951375697418,
+    "null_mean": 0.006666441334615369,
+    "excess_r2": 0.0809830724223588,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2080,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 2080,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7697115384615385,
+      "spearman_with_clone_size": 0.12044014259637861
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "timepoint:d7": {
+   "legacy_size_strata_false": {
+    "r2": 0.06663310744384875,
+    "null_mean": 0.006475695542043704,
+    "excess_r2": 0.06015741190180504,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2082,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 2082,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7699327569644573,
+      "spearman_with_clone_size": 0.18163260052219815
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.06663310744384875,
+    "null_mean": 0.013415800769686497,
+    "excess_r2": 0.053217306674162246,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2082,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 2082,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7699327569644573,
+      "spearman_with_clone_size": 0.18163260052219815
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "age_group": {
+   "legacy_size_strata_false": {
+    "r2": 0.006323591757186764,
+    "null_mean": 0.0004940482391724995,
+    "excess_r2": 0.005829543518014265,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2082,
+    "strata_key": null,
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": true,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "older",
+      "n_clones": 1159,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7575496117342536
+     },
+     {
+      "level": "young",
+      "n_clones": 923,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7854821235102926
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.006323591757186764,
+    "null_mean": 0.0005151105674626596,
+    "excess_r2": 0.005808481189724104,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 2082,
+    "strata_key": null,
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": true,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "older",
+      "n_clones": 1159,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7575496117342536
+     },
+     {
+      "level": "young",
+      "n_clones": 923,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7854821235102926
+     }
+    ],
+    "n_without_majority": 0
+   }
+  }
+ },
+ "programme_tests": {
+  "isotype": {
+   "legacy_n_fdr05": 14,
+   "v460_n_fdr05": 14,
+   "v460_n_fdr05_not_mirror": 14,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 14,
+   "v460_n_fdr05": 14,
+   "v460_n_fdr05_not_mirror": 14,
+   "v460_kruskal_p": null
+  },
+  "mutation_frequency": {
+   "legacy_n_fdr05": 4,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "mutation_frequency|assigned": {
+   "legacy_n_fdr05": 4,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "timepoint:d7": {
+   "legacy_n_fdr05": 5,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "timepoint:d7|assigned": {
+   "legacy_n_fdr05": 5,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "age_group": {
+   "legacy_n_fdr05": 6,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 3,
+   "v460_kruskal_p": null
+  },
+  "age_group|assigned": {
+   "legacy_n_fdr05": 6,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 3,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {
+  "timepoint": {
+   "order_from_manuscript_run": [
+    "d0",
+    "d7"
+   ],
+   "legacy_all_pooled": {
+    "n_clones": 726,
+    "n_pairs": 726,
+    "memory_index": 0.8903978679940178,
+    "memory_index_ci": [
+     0.8141340226036352,
+     0.9775721350920573
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.7176308539944903,
+    "persistence_null": 0.4188154269972452,
+    "levels": [
+     "d0",
+     "d7"
+    ],
+    "reference": "all",
+    "noise": "pooled",
+    "mean_change": 0.034734455852565384,
+    "mean_change_random": 0.3169140528276359,
+    "mean_change_shared": 0.02050605675518652,
+    "mean_noise_removed": 0.5196938865058613
+   },
+   "v460": {
+    "n_clones": 726,
+    "n_pairs": 726,
+    "memory_index": 0.8204915813594637,
+    "memory_index_ci": [
+     0.673098592170747,
+     1.051380913766222
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.7176308539944903,
+    "persistence_null": 0.49024050982504586,
+    "levels": [
+     "d0",
+     "d7"
+    ],
+    "reference": "persistent",
+    "noise": "snapshot",
+    "mean_change": 0.04029268096307237,
+    "mean_change_random": 0.2244612328949208,
+    "mean_change_shared": 0.020548662658732748,
+    "mean_noise_removed": 0.5141356613953545,
+    "variance_source": {
+     "own": 308,
+     "level": 1144,
+     "kind": 0,
+     "all": 0
+    }
+   }
+  }
+ },
+ "memory_min_cells_2": {
+  "timepoint": {
+   "n_clones": 64,
+   "n_pairs": 64,
+   "memory_index": 0.6617428411420467,
+   "memory_index_ci": [
+    0.4672046783723128,
+    0.8064522566418395
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.8125,
+   "persistence_null": 0.5507089604236344,
+   "levels": [
+    "d0",
+    "d7"
+   ],
+   "reference": "persistent",
+   "noise": "snapshot",
+   "mean_change": 0.09821334778575488,
+   "mean_change_random": 0.2903511284649508,
+   "mean_change_shared": 0.030082506974313684,
+   "mean_noise_removed": 0.22041799492177505
+  }
+ },
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 92,
+    "statistic": "excess_icc",
+    "median_icc": 0.1717,
+    "matched_background_median_icc": 0.07597,
+    "difference": 0.090669,
+    "se": 0.019509,
+    "ci_low": 0.052431,
+    "ci_high": 0.128907,
+    "se_genes": 0.011555,
+    "se_clones": 0.015719,
+    "frac_significant": 0.880435,
+    "pvalue_vs_matched": 3e-06,
+    "pvalue_mw_genes_independent": 0.0,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 3e-06
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/flu_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.042532920837402344
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 2082,
+  "n_clones_new": 2082,
+  "n_common": 2082,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 5.883263475869871e-05,
+  "max_abs_diff_x": 4.343923568725586,
+  "max_abs_diff_y": 3.956900954246521,
+  "agreement_clone_programme": 0.9726224783861671,
+  "agreement_clone_programme_assigned": 0.9726224783861671
+ }
+}

@@ -1,0 +1,491 @@
+{
+ "dataset": "covid_bcell",
+ "title": "Dugan et al. 2021 Immunity - COVID-19 multi-antigen bait-sorted B cells (38 patients, acute + convalescent; oligo-tagged spike/RBD/NP/ORF8 and HCoV probes)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 11683,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 39503,
+  "n_clones": 38059,
+  "n_clones_ge2": 588,
+  "largest_clone": 33,
+  "python_hash_seed": "0",
+  "source": "dandelion",
+  "cells_dropped": 11683,
+  "light_chain_only_cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 61423,
+  "n_cells_bcr": 39503,
+  "n_clones": 38059,
+  "clones_ge2": 588,
+  "clones_ge3": 195,
+  "clones_ge5": 76,
+  "clones_ge10": 31,
+  "cells_in_clones_ge2": 2032,
+  "largest_clone": 33,
+  "n_donors": 37,
+  "n_samples": 36
+ },
+ "coherence": {
+  "icc": 0.40029303198905836,
+  "null_mean": 0.05137611275134964,
+  "null_q95": 0.06596973991103854,
+  "excess": 0.34891691923770873,
+  "p_value": 0.001996007984031936,
+  "n_clones": 588,
+  "n_cells": 2032,
+  "min_cells_reliability_0.5": 2
+ },
+ "clone_map": {
+  "n_neighbors": 30,
+  "min_dist": 0.3,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 588,
+  "n_profiled": 588,
+  "chosen_by": "user",
+  "quality": {
+   "score": 0.42360208751703143,
+   "coherence": 0.9319727891156463,
+   "local_fidelity": 0.558843537414966,
+   "global_fidelity": 0.7305375083673956,
+   "coherence_target": 0.9761904761904762
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 4,
+  "n_merged": 1,
+  "root_pvalue": 0.07220463157004142
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 588,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "antigen_call": {
+   "label": "antigen_call",
+   "kind": "categorical",
+   "r2": 0.0679193364141325,
+   "null_mean": 0.04196440527541243,
+   "excess_r2": 0.02595493113872007,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 484,
+   "n_levels": 5,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "none": [
+     -0.19805331670305001,
+     0.2846058648877317,
+     -0.007907421186844149
+    ],
+    "np": [
+     0.12033933924625378,
+     0.016805261366087586,
+     -0.011679811966079354
+    ],
+    "orf8": [
+     0.13011136465119777,
+     -0.07808222342172665,
+     -0.09957168367786644
+    ],
+    "rbd": [
+     0.030519855177091843,
+     0.0502065365345673,
+     -0.030886460044083942
+    ],
+    "spike": [
+     -0.1508968239430445,
+     -0.3190569714219537,
+     0.1862621749922249
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "none",
+     "n_clones": 75,
+     "median_cells": 2.0,
+     "frac_2cell": 0.5066666666666667
+    },
+    {
+     "level": "np",
+     "n_clones": 168,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6011904761904762
+    },
+    {
+     "level": "orf8",
+     "n_clones": 87,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4827586206896552
+    },
+    {
+     "level": "rbd",
+     "n_clones": 99,
+     "median_cells": 2.0,
+     "frac_2cell": 0.7373737373737373
+    },
+    {
+     "level": "spike",
+     "n_clones": 55,
+     "median_cells": 2.0,
+     "frac_2cell": 0.7272727272727273
+    }
+   ],
+   "n_without_majority": 104,
+   "sample_key": "donor",
+   "n_samples": 34,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "dominant SARS-CoV-2 antigen bait of the clone (measured oligo-probe counts)"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.10714271546900167,
+   "null_mean": 0.037098363740335684,
+   "excess_r2": 0.070044351728666,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 510,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.31195268015044103,
+     0.15554949490283676,
+     -0.014726158447238607
+    ],
+    "IGHD": [
+     0.06106582806367447,
+     0.04082490752571496,
+     -0.029023421652735172
+    ],
+    "IGHG": [
+     -0.31952691422234636,
+     -0.039956950006459345,
+     0.2998701537924376
+    ],
+    "IGHM": [
+     0.4795283585109604,
+     -0.10031005298741513,
+     -0.2284032446444525
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHA",
+     "n_clones": 86,
+     "median_cells": 2.0,
+     "frac_2cell": 0.5813953488372093
+    },
+    {
+     "level": "IGHD",
+     "n_clones": 20,
+     "median_cells": 2.0,
+     "frac_2cell": 0.8
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 112,
+     "median_cells": 2.0,
+     "frac_2cell": 0.5982142857142857
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 292,
+     "median_cells": 2.0,
+     "frac_2cell": 0.636986301369863
+    }
+   ],
+   "n_without_majority": 78,
+   "sample_key": "donor",
+   "n_samples": 36,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  },
+  "disease_state": {
+   "label": "disease_state",
+   "kind": "categorical",
+   "r2": 0.05063398682202004,
+   "null_mean": 0.0018490645764379914,
+   "excess_r2": 0.04878492224558205,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 588,
+   "n_levels": 2,
+   "strata_key": null,
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "Acute": [
+     -0.18006968650579364,
+     0.33488552287673123,
+     -0.011882480505629569
+    ],
+    "Convalescent": [
+     0.18006968650579364,
+     -0.33488552287673123,
+     0.011882480505629569
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "Acute",
+     "n_clones": 84,
+     "median_cells": 2.0,
+     "frac_2cell": 0.5119047619047619
+    },
+    {
+     "level": "Convalescent",
+     "n_clones": 504,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6944444444444444
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 36,
+   "sample_level": true,
+   "samples_per_level": [
+    {
+     "level": "Acute",
+     "n_samples": 9
+    },
+    {
+     "level": "Convalescent",
+     "n_samples": 27
+    }
+   ],
+   "note": "acute vs convalescent sampling (donor-level label: not separable from other donor differences)"
+  }
+ },
+ "programme_associations": {},
+ "memory": {
+  "visit": {
+   "n_clones": 13,
+   "n_pairs": 13,
+   "memory_index": 1.2454036430082294,
+   "memory_index_ci": [
+    NaN,
+    NaN
+   ],
+   "p_value": 0.003992015968063872,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "v1",
+    "v2"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 4934,
+  "median_icc": 0.031741732332812356,
+  "top_genes": [
+   "JCHAIN",
+   "MALAT1",
+   "GAPDH",
+   "HIST1H4C",
+   "HOPX",
+   "TUBA1B",
+   "CD74",
+   "ACTB",
+   "ACTG1",
+   "CCND2",
+   "CRIP1",
+   "FTL",
+   "HLA-DRA",
+   "KIAA0125",
+   "S100A4",
+   "TMSB10",
+   "MT-CO2",
+   "MT-CO1",
+   "RP5-887A10.1",
+   "HIST1H1E",
+   "HSP90B1",
+   "RPS3",
+   "PFN1",
+   "LTB",
+   "B2M"
+  ],
+  "receptor_gene_icc": 0.8786812190141647,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.1297,
+    "matched_background_median_icc": 0.0206,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.1981,
+    "matched_background_median_icc": 0.0254,
+    "pvalue_vs_matched": 0.0006
+   },
+   "light zone": {
+    "median_icc": 0.0678,
+    "matched_background_median_icc": 0.0121,
+    "pvalue_vs_matched": 0.0054
+   },
+   "memory": {
+    "median_icc": 0.0557,
+    "matched_background_median_icc": 0.0182,
+    "pvalue_vs_matched": 0.3739
+   },
+   "naive": {
+    "median_icc": 0.1476,
+    "matched_background_median_icc": 0.0189,
+    "pvalue_vs_matched": 0.0001
+   },
+   "interferon": {
+    "median_icc": -0.0,
+    "matched_background_median_icc": 0.0026,
+    "pvalue_vs_matched": 0.9712
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "PRDM1",
+    "XBP1",
+    "IRF4",
+    "JCHAIN",
+    "MZB1",
+    "SDC1",
+    "TNFRSF17",
+    "DERL3",
+    "FKBP11",
+    "SSR4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "BCL6",
+    "AICDA",
+    "RGS13",
+    "MEF2B",
+    "S1PR2",
+    "LMO2",
+    "MYBL1",
+    "GCSAM",
+    "ELL3",
+    "SERPINA9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "CXCR4",
+    "MKI67",
+    "TOP2A",
+    "AURKB",
+    "CCNB1",
+    "HMGB2",
+    "TUBB",
+    "STMN1",
+    "FOXP1",
+    "AICDA"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "CD83",
+    "CD86",
+    "MYC",
+    "NFKBIA",
+    "BATF",
+    "EGR2",
+    "IL4I1",
+    "CCL22",
+    "BCL2A1",
+    "NME1"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "CD27",
+    "CCR6",
+    "GPR183",
+    "TNFRSF13B",
+    "SELL",
+    "CD44",
+    "S1PR1",
+    "KLF2",
+    "ZBTB32",
+    "FCRL4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "TCL1A",
+    "FCER2",
+    "IL4R",
+    "BACH2",
+    "SELL",
+    "PLPP5",
+    "YBX3",
+    "BTG1",
+    "CD200",
+    "IGHD"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "ISG15",
+    "IFIT1",
+    "IFIT3",
+    "MX1",
+    "IFI44L",
+    "OAS1",
+    "IFI6",
+    "XAF1",
+    "STAT1",
+    "IRF7"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 3.6
+}

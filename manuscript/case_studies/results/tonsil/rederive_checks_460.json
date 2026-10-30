@@ -1,0 +1,149 @@
+{
+ "dataset": "tonsil",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "isotype": {
+   "legacy_size_strata_false": {
+    "r2": 0.038007515828813045,
+    "null_mean": 0.011536451692397854,
+    "excess_r2": 0.02647106413641519,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 317,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 40,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 63,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7777777777777778
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 146,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7808219178082192
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 68,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8088235294117647
+     }
+    ],
+    "n_without_majority": 42
+   },
+   "v460": {
+    "r2": 0.038007515828813045,
+    "null_mean": 0.011269150002662322,
+    "excess_r2": 0.026738365826150724,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 317,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 40,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 63,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7777777777777778
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 146,
+      "median_cells": 2.0,
+      "frac_2cell": 0.7808219178082192
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 68,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8088235294117647
+     }
+    ],
+    "n_without_majority": 42
+   }
+  }
+ },
+ "programme_tests": {
+  "isotype": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_n_fdr05_not_mirror": 2,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_n_fdr05_not_mirror": 2,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {},
+ "memory_min_cells_2": {},
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 92,
+    "statistic": "excess_icc",
+    "median_icc": 0.146963,
+    "matched_background_median_icc": 0.073135,
+    "difference": 0.064047,
+    "se": 0.029864,
+    "ci_low": 0.005515,
+    "ci_high": 0.122579,
+    "se_genes": 0.007086,
+    "se_clones": 0.029011,
+    "frac_significant": 0.0,
+    "pvalue_vs_matched": 0.031982,
+    "pvalue_mw_genes_independent": 0.0,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 0.031982
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/tonsil_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.00043033063411712646
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 361,
+  "n_clones_new": 361,
+  "n_common": 361,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 0.0,
+  "max_abs_diff_x": 0.0,
+  "max_abs_diff_y": 0.0,
+  "agreement_clone_programme": 1.0,
+  "agreement_clone_programme_assigned": 1.0
+ }
+}

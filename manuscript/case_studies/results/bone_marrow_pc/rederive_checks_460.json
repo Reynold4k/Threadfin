@@ -1,0 +1,541 @@
+{
+ "dataset": "bone_marrow_pc",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "sorted_as:plasma cells": {
+   "legacy_size_strata_false": {
+    "r2": 0.3542305870704988,
+    "null_mean": 0.002269651669718871,
+    "excess_r2": 0.35196093540077994,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6583,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 6583,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6911742366702112,
+      "spearman_with_clone_size": 0.09224976589566299
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.3542305870704988,
+    "null_mean": 0.001425550180752312,
+    "excess_r2": 0.3528050368897465,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6583,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 6583,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6911742366702112,
+      "spearman_with_clone_size": 0.09224976589566299
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "tissue:bone marrow": {
+   "legacy_size_strata_false": {
+    "r2": 0.333747968716216,
+    "null_mean": 0.0017113110669129026,
+    "excess_r2": 0.33203665764930307,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6583,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 6583,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6911742366702112,
+      "spearman_with_clone_size": 0.022978620916258068
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.333747968716216,
+    "null_mean": 0.0025447444657822295,
+    "excess_r2": 0.33120322425043375,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6583,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 6583,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6911742366702112,
+      "spearman_with_clone_size": 0.022978620916258068
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "antigen": {
+   "legacy_size_strata_false": {
+    "r2": 0.006439620624381856,
+    "null_mean": 0.002133224749940668,
+    "excess_r2": 0.004306395874441188,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6581,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "SARS-CoV-2 spike",
+      "n_clones": 124,
+      "median_cells": 3.0,
+      "frac_2cell": 0.3951612903225806
+     },
+     {
+      "level": "not antigen sorted",
+      "n_clones": 6447,
+      "median_cells": 2.0,
+      "frac_2cell": 0.697378625717388
+     },
+     {
+      "level": "tetanus toxoid",
+      "n_clones": 10,
+      "median_cells": 3.5,
+      "frac_2cell": 0.3
+     }
+    ],
+    "n_without_majority": 2
+   },
+   "v460": {
+    "r2": 0.006439620624381856,
+    "null_mean": 0.00246342069611023,
+    "excess_r2": 0.003976199928271626,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6581,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "SARS-CoV-2 spike",
+      "n_clones": 124,
+      "median_cells": 3.0,
+      "frac_2cell": 0.3951612903225806
+     },
+     {
+      "level": "not antigen sorted",
+      "n_clones": 6447,
+      "median_cells": 2.0,
+      "frac_2cell": 0.697378625717388
+     },
+     {
+      "level": "tetanus toxoid",
+      "n_clones": 10,
+      "median_cells": 3.5,
+      "frac_2cell": 0.3
+     }
+    ],
+    "n_without_majority": 2
+   }
+  },
+  "isotype": {
+   "legacy_size_strata_false": {
+    "r2": 0.039813482611895795,
+    "null_mean": 0.0025778256628267143,
+    "excess_r2": 0.03723565694906908,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6266,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 3215,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6681181959564542
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 93,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6451612903225806
+     },
+     {
+      "level": "IGHE",
+      "n_clones": 1,
+      "median_cells": 2.0,
+      "frac_2cell": 1.0
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 2580,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6922480620155039
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 377,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6710875331564987
+     }
+    ],
+    "n_without_majority": 317
+   },
+   "v460": {
+    "r2": 0.039813482611895795,
+    "null_mean": 0.002087835145479642,
+    "excess_r2": 0.03772564746641616,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 6266,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 6,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 3215,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6681181959564542
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 93,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6451612903225806
+     },
+     {
+      "level": "IGHE",
+      "n_clones": 1,
+      "median_cells": 2.0,
+      "frac_2cell": 1.0
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 2580,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6922480620155039
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 377,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6710875331564987
+     }
+    ],
+    "n_without_majority": 317
+   }
+  }
+ },
+ "programme_tests": {
+  "sorted_as:plasma cells": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "sorted_as:plasma cells|assigned": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "tissue:bone marrow": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "tissue:bone marrow|assigned": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "antigen": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_n_fdr05_not_mirror": 0,
+   "v460_kruskal_p": null
+  },
+  "antigen|assigned": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_n_fdr05_not_mirror": 0,
+   "v460_kruskal_p": null
+  },
+  "isotype": {
+   "legacy_n_fdr05": 8,
+   "v460_n_fdr05": 8,
+   "v460_n_fdr05_not_mirror": 8,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 8,
+   "v460_n_fdr05": 8,
+   "v460_n_fdr05_not_mirror": 8,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {
+  "tissue": {
+   "order_from_manuscript_run": [
+    "blood",
+    "bone marrow"
+   ],
+   "legacy_all_pooled": {
+    "n_clones": 1604,
+    "n_pairs": 1604,
+    "memory_index": 0.29119362043422115,
+    "memory_index_ci": [
+     0.256063396190245,
+     0.3290445639355693
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.43516209476309226,
+    "persistence_null": 0.24597256857855368,
+    "levels": [
+     "blood",
+     "bone marrow"
+    ],
+    "reference": "all",
+    "noise": "pooled",
+    "mean_change": 0.3463295503387129,
+    "mean_change_random": 0.4886095276835367,
+    "mean_change_shared": 0.17566332587646533,
+    "mean_noise_removed": 0.35036513104516703
+   },
+   "v460": {
+    "n_clones": 1604,
+    "n_pairs": 1604,
+    "memory_index": 0.17621135109337316,
+    "memory_index_ci": [
+     0.13003602903816405,
+     0.2260237826808844
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.43516209476309226,
+    "persistence_null": 0.416469344739437,
+    "levels": [
+     "blood",
+     "bone marrow"
+    ],
+    "reference": "persistent",
+    "noise": "snapshot",
+    "mean_change": 0.31981335501879393,
+    "mean_change_random": 0.38822258044374136,
+    "mean_change_shared": 0.17561351223564647,
+    "mean_noise_removed": 0.376881326365086,
+    "variance_source": {
+     "own": 771,
+     "level": 2437,
+     "kind": 0,
+     "all": 0
+    }
+   }
+  },
+  "sorted_as": {
+   "order_from_manuscript_run": [
+    "antigen-specific B cells",
+    "memory B cells",
+    "plasma cells",
+    "plasma cells and memory B cells",
+    "plasmablasts and memory B cells"
+   ],
+   "legacy_all_pooled": {
+    "n_clones": 1513,
+    "n_pairs": 1513,
+    "memory_index": 0.042443438780632725,
+    "memory_index_ci": [
+     0.02932998073265036,
+     0.0558861734125541
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.058823529411764705,
+    "persistence_null": 0.04054857898215466,
+    "levels": [
+     "antigen-specific B cells",
+     "memory B cells",
+     "plasma cells",
+     "plasma cells and memory B cells",
+     "plasmablasts and memory B cells"
+    ],
+    "reference": "all",
+    "noise": "pooled",
+    "mean_change": 0.65273241919294,
+    "mean_change_random": 0.6816646093069849,
+    "mean_change_shared": 0.5365485189763642,
+    "mean_noise_removed": 0.3049563817406801
+   },
+   "v460": {
+    "n_clones": 1513,
+    "n_pairs": 1513,
+    "memory_index": 0.035701019363366115,
+    "memory_index_ci": [
+     0.02217954857094103,
+     0.048267837873366276
+    ],
+    "p_value": 0.001996007984031936,
+    "persistence": 0.058823529411764705,
+    "persistence_null": 0.04301768236990127,
+    "levels": [
+     "antigen-specific B cells",
+     "memory B cells",
+     "plasma cells",
+     "plasma cells and memory B cells",
+     "plasmablasts and memory B cells"
+    ],
+    "reference": "persistent",
+    "noise": "snapshot",
+    "mean_change": 0.626448958341037,
+    "mean_change_random": 0.6496418340372536,
+    "mean_change_shared": 0.5364006920159662,
+    "mean_noise_removed": 0.3312398425925831,
+    "variance_source": {
+     "own": 807,
+     "level": 2215,
+     "kind": 4,
+     "all": 0
+    }
+   }
+  }
+ },
+ "memory_min_cells_2": {
+  "tissue": {
+   "n_clones": 111,
+   "n_pairs": 111,
+   "memory_index": 0.2329586935305782,
+   "memory_index_ci": [
+    0.0943902449708495,
+    0.3854177126778622
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.3963963963963964,
+   "persistence_null": 0.3580734580734582,
+   "levels": [
+    "blood",
+    "bone marrow"
+   ],
+   "reference": "persistent",
+   "noise": "snapshot",
+   "mean_change": 0.28103168973037357,
+   "mean_change_random": 0.3663840361139364,
+   "mean_change_shared": 0.15490691339795068,
+   "mean_noise_removed": 0.17586386123105735
+  },
+  "sorted_as": {
+   "n_clones": 116,
+   "n_pairs": 116,
+   "memory_index": 0.054756908019864214,
+   "memory_index_ci": [
+    0.019045736380826357,
+    0.0962319647831332
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.0603448275862069,
+   "persistence_null": 0.029679802955665018,
+   "levels": [
+    "antigen-specific B cells",
+    "memory B cells",
+    "plasma cells",
+    "plasma cells and memory B cells",
+    "plasmablasts and memory B cells"
+   ],
+   "reference": "persistent",
+   "noise": "snapshot",
+   "mean_change": 0.5929510465039552,
+   "mean_change_random": 0.6273000580853926,
+   "mean_change_shared": 0.5189298357041551,
+   "mean_noise_removed": 0.1669727419235938
+  }
+ },
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 89,
+    "statistic": "excess_icc",
+    "median_icc": 0.033858,
+    "matched_background_median_icc": 0.02936,
+    "difference": 0.003313,
+    "se": 0.055589,
+    "ci_low": -0.105639,
+    "ci_high": 0.112266,
+    "se_genes": 0.007461,
+    "se_clones": 0.055086,
+    "frac_significant": 0.707865,
+    "pvalue_vs_matched": 0.952473,
+    "pvalue_mw_genes_independent": 0.880145,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 0.952473
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/bone_marrow_pc_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.09944796562194824
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 6583,
+  "n_clones_new": 6583,
+  "n_common": 6583,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 0.00011767052870093053,
+  "max_abs_diff_x": 34.96402645111084,
+  "max_abs_diff_y": 19.292147159576416,
+  "agreement_clone_programme": 0.9914932401640589,
+  "agreement_clone_programme_assigned": 0.9914932401640589
+ }
+}

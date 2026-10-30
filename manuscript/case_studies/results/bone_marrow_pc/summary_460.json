@@ -1,0 +1,616 @@
+{
+ "dataset": "bone_marrow_pc",
+ "title": "GSE253857 - human bone-marrow plasma cells and memory B cells, with blood counterparts; some sorted by what their antibody binds (SARS-CoV-2 spike, recent; tetanus toxoid, decades old)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 3628,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 67895,
+  "n_clones": 55621,
+  "n_clones_ge2": 6583,
+  "largest_clone": 622,
+  "python_hash_seed": "0",
+  "source": "dandelion",
+  "cells_dropped": 10988,
+  "light_chain_only_cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 115144,
+  "n_cells_bcr": 67895,
+  "n_clones": 55621,
+  "clones_ge2": 6583,
+  "clones_ge3": 2033,
+  "clones_ge5": 460,
+  "clones_ge10": 64,
+  "cells_in_clones_ge2": 18857,
+  "largest_clone": 622,
+  "n_donors": 7,
+  "n_samples": 15
+ },
+ "coherence": {
+  "icc": 0.4269241582873138,
+  "null_mean": 0.24480561381484994,
+  "null_q95": 0.2493292445729697,
+  "excess": 0.18211854447246384,
+  "p_value": 0.001996007984031936,
+  "n_clones": 6583,
+  "n_cells": 18857,
+  "min_cells_reliability_0.5": 1
+ },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 6583,
+  "n_profiled": 6583,
+  "chosen_by": "user",
+  "quality": {
+   "score": 0.5809174211153466,
+   "coherence": 0.9966580586358803,
+   "local_fidelity": 0.23417894576940604,
+   "global_fidelity": 0.9276558964612872,
+   "coherence_target": 0.9857207959896703
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 3,
+  "n_merged": 0,
+  "root_pvalue": 4.8445427982198573e-172
+ },
+ "programme_markers": {
+  "P1": [
+   "SSR4",
+   "MZB1",
+   "DERL3",
+   "XBP1",
+   "TXNDC5",
+   "FKBP11",
+   "HSP90B1",
+   "SEC11C",
+   "IGLL5",
+   "FOS",
+   "HERPUD1",
+   "PRDX4"
+  ],
+  "P2": [
+   "HLA-DRA",
+   "HLA-DPB1",
+   "CD52",
+   "HLA-DPA1",
+   "MS4A1",
+   "HLA-DRB1",
+   "LTB",
+   "CD37",
+   "HLA-DRB5",
+   "LAPTM5",
+   "TMSB4X",
+   "HLA-DQB1"
+  ],
+  "P3": [
+   "C12orf75",
+   "RP11-796E2.4",
+   "RFTN1",
+   "TESK2",
+   "PHF21A",
+   "CLEC2D",
+   "FGR",
+   "WEE1",
+   "CCNB1IP1",
+   "TMEM2",
+   "ANXA2R",
+   "SH3BP1"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 1.895,
+   "germinal centre": -0.007,
+   "dark zone / cycling": 0.038,
+   "light zone": 0.04,
+   "memory": 0.145,
+   "naive": -0.16,
+   "interferon": 0.067
+  },
+  "P2": {
+   "plasma cell": -0.503,
+   "germinal centre": 0.004,
+   "dark zone / cycling": 0.153,
+   "light zone": 0.309,
+   "memory": 0.3,
+   "naive": 0.186,
+   "interferon": 0.063
+  },
+  "P3": {
+   "plasma cell": 1.017,
+   "germinal centre": -0.001,
+   "dark zone / cycling": 0.059,
+   "light zone": 0.121,
+   "memory": 0.218,
+   "naive": -0.045,
+   "interferon": 0.059
+  }
+ },
+ "programmes": {
+  "n": 3,
+  "resolution": 0.2,
+  "n_clones": 6583,
+  "n_cells": 18857,
+  "n_clones_with_assigned": 6583,
+  "stability": {
+   "P1": 0.673,
+   "P2": 0.768,
+   "P3": 0.326
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "sorted_as:plasma cells": {
+   "label": "sorted_as:plasma cells",
+   "kind": "numeric",
+   "r2": 0.3542305870704988,
+   "null_mean": 0.001425550180752312,
+   "excess_r2": 0.3528050368897465,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 6583,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.7133885164825382,
+     -0.03766738433732448,
+     -0.009999877630245544
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 6583,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6911742366702112,
+     "spearman_with_clone_size": 0.09224976589566299
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 6,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells sorted as plasma cells"
+  },
+  "tissue:bone marrow": {
+   "label": "tissue:bone marrow",
+   "kind": "numeric",
+   "r2": 0.333747968716216,
+   "null_mean": 0.0025447444657822295,
+   "excess_r2": 0.33120322425043375,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 6583,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.6839485769891676,
+     -0.20398178017353122,
+     -0.14628894826261601
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 6583,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6911742366702112,
+     "spearman_with_clone_size": 0.022978620916258068
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 6,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells found in the bone marrow"
+  },
+  "antigen": {
+   "label": "antigen",
+   "kind": "categorical",
+   "r2": 0.006439620624381856,
+   "null_mean": 0.00246342069611023,
+   "excess_r2": 0.003976199928271626,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 6581,
+   "n_levels": 3,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "SARS-CoV-2 spike": [
+     -0.02525830473176263,
+     -0.12995405726060072,
+     0.065326163499022
+    ],
+    "not antigen sorted": [
+     0.02130976391453816,
+     0.13776761238094307,
+     -0.08137557076857628
+    ],
+    "tetanus toxoid": [
+     0.01090173771150592,
+     -0.0459027019783393,
+     0.06702648721817003
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "SARS-CoV-2 spike",
+     "n_clones": 124,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3951612903225806
+    },
+    {
+     "level": "not antigen sorted",
+     "n_clones": 6447,
+     "median_cells": 2.0,
+     "frac_2cell": 0.697378625717388
+    },
+    {
+     "level": "tetanus toxoid",
+     "n_clones": 10,
+     "median_cells": 3.5,
+     "frac_2cell": 0.3
+    }
+   ],
+   "n_without_majority": 2,
+   "sample_key": "donor",
+   "n_samples": 6,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "antigen the clone's antibody was sorted on"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.039813482611895795,
+   "null_mean": 0.002087835145479642,
+   "excess_r2": 0.03772564746641616,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 6266,
+   "n_levels": 5,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.02601493694387111,
+     0.2604544805540195,
+     -0.11859060948021746
+    ],
+    "IGHD": [
+     0.13964096733881542,
+     0.03933178929569065,
+     0.022228219662160036
+    ],
+    "IGHE": [
+     -0.004627277903046294,
+     -0.013867864568299497,
+     -0.014733951300341367
+    ],
+    "IGHG": [
+     0.07497948256310018,
+     -0.20065442752758877,
+     0.10676962578914047
+    ],
+    "IGHM": [
+     -0.1712619731849447,
+     -0.15143970641658722,
+     0.017774367817904525
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHA",
+     "n_clones": 3215,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6681181959564542
+    },
+    {
+     "level": "IGHD",
+     "n_clones": 93,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6451612903225806
+    },
+    {
+     "level": "IGHE",
+     "n_clones": 1,
+     "median_cells": 2.0,
+     "frac_2cell": 1.0
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 2580,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6922480620155039
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 377,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6710875331564987
+    }
+   ],
+   "n_without_majority": 317,
+   "sample_key": "donor",
+   "n_samples": 6,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "sorted_as:plasma cells": {
+   "n_clones": 6583,
+   "n_significant_fdr05": 3
+  },
+  "tissue:bone marrow": {
+   "n_clones": 6583,
+   "n_significant_fdr05": 3
+  },
+  "antigen": {
+   "n_clones": 6581,
+   "n_significant_fdr05": 0
+  },
+  "isotype": {
+   "n_clones": 6266,
+   "n_significant_fdr05": 8
+  }
+ },
+ "memory": {
+  "tissue": {
+   "n_clones": 1604,
+   "n_pairs": 1604,
+   "memory_index": 0.17621135109337316,
+   "memory_index_ci": [
+    0.13003602903816405,
+    0.2260237826808844
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.43516209476309226,
+   "persistence_null": 0.416469344739437,
+   "levels": [
+    "blood",
+    "bone marrow"
+   ]
+  },
+  "sorted_as": {
+   "n_clones": 1513,
+   "n_pairs": 1513,
+   "memory_index": 0.035701019363366115,
+   "memory_index_ci": [
+    0.02217954857094103,
+    0.048267837873366276
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.058823529411764705,
+   "persistence_null": 0.04301768236990127,
+   "levels": [
+    "antigen-specific B cells",
+    "memory B cells",
+    "plasma cells",
+    "plasma cells and memory B cells",
+    "plasmablasts and memory B cells"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 6171,
+  "median_icc": 0.036413194474071035,
+  "top_genes": [
+   "CH17-132F21.1",
+   "RP11-685N3.1",
+   "RP11-812E19.9",
+   "RP11-731F5.2",
+   "KIAA0125",
+   "AC079767.4",
+   "IGJ",
+   "CD1C",
+   "JSRP1",
+   "S100A4",
+   "LTB",
+   "CST3",
+   "HOPX",
+   "RP5-887A10.1",
+   "C1orf162",
+   "CTSW",
+   "TIMP1",
+   "FOXP1",
+   "FCER2",
+   "TNFRSF17",
+   "FAIM3",
+   "CCR10",
+   "CD69",
+   "DERL3",
+   "CYB561A3"
+  ],
+  "receptor_gene_icc": 0.3334506950124304,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.1287,
+    "matched_background_median_icc": 0.031,
+    "pvalue_vs_matched": 0.0101
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0254,
+    "matched_background_median_icc": 0.0121,
+    "pvalue_vs_matched": 0.0353
+   },
+   "light zone": {
+    "median_icc": 0.046,
+    "matched_background_median_icc": 0.0109,
+    "pvalue_vs_matched": 0.1363
+   },
+   "memory": {
+    "median_icc": 0.0561,
+    "matched_background_median_icc": 0.0146,
+    "pvalue_vs_matched": 0.0282
+   },
+   "naive": {
+    "median_icc": 0.1037,
+    "matched_background_median_icc": 0.0092,
+    "pvalue_vs_matched": 0.0009
+   },
+   "interferon": {
+    "median_icc": 0.0117,
+    "matched_background_median_icc": 0.0055,
+    "pvalue_vs_matched": 0.422
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "PRDM1",
+    "XBP1",
+    "IRF4",
+    "MZB1",
+    "SDC1",
+    "TNFRSF17",
+    "DERL3",
+    "FKBP11",
+    "SSR4"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "BCL6",
+    "AICDA",
+    "RGS13",
+    "MEF2B",
+    "S1PR2",
+    "LMO2",
+    "MYBL1",
+    "GCSAM",
+    "ELL3",
+    "SERPINA9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "CXCR4",
+    "MKI67",
+    "TOP2A",
+    "AURKB",
+    "CCNB1",
+    "HMGB2",
+    "TUBB",
+    "STMN1",
+    "FOXP1",
+    "AICDA"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "CD83",
+    "CD86",
+    "MYC",
+    "NFKBIA",
+    "BATF",
+    "EGR2",
+    "IL4I1",
+    "CCL22",
+    "BCL2A1",
+    "NME1"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "CD27",
+    "CCR6",
+    "GPR183",
+    "TNFRSF13B",
+    "SELL",
+    "CD44",
+    "S1PR1",
+    "KLF2",
+    "ZBTB32",
+    "FCRL4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "TCL1A",
+    "FCER2",
+    "IL4R",
+    "BACH2",
+    "SELL",
+    "YBX3",
+    "BTG1",
+    "CD200"
+   ],
+   "n_present": 8,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "ISG15",
+    "IFIT1",
+    "IFIT3",
+    "MX1",
+    "IFI44L",
+    "OAS1",
+    "IFI6",
+    "XAF1",
+    "STAT1",
+    "IRF7"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 11.4
+}

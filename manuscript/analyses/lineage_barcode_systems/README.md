@@ -51,7 +51,9 @@ clone's day-14 cells in the mCherry-high (non-cycling) or mCherry-low (cycling) 
 with ≥ 2 day-14 cells. Association by `profile_association` (2,000 permutations).
 
 **Results.** Excess R² for the non-cycling gate 0.075 with mean profiles and 0.052 with kernel profiles;
-cycling gate 0.025 and 0.023 (P = 0.0005 for each). The association is real but weak, and the simpler mean
+cycling gate 0.025 and 0.023 (P = 0.0005 for each). With Threadfin 4.6.0, which shuffles the label among clones
+of similar size (`watermelon/summary_460.json`, re-derived on 2026-10-30): 0.075 and 0.052; 0.025 and 0.024
+(P = 0.0005 for each). The association is real but weak, and the simpler mean
 profile does at least as well as the kernel profile. Days 3 and 7 are already under treatment, so this is
 not a pre-treatment prediction, and the gates are proliferation states among survivors, not persister versus
 non-persister.

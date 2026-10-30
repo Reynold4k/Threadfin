@@ -1,0 +1,462 @@
+{
+ "dataset": "mouse_np",
+ "title": "Merkenschlager et al. 2025 Nature - NP-OVA germinal centres, H2B-mCherry division reporter (7 mice)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 4855,
+  "n_clones": 2680,
+  "n_clones_ge2": 615,
+  "largest_clone": 48,
+  "source": "dandelion",
+  "cells_dropped": 1,
+  "light_chain_only_cells_dropped": 962
+ },
+ "qc": {
+  "n_cells": 10109,
+  "n_cells_bcr": 3893,
+  "n_clones": 2296,
+  "clones_ge2": 471,
+  "clones_ge3": 268,
+  "clones_ge5": 119,
+  "clones_ge10": 41,
+  "cells_in_clones_ge2": 2068,
+  "largest_clone": 48,
+  "n_donors": 7,
+  "n_samples": 14
+ },
+ "coherence": {
+  "icc": 0.12021740956934464,
+  "null_mean": 0.04136229507355059,
+  "null_q95": 0.053830347826336986,
+  "excess": 0.07885511449579405,
+  "p_value": 0.001996007984031936,
+  "n_clones": 471,
+  "n_cells": 2068,
+  "min_cells_reliability_0.5": 7
+ },
+ "clone_map": {
+  "n_neighbors": 15,
+  "min_dist": 0.1,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 471,
+  "n_profiled": 471,
+  "chosen_by": "user",
+  "quality": {
+   "score": 0.5944128199010204,
+   "coherence": 0.9532908704883227,
+   "local_fidelity": 0.5364472753007785,
+   "global_fidelity": 0.6523783645012621,
+   "coherence_target": 0.9469214437367304
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 2,
+  "n_merged": 1,
+  "root_pvalue": 0.2514452779897518
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 471,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "division_gate:mCherry-low": {
+   "label": "division_gate:mCherry-low",
+   "kind": "numeric",
+   "r2": 0.08197524041408079,
+   "null_mean": 0.0027546825628733547,
+   "excess_r2": 0.07922055785120743,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 471,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.45253950062502596,
+     0.024288503925476015,
+     0.08878898549790243
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 471,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4309978768577495,
+     "spearman_with_clone_size": 0.05096954392928013
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 7,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells that divided most (mCherry-low gate)"
+  },
+  "w33l": {
+   "label": "w33l",
+   "kind": "categorical",
+   "r2": 0.014744101564751933,
+   "null_mean": 0.012687974283181126,
+   "excess_r2": 0.002056127281570808,
+   "p_value": 0.296351824087956,
+   "n_clones": 82,
+   "n_levels": 2,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "W33L": [
+     0.14015631474018767,
+     0.012458339088016681,
+     0.13496534012018074
+    ],
+    "germline W33": [
+     -0.14015631474018767,
+     -0.012458339088016681,
+     -0.13496534012018074
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "W33L",
+     "n_clones": 36,
+     "median_cells": 3.0,
+     "frac_2cell": 0.2777777777777778
+    },
+    {
+     "level": "germline W33",
+     "n_clones": 46,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3695652173913043
+    }
+   ],
+   "n_without_majority": 5,
+   "sample_key": "donor",
+   "n_samples": 7,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "VH186.2 W33L high-affinity mutation (IGHV1-72 clones)"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.0015309715020699287,
+   "null_mean": 0.000956244837194097,
+   "excess_r2": 0.0005747266648758317,
+   "p_value": 0.11244377811094453,
+   "n_clones": 471,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.06213711478674868,
+     -0.08948553409780144,
+     0.11033373375039318
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 471,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4309978768577495,
+     "spearman_with_clone_size": -0.01929011452971422
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 7,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "V-region mutation frequency"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.014977963231193193,
+   "null_mean": 0.006161196775520055,
+   "excess_r2": 0.008816766455673138,
+   "p_value": 0.02448775612193903,
+   "n_clones": 450,
+   "n_levels": 3,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHD": [
+     -0.08010591858298104,
+     0.0811957950262869,
+     -0.07574641280975758
+    ],
+    "IGHG": [
+     0.031135726357946838,
+     -0.013006062909015764,
+     -0.05044775916224297
+    ],
+    "IGHM": [
+     -0.00975371717881286,
+     -0.00934518452210866,
+     0.07358694478884467
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHD",
+     "n_clones": 1,
+     "median_cells": 9.0,
+     "frac_2cell": 0.0
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 436,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4105504587155963
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 13,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3076923076923077
+    }
+   ],
+   "n_without_majority": 21,
+   "sample_key": "donor",
+   "n_samples": 7,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {},
+ "memory": {
+  "division_gate": {
+   "n_clones": 203,
+   "n_pairs": 203,
+   "memory_index": 0.2335830946327696,
+   "memory_index_ci": [
+    -0.01146073701431209,
+    0.5206075527537894
+   ],
+   "p_value": 0.00998003992015968,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "mCherry-high",
+    "mCherry-low"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 9137,
+  "median_icc": 0.0283211927831811,
+  "top_genes": [
+   "Gm30211",
+   "Eya1",
+   "Cd72",
+   "Gm20628",
+   "Gm42031",
+   "Slc15a2",
+   "Lgals9",
+   "Gm42047",
+   "Apoe",
+   "Hist2h4",
+   "Slpi",
+   "Lmo7",
+   "Ifi27l2a",
+   "Gm43305",
+   "Cd74",
+   "Jchain",
+   "Gm4316",
+   "Cr2",
+   "Hmces",
+   "Klf2",
+   "Nmral1",
+   "Rgs13",
+   "Blvrb",
+   "Cd79a",
+   "Ptprj"
+  ],
+  "receptor_gene_icc": 0.8078394848656734,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.0545,
+    "matched_background_median_icc": 0.0285,
+    "pvalue_vs_matched": 0.0164
+   },
+   "germinal centre": {
+    "median_icc": 0.077,
+    "matched_background_median_icc": 0.0445,
+    "pvalue_vs_matched": 0.0218
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0598,
+    "matched_background_median_icc": 0.0378,
+    "pvalue_vs_matched": 0.0764
+   },
+   "light zone": {
+    "median_icc": 0.0686,
+    "matched_background_median_icc": 0.0237,
+    "pvalue_vs_matched": 0.0977
+   },
+   "memory": {
+    "median_icc": 0.0164,
+    "matched_background_median_icc": 0.0125,
+    "pvalue_vs_matched": 0.1002
+   },
+   "naive": {
+    "median_icc": 0.0822,
+    "matched_background_median_icc": 0.0255,
+    "pvalue_vs_matched": 0.0392
+   },
+   "interferon": {
+    "median_icc": 0.0817,
+    "matched_background_median_icc": 0.0154,
+    "pvalue_vs_matched": 0.001
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200",
+    "Ighd"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 1.3
+}

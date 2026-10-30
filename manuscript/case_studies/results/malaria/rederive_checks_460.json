@@ -1,0 +1,397 @@
+{
+ "dataset": "malaria",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "cell_state:GC": {
+   "legacy_size_strata_false": {
+    "r2": 0.04635686809363378,
+    "null_mean": 0.0042048038009973344,
+    "excess_r2": 0.042152064292636446,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": 0.034376210574988963
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.04635686809363378,
+    "null_mean": 0.0041609910061457195,
+    "excess_r2": 0.04219587708748806,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": 0.034376210574988963
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "cell_state:PB": {
+   "legacy_size_strata_false": {
+    "r2": 0.26492388170732734,
+    "null_mean": 0.10236835639237217,
+    "excess_r2": 0.16255552531495515,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": 0.11179678829888116
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.26492388170732734,
+    "null_mean": 0.11822047909107089,
+    "excess_r2": 0.14670340261625645,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": 0.11179678829888116
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "cell_state:Memory": {
+   "legacy_size_strata_false": {
+    "r2": 0.04713758050411359,
+    "null_mean": 0.009781612193995336,
+    "excess_r2": 0.037355968310118254,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": -0.022125702813972362
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.04713758050411359,
+    "null_mean": 0.01067370417640709,
+    "excess_r2": 0.0364638763277065,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": -0.022125702813972362
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "mutation_frequency": {
+   "legacy_size_strata_false": {
+    "r2": 0.010202958700076366,
+    "null_mean": 0.003155442524565533,
+    "excess_r2": 0.0070475161755108335,
+    "p_value": 0.005997001499250375,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": -0.06707992502829514
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.010202958700076366,
+    "null_mean": 0.0034268093773741695,
+    "excess_r2": 0.006776149322702197,
+    "p_value": 0.005497251374312844,
+    "n_clones": 523,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 523,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8604206500956023,
+      "spearman_with_clone_size": -0.06707992502829514
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "isotype": {
+   "legacy_size_strata_false": {
+    "r2": 0.15169998880907826,
+    "null_mean": 0.07998056396684973,
+    "excess_r2": 0.07171942484222853,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 462,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 2,
+      "median_cells": 2.0,
+      "frac_2cell": 1.0
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 20,
+      "median_cells": 2.0,
+      "frac_2cell": 0.95
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 264,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8295454545454546
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 176,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8465909090909091
+     }
+    ],
+    "n_without_majority": 60
+   },
+   "v460": {
+    "r2": 0.15169998880907826,
+    "null_mean": 0.09076986425953189,
+    "excess_r2": 0.06093012454954637,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 462,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 19,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 2,
+      "median_cells": 2.0,
+      "frac_2cell": 1.0
+     },
+     {
+      "level": "IGHD",
+      "n_clones": 20,
+      "median_cells": 2.0,
+      "frac_2cell": 0.95
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 264,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8295454545454546
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 176,
+      "median_cells": 2.0,
+      "frac_2cell": 0.8465909090909091
+     }
+    ],
+    "n_without_majority": 60
+   }
+  }
+ },
+ "programme_tests": {
+  "cell_state:GC": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "cell_state:GC|assigned": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "cell_state:PB": {
+   "legacy_n_fdr05": 4,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "cell_state:PB|assigned": {
+   "legacy_n_fdr05": 4,
+   "v460_n_fdr05": 4,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "cell_state:Memory": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "cell_state:Memory|assigned": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "mutation_frequency": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "mutation_frequency|assigned": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "isotype": {
+   "legacy_n_fdr05": 7,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 6,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 7,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 6,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {},
+ "memory_min_cells_2": {},
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 88,
+    "statistic": "excess_icc",
+    "median_icc": 0.2801,
+    "matched_background_median_icc": 0.126346,
+    "difference": 0.115107,
+    "se": 0.025262,
+    "ci_low": 0.065595,
+    "ci_high": 0.164619,
+    "se_genes": 0.016576,
+    "se_clones": 0.019063,
+    "frac_significant": 0.909091,
+    "pvalue_vs_matched": 5e-06,
+    "pvalue_mw_genes_independent": 0.0,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 5e-06
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/malaria_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.0022211074829101562
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 523,
+  "n_clones_new": 523,
+  "n_common": 523,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 0.0,
+  "max_abs_diff_x": 0.0,
+  "max_abs_diff_y": 0.0,
+  "agreement_clone_programme": 1.0,
+  "agreement_clone_programme_assigned": 1.0
+ }
+}

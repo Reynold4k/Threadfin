@@ -1,0 +1,575 @@
+{
+ "dataset": "flu_lung",
+ "title": "GSE317692 - influenza A (PR8) infection, mouse lung and mediastinal lymph node at day 20, haemagglutinin tetramers and a B-cell alpha-v integrin knockout (15 mice)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 371,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 2115,
+  "n_clones": 1367,
+  "n_clones_ge2": 204,
+  "largest_clone": 41,
+  "python_hash_seed": "0",
+  "source": "dandelion",
+  "cells_dropped": 0,
+  "light_chain_only_cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 4121,
+  "n_cells_bcr": 2115,
+  "n_clones": 1367,
+  "clones_ge2": 204,
+  "clones_ge3": 117,
+  "clones_ge5": 60,
+  "clones_ge10": 20,
+  "cells_in_clones_ge2": 952,
+  "largest_clone": 41,
+  "n_donors": 15,
+  "n_samples": 30
+ },
+ "coherence": {
+  "icc": 0.16163318219793016,
+  "null_mean": 0.05171143549886772,
+  "null_q95": 0.0722544709602879,
+  "excess": 0.10992174669906243,
+  "p_value": 0.001996007984031936,
+  "n_clones": 204,
+  "n_cells": 952,
+  "min_cells_reliability_0.5": 4
+ },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 204,
+  "n_profiled": 204,
+  "chosen_by": "user",
+  "quality": {
+   "score": 0.6920394407949146,
+   "coherence": 1.0,
+   "local_fidelity": 0.6756535947712419,
+   "global_fidelity": 0.7084252868185875,
+   "coherence_target": 0.99
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 4,
+  "n_merged": 1,
+  "root_pvalue": 0.05656418227984329
+ },
+ "programmes": {
+  "n": 1,
+  "n_clones": 204,
+  "note": "no distinct programmes: clones vary along a continuum"
+ },
+ "label_effects": {
+  "ha_binding:PR8HA": {
+   "label": "ha_binding:PR8HA",
+   "kind": "numeric",
+   "r2": 0.006040113323856548,
+   "null_mean": 0.004541633756544668,
+   "excess_r2": 0.0014984795673118802,
+   "p_value": 0.23088455772113944,
+   "n_clones": 204,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.006065143697243021,
+     -0.1276505664993285,
+     -0.01547867018099325
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 204,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4264705882352941,
+     "spearman_with_clone_size": -0.07248144904622185
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells binding the infecting strain's haemagglutinin"
+  },
+  "ha_binding:both strains": {
+   "label": "ha_binding:both strains",
+   "kind": "numeric",
+   "r2": 0.003885130638753954,
+   "null_mean": 0.005079480658642409,
+   "excess_r2": -0.0011943500198884549,
+   "p_value": 0.5112443778110944,
+   "n_clones": 204,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.09371551978312567,
+     0.12240984945277844,
+     -0.04671861752686937
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 204,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4264705882352941,
+     "spearman_with_clone_size": 0.22079936959902094
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells binding both strains (cross-reactive)"
+  },
+  "tissue:Lung": {
+   "label": "tissue:Lung",
+   "kind": "numeric",
+   "r2": 0.3026175397517138,
+   "null_mean": 0.020478372561699876,
+   "excess_r2": 0.2821391671900139,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 204,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     0.5038039360592734,
+     0.29066752136149704,
+     0.11263386286504487
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 204,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4264705882352941,
+     "spearman_with_clone_size": -0.07425142852825933
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's cells found in the infected lung"
+  },
+  "mutation_frequency": {
+   "label": "mutation_frequency",
+   "kind": "numeric",
+   "r2": 0.0958611530927807,
+   "null_mean": 0.009308043676505277,
+   "excess_r2": 0.08655310941627542,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 204,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.2741753434738138,
+     -0.1630875574223848,
+     0.05714913839427388
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 204,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4264705882352941,
+     "spearman_with_clone_size": 0.12374953754915402
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "V-region mutation frequency"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.05056709257589346,
+   "null_mean": 0.00884151941180087,
+   "excess_r2": 0.04172557316409259,
+   "p_value": 0.0009995002498750624,
+   "n_clones": 199,
+   "n_levels": 3,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     0.06604534214560537,
+     0.15075567228888184,
+     -0.04738035414793428
+    ],
+    "IGHG": [
+     -0.17175331889612538,
+     -0.06398653056914475,
+     -0.050515682028272176
+    ],
+    "IGHM": [
+     0.16165004616786913,
+     -0.02966994518271016,
+     0.0951484448962774
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHA",
+     "n_clones": 3,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3333333333333333
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 190,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4052631578947368
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 6,
+     "median_cells": 2.0,
+     "frac_2cell": 0.6666666666666666
+    }
+   ],
+   "n_without_majority": 5,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  },
+  "genotype": {
+   "label": "genotype",
+   "kind": "categorical",
+   "r2": 0.02095622105474565,
+   "null_mean": 0.004808432418894407,
+   "excess_r2": 0.016147788635851243,
+   "p_value": 0.005997001499250375,
+   "n_clones": 204,
+   "n_levels": 2,
+   "strata_key": null,
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "Control": [
+     0.15899832570826433,
+     0.05954482752367818,
+     0.04590860748008775
+    ],
+    "cKO": [
+     -0.15899832570826433,
+     -0.05954482752367818,
+     -0.04590860748008775
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "Control",
+     "n_clones": 61,
+     "median_cells": 3.0,
+     "frac_2cell": 0.4098360655737705
+    },
+    {
+     "level": "cKO",
+     "n_clones": 143,
+     "median_cells": 3.0,
+     "frac_2cell": 0.43356643356643354
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "donor",
+   "n_samples": 8,
+   "sample_level": true,
+   "samples_per_level": [
+    {
+     "level": "Control",
+     "n_samples": 3
+    },
+    {
+     "level": "cKO",
+     "n_samples": 5
+    }
+   ],
+   "note": "B-cell alpha-v integrin knockout or control (donor-level label: not separable from other donor differences)"
+  }
+ },
+ "programme_associations": {},
+ "memory": {
+  "tissue": {
+   "n_clones": 26,
+   "n_pairs": 26,
+   "memory_index": -0.06535670857812881,
+   "memory_index_ci": [
+    -0.438694184253281,
+    0.2219508812342288
+   ],
+   "p_value": 0.7764471057884231,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "Lung",
+    "medLN"
+   ]
+  },
+  "ha_binding": {
+   "n_clones": 145,
+   "n_pairs": 189,
+   "memory_index": 0.6178770901953283,
+   "memory_index_ci": [
+    0.16322198938973215,
+    1.3086637596976598
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": null,
+   "persistence_null": null,
+   "levels": [
+    "Cal09HA",
+    "PR8HA",
+    "both strains",
+    "non-binding"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 9578,
+  "median_icc": 0.02799282189771237,
+  "top_genes": [
+   "Gm30211",
+   "Gm56626",
+   "Gm43305",
+   "Ccrl2",
+   "Gsto1",
+   "Slc15a2",
+   "Cd55",
+   "Usp54",
+   "Ephx1",
+   "Camk2b",
+   "Rpsa",
+   "Baiap2",
+   "Rps2",
+   "Il10rb",
+   "Gm42031",
+   "Rack1",
+   "Zmynd11",
+   "Il10ra",
+   "Zeb2",
+   "Hsp90ab1",
+   "Rpl29",
+   "Rps12",
+   "Rpl3",
+   "Npm1",
+   "Mpp7"
+  ],
+  "receptor_gene_icc": 0.7786101350180279,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.0875,
+    "matched_background_median_icc": 0.0291,
+    "pvalue_vs_matched": 0.0046
+   },
+   "germinal centre": {
+    "median_icc": 0.0214,
+    "matched_background_median_icc": 0.0349,
+    "pvalue_vs_matched": 0.3394
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0767,
+    "matched_background_median_icc": 0.044,
+    "pvalue_vs_matched": 0.3949
+   },
+   "light zone": {
+    "median_icc": -0.0086,
+    "matched_background_median_icc": 0.029,
+    "pvalue_vs_matched": 0.0231
+   },
+   "memory": {
+    "median_icc": 0.0357,
+    "matched_background_median_icc": 0.0118,
+    "pvalue_vs_matched": 0.9267
+   },
+   "naive": {
+    "median_icc": 0.0246,
+    "matched_background_median_icc": 0.0276,
+    "pvalue_vs_matched": 0.6777
+   },
+   "interferon": {
+    "median_icc": 0.0082,
+    "matched_background_median_icc": 0.0133,
+    "pvalue_vs_matched": 0.9174
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "Prdm1",
+    "Xbp1",
+    "Irf4",
+    "Jchain",
+    "Mzb1",
+    "Sdc1",
+    "Tnfrsf17",
+    "Derl3",
+    "Fkbp11",
+    "Ssr4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "Bcl6",
+    "Aicda",
+    "Rgs13",
+    "Mef2b",
+    "S1pr2",
+    "Lmo2",
+    "Mybl1",
+    "Gcsam",
+    "Ell3",
+    "Serpina9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "Cxcr4",
+    "Mki67",
+    "Top2a",
+    "Aurkb",
+    "Ccnb1",
+    "Hmgb2",
+    "Stmn1",
+    "Foxp1",
+    "Aicda"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "Cd83",
+    "Cd86",
+    "Myc",
+    "Nfkbia",
+    "Batf",
+    "Egr2",
+    "Il4i1",
+    "Ccl22",
+    "Nme1"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "Cd27",
+    "Ccr6",
+    "Gpr183",
+    "Tnfrsf13b",
+    "Sell",
+    "Cd44",
+    "S1pr1",
+    "Klf2",
+    "Zbtb32"
+   ],
+   "n_present": 9,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "Bach2",
+    "Sell",
+    "Plpp5",
+    "Ybx3",
+    "Btg1",
+    "Cd200",
+    "Ighd"
+   ],
+   "n_present": 7,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "Isg15",
+    "Ifit1",
+    "Ifit3",
+    "Mx1",
+    "Ifi44l",
+    "Xaf1",
+    "Stat1",
+    "Irf7"
+   ],
+   "n_present": 8,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 0.6
+}

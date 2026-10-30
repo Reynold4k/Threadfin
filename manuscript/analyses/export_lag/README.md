@@ -24,6 +24,21 @@ annotations; clones are the paired-chain Dandelion clones of the case studies.
 | human lymph node (GSE195673) | 2,564 | 1,536 / 821 / 207 | −0.19 [−0.19, −0.17] | 0.023 [0.002, 0.030] | −8.1 |
 | *Plasmodium* days 0–14 (GSE286215 exp. 1) | 9 | 4 / 1 / 4 | 0.00 | not estimable | — |
 
+**Threadfin 4.6.0** (re-derived on 2026-10-30; `results/summary_460.json`, `results/*_per_donor_460.csv`,
+`results/*_clone_pairs_460.csv`, `results/*_clock_points_460.csv`). The same clone pairs, with
+`tl.export_lag(..., time_key="timepoint", donor_key="donor")`: the interval of the median gap is the sign-test
+interval (the bootstrap above was replaced), the clock is the package's fit through the per-visit medians (the
+same fit as this script's, with Sen's exact interval) and days get an interval with at least 95 % coverage.
+
+| Dataset | Median gap, pp [95 % CI] | Sign test P | GC clock, %/day [95 % CI] | Days [95 % CI] | Donors: negative / all; median of donor medians [95 % CI] |
+|---|---|---|---|---|---|
+| *Plasmodium* days 10–42 | −0.38 [−0.74, −0.37] | 3.2 × 10⁻¹² | 0.101 [0.079, 0.135] | −3.7 [−9.3, −2.8] | 13 / 16; −0.72 [−1.49, −0.28] |
+| human lymph node | −0.19 [−0.19, −0.16] | 1.0 × 10⁻⁴⁹ | 0.023 [0.002, 0.030] | −8.1 [−84, −5.4] | 8 / 8; −0.18 [−0.28, −0.06] |
+| *Plasmodium* days 0–14 | 0.00 [−1.12, 0.00] | 0.38 | not estimable (4 time points) | — | 3 / 7; 0.00 [−1.48, 0.37] |
+
+The conclusions are unchanged: the median gap is negative in both data sets with a time course of more than
+two weeks and is not distinguishable from zero in the first two weeks of the *Plasmodium* infection.
+
 ![Export lag](figures/export_lag.png)
 
 *Left:* median mutation of switched GC cells per day (band: interquartile range) and of output cells.

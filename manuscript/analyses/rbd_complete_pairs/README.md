@@ -27,6 +27,12 @@ reproduce the saved Figure 4 values.
 
 Every association has P = 0.0005 (2,000 permutations within mice).
 
+**Threadfin 4.6.0** (re-derived on 2026-10-30, `results/summary_460.json`; labels shuffled within mouse ×
+clone-size bins, the 4.6.0 default; R² and the cosine are unchanged). Excess R², all cells → complete pairs only:
+recent division 0.087 → 0.095 (protein cohort 0.091 → 0.098, mRNA cohort 0.067 → 0.077), RBD bait
+0.021 → 0.023, dark-zone gate 0.037 → 0.045; every P = 0.0005. With `size_strata=False` the run reproduces the
+table above exactly.
+
 ## 2. Contig ids reused across sequencing libraries
 
 **Defect.** Cell Ranger names each contig after its cell barcode (`ACGGGTTTCATTAAGC-1_contig_1`). Each mouse of
@@ -46,6 +52,9 @@ duplicated ids after their cell.
 
 Figure 4 with the corrected RBD clones (1,881 profiled clones): division excess R² 0.085 (protein 0.089, mRNA
 0.069), RBD bait 0.022, dark-zone gate 0.037, crossover cosine 0.896, 10 of 10 mice — the same as the figure.
+With Threadfin 4.6.0 (`results/contig_id_fix_460.json`, clones re-called under hash seed 0): division excess R²
+0.085 (protein 0.088, mRNA 0.067), RBD bait 0.021, dark-zone gate 0.037, every P = 0.0005; cosine and mice
+unchanged.
 
 ## Reproduce
 

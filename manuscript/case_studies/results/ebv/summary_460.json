@@ -1,0 +1,526 @@
+{
+ "dataset": "ebv",
+ "title": "Mitul et al. 2026 PNAS - EBV infection of tonsil organoids (d0-d21, GFP+/- sorts)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 10841,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 123369,
+  "n_clones": 87396,
+  "n_clones_ge2": 6124,
+  "largest_clone": 345,
+  "python_hash_seed": "0",
+  "source": "dandelion",
+  "cells_dropped": 10841,
+  "light_chain_only_cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 205630,
+  "n_cells_bcr": 123369,
+  "n_clones": 87396,
+  "clones_ge2": 6124,
+  "clones_ge3": 3957,
+  "clones_ge5": 2331,
+  "clones_ge10": 974,
+  "cells_in_clones_ge2": 42097,
+  "largest_clone": 345,
+  "n_donors": 1,
+  "n_samples": 7
+ },
+ "coherence": {
+  "icc": 0.1582933357013237,
+  "null_mean": 0.042831021505505336,
+  "null_q95": 0.04445835803481992,
+  "excess": 0.11546231419581837,
+  "p_value": 0.001996007984031936,
+  "n_clones": 6124,
+  "n_cells": 42097,
+  "min_cells_reliability_0.5": 5
+ },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 6124,
+  "n_profiled": 6124,
+  "chosen_by": "user",
+  "quality": {
+   "score": 0.4625988327427999,
+   "coherence": 0.9606466361854997,
+   "local_fidelity": 0.16841933376877857,
+   "global_fidelity": 0.7665758496789369,
+   "coherence_target": 0.9616263879817113
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 4,
+  "n_merged": 0,
+  "root_pvalue": 3.479451512166242e-08
+ },
+ "programme_markers": {
+  "P1": [
+   "PLAC8",
+   "TMSB4X",
+   "RPSA",
+   "RPL37A",
+   "RPS12",
+   "RPL37",
+   "RPL31",
+   "RPL35",
+   "RPS18",
+   "RPL27",
+   "FTH1",
+   "RPL12"
+  ],
+  "P2": [
+   "JCHAIN",
+   "XBP1",
+   "SSR4",
+   "MZB1",
+   "HSP90B1",
+   "SEC11C",
+   "HERPUD1",
+   "CD27",
+   "PPIB",
+   "LINC02362",
+   "FKBP11",
+   "MYDGF"
+  ],
+  "P3": [
+   "RGS13",
+   "MEF2B",
+   "ELL3",
+   "SERF2",
+   "ENSG00000225885",
+   "IRAG2",
+   "CD81",
+   "BCAS4",
+   "RFTN1",
+   "KLHL6",
+   "ENSG00000243276",
+   "BASP1"
+  ],
+  "P4": [
+   "CD74",
+   "HLA-DRA",
+   "MT-CO1",
+   "CD37",
+   "HLA-DPB1",
+   "RPS27",
+   "HLA-DPA1",
+   "BANK1",
+   "BTG1",
+   "MALAT1",
+   "FAU",
+   "MT-CO2"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": 0.304,
+   "germinal centre": -0.012,
+   "dark zone / cycling": 0.164,
+   "light zone": 0.109,
+   "memory": 0.094,
+   "naive": 0.036,
+   "interferon": 0.391
+  },
+  "P2": {
+   "plasma cell": 0.877,
+   "germinal centre": 0.01,
+   "dark zone / cycling": 0.019,
+   "light zone": 0.038,
+   "memory": 0.144,
+   "naive": -0.078,
+   "interferon": 0.34
+  },
+  "P3": {
+   "plasma cell": 0.275,
+   "germinal centre": 0.537,
+   "dark zone / cycling": 0.233,
+   "light zone": 0.062,
+   "memory": -0.009,
+   "naive": 0.05,
+   "interferon": -0.029
+  },
+  "P4": {
+   "plasma cell": -0.012,
+   "germinal centre": -0.02,
+   "dark zone / cycling": 0.038,
+   "light zone": 0.024,
+   "memory": 0.135,
+   "naive": 0.279,
+   "interferon": 0.177
+  }
+ },
+ "programmes": {
+  "n": 4,
+  "resolution": 0.2,
+  "n_clones": 6124,
+  "n_cells": 42097,
+  "n_clones_with_assigned": 6124,
+  "stability": {
+   "P1": 0.803,
+   "P2": 0.648,
+   "P3": 0.606,
+   "P4": 0.024
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "gfp:GFP+": {
+   "label": "gfp:GFP+",
+   "kind": "numeric",
+   "r2": 0.11327680436193169,
+   "null_mean": 0.0009639577405646802,
+   "excess_r2": 0.11231284662136701,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 5808,
+   "n_levels": null,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "label": [
+     -0.39128566986499885,
+     0.48789580903917523,
+     -0.19057562545443085
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "all",
+     "n_clones": 5808,
+     "median_cells": 4.0,
+     "frac_2cell": 0.32627410468319556,
+     "spearman_with_clone_size": 0.18278080977442662
+    }
+   ],
+   "n_without_majority": 0,
+   "sample_key": "timepoint",
+   "n_samples": 2,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "fraction of the clone's d14/d21 cells that are EBV-GFP+"
+  },
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.09208093587619699,
+   "null_mean": 0.0006882985241519989,
+   "excess_r2": 0.09139263735204499,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 6035,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     0.17981574150095053,
+     0.17554334109194478,
+     0.17322252359914353
+    ],
+    "IGHD": [
+     0.04574199720497966,
+     0.049974043775899805,
+     0.025108599149221204
+    ],
+    "IGHG": [
+     0.3448015785517116,
+     0.28008203078819494,
+     0.1235514356358353
+    ],
+    "IGHM": [
+     -0.4401006423169209,
+     -0.37875168944589205,
+     -0.22968236843316206
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHA",
+     "n_clones": 687,
+     "median_cells": 3.0,
+     "frac_2cell": 0.40611353711790393
+    },
+    {
+     "level": "IGHD",
+     "n_clones": 41,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3902439024390244
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 1688,
+     "median_cells": 3.0,
+     "frac_2cell": 0.3886255924170616
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 3619,
+     "median_cells": 4.0,
+     "frac_2cell": 0.31279358938933405
+    }
+   ],
+   "n_without_majority": 88,
+   "sample_key": "timepoint",
+   "n_samples": 5,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "gfp:GFP+": {
+   "n_clones": 5808,
+   "n_significant_fdr05": 4
+  },
+  "isotype": {
+   "n_clones": 6035,
+   "n_significant_fdr05": 13
+  }
+ },
+ "memory": {
+  "timepoint": {
+   "n_clones": 730,
+   "n_pairs": 918,
+   "memory_index": 0.2529627350873186,
+   "memory_index_ci": [
+    0.17463962204961483,
+    0.3357702361609971
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.3790849673202614,
+   "persistence_null": 0.291361463572738,
+   "levels": [
+    "d0",
+    "d4",
+    "d7",
+    "d14",
+    "d21"
+   ]
+  },
+  "gfp": {
+   "n_clones": 3495,
+   "n_pairs": 3495,
+   "memory_index": 0.3299889044769161,
+   "memory_index_ci": [
+    0.2994596510824448,
+    0.36637134121780324
+   ],
+   "p_value": 0.001996007984031936,
+   "persistence": 0.5290414878397711,
+   "persistence_null": 0.39186834082215743,
+   "levels": [
+    "GFP+",
+    "GFP-"
+   ]
+  }
+ },
+ "heritability": {
+  "n_genes": 10863,
+  "median_icc": 0.018944448825765917,
+  "top_genes": [
+   "ENSG00000275063",
+   "IFI27",
+   "ENSG00000290104",
+   "ATF5",
+   "GTSF1",
+   "TCL1A",
+   "RPS26",
+   "PLAC8",
+   "FAM30A",
+   "HLA-DQA2",
+   "ENSG00000243276",
+   "CTSH",
+   "LAMP5",
+   "HLA-DQB1",
+   "RGS13",
+   "CD27",
+   "MGST1",
+   "IL4I1",
+   "SEC11C",
+   "KCTD14",
+   "RPSA2",
+   "IFITM3",
+   "LGALS1",
+   "SNHG5",
+   "CADM1"
+  ],
+  "receptor_gene_icc": 0.8116415039890333,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.1247,
+    "matched_background_median_icc": 0.0304,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.0698,
+    "matched_background_median_icc": 0.0127,
+    "pvalue_vs_matched": 0.0
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.0508,
+    "matched_background_median_icc": 0.0202,
+    "pvalue_vs_matched": 0.0795
+   },
+   "light zone": {
+    "median_icc": 0.0573,
+    "matched_background_median_icc": 0.0222,
+    "pvalue_vs_matched": 0.0
+   },
+   "memory": {
+    "median_icc": 0.0752,
+    "matched_background_median_icc": 0.0222,
+    "pvalue_vs_matched": 0.0
+   },
+   "naive": {
+    "median_icc": 0.0868,
+    "matched_background_median_icc": 0.0215,
+    "pvalue_vs_matched": 0.0
+   },
+   "interferon": {
+    "median_icc": 0.0837,
+    "matched_background_median_icc": 0.035,
+    "pvalue_vs_matched": 0.0024
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "PRDM1",
+    "XBP1",
+    "IRF4",
+    "JCHAIN",
+    "MZB1",
+    "SDC1",
+    "TNFRSF17",
+    "DERL3",
+    "FKBP11",
+    "SSR4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "BCL6",
+    "AICDA",
+    "RGS13",
+    "MEF2B",
+    "S1PR2",
+    "LMO2",
+    "MYBL1",
+    "GCSAM",
+    "ELL3",
+    "SERPINA9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "CXCR4",
+    "MKI67",
+    "TOP2A",
+    "AURKB",
+    "CCNB1",
+    "HMGB2",
+    "TUBB",
+    "STMN1",
+    "FOXP1",
+    "AICDA"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "CD83",
+    "CD86",
+    "MYC",
+    "NFKBIA",
+    "BATF",
+    "EGR2",
+    "IL4I1",
+    "CCL22",
+    "BCL2A1",
+    "NME1"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "CD27",
+    "CCR6",
+    "GPR183",
+    "TNFRSF13B",
+    "SELL",
+    "CD44",
+    "S1PR1",
+    "KLF2",
+    "ZBTB32",
+    "FCRL4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "TCL1A",
+    "FCER2",
+    "IL4R",
+    "BACH2",
+    "SELL",
+    "PLPP5",
+    "YBX3",
+    "BTG1",
+    "CD200",
+    "IGHD"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "ISG15",
+    "IFIT1",
+    "IFIT3",
+    "MX1",
+    "IFI44L",
+    "OAS1",
+    "IFI6",
+    "XAF1",
+    "STAT1",
+    "IRF7"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 17.8
+}

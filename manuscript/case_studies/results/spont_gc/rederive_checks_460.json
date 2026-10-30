@@ -1,0 +1,273 @@
+{
+ "dataset": "spont_gc",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "isotype": {
+   "legacy_size_strata_false": {
+    "r2": 0.03692473008462308,
+    "null_mean": 0.008771162364526571,
+    "excess_r2": 0.02815356772009651,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 999,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 65,
+      "median_cells": 3.0,
+      "frac_2cell": 0.4307692307692308
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 449,
+      "median_cells": 3.0,
+      "frac_2cell": 0.39643652561247217
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 485,
+      "median_cells": 3.0,
+      "frac_2cell": 0.33608247422680415
+     }
+    ],
+    "n_without_majority": 51
+   },
+   "v460": {
+    "r2": 0.03692473008462308,
+    "null_mean": 0.007359917826818437,
+    "excess_r2": 0.029564812257804645,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 999,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "IGHA",
+      "n_clones": 65,
+      "median_cells": 3.0,
+      "frac_2cell": 0.4307692307692308
+     },
+     {
+      "level": "IGHG",
+      "n_clones": 449,
+      "median_cells": 3.0,
+      "frac_2cell": 0.39643652561247217
+     },
+     {
+      "level": "IGHM",
+      "n_clones": 485,
+      "median_cells": 3.0,
+      "frac_2cell": 0.33608247422680415
+     }
+    ],
+    "n_without_majority": 51
+   }
+  },
+  "mutation_frequency": {
+   "legacy_size_strata_false": {
+    "r2": 0.047170449958498825,
+    "null_mean": 0.0012566050485865441,
+    "excess_r2": 0.04591384490991228,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1051,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 1051,
+      "median_cells": 3.0,
+      "frac_2cell": 0.3910561370123692,
+      "spearman_with_clone_size": -0.0345148041307978
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.047170449958498825,
+    "null_mean": 0.002750561392062048,
+    "excess_r2": 0.04441988856643678,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1051,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 1051,
+      "median_cells": 3.0,
+      "frac_2cell": 0.3910561370123692,
+      "spearman_with_clone_size": -0.0345148041307978
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "condition": {
+   "legacy_size_strata_false": {
+    "r2": 0.03390395194589951,
+    "null_mean": 0.0009543924591009856,
+    "excess_r2": 0.03294955948679853,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1051,
+    "strata_key": null,
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": true,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "autoimmune",
+      "n_clones": 732,
+      "median_cells": 3.0,
+      "frac_2cell": 0.36885245901639346
+     },
+     {
+      "level": "immunized",
+      "n_clones": 319,
+      "median_cells": 3.0,
+      "frac_2cell": 0.44200626959247646
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.03390395194589951,
+    "null_mean": 0.0009273168302694372,
+    "excess_r2": 0.03297663511563008,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 1051,
+    "strata_key": null,
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": true,
+    "n_samples": 8,
+    "clone_size": [
+     {
+      "level": "autoimmune",
+      "n_clones": 732,
+      "median_cells": 3.0,
+      "frac_2cell": 0.36885245901639346
+     },
+     {
+      "level": "immunized",
+      "n_clones": 319,
+      "median_cells": 3.0,
+      "frac_2cell": 0.44200626959247646
+     }
+    ],
+    "n_without_majority": 0
+   }
+  }
+ },
+ "programme_tests": {
+  "isotype": {
+   "legacy_n_fdr05": 5,
+   "v460_n_fdr05": 5,
+   "v460_n_fdr05_not_mirror": 5,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 5,
+   "v460_n_fdr05": 5,
+   "v460_n_fdr05_not_mirror": 5,
+   "v460_kruskal_p": null
+  },
+  "mutation_frequency": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "mutation_frequency|assigned": {
+   "legacy_n_fdr05": 3,
+   "v460_n_fdr05": 3,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "condition": {
+   "legacy_n_fdr05": 6,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 3,
+   "v460_kruskal_p": null
+  },
+  "condition|assigned": {
+   "legacy_n_fdr05": 6,
+   "v460_n_fdr05": 6,
+   "v460_n_fdr05_not_mirror": 3,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {},
+ "memory_min_cells_2": {},
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 88,
+    "statistic": "excess_icc",
+    "median_icc": 0.19294,
+    "matched_background_median_icc": 0.109673,
+    "difference": 0.093231,
+    "se": 0.022147,
+    "ci_low": 0.049824,
+    "ci_high": 0.136638,
+    "se_genes": 0.01359,
+    "se_clones": 0.017487,
+    "frac_significant": 0.977273,
+    "pvalue_vs_matched": 2.6e-05,
+    "pvalue_mw_genes_independent": 0.0,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 2.6e-05
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/spont_gc_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.0008451938629150391
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 1051,
+  "n_clones_new": 1051,
+  "n_common": 1051,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 0.0,
+  "max_abs_diff_x": 0.0,
+  "max_abs_diff_y": 0.0,
+  "agreement_clone_programme": 1.0,
+  "agreement_clone_programme_assigned": 1.0
+ }
+}

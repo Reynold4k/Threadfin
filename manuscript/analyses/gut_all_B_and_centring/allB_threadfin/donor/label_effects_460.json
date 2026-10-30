@@ -1,0 +1,330 @@
+{
+ "threadfin": "4.6.0",
+ "n_clones_profiled": 957,
+ "tests": {
+  "gc_sort:GC": {
+   "saved": {
+    "r2": 0.07793203540529371,
+    "null_mean": 0.0013474637399813912,
+    "excess_r2": 0.07658457166531232,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.07793098450996183,
+    "null_mean": 0.0013474960242374706,
+    "excess_r2": 0.07658348848572435,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.07793098450996183,
+    "null_mean": 0.0012354720449238806,
+    "excess_r2": 0.07669551246503795,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "celltype:B_cell": {
+   "saved": {
+    "r2": 0.027553730026712457,
+    "null_mean": 0.0011634522495103051,
+    "excess_r2": 0.026390277777202154,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.027554260970419728,
+    "null_mean": 0.0011634484662751494,
+    "excess_r2": 0.02639081250414458,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.027554260970419728,
+    "null_mean": 0.001175024164630989,
+    "excess_r2": 0.026379236805788738,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "celltype:GC_Bcell": {
+   "saved": {
+    "r2": 0.5291058614737174,
+    "null_mean": 0.008234814265050698,
+    "excess_r2": 0.5208710472086667,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.5290929603425908,
+    "null_mean": 0.008234430501785942,
+    "excess_r2": 0.5208585298408048,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.5290929603425908,
+    "null_mean": 0.009733985651325728,
+    "excess_r2": 0.519358974691265,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "celltype:plasma": {
+   "saved": {
+    "r2": 0.5628326319082407,
+    "null_mean": 0.009284872791666657,
+    "excess_r2": 0.5535477591165741,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.5628185400532905,
+    "null_mean": 0.009284494953441181,
+    "excess_r2": 0.5535340450998493,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.5628185400532905,
+    "null_mean": 0.011569434809256483,
+    "excess_r2": 0.551249105244034,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "isotype": {
+   "saved": {
+    "r2": 0.20334962078756388,
+    "null_mean": 0.004249085499988302,
+    "excess_r2": 0.19910053528757557,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 888,
+    "kind": "categorical"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.20334943035766148,
+    "null_mean": 0.0042491201346294555,
+    "excess_r2": 0.19910031022303204,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 888,
+    "kind": "categorical",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.20334943035766148,
+    "null_mean": 0.004379791876635984,
+    "excess_r2": 0.1989696384810255,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 888,
+    "kind": "categorical",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "mutation_frequency": {
+   "saved": {
+    "r2": 0.049421870137301545,
+    "null_mean": 0.001495544066246732,
+    "excess_r2": 0.04792632607105481,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.049421100413419426,
+    "null_mean": 0.00149554574986663,
+    "excess_r2": 0.0479255546635528,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.049421100413419426,
+    "null_mean": 0.0014886976864193207,
+    "excess_r2": 0.047932402727000105,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "tissue:LP": {
+   "saved": {
+    "r2": 0.47814668607888644,
+    "null_mean": 0.009346481243769815,
+    "excess_r2": 0.46880020483511664,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.4781375360673572,
+    "null_mean": 0.009346195350085624,
+    "excess_r2": 0.4687913407172716,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.4781375360673572,
+    "null_mean": 0.011070706389237888,
+    "excess_r2": 0.4670668296781193,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "tissue:PP": {
+   "saved": {
+    "r2": 0.28884754712579047,
+    "null_mean": 0.011124698355213363,
+    "excess_r2": 0.2777228487705771,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.28883816092674863,
+    "null_mean": 0.011124037599821538,
+    "excess_r2": 0.2777141233269271,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.28883816092674863,
+    "null_mean": 0.013048319940598218,
+    "excess_r2": 0.2757898409861504,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  },
+  "tissue:MLN": {
+   "saved": {
+    "r2": 0.028761139316497368,
+    "null_mean": 0.0023085558223955634,
+    "excess_r2": 0.026452583494101803,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric"
+   },
+   "legacy_size_strata_false": {
+    "r2": 0.028763184852791352,
+    "null_mean": 0.0023084809944606973,
+    "excess_r2": 0.026454703858330656,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": null
+   },
+   "v460": {
+    "r2": 0.028763184852791352,
+    "null_mean": 0.002314864578480253,
+    "excess_r2": 0.0264483202743111,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 957,
+    "kind": "numeric",
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ]
+   }
+  }
+ }
+}

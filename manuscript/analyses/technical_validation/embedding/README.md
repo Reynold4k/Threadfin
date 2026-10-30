@@ -33,6 +33,12 @@ Every clonal ICC exceeded all 200 shuffles (P = 0.005) and every label effect al
 rows reproduce the case studies (RBD: ICC 0.169, division excess R² 0.088; gut: ICC 0.401). Tables:
 `results/embedding_sensitivity_*.csv`.
 
+**Threadfin 4.6.0** (the same script, re-run on 2026-10-30; `results_460/embedding_sensitivity_*.csv`). Label
+tests now shuffle among clones of the same mouse and similar size, so the label excess R² changes slightly: RBD
+0.087 (default), 0.078 (2,000 genes), 0.080 (5,000 genes), 0.099 (20 PCs), 0.093 (50 PCs), 0.072 (receptor genes
+left in); gut 0.065, 0.073, 0.083, 0.072, 0.065, 0.065. Every label effect still exceeded all 1,000 shuffles
+(P = 0.001); the ICCs are unchanged.
+
 **Reading.**
 
 * *Variable genes and components.* The excess of the clonal ICC over shuffled clones stays within 0.116–0.118

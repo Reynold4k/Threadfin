@@ -1,0 +1,397 @@
+{
+ "dataset": "tonsil",
+ "title": "King et al. 2021 Sci Immunol - paediatric tonsil (6 donors)",
+ "clone_definition": {
+  "method": "dandelion",
+  "dandelion_version": "0.5.7",
+  "use_light_chain": true,
+  "require_heavy_chain": true,
+  "n_cells_without_heavy_chain": 2997,
+  "identity": 0.85,
+  "donor_key": "donor",
+  "n_cells": 11570,
+  "n_clones": 11075,
+  "n_clones_ge2": 361,
+  "largest_clone": 9,
+  "python_hash_seed": "0",
+  "source": "dandelion",
+  "cells_dropped": 2996,
+  "light_chain_only_cells_dropped": 0
+ },
+ "qc": {
+  "n_cells": 22478,
+  "n_cells_bcr": 11570,
+  "n_clones": 11075,
+  "clones_ge2": 361,
+  "clones_ge3": 76,
+  "clones_ge5": 13,
+  "clones_ge10": 0,
+  "cells_in_clones_ge2": 856,
+  "largest_clone": 9,
+  "n_donors": 6,
+  "n_samples": 6
+ },
+ "coherence": {
+  "icc": 0.25284801282774994,
+  "null_mean": 0.03324442967977868,
+  "null_q95": 0.056847369395986405,
+  "excess": 0.21960358314797127,
+  "p_value": 0.001996007984031936,
+  "n_clones": 361,
+  "n_cells": 856,
+  "min_cells_reliability_0.5": 3
+ },
+ "clone_map": {
+  "n_neighbors": 50,
+  "min_dist": 0.8,
+  "repulsion_strength": 1.0,
+  "spread": 1.0,
+  "min_reliability": 0.0,
+  "random_state": 0,
+  "layout_seed": 0,
+  "n_clones": 361,
+  "n_profiled": 361,
+  "chosen_by": "user",
+  "quality": {
+   "score": -0.32643324519036687,
+   "coherence": 0.7700831024930748,
+   "local_fidelity": 0.6041551246537397,
+   "global_fidelity": 0.8482415428602634,
+   "coherence_target": 0.9806094182825484
+  },
+  "min_cells": 2
+ },
+ "programme_splits": {
+  "n_leiden_communities": 2,
+  "n_merged": 0,
+  "root_pvalue": 6.348721542452104e-06
+ },
+ "programme_markers": {
+  "P1": [
+   "ACTB",
+   "ACTG1",
+   "CORO1A",
+   "PFN1",
+   "COTL1",
+   "TMSB4X",
+   "HMGN1",
+   "CFL1",
+   "GAPDH",
+   "PPIA",
+   "RPS24",
+   "RPS23"
+  ],
+  "P2": [
+   "SSR4",
+   "MZB1",
+   "FKBP11",
+   "XBP1",
+   "JCHAIN",
+   "HSP90B1",
+   "SEC11C",
+   "DERL3",
+   "FKBP2",
+   "PLPP5",
+   "PRDM1",
+   "SELENOS"
+  ]
+ },
+ "programme_signatures": {
+  "P1": {
+   "plasma cell": -0.029,
+   "germinal centre": 0.376,
+   "dark zone / cycling": 0.509,
+   "light zone": -0.03,
+   "memory": -0.149,
+   "naive": 0.279,
+   "interferon": 0.003
+  },
+  "P2": {
+   "plasma cell": 1.232,
+   "germinal centre": 0.108,
+   "dark zone / cycling": 0.035,
+   "light zone": -0.047,
+   "memory": 0.019,
+   "naive": 0.085,
+   "interferon": 0.012
+  }
+ },
+ "programmes": {
+  "n": 2,
+  "resolution": 0.2,
+  "n_clones": 361,
+  "n_cells": 856,
+  "n_clones_with_assigned": 361,
+  "stability": {
+   "P1": 0.696,
+   "P2": 0.794
+  },
+  "n_stable": 1
+ },
+ "label_effects": {
+  "isotype": {
+   "label": "isotype",
+   "kind": "categorical",
+   "r2": 0.038007515828813045,
+   "null_mean": 0.011269150002662322,
+   "excess_r2": 0.026738365826150724,
+   "p_value": 0.0004997501249375312,
+   "n_clones": 317,
+   "n_levels": 4,
+   "strata_key": "donor",
+   "size_bins": [
+    1,
+    2,
+    3,
+    5,
+    10
+   ],
+   "n_perm": 2000,
+   "axis_correlation": {
+    "IGHA": [
+     -0.1060997931779509,
+     -0.03716607236566186,
+     0.010277768615085264
+    ],
+    "IGHD": [
+     -0.11126594266708452,
+     -0.13674999009471644,
+     0.1897913633847707
+    ],
+    "IGHG": [
+     0.11031122972340245,
+     0.16100598294425134,
+     -0.03610185700038625
+    ],
+    "IGHM": [
+     0.06004618688843345,
+     -0.032500523532620625,
+     -0.14898172802808524
+    ]
+   },
+   "clone_size": [
+    {
+     "level": "IGHA",
+     "n_clones": 40,
+     "median_cells": 2.0,
+     "frac_2cell": 0.7
+    },
+    {
+     "level": "IGHD",
+     "n_clones": 63,
+     "median_cells": 2.0,
+     "frac_2cell": 0.7777777777777778
+    },
+    {
+     "level": "IGHG",
+     "n_clones": 146,
+     "median_cells": 2.0,
+     "frac_2cell": 0.7808219178082192
+    },
+    {
+     "level": "IGHM",
+     "n_clones": 68,
+     "median_cells": 2.0,
+     "frac_2cell": 0.8088235294117647
+    }
+   ],
+   "n_without_majority": 42,
+   "sample_key": "donor",
+   "n_samples": 6,
+   "sample_level": false,
+   "samples_per_level": null,
+   "note": "heavy-chain isotype"
+  }
+ },
+ "programme_associations": {
+  "isotype": {
+   "n_clones": 317,
+   "n_significant_fdr05": 2
+  }
+ },
+ "memory": {},
+ "heritability": {
+  "n_genes": 9078,
+  "median_icc": 0.027565075958235492,
+  "top_genes": [
+   "GAPDH",
+   "COTL1",
+   "XBP1",
+   "ACTG1",
+   "ACTB",
+   "RPL28",
+   "FRZB",
+   "CFL1",
+   "HMGN1",
+   "PPIA",
+   "PFN1",
+   "HSP90B1",
+   "GTSF1",
+   "JCHAIN",
+   "HIST1H2AI",
+   "CCDC191",
+   "RGS1",
+   "PRDM1",
+   "SSR4",
+   "FAM30A",
+   "SEC11C",
+   "SLC25A5",
+   "PRDX4",
+   "RAN",
+   "MT-ND3"
+  ],
+  "receptor_gene_icc": 0.7243609461859558,
+  "gene_sets": {
+   "plasma cell": {
+    "median_icc": 0.2796,
+    "matched_background_median_icc": 0.0376,
+    "pvalue_vs_matched": 0.0
+   },
+   "germinal centre": {
+    "median_icc": 0.0583,
+    "matched_background_median_icc": 0.0514,
+    "pvalue_vs_matched": 0.5609
+   },
+   "dark zone / cycling": {
+    "median_icc": 0.1678,
+    "matched_background_median_icc": 0.0547,
+    "pvalue_vs_matched": 0.0009
+   },
+   "light zone": {
+    "median_icc": 0.0333,
+    "matched_background_median_icc": 0.0127,
+    "pvalue_vs_matched": 0.557
+   },
+   "memory": {
+    "median_icc": 0.1609,
+    "matched_background_median_icc": 0.0132,
+    "pvalue_vs_matched": 0.0008
+   },
+   "naive": {
+    "median_icc": 0.1975,
+    "matched_background_median_icc": 0.0375,
+    "pvalue_vs_matched": 0.0002
+   },
+   "interferon": {
+    "median_icc": 0.0465,
+    "matched_background_median_icc": -0.0007,
+    "pvalue_vs_matched": 0.1787
+   }
+  }
+ },
+ "signature_coverage": {
+  "plasma cell": {
+   "genes_present": [
+    "PRDM1",
+    "XBP1",
+    "IRF4",
+    "JCHAIN",
+    "MZB1",
+    "SDC1",
+    "TNFRSF17",
+    "DERL3",
+    "FKBP11",
+    "SSR4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "germinal centre": {
+   "genes_present": [
+    "BCL6",
+    "AICDA",
+    "RGS13",
+    "MEF2B",
+    "S1PR2",
+    "LMO2",
+    "MYBL1",
+    "GCSAM",
+    "ELL3",
+    "SERPINA9"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "dark zone / cycling": {
+   "genes_present": [
+    "CXCR4",
+    "MKI67",
+    "TOP2A",
+    "AURKB",
+    "CCNB1",
+    "HMGB2",
+    "TUBB",
+    "STMN1",
+    "FOXP1",
+    "AICDA"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "light zone": {
+   "genes_present": [
+    "CD83",
+    "CD86",
+    "MYC",
+    "NFKBIA",
+    "BATF",
+    "EGR2",
+    "IL4I1",
+    "CCL22",
+    "BCL2A1",
+    "NME1"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "memory": {
+   "genes_present": [
+    "CD27",
+    "CCR6",
+    "GPR183",
+    "TNFRSF13B",
+    "SELL",
+    "CD44",
+    "S1PR1",
+    "KLF2",
+    "ZBTB32",
+    "FCRL4"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "naive": {
+   "genes_present": [
+    "TCL1A",
+    "FCER2",
+    "IL4R",
+    "BACH2",
+    "SELL",
+    "PLPP5",
+    "YBX3",
+    "BTG1",
+    "CD200",
+    "IGHD"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  },
+  "interferon": {
+   "genes_present": [
+    "ISG15",
+    "IFIT1",
+    "IFIT3",
+    "MX1",
+    "IFI44L",
+    "OAS1",
+    "IFI6",
+    "XAF1",
+    "STAT1",
+    "IRF7"
+   ],
+   "n_present": 10,
+   "n_requested": 10
+  }
+ },
+ "runtime_min": 1.7
+}

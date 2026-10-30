@@ -1,0 +1,442 @@
+{
+ "dataset": "gc_np_pc",
+ "threadfin_version": "4.6.0",
+ "label_tests": {
+  "fate:plasma cell": {
+   "legacy_size_strata_false": {
+    "r2": 0.776437100826033,
+    "null_mean": 0.026713984594235036,
+    "excess_r2": 0.749723116231798,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.09645504787477174
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.776437100826033,
+    "null_mean": 0.048040980269728986,
+    "excess_r2": 0.728396120556304,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.09645504787477174
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "fate:Myc+ light zone": {
+   "legacy_size_strata_false": {
+    "r2": 0.027331006407121054,
+    "null_mean": 0.0027123549061935552,
+    "excess_r2": 0.0246186515009275,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": -0.09716166249065303
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.027331006407121054,
+    "null_mean": 0.002765448132052473,
+    "excess_r2": 0.02456555827506858,
+    "p_value": 0.0004997501249375312,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": -0.09716166249065303
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "fate:dark zone": {
+   "legacy_size_strata_false": {
+    "r2": 0.030945171472842356,
+    "null_mean": 0.008147027592120921,
+    "excess_r2": 0.022798143880721433,
+    "p_value": 0.033483258370814596,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.14240644194431037
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.030945171472842356,
+    "null_mean": 0.017084863911928358,
+    "excess_r2": 0.013860307560913998,
+    "p_value": 0.16841579210394803,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.14240644194431037
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "w33l:W33L": {
+   "legacy_size_strata_false": {
+    "r2": 0.06378685516664967,
+    "null_mean": 0.01313399120588947,
+    "excess_r2": 0.0506528639607602,
+    "p_value": 0.019490254872563718,
+    "n_clones": 74,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 74,
+      "median_cells": 2.0,
+      "frac_2cell": 0.581081081081081,
+      "spearman_with_clone_size": 0.21057548267186177
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.06378685516664967,
+    "null_mean": 0.012132093074032563,
+    "excess_r2": 0.05165476209261711,
+    "p_value": 0.008995502248875561,
+    "n_clones": 74,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 74,
+      "median_cells": 2.0,
+      "frac_2cell": 0.581081081081081,
+      "spearman_with_clone_size": 0.21057548267186177
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "mutation_frequency": {
+   "legacy_size_strata_false": {
+    "r2": 0.0015067985755268152,
+    "null_mean": 0.018259605832502197,
+    "excess_r2": -0.016752807256975383,
+    "p_value": 0.9325337331334332,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": null,
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.12203704463257423
+     }
+    ],
+    "n_without_majority": 0
+   },
+   "v460": {
+    "r2": 0.0015067985755268152,
+    "null_mean": 0.017515963048355697,
+    "excess_r2": -0.016009164472828883,
+    "p_value": 0.9310344827586207,
+    "n_clones": 96,
+    "strata_key": "donor",
+    "size_bins": [
+     1,
+     2,
+     3,
+     5,
+     10
+    ],
+    "n_perm": 2000,
+    "sample_level": false,
+    "n_samples": 11,
+    "clone_size": [
+     {
+      "level": "all",
+      "n_clones": 96,
+      "median_cells": 2.0,
+      "frac_2cell": 0.6458333333333334,
+      "spearman_with_clone_size": 0.12203704463257423
+     }
+    ],
+    "n_without_majority": 0
+   }
+  },
+  "isotype": {
+   "legacy_size_strata_false": {
+    "error": "'isotype' has a single level among the reliable clones."
+   },
+   "v460": {
+    "error": "'isotype' has a single level among the reliable clones."
+   }
+  }
+ },
+ "programme_tests": {
+  "fate:plasma cell": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "fate:plasma cell|assigned": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "fate:Myc+ light zone": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "fate:Myc+ light zone|assigned": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0004997501249375312
+  },
+  "fate:dark zone": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_kruskal_p": 0.6926536731634183
+  },
+  "fate:dark zone|assigned": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_kruskal_p": 0.6926536731634183
+  },
+  "w33l:W33L": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0014992503748125937
+  },
+  "w33l:W33L|assigned": {
+   "legacy_n_fdr05": 2,
+   "v460_n_fdr05": 2,
+   "v460_kruskal_p": 0.0014992503748125937
+  },
+  "mutation_frequency": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_kruskal_p": 0.7481259370314842
+  },
+  "mutation_frequency|assigned": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_kruskal_p": 0.7481259370314842
+  },
+  "isotype": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_n_fdr05_not_mirror": 0,
+   "v460_kruskal_p": null
+  },
+  "isotype|assigned": {
+   "legacy_n_fdr05": 0,
+   "v460_n_fdr05": 0,
+   "v460_n_fdr05_not_mirror": 0,
+   "v460_kruskal_p": null
+  }
+ },
+ "memory": {
+  "plasma_cell": {
+   "order_from_manuscript_run": [
+    "GC",
+    "PC"
+   ],
+   "legacy_all_pooled": {
+    "n_clones": 31,
+    "n_pairs": 31,
+    "memory_index": -0.017237328972869115,
+    "memory_index_ci": [
+     -0.22644980981556886,
+     0.15757309942582523
+    ],
+    "p_value": 0.5828343313373253,
+    "persistence": 0.03225806451612903,
+    "persistence_null": 0.032258064516129024,
+    "levels": [
+     "GC",
+     "PC"
+    ],
+    "reference": "all",
+    "noise": "pooled",
+    "mean_change": 0.7392694043568472,
+    "mean_change_random": 0.7267423081133945,
+    "mean_change_shared": 0.6511214881886958,
+    "mean_noise_removed": 0.460444915106198
+   },
+   "v460": {
+    "n_clones": 30,
+    "n_pairs": 30,
+    "memory_index": 0.009640264253488962,
+    "memory_index_ci": [
+     -0.1996627826695235,
+     0.16777016895535704
+    ],
+    "p_value": 0.24151696606786427,
+    "persistence": 0.03333333333333333,
+    "persistence_null": 0.03333333333333333,
+    "levels": [
+     "GC",
+     "PC"
+    ],
+    "reference": "persistent",
+    "noise": "snapshot",
+    "mean_change": 0.7402395580431925,
+    "mean_change_random": 0.7474451265783907,
+    "mean_change_shared": 0.6532106432799952,
+    "mean_noise_removed": 0.45228758066261743,
+    "variance_source": {
+     "own": 22,
+     "level": 38,
+     "kind": 0,
+     "all": 0
+    }
+   }
+  }
+ },
+ "memory_min_cells_2": {
+  "plasma_cell": {
+   "error": "Only 6 clones have >= 2 cells at two levels of 'plasma_cell' (need >= 10); no memory index is reported."
+  }
+ },
+ "geneset_extra": {
+  "summarize_ribosomal": [
+   {
+    "gene_set": "translation (ribosomal)",
+    "n_genes": 88,
+    "statistic": "excess_icc",
+    "median_icc": -0.012164,
+    "matched_background_median_icc": -0.005437,
+    "difference": -0.021691,
+    "se": 0.029583,
+    "ci_low": -0.079672,
+    "ci_high": 0.036291,
+    "se_genes": 0.004474,
+    "se_clones": 0.029243,
+    "frac_significant": 0.0,
+    "pvalue_vs_matched": 0.46343,
+    "pvalue_mw_genes_independent": 0.080588,
+    "method": "excess Fisher z, set minus expression-matched background; SE from the spread between genes and a clone bootstrap (200 replicates)",
+    "fdr": 0.46343
+   }
+  ]
+ },
+ "embedding": {
+  "mode": "cache",
+  "cache": "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin\u53d1\u8868/internal_validation/algorithm_revision/embedding_cache/gc_np_pc_embedding.h5ad",
+  "max_abs_difference_recomputed_vs_cache": 0.002727508544921875
+ },
+ "clone_ids": {
+  "cells_whose_clone_differs_from_saved": 0
+ },
+ "reproduction_clone_table": {
+  "n_clones_saved": 96,
+  "n_clones_new": 96,
+  "n_common": 96,
+  "max_abs_diff_n_cells": 0.0,
+  "max_abs_diff_reliability": 0.0,
+  "max_abs_diff_x": 0.0,
+  "max_abs_diff_y": 0.0,
+  "agreement_clone_programme": 1.0,
+  "agreement_clone_programme_assigned": 1.0
+ }
+}
