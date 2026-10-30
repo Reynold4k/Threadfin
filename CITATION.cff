@@ -9,8 +9,8 @@ authors:
 url: "https://github.com/Reynold4k/Threadfin"
 repository-code: "https://github.com/Reynold4k/Threadfin"
 license: MIT
-version: 4.6.0
-date-released: "2026-10-30"
+version: 4.6.1
+date-released: "2026-10-31"
 keywords:
   - single-cell
   - scRNA-seq

@@ -2,6 +2,12 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.6.1 — 2026-10-31
+
+No change to the code. This release exists so that Zenodo archives Threadfin and gives it a citable DOI.
+
+**What this means for you:** nothing to do; results are identical to 4.6.0.
+
 ## 4.6.0 — 2026-10-30
 
 Five independent reviews of the package (software, statistics, concept, biology and benchmark), and every tutorial
