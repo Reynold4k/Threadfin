@@ -2,8 +2,8 @@
 
 A *clonal programme* is a set of genetically distinct clones whose cells,
 relative to their sampling context, occupy similar transcriptional states
-(for example clones biased towards plasmablast output, or clones that stay
-in the germinal centre). Programmes are found by Leiden community detection
+(for example ASC-rich clones, or clones whose cells are mostly germinal-centre
+B cells). Programmes are found by Leiden community detection
 on a k-nearest-neighbour graph of clone profiles
 (:func:`threadfin.tl.clone_profiles`).
 
@@ -23,15 +23,18 @@ continuously without forming groups. Two safeguards address this:
    work (Meinshausen 2008; sc-SHC, Grabski et al. 2023), but this implementation
    does not establish family-wise error control for the selected tree. Communities below a non-significant
    node are merged. When even the root is not significant, the clones form
-   a single programme: they differ (see the coherence test), but not as
-   groups the test can separate. This alone is not evidence of a continuum
-   (see :func:`split_test`).
+   a single programme. The test detects any departure from one Gaussian
+   group, which graded variation along a path can also produce, so a split
+   says that the clone profiles are not one Gaussian cloud, and one
+   programme is not by itself evidence of a continuum (see :func:`split_test`).
 2. **Bootstrap stability.** Cells are resampled within clones (Poisson
-   bootstrap), profiles are re-estimated and the whole procedure (graph,
-   Leiden, split test) is repeated; each programme is matched to its best
-   bootstrap counterpart by Jaccard overlap (Hennig 2007, "clusterboot").
-   Programmes with mean Jaccard >= 0.75 are stable; below 0.6 they should
-   not be interpreted.
+   bootstrap) with the fitted profile model held fixed (the set of clones,
+   the smoothing neighbours and the variance components), profiles are
+   re-estimated and the graph, Leiden and split test are repeated; each
+   programme is matched to its best bootstrap counterpart by Jaccard overlap
+   (as in Hennig 2007). This measures how robust a programme is to the
+   sampling of cells. Programmes with mean Jaccard >= 0.75 are stable; below
+   0.6 they should not be interpreted.
 
 The Leiden resolution is chosen as the finest one whose size-weighted
 stability reaches the threshold (otherwise the most stable one, with a
@@ -214,11 +217,15 @@ def split_test(x: np.ndarray, split=None, *, n_null: int = 100, random_state=0, 
     with a planted two-group structure; the measured numbers are quoted below, and neither setting is satisfactory:**
 
     ``"total"`` (default)
-        the sample covariance of ``x`` itself (SigClust-style). Valid but very conservative: the false-positive
-        rate at zero separation is 0 of 30 simulations, and so is the detection rate for two groups separated by
-        four within-group standard deviations. A split inflates the covariance along the splitting direction and
-        the null inherits that inflation, so the test partly cancels itself. **A non-significant result from
-        this test is therefore not evidence of a continuum.**
+        the sample covariance of ``x`` itself (SigClust-style). Conservative under its null: a single Gaussian
+        group is rejected far less often than ``alpha`` (0 of 30 simulations on real clone profiles, 0 of 600
+        on synthetic data). Its power depends on the direction of a separation relative to the covariance: two
+        synthetic Gaussian groups four within-group standard deviations apart are detected, while a two-group
+        structure planted in real mouse_rbd clone profiles was missed in 30 of 30 simulations, because a split
+        inflates the covariance along the splitting direction and the null inherits that inflation. Graded,
+        non-Gaussian variation (clones spread evenly along a path) is also rejected. **A significant split
+        therefore says that the profiles are not one Gaussian group, not that they form discrete types; a
+        non-significant one is not evidence of a continuum.**
     ``"within"``
         the covariance pooled *within* the two candidate groups. **Invalid — do not use for inference.** It was
         tried as a fix and measured: on mouse_rbd clone profiles it reports a split in 30 of 30 simulations with
@@ -478,14 +485,13 @@ def find_programmes(
         Neighbours per clone in the clone graph.
     weight_by_reliability
         Scale each graph edge by ``sqrt(rel_i * rel_j)`` so that every clone is clustered but a
-        thinly observed one pulls weakly. This is what makes ``min_reliability=0`` safe: on a
-        simulated one-programme continuum of 3,000 clones with a median of one cell each, an
-        unweighted unfiltered run invents four programmes at bootstrap stability 0.78-0.86, while the
-        weighted run recovers the single true programme.
+        thinly observed one pulls weakly on its neighbours. Clones of a single cell are not profiled
+        (``min_cells=2`` in :func:`threadfin.tl.clone_profiles`); that, rather than the weighting, keeps
+        unfiltered runs from inventing programmes on a simulated one-programme repertoire.
     min_reliability
         Reliability floor for clustering; ``0.0`` (the default) clusters every profiled clone.
         Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
-        few cells is pulled towards the population mean, so its influence is down-weighted in
+        few cells is pulled towards the average profile, so its influence is down-weighted in
         proportion to how little was seen. A reliability floor on top of that discards the same
         information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
         75-100 % of the profiled clones.
@@ -533,9 +539,10 @@ def find_programmes(
     eligible = table.index[table["reliability"] >= min_reliability]
     if eligible.size < min_clones:
         raise ValueError(
-            f"Only {eligible.size} clones reach reliability {min_reliability} (need {min_clones}); "
-            "too few expanded clones to define programmes. Report the coherence test only, or "
-            "lower min_reliability."
+            (f"only {eligible.size} clones have two or more cells (need {min_clones}); too few expanded clones "
+             "to define programmes. The coherence test above still applies." if min_reliability <= 0 else
+             f"only {eligible.size} clones reach reliability {min_reliability} (need {min_clones}); too few "
+             "expanded clones to define programmes. Report the coherence test only, or lower min_reliability.")
         )
     feats = feats_all.loc[eligible].to_numpy()
     rel = table.loc[eligible, "reliability"].to_numpy() if weight_by_reliability else None
@@ -545,7 +552,8 @@ def find_programmes(
     if auto and resolution != "auto":
         raise ValueError("resolution must be a number or 'auto'.")
     if auto and n_boot < 5:
-        raise ValueError("resolution='auto' needs n_boot >= 5 bootstrap replicates.")
+        raise ValueError(f"choosing the resolution automatically needs n_boot >= 5 bootstrap replicates "
+                         f"(n_boot={n_boot}).")
     res_grid = list(resolutions) if auto else [float(resolution)]
 
     rng = np.random.default_rng(random_state)
@@ -783,12 +791,29 @@ def get_programmes(adata) -> dict:
     return out
 
 
-def programme_composition(adata, state_key: str, *, key: str | None = None) -> pd.DataFrame:
-    """Fraction of each programme's cells in each cell state (rows sum to 1)."""
+def programme_composition(adata, state_key: str, *, key: str | None = None, weight: str = "cells",
+                          clone_key: str | None = None) -> pd.DataFrame:
+    """Share of each cell state in each programme (rows sum to 1).
+
+    ``weight="cells"`` (default) counts every cell once: the fraction of the programme's cells in each state,
+    to which an expanded clone contributes in proportion to its sampled cells. ``weight="clones"`` counts every
+    clone once: the share of each clone's cells in each state, averaged over the programme's clones; it describes
+    a typical clone of the programme and is not dominated by a few large clones. Only cells with both a
+    programme and a state are counted. ``clone_key`` (for ``weight="clones"``) defaults to the clone column of
+    :func:`threadfin.tl.clone_profiles`.
+    """
+    if weight not in {"cells", "clones"}:
+        raise ValueError(f"weight must be 'cells' or 'clones', not {weight!r}.")
     key = key or get_programmes(adata)["params"]["key_added"]
-    df = adata.obs[[key, state_key]].dropna()
-    tab = pd.crosstab(df[key], df[state_key])
-    return tab.div(tab.sum(axis=1), axis=0)
+    if weight == "cells":
+        df = adata.obs[[key, state_key]].dropna()
+        tab = pd.crosstab(df[key], df[state_key])
+        return tab.div(tab.sum(axis=1), axis=0)
+    clone_key = clone_key or get_profiles(adata)["params"]["clone_key"]
+    df = adata.obs[[key, clone_key, state_key]].dropna()
+    per_clone = pd.crosstab([df[key], df[clone_key].astype(str)], df[state_key])
+    shares = per_clone.div(per_clone.sum(axis=1), axis=0)
+    return shares.groupby(level=0, observed=True).mean()
 
 
 def _clone_expression(adata, *, clone_key, cell_mask, layer, context_key, state_key, state, min_cells_in_state,
@@ -803,6 +828,11 @@ def _clone_expression(adata, *, clone_key, cell_mask, layer, context_key, state_
 
     from ._utils import codes
 
+    if layer is not None and layer not in adata.layers:
+        raise ValueError(f"{caller}: adata.layers has no '{layer}' (layers: "
+                         f"{', '.join(map(repr, adata.layers.keys())) or 'none'}). threadfin.pp.prepare_embedding "
+                         "(and threadfin.run without basis=) writes 'log_norm'; otherwise pass the layer that holds "
+                         "normalised, log-transformed counts, or layer=None to use adata.X.")
     x = adata.layers[layer] if layer is not None else adata.X
     x = sp.csr_matrix(x) if not sp.issparse(x) else x.tocsr()
     in_state = np.ones(adata.n_obs, dtype=bool)

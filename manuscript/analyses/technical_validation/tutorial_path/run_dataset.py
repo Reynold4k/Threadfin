@@ -6,7 +6,8 @@ The user's part is reading their own files: raw counts with donor and sample col
 expression data (Tutorial 2, section 4; `case_studies/dandelion_clones.contigs_for`). Everything after that is
 the documented call, with every setting at its default:
 
-    result = tf.run(adata, bcr=contigs, donor_key="donor", sample_key=..., test=[...], n_jobs=8)
+    result = tf.run(adata, bcr=contigs, donor_key="donor", sample_key=..., strata_key="sample", test=[...],
+                    n_jobs=8)
     print(result.summary()); result.methods(); result.plot(...); result.clones.to_csv(...); adata.write_h5ad(...)
 
 LARRY has lineage barcodes instead of a BCR; it follows Tutorial 2, section 6 (clone ids defined elsewhere) with
@@ -14,12 +15,17 @@ the published embedding (`basis=`). Every exception, every warning and the run t
 <out>/<dataset>.json.
 
 Usage: PYTHONHASHSEED=0 python run_dataset.py <dataset> <out_dir>
+
+The AnnData after the run is kept as <out>/<dataset>.h5ad, and the settings of the run are recorded in the json,
+so that make_gallery.py can draw every figure later without running the analysis again
+(THREADFIN_KEEP_H5AD=0 keeps no h5ad).
 """
 from __future__ import annotations
 
 import json
 import os
 import resource
+import shutil
 import sys
 import time
 import traceback
@@ -36,26 +42,29 @@ sys.path.insert(0, str(MANUSCRIPT / "benchmarking" / "scripts"))
 
 import threadfin as tf  # noqa: E402
 
-# the settings of the case studies (run_case_study.CONFIGS): context, batch, annotation and test columns
+# the settings of the case studies (run_case_study.CONFIGS): context, batch, annotation and test columns; the
+# coherence test shuffles clone labels within each sample, the finest sampling unit, as in the case studies
 SETTINGS = {
-    "ln_vaccine": dict(sample_key="donor", batch_key="donor", state_key="state",
+    "ln_vaccine": dict(sample_key="donor", strata_key="sample", batch_key="donor", state_key="state",
                        test=["spike_binding", "tissue"], time_key="timepoint"),
-    "flu": dict(sample_key="donor", batch_key="donor", test=["timepoint"], time_key="timepoint"),
-    "tonsil": dict(sample_key="donor", batch_key="donor", state_key="state", test=[]),
-    "ebv": dict(sample_key="timepoint", test=["gfp"], time_key="timepoint"),
-    "mouse_np": dict(sample_key="donor", test=["division_gate"], time_key="division_gate"),
-    "mouse_rbd": dict(sample_key="donor", test=["rbd_bait", "division_gate", "zone_gate"],
+    "flu": dict(sample_key="donor", strata_key="sample", batch_key="donor", test=["timepoint"],
+                time_key="timepoint"),
+    "tonsil": dict(sample_key="donor", strata_key="sample", batch_key="donor", state_key="state", test=[]),
+    "ebv": dict(sample_key="timepoint", strata_key="sample", test=["gfp"], time_key="timepoint"),
+    "mouse_np": dict(sample_key="donor", strata_key="sample", test=["division_gate"], time_key="division_gate"),
+    "mouse_rbd": dict(sample_key="donor", strata_key="sample", test=["rbd_bait", "division_gate", "zone_gate"],
                       time_key="division_gate"),
-    "gc_np_pc": dict(sample_key="donor", state_key="fate", test=["fate"]),
-    "flu_lung": dict(sample_key="donor", test=["ha_binding", "tissue"], time_key="tissue"),
-    "bone_marrow_pc": dict(sample_key="donor", batch_key="donor", test=["sorted_as", "tissue", "antigen"],
-                           time_key="tissue"),
-    "malaria": dict(sample_key="donor", state_key="cell_state", test=["cell_state"]),
-    "malaria_late": dict(sample_key="donor", state_key="cell_state", test=["cell_state"]),
-    "gut_gc_reporter": dict(sample_key="donor", state_key="celltype", test=["gc_sort", "tissue"],
-                            time_key="tissue"),
-    "covid_bcell": dict(sample_key="donor", batch_key="donor", test=["antigen_call"], time_key="visit"),
-    "spont_gc": dict(sample_key="donor", test=[]),
+    "gc_np_pc": dict(sample_key="donor", strata_key="sample", state_key="fate", test=["fate"]),
+    "flu_lung": dict(sample_key="donor", strata_key="sample", test=["ha_binding", "tissue"], time_key="tissue"),
+    "bone_marrow_pc": dict(sample_key="donor", strata_key="sample", batch_key="donor",
+                           test=["sorted_as", "tissue", "antigen"], time_key="tissue"),
+    "malaria": dict(sample_key="donor", strata_key="sample", state_key="cell_state", test=["cell_state"]),
+    "malaria_late": dict(sample_key="donor", strata_key="sample", state_key="cell_state", test=["cell_state"]),
+    "gut_gc_reporter": dict(sample_key="donor", strata_key="sample", state_key="celltype",
+                            test=["gc_sort", "tissue"], time_key="tissue"),
+    "covid_bcell": dict(sample_key="donor", strata_key="sample", batch_key="donor", test=["antigen_call"],
+                        time_key="visit"),
+    "spont_gc": dict(sample_key="donor", strata_key="sample", test=[]),
     "larry_d2": dict(sample_key="sample", state_key="state", test=[]),
     "larry_d46": dict(sample_key="sample", state_key="state", test=[]),
 }
@@ -63,6 +72,26 @@ SETTINGS = {
 
 def peak_gb():
     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024 ** 2
+
+
+def keep_for_gallery(h5: Path, ds: str):
+    """Give the written h5ad a second name, <out>/<dataset>.h5ad, which make_gallery.py draws from.
+
+    A hard link costs no time or space, and the unlink() that follows the size check then removes only the
+    checked name. A failure here is recorded but is not a failure of the user path.
+    """
+    if os.environ.get("THREADFIN_KEEP_H5AD", "1") == "0":
+        return None
+    kept = h5.with_name(f"{ds}.h5ad")
+    try:
+        kept.unlink(missing_ok=True)
+        try:
+            os.link(h5, kept)
+        except OSError:
+            shutil.copy2(h5, kept)
+        return kept.name                                  # a name, not a path: the json is copied into the repository
+    except Exception as e:                                # noqa: BLE001 - the gallery input is optional
+        return f"not kept: {type(e).__name__}: {e}"
 
 
 def user_inputs(ds):
@@ -105,13 +134,15 @@ def main(ds, out: Path):
             s = SETTINGS[ds]
             test = [c for c in s.get("test", []) if c in adata.obs] + (["isotype"] if "isotype" in adata.obs else [])
             rec["test"] = test
-            kw = dict(donor_key="donor", sample_key=s["sample_key"], batch_key=s.get("batch_key"),
-                      state_key=s.get("state_key"), test=test or None, time_key=s.get("time_key"), n_jobs=8, **extra)
+            kw = dict(donor_key="donor", sample_key=s["sample_key"], strata_key=s.get("strata_key"),
+                      batch_key=s.get("batch_key"), state_key=s.get("state_key"), test=test or None,
+                      time_key=s.get("time_key"), n_jobs=8, **extra)
             if contigs is not None:
                 kw["bcr"] = contigs
             t1 = time.time()
             result = tf.run(adata, **kw)
             rec["steps"]["threadfin_run"] = round(time.time() - t1, 1)
+            rec["settings"] = {k: v for k, v in result.settings.items() if k != "clone_calling"}  # for make_gallery.py
             summary = result.summary()
             (out / f"{ds}_summary.txt").write_text(summary + "\n")
             (out / f"{ds}_methods.txt").write_text(result.methods() + "\n")
@@ -121,6 +152,7 @@ def main(ds, out: Path):
             h5 = out / f"{ds}_result.h5ad"
             adata.write_h5ad(h5)
             rec["h5ad_gb"] = round(h5.stat().st_size / 1024 ** 3, 2)
+            rec["gallery_h5ad"] = keep_for_gallery(h5, ds)  # kept for make_gallery.py (the unlink below drops one name)
             h5.unlink()                                   # written and readable is what is checked; not kept
             rec["steps"]["plot_and_save"] = round(time.time() - t2, 1)
             sizes = adata.obs["clone_id"].dropna().astype(str).value_counts()

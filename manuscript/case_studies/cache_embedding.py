@@ -2,8 +2,10 @@
 """Build the slim expression-embedding cache for one dataset (no counts, obs + X_threadfin).
 
 Usage: python cache_embedding.py <dataset>
-Output: internal_validation/algorithm_revision/embedding_cache/<dataset>_embedding.h5ad
+Output: $THREADFIN_EMBEDDING_CACHE/<dataset>_embedding.h5ad (default, as in the benchmark:
+internal_validation/algorithm_revision/embedding_cache next to the repository clone)
 """
+import os
 import sys
 from pathlib import Path
 
@@ -14,8 +16,8 @@ import scipy.sparse as sp
 import run_case_study as case
 
 name = sys.argv[1]
-cache = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/internal_validation/"
-             "algorithm_revision/embedding_cache")
+cache = Path(os.environ.get("THREADFIN_EMBEDDING_CACHE", Path(__file__).resolve().parents[2].parent
+                            / "internal_validation" / "algorithm_revision" / "embedding_cache"))
 cache.mkdir(parents=True, exist_ok=True)
 
 adata, bcr = case.LOADERS[name]()

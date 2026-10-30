@@ -9,11 +9,11 @@ families as the unit, never individual cells.
 
 Usage (from repository root)::
 
-    /data/scratch/projects/punim1236/python_envs/threadfin_v4/bin/python \
-        case_studies/spike_binding_audit.py
+    python manuscript/case_studies/spike_binding_audit.py
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import argparse
 
@@ -25,7 +25,7 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RAW = Path("/data/scratch/projects/punim1236/threadfin_data/gse195673_ln_vaccine")
+DEFAULT_RAW = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "data")) / "gse195673_ln_vaccine"
 DEFAULT_RESULT = ROOT / "case_studies/results/ln_vaccine"
 DEFAULT_OUT = ROOT / "case_studies/results/spike_binding_audit"
 

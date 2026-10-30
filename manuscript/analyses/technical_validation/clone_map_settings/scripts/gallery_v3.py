@@ -1,8 +1,9 @@
+from pathlib import Path
 import sys, numpy as np, pandas as pd, warnings
 warnings.filterwarnings("ignore")
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from load_feats import features
-CASE = "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results"
+CASE = str(Path(__file__).resolve().parents[4] / "case_studies" / "results")
 r3 = pd.read_csv("validation3/results.csv"); r2 = pd.read_csv("validation2/results.csv")
 sets = [("gut_gc_reporter", 2), ("ln_vaccine", 10), ("malaria_late", 2), ("spont_gc", 2), ("covid_bcell", 2),
         ("mouse_rbd", 2), ("malaria", 2), ("mouse_np", 2), ("gc_np_pc", 2)]

@@ -1,7 +1,7 @@
 """Rebuild clone-profile features for a cached dataset exactly as clone_map_sweep.features_for does."""
 import sys, numpy as np, pandas as pd
 from pathlib import Path
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
+ROOT = Path(__file__).resolve().parents[6]          # the folder that holds the repository clone
 sys.path.insert(0, str(ROOT / "Threadfin"))
 CACHE = ROOT / "internal_validation/algorithm_revision/embedding_cache"
 CLONES = ROOT / "Threadfin/case_studies/results/dandelion_clones"

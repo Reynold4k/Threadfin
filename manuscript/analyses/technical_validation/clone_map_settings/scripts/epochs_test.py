@@ -1,7 +1,8 @@
+from pathlib import Path
 import sys, time, warnings
 warnings.filterwarnings("ignore")
 import numpy as np, pandas as pd
-sys.path.insert(0, "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin")
+sys.path.insert(0, str(Path(__file__).resolve().parents[5]))
 from load_feats import features
 from threadfin.maptune import _Reference, _target
 import umap

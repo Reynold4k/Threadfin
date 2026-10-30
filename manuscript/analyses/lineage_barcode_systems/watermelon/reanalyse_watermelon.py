@@ -30,7 +30,7 @@ import threadfin as tf
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse150949_watermelon")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse150949_watermelon"
 OUT = HERE / "results" / "watermelon"
 OUT.mkdir(parents=True, exist_ok=True)
 

@@ -262,7 +262,8 @@ def coherence(adata, *, result: dict | None = None, ax=None, save=None):
     top = max(obs, hi)
     for x, v in ((0, obs), (1, null.mean())):
         ax.text(x, (hi if x == 1 else v) + 0.03 * top, f"{v:.1f}%", ha="center", va="bottom", color=INK)
-    ax.set_xticks([0, 1], ["observed", "shuffled\nwithin samples"])
+    strata = res.get("strata_key")
+    ax.set_xticks([0, 1], ["observed", f"shuffled\nwithin {strata}" if strata else "shuffled"])
     ax.set_ylim(0, top * 1.25)
     ax.set_ylabel("variance explained by clone (%)")
     ax.set_title(f"clonal coherence (p = {res['p_value']:.2g})", color=INK)
@@ -270,11 +271,15 @@ def coherence(adata, *, result: dict | None = None, ax=None, save=None):
 
 
 def programme_composition(adata, state_key: str, *, programme_key: str = "clone_programme",
-                          ax=None, save=None, legend: bool = True):
-    """Stacked bars: fraction of each programme's cells in each cell state."""
-    df = adata.obs[[programme_key, state_key]].dropna()
-    tab = pd.crosstab(df[programme_key], df[state_key])
-    frac = tab.div(tab.sum(axis=1), axis=0)
+                          weight: str = "cells", ax=None, save=None, legend: bool = True):
+    """Stacked bars: share of each cell state in each programme.
+
+    ``weight="cells"`` (default) shows the fraction of the programme's cells; ``weight="clones"`` counts every
+    clone once (see :func:`threadfin.tl.programme_composition`).
+    """
+    from .programmes import programme_composition as _composition
+
+    frac = _composition(adata, state_key, key=programme_key, weight=weight)
     states = list(frac.sum(axis=0).sort_values(ascending=False).index)
     if len(states) > 8:  # fold the tail into "other"
         frac["other"] = frac[states[7:]].sum(axis=1)
@@ -292,7 +297,7 @@ def programme_composition(adata, state_key: str, *, programme_key: str = "clone_
         left += vals
     ax.set_yticks(ypos, [str(i) for i in frac.index])
     ax.set_xlim(0, 1)
-    ax.set_xlabel("fraction of programme cells")
+    ax.set_xlabel("fraction of programme cells" if weight == "cells" else "mean fraction per clone")
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
     if legend:
@@ -363,19 +368,23 @@ def association(table: pd.DataFrame, *, level=None, ax=None, save=None, title: s
 
 
 def memory(res: dict, *, ax=None, save=None):
-    """Clonal memory: how much a clone changes between snapshots, vs random clones.
+    """Clonal memory: how much a clone changes between snapshots, vs other clones.
 
     Bars show the mean noise-corrected squared change of the same clone and of
-    random same-donor clones; the title gives the memory index with its 95% CI.
+    other same-donor clones seen at the same levels; the title gives the memory
+    index with its 95% CI. A noise-corrected change can be negative.
     """
     fig, ax = _ax(ax, figsize=(2.2, 2.0))
     vals = [res["mean_change"], res["mean_change_random"]]
     ax.bar([0, 1], vals, width=0.6, color=[PALETTE[0], OTHER])
-    ax.set_xticks([0, 1], ["same\nclone", "random\nclone"])
+    other = "other\nclone" if res.get("reference", "persistent") == "persistent" else "random\nclone"
+    ax.set_xticks([0, 1], ["same\nclone", other])
+    ax.axhline(0, color=INK, lw=0.5)
     ax.set_ylabel("state change between snapshots")
-    ax.set_ylim(0, max(vals) * 1.25 if max(vals) > 0 else 1)
+    ax.set_ylim(min(0.0, min(vals) * 1.25), max(vals) * 1.25 if max(vals) > 0 else 1)
     lo, hi = res["memory_index_ci"]
-    ax.set_title(f"memory index {res['memory_index']:.2f} [{lo:.2f}, {hi:.2f}]", color=INK)
+    ax.set_title(f"memory index {res['memory_index']:.2f} [{lo:.2f}, {hi:.2f}]" if np.isfinite(lo) and np.isfinite(hi)
+                 else f"memory index {res['memory_index']:.2f} (no interval; not interpretable)", color=INK)
     return _finish(fig, save)
 
 
@@ -427,12 +436,13 @@ def heritability(table: pd.DataFrame, *, highlight: dict | None = None, n_label:
     return _finish(fig, save)
 
 
-def overview(adata, *, state_key: str | None = None, coherence_result: dict | None = None, save=None):
+def overview(adata, *, state_key: str | None = None, coherence_result: dict | None = None,
+             composition_weight: str = "cells", save=None):
     """Four-panel summary of a :func:`threadfin.run` result.
 
     ``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
     ``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
-    ``adata.uns``.
+    ``adata.uns``. ``composition_weight`` is passed to :func:`programme_composition` for panel d.
     """
     set_style()
     fig = plt.figure(figsize=(7.2, 5.2))
@@ -460,8 +470,9 @@ def overview(adata, *, state_key: str | None = None, coherence_result: dict | No
     else:
         stability(adata, ax=ax_c)
         if state_key is not None:
-            programme_composition(adata, state_key, ax=ax_d)
-            ax_d.set_title("programme composition by cell state", color=INK)
+            programme_composition(adata, state_key, weight=composition_weight, ax=ax_d)
+            ax_d.set_title("programme composition by cell state"
+                           + (" (clones weighted equally)" if composition_weight == "clones" else ""), color=INK)
         else:
             ax_d.bar(range(len(summ)), summ["n_clones"], width=0.6, color=PALETTE[0])
             ax_d.set_xticks(range(len(summ)), [str(i) for i in summ.index])

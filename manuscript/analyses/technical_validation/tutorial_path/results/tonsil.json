@@ -1,10 +1,10 @@
 {
  "dataset": "tonsil",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 5.8,
-  "threadfin_run": 64.9,
+  "user_inputs": 5.0,
+  "threadfin_run": 50.1,
   "plot_and_save": 0.8
  },
  "warnings": [
@@ -15,12 +15,6 @@
    "count": 6
   },
   {
-   "category": "ImplicitModificationWarning",
-   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
-   "file": "anndata.py",
-   "count": 1
-  },
-  {
    "category": "ImportWarning",
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
@@ -28,7 +22,7 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.67). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.67). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
    "file": "api.py",
    "count": 1
   }
@@ -40,7 +34,23 @@
  "test": [
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": "state",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 0.71,
+ "gallery_h5ad": "tonsil.h5ad",
  "clones": 11075,
  "clones_ge2": 361,
  "icc": 0.25284805436727426,
@@ -52,6 +62,6 @@
   "n_neighbors": 180,
   "min_dist": 0.95
  },
- "seconds_total": 71.5,
- "peak_rss_gb": 2.54
+ "seconds_total": 55.9,
+ "peak_rss_gb": 2.43
 }

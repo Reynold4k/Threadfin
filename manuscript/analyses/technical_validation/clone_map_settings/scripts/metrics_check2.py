@@ -1,9 +1,10 @@
+from pathlib import Path
 import numpy as np, pandas as pd, sys
 from sklearn.neighbors import NearestNeighbors
 sys.path.insert(0, ".")
 from load_feats import features
 from metrics_check import extent, largest_piece, faith
-SWEEP = "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results/clone_map_sweep"
+SWEEP = str(Path(__file__).resolve().parents[4] / "case_studies" / "results" / "clone_map_sweep")
 ds = sys.argv[1]
 f, s, r, ids = features(ds)
 N = len(f)

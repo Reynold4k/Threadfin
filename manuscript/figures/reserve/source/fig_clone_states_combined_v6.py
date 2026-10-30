@@ -6,6 +6,7 @@ Run with --preview for a quick check or without it for 1200 dpi PNG/PDF exports.
 """
 from __future__ import annotations
 
+import os
 import argparse
 import copy
 import hashlib
@@ -35,9 +36,7 @@ GUT_SHIFT = 215
 GUT_SIZE = 64
 RANDOM_SEED = 20261015
 GATE_COLORS = {"GC": "#d94845", "nonGC": "#2a78d6"}
-METADATA = Path(
-    "/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc/gex_reporter/metadata.csv.gz"
-)
+METADATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse284622_gut_gc" / "gex_reporter" / "metadata.csv.gz"
 
 
 def digest(path):

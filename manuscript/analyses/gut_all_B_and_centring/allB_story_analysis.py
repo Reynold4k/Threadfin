@@ -28,9 +28,8 @@ import pandas as pd
 from scipy import stats
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[3]
+REPO = HERE.parents[2]
 sys.path.insert(0, str(REPO))
-os.environ.setdefault("THREADFIN_DATA", "/data/scratch/projects/punim1236/threadfin_data")
 import threadfin as tf  # noqa: E402
 
 RUN = HERE / "allB_threadfin"

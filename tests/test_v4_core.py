@@ -220,6 +220,8 @@ def test_run_end_to_end(sim, tmp_path):
                         basis="X_pca", test=["true_programme"], n_perm=20, n_boot=6, verbose=False)
     text = result.summary()
     assert "clonal coherence" in text and "programmes" in text
+    assert result.settings["composition_weight"] == "cells"
+    assert result.programmes.shape[0] < 2 or "State composition: share of the programme's cells" in text
     assert "clone_programme" in ad.obs
     fig = result.plot(save=str(tmp_path / "overview.png"))
     assert (tmp_path / "overview.png").exists()
@@ -248,6 +250,77 @@ def test_run_end_to_end(sim, tmp_path):
     ids.attrs.update({"method": "dandelion", "dandelion_version": "0.5.7", "donor_key": "mouse", "identity": 0.85,
                       "receptor": "BCR", "use_light_chain": True, "require_heavy_chain": True})
     assert "Dandelion 0.5.7 (ref. 1) within each donor ('mouse')" in result.methods(ids)
+
+
+def test_programme_composition_counts_cells_or_clones():
+    # P1: clone a (8 cells, all GC) and clone b (2 cells, all ASC); P2: clone c (1 GC, 1 ASC) and d (4 ASC).
+    # One cell without a state and one without a programme are not counted.
+    obs = pd.DataFrame({
+        "clone_id": ["a"] * 9 + ["b"] * 2 + ["c"] * 2 + ["d"] * 4 + ["e"],
+        "clone_programme": ["P1"] * 11 + ["P2"] * 6 + [None],
+        "state": ["GC"] * 8 + [None] + ["ASC"] * 2 + ["GC", "ASC"] + ["ASC"] * 4 + ["GC"],
+    }, index=[f"cell{i}" for i in range(18)])
+    ad = AnnData(np.zeros((18, 1)), obs=obs)
+    cells = tf.tl.programme_composition(ad, "state", key="clone_programme")
+    clones = tf.tl.programme_composition(ad, "state", key="clone_programme", weight="clones", clone_key="clone_id")
+    assert cells.loc["P1", "GC"] == pytest.approx(0.8) and clones.loc["P1", "GC"] == pytest.approx(0.5)
+    assert cells.loc["P2", "GC"] == pytest.approx(1 / 6) and clones.loc["P2", "GC"] == pytest.approx(0.25)
+    assert list(cells.index) == list(clones.index) and list(cells.columns) == list(clones.columns)
+    assert np.allclose(cells.sum(axis=1), 1) and np.allclose(clones.sum(axis=1), 1)
+    # clones of equal size: both weightings give the same composition
+    even = ad[ad.obs["clone_id"].isin(["b", "c"]) & ad.obs["state"].notna()].copy()
+    even.obs["clone_programme"] = "P1"
+    assert np.allclose(tf.tl.programme_composition(even, "state", key="clone_programme"),
+                       tf.tl.programme_composition(even, "state", key="clone_programme", weight="clones",
+                                                   clone_key="clone_id"))
+    with pytest.raises(ValueError, match="weight must be 'cells' or 'clones'"):
+        tf.tl.programme_composition(ad, "state", key="clone_programme", weight="donors")
+
+
+def test_run_can_weight_the_composition_by_clones(sim, tmp_path):
+    ad = sim.copy()
+    with pytest.raises(ValueError, match="composition_weight must be"):
+        tf.run(ad, donor_key="donor", sample_key="context", state_key="true_state", basis="X_pca",
+               composition_weight="donor", verbose=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        result = tf.run(ad, donor_key="donor", sample_key="context", state_key="true_state", basis="X_pca",
+                        test=["true_programme"], composition_weight="clones", map_n_neighbors=15, map_min_dist=0.5,
+                        n_perm=10, n_boot=6,
+                        verbose=False)
+    assert result.settings["composition_weight"] == "clones"
+    pd.testing.assert_frame_equal(result.composition,
+                                  tf.tl.programme_composition(ad, "true_state", weight="clones"))
+    assert not np.allclose(result.composition, tf.tl.programme_composition(ad, "true_state"))
+    assert result.programmes.shape[0] > 1
+    assert "every clone counts once" in result.summary()
+    assert "so that every clone counted once" in result.methods()
+    result.plot(save=str(tmp_path / "overview_clones.png"))
+    assert (tmp_path / "overview_clones.png").exists()
+
+    # the run is recorded in the AnnData, so the result can be rebuilt after saving and reading it
+    import anndata
+
+    record = ad.uns["threadfin"]["run"]
+    assert record["versions"]["threadfin"] == tf.__version__ and record["settings"]["composition_weight"] == "clones"
+    ad.write_h5ad(tmp_path / "result.h5ad")
+    again = tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "result.h5ad"))
+    assert again.summary() == result.summary()
+    assert again.methods() == result.methods()
+    again.plot(save=str(tmp_path / "overview_again.png"))
+
+
+def test_run_warns_once_about_a_sample_level_label(sim):
+    """Both label tests check a label fixed within each sample; run() says so once, not once per test."""
+    ad = sim.copy()
+    ad.obs["gate"] = np.where(ad.obs["context"].astype(str).str.endswith("S0"), "A", "B")
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        result = tf.run(ad, donor_key="donor", sample_key="context", state_key="true_state", basis="X_pca",
+                        test=["gate"], map_n_neighbors=15, map_min_dist=0.5, n_perm=10, n_boot=6, verbose=False)
+    assert result.programmes.shape[0] > 1 and "gate" in result.tests       # both tests ran
+    assert result.tests["gate"].attrs["sample_level"] and result.profile_tests["gate"]["sample_level"]
+    assert sum("'gate' is the same for every cell" in str(w.message) for w in caught) == 1
 
 
 def test_programme_markers_clone_level(sim):

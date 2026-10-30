@@ -39,7 +39,7 @@ from .programs import community_markers, community_score  # noqa: E402
 from .reclustering import reclustering_presets  # noqa: E402
 from .specificity import annotate_specificity, specificity_enrichment  # noqa: E402
 
-__version__ = "4.5.3"
+__version__ = "4.6.0"
 __all__ = [
     "ThreadfinResult",
     "DensityResult",

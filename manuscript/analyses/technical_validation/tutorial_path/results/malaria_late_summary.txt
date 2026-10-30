@@ -1,33 +1,35 @@
 Threadfin summary
 =================
-Cells with a BCR: 59,922 of 72,359, in 58,594 clones (185 clones have >= 3 cells).
+Cells with a BCR: 59,922 of 72,359, in 58,594 clones (1,007 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 45.4% of transcriptional variance within 'donor' strata; shuffled clones explain 1.6% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 2 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 45.4% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 1.6% (p = 0.00498, 200 permutations): an excess of 43.8 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 2 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   4 programmes from 1,007 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   4 programmes from 1,007 profiled clones (every split passed the split test); 1 is stable (bootstrap Jaccard >= 0.75).
+   State composition: share of the programme's cells in each state.
    P1: 337 clones, 741 cells, stability 0.80; GC 95%, PB 3%
    P2: 290 clones, 622 cells, stability 0.41; PB 45%, GC 24%  [unstable - do not interpret]
    P3: 251 clones, 613 cells, stability 0.73; PB 98%, GC 1%
    P4: 129 clones, 359 cells, stability 0.71; B1 73%, Memory 21%
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   cell_state explains clone states: 58.8% of clone-profile variance vs 14.1% for shuffled labels (p = 0.0005, 812 clones).
-   isotype explains clone states: 12.6% of clone-profile variance vs 0.6% for shuffled labels (p = 0.0005, 941 clones).
-   Programme differences (FDR < 0.05):
-   cell_state: P1 depleted for 'Atypical' (0% vs 2% of clones; OR 0.00, FDR 0.0012)
-   cell_state: P1 depleted for 'B1' (0% vs 16% of clones; OR 0.00, FDR 0.0012)
-   cell_state: P1 depleted for 'Follicular Naive' (0% vs 3% of clones; OR 0.00, FDR 0.0012)
-   cell_state: P1 enriched for 'GC' (98% vs 2% of clones; OR 1963.13, FDR 0.0012)
-   cell_state: P1 depleted for 'Immature' (0% vs 3% of clones; OR 0.00, FDR 0.0012)
-   cell_state: P1 depleted for 'Memory' (0% vs 3% of clones; OR 0.00, FDR 0.0012)
-   isotype: P1 enriched for 'IGHG' (96% vs 63% of clones; OR 30.62, FDR 0.002)
-   isotype: P1 depleted for 'IGHM' (4% vs 37% of clones; OR 0.03, FDR 0.002)
-   isotype: P4 enriched for 'IGHM' (97% vs 14% of clones; OR 329.16, FDR 0.002)
-   isotype: P4 depleted for 'IGHG' (2% vs 86% of clones; OR 0.00, FDR 0.002)
-   isotype: P3 depleted for 'IGHM' (14% vs 29% of clones; OR 0.41, FDR 0.0027)
-   isotype: P3 enriched for 'IGHG' (86% vs 71% of clones; OR 2.44, FDR 0.0027)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   cell_state explains clone states: 58.8% of clone-profile variance vs 17.6% for shuffled labels (p = 0.0005, 812 clones; 195 clones without a majority level left out; this is the state annotation itself, a positive control).
+   isotype explains clone states: 12.6% of clone-profile variance vs 1.3% for shuffled labels (p = 0.0005, 941 clones; 66 clones without a majority level left out).
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   cell_state: P1 depleted for 'Follicular Naive' (0% vs 3% of clones; OR < 0.01, FDR 0.0012)
+   cell_state: P1 depleted for 'B1' (0% vs 16% of clones; OR < 0.01, FDR 0.0012)
+   cell_state: P1 depleted for 'Immature' (0% vs 3% of clones; OR < 0.01, FDR 0.0012)
+   cell_state: P1 enriched for 'GC' (98% vs 2% of clones; OR > 100, FDR 0.0012)
+   cell_state: P1 depleted for 'Memory' (0% vs 3% of clones; OR < 0.01, FDR 0.0012)
+   cell_state: P2 depleted for 'B1' (0% vs 12% of clones; OR < 0.01, FDR 0.0012)  [unstable programme]
+   isotype: P1 enriched for 'IGHG' (96% vs 63% of clones; OR 26.83 [12.06, 59.69], FDR 0.002)
+   isotype: P1 depleted for 'IGHM' (4% vs 37% of clones; OR 0.04 [0.02, 0.08], FDR 0.002)
+   isotype: P4 depleted for 'IGHG' (2% vs 86% of clones; OR < 0.01 [< 0.01, 0.02], FDR 0.002)
+   isotype: P4 enriched for 'IGHM' (97% vs 14% of clones; OR > 100 [47.53, > 100], FDR 0.002)
+   isotype: P3 depleted for 'IGHM' (14% vs 29% of clones; OR 0.47 [0.28, 0.78], FDR 0.008)
+   isotype: P3 enriched for 'IGHG' (86% vs 71% of clones; OR 2.14 [1.28, 3.58], FDR 0.008)
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

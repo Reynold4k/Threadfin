@@ -30,7 +30,7 @@ SECTIONS = [
      [(f"tf.pp.{n}", getattr(tf.pp, n)) for n in tf.pp.__all__]),
     ("Analysis steps: tf.tl", "The steps that `tf.run` calls, and further analyses, one by one.",
      [(f"tf.tl.{n}", getattr(tf.tl, n)) for n in sorted(tf.tl.__all__)]),
-    ("Figures: tf.pl", "Every figure takes the AnnData that the analysis wrote to.",
+    ("Figures: tf.pl", "Figures of the analysis take the AnnData it wrote to; figures of test results take the result tables.",
      [(f"tf.pl.{n}", getattr(tf.pl, n)) for n in tf.pl.__all__]),
     ("Simulated data: tf.sim", "Repertoires with a known answer, for testing and teaching.",
      [(f"tf.sim.{n}", getattr(tf.sim, n)) for n in tf.sim.__all__]),

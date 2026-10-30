@@ -9,7 +9,7 @@ in [`../benchmarking/`](../benchmarking/README.md); what did not hold is in
 
 | # | Analysis | Data | One-line result | Location |
 |---|---|---|---|---|
-| 1 | [Export lag](#1-export-lag-how-far-behind-its-germinal-centre-is-a-clones-output) | *Plasmodium*, human lymph node | within a clone, output cells are less mutated than the clone's own GC cells (65 vs 8 clones in Plasmodium; 1,536 vs 821 in human lymph node) | [`export_lag/`](export_lag) |
+| 1 | [Export lag](#1-export-lag-how-far-behind-its-germinal-centre-is-a-clones-output) | *Plasmodium*, human lymph node | the median within-clone mutation gap is negative, although output is more mutated in 8 of 92 mouse and 821 of 2,564 human clones | [`export_lag/`](export_lag) |
 | 2 | [Convergent receptors and the compartments of a clone](#2-convergent-receptors-in-plasmodium-infection) | *Plasmodium* | receptors shared between mice are enriched in plasmablast-dominated clones | [`../case_studies/results/pcas_arm_analyses/`](../case_studies/results/pcas_arm_analyses) |
 | 3 | [States that co-occur within clones](#3-which-states-co-occur-within-a-clone-plasmodium) | *Plasmodium* | GC + plasmablast clones are enriched from day 10 on, depleted before | [`../case_studies/results/clone_state_sharing/`](../case_studies/results/clone_state_sharing) |
 | 4 | [Clonal structure through infection](#4-clonal-structure-through-the-plasmodium-infection) | *Plasmodium* | the share of state explained by clone falls from 0.78 to 0.28 while clones diversify | [`../case_studies/results/malaria/timecourse.csv`](../case_studies/results/malaria/timecourse.csv) |
@@ -18,7 +18,7 @@ in [`../benchmarking/`](../benchmarking/README.md); what did not hold is in
 | 7 | [Division, binding and zone with library controls](#7-model-antigen-germinal-centres-with-library-controls) | GSE287123 | with profiles centred within each mouse × gate library, division still explains clone profiles; bait and zone almost vanish | `../case_studies/results/mouse_gc_deep_dive/` |
 | 8 | [Lineage trees](#8-somatic-hypermutation-lineage-trees) | GSE246382, NP–OVA, RBD | close relatives on the tree do not share state beyond the clone; plasma cells sit nearer the germline than GC cells of their clone | `../case_studies/results/<dataset>/lineage/` |
 | 9 | [Clonal memory across time, tissue and gates](#9-clonal-memory-across-time-points-tissues-and-gates) | 11 datasets | clones keep their state across vaccine visits and between RBD-bait gates, not between lymph node and blood | [`cross_dataset/clonal_memory.csv`](cross_dataset/clonal_memory.csv) |
-| 10 | [Clonally inherited gene sets](#10-clonally-inherited-genes) | 15 datasets | plasma-cell and GC programmes are inherited within clones above expression-matched genes | [`cross_dataset/geneset_heritability.csv`](cross_dataset/geneset_heritability.csv) |
+| 10 | [Genes shared within clones](#10-genes-shared-within-clones) | 15 datasets | gene sets compared with expression-matched genes; the cross-dataset table awaits regeneration with the 4.6.0 test | [`cross_dataset/geneset_heritability.csv`](cross_dataset/geneset_heritability.csv) |
 | 11 | [All clone-level association tests](#11-every-clone-level-association-test) | 15 datasets | 58 annotation tests in one table | [`cross_dataset/label_effects.csv`](cross_dataset/label_effects.csv) |
 | 12 | [Additional datasets](#12-additional-datasets) | 6 datasets | the pipeline on influenza, tonsil, EBV, bone marrow and bait-sorted cells (all six re-run on 2026-10-23 with threadfin 4.4 clone calls) | `../case_studies/results/<dataset>/` |
 | 13 | [Gut: all B cells and centring](gut_all_B_and_centring/README.md) | GSE284622 | the second plasma branch is one mouse; the GC → plasma path survives every centring | [`gut_all_B_and_centring/`](gut_all_B_and_centring) |
@@ -32,34 +32,45 @@ in [`../benchmarking/`](../benchmarking/README.md); what did not hold is in
 
 ## 1. Export lag: how far behind its germinal centre is a clone's output?
 
-**Question.** Somatic hypermutation only accumulates, so within one clone an antibody-secreting cell can carry
-at most the mutation load the clone's GC cells had when it left. Is the output of a clone systematically less
-mutated than its own GC cells, and by how much?
+**Question.** Is the median within-clone mutation gap between output cells and their own GC cells negative,
+and how large is it? The gap can be positive in some clones.
 
 **Data and method.** Class-switched cells of clones captured as both GC B cells and output cells
-(plasmablasts; in the human lymph node also lymph-node plasma cells) at the same visit (and tissue). For each
-clone, `threadfin.tl.export_lag` computes the mean mutation frequency of its output cells minus that of its
-GC cells. The GC compartment's own maturation rate (a Theil–Sen fit on per-visit medians of switched GC cells)
-converts the gap into days. Script: [`export_lag/export_lag_analysis.py`](export_lag/export_lag_analysis.py).
+(ASCs) at the same visit (and tissue). For each clone, `threadfin.tl.export_lag` computes the mean mutation
+frequency of its output cells minus that of its
+GC cells. The estimate is the median gap across clones, with a sign-test interval and a sign test of a zero
+median. The GC compartment's own maturation rate (a Theil–Sen fit on per-visit medians of switched GC cells)
+converts the gap into days. Sen's interval estimates the rate, and the 97.5 % intervals of the gap and rate
+give a days interval with at least 95 % coverage. Donor medians have their own sign-test intervals.
+Script: [`export_lag/export_lag_analysis.py`](export_lag/export_lag_analysis.py).
 
 **Result.** (`export_lag/results/summary.json`, figure `export_lag/figures/export_lag.png`)
 
-| Dataset | Clones in both compartments | Output less / more mutated / equal | Median gap (percentage points) [95 % CI] | GC clock (% per day) [95 % CI] | Median gap in days |
+The intervals below are 95 % intervals; pp means percentage points.
+
+| Dataset | Median gap (pp) | Sign test P | Clock (%/day) | Days | Donors |
 |---|---|---|---|---|---|
-| *Plasmodium*, days 10–42 | 92 | 65 / 8 / 19 | −0.38 [−0.73, −0.37] | 0.101 [0.079, 0.135] | −3.7 |
-| human lymph node | 2,564 | 1,536 / 821 / 207 | −0.19 [−0.19, −0.17] | 0.023 [0.002, 0.030] | −8.1 |
-| *Plasmodium*, days 0–14 | 9 | 4 / 1 / 4 | 0.00 | not estimable | — |
+| *Plasmodium* d10–42 | −0.38 [−0.74, −0.37] | 3e-12 | 0.101 [0.079, 0.135] | −3.7 [−9.3, −2.8] | 13 of 16 mice negative; across donors −0.72 [−1.49, −0.28] |
+| Human lymph node | −0.19 [−0.19, −0.16] | 1e-49 | 0.023 [0.002, 0.030] | −8.1 [−84, −5.4] | 8 of 8 participants negative; across donors −0.18 [−0.28, −0.06] |
 
-Within a clone, the antibody-secreting cells are usually less mutated than the clone's own GC cells sampled at
-the same time, as expected if output cells leave the GC before the GC cells sampled with them have finished
-mutating. In *Plasmodium*, plasmablasts carry no mutations up to day 14 (extrafollicular output) and mutated
-receptors from day 21, when the output tracks the GC with a lag. The human clock's interval nearly reaches
-zero, so the conversion into days is very uncertain there. Numbers from the earlier heavy-chain clone
-definition (122 and 1,946 clones; 4.9 and 10.5 days) are of the same direction and size.
+The 92 *Plasmodium* clones include 65 with less mutated output, 8 with more mutated output and 19 ties.
+The corresponding counts among 2,564 human lymph-node clones are 1,536, 821 and 207. The human interval in
+days is wide because the d28→d35 segment of the clock is almost flat. In *Plasmodium* at days 0–14, nine
+clones had a median gap of 0.00 pp (4 less mutated, 1 more mutated, 4 tied), and the clock was not estimable.
+Numbers from the earlier heavy-chain clone definition (122 and 1,946 clones; 4.9 and 10.5 days) are of the
+same direction and size.
 
-**Caveats.** Descriptive: it does not show that the output cells sampled at a visit descend from the GC cells
-sampled at that visit; converting mutations into days assumes every clone matures at the population's average
-rate; mutation count is not affinity. Not in the manuscript for these reasons.
+A negative gap has four explanations that these data cannot separate:
+
+* output that left the germinal centre before it accumulated further mutations;
+* extrafollicular ASCs of the same clone;
+* affinity-biased export of plasma cells;
+* regulated hypermutation, in which high-affinity cells divide more often with fewer mutations per division.
+
+**Caveats.** The gap does not establish a parent–offspring relation between particular cells. Converting
+mutations into days assumes every clone mutates at the population's average rate and that the rate is
+constant per day. Regulated hypermutation does not support that assumption. Mutation count is not affinity.
+The analysis is not in the manuscript for these reasons.
 
 ## 2. Convergent receptors in *Plasmodium* infection
 
@@ -220,13 +231,18 @@ Clones keep their state across vaccine visits and between sort gates that do not
 (bait, division), but not between compartments that do (lymph node vs blood, where the same clone is a GC B
 cell or plasma cell in one and a circulating cell in the other).
 
-## 10. Clonally inherited genes
+## 10. Genes shared within clones
 
 The clonal ICC of every gene and of marker gene sets, compared with genes of matched expression level
 (`gene_heritability.csv`, `geneset_heritability.csv` per dataset; all datasets in
 `cross_dataset/geneset_heritability.csv`). In the gut cohort, for example, plasma-cell genes (median excess
-ICC 0.099 vs 0.033 for matched genes; FDR 0.0009), GC genes (0.084 vs 0.018) and dark-zone/cycling genes
-(0.076 vs 0.021) are inherited within clones above background, light-zone genes are not (FDR 0.16).
+ICC 0.099 vs 0.034 for matched genes; FDR 0.008), GC genes (0.084 vs 0.020; FDR 0.0005) and dark-zone/cycling
+genes (0.076 vs 0.021; FDR 0.0015) are shared within clones more than matched genes; light-zone genes are not
+(FDR 0.15).
+
+The gene-set test was replaced in Threadfin 4.6.0 by one that allows for co-expressed genes; the cross-dataset
+table (`cross_dataset/geneset_heritability.csv`) was computed with the earlier test and is to be regenerated
+before its numbers are quoted.
 
 ## 11. Every clone-level association test
 

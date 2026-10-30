@@ -2,6 +2,117 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.6.0 — 2026-10-30
+
+Five independent reviews of the package (software, statistics, concept, biology and benchmark), and every tutorial
+followed in new environments, led to this release.
+
+**Unchanged for the same settings:** clone calls, profiles, the clone map, programmes and the coherence ICC.
+
+**Changed, where a review showed a test answering a different question from the one documented:**
+- the null of the coherence test (with `strata_key`);
+- the clonal memory index;
+- the label tests;
+- the gene-set test;
+- the intervals of the export lag.
+
+*What this means for you:*
+- **Several samples per donor.** If your cells come from several samples, libraries, sort gates or tissues per donor and you centre on the donor, set `strata_key` to the sample column (Tutorial 2, section 5). The coherence test then shuffles clone labels within samples, as the manuscript's analyses did.
+- **Clone calls no longer need `PYTHONHASHSEED`.**
+- **Label tests, memory indices and gene-set tests** can give different numbers from 4.5. The previous estimators remain available for comparison (below).
+
+### New
+
+- **Composition counted per clone.** `tf.run(..., composition_weight="clones")` (and `weight=` in `tl.programme_composition` and `pl.programme_composition`) averages each clone's share of cells in each state over the programme's clones, so every clone counts once. The default, `"cells"`, is unchanged. The summary, the Methods paragraph and panel d of the overview say which was used.
+- **`strata_key`** in `tf.run`: the column within which the coherence test shuffles clone labels (default: `sample_key`). Strata stay within the centring groups: when a library pools several donors, labels are shuffled within each donor × library combination, with a warning (also in `tl.gene_heritability`). The summary and panel b name the strata and give the excess of the observed ICC over shuffled clones, in percentage points.
+- **Clone calls are identical in every Python session.** `define_clones_dandelion` calls Dandelion under Python's hash seed 0; when Python was not started with `PYTHONHASHSEED=0`, it does so in a separate process (about 2 s more). `hash_seed=None` (`clone_options={"hash_seed": None}` in `tf.run`) keeps the old behaviour. Without a fixed seed, about one expanded clone in eight had changed its cells between sessions.
+- **The Dandelion extra installs on Python 3.10–3.14.** Importing threadfin restores `matplotlib.cm.get_cmap`, which Dandelion 0.5.7 needs. Up to Python 3.12 the extra keeps the validated matplotlib < 3.9. Clone calls are identical on Python 3.11, 3.13 and 3.14.
+- **The run is recorded in the AnnData** (`adata.uns['threadfin']['run']`): settings, analyses not run and why, package versions and BLAS threads. `ThreadfinResult.from_adata(adata)` rebuilds the result after `write_h5ad`/`read_h5ad`; `summary()`, `methods()` and `plot()` give the same output as before saving.
+
+### Statistics
+
+- **Clonal memory** (`tl.clonal_memory`).
+  - Each clone is now compared with other clones of its donor seen at the same two levels. It was compared with any clone of the later level, so clones found at two levels, a selected group that can share a state, read as having memory: in simulations with selection but no memory, the old index was 0.81 and its test rejected in 100 of 100 data sets, against −0.01 and 5 of 100 now.
+  - Sampling noise is removed with each snapshot's own variance instead of one pooled variance, which put the index above 1 in 77% of data sets with a true index of 0.5.
+  - The p-value permutes the later profiles among the clones of each donor seen at the same two levels.
+  - `reference="all", noise="pooled"` reproduces 4.5. The index is not bounded by 0 and 1, and an index without an interval is reported as not interpretable.
+- **Label tests** (`tl.profile_association`, `tl.association_test`, and `test=` in `tf.run`).
+  - Labels are shuffled among clones of the same donor and of similar size (2, 3–4, 5–9, ≥ 10 cells). Small clones' profiles are pulled towards the average profile, so a label that follows only clone size was called significant in up to 42% of simulated data sets; now 3–8%, with 0–7 points of power lost. `size_strata=False` reproduces 4.5.
+  - A label fixed within each sample (a tissue, sort gate or visit sequenced in its own library) is flagged: the comparison is between samples, not between independent clones. `tf.run` says so once per label.
+  - Two-level labels show each programme effect once.
+  - The numeric programme test is centred within strata.
+  - Levels that look like missing values ("nan", ".") give a warning.
+- **Gene sets** (`tl.geneset_heritability`). The new competitive test on Fisher's z of the clonal ICC has an error term that combines the spread between genes with a clone bootstrap. The Mann–Whitney test treated co-expressed genes as independent (16% false positives with co-expressed null genes; 50–60% when they also shared clonal programmes). It is kept only as the column `pvalue_mw_genes_independent`. `tl.gene_heritability` gains `n_boot` and the column `excess_fisher_z`.
+- **Export lag** (`tl.export_lag`).
+  - It is described as a within-clone mutation gap; its sign varies between clones.
+  - The median gap has a sign-test interval (at least 95% coverage for any distribution, ties included) instead of a bootstrap.
+  - The clock goes through per-time-point medians with Sen's exact interval, as in the manuscript's analysis.
+  - Days come with an interval.
+  - `donor_key` gives per-donor results.
+
+### Fixed
+
+- **A fix suggested by an error message created false clones.** For clone ids shared between donors, the suggested line turned cells without a clone into one clone per donor ("BCP005|nan"). It now keeps missing ids missing, and clone ids that look like missing values give a warning.
+- **`counts_layer=` and `batch_key=` were ignored on a second run** when `obsm['X_threadfin']` already existed. The embedding is now rebuilt when they differ, and the log says which embedding was used.
+- **No programmes, and the wrong reason.** When the programme step could not run (for example with `n_boot` below 5), the summary said there were too few clones; it now gives the actual reason. `n_jobs`, `map_n_neighbors`, `map_min_dist` and `random_state` are checked before any work starts.
+- **The summary contradicted itself** where an odds ratio within donors and the pooled shares point in opposite directions. It now says so, prints the 95% interval of each odds ratio, and bounds odds ratios from sparse tables ("> 100").
+- **Clonal memory paired tissues in alphabetical order without saying so.** It now uses the order of an ordered Categorical, warns when it falls back to alphabetical order, and the summary names the order.
+- **Smaller fixes.**
+  - A per-cell table from `read_bcr` was not recognised as per-cell.
+  - The pre-check of `tf.run` asked for 2 expanded clones although 3 are needed.
+  - Harmony's batch-aware gene selection warned about an AnnData view.
+  - `random_state=None` failed late.
+  - `define_clones_dandelion(donor_key=..., check_contigs=True)` failed on contigs without read counts.
+  - Methods and markers functions now say which layer is missing instead of raising `KeyError: 'log_norm'`.
+
+### Reporting
+
+- **The summary:**
+  - asks "Are cells of one clone more alike than cells of different clones?" and describes the ICC as the share of the variance of cell states (the expression embedding);
+  - counts clones "with two or more cells", the ones profiled;
+  - says that reliability refers to the smoothed profile;
+  - says "every split passed the split test";
+  - flags unstable programmes on the label-test lines;
+  - reports clones left out of a label test for lack of a majority level, and labels that are the state annotation itself (positive controls);
+  - says that programmes are descriptive when coherence is not significant.
+- **Warnings** when no immunoglobulin or TCR genes are recognised (gene names that are not symbols), and when `sample_key` is not given.
+- **Docstrings that disagreed with the code were corrected:** the split test, the reliability weighting of the clone graph, the shrinkage target, the reliability under smoothing, and the clone-map tuner.
+
+### Tests
+
+- **New tests of statistical properties:**
+  - calibration of the coherence, profile-association and association tests under nested nulls;
+  - permutation p-values and BH on hand-worked examples;
+  - variance components against the closed-form ANOVA;
+  - the Mantel–Haenszel odds ratio;
+  - no receptor genes among the highly variable genes;
+  - the smoothing neighbours;
+  - the BCR-file path of `tf.run`;
+  - plots of test results;
+  - the new memory, association, gene-set, export-lag and Dandelion behaviour.
+- **Mutation test.** The independent review planted 25 realistic one-line errors in the statistics. The test suite now detects all 25, against 8 before.
+- **The Dandelion job of continuous integration** runs on Python 3.12, 3.13 and 3.14, without `PYTHONHASHSEED`.
+- **The sdist's tests** skip the checks of files it does not contain.
+
+### Documentation
+
+- README, Methods and Tutorials 1–5 were revised with the reviews:
+  - `strata_key` and when to set it;
+  - composition weighting;
+  - run time and memory measured up to 205,630 cells, with the scope of the million-cell figure;
+  - reproducibility across `n_jobs`, BLAS threads and cell order;
+  - the split test detects any departure from one Gaussian group;
+  - stability is a cell-resampling stability;
+  - marker statistics are descriptive;
+  - an expected-squared-correlation reading of reliability;
+  - ASC wording;
+  - the export lag as a mutation gap, with the alternatives to its interpretation;
+  - genes "shared within clones" instead of "inherited";
+  - corrected and completed shown outputs.
+- **Tutorial 2:** a corrected isotype snippet (productive contigs, the heavy chain with the most UMIs), the scirpy multi-sample loop, and new troubleshooting rows.
+- **Tutorial notebook:** conda-forge only, a complete `environment.yml` block, no seed setting needed, and `requirements-lock.txt` with every package at the version of the published run. A weekly job of continuous integration runs the notebook on the GEO data with the newest allowed dependencies.
+- **The figure gallery:** every figure of the 16 validation datasets (`manuscript/analyses/technical_validation/tutorial_path/figures/`).
+
 ## 4.5.3 — 2026-10-28
 
 A dependency released on 27 October 2026 stopped new installations from running the tutorial notebook and from

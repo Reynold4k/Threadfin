@@ -1,11 +1,11 @@
 {
  "dataset": "ebv",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 44.8,
-  "threadfin_run": 412.8,
-  "plot_and_save": 5.4
+  "user_inputs": 44.6,
+  "threadfin_run": 411.6,
+  "plot_and_save": 5.6
  },
  "warnings": [
   {
@@ -22,9 +22,15 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.62). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.62). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
    "file": "api.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'gfp' is the same for every cell of each 'sample', so this test compares 4 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'gfp', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples with one",
+   "file": "stats.py",
+   "count": 2
   }
  ],
  "error": null,
@@ -35,11 +41,27 @@
   "gfp",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "timepoint",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "timepoint",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 10.84,
+ "gallery_h5ad": "ebv.h5ad",
  "clones": 87396,
  "clones_ge2": 6124,
  "icc": 0.1582933357013237,
- "icc_shuffled": 0.013905491786108892,
+ "icc_shuffled": 0.042893336695508946,
  "p_value": 0.004975124378109453,
  "programmes": 2,
  "skipped": {},
@@ -47,6 +69,6 @@
   "n_neighbors": 65,
   "min_dist": 0.8
  },
- "seconds_total": 463.2,
- "peak_rss_gb": 25.54
+ "seconds_total": 462.1,
+ "peak_rss_gb": 25.53
 }

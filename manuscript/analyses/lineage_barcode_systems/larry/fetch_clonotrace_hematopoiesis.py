@@ -3,6 +3,7 @@
 The expression matrix is author-normalised UMI counts, not raw integer counts.
 No clone, state or day labels are inferred from a published plot.
 """
+import os
 from pathlib import Path
 import concurrent.futures
 import hashlib
@@ -10,7 +11,8 @@ import json
 import subprocess
 
 
-OUT = Path('/data/scratch/projects/punim1236/threadfin_data/gse140802_larry')
+# the downloaded public data, as in case_studies/datasets.py ($THREADFIN_DATA)
+OUT = Path(os.environ.get('THREADFIN_DATA', Path(__file__).resolve().parents[3] / 'case_studies' / 'data')) / 'gse140802_larry'
 GEO = 'https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4185nnn/GSM4185642/suppl/'
 KLEIN = 'https://kleintools.hms.harvard.edu/paper_websites/state_fate2020/'
 NAMES = ['normed_counts.mtx.gz', 'gene_names.txt.gz', 'clone_matrix.mtx.gz',

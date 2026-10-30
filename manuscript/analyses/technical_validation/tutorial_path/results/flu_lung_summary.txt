@@ -1,20 +1,22 @@
 Threadfin summary
 =================
-Cells with a BCR: 2,115 of 4,121, in 1,367 clones (117 clones have >= 3 cells).
+Cells with a BCR: 2,115 of 4,121, in 1,367 clones (204 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 16.2% of transcriptional variance within 'donor' strata; shuffled clones explain 1.8% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 4 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 16.2% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 5.1% (p = 0.00498, 200 permutations): an excess of 11.1 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 4 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   No distinct programmes: the 204 reliable clones differ, but along a continuum rather than in separate groups (split test p = 0.11).
+   No distinct programmes: no split of the 204 profiled clones into separate groups was significant (split test p = 0.11).
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   ha_binding does not significantly explain clone states: 1.7% of clone-profile variance vs 2.0% for shuffled labels (p = 0.53, 151 clones).
-   tissue explains clone states: 26.2% of clone-profile variance vs 0.7% for shuffled labels (p = 0.0005, 194 clones).
-   isotype explains clone states: 5.1% of clone-profile variance vs 1.1% for shuffled labels (p = 0.005, 199 clones).
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   ha_binding does not significantly explain clone states: 1.7% of clone-profile variance vs 1.9% for shuffled labels (p = 0.516, 151 clones; 53 clones without a majority level left out).
+   tissue explains clone states: 26.2% of clone-profile variance vs 1.6% for shuffled labels (p = 0.0005, 194 clones; 10 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 15), not between independent clones.
+   isotype explains clone states: 5.1% of clone-profile variance vs 0.9% for shuffled labels (p = 0.001, 199 clones; 5 clones without a majority level left out).
 
-4. Do clones keep their state over 'tissue'? (clonal memory)
-   28 clones seen at >= 2 levels: memory index -0.10 [-0.32, 0.11], p = 0.93 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
+4. Do clones keep their state over 'tissue'? (clonal memory; levels in the order Lung -> medLN)
+   26 clones seen at >= 2 levels: memory index -0.07 [-0.44, 0.22], p = 0.776 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to another clone of its donor seen at the same levels; sampling noise can put it outside 0-1).
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

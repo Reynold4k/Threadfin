@@ -37,4 +37,4 @@ python atlas_scale.py --plot results
   is standard Scanpy and can be replaced by any embedding of your own (`tf.run(..., basis=...)`).
 
 For the comparison with other tools on real data, see the benchmark
-([`../../../benchmarking/`](../../../benchmarking/README.md), Figures 11 and 12).
+([`../../../benchmarking/`](../../../benchmarking/README.md), Figures 12 and 13).

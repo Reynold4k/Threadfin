@@ -6,6 +6,7 @@ Run: python map_gc_derived_to_scrna_umap.py [--metadata PATH] [--out PATH] [--dp
 """
 from __future__ import annotations
 
+import os
 import argparse
 import hashlib
 import json
@@ -27,10 +28,9 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "source"))
 import figstyle as fs
 
-CASE = HERE.parents[3] / "case_studies" / "results" / "gut_gc_reporter"
-DEFAULT_METADATA = Path(
-    "/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc/gex_reporter/metadata.csv.gz"
-)
+CASE = HERE.parents[1] / "case_studies" / "results" / "gut_gc_reporter"
+DEFAULT_METADATA = (Path(os.environ.get("THREADFIN_DATA", CASE.parents[1] / "data"))
+                    / "gse284622_gut_gc" / "gex_reporter" / "metadata.csv.gz")
 MISSING = "#d5d5d5"
 GATE_COLORS = {"GC": "#d94845", "nonGC": "#2a78d6"}
 

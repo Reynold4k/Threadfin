@@ -22,7 +22,7 @@ import pandas as pd
 import clone_coords as cc
 from figstyle import (BLUE, INK, INK2, MUTED, ORANGE, RED, VIOLET, new_page, panel, save)
 
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
+ROOT = Path(__file__).resolve().parents[5]          # the folder that holds the repository clone
 CASE = ROOT / "Threadfin" / "manuscript" / "case_studies" / "results"
 SR = ROOT / "story_review_2026-10-12"
 # non-B-cell comparison results moved out of the package repository on 2026-10-18

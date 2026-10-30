@@ -26,7 +26,7 @@ import pandas as pd
 from fig2_gc_overview import COL, COMPARTMENT, KEY, ORDER, PROG_COL, state_col
 from figstyle import INK, INK2, MUTED, new_page, panel, save
 
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
+ROOT = Path(__file__).resolve().parents[5]          # the folder that holds the repository clone
 CASE = ROOT / "Threadfin" / "manuscript" / "case_studies" / "results"
 
 DATASETS = [

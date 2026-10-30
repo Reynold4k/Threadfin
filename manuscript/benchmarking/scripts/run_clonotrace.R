@@ -8,8 +8,9 @@
 #      column mass and renormalised
 #   4. clone distances on the cell graph, nearest-neighbour approximation (the vignette default for
 #      large data); `revised = TRUE` (the 1.2.1 default) blends the distance with the clone-centroid
-#      distance, and the unrevised (published) distance is returned alongside in `dis_clonotrace`;
-#      clones whose cells all fall below the 0.1 probability threshold are removed and counted
+#      distance, and the unrevised (published) distance is returned alongside in `dis_clonotrace`
+#      (the vignette passes `revised = FALSE` to reproduce its published figure); clones whose cells all
+#      fall below the 0.1 probability threshold are removed and counted
 #   5. Leiden clustering + UMAP of clones (k = 20, resolution 0.5), as in the vignette
 #
 # Steps 2 and 4 run on `workers` parallel R sessions (future::plan(multisession)), as the vignette sets the
@@ -18,7 +19,16 @@
 # distance is deterministic) but their clone-distance times are single-process. run.json records
 # `distance_workers` for every run made with this version.
 #
-# Usage: Rscript run_clonotrace.R <dataset> <variant> <min_size> <workers> <inputs_dir> <out_dir> [graph_k ladder]
+# With `exact` as the 8th argument, step 4 uses the vignette's exact optimal-transport distance instead
+# (`exact = TRUE`, disk backend, `force_exact = TRUE`, checkpoints in <graph dir>/exact_ot_checkpoints; still
+# `revised = TRUE`, the unrevised exact distance in `dis_clonotrace`). This is the call of the exact-OT runs of
+# 2026-10-25 (its arguments are stored in each run's graph_k*/clone_graph_dis_exact.rds); run.json then
+# records "distance": "exact OT".
+#
+# Note: the memory and CPU that /usr/bin/time reports for this script cover the main R session only; the
+# parallel sessions are not waited-for children of it, so whole-job peaks come from the scheduler (sacct).
+#
+# Usage: Rscript run_clonotrace.R <dataset> <variant> <min_size> <workers> <inputs_dir> <out_dir> [graph_k ladder] [exact]
 #   graph_k ladder: comma-separated graph sizes to try for clone distances, default "10,30,50"
 
 suppressPackageStartupMessages({
@@ -29,6 +39,7 @@ args <- commandArgs(trailingOnly = TRUE)
 dataset <- args[1]; variant <- args[2]; min_size <- as.integer(args[3]); workers <- as.integer(args[4])
 inputs <- file.path(args[5], dataset); out <- args[6]
 ladder <- if (length(args) >= 7) as.integer(strsplit(args[7], ",")[[1]]) else c(10L, 30L, 50L)
+exact_ot <- length(args) >= 8 && identical(args[8], "exact")
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 options(future.globals.maxSize = 64 * 1024^3)
 set.seed(0)
@@ -139,8 +150,15 @@ result <- tryCatch({
   # which is what is done here (30, then 50 by default; a longer ladder can be given), and recorded.
   dis <- NULL; attempts <- character()
   for (gk in ladder) {
-    attempt <- tryCatch(clone_disance(emb, prob, outpath = file.path(out, sprintf("graph_k%d", gk)), graph_k = gk,
-                                      exact = FALSE, revised = TRUE, verbose = FALSE), error = function(e) e)
+    gdir <- file.path(out, sprintf("graph_k%d", gk))
+    attempt <- if (exact_ot) {
+      tryCatch(clone_disance(emb, prob, outpath = gdir, graph_k = gk, exact = TRUE, force_exact = TRUE,
+                             revised = TRUE, checkpoint_dir = file.path(gdir, "exact_ot_checkpoints"),
+                             verbose = FALSE), error = function(e) e)
+    } else {
+      tryCatch(clone_disance(emb, prob, outpath = gdir, graph_k = gk,
+                             exact = FALSE, revised = TRUE, verbose = FALSE), error = function(e) e)
+    }
     if (!inherits(attempt, "error")) { dis <- attempt; graph_k_used <<- gk; break }
     attempts <- c(attempts, sprintf("graph_k=%d: %s", gk, conditionMessage(attempt)))
     if (!grepl("disconnected", conditionMessage(attempt))) stop(conditionMessage(attempt))
@@ -174,12 +192,13 @@ unlink(file.path(out, "tmp"), recursive = TRUE)
 if (inherits(result, "error")) {
   write_status("failed", list(reason = conditionMessage(result), n_clones_eligible = length(expanded)))
 } else {
-  write_status("completed", list(n_clones_eligible = result$n_eligible, n_clones_lost_after_filtering = result$n_lost,
-                                 n_clones_lost_below_prob_thresh = result$n_lost_thresh,
-                                 n_clones = result$n_out, n_cells_input = result$n_cells,
-                                 n_cells_after_deviance_filter = result$n_cells_kept,
-                                 revised_mean_weight = result$mean_weight,
-                                 graph_k_used = graph_k_used, distance_workers = workers,
-                                 graph_k_failed_attempts = if (length(graph_attempts)) graph_attempts else "none",
-                                 total_seconds = round(as.numeric(difftime(Sys.time(), t_all, units = "secs")), 3)))
+  write_status("completed", c(list(n_clones_eligible = result$n_eligible, n_clones_lost_after_filtering = result$n_lost,
+                                   n_clones_lost_below_prob_thresh = result$n_lost_thresh,
+                                   n_clones = result$n_out, n_cells_input = result$n_cells,
+                                   n_cells_after_deviance_filter = result$n_cells_kept,
+                                   revised_mean_weight = result$mean_weight,
+                                   graph_k_used = graph_k_used, distance_workers = workers),
+                              if (exact_ot) list(distance = "exact OT"),
+                              list(graph_k_failed_attempts = if (length(graph_attempts)) graph_attempts else "none",
+                                   total_seconds = round(as.numeric(difftime(Sys.time(), t_all, units = "secs")), 3))))
 }

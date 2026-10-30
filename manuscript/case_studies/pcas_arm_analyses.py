@@ -27,6 +27,7 @@ Output: case_studies/results/pcas_arm_analyses/
 """
 from __future__ import annotations
 
+import os
 import argparse
 import json
 from pathlib import Path
@@ -36,7 +37,7 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "data"))
 CACHE = ROOT / "internal_validation" / "algorithm_revision" / "embedding_cache"
 CLONES = HERE / "results" / "dandelion_clones"
 OUT = HERE / "results" / "pcas_arm_analyses"

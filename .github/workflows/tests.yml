@@ -64,18 +64,28 @@ jobs:
         run: .venv-oldest/bin/python examples/tutorial.py
 
   dandelion:
-    # the README's main path: clones called from receptor contigs with Dandelion, and scirpy input
+    # the README's main path: clones called from receptor contigs with Dandelion, and scirpy input; tests run
+    # without PYTHONHASHSEED, so the default path users get (clone calls in a child process with seed 0) is tested
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install with Dandelion and scirpy
-        run: pip install -e ".[test,dandelion]" scirpy
-      - name: Dandelion and scirpy are importable (otherwise their tests would be skipped)
-        # the installed versions; dandelion.__version__ asks setuptools-scm first and reports the checkout's git state
-        run: python -c "import dandelion, scirpy; from importlib.metadata import version; print('sc-dandelion', version('sc-dandelion'), 'scirpy', version('scirpy'))"
+          python-version: ${{ matrix.python-version }}
+      - name: Install with Dandelion, and scirpy where it installs
+        run: |
+          pip install -e ".[test,dandelion]"
+          pip install scirpy || echo "::warning::scirpy could not be installed on Python ${{ matrix.python-version }}"
+      - name: Dandelion is importable (otherwise its tests would be skipped)
+        # the installed version; dandelion.__version__ asks setuptools-scm first and reports the checkout's git state
+        run: python -c "import threadfin, dandelion; from importlib.metadata import version; print('sc-dandelion', version('sc-dandelion'), 'matplotlib', version('matplotlib'))"
+      - name: scirpy is importable on Python 3.12 (otherwise its test would be skipped)
+        if: matrix.python-version == '3.12'
+        run: python -c "import scirpy; from importlib.metadata import version; print('scirpy', version('scirpy'))"
       - name: Run tests
         run: python -m pytest tests/ -q -rs
       - name: Tutorial on simulated data

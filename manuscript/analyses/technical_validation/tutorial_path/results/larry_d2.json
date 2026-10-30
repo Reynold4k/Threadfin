@@ -1,11 +1,11 @@
 {
  "dataset": "larry_d2",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
   "user_inputs": 0.0,
-  "threadfin_run": 67.9,
-  "plot_and_save": 0.8
+  "threadfin_run": 54.4,
+  "plot_and_save": 0.5
  },
  "warnings": [
   {
@@ -18,7 +18,23 @@
  "error": null,
  "cells": 28249,
  "test": [],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "sample",
+  "strata_key": "sample",
+  "state_key": "state",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_published",
+  "representation": "kernel",
+  "receptor": null,
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 0.01,
+ "gallery_h5ad": "larry_d2.h5ad",
  "clones": 2672,
  "clones_ge2": 1401,
  "icc": 0.6800159008303752,
@@ -30,6 +46,6 @@
   "n_neighbors": 100,
   "min_dist": 0.8
  },
- "seconds_total": 68.8,
- "peak_rss_gb": 0.66
+ "seconds_total": 54.9,
+ "peak_rss_gb": 0.62
 }

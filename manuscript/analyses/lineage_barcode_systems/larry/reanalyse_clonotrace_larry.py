@@ -27,7 +27,8 @@ import threadfin as tf
 from threadfin.profiles import build_model, variance_components, median_bandwidth, _random_fourier_features
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse140802_larry")
+# the downloaded public data, as in case_studies/datasets.py ($THREADFIN_DATA)
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse140802_larry"
 OUT = ROOT/"case_studies/results/clonotrace_larry"
 CACHE = ROOT.parent/"internal_validation/paper_673503/larry"
 STATES = ["Monocyte", "Neutrophil", "Erythroid", "Megakaryocyte", "Basophil", "Eosinophil",

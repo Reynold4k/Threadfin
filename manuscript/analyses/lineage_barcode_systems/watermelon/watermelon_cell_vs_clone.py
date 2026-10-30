@@ -10,6 +10,7 @@ Outputs: case_studies/results/watermelon/cells_umap.csv.gz, cell_vs_clone_visibi
 """
 from __future__ import annotations
 
+import os
 import json
 import time
 from pathlib import Path
@@ -22,7 +23,7 @@ import scipy.sparse as sp
 import threadfin as tf
 
 HERE = Path(__file__).resolve().parent
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse150949_watermelon")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse150949_watermelon"
 OUT = HERE / "results" / "watermelon"
 
 

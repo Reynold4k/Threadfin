@@ -1,45 +1,46 @@
 Threadfin summary
 =================
-Cells with a BCR: 67,895 of 115,144, in 55,621 clones (2,033 clones have >= 3 cells).
+Cells with a BCR: 67,895 of 115,144, in 55,621 clones (6,583 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 42.7% of transcriptional variance within 'donor' strata; shuffled clones explain 4.6% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 2 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 42.7% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 24.5% (p = 0.00498, 200 permutations): an excess of 18.2 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 2 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   3 programmes from 6,583 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   3 programmes from 6,583 profiled clones (every split passed the split test); 1 is stable (bootstrap Jaccard >= 0.75).
    P1: 2,213 clones, 6,070 cells, stability 0.34  [unstable - do not interpret]
    P2: 2,203 clones, 6,808 cells, stability 0.80
    P3: 2,167 clones, 5,979 cells, stability 0.64
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   sorted_as explains clone states: 60.6% of clone-profile variance vs 2.0% for shuffled labels (p = 0.0005, 5709 clones).
-   tissue explains clone states: 33.6% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 5592 clones).
-   antigen explains clone states: 0.6% of clone-profile variance vs 0.2% for shuffled labels (p = 0.0005, 6581 clones).
-   isotype explains clone states: 4.0% of clone-profile variance vs 0.3% for shuffled labels (p = 0.0005, 6266 clones).
-   Programme differences (FDR < 0.05):
-   sorted_as: P1 depleted for 'memory B cells' (16% vs 45% of clones; OR 0.65, FDR 0.00062)
-   sorted_as: P1 enriched for 'plasma cells' (21% vs 39% of clones; OR 1.53, FDR 0.00062)
-   sorted_as: P1 depleted for 'plasma cells and memory B cells' (47% vs 11% of clones; OR 0.40, FDR 0.00062)
-   sorted_as: P1 enriched for 'plasmablasts and memory B cells' (10% vs 4% of clones; OR 2.53, FDR 0.00062)
-   sorted_as: P2 enriched for 'memory B cells' (89% vs 6% of clones; OR inf, FDR 0.00062)
-   sorted_as: P2 depleted for 'plasma cells' (0% vs 56% of clones; OR 0.00, FDR 0.00062)
-   tissue: P1 depleted for 'blood' (14% vs 31% of clones; OR 0.47, FDR 0.0005)
-   tissue: P1 enriched for 'bone marrow' (86% vs 69% of clones; OR 2.11, FDR 0.0005)
-   tissue: P2 enriched for 'blood' (70% vs 6% of clones; OR 63.97, FDR 0.0005)
-   tissue: P2 depleted for 'bone marrow' (30% vs 94% of clones; OR 0.02, FDR 0.0005)
-   tissue: P3 depleted for 'blood' (0% vs 42% of clones; OR 0.00, FDR 0.0005)
-   tissue: P3 enriched for 'bone marrow' (100% vs 58% of clones; OR 1361.28, FDR 0.0005)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   sorted_as explains clone states: 60.6% of clone-profile variance vs 2.1% for shuffled labels (p = 0.0005, 5709 clones; 874 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 13), not between independent clones.
+   tissue explains clone states: 33.6% of clone-profile variance vs 0.2% for shuffled labels (p = 0.0005, 5592 clones; 991 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 13), not between independent clones.
+   antigen explains clone states: 0.6% of clone-profile variance vs 0.2% for shuffled labels (p = 0.0005, 6581 clones; 2 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 13), not between independent clones.
+   isotype explains clone states: 4.0% of clone-profile variance vs 0.2% for shuffled labels (p = 0.0005, 6266 clones; 317 clones without a majority level left out).
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   sorted_as: P1 depleted for 'plasma cells and memory B cells' (47% vs 11% of clones; OR 0.41 [0.30, 0.58], FDR 0.00075; the pooled shares point the other way, because donors or clone sizes differ)  [unstable programme]
+   sorted_as: P1 enriched for 'plasmablasts and memory B cells' (10% vs 4% of clones; OR 2.48 [1.77, 3.48], FDR 0.00075)  [unstable programme]
+   sorted_as: P2 enriched for 'memory B cells' (89% vs 6% of clones; OR > 100, FDR 0.00075)
+   sorted_as: P2 depleted for 'plasma cells' (0% vs 56% of clones; OR < 0.01, FDR 0.00075)
+   sorted_as: P2 depleted for 'plasma cells and memory B cells' (2% vs 31% of clones; OR 0.04 [0.02, 0.06], FDR 0.00075)
+   sorted_as: P2 enriched for 'plasmablasts and memory B cells' (7% vs 4% of clones; OR 53.19 [22.33, > 100], FDR 0.00075)
+   tissue: P1 depleted for 'blood' (14% vs 31% of clones; OR 0.47 [0.39, 0.55], FDR 0.0005)  [unstable programme]
+   tissue: P2 enriched for 'blood' (70% vs 6% of clones; OR 74.55 [57.82, 96.13], FDR 0.0005)
+   tissue: P3 depleted for 'blood' (0% vs 42% of clones; OR < 0.01 [< 0.01, < 0.01], FDR 0.0005)
    antigen: no significant programme effect.
-   isotype: P1 depleted for 'IGHD' (1% vs 2% of clones; OR 0.08, FDR 0.00094)
-   isotype: P1 enriched for 'IGHG' (48% vs 38% of clones; OR 1.35, FDR 0.00094)
-   isotype: P1 depleted for 'IGHM' (5% vs 6% of clones; OR 0.45, FDR 0.00094)
-   isotype: P2 depleted for 'IGHD' (0% vs 2% of clones; OR 0.00, FDR 0.00094)
-   isotype: P2 depleted for 'IGHG' (34% vs 45% of clones; OR 0.69, FDR 0.00094)
-   isotype: P2 enriched for 'IGHM' (9% vs 4% of clones; OR 8.73, FDR 0.00094)
+   isotype: P1 depleted for 'IGHD' (1% vs 2% of clones; OR 0.08 [0.03, 0.25], FDR 0.00094)  [unstable programme]
+   isotype: P1 enriched for 'IGHG' (48% vs 38% of clones; OR 1.34 [1.19, 1.51], FDR 0.00094)  [unstable programme]
+   isotype: P1 depleted for 'IGHM' (5% vs 6% of clones; OR 0.46 [0.35, 0.61], FDR 0.00094)  [unstable programme]
+   isotype: P2 depleted for 'IGHD' (0% vs 2% of clones; OR < 0.01, FDR 0.00094)
+   isotype: P2 depleted for 'IGHG' (34% vs 45% of clones; OR 0.68 [0.61, 0.77], FDR 0.00094)
+   isotype: P2 enriched for 'IGHM' (9% vs 4% of clones; OR 8.14 [6.09, 10.89], FDR 0.00094)
 
-4. Do clones keep their state over 'tissue'? (clonal memory)
-   1604 clones seen at >= 2 levels: memory index 0.29 [0.26, 0.33], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
-   Same programme at the next level: 43% of clones vs 25% expected for random clones.
+4. Do clones keep their state over 'tissue'? (clonal memory; levels in the order blood -> bone marrow)
+   1604 clones seen at >= 2 levels: memory index 0.18 [0.13, 0.23], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to another clone of its donor seen at the same levels; sampling noise can put it outside 0-1).
+   Same programme at the next level: 43% of clones vs 42% expected for other clones seen at the same levels.
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

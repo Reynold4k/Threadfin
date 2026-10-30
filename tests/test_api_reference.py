@@ -3,7 +3,11 @@
 import importlib.util
 from pathlib import Path
 
+import pytest
+
 DOCS = Path(__file__).resolve().parents[1] / "docs"
+if not (DOCS / "make_api_reference.py").exists():  # the sdist ships the tests but not docs/
+    pytest.skip("docs/ is not part of this copy of Threadfin", allow_module_level=True)
 
 
 def test_api_reference_is_current():

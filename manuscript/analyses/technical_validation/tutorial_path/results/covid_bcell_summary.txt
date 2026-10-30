@@ -1,19 +1,20 @@
 Threadfin summary
 =================
-Cells with a BCR: 39,503 of 61,423, in 38,059 clones (195 clones have >= 3 cells).
+Cells with a BCR: 39,503 of 61,423, in 38,059 clones (588 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 40.0% of transcriptional variance within 'donor' strata; shuffled clones explain 4.6% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 2 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 40.0% of the variance of cell states (the expression embedding); with clone labels shuffled within 'donor x sample', 5.2% (p = 0.00498, 200 permutations): an excess of 34.8 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 2 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   No distinct programmes: the 588 reliable clones differ, but along a continuum rather than in separate groups (split test p = 0.084).
+   No distinct programmes: no split of the 588 profiled clones into separate groups was significant (split test p = 0.084).
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   antigen_call explains clone states: 6.8% of clone-profile variance vs 3.9% for shuffled labels (p = 0.0005, 484 clones).
-   isotype explains clone states: 10.7% of clone-profile variance vs 2.7% for shuffled labels (p = 0.0005, 510 clones).
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   antigen_call explains clone states: 6.8% of clone-profile variance vs 4.2% for shuffled labels (p = 0.0005, 484 clones; 104 clones without a majority level left out).
+   isotype explains clone states: 10.7% of clone-profile variance vs 3.7% for shuffled labels (p = 0.0005, 510 clones; 78 clones without a majority level left out).
 
-4. Do clones keep their state over 'visit'? (clonal memory)
-   13 clones seen at >= 2 levels: memory index 1.21 [nan, nan], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
+4. Do clones keep their state over 'visit'? (clonal memory; levels in the order v1 -> v2)
+   13 clones seen at >= 2 levels: memory index not estimable (too few clones for an interval), p = 0.00399.
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

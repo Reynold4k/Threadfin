@@ -19,6 +19,7 @@ Output: case_studies/results/dandelion_clones/<dataset>.csv  (cell, clone_id)  +
 """
 from __future__ import annotations
 
+import os
 import argparse
 import glob
 import json
@@ -27,8 +28,8 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data")
+ROOT = Path(__file__).resolve().parents[3]          # the folder that holds the repository clone
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "data"))
 CACHE = ROOT / "internal_validation" / "algorithm_revision" / "embedding_cache"
 OUT = ROOT / "Threadfin" / "manuscript" / "case_studies" / "results" / "dandelion_clones"
 

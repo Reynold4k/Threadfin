@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 import numpy as np
 import pandas as pd
 import scipy.sparse as sp
@@ -158,6 +160,38 @@ def permute_within(labels: np.ndarray, strata: np.ndarray | None, rng: np.random
         if idx.size > 1:
             out[idx] = labels[rng.permutation(idx)]
     return out
+
+
+def nested_strata(obs: pd.DataFrame, strata_key: str | None,
+                  context_key: str | None) -> tuple[np.ndarray | None, str | None]:
+    """Permutation strata from ``strata_key``, kept within the ``context_key`` groups.
+
+    Cells are centred within their ``context_key`` group (usually the donor) and a clone lies within one
+    donor, so clone labels are never exchanged between those groups. When a ``strata_key`` group holds cells
+    of more than one ``context_key`` group (a library that pools several donors, for example), the strata
+    become the ``context_key`` x ``strata_key`` combinations, with a warning; otherwise the codes of
+    ``strata_key`` are returned unchanged. Returns the integer codes (``None`` without strata) and the name
+    to report.
+    """
+    if strata_key is None:
+        return None, None
+    strata = codes(obs[strata_key])[0]
+    if context_key is None or context_key == strata_key:
+        return strata, strata_key
+    ctx = codes(obs[context_key])[0]
+    ok = (strata >= 0) & (ctx >= 0)
+    per_stratum = pd.Series(ctx[ok]).groupby(strata[ok]).nunique()
+    crossing = int((per_stratum > 1).sum())
+    if not crossing:
+        return strata, strata_key
+    warnings.warn(
+        f"{crossing} of {per_stratum.size} '{strata_key}' groups contain cells of more than one '{context_key}' "
+        f"(for example libraries that pool several donors). Clone labels are shuffled within each "
+        f"'{context_key}' x '{strata_key}' combination, so they never move between '{context_key}' groups.",
+        stacklevel=3)
+    combined = np.full(strata.size, -1, dtype=np.int64)
+    combined[ok] = np.unique(ctx[ok] * (int(strata.max()) + 1) + strata[ok], return_inverse=True)[1].ravel()
+    return combined, f"{context_key} x {strata_key}"
 
 
 def bh_fdr(p) -> np.ndarray:

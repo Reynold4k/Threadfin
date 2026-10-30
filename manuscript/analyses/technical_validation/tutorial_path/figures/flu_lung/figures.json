@@ -1,0 +1,193 @@
+{
+ "dataset": "flu_lung",
+ "name": "GSE317692 influenza lung",
+ "threadfin_run": "4.6.0",
+ "threadfin_drawn": "4.6.0",
+ "record": {
+  "cells": 4121,
+  "clones_ge2": 204,
+  "icc": 0.16163318219793016,
+  "icc_shuffled": 0.051085570574239195,
+  "p_value": 0.004975124378109453,
+  "programmes": 1,
+  "test": [
+   "ha_binding",
+   "tissue",
+   "isotype"
+  ],
+  "skipped": {}
+ },
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "tissue",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
+ "figures": [
+  {
+   "name": "overview",
+   "file": "overview.png",
+   "title": "Overview (`result.plot()`)",
+   "shows": "The figure that `result.plot()` saves: (a) clonal programmes on the clone map, (b) clonal coherence, (c) programme stability, (d) programme sizes.",
+   "dpi": 300,
+   "bytes": 138354,
+   "width": 2204,
+   "height": 1438,
+   "seconds": 0.7
+  },
+  {
+   "name": "coherence",
+   "file": "coherence.png",
+   "title": "Clonal coherence",
+   "shows": "Share of transcriptional variance explained by clone identity (clonal ICC), observed and with clone labels shuffled within each `sample` (bar: mean of 200 permutations; whisker: their central 95 %).",
+   "dpi": 300,
+   "bytes": 34291,
+   "width": 664,
+   "height": 668,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_clone_size",
+   "file": "clone_map_clone_size.png",
+   "title": "Clone map: clone size",
+   "shows": "The clone map coloured by the number of cells of each clone.",
+   "dpi": 300,
+   "bytes": 63656,
+   "width": 908,
+   "height": 770,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_reliability",
+   "file": "clone_map_reliability.png",
+   "title": "Clone map: profile reliability",
+   "shows": "The clone map coloured by the reliability of each clone's profile (0 to 1; it grows with the number of cells sampled from the clone).",
+   "dpi": 300,
+   "bytes": 68095,
+   "width": 916,
+   "height": 770,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_donor",
+   "file": "clone_map_donor.png",
+   "title": "Clone map: donor",
+   "shows": "The clone map coloured by donor, one panel per donor, every other clone in grey.",
+   "dpi": 300,
+   "bytes": 184954,
+   "width": 1657,
+   "height": 1034,
+   "seconds": 0.6
+  },
+  {
+   "name": "clone_map_ha_binding",
+   "file": "clone_map_ha_binding.png",
+   "title": "Clone map: ha_binding",
+   "shows": "The clone map coloured by `ha_binding`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 108801,
+   "width": 1657,
+   "height": 578,
+   "seconds": 0.3
+  },
+  {
+   "name": "clone_map_tissue",
+   "file": "clone_map_tissue.png",
+   "title": "Clone map: tissue",
+   "shows": "The clone map coloured by `tissue`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 66235,
+   "width": 843,
+   "height": 578,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_isotype",
+   "file": "clone_map_isotype.png",
+   "title": "Clone map: isotype",
+   "shows": "The clone map coloured by `isotype`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 86921,
+   "width": 1250,
+   "height": 578,
+   "seconds": 0.2
+  },
+  {
+   "name": "label_effects",
+   "file": "label_effects.png",
+   "title": "Label effects",
+   "shows": "For each tested label, the share of the variance between clone profiles that it explains (blue) and the same with the label shuffled among clones of the same donor and of similar size (grey), with the permutation P value.",
+   "dpi": 300,
+   "bytes": 33800,
+   "width": 1408,
+   "height": 624,
+   "seconds": 0.2
+  },
+  {
+   "name": "memory_tissue",
+   "file": "memory_tissue.png",
+   "title": "Clonal memory over tissue",
+   "shows": "How much a clone's profile changes between levels of `tissue`, against other clones of the same donor seen at the same two levels; the title gives the memory index with its 95 % CI.",
+   "dpi": 300,
+   "bytes": 26589,
+   "width": 649,
+   "height": 622,
+   "seconds": 0.1
+  },
+  {
+   "name": "heritability",
+   "file": "heritability.png",
+   "title": "Gene heritability",
+   "shows": "Clonal ICC of every gene expressed in at least 5 % of the cells of clones with two or more cells (receptor genes excluded), by rank; the 12 highest are named (`tl.gene_heritability` with its defaults).",
+   "dpi": 300,
+   "bytes": 75616,
+   "width": 968,
+   "height": 730,
+   "seconds": 0.4
+  },
+  {
+   "name": "cells_ha_binding",
+   "file": "cells_ha_binding.png",
+   "title": "Cells: ha_binding",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `ha_binding`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 157640,
+   "width": 2028,
+   "height": 562,
+   "seconds": 0.5
+  },
+  {
+   "name": "cells_tissue",
+   "file": "cells_tissue.png",
+   "title": "Cells: tissue",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `tissue`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 57455,
+   "width": 891,
+   "height": 562,
+   "seconds": 0.2
+  },
+  {
+   "name": "cells_isotype",
+   "file": "cells_isotype.png",
+   "title": "Cells: isotype",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `isotype`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 102841,
+   "width": 2031,
+   "height": 562,
+   "seconds": 0.6
+  }
+ ],
+ "not_drawn": [],
+ "seconds": 5.5
+}

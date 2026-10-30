@@ -1,127 +1,166 @@
 row,column,verdict,shown,detail,n,p
-Threadfin,Share of clones it describes,ref,100 %,,11.0,
-Threadfin,Keeps two-cell clones,ref,100 %,,11.0,
-Threadfin,Datasets it could analyse,ref,11 of 11,,11.0,
-Threadfin,Predicts measured clone traits,ref,reference,,,
-Threadfin,… when traits come from other cells,ref,reference,,,
-Threadfin,Recognises a clone from other cells,ref,11 %,,,
-Threadfin,Links day-4 clones to day 6,ref,0.030,,,
-Threadfin,Finds planted clone groups,ref,0.75,,,
-Threadfin,Tells mixed from in-between clones,ref,0.89,,,
-Threadfin,Run time,ref,3.1 s (median),,,
-Threadfin,Peak memory,ref,0.5 GB (median),,,
-Threadfin,Gain from 16 CPU cores,ref,2.0× faster,,,
-Threadfin,Slow-down as data grow,ref,20× time for 10× clones,,,
-Threadfin,Runs that ended with- out help,ref,77 of 77,,,
+"Threadfin (donor as context, as in the case studies)",Share of clones it describes,ref,100 %,,11.0,
+"Threadfin (donor as context, as in the case studies)",Keeps two-cell clones,ref,100 %,,11.0,
+"Threadfin (donor as context, as in the case studies)",Datasets it could analyse,ref,11 of 11,,11.0,
+"Threadfin (donor as context, as in the case studies)",Predicts measured clone traits,ref,reference,,,
+"Threadfin (donor as context, as in the case studies)",… when traits come from other cells,ref,reference,,,
+"Threadfin (donor as context, as in the case studies)",Recognises a clone from other cells,ref,11 %,,,
+"Threadfin (donor as context, as in the case studies)",Links day-4 clones to day 6,ref,0.030,,,
+"Threadfin (donor as context, as in the case studies)",Finds planted clone groups,ref,0.72,,,
+"Threadfin (donor as context, as in the case studies)",Tells mixed from in-between clones,ref,0.87,,,
+"Threadfin (donor as context, as in the case studies)",Run time,ref,3.1 s (median),,,
+"Threadfin (donor as context, as in the case studies)",Peak memory,ref,0.5 GB (median),,,
+"Threadfin (donor as context, as in the case studies)",Gain from 16 CPU cores,ref,2.0× (analysis),,,
+"Threadfin (donor as context, as in the case studies)",Time for 10× the clones,ref,20× time (profiles),,,
+"Threadfin (donor as context, as in the case studies)",Runs that ended without help,ref,77 of 77,,,
+"Threadfin (donor as context, as in the case studies)",Tiles better / worse,count,—,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 "clone2vec, its default (clones ≥ 3 cells)",Share of clones it describes,worse,50 %,"per dataset: 57 %, 50 %, 57 %, 35 %, 18 %, 14 %, 54 %, 61 %, 32 %, 29 %, 72 %",11.0,
 "clone2vec, its default (clones ≥ 3 cells)",Keeps two-cell clones,worse,0 %,"per dataset: 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %",11.0,
 "clone2vec, its default (clones ≥ 3 cells)",Datasets it could analyse,similar,11 of 11,,11.0,
-"clone2vec, its default (clones ≥ 3 cells)",Predicts measured clone traits,similar,10 better 3 worse,"10 better, 3 worse, 35 annotations",35.0,0.09228515625
-"clone2vec, its default (clones ≥ 3 cells)",… when traits come from other cells,similar,11 better 7 worse,18 annotations,18.0,0.480682373046875
-"clone2vec, its default (clones ≥ 3 cells)",Recognises a clone from other cells,similar,31 % vs 55 %,5 datasets,5.0,0.0625
-"clone2vec, its default (clones ≥ 3 cells)",Links day-4 clones to day 6,similar,0.110 vs 0.087,"95 % CI of difference [-0.019, 0.062]",164.0,
-"clone2vec, its default (clones ≥ 3 cells)",Finds planted clone groups,better,0.93 vs 0.86,6 simulated datasets,6.0,0.03125
-"clone2vec, its default (clones ≥ 3 cells)",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
+"clone2vec, its default (clones ≥ 3 cells)",Predicts measured clone traits,similar,10 better 3 worse,"10 better, 3 worse, 0 unresolved, 35 annotations",35.0,0.09228515625
+"clone2vec, its default (clones ≥ 3 cells)",… when traits come from other cells,similar,11 better 7 worse,18 annotations (matched halves),18.0,0.480682373046875
+"clone2vec, its default (clones ≥ 3 cells)",Recognises a clone from other cells,descriptive,31 % vs 55 %,5 datasets (matched halves); tool higher on 0; too few datasets to test,5.0,
+"clone2vec, its default (clones ≥ 3 cells)",Links day-4 clones to day 6,similar,0.110 vs 0.087,"95 % CI of difference [-0.016, 0.062]",164.0,
+"clone2vec, its default (clones ≥ 3 cells)",Finds planted clone groups,better,0.92 vs 0.85,10 seeds (20 simulated datasets),10.0,0.001953125
+"clone2vec, its default (clones ≥ 3 cells)",Tells mixed from in-between clones,better,0.98 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
 "clone2vec, its default (clones ≥ 3 cells)",Run time,worse,27× slower,11 datasets,11.0,0.0009765625
 "clone2vec, its default (clones ≥ 3 cells)",Peak memory,worse,2.3× more,11 datasets,11.0,0.013671875
-"clone2vec, its default (clones ≥ 3 cells)",Gain from 16 CPU cores,worse,1.2× faster Threadfin 2.0×,Threadfin 2.0×,,
-"clone2vec, its default (clones ≥ 3 cells)",Slow-down as data grow,better,6× time for 10× clones,exponent 0.78 vs 1.29,,
-"clone2vec, its default (clones ≥ 3 cells)",Runs that ended with- out help,worse,65 of 77 12 failed,12 failed,77.0,
+"clone2vec, its default (clones ≥ 3 cells)",Gain from 16 CPU cores,worse,1.2× vs 2.0×,Threadfin 2.0× (complete analysis); tool: clone representation,,
+"clone2vec, its default (clones ≥ 3 cells)",Time for 10× the clones,better,6× vs 20×,exponent 0.78 vs 1.29,,
+"clone2vec, its default (clones ≥ 3 cells)",Runs that ended without help,similar,65 of 65,not counted: 12 runs on 4 inputs with fewer than 11 clones the tool can represent,65.0,
+"clone2vec, its default (clones ≥ 3 cells)",Tiles better / worse,count,3 / 5,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 "clone2vec, forced to clones ≥ 2 cells",Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 "clone2vec, forced to clones ≥ 2 cells",Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 "clone2vec, forced to clones ≥ 2 cells",Datasets it could analyse,similar,11 of 11,,11.0,
-"clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 6 worse,"5 better, 6 worse, 35 annotations",35.0,1.0
-"clone2vec, forced to clones ≥ 2 cells",… when traits come from other cells,similar,17 better 12 worse,29 annotations,29.0,0.45825831964612007
-"clone2vec, forced to clones ≥ 2 cells",Recognises a clone from other cells,worse,3.6 % vs 11 %,10 datasets,10.0,0.001953125
-"clone2vec, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.004, 0.017]",1251.0,
-"clone2vec, forced to clones ≥ 2 cells",Finds planted clone groups,similar,0.76 vs 0.75,12 simulated datasets,12.0,0.67724609375
-"clone2vec, forced to clones ≥ 2 cells",Tells mixed from in-between clones,better,0.98 vs 0.89,6 simulated datasets,6.0,0.03125
+"clone2vec, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,5 better 5 worse,"5 better, 5 worse, 0 unresolved, 35 annotations",35.0,1.0
+"clone2vec, forced to clones ≥ 2 cells",… when traits come from other cells,similar,17 better 12 worse,29 annotations (matched halves),29.0,0.45825831964612007
+"clone2vec, forced to clones ≥ 2 cells",Recognises a clone from other cells,worse,3.6 % vs 11 %,10 datasets (matched halves); tool higher on 0,10.0,0.001953125
+"clone2vec, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.040 vs 0.030,"95 % CI of difference [0.003, 0.017]",1251.0,
+"clone2vec, forced to clones ≥ 2 cells",Finds planted clone groups,better,0.74 vs 0.72,10 seeds (40 simulated datasets),10.0,0.005859375
+"clone2vec, forced to clones ≥ 2 cells",Tells mixed from in-between clones,better,0.98 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
 "clone2vec, forced to clones ≥ 2 cells",Run time,worse,34× slower,11 datasets,11.0,
 "clone2vec, forced to clones ≥ 2 cells",Peak memory,worse,2.3× more,11 datasets,11.0,0.013671875
-"clone2vec, forced to clones ≥ 2 cells",Gain from 16 CPU cores,worse,1.2× faster Threadfin 2.0×,Threadfin 2.0×,,
-"clone2vec, forced to clones ≥ 2 cells",Slow-down as data grow,better,6× time for 10× clones,exponent 0.78 vs 1.29,,
-"clone2vec, forced to clones ≥ 2 cells",Runs that ended with- out help,similar,77 of 77,,77.0,
+"clone2vec, forced to clones ≥ 2 cells",Gain from 16 CPU cores,worse,1.2× vs 2.0×,Threadfin 2.0× (complete analysis); tool: clone representation,,
+"clone2vec, forced to clones ≥ 2 cells",Time for 10× the clones,better,6× vs 20×,exponent 0.78 vs 1.29,,
+"clone2vec, forced to clones ≥ 2 cells",Runs that ended without help,similar,77 of 77,,77.0,
+"clone2vec, forced to clones ≥ 2 cells",Tiles better / worse,count,4 / 4,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 "Clonotrace, its default (clones ≥ 10 cells)",Share of clones it describes,worse,8.5 %,"per dataset: 12 %, 8.5 %, 8.7 %, 0 %, 0 %, 0 %, 11 %, 12 %, 5.2 %, 0 %, 18 %",11.0,
 "Clonotrace, its default (clones ≥ 10 cells)",Keeps two-cell clones,worse,0 %,"per dataset: 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %, 0 %",11.0,
 "Clonotrace, its default (clones ≥ 10 cells)",Datasets it could analyse,worse,7 of 11 4 too small,4 too small,11.0,
-"Clonotrace, its default (clones ≥ 10 cells)",Predicts measured clone traits,worse,0 better 6 worse,"0 better, 6 worse, 24 annotations",24.0,0.03125
-"Clonotrace, its default (clones ≥ 10 cells)",… when traits come from other cells,similar,6 better 12 worse,18 annotations,18.0,0.237884521484375
-"Clonotrace, its default (clones ≥ 10 cells)",Recognises a clone from other cells,similar,39 % vs 55 %,5 datasets,5.0,0.3125
-"Clonotrace, its default (clones ≥ 10 cells)",Links day-4 clones to day 6,similar,0.098 vs 0.087,"95 % CI of difference [-0.014, 0.032]",164.0,
-"Clonotrace, its default (clones ≥ 10 cells)",Finds planted clone groups,worse,0.81 vs 0.86,6 simulated datasets,6.0,0.03125
-"Clonotrace, its default (clones ≥ 10 cells)",Tells mixed from in-between clones,worse,0.63 vs 0.89,6 simulated datasets,6.0,0.03125
+"Clonotrace, its default (clones ≥ 10 cells)",Predicts measured clone traits,worse,0 better 6 worse,"0 better, 6 worse, 1 unresolved, 24 annotations",24.0,0.03125
+"Clonotrace, its default (clones ≥ 10 cells)",… when traits come from other cells,similar,5 better 13 worse,18 annotations (matched halves),18.0,0.09625244140625
+"Clonotrace, its default (clones ≥ 10 cells)",Recognises a clone from other cells,descriptive,39 % vs 49 %,5 datasets (matched halves); tool higher on 2; too few datasets to test,5.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Links day-4 clones to day 6,similar,0.098 vs 0.087,"95 % CI of difference [-0.013, 0.032]",164.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Finds planted clone groups,descriptive,0.83 vs 0.87,3 seeds (6 simulated datasets); too few seeds to test,3.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Tells mixed from in-between clones,descriptive,0.62 vs 0.88,3 seeds (6 simulated datasets); too few seeds to test,3.0,
 "Clonotrace, its default (clones ≥ 10 cells)",Run time,worse,"2,436× slower",3 datasets,3.0,
-"Clonotrace, its default (clones ≥ 10 cells)",Peak memory,worse,3.8× more,3 datasets,3.0,
-"Clonotrace, its default (clones ≥ 10 cells)",Gain from 16 CPU cores,better,9.0× faster Threadfin 2.0×,Threadfin 2.0×,,
-"Clonotrace, its default (clones ≥ 10 cells)",Slow-down as data grow,worse,164× time for 10× clones,exponent 2.22 vs 1.29,,
-"Clonotrace, its default (clones ≥ 10 cells)",Runs that ended with- out help,worse,19 of 21 2 re-run,2 re-run,21.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Peak memory,worse,≥ 3.8× more,3 datasets; 3 main-session peaks (lower bounds),3.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Gain from 16 CPU cores,better,9.0× vs 2.0×,Threadfin 2.0× (complete analysis); tool: clone representation,,
+"Clonotrace, its default (clones ≥ 10 cells)",Time for 10× the clones,worse,164× vs 20×,exponent 2.22 vs 1.29,,
+"Clonotrace, its default (clones ≥ 10 cells)",Runs that ended without help,worse,19 of 21 2 re-run,2 re-run,21.0,
+"Clonotrace, its default (clones ≥ 10 cells)",Tiles better / worse,count,1 / 8,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 "Clonotrace, forced to clones ≥ 2 cells",Share of clones it describes,worse,64 %,"per dataset: 64 %, 62 %, 67 %, 60 %, 52 %, 53 %, 64 %, 73 %, 69 %, 72 %, 76 %",11.0,
 "Clonotrace, forced to clones ≥ 2 cells",Keeps two-cell clones,worse,32 %,"per dataset: 16 %, 25 %, 23 %, 39 %, 42 %, 45 %, 22 %, 32 %, 55 %, 61 %, 16 %",11.0,
 "Clonotrace, forced to clones ≥ 2 cells",Datasets it could analyse,similar,11 of 11,,11.0,
-"Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,2 better 7 worse,"2 better, 7 worse, 35 annotations",35.0,0.1796875
-"Clonotrace, forced to clones ≥ 2 cells",… when traits come from other cells,similar,12 better 9 worse,21 annotations,21.0,0.6636238098144531
-"Clonotrace, forced to clones ≥ 2 cells",Recognises a clone from other cells,similar,8.9 % vs 14 %,7 datasets,7.0,0.9375
+"Clonotrace, forced to clones ≥ 2 cells",Predicts measured clone traits,similar,2 better 7 worse,"2 better, 7 worse, 0 unresolved, 35 annotations",35.0,0.1796875
+"Clonotrace, forced to clones ≥ 2 cells",… when traits come from other cells,similar,10 better 11 worse,21 annotations (matched halves),21.0,1.0
+"Clonotrace, forced to clones ≥ 2 cells",Recognises a clone from other cells,similar,8.9 % vs 21 %,7 datasets (matched halves); tool higher on 3,7.0,0.46875
 "Clonotrace, forced to clones ≥ 2 cells",Links day-4 clones to day 6,better,0.039 vs 0.030,"95 % CI of difference [0.003, 0.015]",1251.0,
-"Clonotrace, forced to clones ≥ 2 cells",Finds planted clone groups,worse,0.51 vs 0.61,6 simulated datasets,6.0,0.03125
+"Clonotrace, forced to clones ≥ 2 cells",Finds planted clone groups,descriptive,0.52 vs 0.62,3 seeds (6 simulated datasets); too few seeds to test,3.0,
 "Clonotrace, forced to clones ≥ 2 cells",Tells mixed from in-between clones,na,—,,,
 "Clonotrace, forced to clones ≥ 2 cells",Run time,worse,286× slower,5 datasets,5.0,
-"Clonotrace, forced to clones ≥ 2 cells",Peak memory,worse,2.1× more,5 datasets,5.0,
-"Clonotrace, forced to clones ≥ 2 cells",Gain from 16 CPU cores,better,9.0× faster Threadfin 2.0×,Threadfin 2.0×,,
-"Clonotrace, forced to clones ≥ 2 cells",Slow-down as data grow,worse,164× time for 10× clones,exponent 2.22 vs 1.29,,
-"Clonotrace, forced to clones ≥ 2 cells",Runs that ended with- out help,worse,26 of 29 3 re-run,3 re-run,29.0,
+"Clonotrace, forced to clones ≥ 2 cells",Peak memory,worse,≥ 7.4× more,5 datasets; 3 main-session peaks (lower bounds),5.0,
+"Clonotrace, forced to clones ≥ 2 cells",Gain from 16 CPU cores,better,9.0× vs 2.0×,Threadfin 2.0× (complete analysis); tool: clone representation,,
+"Clonotrace, forced to clones ≥ 2 cells",Time for 10× the clones,worse,164× vs 20×,exponent 2.22 vs 1.29,,
+"Clonotrace, forced to clones ≥ 2 cells",Runs that ended without help,worse,26 of 29 3 re-run,3 re-run,29.0,
+"Clonotrace, forced to clones ≥ 2 cells",Tiles better / worse,count,2 / 6,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Share of clones it describes,worse,60 %,"per dataset: 0 %, 0 %, 67 %, 60 %, 0 %, 53 %, 73 %, 70 %, 72 %",9.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Keeps two-cell clones,worse,32 %,"per dataset: 0 %, 0 %, 23 %, 39 %, 0 %, 45 %, 32 %, 55 %, 61 %",9.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Datasets it could analyse,worse,6 of 9 3 failed,3 failed; not counted: 2 cancelled,9.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Predicts measured clone traits,similar,1 better 3 worse,"1 better, 3 worse, 0 unresolved, 17 annotations",17.0,0.625
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",… when traits come from other cells,na,not run on halves,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Recognises a clone from other cells,na,not run on halves,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Links day-4 clones to day 6,na,cancelled,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Finds planted clone groups,descriptive,0.52 vs 0.62,3 seeds (6 simulated datasets); too few seeds to test,3.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Tells mixed from in-between clones,na,not run,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Run time,worse,204× slower,6 datasets,6.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Peak memory,worse,13× more,6 datasets,6.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Gain from 16 CPU cores,na,—,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Time for 10× the clones,na,—,,,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Runs that ended without help,worse,8 of 12 4 failed,4 failed; not counted: 4 runs cancelled by the authors,12.0,
+"Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran)",Tiles better / worse,count,0 / 6,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 Benisse,Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 11 %, 100 %, 100 %",9.0,
 Benisse,Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 0 %, 100 %, 100 %",9.0,
-Benisse,Datasets it could analyse,worse,9 of 11 2 without BCR,2 without BCR,11.0,
-Benisse,Predicts measured clone traits,worse,3 better 23 worse,"3 better, 23 worse, 32 annotations",32.0,8.797645568847656e-05
-Benisse,… when traits come from other cells,worse,5 better 16 worse,21 annotations,21.0,0.02660369873046875
-Benisse,Recognises a clone from other cells,similar,8.3 % vs 10 %,6 datasets,6.0,0.6875
+Benisse,Datasets it could analyse,similar,9 of 9,not counted: 2 without BCR,9.0,
+Benisse,Predicts measured clone traits,worse,3 better 23 worse,"3 better, 23 worse, 0 unresolved, 32 annotations",32.0,8.797645568847656e-05
+Benisse,… when traits come from other cells,similar,6 better 15 worse,21 annotations (matched halves),21.0,0.0783538818359375
+Benisse,Recognises a clone from other cells,similar,8.3 % vs 14 %,6 datasets (matched halves); tool higher on 4,6.0,0.84375
 Benisse,Links day-4 clones to day 6,na,no BCR,,,
 Benisse,Finds planted clone groups,na,no BCR,,,
 Benisse,Tells mixed from in-between clones,na,no BCR,,,
 Benisse,Run time,worse,33× slower,9 datasets,9.0,0.00390625
 Benisse,Peak memory,similar,1.6× more,9 datasets,9.0,0.25
-Benisse,Gain from 16 CPU cores,worse,2.9× slower Threadfin 2.0×,Threadfin 2.0×,,
-Benisse,Slow-down as data grow,worse,123× time for 10× clones,exponent 2.09 vs 1.29,,
-Benisse,Runs that ended with- out help,worse,26 of 27 1 failed,1 failed,27.0,
+Benisse,Gain from 16 CPU cores,worse,0.34× vs 2.0×,Threadfin 2.0× (complete analysis); tool: clone representation,,
+Benisse,Time for 10× the clones,worse,123× vs 20×,exponent 2.09 vs 1.29,,
+Benisse,Runs that ended without help,worse,26 of 27 1 failed,1 failed,27.0,
+Benisse,Tiles better / worse,count,0 / 5,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 CoNGA's one-cell-per-clone rule,Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 CoNGA's one-cell-per-clone rule,Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 CoNGA's one-cell-per-clone rule,Datasets it could analyse,similar,11 of 11,,11.0,
-CoNGA's one-cell-per-clone rule,Predicts measured clone traits,worse,1 better 15 worse,"1 better, 15 worse, 35 annotations",35.0,0.000518798828125
-CoNGA's one-cell-per-clone rule,… when traits come from other cells,similar,9 better 20 worse,29 annotations,29.0,0.06142834573984146
-CoNGA's one-cell-per-clone rule,Recognises a clone from other cells,similar,3.3 % vs 11 %,10 datasets,10.0,0.10546875
-CoNGA's one-cell-per-clone rule,Links day-4 clones to day 6,worse,0.019 vs 0.030,"95 % CI of difference [-0.017, -0.003]",1251.0,
-CoNGA's one-cell-per-clone rule,Finds planted clone groups,worse,0.44 vs 0.75,12 simulated datasets,12.0,0.00048828125
-CoNGA's one-cell-per-clone rule,Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
+CoNGA's one-cell-per-clone rule,Predicts measured clone traits,worse,1 better 15 worse,"1 better, 15 worse, 0 unresolved, 35 annotations",35.0,0.000518798828125
+CoNGA's one-cell-per-clone rule,… when traits come from other cells,similar,9 better 20 worse,29 annotations (matched halves),29.0,0.06142834573984146
+CoNGA's one-cell-per-clone rule,Recognises a clone from other cells,similar,3.3 % vs 11 %,10 datasets (matched halves); tool higher on 2,10.0,0.10546875
+CoNGA's one-cell-per-clone rule,Links day-4 clones to day 6,worse,0.019 vs 0.030,"95 % CI of difference [-0.018, -0.003]",1251.0,
+CoNGA's one-cell-per-clone rule,Finds planted clone groups,worse,0.44 vs 0.72,10 seeds (40 simulated datasets),10.0,0.001953125
+CoNGA's one-cell-per-clone rule,Tells mixed from in-between clones,worse,0.49 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
 CoNGA's one-cell-per-clone rule,Run time,na,not timed,,,
 CoNGA's one-cell-per-clone rule,Peak memory,na,not measured,,,
 CoNGA's one-cell-per-clone rule,Gain from 16 CPU cores,na,—,,,
-CoNGA's one-cell-per-clone rule,Slow-down as data grow,na,—,,,
-CoNGA's one-cell-per-clone rule,Runs that ended with- out help,similar,77 of 77,,77.0,
+CoNGA's one-cell-per-clone rule,Time for 10× the clones,na,—,,,
+CoNGA's one-cell-per-clone rule,Runs that ended without help,similar,77 of 77,,77.0,
+CoNGA's one-cell-per-clone rule,Tiles better / worse,count,0 / 4,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 Mean of the embedding (baseline),Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 Mean of the embedding (baseline),Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 Mean of the embedding (baseline),Datasets it could analyse,similar,11 of 11,,11.0,
-Mean of the embedding (baseline),Predicts measured clone traits,similar,7 better 5 worse,"7 better, 5 worse, 35 annotations",35.0,0.7744140625
-Mean of the embedding (baseline),… when traits come from other cells,similar,16 better 13 worse,29 annotations,29.0,0.711071103811264
-Mean of the embedding (baseline),Recognises a clone from other cells,similar,8.2 % vs 11 %,10 datasets,10.0,0.431640625
+Mean of the embedding (baseline),Predicts measured clone traits,similar,7 better 5 worse,"7 better, 5 worse, 0 unresolved, 35 annotations",35.0,0.7744140625
+Mean of the embedding (baseline),… when traits come from other cells,similar,16 better 13 worse,29 annotations (matched halves),29.0,0.711071103811264
+Mean of the embedding (baseline),Recognises a clone from other cells,similar,8.2 % vs 11 %,10 datasets (matched halves); tool higher on 6,10.0,0.431640625
 Mean of the embedding (baseline),Links day-4 clones to day 6,similar,0.034 vs 0.030,"95 % CI of difference [-0.000, 0.010]",1251.0,
-Mean of the embedding (baseline),Finds planted clone groups,worse,0.70 vs 0.75,12 simulated datasets,12.0,0.00048828125
-Mean of the embedding (baseline),Tells mixed from in-between clones,worse,0.53 vs 0.89,6 simulated datasets,6.0,0.03125
+Mean of the embedding (baseline),Finds planted clone groups,worse,0.67 vs 0.72,10 seeds (40 simulated datasets),10.0,0.001953125
+Mean of the embedding (baseline),Tells mixed from in-between clones,worse,0.57 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
 Mean of the embedding (baseline),Run time,na,not timed,,,
 Mean of the embedding (baseline),Peak memory,na,not measured,,,
 Mean of the embedding (baseline),Gain from 16 CPU cores,na,—,,,
-Mean of the embedding (baseline),Slow-down as data grow,na,—,,,
-Mean of the embedding (baseline),Runs that ended with- out help,similar,77 of 77,,77.0,
+Mean of the embedding (baseline),Time for 10× the clones,na,—,,,
+Mean of the embedding (baseline),Runs that ended without help,similar,77 of 77,,77.0,
+Mean of the embedding (baseline),Tiles better / worse,count,0 / 2,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
 Cluster composition (baseline),Share of clones it describes,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 Cluster composition (baseline),Keeps two-cell clones,similar,100 %,"per dataset: 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %, 100 %",11.0,
 Cluster composition (baseline),Datasets it could analyse,similar,11 of 11,,11.0,
-Cluster composition (baseline),Predicts measured clone traits,worse,1 better 20 worse,"1 better, 20 worse, 35 annotations",35.0,2.09808349609375e-05
-Cluster composition (baseline),… when traits come from other cells,worse,4 better 25 worse,29 annotations,29.0,0.00010371580719947815
-Cluster composition (baseline),Recognises a clone from other cells,similar,3.4 % vs 11 %,10 datasets,10.0,0.193359375
-Cluster composition (baseline),Links day-4 clones to day 6,better,0.059 vs 0.030,"95 % CI of difference [0.018, 0.042]",1251.0,
-Cluster composition (baseline),Finds planted clone groups,similar,0.77 vs 0.75,12 simulated datasets,12.0,0.1513671875
-Cluster composition (baseline),Tells mixed from in-between clones,similar,0.95 vs 0.89,6 simulated datasets,6.0,0.09375
+Cluster composition (baseline),Predicts measured clone traits,worse,1 better 20 worse,"1 better, 20 worse, 0 unresolved, 35 annotations",35.0,2.09808349609375e-05
+Cluster composition (baseline),… when traits come from other cells,worse,4 better 25 worse,29 annotations (matched halves),29.0,0.00010371580719947815
+Cluster composition (baseline),Recognises a clone from other cells,similar,3.4 % vs 11 %,10 datasets (matched halves); tool higher on 4,10.0,0.193359375
+Cluster composition (baseline),Links day-4 clones to day 6,worse,0.015 vs 0.030,"95 % CI of difference [-0.021, -0.008]",1251.0,
+Cluster composition (baseline),Finds planted clone groups,better,0.75 vs 0.72,10 seeds (40 simulated datasets),10.0,0.001953125
+Cluster composition (baseline),Tells mixed from in-between clones,better,0.93 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
 Cluster composition (baseline),Run time,na,not timed,,,
 Cluster composition (baseline),Peak memory,na,not measured,,,
 Cluster composition (baseline),Gain from 16 CPU cores,na,—,,,
-Cluster composition (baseline),Slow-down as data grow,na,—,,,
-Cluster composition (baseline),Runs that ended with- out help,similar,77 of 77,,77.0,
+Cluster composition (baseline),Time for 10× the clones,na,—,,,
+Cluster composition (baseline),Runs that ended without help,similar,77 of 77,,77.0,
+Cluster composition (baseline),Tiles better / worse,count,2 / 3,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,
+Threadfin with another random seed (negative control),Share of clones it describes,na,—,,,
+Threadfin with another random seed (negative control),Keeps two-cell clones,na,—,,,
+Threadfin with another random seed (negative control),Datasets it could analyse,na,—,,,
+Threadfin with another random seed (negative control),Predicts measured clone traits,similar,2 better 2 worse,"2 better, 2 worse, 1 unresolved, 35 annotations",35.0,1.0
+Threadfin with another random seed (negative control),… when traits come from other cells,better,21 better 8 worse,29 annotations (matched halves),29.0,0.0241195447742939
+Threadfin with another random seed (negative control),Recognises a clone from other cells,similar,8.8 % vs 9.3 %,10 datasets (matched halves); tool higher on 5,10.0,0.8828125
+Threadfin with another random seed (negative control),Links day-4 clones to day 6,na,—,,,
+Threadfin with another random seed (negative control),Finds planted clone groups,similar,0.72 vs 0.72,10 seeds (40 simulated datasets),10.0,0.130859375
+Threadfin with another random seed (negative control),Tells mixed from in-between clones,worse,0.78 vs 0.87,10 seeds (20 simulated datasets),10.0,0.001953125
+Threadfin with another random seed (negative control),Run time,na,—,,,
+Threadfin with another random seed (negative control),Peak memory,na,—,,,
+Threadfin with another random seed (negative control),Gain from 16 CPU cores,na,—,,,
+Threadfin with another random seed (negative control),Time for 10× the clones,na,—,,,
+Threadfin with another random seed (negative control),Runs that ended without help,na,—,,,
+Threadfin with another random seed (negative control),Tiles better / worse,count,1 / 1,"number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking.",,

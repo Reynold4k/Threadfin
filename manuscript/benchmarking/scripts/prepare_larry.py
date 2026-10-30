@@ -13,6 +13,11 @@ own tutorial.
 
 Every cell gets the single donor ``pool`` (one culture) and its library as sample.
 
+The two embeddings (``THREADFIN_LARRY_CACHE``) are written by
+``manuscript/analyses/lineage_barcode_systems/larry/reanalyse_clonotrace_larry.py`` (``tf.pp.prepare_embedding``
+with ``random_state=0`` on all cells with one barcode, and on the day-2 cells alone) from the GSE140802 files that
+``fetch_clonotrace_hematopoiesis.py`` in the same folder downloads.
+
 Usage: python prepare_larry.py
 """
 from __future__ import annotations
@@ -23,10 +28,10 @@ import anndata as ad
 import numpy as np
 import pandas as pd
 
-from bench_paths import INPUTS
+from bench_paths import INPUTS, LARRY_CACHE
 from prepare_inputs import SEEDS, split_halves
 
-LARRY = "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/internal_validation/paper_673503/larry"
+LARRY = str(LARRY_CACHE)
 
 
 def write(name, x, cells, extra=None):

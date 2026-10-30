@@ -9,6 +9,7 @@ contig; missing or multi-contig chains are excluded rather than resolved.
 """
 from __future__ import annotations
 
+import os
 import argparse
 from pathlib import Path
 
@@ -16,7 +17,7 @@ import pandas as pd
 
 
 HERE = Path(__file__).resolve().parent
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse253857_bmpc")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse253857_bmpc"
 MANIFEST = HERE / "bone_marrow_sample_manifest.tsv"
 
 # Pure, single-donor GEX/BCR libraries verified in the GEO SOFT sample map.

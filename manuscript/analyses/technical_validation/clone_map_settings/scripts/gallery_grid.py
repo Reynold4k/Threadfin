@@ -1,9 +1,10 @@
+from pathlib import Path
 import sys, glob, numpy as np, pandas as pd, warnings
 warnings.filterwarnings("ignore")
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from load_feats import features
 from analyze_grid import objectives, MANUAL
-CASE = "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/Threadfin/case_studies/results"
+CASE = str(Path(__file__).resolve().parents[4] / "case_studies" / "results")
 OBJ = sys.argv[1] if len(sys.argv) > 1 else "bal30_C1.5_adapt"
 sets = sorted(glob.glob("grid/*.csv"))
 fig, axs = plt.subplots(len(sets), 4, figsize=(16, 4 * len(sets)))

@@ -1,11 +1,11 @@
 {
  "dataset": "bone_marrow_pc",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 8.9,
-  "threadfin_run": 377.6,
-  "plot_and_save": 2.4
+  "user_inputs": 7.5,
+  "threadfin_run": 308.5,
+  "plot_and_save": 1.9
  },
  "warnings": [
   {
@@ -15,9 +15,9 @@
    "count": 15
   },
   {
-   "category": "ImplicitModificationWarning",
-   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
-   "file": "anndata.py",
+   "category": "UserWarning",
+   "message": "Only 4 immunoglobulin/TCR genes were recognised among 32,738 genes, so receptor genes may stay in the embedding. Threadfin recognises gene symbols (IGHG1, IGKC, TRBC2 ...): if adata.var_names hold other identifiers (e.g. Ensembl ids), set them to symbols first, e.g. adata.var_names = adata.var['gene",
+   "file": "api.py",
    "count": 1
   },
   {
@@ -28,7 +28,31 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.60). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.60). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
+   "file": "api.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'sorted_as' is the same for every cell of each 'sample', so this test compares 13 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'sorted_as', and the p-value counts clones as replicates. Read it as descriptive, or compare the sam",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "'tissue' is the same for every cell of each 'sample', so this test compares 13 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'tissue', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples w",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "'antigen' is the same for every cell of each 'sample', so this test compares 13 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'antigen', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "The levels of 'tissue' (blood, bone marrow) have no order, so they are paired in alphabetical order. If they have one (time points, or a path between tissues), pass order=[...] or make the column an ordered pandas Categorical.",
    "file": "api.py",
    "count": 1
   }
@@ -43,11 +67,27 @@
   "antigen",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "tissue",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 2.1,
+ "gallery_h5ad": "bone_marrow_pc.h5ad",
  "clones": 55621,
  "clones_ge2": 6583,
  "icc": 0.4269243637623394,
- "icc_shuffled": 0.045932633437314074,
+ "icc_shuffled": 0.2449762027868018,
  "p_value": 0.004975124378109453,
  "programmes": 3,
  "skipped": {},
@@ -55,6 +95,6 @@
   "n_neighbors": 70,
   "min_dist": 0.95
  },
- "seconds_total": 389.1,
- "peak_rss_gb": 8.03
+ "seconds_total": 318.0,
+ "peak_rss_gb": 6.85
 }

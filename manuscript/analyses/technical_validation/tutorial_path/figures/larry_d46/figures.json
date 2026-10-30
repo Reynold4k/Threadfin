@@ -1,0 +1,156 @@
+{
+ "dataset": "larry_d46",
+ "name": "GSE140802 LARRY days 4/6 (clone ids given)",
+ "threadfin_run": "4.6.0",
+ "threadfin_drawn": "4.6.0",
+ "record": {
+  "cells": 44664,
+  "clones_ge2": 6174,
+  "icc": 0.5976894634687825,
+  "icc_shuffled": 0.0007104383367093248,
+  "p_value": 0.004975124378109453,
+  "programmes": 8,
+  "test": [],
+  "skipped": {}
+ },
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "sample",
+  "strata_key": "sample",
+  "state_key": "state",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_published",
+  "representation": "kernel",
+  "receptor": null,
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
+ "figures": [
+  {
+   "name": "overview",
+   "file": "overview.png",
+   "title": "Overview (`result.plot()`)",
+   "shows": "The figure that `result.plot()` saves: (a) clonal programmes on the clone map, (b) clonal coherence, (c) programme stability, (d) programme composition by `state`.",
+   "dpi": 300,
+   "bytes": 555141,
+   "width": 2216,
+   "height": 1482,
+   "seconds": 1.3
+  },
+  {
+   "name": "coherence",
+   "file": "coherence.png",
+   "title": "Clonal coherence",
+   "shows": "Share of transcriptional variance explained by clone identity (clonal ICC), observed and with clone labels shuffled within each `sample` (bar: mean of 200 permutations; whisker: their central 95 %).",
+   "dpi": 300,
+   "bytes": 32284,
+   "width": 641,
+   "height": 668,
+   "seconds": 0.1
+  },
+  {
+   "name": "clone_map_programmes",
+   "file": "clone_map_programmes.png",
+   "title": "Clone map: programmes",
+   "shows": "The clone map (UMAP of clone profiles; one point per clone, area by its number of cells) coloured by clonal programme, one panel per programme, every other clone in grey.",
+   "dpi": 300,
+   "bytes": 797162,
+   "width": 1657,
+   "height": 1034,
+   "seconds": 1.3
+  },
+  {
+   "name": "clone_map_clone_size",
+   "file": "clone_map_clone_size.png",
+   "title": "Clone map: clone size",
+   "shows": "The clone map coloured by the number of cells of each clone.",
+   "dpi": 300,
+   "bytes": 294978,
+   "width": 923,
+   "height": 770,
+   "seconds": 0.4
+  },
+  {
+   "name": "clone_map_reliability",
+   "file": "clone_map_reliability.png",
+   "title": "Clone map: profile reliability",
+   "shows": "The clone map coloured by the reliability of each clone's profile (0 to 1; it grows with the number of cells sampled from the clone).",
+   "dpi": 300,
+   "bytes": 401025,
+   "width": 931,
+   "height": 770,
+   "seconds": 0.4
+  },
+  {
+   "name": "clone_map_state",
+   "file": "clone_map_state.png",
+   "title": "Clone map: state",
+   "shows": "The clone map coloured by `state`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 250,
+   "bytes": 760214,
+   "width": 1381,
+   "height": 1242,
+   "seconds": 2.9
+  },
+  {
+   "name": "stability",
+   "file": "stability.png",
+   "title": "Programme stability",
+   "shows": "Bootstrap stability of each programme (mean Jaccard overlap with the best-matching group over 30 bootstrap replicates), with the 0.75 (stable) and 0.6 guides.",
+   "dpi": 300,
+   "bytes": 28171,
+   "width": 994,
+   "height": 592,
+   "seconds": 0.1
+  },
+  {
+   "name": "composition_state_cells",
+   "file": "composition_state_cells.png",
+   "title": "Programme composition: state (cells)",
+   "shows": "For each programme (one bar), the fraction of the programme's cells in each level of `state` (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 37253,
+   "width": 1034,
+   "height": 821,
+   "seconds": 0.2
+  },
+  {
+   "name": "composition_state_clones",
+   "file": "composition_state_clones.png",
+   "title": "Programme composition: state (clones)",
+   "shows": "For each programme (one bar), the mean over the programme's clones of each clone's fraction of cells in each level of `state`, so that every clone counts once (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 36821,
+   "width": 1034,
+   "height": 821,
+   "seconds": 0.3
+  },
+  {
+   "name": "cells_programmes",
+   "file": "cells_programmes.png",
+   "title": "Cells: programmes",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_published`): the cells of each programme's clones, one panel per programme, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 350760,
+   "width": 2031,
+   "height": 1120,
+   "seconds": 1.4
+  },
+  {
+   "name": "cells_state",
+   "file": "cells_state.png",
+   "title": "Cells: state",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_published`): the cells of each level of `state`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 336889,
+   "width": 2228,
+   "height": 1679,
+   "seconds": 1.8
+  }
+ ],
+ "not_drawn": [],
+ "seconds": 12.0
+}

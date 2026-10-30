@@ -24,7 +24,12 @@ The data are real; only the clone labels are changed:
 
 A calibrated test rejects in about 5 % of null replicates at alpha = 0.05.
 
+``--power n`` runs Threadfin's test alone on the ``mix`` scenarios, ``n`` replicates per fraction (the first
+run had 10 per fraction, too few for a stable power estimate), each replicate with its own seeded generator,
+and writes ``results/tests/power/<dataset>.csv``.
+
 Usage: python run_tests.py <dataset> [n_replicates]
+       python run_tests.py <dataset> --power 50
 """
 from __future__ import annotations
 
@@ -139,5 +144,30 @@ def main(dataset, n_rep=50):
     pd.DataFrame(rows).to_csv(out / f"{dataset}.csv", index=False)
 
 
+def power(dataset, n_rep=50):
+    """Power of Threadfin's coherence test when a fraction of the cells keep their real clone label."""
+    import threadfin
+
+    x, cells = bench_io.load(dataset, "full")
+    labels = cells["clone"].astype(object).where(cells["clone"].notna(), None).to_numpy()
+    samples = cells["sample"].astype(str).to_numpy()
+    rows = []
+    for f in FRACTIONS:
+        for i in range(n_rep):
+            lab = scenario_labels(labels, samples, f"mix_{f}", bench_io.rng_for("power", dataset, f, i))
+            t0 = time.perf_counter()
+            p_tf, icc, null_mean = threadfin_test(x, cells, lab)
+            rows.append({"dataset": dataset, "scenario": "mix", "fraction_real_labels": f, "replicate": i,
+                         "threadfin_p": p_tf, "threadfin_icc": icc, "threadfin_null_mean": null_mean,
+                         "seconds_threadfin": round(time.perf_counter() - t0, 2), "threadfin": threadfin.__version__})
+        print(f"{dataset} fraction {f}: {np.mean([r['threadfin_p'] < 0.05 for r in rows[-n_rep:]]):.2f}", flush=True)
+    out = RESULTS / "tests" / "power"
+    out.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(out / f"{dataset}.csv", index=False)
+
+
 if __name__ == "__main__":
-    main(sys.argv[1], int(sys.argv[2]) if len(sys.argv) > 2 else 50)
+    if "--power" in sys.argv:
+        power(sys.argv[1], int(sys.argv[sys.argv.index("--power") + 1]))
+    else:
+        main(sys.argv[1], int(sys.argv[2]) if len(sys.argv) > 2 else 50)

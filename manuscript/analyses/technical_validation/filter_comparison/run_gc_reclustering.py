@@ -23,7 +23,7 @@ from sklearn.metrics import adjusted_rand_score
 import threadfin as tf
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = Path(os.environ.get("THREADFIN_DATA", "/data/scratch/projects/punim1236/threadfin_data"))
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data"))
 GATES = ["light zone", "Myc+ light zone", "dark zone", "plasma cell"]
 MARKERS = {
     "GC identity": ["Bcl6", "Aicda", "Rgs13", "S1pr2"],

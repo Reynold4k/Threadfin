@@ -34,7 +34,7 @@ import schematics as sk
 from figstyle import (AQUA, BLUE, GREEN, INK, INK2, MAGENTA, MUTED, ORANGE, RED, VIOLET, new_page,
                       panel, save)
 
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
+ROOT = Path(__file__).resolve().parents[5]          # the folder that holds the repository clone
 CASE = ROOT / "Threadfin" / "manuscript" / "case_studies" / "results"
 
 # One vocabulary across the studies, so a colour means the same thing in every panel. Plasmablasts and

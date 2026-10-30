@@ -2,13 +2,13 @@
 
 ## status
 
-*Status of the full-data runs when these tables were generated (2026-10-27 21:23, Melbourne time).*
+*Status of the full-data runs when these tables were generated (2026-10-30 16:25, Melbourne time).*
 
 Still running: none.
 
 Failed (each with the reason the tool gave): none.
 
-Split-half runs still running (sections 6.4–6.5 use the halves that are complete): none.
+Clonotrace with the exact OT distance (runs of 2026-10-25): 28 started, 14 completed (8 on real data), 4 failed, 10 cancelled by the authors (section 6.11).
 
 ## datasets
 
@@ -44,59 +44,68 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 
 ## pairwise_forced
 
-| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
-|---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 11 | 25 | -0.018 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 10 | 41 | 2 | 13 | 26 | -0.040 | 531 |
-| Clonotrace, published distance (≥ 2) | 10 | 41 | 2 | 25 | 14 | -0.146 | 531 |
-| Benisse | 8 | 31 | 3 | 22 | 6 | -0.372 | 958 |
-| Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
-| Cluster composition (baseline) | 10 | 41 | 1 | 25 | 15 | -0.101 | 958 |
-| Medoid cell, CoNGA's rule (baseline) | 10 | 41 | 1 | 21 | 19 | -0.050 | 958 |
+| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | unresolved | median ΔR² (tool − Threadfin) | median clones per comparison |
+|---|---|---|---|---|---|---|---|---|
+| clone2vec (forced to ≥ 2 cells) | 10 | 41 | 5 | 10 | 26 | 0 | -0.018 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 41 | 2 | 13 | 26 | 0 | -0.040 | 531 |
+| Clonotrace, published distance (≥ 2) | 10 | 41 | 2 | 25 | 13 | 1 | -0.146 | 531 |
+| Benisse | 8 | 31 | 3 | 22 | 6 | 0 | -0.372 | 958 |
+| Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | 0 | -0.003 | 958 |
+| Cluster composition (baseline) | 10 | 41 | 1 | 25 | 15 | 0 | -0.101 | 958 |
+| Medoid cell, CoNGA's rule (baseline) | 10 | 41 | 1 | 21 | 19 | 0 | -0.050 | 958 |
 
 ## pairwise_forced_no_rna
 
-| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
-|---|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 6 | 24 | -0.006 | 958 |
-| Clonotrace (forced to ≥ 2 cells) | 10 | 35 | 2 | 7 | 26 | -0.032 | 609 |
-| Clonotrace, published distance (≥ 2) | 10 | 35 | 2 | 19 | 14 | -0.119 | 609 |
-| Benisse | 8 | 26 | 3 | 17 | 6 | -0.284 | 958 |
-| Mean of the embedding (baseline) | 10 | 35 | 7 | 5 | 23 | +0.001 | 958 |
-| Cluster composition (baseline) | 10 | 35 | 1 | 20 | 14 | -0.095 | 958 |
-| Medoid cell, CoNGA's rule (baseline) | 10 | 35 | 1 | 15 | 19 | -0.043 | 958 |
+| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | unresolved | median ΔR² (tool − Threadfin) | median clones per comparison |
+|---|---|---|---|---|---|---|---|---|
+| clone2vec (forced to ≥ 2 cells) | 10 | 35 | 5 | 5 | 25 | 0 | -0.006 | 958 |
+| Clonotrace (forced to ≥ 2 cells) | 10 | 35 | 2 | 7 | 26 | 0 | -0.032 | 609 |
+| Clonotrace, published distance (≥ 2) | 10 | 35 | 2 | 19 | 13 | 1 | -0.119 | 609 |
+| Benisse | 8 | 26 | 3 | 17 | 6 | 0 | -0.284 | 958 |
+| Mean of the embedding (baseline) | 10 | 35 | 7 | 5 | 23 | 0 | +0.001 | 958 |
+| Cluster composition (baseline) | 10 | 35 | 1 | 20 | 14 | 0 | -0.095 | 958 |
+| Medoid cell, CoNGA's rule (baseline) | 10 | 35 | 1 | 15 | 19 | 0 | -0.043 | 958 |
 
 ## pairwise_native
 
-| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
-|---|---|---|---|---|---|---|---|
-| clone2vec (default, ≥ 3 cells) | 10 | 41 | 10 | 7 | 24 | +0.002 | 268 |
-| Clonotrace (default, ≥ 10 cells) | 6 | 26 | 0 | 8 | 18 | -0.039 | 127 |
-| Clonotrace, published distance (≥ 10) | 6 | 26 | 0 | 11 | 15 | -0.096 | 127 |
-| Benisse (≥ 10 cells) | 1 | 7 | 0 | 7 | 0 | -0.606 | 1243 |
+| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | unresolved | median ΔR² (tool − Threadfin) | median clones per comparison |
+|---|---|---|---|---|---|---|---|---|
+| clone2vec (default, ≥ 3 cells) | 10 | 41 | 10 | 7 | 24 | 0 | +0.002 | 268 |
+| Clonotrace (default, ≥ 10 cells) | 6 | 26 | 0 | 8 | 17 | 1 | -0.039 | 127 |
+| Clonotrace, published distance (≥ 10) | 6 | 26 | 0 | 11 | 15 | 0 | -0.096 | 127 |
+| Benisse (≥ 10 cells) | 1 | 7 | 0 | 7 | 0 | 0 | -0.606 | 1243 |
 
 ## pairwise_ablation
 
-| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | median ΔR² (tool − Threadfin) | median clones per comparison |
-|---|---|---|---|---|---|---|---|
-| Threadfin, mean profile | 10 | 41 | 8 | 5 | 28 | +0.003 | 958 |
-| Threadfin, no centring | 10 | 41 | 1 | 13 | 27 | -0.010 | 958 |
-| Threadfin, no smoothing | 10 | 41 | 14 | 4 | 23 | +0.010 | 958 |
-| Threadfin, no shrinkage | 10 | 41 | 6 | 2 | 33 | +0.002 | 958 |
-| Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | -0.003 | 958 |
+| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | unresolved | median ΔR² (tool − Threadfin) | median clones per comparison |
+|---|---|---|---|---|---|---|---|---|
+| Threadfin, mean profile | 10 | 41 | 7 | 3 | 28 | 3 | +0.003 | 958 |
+| Threadfin, no centring | 10 | 41 | 2 | 13 | 26 | 0 | -0.010 | 958 |
+| Threadfin, no smoothing | 10 | 41 | 13 | 4 | 24 | 0 | +0.010 | 958 |
+| Threadfin, no shrinkage | 10 | 41 | 5 | 1 | 33 | 2 | +0.002 | 958 |
+| Mean of the embedding (baseline) | 10 | 41 | 7 | 10 | 24 | 0 | -0.003 | 958 |
+
+## pairwise_exact
+
+| tool | datasets | annotations | tool better (95 % CI > 0) | Threadfin better (CI < 0) | no clear difference | unresolved | median ΔR² (tool − Threadfin) | median clones per comparison |
+|---|---|---|---|---|---|---|---|---|
+| Clonotrace, exact OT (≥ 2) | 6 | 19 | 1 | 5 | 13 | 0 | -0.022 | 275 |
+| Clonotrace, exact OT, published (≥ 2) | 6 | 19 | 1 | 5 | 13 | 0 | -0.060 | 275 |
+| Clonotrace, exact OT (≥ 10) | 2 | 6 | 0 | 0 | 5 | 1 | -0.097 | 84 |
+| Clonotrace, exact OT, published (≥ 10) | 2 | 6 | 0 | 1 | 5 | 0 | -0.056 | 84 |
 
 ## two_cell
 
-| tool | annotations | median R² on two-cell clones, tool | median R² on the same clones, Threadfin | tool higher | Threadfin higher | annotations with R² > 0.1 for the tool |
-|---|---|---|---|---|---|---|
-| clone2vec (forced to ≥ 2 cells) | 41 | 0.259 | 0.246 | 15 | 26 | 30 |
-| Clonotrace (forced to ≥ 2 cells) | 39 | 0.236 | 0.304 | 11 | 28 | 26 |
-| Benisse | 31 | -0.084 | 0.246 | 5 | 26 | 1 |
-| Mean of the embedding (baseline) | 41 | 0.259 | 0.246 | 20 | 21 | 33 |
-| Cluster composition (baseline) | 41 | 0.120 | 0.246 | 3 | 38 | 23 |
-| Medoid cell, CoNGA's rule (baseline) | 41 | 0.207 | 0.246 | 7 | 34 | 29 |
-| Threadfin, mean profile | 41 | 0.252 | 0.246 | 20 | 21 | 29 |
-| Threadfin, no shrinkage | 41 | 0.242 | 0.246 | 24 | 17 | 32 |
+| tool | annotations | median R² on two-cell clones, tool | median R² on the same clones, Threadfin | the same, measured annotations only: tool / Threadfin | tool higher | Threadfin higher | interval excludes 0: tool / Threadfin better | annotations with R² > 0.1 for the tool |
+|---|---|---|---|---|---|---|---|---|
+| clone2vec (forced to ≥ 2 cells) | 41 | 0.259 | 0.246 | 0.223 / 0.217 (35) | 15 | 26 | 3 / 9 | 30 |
+| Clonotrace (forced to ≥ 2 cells) | 39 | 0.236 | 0.304 | 0.220 / 0.273 (33) | 11 | 28 | 0 / 17 | 26 |
+| Benisse | 31 | -0.084 | 0.246 | -0.083 / 0.203 (26) | 5 | 26 | 1 / 23 | 1 |
+| Mean of the embedding (baseline) | 41 | 0.259 | 0.246 | 0.219 / 0.217 (35) | 20 | 21 | 7 / 10 | 33 |
+| Cluster composition (baseline) | 41 | 0.120 | 0.246 | 0.106 / 0.217 (35) | 3 | 38 | 1 / 24 | 23 |
+| Medoid cell, CoNGA's rule (baseline) | 41 | 0.207 | 0.246 | 0.182 / 0.217 (35) | 7 | 34 | 1 / 20 | 29 |
+| Threadfin, mean profile | 41 | 0.252 | 0.246 | 0.210 / 0.217 (35) | 20 | 21 | 6 / 2 | 29 |
+| Threadfin, no shrinkage | 41 | 0.242 | 0.246 | 0.224 / 0.217 (35) | 24 | 17 | 4 / 2 | 32 |
 
 ## pairwise_detail
 
@@ -142,182 +151,248 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Human COVID-19 | IgG | 0.23 vs 0.22 | 0.14 vs 0.18 | -0.30 vs 0.22 ▼ | 0.22 vs 0.22 |
 | LARRY d2 | day-6 neutrophil fraction | 0.16 vs 0.19 | 0.16 vs 0.30 ▼ | — | 0.16 vs 0.19 |
 | LARRY d2 | day-6 monocyte fraction | 0.11 vs 0.14 | 0.05 vs 0.10 | — | 0.10 vs 0.14 |
-| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 ▼ | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
+| LARRY d2 | day-6 neutrophil share (of neu + mono) | 0.11 vs 0.21 | 0.09 vs 0.21 | — | 0.17 vs 0.21 |
+
+## seed_control
+
+| comparisons | annotations | comparisons (2 seeds) | called better | called worse | unresolved | false-call rate (Wilson 95 % CI) | binomial P against 5 % | median |ΔR²| | largest |ΔR²| |
+|---|---|---|---|---|---|---|---|---|---|
+| all clones ≥ 2 cells (Fig. 4) | measured | 70 | 5 | 4 | 4 | 13 % (7–23 %) | 0.008 | 0.008 | 0.122 |
+| all clones ≥ 2 cells (Fig. 4) | all (incl. RNA) | 82 | 8 | 5 | 4 | 16 % (10–25 %) | 2.1e-04 | 0.007 | 0.122 |
+| clones ≥ 3 cells (Fig. 5) | measured | 70 | 5 | 3 | 1 | 11 % (6–21 %) | 0.023 | 0.010 | 0.077 |
+| clones ≥ 3 cells (Fig. 5) | all (incl. RNA) | 82 | 6 | 5 | 1 | 13 % (8–22 %) | 0.0026 | 0.010 | 0.077 |
+| clones ≥ 10 cells (Fig. 5) | measured | 48 | 4 | 2 | 0 | 12 % (6–25 %) | 0.032 | 0.017 | 0.068 |
+| clones ≥ 10 cells (Fig. 5) | all (incl. RNA) | 52 | 5 | 2 | 0 | 13 % (7–25 %) | 0.014 | 0.016 | 0.068 |
+
+## exact
+
+| dataset | setting | status | clones kept | clone distances | approximate distance | job peak memory | reason |
+|---|---|---|---|---|---|---|---|
+| Gut GC reporter | ≥ 2 cells | failed |  |  | 26.7 min | 5.0 GB | the tool: "All stored endpoint cells must lie in one connected graph component." |
+| RBD reporter | ≥ 2 cells | cancelled |  |  | 31.6 min |  | cancelled by the authors |
+| NP reporter | ≥ 2 cells | completed | 315 | 0.5 min | 0.3 min | 4.2 GB |  |
+| Plasmodium d10-42 | ≥ 2 cells | failed |  |  | 0.6 min | 10.8 GB | the tool: "All stored endpoint cells must lie in one connected graph component." |
+| Plasmodium d0-14 | ≥ 2 cells | completed | 275 | 0.2 min | 0.1 min | 7.3 GB |  |
+| Spontaneous GC | ≥ 2 cells | completed | 770 | 3.3 min | 14.6 min | 6.0 GB |  |
+| GC + plasma cells | ≥ 2 cells | completed | 58 | 0.0 min | 0.0 min | 3.2 GB |  |
+| Human COVID-19 | ≥ 2 cells | completed | 413 | 0.8 min | 1.0 min | 9.9 GB |  |
+| LARRY d2 | ≥ 2 cells | completed | 1,015 | 3.4 min | 3.0 min | 6.7 GB |  |
+| simulation, small clones, shift 0, seed 1 | ≥ 2 cells | completed | 554 | 0.8 min | 0.7 min | 4.1 GB |  |
+| simulation, small clones, shift 0, seed 2 | ≥ 2 cells | completed | 524 | 0.8 min | 0.5 min | 4.1 GB |  |
+| simulation, small clones, shift 0, seed 3 | ≥ 2 cells | completed | 523 | 0.8 min | 0.5 min | 4.1 GB |  |
+| simulation, small clones, shift 1.5, seed 1 | ≥ 2 cells | completed | 528 | 0.8 min | 0.6 min | 4.1 GB |  |
+| simulation, small clones, shift 1.5, seed 2 | ≥ 2 cells | completed | 518 | 0.8 min | 0.6 min | 4.1 GB |  |
+| simulation, small clones, shift 1.5, seed 3 | ≥ 2 cells | completed | 522 | 0.8 min | 0.4 min | 4.1 GB |  |
+| Gut GC reporter | ≥ 10 cells | failed |  |  | 68.2 min | 4.6 GB | the tool: "All stored endpoint cells must lie in one connected graph component." |
+| RBD reporter | ≥ 10 cells | failed |  |  | 181.0 min | 6.7 GB | the tool: "All stored endpoint cells must lie in one connected graph component." |
+| NP reporter | ≥ 10 cells | completed | 41 | 0.5 min | 1.0 min | 3.6 GB |  |
+| Human LN vaccine | ≥ 10 cells | cancelled |  |  | 1566.8 min |  | cancelled by the authors |
+| Spontaneous GC | ≥ 10 cells | completed | 127 | 11.9 min | 41.6 min | 5.3 GB |  |
+| Human COVID-19 | ≥ 10 cells | cancelled |  |  | 440.3 min |  | cancelled by the authors |
+| LARRY d4/d6 | ≥ 10 cells | cancelled |  |  | 1053.3 min |  | cancelled by the authors |
+| simulation, large clones, shift 0, seed 1 | ≥ 10 cells | cancelled |  |  | 355.0 min |  | cancelled by the authors |
+| simulation, large clones, shift 0, seed 2 | ≥ 10 cells | cancelled |  |  | 286.3 min |  | cancelled by the authors |
+| simulation, large clones, shift 0, seed 3 | ≥ 10 cells | cancelled |  |  | 300.6 min |  | cancelled by the authors |
+| simulation, large clones, shift 1.5, seed 1 | ≥ 10 cells | cancelled |  |  | 379.9 min |  | cancelled by the authors |
+| simulation, large clones, shift 1.5, seed 2 | ≥ 10 cells | cancelled |  |  | 310.4 min |  | cancelled by the authors |
+| simulation, large clones, shift 1.5, seed 3 | ≥ 10 cells | cancelled |  |  | 316.9 min |  | cancelled by the authors |
 
 ## tests
 
-| dataset | Threadfin: false positives, shuffled within sample | scirpy: ≥ 1 clone flagged, shuffled within sample | scirpy: share of clones flagged, shuffled within sample | ANOVA: false positives, shuffled within sample | Threadfin, shuffled across dataset | scirpy, shuffled across dataset | ANOVA, shuffled across dataset | Threadfin power at 10 / 25 / 50 % real labels | Threadfin on the real labels: ICC (null) P | scirpy on the real labels: clones flagged |
+| dataset | Threadfin: false positives, shuffled within sample | scirpy: ≥ 1 clone flagged, shuffled within sample | scirpy: share of clones flagged, shuffled within sample | ANOVA: false positives, shuffled within sample | Threadfin, shuffled across dataset | scirpy, shuffled across dataset | ANOVA, shuffled across dataset | Threadfin power at 10 / 25 / 50 % real labels (50 replicates each) | Threadfin on the real labels: ICC (null) P | scirpy on the real labels: clones flagged |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Gut GC reporter | 0.02 | 1.00 | 0.005 | 1.00 | 0.02 | 0.00 | 0.60 | 0.0 / 0.0 / 1.0 | 0.245 (0.130) 0.01 | 35 of 958 |
-| RBD reporter | 0.04 | 1.00 | 0.003 | 1.00 | 0.02 | 0.12 | 0.30 | 0.0 / 1.0 / 1.0 | 0.142 (0.016) 0.01 | 123 of 1,887 |
-| NP reporter | 0.00 | 0.02 | 0.000 | 1.00 | 0.04 | 0.02 | 0.12 | 0.2 / 0.3 / 0.9 | 0.111 (0.018) 0.01 | 2 of 471 |
-| GC + plasma cells | 0.02 | 0.04 | 0.000 | 0.86 | 0.06 | 0.00 | 0.56 | 0.0 / 0.0 / 0.0 | 0.048 (0.032) 0.24 | 0 of 96 |
-| Plasmodium d10-42 | 0.04 | 0.12 | 0.000 | 1.00 | 0.00 | 0.04 | 0.10 | 0.0 / 0.2 / 0.8 | 0.451 (0.015) 0.01 | 4 of 1,015 |
-| Plasmodium d0-14 | 0.04 | 0.02 | 0.000 | 1.00 | 0.04 | 0.00 | 0.08 | 0.2 / 0.0 / 1.0 | 0.736 (0.061) 0.01 | 30 of 523 |
-| Human LN vaccine | 0.08 | 1.00 | 0.001 | 1.00 | 0.00 | 0.66 | 0.10 | 0.9 / 1.0 / 1.0 | 0.216 (0.001) 0.01 | 841 of 11,141 |
-| Spontaneous GC | 0.04 | 1.00 | 0.006 | 1.00 | 0.00 | 0.00 | 0.04 | 0.2 / 1.0 / 1.0 | 0.279 (0.027) 0.01 | 120 of 1,051 |
-| Human COVID-19 | 0.02 | 0.80 | 0.003 | 1.00 | 0.04 | 0.04 | 0.14 | 0.1 / 0.0 / 0.9 | 0.387 (0.036) 0.01 | 34 of 592 |
+| Gut GC reporter | 2 % (0–10 %) | 1.00 | 0.005 | 1.00 | 2 % (0–10 %) | 0.00 | 0.60 | 0.02 / 0.26 / 0.90 | 0.245 (0.130) 0.01 | 35 of 958 |
+| RBD reporter | 4 % (1–13 %) | 1.00 | 0.003 | 1.00 | 2 % (0–10 %) | 0.12 | 0.30 | 0.18 / 0.80 / 1.00 | 0.142 (0.016) 0.01 | 123 of 1,887 |
+| NP reporter | 0 % (0–7 %) | 0.02 | 0.000 | 1.00 | 4 % (1–13 %) | 0.02 | 0.12 | 0.16 / 0.40 / 0.94 | 0.111 (0.018) 0.01 | 2 of 471 |
+| GC + plasma cells | 2 % (0–10 %) | 0.04 | 0.000 | 0.86 | 6 % (2–16 %) | 0.00 | 0.56 | 0.04 / 0.00 / 0.04 | 0.048 (0.032) 0.24 | 0 of 96 |
+| Plasmodium d10-42 | 4 % (1–13 %) | 0.12 | 0.000 | 1.00 | 0 % (0–7 %) | 0.04 | 0.10 | 0.06 / 0.04 / 0.74 | 0.451 (0.015) 0.01 | 4 of 1,015 |
+| Plasmodium d0-14 | 4 % (1–13 %) | 0.02 | 0.000 | 1.00 | 4 % (1–13 %) | 0.00 | 0.08 | 0.00 / 0.06 / 0.80 | 0.736 (0.061) 0.01 | 30 of 523 |
+| Human LN vaccine | 8 % (3–19 %) | 1.00 | 0.001 | 1.00 | 0 % (0–7 %) | 0.66 | 0.10 | 0.94 / 1.00 / 1.00 | 0.216 (0.001) 0.01 | 841 of 11,141 |
+| Spontaneous GC | 4 % (1–13 %) | 1.00 | 0.006 | 1.00 | 0 % (0–7 %) | 0.00 | 0.04 | 0.34 / 1.00 / 1.00 | 0.279 (0.027) 0.01 | 120 of 1,051 |
+| Human COVID-19 | 2 % (0–10 %) | 0.80 | 0.003 | 1.00 | 4 % (1–13 %) | 0.04 | 0.14 | 0.08 / 0.04 / 0.76 | 0.387 (0.036) 0.01 | 34 of 592 |
+
+Threadfin's coherence test over all nine datasets: shuffled within sample: 15 of 450, 3 % (2–5 %); shuffled across the dataset: 11 of 450, 2 % (1–4 %).
 
 ## simulation
 
 | clones | donor shift (SD) | method | seeds | programme purity (chance) | purity, two-cell clones | mixture vs intermediate AUROC | same-donor excess |
 |---|---|---|---|---|---|---|---|
-| small (half 2 cells) | 0 | Threadfin (default) | 3 | 0.626 (0.212) | 0.571 | 0.464 | +0.017 |
-| small (half 2 cells) | 0 | Threadfin, mean profile | 3 | 0.631 (0.212) | 0.581 | 0.390 | +0.009 |
+| small (half 2 cells) | 0 | Threadfin (default) | 10 | 0.591 (0.209) | 0.558 | 0.467 | +0.014 |
+| small (half 2 cells) | 0 | Threadfin, mean profile | 10 | 0.603 (0.209) | 0.574 | 0.400 | +0.013 |
+| small (half 2 cells) | 0 | Threadfin, no centring | 10 | 0.597 (0.209) | 0.566 | 0.478 | +0.017 |
+| small (half 2 cells) | 0 | Threadfin, no smoothing | 10 | 0.546 (0.209) | 0.514 | 0.459 | +0.010 |
+| small (half 2 cells) | 0 | Threadfin, no shrinkage | 10 | 0.603 (0.209) | 0.577 | 0.410 | +0.015 |
+| small (half 2 cells) | 0 | clone2vec (forced to ≥ 2 cells) | 10 | 0.562 (0.209) | 0.530 | 0.623 | +0.013 |
 | small (half 2 cells) | 0 | Clonotrace (forced to ≥ 2 cells) | 3 | 0.521 (0.212) | 0.448 | 0.494 | +0.009 |
-| small (half 2 cells) | 0 | Clonotrace, published distance (≥ 2) | 3 | 0.461 (0.212) | 0.402 | 0.546 | +0.006 |
-| small (half 2 cells) | 0 | clone2vec (forced to ≥ 2 cells) | 3 | 0.587 (0.212) | 0.537 | 0.621 | +0.010 |
-| small (half 2 cells) | 0 | Mean of the embedding (baseline) | 3 | 0.580 (0.212) | 0.534 | 0.422 | +0.016 |
-| small (half 2 cells) | 0 | Cluster composition (baseline) | 3 | 0.637 (0.212) | 0.577 | 0.609 | +0.008 |
-| small (half 2 cells) | 0 | Medoid cell, CoNGA's rule (baseline) | 3 | 0.416 (0.212) | 0.393 | 0.550 | +0.014 |
-| small (half 2 cells) | 0 | Threadfin, no centring | 3 | 0.624 (0.211) | 0.586 | 0.454 | +0.019 |
-| small (half 2 cells) | 0 | Threadfin, no smoothing | 3 | 0.573 (0.211) | 0.533 | 0.478 | +0.012 |
-| small (half 2 cells) | 0 | Threadfin, no shrinkage | 3 | 0.633 (0.211) | 0.598 | 0.423 | +0.016 |
-| small (half 2 cells) | 1.5 | Threadfin (default) | 3 | 0.623 (0.211) | 0.565 | 0.467 | +0.023 |
-| small (half 2 cells) | 1.5 | Threadfin, mean profile | 3 | 0.633 (0.211) | 0.586 | 0.405 | +0.015 |
+| small (half 2 cells) | 0 | Mean of the embedding (baseline) | 10 | 0.546 (0.209) | 0.520 | 0.411 | +0.014 |
+| small (half 2 cells) | 0 | Cluster composition (baseline) | 10 | 0.616 (0.209) | 0.584 | 0.611 | +0.013 |
+| small (half 2 cells) | 0 | Medoid cell, CoNGA's rule (baseline) | 10 | 0.401 (0.209) | 0.396 | 0.550 | +0.006 |
+| small (half 2 cells) | 1.5 | Threadfin (default) | 10 | 0.591 (0.209) | 0.558 | 0.467 | +0.014 |
+| small (half 2 cells) | 1.5 | Threadfin, mean profile | 10 | 0.603 (0.209) | 0.574 | 0.400 | +0.013 |
+| small (half 2 cells) | 1.5 | Threadfin, no centring | 10 | 0.587 (0.209) | 0.557 | 0.472 | +0.281 |
+| small (half 2 cells) | 1.5 | Threadfin, no smoothing | 10 | 0.546 (0.209) | 0.514 | 0.459 | +0.010 |
+| small (half 2 cells) | 1.5 | Threadfin, no shrinkage | 10 | 0.603 (0.209) | 0.577 | 0.410 | +0.015 |
+| small (half 2 cells) | 1.5 | clone2vec (forced to ≥ 2 cells) | 10 | 0.554 (0.209) | 0.525 | 0.653 | +0.259 |
 | small (half 2 cells) | 1.5 | Clonotrace (forced to ≥ 2 cells) | 3 | 0.520 (0.211) | 0.453 | 0.493 | +0.184 |
-| small (half 2 cells) | 1.5 | Clonotrace, published distance (≥ 2) | 3 | 0.463 (0.211) | 0.406 | 0.545 | +0.080 |
-| small (half 2 cells) | 1.5 | clone2vec (forced to ≥ 2 cells) | 3 | 0.575 (0.211) | 0.529 | 0.658 | +0.277 |
-| small (half 2 cells) | 1.5 | Mean of the embedding (baseline) | 3 | 0.560 (0.211) | 0.517 | 0.470 | +0.340 |
-| small (half 2 cells) | 1.5 | Cluster composition (baseline) | 3 | 0.609 (0.211) | 0.564 | 0.592 | +0.071 |
-| small (half 2 cells) | 1.5 | Medoid cell, CoNGA's rule (baseline) | 3 | 0.417 (0.211) | 0.395 | 0.543 | +0.136 |
-| small (half 2 cells) | 1.5 | Threadfin, no centring | 3 | 0.621 (0.211) | 0.584 | 0.527 | +0.309 |
-| small (half 2 cells) | 1.5 | Threadfin, no smoothing | 3 | 0.573 (0.211) | 0.533 | 0.478 | +0.012 |
-| small (half 2 cells) | 1.5 | Threadfin, no shrinkage | 3 | 0.633 (0.211) | 0.598 | 0.423 | +0.016 |
-| large (≥ 10 cells) | 0 | Threadfin (default) | 3 | 0.868 (0.213) |  | 0.878 | +0.105 |
-| large (≥ 10 cells) | 0 | Threadfin, mean profile | 3 | 0.825 (0.213) |  | 0.575 | +0.112 |
+| small (half 2 cells) | 1.5 | Mean of the embedding (baseline) | 10 | 0.528 (0.209) | 0.507 | 0.455 | +0.320 |
+| small (half 2 cells) | 1.5 | Cluster composition (baseline) | 10 | 0.580 (0.209) | 0.555 | 0.569 | +0.066 |
+| small (half 2 cells) | 1.5 | Medoid cell, CoNGA's rule (baseline) | 10 | 0.400 (0.209) | 0.395 | 0.540 | +0.124 |
+| large (≥ 10 cells) | 0 | Threadfin (default) | 10 | 0.853 (0.210) |  | 0.871 | +0.109 |
+| large (≥ 10 cells) | 0 | Threadfin, mean profile | 10 | 0.805 (0.210) |  | 0.585 | +0.123 |
+| large (≥ 10 cells) | 0 | Threadfin, no centring | 10 | 0.883 (0.210) |  | 0.928 | +0.027 |
+| large (≥ 10 cells) | 0 | Threadfin, no smoothing | 10 | 0.832 (0.210) |  | 0.830 | +0.066 |
+| large (≥ 10 cells) | 0 | Threadfin, no shrinkage | 10 | 0.842 (0.210) |  | 0.815 | +0.103 |
+| large (≥ 10 cells) | 0 | clone2vec (default, ≥ 3 cells) | 10 | 0.936 (0.210) |  | 0.987 | +0.022 |
 | large (≥ 10 cells) | 0 | Clonotrace (default, ≥ 10 cells) | 3 | 0.831 (0.213) |  | 0.621 | +0.017 |
-| large (≥ 10 cells) | 0 | Clonotrace, published distance (≥ 10) | 3 | 0.793 (0.213) |  | 0.809 | +0.020 |
-| large (≥ 10 cells) | 0 | clone2vec (default, ≥ 3 cells) | 3 | 0.946 (0.213) |  | 0.987 | +0.013 |
-| large (≥ 10 cells) | 0 | Mean of the embedding (baseline) | 3 | 0.822 (0.213) |  | 0.527 | +0.019 |
-| large (≥ 10 cells) | 0 | Cluster composition (baseline) | 3 | 0.935 (0.213) |  | 0.962 | +0.018 |
-| large (≥ 10 cells) | 0 | Medoid cell, CoNGA's rule (baseline) | 3 | 0.500 (0.213) |  | 0.515 | +0.007 |
-| large (≥ 10 cells) | 0 | Threadfin, no centring | 3 | 0.885 (0.213) |  | 0.921 | +0.024 |
-| large (≥ 10 cells) | 0 | Threadfin, no smoothing | 3 | 0.851 (0.213) |  | 0.837 | +0.061 |
-| large (≥ 10 cells) | 0 | Threadfin, no shrinkage | 3 | 0.859 (0.213) |  | 0.836 | +0.092 |
-| large (≥ 10 cells) | 1.5 | Threadfin (default) | 3 | 0.868 (0.213) |  | 0.878 | +0.105 |
-| large (≥ 10 cells) | 1.5 | Threadfin, mean profile | 3 | 0.825 (0.213) |  | 0.575 | +0.112 |
+| large (≥ 10 cells) | 0 | Mean of the embedding (baseline) | 10 | 0.808 (0.210) |  | 0.548 | +0.024 |
+| large (≥ 10 cells) | 0 | Cluster composition (baseline) | 10 | 0.942 (0.210) |  | 0.972 | +0.028 |
+| large (≥ 10 cells) | 0 | Medoid cell, CoNGA's rule (baseline) | 10 | 0.476 (0.210) |  | 0.489 | +0.011 |
+| large (≥ 10 cells) | 1.5 | Threadfin (default) | 10 | 0.853 (0.210) |  | 0.871 | +0.109 |
+| large (≥ 10 cells) | 1.5 | Threadfin, mean profile | 10 | 0.805 (0.210) |  | 0.585 | +0.123 |
+| large (≥ 10 cells) | 1.5 | Threadfin, no centring | 10 | 0.839 (0.210) |  | 0.763 | +0.790 |
+| large (≥ 10 cells) | 1.5 | Threadfin, no smoothing | 10 | 0.832 (0.210) |  | 0.830 | +0.066 |
+| large (≥ 10 cells) | 1.5 | Threadfin, no shrinkage | 10 | 0.842 (0.210) |  | 0.815 | +0.103 |
+| large (≥ 10 cells) | 1.5 | clone2vec (default, ≥ 3 cells) | 10 | 0.907 (0.210) |  | 0.979 | +0.746 |
 | large (≥ 10 cells) | 1.5 | Clonotrace (default, ≥ 10 cells) | 3 | 0.833 (0.213) |  | 0.626 | +0.809 |
-| large (≥ 10 cells) | 1.5 | Clonotrace, published distance (≥ 10) | 3 | 0.775 (0.213) |  | 0.779 | +0.433 |
-| large (≥ 10 cells) | 1.5 | clone2vec (default, ≥ 3 cells) | 3 | 0.916 (0.213) |  | 0.975 | +0.749 |
-| large (≥ 10 cells) | 1.5 | Mean of the embedding (baseline) | 3 | 0.817 (0.213) |  | 0.563 | +0.810 |
-| large (≥ 10 cells) | 1.5 | Cluster composition (baseline) | 3 | 0.896 (0.213) |  | 0.910 | +0.212 |
-| large (≥ 10 cells) | 1.5 | Medoid cell, CoNGA's rule (baseline) | 3 | 0.495 (0.213) |  | 0.493 | +0.200 |
-| large (≥ 10 cells) | 1.5 | Threadfin, no centring | 3 | 0.852 (0.213) |  | 0.734 | +0.791 |
-| large (≥ 10 cells) | 1.5 | Threadfin, no smoothing | 3 | 0.851 (0.213) |  | 0.837 | +0.061 |
-| large (≥ 10 cells) | 1.5 | Threadfin, no shrinkage | 3 | 0.859 (0.213) |  | 0.836 | +0.092 |
+| large (≥ 10 cells) | 1.5 | Mean of the embedding (baseline) | 10 | 0.801 (0.210) |  | 0.584 | +0.808 |
+| large (≥ 10 cells) | 1.5 | Cluster composition (baseline) | 10 | 0.878 (0.210) |  | 0.890 | +0.233 |
+| large (≥ 10 cells) | 1.5 | Medoid cell, CoNGA's rule (baseline) | 10 | 0.471 (0.210) |  | 0.489 | +0.189 |
+
+## simulation_tests
+
+| tool | readout | tool vs Threadfin (mean over seeds) | seeds | Wilcoxon P over seeds | verdict |
+|---|---|---|---|---|---|
+| clone2vec (default, ≥ 3 cells) | programme purity | 0.92 vs 0.85 | 10 | 0.002 | better |
+| clone2vec (default, ≥ 3 cells) | mixture vs intermediate AUROC | 0.98 vs 0.87 | 10 | 0.002 | better |
+| clone2vec (forced to ≥ 2 cells) | programme purity | 0.74 vs 0.72 | 10 | 0.0059 | better |
+| clone2vec (forced to ≥ 2 cells) | mixture vs intermediate AUROC | 0.98 vs 0.87 | 10 | 0.002 | better |
+| Clonotrace (default, ≥ 10 cells) | programme purity | 0.83 vs 0.87 | 3 |  | too few seeds to test |
+| Clonotrace (default, ≥ 10 cells) | mixture vs intermediate AUROC | 0.62 vs 0.88 | 3 |  | too few seeds to test |
+| Clonotrace (forced to ≥ 2 cells) | programme purity | 0.52 vs 0.62 | 3 |  | too few seeds to test |
+| Clonotrace, exact OT (≥ 2) | programme purity | 0.52 vs 0.62 | 3 |  | too few seeds to test |
+| Mean of the embedding (baseline) | programme purity | 0.67 vs 0.72 | 10 | 0.002 | worse |
+| Mean of the embedding (baseline) | mixture vs intermediate AUROC | 0.57 vs 0.87 | 10 | 0.002 | worse |
+| Cluster composition (baseline) | programme purity | 0.75 vs 0.72 | 10 | 0.002 | better |
+| Cluster composition (baseline) | mixture vs intermediate AUROC | 0.93 vs 0.87 | 10 | 0.002 | better |
+| Medoid cell, CoNGA's rule (baseline) | programme purity | 0.44 vs 0.72 | 10 | 0.002 | worse |
+| Medoid cell, CoNGA's rule (baseline) | mixture vs intermediate AUROC | 0.49 vs 0.87 | 10 | 0.002 | worse |
+| Threadfin, another seed (control) | programme purity | 0.72 vs 0.72 | 10 | 0.13 | similar |
+| Threadfin, another seed (control) | mixture vs intermediate AUROC | 0.78 vs 0.87 | 10 | 0.002 | worse |
 
 ## runtime
 
 | dataset | Threadfin | clone2vec ≥ 3 | clone2vec ≥ 2 | Clonotrace ≥ 10 | Clonotrace ≥ 2 | Benisse |
 |---|---|---|---|---|---|---|
-| Gut GC reporter | 1.9 s, 0.4 GB | 50.4 s, 1.1 GB | 1.0 min, 1.1 GB | 1.2 h, 1.0 GB † | 35.9 min, 1.1 GB † | 2.5 min, 1.5 GB |
-| RBD reporter | 3.1 s, 0.5 GB | 1.1 min, 1.1 GB | 1.8 min, 1.1 GB | 3.1 h, 1.3 GB † | 1.2 h, 2.4 GB † | 11.0 min, 4.0 GB |
-| NP reporter | 0.7 s, 0.3 GB | 35.6 s, 1.1 GB | 47.6 s, 1.1 GB | 1.7 min, 0.6 GB † | 3.3 min, 0.6 GB | 49.1 s, 0.5 GB |
-| GC + plasma cells | 0.2 s, 0.2 GB | 33.3 s, 1.1 GB | 32.5 s, 1.1 GB | — | 28.6 s, 0.4 GB † | 5.7 s, 0.3 GB |
-| Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | 18.8 min, 2.7 GB | 2.0 min, 0.8 GB |
-| Plasmodium d0-14 | 5.8 s, 0.6 GB | 36.1 s, 1.1 GB | 53.4 s, 1.1 GB | — | 11.5 min, 1.4 GB † | 20.0 s, 0.3 GB |
-| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, 8.7 GB | 100.7 h, 67.3 GB | 19.0 min, 31.6 GB |
-| Spontaneous GC | 1.2 s, 0.4 GB | 53.8 s, 1.1 GB | 1.0 min, 1.1 GB | 43.6 min, 1.0 GB † | 29.7 min, 1.4 GB † | 3.3 min, 1.9 GB |
-| Human COVID-19 | 27.3 s, 1.2 GB | 1.2 min, 1.1 GB | 1.0 min, 1.1 GB | 7.4 h, 2.2 GB | 22.7 min, 2.2 GB | 32.2 s, 0.4 GB |
-| LARRY d2 | 1.4 s, 0.4 GB | 1.1 min, 1.1 GB | 1.6 min, 1.1 GB | — | 22.6 min, 1.6 GB † | — |
-| LARRY d4/d6 | 3.6 s, 0.6 GB | 4.4 min, 1.2 GB | 6.2 min, 1.2 GB | 18.2 h, 4.5 GB | 31.0 h, 22.4 GB | — |
+| Gut GC reporter | 1.9 s, 0.4 GB | 50.4 s, 1.1 GB | 1.0 min, 1.1 GB | 1.2 h, ≥ 1.0 GB, 1.2 core-h † | 35.9 min, ≥ 1.1 GB, 1.1 core-h † | 2.5 min, 1.5 GB |
+| RBD reporter | 3.1 s, 0.5 GB | 1.1 min, 1.1 GB | 1.8 min, 1.1 GB | 3.1 h, ≥ 1.3 GB, 3.3 core-h † | 1.2 h, ≥ 2.4 GB, 3.2 core-h † | 11.0 min, 4.0 GB |
+| NP reporter | 0.7 s, 0.3 GB | 35.6 s, 1.1 GB | 47.6 s, 1.1 GB | 1.7 min, ≥ 0.6 GB, 0.1 core-h † | 3.3 min, ≥ 0.6 GB, 0.2 core-h | 49.1 s, 0.5 GB |
+| GC + plasma cells | 0.2 s, 0.2 GB | 33.3 s, 1.1 GB | 32.5 s, 1.1 GB | — | 28.6 s, ≥ 0.4 GB, 0.0 core-h † | 5.7 s, 0.3 GB |
+| Plasmodium d10-42 | 29.5 s, 1.4 GB | 36.3 s, 1.1 GB | 1.2 min, 1.2 GB | — | 18.8 min, 10.8 GB (job), 2.3 core-h | 2.0 min, 0.8 GB |
+| Plasmodium d0-14 | 5.8 s, 0.6 GB | 36.1 s, 1.1 GB | 53.4 s, 1.1 GB | — | 11.5 min, ≥ 1.4 GB, 0.7 core-h † | 20.0 s, 0.3 GB |
+| Human LN vaccine | 42.6 s, 2.3 GB | 5.5 min, 1.3 GB | 10.7 min, 1.4 GB | 28.8 h, ≥ 8.7 GB, 114.8 core-h | 100.7 h, 128.2 GB (job), 3,213.9 core-h | 19.0 min, 31.6 GB |
+| Spontaneous GC | 1.2 s, 0.4 GB | 53.8 s, 1.1 GB | 1.0 min, 1.1 GB | 43.6 min, ≥ 1.0 GB, 0.8 core-h † | 29.7 min, ≥ 1.4 GB, 1.2 core-h † | 3.3 min, 1.9 GB |
+| Human COVID-19 | 27.3 s, 1.2 GB | 1.2 min, 1.1 GB | 1.0 min, 1.1 GB | 7.4 h, ≥ 2.2 GB, 29.5 core-h | 22.7 min, ≥ 2.2 GB, 1.3 core-h | 32.2 s, 0.4 GB |
+| LARRY d2 | 1.4 s, 0.4 GB | 1.1 min, 1.1 GB | 1.6 min, 1.1 GB | — | 22.6 min, ≥ 1.6 GB, 1.3 core-h † | — |
+| LARRY d4/d6 | 3.6 s, 0.6 GB | 4.4 min, 1.2 GB | 6.2 min, 1.2 GB | 18.2 h, ≥ 4.5 GB, 72.6 core-h | 31.0 h, ≥ 22.4 GB, 185.6 core-h | — |
 
 ## clonotrace_stages
 
-| dataset | setting | clones offered | clones kept | label spreading | clone distances | graph k used |
-|---|---|---|---|---|---|---|
-| Gut GC reporter | default ≥ 10 | 119 | 119 | 1.5 min | 1.1 h (1 process) | 50 |
-| Gut GC reporter | forced ≥ 2 | 958 | 609 | 9.1 min | 26.7 min (1 process) | 30 |
-| RBD reporter | default ≥ 10 | 160 | 160 | 3.6 min | 3.0 h (1 process) | 30 |
-| RBD reporter | forced ≥ 2 | 1,887 | 1,173 | 40.1 min | 31.6 min (1 process) |  |
-| NP reporter | default ≥ 10 | 41 | 41 | 34.3 s | 1.0 min (1 process) |  |
-| NP reporter | forced ≥ 2 | 471 | 315 | 2.9 min | 18.6 s (4 workers) | 10 |
-| Plasmodium d10-42 | forced ≥ 2 | 1,015 | 531 | 16.4 min | 35.3 s (8 workers) | 100 |
-| Plasmodium d0-14 | forced ≥ 2 | 523 | 275 | 10.5 min | 8.7 s (1 process) |  |
-| Human LN vaccine | default ≥ 10 | 1,243 | 1,243 | 2.6 h | 26.1 h (4 workers) | 10 |
-| Human LN vaccine | forced ≥ 2 | 11,141 | 7,158 | 4.7 h | 95.7 h (32 workers) | 30 |
-| Spontaneous GC | default ≥ 10 | 127 | 127 | 1.7 min | 41.6 min (1 process) |  |
-| Spontaneous GC | forced ≥ 2 | 1,051 | 770 | 14.7 min | 14.6 min (1 process) |  |
-| GC + plasma cells | forced ≥ 2 | 96 | 58 | 27.4 s | 0.8 s (1 process) |  |
-| Human COVID-19 | default ≥ 10 | 31 | 31 | 1.1 min | 7.3 h (4 workers) | 10 |
-| Human COVID-19 | forced ≥ 2 | 592 | 411 | 16.9 min | 1.0 min (4 workers) | 10 |
-| LARRY d2 | forced ≥ 2 | 1,401 | 1,015 | 19.0 min | 3.0 min (1 process) | 10 |
-| LARRY d4/d6 | default ≥ 10 | 1,139 | 1,139 | 34.9 min | 17.6 h (4 workers) | 10 |
-| LARRY d4/d6 | forced ≥ 2 | 6,174 | 4,693 | 1.9 h | 29.1 h (6 workers) | 10 |
+| dataset | setting | clones offered | clones kept | label spreading | clone distances | core-hours | graph k used |
+|---|---|---|---|---|---|---|---|
+| Gut GC reporter | default ≥ 10 | 119 | 119 | 1.5 min | 1.1 h (1 process) | 1.2 | 50 |
+| Gut GC reporter | forced ≥ 2 | 958 | 609 | 9.1 min | 26.7 min (1 process) | 1.1 | 30 |
+| RBD reporter | default ≥ 10 | 160 | 160 | 3.6 min | 3.0 h (1 process) | 3.3 | 30 |
+| RBD reporter | forced ≥ 2 | 1,887 | 1,173 | 40.1 min | 31.6 min (1 process) | 3.2 |  |
+| NP reporter | default ≥ 10 | 41 | 41 | 34.3 s | 1.0 min (1 process) | 0.1 |  |
+| NP reporter | forced ≥ 2 | 471 | 315 | 2.9 min | 18.6 s (4 workers) | 0.2 | 10 |
+| Plasmodium d10-42 | forced ≥ 2 | 1,015 | 531 | 16.4 min | 35.3 s (8 workers) | 2.3 | 100 |
+| Plasmodium d0-14 | forced ≥ 2 | 523 | 275 | 10.5 min | 8.7 s (1 process) | 0.7 |  |
+| Human LN vaccine | default ≥ 10 | 1,243 | 1,243 | 2.6 h | 26.1 h (4 workers) | 114.8 | 10 |
+| Human LN vaccine | forced ≥ 2 | 11,141 | 7,158 | 4.7 h | 95.7 h (32 workers) | 3,213.9 | 30 |
+| Spontaneous GC | default ≥ 10 | 127 | 127 | 1.7 min | 41.6 min (1 process) | 0.8 |  |
+| Spontaneous GC | forced ≥ 2 | 1,051 | 770 | 14.7 min | 14.6 min (1 process) | 1.2 |  |
+| GC + plasma cells | forced ≥ 2 | 96 | 58 | 27.4 s | 0.8 s (1 process) | 0.0 |  |
+| Human COVID-19 | default ≥ 10 | 31 | 31 | 1.1 min | 7.3 h (4 workers) | 29.5 | 10 |
+| Human COVID-19 | forced ≥ 2 | 592 | 411 | 16.9 min | 1.0 min (4 workers) | 1.3 | 10 |
+| LARRY d2 | forced ≥ 2 | 1,401 | 1,015 | 19.0 min | 3.0 min (1 process) | 1.3 | 10 |
+| LARRY d4/d6 | default ≥ 10 | 1,139 | 1,139 | 34.9 min | 17.6 h (4 workers) | 72.6 | 10 |
+| LARRY d4/d6 | forced ≥ 2 | 6,174 | 4,693 | 1.9 h | 29.1 h (6 workers) | 185.6 | 10 |
 
 ## reproducibility
 
-| method | datasets | median distance Spearman | median 10-NN overlap | overlap by chance | median re-identification (top 1) | re-identification by chance |
-|---|---|---|---|---|---|---|
-| Benisse | 6 | 0.774 | 0.455 | 0.063 | 0.083 | 0.0062 |
-| Threadfin, no centring | 10 | 0.719 | 0.112 | 0.044 | 0.084 | 0.0044 |
-| Mean of the embedding (baseline) | 10 | 0.653 | 0.161 | 0.051 | 0.084 | 0.0051 |
-| Threadfin (default) | 10 | 0.650 | 0.125 | 0.051 | 0.084 | 0.0051 |
-| Threadfin, no smoothing | 10 | 0.645 | 0.137 | 0.044 | 0.090 | 0.0044 |
-| Threadfin, mean profile | 10 | 0.643 | 0.130 | 0.051 | 0.077 | 0.0051 |
-| Threadfin, no shrinkage | 10 | 0.593 | 0.130 | 0.044 | 0.070 | 0.0044 |
-| clone2vec (forced to ≥ 2 cells) | 10 | 0.588 | 0.127 | 0.039 | 0.030 | 0.0039 |
-| Clonotrace (forced to ≥ 2 cells) | 7 | 0.578 | 0.206 | 0.087 | 0.089 | 0.0086 |
-| Clonotrace, published distance (≥ 2) | 7 | 0.537 | 0.234 | 0.087 | 0.108 | 0.0086 |
-| Medoid cell, CoNGA's rule (baseline) | 10 | 0.510 | 0.085 | 0.039 | 0.031 | 0.0039 |
-| Cluster composition (baseline) | 10 | 0.413 | 0.086 | 0.039 | 0.031 | 0.0039 |
+| method | set | datasets | median distance Spearman | Threadfin, same clones | median 10-NN overlap | Threadfin, same clones  | overlap by chance | median re-identification (top 1) | Threadfin, same clones   | higher / lower than Threadfin | re-identification by chance |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Threadfin (default) | forced | 10 | 0.649 | 0.649 | 0.134 | 0.134 | 0.051 | 0.109 | 0.109 |  | 0.0050 |
+| clone2vec (forced to ≥ 2 cells) | forced | 10 | 0.577 | 0.649 | 0.126 | 0.134 | 0.051 | 0.036 | 0.109 | 0 / 10 | 0.0050 |
+| Clonotrace (forced to ≥ 2 cells) | forced | 7 | 0.578 | 0.658 | 0.206 | 0.180 | 0.087 | 0.089 | 0.208 | 3 / 4 | 0.0086 |
+| Clonotrace, published distance (≥ 2) | forced | 7 | 0.537 | 0.658 | 0.234 | 0.180 | 0.087 | 0.108 | 0.208 | 0 / 7 | 0.0086 |
+| Benisse | forced | 6 | 0.774 | 0.598 | 0.455 | 0.144 | 0.063 | 0.083 | 0.143 | 4 / 2 | 0.0062 |
+| Mean of the embedding (baseline) | forced | 10 | 0.673 | 0.649 | 0.160 | 0.134 | 0.051 | 0.082 | 0.109 | 6 / 4 | 0.0050 |
+| Cluster composition (baseline) | forced | 10 | 0.393 | 0.649 | 0.090 | 0.134 | 0.051 | 0.034 | 0.109 | 4 / 6 | 0.0050 |
+| Medoid cell, CoNGA's rule (baseline) | forced | 10 | 0.530 | 0.649 | 0.087 | 0.134 | 0.051 | 0.033 | 0.109 | 2 / 8 | 0.0050 |
+| Threadfin, mean profile | ablation | 10 | 0.649 | 0.641 | 0.128 | 0.124 | 0.044 | 0.102 | 0.093 | 6 / 3 | 0.0044 |
+| Threadfin, no centring | ablation | 10 | 0.717 | 0.641 | 0.110 | 0.124 | 0.044 | 0.091 | 0.093 | 5 / 3 | 0.0044 |
+| Threadfin, no smoothing | ablation | 10 | 0.646 | 0.641 | 0.134 | 0.124 | 0.044 | 0.086 | 0.093 | 5 / 5 | 0.0044 |
+| Threadfin, no shrinkage | ablation | 10 | 0.603 | 0.641 | 0.128 | 0.124 | 0.044 | 0.069 | 0.093 | 4 / 6 | 0.0044 |
+| Threadfin, another seed (control) | sensitivity | 10 | 0.637 | 0.641 | 0.125 | 0.124 | 0.044 | 0.088 | 0.093 | 5 / 3 | 0.0044 |
 
 ## disjoint
 
-| method | annotations | median ΔR² (tool − Threadfin) | tool higher | Threadfin higher |
-|---|---|---|---|---|
-| Benisse | 24 | -0.063 | 5 | 19 |
-| clone2vec (forced to ≥ 2 cells) | 35 | +0.002 | 18 | 17 |
-| Clonotrace, published distance (≥ 2) | 24 | -0.032 | 5 | 19 |
-| Clonotrace (forced to ≥ 2 cells) | 24 | -0.002 | 12 | 12 |
-| Cluster composition (baseline) | 35 | -0.055 | 6 | 29 |
-| Medoid cell, CoNGA's rule (baseline) | 35 | -0.027 | 10 | 25 |
-| Mean of the embedding (baseline) | 35 | +0.011 | 19 | 16 |
-| Threadfin, no centring | 35 | -0.003 | 17 | 18 |
-| Threadfin, no shrinkage | 35 | +0.005 | 20 | 15 |
-| Threadfin, no smoothing | 35 | +0.020 | 26 | 9 |
-| Threadfin, mean profile | 35 | +0.016 | 25 | 10 |
+| method | set | annotations | median ΔR² (tool − Threadfin, same halves and clones) | tool higher | Threadfin higher | measured annotations only: higher / lower (sign test P) |
+|---|---|---|---|---|---|---|
+| clone2vec (forced to ≥ 2 cells) | forced | 35 | +0.002 | 18 | 17 | 17 / 12 (0.46) |
+| Clonotrace (forced to ≥ 2 cells) | forced | 24 | -0.004 | 11 | 13 | 10 / 11 (1) |
+| Clonotrace, published distance (≥ 2) | forced | 24 | -0.011 | 10 | 14 | 9 / 12 (0.66) |
+| Benisse | forced | 24 | -0.074 | 7 | 17 | 6 / 15 (0.078) |
+| Mean of the embedding (baseline) | forced | 35 | +0.011 | 19 | 16 | 16 / 13 (0.71) |
+| Cluster composition (baseline) | forced | 35 | -0.055 | 5 | 30 | 4 / 25 (1.0e-04) |
+| Medoid cell, CoNGA's rule (baseline) | forced | 35 | -0.027 | 10 | 25 | 9 / 20 (0.061) |
+| Threadfin, mean profile | ablation | 35 | +0.009 | 25 | 10 | 20 / 9 (0.061) |
+| Threadfin, no centring | ablation | 35 | -0.009 | 11 | 24 | 9 / 20 (0.061) |
+| Threadfin, no smoothing | ablation | 35 | +0.011 | 29 | 6 | 24 / 5 (5.5e-04) |
+| Threadfin, no shrinkage | ablation | 35 | +0.001 | 20 | 15 | 16 / 13 (0.71) |
+| Threadfin, another seed (control) | sensitivity | 35 | +0.002 | 23 | 12 | 21 / 8 (0.024) |
 
 ## larry
 
-| setting | method | query clones | day-6 candidates | top 1 | top 10 | mean reciprocal rank | median rank | chance top 1 |
-|---|---|---|---|---|---|---|---|---|
-| forced: clones >= 2 cells | Cluster composition (baseline) | 1,251 | 2,643 | 0.049 | 0.072 | 0.059 | 433 | 0.0004 |
-| forced: clones >= 2 cells | clone2vec (forced to ≥ 2 cells) | 1,251 | 2,643 | 0.018 | 0.075 | 0.040 | 326 | 0.0004 |
-| forced: clones >= 2 cells | Clonotrace (forced to ≥ 2 cells) | 1,251 | 2,643 | 0.018 | 0.068 | 0.039 | 448 | 0.0004 |
-| forced: clones >= 2 cells | Mean of the embedding (baseline) | 1,251 | 2,643 | 0.014 | 0.063 | 0.034 | 597 | 0.0004 |
-| forced: clones >= 2 cells | Clonotrace, published distance (≥ 2) | 1,251 | 2,643 | 0.009 | 0.073 | 0.034 | 348 | 0.0004 |
-| forced: clones >= 2 cells | Threadfin, mean profile | 1,251 | 2,643 | 0.015 | 0.052 | 0.031 | 628 | 0.0004 |
-| forced: clones >= 2 cells | Threadfin (default) | 1,251 | 2,643 | 0.016 | 0.049 | 0.030 | 612 | 0.0004 |
-| forced: clones >= 2 cells | Medoid cell, CoNGA's rule (baseline) | 1,251 | 2,643 | 0.007 | 0.041 | 0.019 | 754 | 0.0004 |
-| native: clones >= 10 cells | clone2vec (default, ≥ 3 cells) | 164 | 863 | 0.055 | 0.213 | 0.110 | 60 | 0.0012 |
-| native: clones >= 10 cells | Clonotrace (default, ≥ 10 cells) | 164 | 863 | 0.049 | 0.177 | 0.098 | 102 | 0.0012 |
-| native: clones >= 10 cells | Clonotrace, published distance (≥ 10) | 164 | 863 | 0.043 | 0.177 | 0.091 | 91 | 0.0012 |
-| native: clones >= 10 cells | Mean of the embedding (baseline) | 164 | 863 | 0.049 | 0.159 | 0.090 | 172 | 0.0012 |
-| native: clones >= 10 cells | Threadfin (default) | 164 | 863 | 0.061 | 0.140 | 0.087 | 168 | 0.0012 |
-| native: clones >= 10 cells | Threadfin, mean profile | 164 | 863 | 0.055 | 0.146 | 0.087 | 176 | 0.0012 |
-| native: clones >= 10 cells | Cluster composition (baseline) | 164 | 863 | 0.024 | 0.140 | 0.063 | 128 | 0.0012 |
-| native: clones >= 10 cells | Medoid cell, CoNGA's rule (baseline) | 164 | 863 | 0.012 | 0.061 | 0.035 | 275 | 0.0012 |
+| setting | method | query clones | day-6 candidates | top 1 | top 10 | mean reciprocal rank | difference to Threadfin (95 % CI) | queries with tied candidates | median rank | chance top 1 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| forced: clones >= 2 cells | clone2vec (forced to ≥ 2 cells) | 1,251 | 2,643 | 0.018 | 0.075 | 0.040 | +0.010 [+0.003, +0.017] | 0% | 326 | 0.0004 |
+| forced: clones >= 2 cells | Clonotrace (forced to ≥ 2 cells) | 1,251 | 2,643 | 0.018 | 0.068 | 0.039 | +0.009 [+0.003, +0.015] | 0% | 448 | 0.0004 |
+| forced: clones >= 2 cells | Mean of the embedding (baseline) | 1,251 | 2,643 | 0.014 | 0.063 | 0.034 | +0.005 [-0.000, +0.010] | 0% | 597 | 0.0004 |
+| forced: clones >= 2 cells | Clonotrace, published distance (≥ 2) | 1,251 | 2,643 | 0.009 | 0.073 | 0.034 | +0.004 [-0.002, +0.011] | 0% | 348 | 0.0004 |
+| forced: clones >= 2 cells | Threadfin, mean profile | 1,251 | 2,643 | 0.015 | 0.052 | 0.031 | +0.001 [-0.002, +0.006] | 0% | 628 | 0.0004 |
+| forced: clones >= 2 cells | Threadfin (default) | 1,251 | 2,643 | 0.016 | 0.049 | 0.030 |  | 0% | 612 | 0.0004 |
+| forced: clones >= 2 cells | Medoid cell, CoNGA's rule (baseline) | 1,251 | 2,643 | 0.007 | 0.041 | 0.019 | -0.010 [-0.018, -0.003] | 0% | 754 | 0.0004 |
+| forced: clones >= 2 cells | Cluster composition (baseline) | 1,251 | 2,643 | 0.004 | 0.026 | 0.015 | -0.014 [-0.021, -0.008] | 66% | 444 | 0.0004 |
+| native: clones >= 10 cells | clone2vec (default, ≥ 3 cells) | 164 | 863 | 0.055 | 0.213 | 0.110 | +0.023 [-0.016, +0.062] | 0% | 60 | 0.0012 |
+| native: clones >= 10 cells | Clonotrace (default, ≥ 10 cells) | 164 | 863 | 0.049 | 0.177 | 0.098 | +0.010 [-0.013, +0.032] | 0% | 102 | 0.0012 |
+| native: clones >= 10 cells | Clonotrace, published distance (≥ 10) | 164 | 863 | 0.043 | 0.177 | 0.091 | +0.004 [-0.029, +0.036] | 0% | 91 | 0.0012 |
+| native: clones >= 10 cells | Mean of the embedding (baseline) | 164 | 863 | 0.049 | 0.159 | 0.090 | +0.003 [-0.015, +0.022] | 0% | 172 | 0.0012 |
+| native: clones >= 10 cells | Threadfin (default) | 164 | 863 | 0.061 | 0.140 | 0.087 |  | 0% | 168 | 0.0012 |
+| native: clones >= 10 cells | Threadfin, mean profile | 164 | 863 | 0.055 | 0.146 | 0.087 | -0.000 [-0.016, +0.018] | 0% | 176 | 0.0012 |
+| native: clones >= 10 cells | Cluster composition (baseline) | 164 | 863 | 0.018 | 0.140 | 0.058 | -0.030 [-0.064, +0.002] | 18% | 128 | 0.0012 |
+| native: clones >= 10 cells | Medoid cell, CoNGA's rule (baseline) | 164 | 863 | 0.012 | 0.061 | 0.035 | -0.053 [-0.087, -0.023] | 0% | 275 | 0.0012 |
 
 ## overview_rules
 
 | column | how the verdict is reached |
 |---|---|
-| Share of clones it describes | median over the 11 datasets of the share of clones with ≥ 2 cells that the tool represents; a run that failed, stopped or could not start counts as 0. Better or worse: more than 5 percentage points from Threadfin. |
+| Share of clones it describes | median over the datasets of the share of clones with ≥ 2 cells that the tool represents; a run that failed, stopped or could not start because too few clones reach the tool's minimum size counts as 0. Datasets outside a tool's scope (LARRY barcodes for Benisse, which needs receptor sequences) and runs the authors cancelled are left out. Better or worse: more than 5 percentage points from Threadfin. |
 | Keeps two-cell clones | the same for clones of exactly two cells. |
-| Datasets it could analyse | datasets (of 11) on which the tool produced a result. |
-| Predicts measured clone traits | measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval of R² − R²(Threadfin) excludes 0. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05. |
-| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells (3 random splits, both directions; Clonotrace and Benisse: split 0 only); sign test over annotations. |
-| Recognises a clone from other cells | share of clones whose representation from one half of their cells is nearest to their own other half (median over datasets); Wilcoxon signed-rank test over datasets. |
-| Links day-4 clones to day 6 | LARRY: mean reciprocal rank of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones. |
-| Finds planted clone groups | simulated data with a known answer: share of clones whose nearest clone has the same planted programme; Wilcoxon over simulated datasets. |
-| Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells); Wilcoxon over simulated datasets. |
-| Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (≥ 6 datasets). |
-| Peak memory | peak memory, the same way. |
-| Gain from 16 CPU cores | time with 1 core divided by time with 16 cores (GSE287123 RBD; Threadfin: its complete analysis). Better or worse: more than 25 % from Threadfin's gain. |
-| Slow-down as data grow | how much longer the clone representation takes for 10 times more clones, from 5-50 % subsets of GSE195673 (8 cores). Better or worse: an exponent more than 0.25 from Threadfin's. |
-| Runs that ended without help | runs on the full data and on the disjoint halves that finished with the tool's default settings; failed or stopped runs, and runs that needed a larger cell graph, are counted against the tool. |
+| Datasets it could analyse | datasets on which the tool produced a result, of those within its scope (the same rule as above). |
+| Predicts measured clone traits | measured annotations that no tool used (sorting gates, isotype, mutation, tissue, time, later fate; RNA-derived calls excluded), each scored on the clones the tool represents: the tool is better (worse) on an annotation when the 95 % paired bootstrap interval (10,000 resamples) of R² − R²(Threadfin) excludes 0; an interval end within the Monte-Carlo error of 0 is unresolved and not counted. Column verdict: two-sided sign test of better vs worse annotations, P < 0.05. |
+| … when traits come from other cells | as above, but the representation and the annotation come from disjoint halves of each clone's cells, and the tool's R² is compared with Threadfin's on the same halves and the same clones (3 random splits, both directions, averaged; Clonotrace and Benisse: split 0 only); sign test over annotations. |
+| Recognises a clone from other cells | share of clones whose representation from one half of their cells is nearest to their own other half, compared with Threadfin on the same halves and clones (median over datasets of the mean over splits); Wilcoxon signed-rank test over datasets. With fewer than 6 datasets no paired test can reach P < 0.05, so the tile is descriptive. |
+| Links day-4 clones to day 6 | LARRY: mean reciprocal rank (ties counted as mid-ranks) of each day-4 clone's own day-6 clone among all day-6 clones; 95 % paired bootstrap interval over clones (10,000 resamples). |
+| Finds planted clone groups | simulated data with a known answer: share of each clone's 10 nearest clones that follow its planted programme (mean over clones), compared with Threadfin on the same clones; the unit is the simulation seed (the two donor-shift levels and the two clone-size regimes of a seed share clones or donors, so their differences are averaged within the seed); Wilcoxon signed-rank test over seeds. 10 seeds for every tool except Clonotrace (3 seeds: descriptive, since no paired test of 3 seeds can reach P < 0.05). |
+| Tells mixed from in-between clones | AUROC for telling clones made of two kinds of cells from clones of cells halfway between them (clones ≥ 10 cells), tested over seeds as above. |
+| Run time | time to compute the clone representation, divided by Threadfin's on the same dataset (median); Clonotrace: only runs whose clone distances used several R sessions, a run stopped at 72 h counted as 72 h. Better or worse: every ratio beyond 25 % in the same direction, otherwise a Wilcoxon test on the log ratios (descriptive with fewer than 6 datasets). |
+| Peak memory | peak memory, the same way. For Clonotrace /usr/bin/time sees only the main R session, so the job's peak from the scheduler is used where the run had a job of its own, and the main session otherwise (a lower bound, marked ≥). |
+| Gain from 16 CPU cores | time with 1 core divided by time with 16 cores (GSE287123 RBD). The scopes differ: Threadfin's complete analysis, the other tools' clone representation. Better or worse: more than 25 % from Threadfin's gain. |
+| Time for 10× the clones | how much longer the clone representation takes for 10 times more clones, from 5-50 % subsets of GSE195673 (8 cores; exponent of a fit to 4 subsets). Better or worse: an exponent more than 0.25 from Threadfin's. |
+| Runs that ended without help | runs on the full data and on the disjoint halves that finished with the tool's default settings; failed or stopped runs, and runs that needed a larger cell graph, are counted against the tool. Inputs with fewer clones than a tool can represent at all (clone2vec: 11 clones of ≥ 3 cells; Clonotrace: 3 of its minimum size) and runs the authors cancelled are not counted. |
+| Tiles better / worse | number of tiles of the row that are better and worse than Threadfin. The columns are not independent questions, so the count is a summary of the row, not a score or a ranking. |
 
 ## usability
 
@@ -329,7 +404,7 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Dependencies listed with versions | yes | yes | yes | partly | partly | yes |
 | Automated tests | yes | yes | yes | no | no | yes |
 | Tests run on every change | yes | yes | yes | no | no | yes |
-| Same result when re-run | yes | yes | partly | partly | n.a. | n.a. |
+| Same result with more cores | yes | yes | partly | partly | n.a. | n.a. |
 | Step-by-step tutorial | yes | yes | yes | partly | yes | yes |
 | Every function documented | yes | yes | yes | partly | partly | yes |
 | Explains bad input and how to fix it | yes | partly | partly | no | n.a. | n.a. |
@@ -337,24 +412,51 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | Works with AnnData or Seurat objects | yes | partly | yes | no | yes | yes |
 | Peer-reviewed paper | no | no | no | yes | yes | yes |
 
+## alpha_sensitivity
+
+Of the 43 tiles whose verdict comes from a test, 4 change when the tests use P < 0.01 instead of 0.05:
+
+| row | column | shown | P at 0.05 | verdict at 0.05 | verdict at 0.01 |
+|---|---|---|---|---|---|
+| clone2vec, its default (clones ≥ 3 cells) | Peak memory | 2.3× more | 0.014 | worse | similar |
+| clone2vec, forced to clones ≥ 2 cells | Peak memory | 2.3× more | 0.014 | worse | similar |
+| Clonotrace, its default (clones ≥ 10 cells) | Predicts measured clone traits | 0 better 6 worse | 0.031 | worse | similar |
+| Threadfin with another random seed (negative control) | … when traits come from other cells | 21 better 8 worse | 0.024 | better | similar |
+
+## tally
+
+| row | tiles better / worse |
+|---|---|
+| Threadfin (donor as context, as in the case studies) | — |
+| clone2vec, its default (clones ≥ 3 cells) | 3 / 5 |
+| clone2vec, forced to clones ≥ 2 cells | 4 / 4 |
+| Clonotrace, its default (clones ≥ 10 cells) | 1 / 8 |
+| Clonotrace, forced to clones ≥ 2 cells | 2 / 6 |
+| Clonotrace, exact OT (≥ 2 cells; ≥ 10 where only that ran) | 0 / 6 |
+| Benisse | 0 / 5 |
+| CoNGA's one-cell-per-clone rule | 0 / 4 |
+| Mean of the embedding (baseline) | 0 / 2 |
+| Cluster composition (baseline) | 2 / 3 |
+| Threadfin with another random seed (negative control) | 1 / 1 |
+
 ## resources_cores
 
 | cores | Threadfin, complete analysis | clone2vec | Clonotrace | Benisse |
 |---|---|---|---|---|
-| 1 | 1.9 min, 0.7 GB | 4.7 min, 1.1 GB | 3.7 h, 2.3 GB | 19.3 min, 4.0 GB |
-| 2 | 1.4 min, 0.8 GB | 3.6 min, 1.1 GB | 2.1 h, 2.2 GB | — |
-| 4 | 1.0 min, 0.8 GB | 3.6 min, 1.1 GB | 1.1 h, 2.2 GB | 15.8 min, 4.2 GB |
-| 8 | 53.9 s, 0.8 GB | 3.4 min, 1.1 GB | 39.0 min, 2.2 GB | — |
-| 16 | 58.2 s, 0.8 GB | 3.8 min, 1.1 GB | 24.6 min, 2.5 GB | 56.4 min, 4.2 GB |
+| 1 | 1.9 min, 0.7 GB | 4.7 min, 1.1 GB | 3.7 h, ≥ 2.3 GB | 19.3 min, 4.0 GB |
+| 2 | 1.4 min, 0.8 GB | 3.6 min, 1.1 GB | 2.1 h, ≥ 2.2 GB | — |
+| 4 | 1.0 min, 0.8 GB | 3.6 min, 1.1 GB | 1.1 h, ≥ 2.2 GB | 15.8 min, 4.2 GB |
+| 8 | 53.9 s, 0.8 GB | 3.4 min, 1.1 GB | 39.0 min, ≥ 2.2 GB | — |
+| 16 | 58.2 s, 0.8 GB | 3.8 min, 1.1 GB | 24.6 min, ≥ 2.5 GB | 56.4 min, 4.2 GB |
 
 ## resources_size
 
 | subset of GSE195673 | clones ≥ 2 cells | Threadfin, complete analysis | Threadfin, clone profiles | clone2vec | Clonotrace | Benisse |
 |---|---|---|---|---|---|---|
-| 5 % | 557 | 37.8 s, 0.5 GB | 1.3 s, 0.3 GB | 1.9 min, 1.2 GB | 3.5 min, 0.6 GB | 1.4 min, 0.6 GB |
-| 10 % | 1,114 | 48.6 s, 0.6 GB | 2.5 s, 0.4 GB | 2.1 min, 1.1 GB | 11.1 min, 1.1 GB | 6.0 min, 2.0 GB |
-| 25 % | 2,785 | 1.5 min, 0.8 GB | 6.7 s, 0.7 GB | 5.8 min, 1.1 GB | 1.5 h, 4.6 GB | 40.0 min, 8.9 GB |
-| 50 % | 5,570 | 2.6 min, 1.4 GB | 27.7 s, 1.5 GB | 10.3 min, 1.2 GB | 9.2 h, 16.8 GB | 2.9 h, 35.3 GB |
+| 5 % | 557 | 37.8 s, 0.5 GB | 1.3 s, 0.3 GB | 1.9 min, 1.2 GB | 3.5 min, ≥ 0.6 GB | 1.4 min, 0.6 GB |
+| 10 % | 1,114 | 48.6 s, 0.6 GB | 2.5 s, 0.4 GB | 2.1 min, 1.1 GB | 11.1 min, ≥ 1.1 GB | 6.0 min, 2.0 GB |
+| 25 % | 2,785 | 1.5 min, 0.8 GB | 6.7 s, 0.7 GB | 5.8 min, 1.1 GB | 1.5 h, 9.9 GB (job) | 40.0 min, 8.9 GB |
+| 50 % | 5,570 | 2.6 min, 1.4 GB | 27.7 s, 1.5 GB | 10.3 min, 1.2 GB | 9.2 h, 20.7 GB (job) | 2.9 h, 35.3 GB |
 
 ## resources_repro
 
@@ -379,3 +481,83 @@ Split-half runs still running (sections 6.4–6.5 use the halves that are comple
 | GC + plasma cells | 884 | 96 | 0.2 s | 0.0 s | 15.8 s | 1.6 s | 0.2 s | 17.8 s | 0.5 GB |
 | Human COVID-19 | 61,423 | 592 | 25.5 s | 0.7 s | 28.6 s | 12.0 s | 5.8 s | 1.2 min | 1.2 GB |
 | LARRY d4/d6 | 44,664 | 6,174 | 3.5 s | 1.3 s | 2.7 min | 3.0 min | ? | 5.8 min | 0.9 GB |
+
+## hosts
+
+| runs | number | nodes | node names |
+|---|---|---|---|
+| per-dataset runs, Threadfin and the baselines | 209 | Sapphire Rapids, 128 cores: 209 | bm054, bm067, bm180 |
+| per-dataset runs, clone2vec | 22 | Sapphire Rapids, 128 cores: 22 | bm054, bm067 |
+| per-dataset runs, Clonotrace (approximate distance) | 18 | 72-core cascade generation: 1; Sapphire Rapids, 128 cores: 17 | bm038, bm054, bm067, bm180 |
+| per-dataset runs, Clonotrace (exact OT) | 16 | Sapphire Rapids, 128 cores: 16 | bm064, bm065, bm066, bm070, bm072, bm073, bm139, bm140, bm142, bm148, bm180 |
+| per-dataset runs, Benisse | 9 | Sapphire Rapids, 128 cores: 9 | bm053, bm067 |
+| core-count and data-size runs, Threadfin | 13 | Sapphire Rapids, 128 cores: 13 | bm180 |
+| core-count and data-size runs, clone2vec | 9 | 72-core cascade generation: 9 | bm015, bm018 |
+| core-count and data-size runs, Clonotrace | 9 | 72-core cascade generation: 9 | bm015, bm017, bm028, bm049 |
+| core-count and data-size runs, Benisse | 7 | 72-core cascade generation: 6; Sapphire Rapids, 128 cores: 1 | bm018, bm030, bm046, bm053 |
+
+## budget
+
+| tool | runs with a time record | completed | wall-hours, completed runs | core-hours, completed runs | wall-hours, all runs (incl. failed, stopped, replaced) | core-hours, all runs | longest run |
+|---|---|---|---|---|---|---|---|
+| Benisse | 34 | 33 | 6.1 | 34.6 | 6.1 | 34.7 | 2.9 h |
+| Clonotrace | 77 | 73 | 305.2 | 3,889.4 | 521.7 | 4,584.4 | 100.8 h |
+| Clonotrace, exact OT | 18 | 14 | 1.5 | 11.0 | 2.0 | 14.5 | 19.0 min |
+| Threadfin and baselines | 280 | 280 | 2.9 | 9.1 | 2.9 | 9.1 | 5.6 min |
+| clone2vec | 320 | 308 | 12.3 | 49.7 | 12.4 | 50.1 | 20.1 min |
+
+## legend_fig1
+
+**Fig. 1 | The benchmark at a glance.** **a**, Each row is a tool at its own default and forced down to clones of two cells, Clonotrace with the exact optimal-transport distance (runs of 2026-10-25, section 6.11), three simple baselines, and a negative control: Threadfin against itself with another random seed. Each column is one question; the rule behind each verdict is in the table below. Every tile compares the tool with Threadfin on the same clones: green ▲ better, grey no clear difference, magenta ▼ worse; a dashed outline marks a comparison with too few datasets or simulation seeds for a two-sided paired test to reach P < 0.05 (shown descriptively). The numbers are the tool's and, after "vs", Threadfin's. Tests: two-sided sign tests over annotations, Wilcoxon signed-rank tests over datasets or simulation seeds, and a 95 % paired bootstrap interval over day-4 clones (10,000 resamples) for LARRY linking; P < 0.05 with no correction for the 43 tiles that come from a test (sensitivity to α below); n of each tile in results/overview.csv. The last column counts the tiles better and worse than Threadfin; the columns are not independent, so it summarises a row and is not a score. **b**, Usability checklist: the authors' assessment, with the evidence for every score in scripts/usability_checklist.csv.
+
+## legend_fig2
+
+**Fig. 2 | Coverage.** Clones with ≥ 2 cells (**a**) and of exactly 2 cells (**b**) that each tool represents, per dataset (row label: the dataset's number of such clones); cell: number represented and share. Hatched: no result, with the reason. Benisse was run at ≥ 10 cells on GSE195673.
+
+## legend_fig3
+
+**Fig. 3 | Two-cell clones carry information.** R² of each annotation computed on the two-cell clones only: tool (y) against Threadfin (x) on the same clones; one dot per annotation with at least 20 two-cell clones (n = 41 per panel; Benisse 31, Clonotrace 39), including the RNA-derived annotations (medians over the measured annotations alone are in the table below). Predictions are the mean annotation of each clone's 10 nearest clones among all clones of the comparison, after centring within donor. Bars: 95 % bootstrap percentile intervals (10,000 resamples of clones; R² of the two-cell clones of each resample). Filled: the 95 % paired bootstrap interval of the difference excludes 0. Text: annotations with the higher point estimate.
+
+## legend_fig4
+
+**Fig. 4 | Recovering measured clone annotations, every tool forced to clones of ≥ 2 cells.** Dot: R² of the tool minus R² of Threadfin on the clones the tool represents (k-nearest-neighbour regression with k = 10, annotations centred within donor); line: 95 % paired bootstrap percentile interval (10,000 resamples of clones, the same resamples for every method on the same clones; arrow: continues beyond the axis); filled: the interval excludes 0; diamond: an interval end within the Monte-Carlo error of 0 (unresolved). Rows: annotations that no tool used; "(RNA)" marks annotations derived from expression, which are easy by construction. Counts under each panel: annotations better, worse and in all. Last panel, a negative control: Threadfin with random-feature seed 1 (upper line of each row) and seed 2 (lower) against the default seed, on the same clones; every call there is false. Over the measured annotations 9 of 70 control comparisons get a call (13 % (7–23 %), Wilson interval), against 5 % expected from a 95 % interval: the intervals hold each representation fixed and do not include the variation from Threadfin's random features (section 6.10).
+
+## legend_fig5
+
+**Fig. 5 | Recovering measured clone annotations, every tool at its own default.** clone2vec keeps clones of ≥ 3 cells, Clonotrace ≥ 10; Benisse was run at ≥ 10 cells on GSE195673 only. Dot: R² of the tool minus R² of Threadfin on the clones the tool represents (k-nearest-neighbour regression with k = 10, annotations centred within donor); line: 95 % paired bootstrap percentile interval (10,000 resamples of clones, the same resamples for every method on the same clones; arrow: continues beyond the axis); filled: the interval excludes 0; diamond: an interval end within the Monte-Carlo error of 0 (unresolved). Rows: annotations that no tool used; "(RNA)" marks annotations derived from expression, which are easy by construction. Counts under each panel: annotations better, worse and in all. Last two panels: the seed control restricted to the clones of ≥ 3 and ≥ 10 cells.
+
+## legend_fig11
+
+**Fig. 11 | Which parts of Threadfin matter?** Each variant switches off one step of the default profile: the kernel mean embedding (mean profile), centring on the donor, neighbour smoothing, shrinkage; "mean of the embedding" switches off all of them. Dot: R² of the tool minus R² of Threadfin on the clones the tool represents (k-nearest-neighbour regression with k = 10, annotations centred within donor); line: 95 % paired bootstrap percentile interval (10,000 resamples of clones, the same resamples for every method on the same clones; arrow: continues beyond the axis); filled: the interval excludes 0; diamond: an interval end within the Monte-Carlo error of 0 (unresolved). Rows: annotations that no tool used; "(RNA)" marks annotations derived from expression, which are easy by construction. Counts under each panel: annotations better, worse and in all. Last panel: the seed control of Fig. 4.
+
+## legend_fig6
+
+**Fig. 6 | Annotation of one half of each clone's cells predicted from a representation of the other half.** R² of the tool minus R² of Threadfin on the same halves and clones (the same split, direction and set of clones), averaged over 3 random splits × 2 directions (Clonotrace and Benisse: split 0 only). Dots: annotations (24–35 per method, including the RNA-derived ones); diamond: median; right: annotations higher / lower than Threadfin. Clones need ≥ 2 cells in each half. The tools come from the comparison of every tool (forced to ≥ 2 cells), Threadfin's variants from the ablation comparison and the control (seed 1) from the sensitivity comparison, each against Threadfin in the same comparison.
+
+## legend_fig7
+
+**Fig. 7 | The same clones represented from two disjoint halves of their cells.** **a**, Spearman correlation of all clone–clone distances between the halves; **b**, overlap of the 10 nearest clones (dashed: chance); **c**, share of clones whose representation from one half is nearest to their own other half (re-identification; ties counted as mid-ranks; dashed: chance). Dots: datasets (6–10 per method; mean over 3 splits, Clonotrace and Benisse split 0 only); diamond: median over datasets; black tick: Threadfin's median on the same halves and clones. Clones need ≥ 2 cells in each half; at most 4,000 clones and 300,000 clone pairs per dataset (the same subsample for every method).
+
+## legend_fig8
+
+**Fig. 8 | Linking day-4 LARRY clones to the same barcode's day-6 clone.** Each day-4 clone's own day-6 clone is ranked among all day-6 clones by the distance between representations (ties counted as mid-ranks). **a**, **b**: clones of ≥ 2 cells kept by every tool (1,251 day-4 queries, 2,643 day-6 candidates); **c**, **d**: clones of ≥ 10 cells (164 queries, 863 candidates). **a**, **c**: mean reciprocal rank (dashed: chance); **b**, **d**: difference to Threadfin with its 95 % paired bootstrap interval over day-4 queries (10,000 resamples); filled: the interval excludes 0.
+
+## legend_fig9
+
+**Fig. 9 | Are tests of "cells of one clone share a state" calibrated?** Real data, clone labels shuffled. **a**, **b**: share of 50 null replicates per dataset in which each test reports clonal structure, with Wilson 95 % intervals (dashed: 5 %). Threadfin: clonal coherence test, 99 within-sample permutations, P < 0.05; scirpy: clonotype modularity, at least one clone at FDR < 5 %; ANOVA: cells as replicates, Bonferroni over the first 10 embedding dimensions. **c**, power of Threadfin's test when 10, 25 or 50 % of cells keep their real clone label and the rest are shuffled within sample (50 replicates per fraction; 0 %: the 50 within-sample null replicates), with Wilson 95 % intervals under each value; right: P of the test on the real labels.
+
+## legend_fig10
+
+**Fig. 10 | Simulated repertoires with a known answer.** 600 clones and 8,000 unlabelled cells per dataset, six donors; rows of panels: clone sizes and donor shift. Small dots: simulated datasets (one per seed); large dot: mean over seeds. Every tool except Clonotrace: 10 seeds; Clonotrace: 3 seeds (its runs take hours per large simulation). Columns: share of each clone's 10 nearest clones that follow the same planted programme (dashed: chance); AUROC for telling mixture from intermediate clones by the share of mixture clones among the 10 nearest (clones ≥ 10 cells; dashed: chance); share of same-donor neighbours minus its expectation (dashed: none). The seed-level tests against Threadfin are in the table below.
+
+## legend_fig12
+
+**Fig. 12 | Computing resources of each tool relative to Threadfin** (log scale; 1 = the same). Top blocks: time and peak memory of the clone representation on each dataset (4 cores; Clonotrace forced to ≥ 2 cells used 6, 8 and 32 R sessions for the clone distances on LARRY days 4/6, Plasmodium d10-42 and GSE195673). Lower blocks: time with 1–16 cores (GSE287123 RBD; Threadfin: its complete analysis, the other tools: their clone representation) and on 5–50 % subsets of GSE195673 (8 cores). Hollow: Clonotrace runs whose clone distances used one R session (slower than its parallel plan). In the two lower blocks the default and forced panels of a tool show the same runs (each program was run once there, on clones of ≥ 2 cells). Triangles: Clonotrace memory of the main R session only, a lower bound (its parallel sessions are not measured by /usr/bin/time; the job's peak from the scheduler is used where the run had a job of its own). Counts under each panel: differences of more than 25 %. Hardware (results/run_hosts.csv): the per-dataset runs ran on 128-core Sapphire Rapids nodes, except Clonotrace forced to ≥ 2 cells on GSE195673 (a 72-core node of the older cascade generation); in the core-count and data-size blocks Threadfin ran on a Sapphire Rapids node and clone2vec, Clonotrace and Benisse on 72-core cascade nodes (Benisse's 50 % subset on a Sapphire Rapids node), so cross-tool times there mix CPU generations. Nodes were shared with other jobs; times are indicative to within about a factor of two.
+
+## legend_fig13
+
+**Fig. 13 | Scaling.** **a**, speed-up with cores on GSE287123 RBD (1,887 clones; each configuration alone in a job holding 16 cores, one after another). **b**, **c**, time and peak memory on 5, 10, 25 and 50 % subsets of GSE195673 (8 cores). Threadfin's runs were on a Sapphire Rapids node, the other tools' on 72-core cascade nodes (Benisse's 50 % subset on a Sapphire Rapids node); Clonotrace's memory is its main R session (a lower bound; job peaks for its two largest subsets in the table). Growth exponents are fits to 4 subsets.
+
+## legend_fig14
+
+**Fig. 14 | Sensitivity of Threadfin to its settings** (one setting changed at a time). **a**, R² of the setting minus the default per measured annotation (n = 35 per setting); dark: the 95 % paired bootstrap interval (10,000 resamples) excludes 0; bar: median; right: annotations better ▲ and worse ▼. The two seed rows are the negative control of Figs. 4, 5 and 11. **b**, re-identification across halves (percentage points; one dot per dataset, mean over 3 splits). **c**, **d**, simulation: one dot per seed (mean over the seed's simulated datasets), programme purity and the mixture vs intermediate AUROC (clones ≥ 10 cells).

@@ -1,11 +1,11 @@
 {
  "dataset": "ln_vaccine",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 114.8,
-  "threadfin_run": 552.5,
-  "plot_and_save": 5.2
+  "user_inputs": 107.7,
+  "threadfin_run": 554.2,
+  "plot_and_save": 5.0
  },
  "warnings": [
   {
@@ -597,12 +597,6 @@
    "count": 1
   },
   {
-   "category": "ImplicitModificationWarning",
-   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
-   "file": "anndata.py",
-   "count": 1
-  },
-  {
    "category": "ImportWarning",
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
@@ -610,9 +604,15 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.71). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.71). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
    "file": "api.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'tissue' is the same for every cell of each 'sample', so this test compares 56 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'tissue', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples w",
+   "file": "stats.py",
+   "count": 2
   }
  ],
  "error": null,
@@ -623,11 +623,27 @@
   "tissue",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": "state",
+  "composition_weight": "cells",
+  "time_key": "timepoint",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 7.92,
+ "gallery_h5ad": "ln_vaccine.h5ad",
  "clones": 104329,
  "clones_ge2": 11126,
  "icc": 0.3259824612779099,
- "icc_shuffled": 0.0009920179638017925,
+ "icc_shuffled": 0.1640674454018477,
  "p_value": 0.004975124378109453,
  "programmes": 4,
  "skipped": {},
@@ -635,6 +651,6 @@
   "n_neighbors": 37,
   "min_dist": 0.95
  },
- "seconds_total": 672.9,
- "peak_rss_gb": 23.68
+ "seconds_total": 667.2,
+ "peak_rss_gb": 23.66
 }

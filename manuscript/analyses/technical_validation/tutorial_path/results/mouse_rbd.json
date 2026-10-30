@@ -1,11 +1,11 @@
 {
  "dataset": "mouse_rbd",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 71.8,
-  "threadfin_run": 137.2,
-  "plot_and_save": 1.6
+  "user_inputs": 43.9,
+  "threadfin_run": 88.2,
+  "plot_and_save": 1.4
  },
  "warnings": [
   {
@@ -22,7 +22,31 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.65). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.65). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
+   "file": "api.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'rbd_bait' is the same for every cell of each 'sample', so this test compares 20 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'rbd_bait', and the p-value counts clones as replicates. Read it as descriptive, or compare the sampl",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "'division_gate' is the same for every cell of each 'sample', so this test compares 40 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'division_gate', and the p-value counts clones as replicates. Read it as descriptive, or compare",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "'zone_gate' is the same for every cell of each 'sample', so this test compares 20 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'zone_gate', and the p-value counts clones as replicates. Read it as descriptive, or compare the sam",
+   "file": "stats.py",
+   "count": 2
+  },
+  {
+   "category": "UserWarning",
+   "message": "The levels of 'division_gate' (mCherry-high, mCherry-low) have no order, so they are paired in alphabetical order. If they have one (time points, or a path between tissues), pass order=[...] or make the column an ordered pandas Categorical.",
    "file": "api.py",
    "count": 1
   }
@@ -37,11 +61,27 @@
   "zone_gate",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "division_gate",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 2.01,
+ "gallery_h5ad": "mouse_rbd.h5ad",
  "clones": 8736,
  "clones_ge2": 1881,
  "icc": 0.16918595941154516,
- "icc_shuffled": 0.006501013469672257,
+ "icc_shuffled": 0.05020839231583318,
  "p_value": 0.004975124378109453,
  "programmes": 3,
  "skipped": {},
@@ -49,6 +89,6 @@
   "n_neighbors": 10,
   "min_dist": 0.95
  },
- "seconds_total": 210.7,
+ "seconds_total": 133.6,
  "peak_rss_gb": 7.9
 }

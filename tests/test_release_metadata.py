@@ -3,9 +3,13 @@
 import re
 from pathlib import Path
 
+import pytest
+
 import threadfin as tf
 
 ROOT = Path(__file__).resolve().parents[1]
+if not (ROOT / "CITATION.cff").exists() or not (ROOT / "docs" / "API.md").exists():  # the sdist lacks them
+    pytest.skip("CITATION.cff and docs/ are not part of this copy of Threadfin", allow_module_level=True)
 
 
 def test_version_is_the_same_everywhere():

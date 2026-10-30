@@ -1,5 +1,26 @@
 # Verified compatibility
 
+## Version 4.6.0 — 30 October 2026
+
+* **The user's path.** A new environment was built as Tutorial 2 describes (Python 3.11, `pip install
+  "threadfin[dandelion]"` from this version: pynndescent 0.6.0, numba 0.68.1, scanpy 1.11.5, sc-dandelion 0.5.7,
+  matplotlib 3.8.4), and `tf.run` was called on the same 16 datasets, with `strata_key="sample"` for the 14 BCR
+  datasets: no error, and every clone table — clone calls, reliabilities, clone-map coordinates and programmes — is
+  identical, byte for byte, to that of 4.5.2, as is every clonal ICC. The shuffled ICC of the coherence test now
+  comes from shuffles within samples; every test that was significant stays at P = 0.005 (200 permutations). In
+  GSE171703 three libraries pool several donors; the strata there are donor × library (a fix this run found).
+  Every code block of Tutorials 1, 3 and 4 ran (23 of 23) and printed what the tutorials show, apart from timings.
+* **The tutorial notebook** ran end to end in a separately built conda environment without `PYTHONHASHSEED`:
+  no error, 5.5 minutes on 8 cores including the download, 7.2 GB; the same 8,736 clones, 1,881 of them profiled,
+  and the same ICC (0.169) as with 4.5.3. Every package version of that run is in
+  `docs/tutorials/requirements-lock.txt`.
+* **Tests.** In that environment 353 passed and 1 was skipped (scirpy was not installed).
+* **Python 3.13 and 3.14 with Dandelion.** The Dandelion extra no longer asks for matplotlib < 3.9 on Python 3.13
+  and later, where importing Threadfin restores the `matplotlib.cm.get_cmap` that Dandelion 0.5.7 needs. With
+  sc-dandelion 0.5.7 and matplotlib 3.11.2, clone calls on three datasets (GSE246382, GSE287123 RBD, GSE286215
+  d0-14) are identical on Python 3.11, 3.13 and 3.14, and identical with and without `PYTHONHASHSEED=0`; the
+  Dandelion job of continuous integration installs `threadfin[dandelion]` on Python 3.12, 3.13 and 3.14.
+
 ## Version 4.5.3 — 28 October 2026
 
 * **Why this version.** Every tutorial was followed again in new environments that saw nothing of the testing
@@ -172,6 +193,7 @@ as negative measurements.
 
 ## Verification limits
 
-This verifies the tested Linux dependency stacks and documented example paths.
-It does not establish Windows/macOS compatibility or every real-data configuration. Record package versions
-alongside scientific outputs.
+This verifies the tested dependency stacks (Linux for the real-data runs; Linux, macOS and Windows in
+continuous integration since 4.4.1) and the documented example paths, not every real-data configuration.
+Record package versions alongside scientific outputs; since 4.6.0, `threadfin.run` records them in
+`adata.uns['threadfin']['run']`.

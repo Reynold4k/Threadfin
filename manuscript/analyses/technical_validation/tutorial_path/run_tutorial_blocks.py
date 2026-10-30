@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 """Execute every ```python block of Tutorials 1, 3 and 4 in order, exactly as written, as a user copying them would.
 
-Each tutorial runs in its own namespace, in an empty working directory. The printed output of each block is saved
-next to the output shown in the tutorial (the ``` block that follows it), so that stale numbers can be spotted.
-Writes <out>/tutorial_blocks.json; exits 1 if any block raises.
+Each tutorial runs in its own namespace. All three share one working directory, <out_dir>, which should be empty
+at the start; files a tutorial writes there stay for the next one. The full printed output of each block is saved
+next to the output shown in the tutorial (the ``` block without a language tag that follows it), so that stale
+numbers can be spotted; ```text blocks (diagrams) are not outputs. Writes <out>/tutorial_blocks.json; exits 1 if any
+block raises.
 
 Usage: python run_tutorial_blocks.py <docs/tutorials> <out_dir>
 """
@@ -56,8 +58,8 @@ def main(tutorials: Path, out: Path):
             printed = buf.getvalue()
             if error:
                 failed += 1
-            report.append({"tutorial": name, "block": k, "code": code, "error": error, "printed": printed[-3000:],
-                           "shown_in_tutorial": shown[-3000:],
+            report.append({"tutorial": name, "block": k, "code": code, "error": error, "printed": printed,
+                           "shown_in_tutorial": shown,
                            "warnings": sorted({f"{w.category.__name__}: {str(w.message)[:200]}" for w in caught})})
             print(f"{name} block {k}: {'ERROR' if error else 'ok'}", file=sys.stderr)
     (out / "tutorial_blocks.json").write_text(json.dumps(report, indent=1) + "\n")

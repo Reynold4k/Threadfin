@@ -43,7 +43,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表")
+ROOT = Path(__file__).resolve().parents[5]          # the folder that holds the repository clone
 CASE = ROOT / "Threadfin" / "manuscript" / "case_studies" / "results"
 
 DEFAULT_MAP = {"map_n_neighbors": 50, "map_min_dist": 0.8}

@@ -1,11 +1,11 @@
 {
  "dataset": "flu",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 34.0,
-  "threadfin_run": 370.2,
-  "plot_and_save": 2.3
+  "user_inputs": 26.8,
+  "threadfin_run": 241.4,
+  "plot_and_save": 2.2
  },
  "warnings": [
   {
@@ -15,16 +15,16 @@
    "count": 12
   },
   {
-   "category": "ImplicitModificationWarning",
-   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
-   "file": "anndata.py",
-   "count": 1
-  },
-  {
    "category": "ImportWarning",
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'timepoint' is the same for every cell of each 'sample', so this test compares 12 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'timepoint', and the p-value counts clones as replicates. Read it as descriptive, or compare the sam",
+   "file": "stats.py",
+   "count": 2
   }
  ],
  "error": null,
@@ -35,11 +35,27 @@
   "timepoint",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "timepoint",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 2.95,
+ "gallery_h5ad": "flu.h5ad",
  "clones": 80760,
  "clones_ge2": 2082,
  "icc": 0.5614943486603674,
- "icc_shuffled": 0.02491272319860644,
+ "icc_shuffled": 0.02968097868372271,
  "p_value": 0.004975124378109453,
  "programmes": 5,
  "skipped": {},
@@ -47,6 +63,6 @@
   "n_neighbors": 180,
   "min_dist": 0.8
  },
- "seconds_total": 406.6,
- "peak_rss_gb": 9.31
+ "seconds_total": 270.4,
+ "peak_rss_gb": 8.17
 }

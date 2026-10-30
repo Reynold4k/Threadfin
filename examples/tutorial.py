@@ -23,14 +23,21 @@ import threadfin as tf  # noqa: E402
 adata = tf.sim.simulate_repertoire(random_state=0)
 print(adata)
 print("\ncells per clone (most clones are singletons):")
-print(adata.obs["clone_id"].value_counts().describe()[["count", "mean", "max"]])
+print(adata.obs["clone_id"].value_counts().describe()[["count", "mean", "max"]].to_string())
 
 # ---------------------------------------------------------------- 2. one call
-# donor_key: who each cell came from - clones are never formed across donors.
+# donor_key:  who each cell came from - clones are never formed across donors.
 # sample_key: which library/sort/time point - each clone is compared with the
-#             cells it was sampled beside, and the null shuffles within it.
+#             cells it was sampled beside, and the coherence test shuffles
+#             clone labels within it.
+# strata_key: (not needed here) a finer sampling unit for that shuffle, when
+#             sample_key is coarser - e.g. the library when sample_key is the
+#             donor in a design that compares tissues or sort gates.
 # basis:      an existing embedding; omit it on real data and Threadfin builds
 #             one that excludes immunoglobulin genes.
+# state_key:  a cell annotation that describes the programmes; their state
+#             composition counts cells (composition_weight="cells", the
+#             default) or gives every clone equal weight ("clones").
 result = tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca",
                 state_key="true_state", test=["true_programme"])
 print(result.summary())
@@ -49,12 +56,16 @@ steps = adata.copy()
 tf.tl.clone_profiles(steps, basis="X_pca", context_key="context", donor_key="donor",
                      representation="kernel")
 coherence = tf.tl.clonal_coherence(steps, strata_key="context", n_perm=500)
-print(f"\nclone identity explains {100 * coherence['icc']:.1f}% of state, "
-      f"{100 * coherence['null_mean']:.1f}% when shuffled (p = {coherence['p_value']:.3g})")
+print(f"\nclone identity explains {100 * coherence['icc']:.1f}% of the variance of cell states, "
+      f"{100 * coherence['null_mean']:.1f}% when shuffled within samples (p = {coherence['p_value']:.3g})")
 
-# Groups of clones are reported only when the split between them is real.
+# Groups of clones are reported only where a split passes a test against one
+# Gaussian group; each comes with its stability when cells are resampled.
 programmes = tf.tl.find_programmes(steps)
-print(programmes)
+print(programmes.to_string())
+
+# The state composition of each programme, with every clone counted once.
+print(tf.tl.programme_composition(steps, "true_state", weight="clones").round(2).to_string())
 
 # A label is first tested against the clone profiles - this works whether or not
 # distinct groups exist - and then, if there are groups, between them.

@@ -4,11 +4,12 @@
 Prints name formats on both sides and the match rate under candidate rules.
 Run after gex_reporter/ export exists.
 """
+import os
 from pathlib import Path
 
 import pandas as pd
 
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "data")) / "gse284622_gut_gc"
 
 meta = pd.read_csv(DATA / "gex_reporter" / "metadata.csv.gz", low_memory=False)
 print("GEX metadata columns:", list(meta.columns))

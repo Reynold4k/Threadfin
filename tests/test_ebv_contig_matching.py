@@ -2,8 +2,12 @@
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 import pandas as pd
+import pytest
 
-_SPEC = spec_from_file_location("case_dandelion_clones", Path(__file__).resolve().parents[1] / "manuscript/case_studies/dandelion_clones.py")
+_SCRIPT = Path(__file__).resolve().parents[1] / "manuscript/case_studies/dandelion_clones.py"
+if not _SCRIPT.exists():  # the sdist ships tests/ but not manuscript/
+    pytest.skip("needs manuscript/ from the repository", allow_module_level=True)
+_SPEC = spec_from_file_location("case_dandelion_clones", _SCRIPT)
 ddl = module_from_spec(_SPEC)
 _SPEC.loader.exec_module(ddl)
 

@@ -78,9 +78,12 @@ manuscript makes no claim of superior prediction. The analysis predates the pair
 not re-run; it is listed in the [manuscript overview](../README.md) as a candidate analysis to repeat.
 
 ### 1.9 Converting the clone's mutation gap into days of export lag
-The mutation gap between a clone's output cells and its own GC cells is real and one-directional
-([`export_lag/`](export_lag)); converting it into days assumes that every clone matures at the population's
-average rate, which has not been validated. It is reported as an exploratory analysis, not as a finding.
+The median within-clone mutation gap between output cells and their own GC cells is negative
+([`export_lag/`](export_lag)). The gap is positive in 8 of 92 mouse and 821 of 2,564 human lymph-node clones.
+Earlier GC exit, extrafollicular ASCs of the same clone, affinity-biased export and regulated hypermutation
+can each produce a negative gap. Converting it into days assumes that every clone mutates at the population's
+average rate and that this rate is constant per day. These assumptions have not been validated. It is
+reported as an exploratory analysis, not as a finding.
 
 ---
 

@@ -7,6 +7,8 @@ import pytest
 
 
 _ROOT = Path(__file__).resolve().parents[1]
+if not (_ROOT / "manuscript" / "case_studies" / "datasets.py").exists():  # the sdist ships tests/ but not manuscript/
+    pytest.skip("needs manuscript/ from the repository", allow_module_level=True)
 _SPEC = spec_from_file_location("case_study_datasets", _ROOT / "manuscript" / "case_studies" / "datasets.py")
 datasets = module_from_spec(_SPEC)
 assert _SPEC.loader is not None

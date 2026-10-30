@@ -16,7 +16,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = Path(os.environ.get("THREADFIN_DATA", "/data/scratch/projects/punim1236/threadfin_data"))
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data"))
 SOURCES = ROOT.parent / "internal_validation/competitors/sources"
 OUT = ROOT / "case_studies/results/native_benchmark"
 sys.path.insert(0, str(ROOT / "case_studies"))

@@ -1,11 +1,11 @@
 {
  "dataset": "malaria",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 19.9,
-  "threadfin_run": 136.0,
-  "plot_and_save": 1.6
+  "user_inputs": 14.5,
+  "threadfin_run": 92.1,
+  "plot_and_save": 1.2
  },
  "warnings": [
   {
@@ -13,6 +13,12 @@
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "adata.obs['cell_state'] has a level that looks like a missing value: 'nan' (298 cells). It is treated as a level of their own; if these cells have no cell_state, set their adata.obs['cell_state'] to NaN.",
+   "file": "stats.py",
+   "count": 2
   }
  ],
  "error": null,
@@ -23,7 +29,23 @@
   "cell_state",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": "cell_state",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 1.22,
+ "gallery_h5ad": "malaria.h5ad",
  "clones": 20500,
  "clones_ge2": 523,
  "icc": 0.7352724353953749,
@@ -35,6 +57,6 @@
   "n_neighbors": 18,
   "min_dist": 0.95
  },
- "seconds_total": 157.5,
+ "seconds_total": 107.8,
  "peak_rss_gb": 3.64
 }

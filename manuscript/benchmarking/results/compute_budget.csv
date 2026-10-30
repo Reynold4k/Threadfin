@@ -1,0 +1,730 @@
+dataset,variant,run,tool,kind,status,wall_hours,core_hours
+covid_bcell,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.035975,0.07195
+covid_bcell,full,_threadfin_task,Threadfin and baselines,full data,completed,0.02468888888888889,0.09875555555555555
+covid_bcell,full,benisse_min2,Benisse,full data,completed,0.009975,0.0399
+covid_bcell,full,clone2vec_min2,clone2vec,full data,completed,0.02011388888888889,0.08045555555555556
+covid_bcell,full,clone2vec_min3,clone2vec,full data,completed,0.023391666666666668,0.09356666666666667
+covid_bcell,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.261125,1.6015947222222222
+covid_bcell,full,clonotrace_min10,Clonotrace,full data,completed,7.437222222222222,29.508616111111106
+covid_bcell,full,clonotrace_min2,Clonotrace,full data,completed,0.37846944444444447,1.2713816666666664
+covid_bcell,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0022,0.0044
+covid_bcell,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.010119444444444445,0.04047777777777778
+covid_bcell,halfA_s0,benisse_min2,Benisse,halves,completed,0.004322222222222222,0.01728888888888889
+covid_bcell,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.01411111111111111,0.05644444444444444
+covid_bcell,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.012936111111111112,0.05174444444444445
+covid_bcell,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,0.1723138888888889,0.6796227777777777
+covid_bcell,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.021477777777777776,0.07629833333333334
+covid_bcell,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0021916666666666664,0.004383333333333333
+covid_bcell,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.010011111111111111,0.040044444444444445
+covid_bcell,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.0139,0.0556
+covid_bcell,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.013769444444444445,0.05507777777777778
+covid_bcell,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.002102777777777778,0.004205555555555556
+covid_bcell,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.010325,0.0413
+covid_bcell,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.014322222222222222,0.05728888888888889
+covid_bcell,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.013427777777777778,0.05371111111111111
+covid_bcell,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.036566666666666664,0.07313333333333333
+covid_bcell,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.02325,0.093
+covid_bcell,halfB_s0,benisse_min2,Benisse,halves,completed,0.005011111111111111,0.020044444444444445
+covid_bcell,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.013822222222222222,0.05528888888888889
+covid_bcell,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.011825,0.0473
+covid_bcell,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,2.3161111111111112,9.133866388888887
+covid_bcell,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.1630777777777778,0.4895430555555556
+covid_bcell,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.036675,0.07335
+covid_bcell,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.023038888888888887,0.09215555555555555
+covid_bcell,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.0146,0.0584
+covid_bcell,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.012594444444444445,0.05037777777777778
+covid_bcell,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.03660277777777778,0.07320555555555557
+covid_bcell,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.022775,0.0911
+covid_bcell,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.014108333333333334,0.056433333333333335
+covid_bcell,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.0123,0.0492
+gc_np_pc,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.00115,0.0023
+gc_np_pc,full,_threadfin_task,Threadfin and baselines,full data,completed,0.0033777777777777777,0.013511111111111111
+gc_np_pc,full,benisse_min2,Benisse,full data,completed,0.0019055555555555557,0.007622222222222223
+gc_np_pc,full,clone2vec_min2,clone2vec,full data,completed,0.010441666666666667,0.04176666666666667
+gc_np_pc,full,clone2vec_min3,clone2vec,full data,completed,0.010719444444444445,0.04287777777777778
+gc_np_pc,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.007897222222222222,0.05680444444444445
+gc_np_pc,full,clonotrace_min2,Clonotrace,full data,completed,0.00858611111111111,0.030722500000000007
+gc_np_pc,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0007472222222222223,0.0014944444444444445
+gc_np_pc,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.004141666666666667,0.016566666666666667
+gc_np_pc,halfA_s0,benisse_min2,Benisse,halves,completed,0.0013805555555555554,0.005522222222222222
+gc_np_pc,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.012722222222222222,0.050888888888888886
+gc_np_pc,halfA_s0,clone2vec_min3,clone2vec,halves,failed,0.009822222222222222,0.03928888888888889
+gc_np_pc,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.008519444444444444,0.03121472222222222
+gc_np_pc,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0007999999999999999,0.0015999999999999999
+gc_np_pc,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.004094444444444445,0.01637777777777778
+gc_np_pc,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.01228611111111111,0.04914444444444444
+gc_np_pc,halfA_s1,clone2vec_min3,clone2vec,halves,failed,0.010355555555555555,0.04142222222222222
+gc_np_pc,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0007694444444444445,0.001538888888888889
+gc_np_pc,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.004186111111111111,0.016744444444444444
+gc_np_pc,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.012380555555555556,0.049522222222222224
+gc_np_pc,halfA_s2,clone2vec_min3,clone2vec,halves,failed,0.010147222222222222,0.04058888888888889
+gc_np_pc,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0011166666666666666,0.0022333333333333333
+gc_np_pc,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.004288888888888889,0.017155555555555556
+gc_np_pc,halfB_s0,benisse_min2,Benisse,halves,completed,0.001486111111111111,0.005944444444444444
+gc_np_pc,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.013008333333333334,0.052033333333333334
+gc_np_pc,halfB_s0,clone2vec_min3,clone2vec,halves,failed,0.009725,0.0389
+gc_np_pc,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.00853611111111111,0.03110722222222222
+gc_np_pc,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0011472222222222222,0.0022944444444444444
+gc_np_pc,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.004319444444444444,0.017277777777777777
+gc_np_pc,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.012977777777777777,0.05191111111111111
+gc_np_pc,halfB_s1,clone2vec_min3,clone2vec,halves,failed,0.010425,0.0417
+gc_np_pc,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0011166666666666666,0.0022333333333333333
+gc_np_pc,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.004261111111111111,0.017044444444444445
+gc_np_pc,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.011536111111111112,0.046144444444444446
+gc_np_pc,halfB_s2,clone2vec_min3,clone2vec,halves,failed,0.0098,0.0392
+gut_gc_reporter,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.007155555555555556,0.014311111111111111
+gut_gc_reporter,full,_threadfin_task,Threadfin and baselines,full data,completed,0.011358333333333333,0.04543333333333333
+gut_gc_reporter,full,benisse_min2,Benisse,full data,completed,0.045241666666666666,0.18096666666666666
+gut_gc_reporter,full,clone2vec_min2,clone2vec,full data,completed,0.018269444444444442,0.07307777777777777
+gut_gc_reporter,full,clone2vec_min3,clone2vec,full data,completed,0.015502777777777779,0.062011111111111114
+gut_gc_reporter,full,clonotrace_exact_min10,"Clonotrace, exact OT",full data,failed,0.025152777777777777,0.17500277777777778
+gut_gc_reporter,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,failed,0.09298055555555557,0.7193105555555556
+gut_gc_reporter,full,clonotrace_min10,Clonotrace,full data,completed,1.1647222222222222,1.2411561111111111
+gut_gc_reporter,full,clonotrace_min2,Clonotrace,full data,completed,0.5994888888888888,1.0515127777777777
+gut_gc_reporter,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.001761111111111111,0.003522222222222222
+gut_gc_reporter,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.0038027777777777778,0.015211111111111111
+gut_gc_reporter,halfA_s0,benisse_min2,Benisse,halves,completed,0.012975,0.0519
+gut_gc_reporter,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.02135,0.0854
+gut_gc_reporter,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.017622222222222223,0.07048888888888889
+gut_gc_reporter,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,0.020594444444444443,0.07732277777777778
+gut_gc_reporter,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.04741666666666666,0.18384916666666665
+gut_gc_reporter,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0017305555555555557,0.0034611111111111114
+gut_gc_reporter,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.0038,0.0152
+gut_gc_reporter,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.021986111111111113,0.08794444444444445
+gut_gc_reporter,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.016783333333333334,0.06713333333333334
+gut_gc_reporter,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0017305555555555557,0.0034611111111111114
+gut_gc_reporter,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.0038027777777777778,0.015211111111111111
+gut_gc_reporter,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.020552777777777777,0.08221111111111111
+gut_gc_reporter,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.014808333333333335,0.05923333333333334
+gut_gc_reporter,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.006361111111111111,0.012722222222222222
+gut_gc_reporter,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.010922222222222222,0.04368888888888889
+gut_gc_reporter,halfB_s0,benisse_min2,Benisse,halves,completed,0.015558333333333332,0.06223333333333333
+gut_gc_reporter,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.03300277777777778,0.1320111111111111
+gut_gc_reporter,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.033183333333333336,0.13273333333333334
+gut_gc_reporter,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,0.03465,0.13171638888888887
+gut_gc_reporter,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.08870555555555555,0.34648861111111107
+gut_gc_reporter,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.006302777777777778,0.012605555555555556
+gut_gc_reporter,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.010905555555555555,0.04362222222222222
+gut_gc_reporter,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.026191666666666665,0.10476666666666666
+gut_gc_reporter,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.029713888888888887,0.11885555555555555
+gut_gc_reporter,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0063,0.0126
+gut_gc_reporter,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.010905555555555555,0.04362222222222222
+gut_gc_reporter,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.02302777777777778,0.09211111111111112
+gut_gc_reporter,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.02336111111111111,0.09344444444444444
+larry_d2,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.006619444444444444,0.013238888888888889
+larry_d2,full,_threadfin_task,Threadfin and baselines,full data,completed,0.010813888888888889,0.043255555555555554
+larry_d2,full,clone2vec_min2,clone2vec,full data,completed,0.028352777777777775,0.1134111111111111
+larry_d2,full,clone2vec_min3,clone2vec,full data,completed,0.019394444444444443,0.07757777777777777
+larry_d2,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.3040055555555556,2.3423802777777776
+larry_d2,full,clonotrace_min2,Clonotrace,full data,completed,0.3774666666666667,1.3286213888888887
+larry_d2,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.002833333333333333,0.005666666666666666
+larry_d2,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.009761111111111111,0.039044444444444444
+larry_d2,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.011583333333333334,0.04633333333333334
+larry_d2,halfA_s0,clone2vec_min3,clone2vec,halves,failed,0.008577777777777778,0.03431111111111111
+larry_d2,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.022608333333333334,0.08078694444444447
+larry_d2,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0027888888888888885,0.005577777777777777
+larry_d2,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.009675,0.0387
+larry_d2,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.011436111111111112,0.04574444444444445
+larry_d2,halfA_s1,clone2vec_min3,clone2vec,halves,failed,0.008427777777777777,0.03371111111111111
+larry_d2,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0027638888888888886,0.005527777777777777
+larry_d2,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.009711111111111111,0.038844444444444445
+larry_d2,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.011630555555555555,0.04652222222222222
+larry_d2,halfA_s2,clone2vec_min3,clone2vec,halves,failed,0.008408333333333334,0.033633333333333335
+larry_d2,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.003880555555555556,0.007761111111111112
+larry_d2,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.010147222222222222,0.04058888888888889
+larry_d2,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.016908333333333334,0.06763333333333334
+larry_d2,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.010786111111111111,0.043144444444444444
+larry_d2,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.07753611111111111,0.29808083333333335
+larry_d2,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0038916666666666665,0.007783333333333333
+larry_d2,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.010136111111111111,0.040544444444444445
+larry_d2,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.017252777777777777,0.0690111111111111
+larry_d2,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.010744444444444444,0.042977777777777774
+larry_d2,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.003847222222222222,0.007694444444444444
+larry_d2,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.010199999999999999,0.040799999999999996
+larry_d2,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.01698611111111111,0.06794444444444445
+larry_d2,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.010983333333333333,0.04393333333333333
+larry_d46,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.015769444444444447,0.031538888888888894
+larry_d46,full,_threadfin_task,Threadfin and baselines,full data,completed,0.013891666666666667,0.05556666666666667
+larry_d46,full,clone2vec_min2,clone2vec,full data,completed,0.10461111111111111,0.41844444444444445
+larry_d46,full,clone2vec_min3,clone2vec,full data,completed,0.07414444444444444,0.2965777777777778
+larry_d46,full,clonotrace_min10,Clonotrace,full data,completed,18.15361111111111,72.56355416666668
+larry_d46,full,clonotrace_min10_seq,Clonotrace,full data,completed,40.935833333333335,42.64319416666667
+larry_d46,full,clonotrace_min2,Clonotrace,full data,completed,30.9775,185.58880055555557
+larry_d46,full,clonotrace_min2_seq_stopped,Clonotrace,full data,cancelled,71.98666666666666,287.94666666666666
+larry_d46,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.007494444444444444,0.014988888888888888
+larry_d46,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.011680555555555555,0.04672222222222222
+larry_d46,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.23645833333333333,0.9458333333333333
+larry_d46,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.19779444444444444,0.7911777777777778
+larry_d46,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,1.6736111111111112,6.678101666666667
+larry_d46,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.00755,0.0151
+larry_d46,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.011844444444444444,0.047377777777777776
+larry_d46,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.2998194444444444,1.1992777777777777
+larry_d46,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.18018055555555554,0.7207222222222222
+larry_d46,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.007566666666666666,0.015133333333333332
+larry_d46,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.011797222222222221,0.047188888888888884
+larry_d46,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.2814611111111111,1.1258444444444444
+larry_d46,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.20996111111111113,0.8398444444444445
+larry_d46,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.009594444444444444,0.019188888888888887
+larry_d46,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.012561111111111111,0.050244444444444446
+larry_d46,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.29464444444444443,1.1785777777777777
+larry_d46,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.2424,0.9696
+larry_d46,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,2.7127777777777777,10.832424999999999
+larry_d46,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0098,0.0196
+larry_d46,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.012608333333333334,0.05043333333333334
+larry_d46,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.31585555555555556,1.2634222222222222
+larry_d46,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.23858888888888888,0.9543555555555555
+larry_d46,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.010047222222222223,0.020094444444444446
+larry_d46,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.01275,0.051
+larry_d46,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.30364444444444444,1.2145777777777778
+larry_d46,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.29224999999999995,1.1689999999999998
+ln_vaccine,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.09326388888888888,0.18652777777777776
+ln_vaccine,full,_threadfin_task,Threadfin and baselines,full data,completed,0.044552777777777774,0.1782111111111111
+ln_vaccine,full,benisse_min10,Benisse,full data,completed,0.3341527777777778,1.3366111111111112
+ln_vaccine,full,clone2vec_min2,clone2vec,full data,completed,0.179375,0.7175
+ln_vaccine,full,clone2vec_min3,clone2vec,full data,completed,0.09475833333333333,0.37903333333333333
+ln_vaccine,full,clonotrace_min10,Clonotrace,full data,completed,28.841666666666665,114.83579333333334
+ln_vaccine,full,clonotrace_min10_seq_stopped,Clonotrace,full data,cancelled,71.98638888888888,287.94555555555553
+ln_vaccine,full,clonotrace_min2,Clonotrace,full data,completed,100.75194444444445,3213.9222941666667
+ln_vaccine,full,clonotrace_min2_seq_stopped72h,Clonotrace,full data,stopped,71.98694444444445,117.0
+ln_vaccine,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.019694444444444445,0.03938888888888889
+ln_vaccine,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.014808333333333335,0.05923333333333334
+ln_vaccine,halfA_s0,benisse_min10,Benisse,halves,completed,0.03115277777777778,0.12461111111111112
+ln_vaccine,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.2573611111111111,1.0294444444444444
+ln_vaccine,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.20537222222222223,0.8214888888888889
+ln_vaccine,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,1.6705555555555556,6.648350833333333
+ln_vaccine,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.01945,0.0389
+ln_vaccine,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.014891666666666666,0.059566666666666664
+ln_vaccine,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.2752583333333333,1.1010333333333333
+ln_vaccine,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.25479722222222223,1.019188888888889
+ln_vaccine,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.019405555555555554,0.03881111111111111
+ln_vaccine,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.015075000000000002,0.060300000000000006
+ln_vaccine,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.26891944444444443,1.0756777777777777
+ln_vaccine,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.24464444444444444,0.9785777777777778
+ln_vaccine,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.08804166666666666,0.17608333333333331
+ln_vaccine,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.04933055555555556,0.19732222222222223
+ln_vaccine,halfB_s0,benisse_min10,Benisse,halves,completed,0.031938888888888885,0.12775555555555554
+ln_vaccine,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.33538611111111116,1.3415444444444447
+ln_vaccine,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.24254166666666666,0.9701666666666666
+ln_vaccine,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,6.6338888888888885,26.025970833333332
+ln_vaccine,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.08801666666666667,0.17603333333333335
+ln_vaccine,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.05373611111111111,0.21494444444444444
+ln_vaccine,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.3354694444444445,1.341877777777778
+ln_vaccine,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.2506111111111111,1.0024444444444445
+ln_vaccine,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.08786944444444444,0.1757388888888889
+ln_vaccine,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.05684444444444444,0.22737777777777776
+ln_vaccine,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.30634999999999996,1.2253999999999998
+ln_vaccine,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.23415555555555556,0.9366222222222222
+ln_vaccine_f0.05,full,_threadfin_kernel_task,Threadfin and baselines,resources,completed,0.0010472222222222222,0.004188888888888889
+ln_vaccine_f0.05,full,benisse_min2,Benisse,resources,completed,0.023244444444444446,0.09297777777777778
+ln_vaccine_f0.05,full,clone2vec_min2,clone2vec,resources,completed,0.03188333333333333,0.12753333333333333
+ln_vaccine_f0.05,full,clonotrace_min2,Clonotrace,resources,completed,0.057836111111111116,0.44312638888888894
+ln_vaccine_f0.1,full,_threadfin_kernel_task,Threadfin and baselines,resources,completed,0.001302777777777778,0.005211111111111112
+ln_vaccine_f0.1,full,benisse_min2,Benisse,resources,completed,0.09995277777777778,0.3998111111111111
+ln_vaccine_f0.1,full,clone2vec_min2,clone2vec,resources,completed,0.0349,0.1396
+ln_vaccine_f0.1,full,clonotrace_min2,Clonotrace,resources,completed,0.18420277777777777,1.4315636111111114
+ln_vaccine_f0.25,full,_threadfin_kernel_task,Threadfin and baselines,resources,completed,0.002525,0.0101
+ln_vaccine_f0.25,full,benisse_min2,Benisse,resources,completed,0.6670194444444444,2.6680777777777775
+ln_vaccine_f0.25,full,clone2vec_min2,clone2vec,resources,completed,0.09734166666666667,0.3893666666666667
+ln_vaccine_f0.25,full,clonotrace_min2,Clonotrace,resources,completed,1.513611111111111,11.944015
+ln_vaccine_f0.5,full,_threadfin_kernel_task,Threadfin and baselines,resources,completed,0.008480555555555555,0.03392222222222222
+ln_vaccine_f0.5,full,benisse_min2,Benisse,resources,completed,2.8766666666666665,11.506666666666666
+ln_vaccine_f0.5,full,clone2vec_min2,clone2vec,resources,completed,0.17194722222222222,0.6877888888888889
+ln_vaccine_f0.5,full,clonotrace_min2,Clonotrace,resources,completed,9.20888888888889,73.1287363888889
+malaria,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.02201388888888889,0.04402777777777778
+malaria,full,_threadfin_task,Threadfin and baselines,full data,completed,0.015822222222222224,0.0632888888888889
+malaria,full,benisse_min2,Benisse,full data,completed,0.006263888888888889,0.025055555555555557
+malaria,full,clone2vec_min2,clone2vec,full data,completed,0.016408333333333334,0.06563333333333334
+malaria,full,clone2vec_min3,clone2vec,full data,completed,0.011616666666666668,0.04646666666666667
+malaria,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.1270388888888889,0.9016480555555556
+malaria,full,clonotrace_min2,Clonotrace,full data,completed,0.19232777777777776,0.7147658333333333
+malaria,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0018361111111111113,0.0036722222222222226
+malaria,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.009158333333333333,0.03663333333333333
+malaria,halfA_s0,benisse_min2,Benisse,halves,failed,0.0014333333333333333,0.005733333333333333
+malaria,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.010141666666666667,0.04056666666666667
+malaria,halfA_s0,clone2vec_min3,clone2vec,halves,failed,0.008119444444444445,0.03247777777777778
+malaria,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.012194444444444444,0.040875833333333327
+malaria,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.001825,0.00365
+malaria,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.00911388888888889,0.03645555555555556
+malaria,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.010102777777777776,0.040411111111111106
+malaria,halfA_s1,clone2vec_min3,clone2vec,halves,failed,0.008241666666666668,0.03296666666666667
+malaria,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0018944444444444445,0.003788888888888889
+malaria,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.009077777777777778,0.03631111111111111
+malaria,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.010327777777777778,0.04131111111111111
+malaria,halfA_s2,clone2vec_min3,clone2vec,halves,failed,0.008405555555555557,0.03362222222222223
+malaria,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.018941666666666666,0.03788333333333333
+malaria,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.014974999999999999,0.059899999999999995
+malaria,halfB_s0,benisse_min2,Benisse,halves,completed,0.0015527777777777777,0.006211111111111111
+malaria,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.010641666666666667,0.04256666666666667
+malaria,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.009972222222222223,0.03988888888888889
+malaria,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.03132777777777778,0.09713777777777777
+malaria,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.018472222222222223,0.036944444444444446
+malaria,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.014988888888888888,0.059955555555555554
+malaria,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.010683333333333333,0.04273333333333333
+malaria,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.010047222222222223,0.04018888888888889
+malaria,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.018641666666666667,0.037283333333333335
+malaria,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.015055555555555556,0.060222222222222226
+malaria,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.010855555555555556,0.04342222222222222
+malaria,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.010191666666666667,0.040766666666666666
+malaria_late,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.050105555555555556,0.10021111111111111
+malaria_late,full,_threadfin_task,Threadfin and baselines,full data,completed,0.02578888888888889,0.10315555555555556
+malaria_late,full,benisse_min2,Benisse,full data,completed,0.034541666666666665,0.13816666666666666
+malaria_late,full,clone2vec_min2,clone2vec,full data,completed,0.02140833333333333,0.08563333333333333
+malaria_late,full,clone2vec_min3,clone2vec,full data,completed,0.011822222222222224,0.047288888888888894
+malaria_late,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,failed,0.3168722222222222,2.252936111111111
+malaria_late,full,clonotrace_min2,Clonotrace,full data,completed,0.31351666666666667,2.2942733333333334
+malaria_late,full,clonotrace_min2_ladder50_failed,Clonotrace,full data,failed,0.5787972222222223,2.0963091666666664
+malaria_late,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.001936111111111111,0.003872222222222222
+malaria_late,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.0037944444444444445,0.015177777777777778
+malaria_late,halfA_s0,benisse_min2,Benisse,halves,completed,0.0017694444444444446,0.007077777777777778
+malaria_late,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.010891666666666668,0.04356666666666667
+malaria_late,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.010477777777777777,0.04191111111111111
+malaria_late,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.013636111111111113,0.0488213888888889
+malaria_late,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0019472222222222221,0.0038944444444444443
+malaria_late,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.0036750000000000003,0.014700000000000001
+malaria_late,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.010444444444444445,0.04177777777777778
+malaria_late,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.010183333333333332,0.04073333333333333
+malaria_late,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0019305555555555556,0.003861111111111111
+malaria_late,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.0036138888888888887,0.014455555555555555
+malaria_late,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.010347222222222223,0.04138888888888889
+malaria_late,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.010163888888888889,0.040655555555555556
+malaria_late,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.04941111111111111,0.09882222222222221
+malaria_late,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.026283333333333336,0.10513333333333334
+malaria_late,halfB_s0,benisse_min2,Benisse,halves,completed,0.0024000000000000002,0.009600000000000001
+malaria_late,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.012022222222222222,0.04808888888888889
+malaria_late,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.010752777777777778,0.04301111111111111
+malaria_late,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.14420277777777776,0.44012444444444443
+malaria_late,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.04894444444444444,0.09788888888888889
+malaria_late,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.026291666666666668,0.10516666666666667
+malaria_late,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.011605555555555556,0.046422222222222226
+malaria_late,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.010458333333333333,0.041833333333333333
+malaria_late,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.049152777777777774,0.09830555555555555
+malaria_late,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.026258333333333335,0.10503333333333334
+malaria_late,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.011808333333333332,0.04723333333333333
+malaria_late,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.010402777777777778,0.04161111111111111
+mouse_np,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.0030194444444444444,0.006038888888888889
+mouse_np,full,_threadfin_task,Threadfin and baselines,full data,completed,0.00977777777777778,0.03911111111111112
+mouse_np,full,benisse_min2,Benisse,full data,completed,0.015236111111111112,0.06094444444444445
+mouse_np,full,clone2vec_min2,clone2vec,full data,completed,0.014705555555555555,0.05882222222222222
+mouse_np,full,clone2vec_min3,clone2vec,full data,completed,0.011308333333333333,0.045233333333333334
+mouse_np,full,clonotrace_exact_min10,"Clonotrace, exact OT",full data,completed,0.017819444444444447,0.12963527777777778
+mouse_np,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.05070555555555555,0.38373333333333326
+mouse_np,full,clonotrace_min10,Clonotrace,full data,completed,0.02867777777777778,0.05647666666666667
+mouse_np,full,clonotrace_min2,Clonotrace,full data,completed,0.055586111111111114,0.21494722222222223
+mouse_np,full,clonotrace_min2_seq,Clonotrace,full data,completed,0.06548055555555556,0.2204225
+mouse_np,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0012111111111111112,0.0024222222222222223
+mouse_np,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.004961111111111111,0.019844444444444442
+mouse_np,halfA_s0,benisse_min2,Benisse,halves,completed,0.002761111111111111,0.011044444444444444
+mouse_np,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.019733333333333332,0.07893333333333333
+mouse_np,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.021391666666666666,0.08556666666666667
+mouse_np,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,0.012805555555555556,0.0470061111111111
+mouse_np,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.02263888888888889,0.0858713888888889
+mouse_np,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0012305555555555555,0.002461111111111111
+mouse_np,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.005044444444444444,0.020177777777777777
+mouse_np,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.018727777777777777,0.07491111111111111
+mouse_np,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.01965277777777778,0.07861111111111112
+mouse_np,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0012055555555555554,0.002411111111111111
+mouse_np,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.006413888888888889,0.025655555555555556
+mouse_np,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.011891666666666667,0.04756666666666667
+mouse_np,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.013469444444444445,0.05387777777777778
+mouse_np,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.002627777777777778,0.005255555555555556
+mouse_np,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.0046,0.0184
+mouse_np,halfB_s0,benisse_min2,Benisse,halves,completed,0.004825,0.0193
+mouse_np,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.020516666666666666,0.08206666666666666
+mouse_np,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.019180555555555555,0.07672222222222222
+mouse_np,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,0.01246111111111111,0.04502138888888889
+mouse_np,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.029911111111111114,0.11420583333333334
+mouse_np,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0025833333333333333,0.005166666666666667
+mouse_np,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.009066666666666667,0.03626666666666667
+mouse_np,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.013444444444444445,0.05377777777777778
+mouse_np,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.012716666666666668,0.05086666666666667
+mouse_np,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0025833333333333333,0.005166666666666667
+mouse_np,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.005947222222222223,0.02378888888888889
+mouse_np,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.016258333333333333,0.06503333333333333
+mouse_np,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.011775,0.0471
+mouse_rbd,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.013044444444444445,0.02608888888888889
+mouse_rbd,full,_threadfin_task,Threadfin and baselines,full data,completed,0.012772222222222221,0.051088888888888885
+mouse_rbd,full,benisse_min2,Benisse,full data,completed,0.1887027777777778,0.7548111111111112
+mouse_rbd,full,clone2vec_min2,clone2vec,full data,completed,0.03091111111111111,0.12364444444444445
+mouse_rbd,full,clone2vec_min3,clone2vec,full data,completed,0.020202777777777778,0.08081111111111111
+mouse_rbd,full,clonotrace_exact_min10,"Clonotrace, exact OT",full data,failed,0.05300277777777778,0.3378925
+mouse_rbd,full,clonotrace_min10,Clonotrace,full data,completed,3.0858333333333334,3.266520555555555
+mouse_rbd,full,clonotrace_min2,Clonotrace,full data,completed,1.2066666666666668,3.212789166666667
+mouse_rbd,full_w1,benisse_min2,Benisse,resources,completed,0.3220361111111111,0.3220361111111111
+mouse_rbd,full_w1,clone2vec_min2,clone2vec,resources,completed,0.07830555555555554,0.07830555555555554
+mouse_rbd,full_w1,clonotrace_min2,Clonotrace,resources,completed,3.6969444444444446,3.695405
+mouse_rbd,full_w16,benisse_min2,Benisse,resources,completed,0.940386111111111,15.046177777777777
+mouse_rbd,full_w16,clone2vec_min2,clone2vec,resources,completed,0.06360833333333334,1.0177333333333334
+mouse_rbd,full_w16,clonotrace_min2,Clonotrace,resources,completed,0.4102,6.299830277777778
+mouse_rbd,full_w2,clone2vec_min2,clone2vec,resources,completed,0.06049722222222222,0.12099444444444445
+mouse_rbd,full_w2,clonotrace_min2,Clonotrace,resources,completed,2.1197222222222223,4.2234588888888895
+mouse_rbd,full_w4,benisse_min2,Benisse,resources,completed,0.26323888888888886,1.0529555555555554
+mouse_rbd,full_w4,clone2vec_min2,clone2vec,resources,completed,0.05988333333333333,0.23953333333333332
+mouse_rbd,full_w4,clonotrace_min2,Clonotrace,resources,completed,1.1191666666666666,4.429032222222222
+mouse_rbd,full_w8,clone2vec_min2,clone2vec,resources,completed,0.05706388888888889,0.45651111111111115
+mouse_rbd,full_w8,clonotrace_min2,Clonotrace,resources,completed,0.6503111111111111,5.093745277777778
+mouse_rbd,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.003336111111111111,0.006672222222222222
+mouse_rbd,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.012380555555555556,0.049522222222222224
+mouse_rbd,halfA_s0,benisse_min2,Benisse,halves,completed,0.018622222222222224,0.0744888888888889
+mouse_rbd,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.02074166666666667,0.08296666666666667
+mouse_rbd,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.07570555555555557,0.30282222222222227
+mouse_rbd,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,0.10114166666666667,0.395235
+mouse_rbd,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.121575,0.4752008333333334
+mouse_rbd,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.003408333333333333,0.006816666666666666
+mouse_rbd,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.01155,0.0462
+mouse_rbd,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.05233611111111111,0.20934444444444444
+mouse_rbd,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.06901944444444444,0.27607777777777776
+mouse_rbd,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.003425,0.00685
+mouse_rbd,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.01321388888888889,0.05285555555555556
+mouse_rbd,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.04432777777777777,0.17731111111111109
+mouse_rbd,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.07194444444444445,0.2877777777777778
+mouse_rbd,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.009394444444444445,0.01878888888888889
+mouse_rbd,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.02056111111111111,0.08224444444444444
+mouse_rbd,halfB_s0,benisse_min2,Benisse,halves,completed,0.032072222222222224,0.1282888888888889
+mouse_rbd,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.05148055555555556,0.20592222222222223
+mouse_rbd,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.04613055555555556,0.18452222222222223
+mouse_rbd,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,0.18215,0.7092800000000001
+mouse_rbd,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.24010277777777778,0.9405844444444446
+mouse_rbd,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.009338888888888888,0.018677777777777776
+mouse_rbd,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.017569444444444443,0.07027777777777777
+mouse_rbd,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.06774444444444444,0.27097777777777776
+mouse_rbd,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.04387222222222222,0.1754888888888889
+mouse_rbd,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.009277777777777777,0.018555555555555554
+mouse_rbd,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.012613888888888888,0.05045555555555555
+mouse_rbd,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.06049444444444445,0.2419777777777778
+mouse_rbd,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.044527777777777784,0.17811111111111114
+sim_large_b0_s1,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038888888888888888,0.0077777777777777776
+sim_large_b0_s1,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009855555555555555,0.03942222222222222
+sim_large_b0_s1,full,clone2vec_min2,clone2vec,simulation,completed,0.014694444444444444,0.058777777777777776
+sim_large_b0_s1,full,clone2vec_min3,clone2vec,simulation,completed,0.014641666666666667,0.05856666666666667
+sim_large_b0_s1,full,clonotrace_min10,Clonotrace,simulation,completed,6.027777777777778,6.329983888888889
+sim_large_b0_s1,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.009286111111111111,0.037144444444444445
+sim_large_b0_s1,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.016308333333333334,0.06523333333333334
+sim_large_b0_s1,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.016625,0.0665
+sim_large_b0_s1,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.009038888888888888,0.03615555555555555
+sim_large_b0_s1,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.016130555555555554,0.06452222222222222
+sim_large_b0_s1,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.009027777777777777,0.03611111111111111
+sim_large_b0_s1,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.009105555555555556,0.036422222222222224
+sim_large_b0_s1,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.016080555555555556,0.06432222222222223
+sim_large_b0_s1,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.01598888888888889,0.06395555555555556
+sim_large_b0_s1,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.009030555555555556,0.03612222222222222
+sim_large_b0_s1,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.00911111111111111,0.03644444444444444
+sim_large_b0_s10,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003861111111111111,0.007722222222222222
+sim_large_b0_s10,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.00945,0.0378
+sim_large_b0_s10,full,clone2vec_min2,clone2vec,simulation,completed,0.013836111111111112,0.055344444444444446
+sim_large_b0_s10,full,clone2vec_min3,clone2vec,simulation,completed,0.015816666666666666,0.06326666666666667
+sim_large_b0_s2,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003741666666666667,0.007483333333333334
+sim_large_b0_s2,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009994444444444443,0.03997777777777777
+sim_large_b0_s2,full,clone2vec_min2,clone2vec,simulation,completed,0.014169444444444445,0.05667777777777778
+sim_large_b0_s2,full,clone2vec_min3,clone2vec,simulation,completed,0.014083333333333335,0.05633333333333334
+sim_large_b0_s2,full,clonotrace_min10,Clonotrace,simulation,completed,4.87,5.1382763888888885
+sim_large_b0_s3,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003725,0.00745
+sim_large_b0_s3,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009866666666666668,0.03946666666666667
+sim_large_b0_s3,full,clone2vec_min2,clone2vec,simulation,completed,0.014491666666666667,0.057966666666666666
+sim_large_b0_s3,full,clone2vec_min3,clone2vec,simulation,completed,0.014436111111111111,0.057744444444444445
+sim_large_b0_s3,full,clonotrace_min10,Clonotrace,simulation,completed,5.109444444444445,5.378332777777778
+sim_large_b0_s4,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038499999999999997,0.007699999999999999
+sim_large_b0_s4,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010577777777777778,0.04231111111111111
+sim_large_b0_s4,full,clone2vec_min2,clone2vec,simulation,completed,0.015191666666666666,0.06076666666666666
+sim_large_b0_s4,full,clone2vec_min3,clone2vec,simulation,completed,0.01423611111111111,0.05694444444444444
+sim_large_b0_s5,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038583333333333334,0.007716666666666667
+sim_large_b0_s5,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009569444444444445,0.03827777777777778
+sim_large_b0_s5,full,clone2vec_min2,clone2vec,simulation,completed,0.02660277777777778,0.10641111111111112
+sim_large_b0_s5,full,clone2vec_min3,clone2vec,simulation,completed,0.019063888888888887,0.07625555555555555
+sim_large_b0_s6,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0037527777777777776,0.007505555555555555
+sim_large_b0_s6,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010052777777777777,0.04021111111111111
+sim_large_b0_s6,full,clone2vec_min2,clone2vec,simulation,completed,0.020091666666666667,0.08036666666666667
+sim_large_b0_s6,full,clone2vec_min3,clone2vec,simulation,completed,0.024805555555555556,0.09922222222222223
+sim_large_b0_s7,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003875,0.00775
+sim_large_b0_s7,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.01063611111111111,0.04254444444444444
+sim_large_b0_s7,full,clone2vec_min2,clone2vec,simulation,completed,0.018808333333333333,0.07523333333333333
+sim_large_b0_s7,full,clone2vec_min3,clone2vec,simulation,completed,0.015130555555555555,0.06052222222222222
+sim_large_b0_s8,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0036916666666666664,0.007383333333333333
+sim_large_b0_s8,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010027777777777778,0.04011111111111111
+sim_large_b0_s8,full,clone2vec_min2,clone2vec,simulation,completed,0.013313888888888889,0.053255555555555556
+sim_large_b0_s8,full,clone2vec_min3,clone2vec,simulation,completed,0.014986111111111112,0.059944444444444446
+sim_large_b0_s9,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0037277777777777778,0.0074555555555555555
+sim_large_b0_s9,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010611111111111111,0.042444444444444444
+sim_large_b0_s9,full,clone2vec_min2,clone2vec,simulation,completed,0.018130555555555556,0.07252222222222222
+sim_large_b0_s9,full,clone2vec_min3,clone2vec,simulation,completed,0.015294444444444446,0.06117777777777778
+sim_large_b1.5_s1,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038527777777777775,0.007705555555555555
+sim_large_b1.5_s1,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010086111111111112,0.04034444444444445
+sim_large_b1.5_s1,full,clone2vec_min2,clone2vec,simulation,completed,0.014588888888888889,0.058355555555555556
+sim_large_b1.5_s1,full,clone2vec_min3,clone2vec,simulation,completed,0.014588888888888889,0.058355555555555556
+sim_large_b1.5_s1,full,clonotrace_min10,Clonotrace,simulation,completed,6.432222222222222,6.70434
+sim_large_b1.5_s10,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003627777777777778,0.007255555555555556
+sim_large_b1.5_s10,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.01023611111111111,0.04094444444444444
+sim_large_b1.5_s10,full,clone2vec_min2,clone2vec,simulation,completed,0.015327777777777777,0.06131111111111111
+sim_large_b1.5_s10,full,clone2vec_min3,clone2vec,simulation,completed,0.014674999999999999,0.058699999999999995
+sim_large_b1.5_s2,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0036972222222222224,0.007394444444444445
+sim_large_b1.5_s2,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009927777777777778,0.039711111111111114
+sim_large_b1.5_s2,full,clone2vec_min2,clone2vec,simulation,completed,0.014258333333333333,0.05703333333333333
+sim_large_b1.5_s2,full,clone2vec_min3,clone2vec,simulation,completed,0.014275,0.0571
+sim_large_b1.5_s2,full,clonotrace_min10,Clonotrace,simulation,completed,5.265833333333333,5.518965555555555
+sim_large_b1.5_s3,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0035194444444444444,0.007038888888888889
+sim_large_b1.5_s3,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010044444444444443,0.04017777777777777
+sim_large_b1.5_s3,full,clone2vec_min2,clone2vec,simulation,completed,0.014366666666666666,0.057466666666666666
+sim_large_b1.5_s3,full,clone2vec_min3,clone2vec,simulation,completed,0.014444444444444444,0.057777777777777775
+sim_large_b1.5_s3,full,clonotrace_min10,Clonotrace,simulation,completed,5.375277777777778,5.626868055555555
+sim_large_b1.5_s4,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038527777777777775,0.007705555555555555
+sim_large_b1.5_s4,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.00998888888888889,0.03995555555555556
+sim_large_b1.5_s4,full,clone2vec_min2,clone2vec,simulation,completed,0.01656388888888889,0.06625555555555555
+sim_large_b1.5_s4,full,clone2vec_min3,clone2vec,simulation,completed,0.014249999999999999,0.056999999999999995
+sim_large_b1.5_s5,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0038694444444444445,0.007738888888888889
+sim_large_b1.5_s5,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009605555555555555,0.03842222222222222
+sim_large_b1.5_s5,full,clone2vec_min2,clone2vec,simulation,completed,0.015225,0.0609
+sim_large_b1.5_s5,full,clone2vec_min3,clone2vec,simulation,completed,0.01525,0.061
+sim_large_b1.5_s6,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0037694444444444446,0.007538888888888889
+sim_large_b1.5_s6,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010541666666666668,0.04216666666666667
+sim_large_b1.5_s6,full,clone2vec_min2,clone2vec,simulation,completed,0.015383333333333334,0.061533333333333336
+sim_large_b1.5_s6,full,clone2vec_min3,clone2vec,simulation,completed,0.01685,0.0674
+sim_large_b1.5_s7,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003872222222222222,0.007744444444444444
+sim_large_b1.5_s7,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010155555555555557,0.040622222222222226
+sim_large_b1.5_s7,full,clone2vec_min2,clone2vec,simulation,completed,0.014652777777777778,0.058611111111111114
+sim_large_b1.5_s7,full,clone2vec_min3,clone2vec,simulation,completed,0.014202777777777778,0.05681111111111111
+sim_large_b1.5_s8,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0037055555555555557,0.007411111111111111
+sim_large_b1.5_s8,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009663888888888889,0.038655555555555554
+sim_large_b1.5_s8,full,clone2vec_min2,clone2vec,simulation,completed,0.016094444444444442,0.06437777777777777
+sim_large_b1.5_s8,full,clone2vec_min3,clone2vec,simulation,completed,0.016505555555555555,0.06602222222222222
+sim_large_b1.5_s9,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.003644444444444444,0.007288888888888888
+sim_large_b1.5_s9,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009797222222222223,0.03918888888888889
+sim_large_b1.5_s9,full,clone2vec_min2,clone2vec,simulation,completed,0.0145,0.058
+sim_large_b1.5_s9,full,clone2vec_min3,clone2vec,simulation,completed,0.014199999999999999,0.056799999999999996
+sim_small_b0_s1,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0018861111111111112,0.0037722222222222224
+sim_small_b0_s1,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009474999999999999,0.037899999999999996
+sim_small_b0_s1,full,clone2vec_min2,clone2vec,simulation,completed,0.013330555555555556,0.05332222222222222
+sim_small_b0_s1,full,clone2vec_min3,clone2vec,simulation,completed,0.01166111111111111,0.04664444444444444
+sim_small_b0_s1,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.044111111111111115,0.33151444444444444
+sim_small_b0_s1,full,clonotrace_min2,Clonotrace,simulation,completed,0.07556944444444445,0.29224500000000003
+sim_small_b0_s1,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.004791666666666666,0.019166666666666665
+sim_small_b0_s1,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.017486111111111112,0.06994444444444445
+sim_small_b0_s1,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.015072222222222221,0.060288888888888885
+sim_small_b0_s1,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.006591666666666667,0.026366666666666667
+sim_small_b0_s1,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.015188888888888889,0.060755555555555556
+sim_small_b0_s1,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.017694444444444447,0.07077777777777779
+sim_small_b0_s1,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.006625000000000001,0.026500000000000003
+sim_small_b0_s1,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.015316666666666668,0.06126666666666667
+sim_small_b0_s1,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.013977777777777778,0.05591111111111111
+sim_small_b0_s1,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.005794444444444444,0.023177777777777776
+sim_small_b0_s1,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.028638888888888887,0.11455555555555555
+sim_small_b0_s1,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.015283333333333335,0.06113333333333334
+sim_small_b0_s1,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.004411111111111111,0.017644444444444445
+sim_small_b0_s1,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.026025,0.1041
+sim_small_b0_s1,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.016255555555555558,0.06502222222222223
+sim_small_b0_s1,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0046055555555555554,0.018422222222222222
+sim_small_b0_s1,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.022205555555555555,0.08882222222222222
+sim_small_b0_s1,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.015719444444444446,0.06287777777777778
+sim_small_b0_s10,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0023666666666666667,0.004733333333333333
+sim_small_b0_s10,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009430555555555557,0.037722222222222226
+sim_small_b0_s10,full,clone2vec_min2,clone2vec,simulation,completed,0.0296,0.1184
+sim_small_b0_s10,full,clone2vec_min3,clone2vec,simulation,completed,0.013474999999999999,0.053899999999999997
+sim_small_b0_s2,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0018472222222222223,0.0036944444444444446
+sim_small_b0_s2,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009319444444444444,0.03727777777777778
+sim_small_b0_s2,full,clone2vec_min2,clone2vec,simulation,completed,0.013502777777777778,0.054011111111111114
+sim_small_b0_s2,full,clone2vec_min3,clone2vec,simulation,completed,0.012100000000000001,0.048400000000000006
+sim_small_b0_s2,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.04989166666666667,0.3769963888888889
+sim_small_b0_s2,full,clonotrace_min2,Clonotrace,simulation,completed,0.06860833333333334,0.26546722222222224
+sim_small_b0_s2,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.005816666666666667,0.023266666666666668
+sim_small_b0_s2,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.015183333333333332,0.06073333333333333
+sim_small_b0_s2,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.015924999999999998,0.06369999999999999
+sim_small_b0_s2,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.005705555555555556,0.022822222222222223
+sim_small_b0_s2,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.014877777777777778,0.05951111111111111
+sim_small_b0_s2,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.013997222222222222,0.05598888888888889
+sim_small_b0_s2,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.005405555555555556,0.021622222222222223
+sim_small_b0_s2,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.016908333333333334,0.06763333333333334
+sim_small_b0_s2,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.013300000000000001,0.053200000000000004
+sim_small_b0_s2,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.004394444444444445,0.01757777777777778
+sim_small_b0_s2,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.023066666666666666,0.09226666666666666
+sim_small_b0_s2,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.017952777777777776,0.0718111111111111
+sim_small_b0_s2,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.004575,0.0183
+sim_small_b0_s2,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.024397222222222223,0.09758888888888889
+sim_small_b0_s2,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.01555,0.0622
+sim_small_b0_s2,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.004383333333333333,0.01753333333333333
+sim_small_b0_s2,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.015511111111111113,0.06204444444444445
+sim_small_b0_s2,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.01478888888888889,0.05915555555555556
+sim_small_b0_s3,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019333333333333333,0.0038666666666666667
+sim_small_b0_s3,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009344444444444445,0.03737777777777778
+sim_small_b0_s3,full,clone2vec_min2,clone2vec,simulation,completed,0.013555555555555555,0.05422222222222222
+sim_small_b0_s3,full,clone2vec_min3,clone2vec,simulation,completed,0.01683888888888889,0.06735555555555556
+sim_small_b0_s3,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.05068611111111111,0.38116638888888893
+sim_small_b0_s3,full,clonotrace_min2,Clonotrace,simulation,completed,0.061172222222222225,0.23588055555555554
+sim_small_b0_s3,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.006730555555555556,0.026922222222222222
+sim_small_b0_s3,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.011927777777777777,0.04771111111111111
+sim_small_b0_s3,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.011558333333333334,0.046233333333333335
+sim_small_b0_s3,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.004394444444444445,0.01757777777777778
+sim_small_b0_s3,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.011791666666666667,0.04716666666666667
+sim_small_b0_s3,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.011411111111111111,0.045644444444444446
+sim_small_b0_s3,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.005075,0.0203
+sim_small_b0_s3,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.011730555555555555,0.04692222222222222
+sim_small_b0_s3,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.011202777777777777,0.04481111111111111
+sim_small_b0_s3,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.004738888888888889,0.018955555555555555
+sim_small_b0_s3,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.013308333333333332,0.05323333333333333
+sim_small_b0_s3,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.012161111111111112,0.04864444444444445
+sim_small_b0_s3,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.005327777777777778,0.02131111111111111
+sim_small_b0_s3,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.01276111111111111,0.05104444444444444
+sim_small_b0_s3,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.012180555555555556,0.04872222222222222
+sim_small_b0_s3,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.004469444444444444,0.017877777777777777
+sim_small_b0_s3,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.011522222222222222,0.04608888888888889
+sim_small_b0_s3,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.011211111111111111,0.044844444444444444
+sim_small_b0_s4,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0021,0.0042
+sim_small_b0_s4,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009349999999999999,0.037399999999999996
+sim_small_b0_s4,full,clone2vec_min2,clone2vec,simulation,completed,0.016802777777777778,0.06721111111111111
+sim_small_b0_s4,full,clone2vec_min3,clone2vec,simulation,completed,0.013530555555555556,0.054122222222222224
+sim_small_b0_s5,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0021194444444444446,0.004238888888888889
+sim_small_b0_s5,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009344444444444445,0.03737777777777778
+sim_small_b0_s5,full,clone2vec_min2,clone2vec,simulation,completed,0.022658333333333332,0.09063333333333333
+sim_small_b0_s5,full,clone2vec_min3,clone2vec,simulation,completed,0.0195,0.078
+sim_small_b0_s6,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0022194444444444445,0.004438888888888889
+sim_small_b0_s6,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010199999999999999,0.040799999999999996
+sim_small_b0_s6,full,clone2vec_min2,clone2vec,simulation,completed,0.015052777777777778,0.06021111111111111
+sim_small_b0_s6,full,clone2vec_min3,clone2vec,simulation,completed,0.015705555555555556,0.06282222222222222
+sim_small_b0_s7,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0022194444444444445,0.004438888888888889
+sim_small_b0_s7,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010375,0.0415
+sim_small_b0_s7,full,clone2vec_min2,clone2vec,simulation,completed,0.017397222222222224,0.0695888888888889
+sim_small_b0_s7,full,clone2vec_min3,clone2vec,simulation,completed,0.023113888888888892,0.09245555555555557
+sim_small_b0_s8,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019666666666666665,0.003933333333333333
+sim_small_b0_s8,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009330555555555557,0.03732222222222223
+sim_small_b0_s8,full,clone2vec_min2,clone2vec,simulation,completed,0.019772222222222226,0.0790888888888889
+sim_small_b0_s8,full,clone2vec_min3,clone2vec,simulation,completed,0.014811111111111112,0.05924444444444445
+sim_small_b0_s9,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019972222222222223,0.0039944444444444446
+sim_small_b0_s9,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009933333333333332,0.03973333333333333
+sim_small_b0_s9,full,clone2vec_min2,clone2vec,simulation,completed,0.019430555555555555,0.07772222222222222
+sim_small_b0_s9,full,clone2vec_min3,clone2vec,simulation,completed,0.022758333333333335,0.09103333333333334
+sim_small_b1.5_s1,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.001936111111111111,0.003872222222222222
+sim_small_b1.5_s1,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009347222222222222,0.03738888888888889
+sim_small_b1.5_s1,full,clone2vec_min2,clone2vec,simulation,completed,0.013277777777777777,0.05311111111111111
+sim_small_b1.5_s1,full,clone2vec_min3,clone2vec,simulation,completed,0.01185,0.0474
+sim_small_b1.5_s1,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.052983333333333334,0.39955861111111113
+sim_small_b1.5_s1,full,clonotrace_min2,Clonotrace,simulation,completed,0.07247500000000001,0.2809202777777778
+sim_small_b1.5_s1,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.0036916666666666664,0.014766666666666666
+sim_small_b1.5_s1,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.012338888888888889,0.049355555555555555
+sim_small_b1.5_s1,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.01046111111111111,0.04184444444444444
+sim_small_b1.5_s1,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.003525,0.0141
+sim_small_b1.5_s1,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.012288888888888889,0.049155555555555557
+sim_small_b1.5_s1,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.010555555555555556,0.042222222222222223
+sim_small_b1.5_s1,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0035083333333333334,0.014033333333333333
+sim_small_b1.5_s1,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.012358333333333334,0.049433333333333336
+sim_small_b1.5_s1,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.011719444444444444,0.046877777777777775
+sim_small_b1.5_s1,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.00365,0.0146
+sim_small_b1.5_s1,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.015705555555555556,0.06282222222222222
+sim_small_b1.5_s1,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.011336111111111111,0.045344444444444444
+sim_small_b1.5_s1,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.0035333333333333336,0.014133333333333335
+sim_small_b1.5_s1,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.01570833333333333,0.06283333333333332
+sim_small_b1.5_s1,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.011972222222222223,0.04788888888888889
+sim_small_b1.5_s1,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0033888888888888888,0.013555555555555555
+sim_small_b1.5_s1,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.015,0.06
+sim_small_b1.5_s1,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.011622222222222223,0.04648888888888889
+sim_small_b1.5_s10,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019249999999999998,0.0038499999999999997
+sim_small_b1.5_s10,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009658333333333335,0.03863333333333334
+sim_small_b1.5_s10,full,clone2vec_min2,clone2vec,simulation,completed,0.013644444444444443,0.054577777777777774
+sim_small_b1.5_s10,full,clone2vec_min3,clone2vec,simulation,completed,0.011827777777777777,0.04731111111111111
+sim_small_b1.5_s2,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019472222222222221,0.0038944444444444443
+sim_small_b1.5_s2,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009369444444444444,0.037477777777777777
+sim_small_b1.5_s2,full,clone2vec_min2,clone2vec,simulation,completed,0.013238888888888889,0.052955555555555554
+sim_small_b1.5_s2,full,clone2vec_min3,clone2vec,simulation,completed,0.011972222222222223,0.04788888888888889
+sim_small_b1.5_s2,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.05029444444444445,0.37908194444444443
+sim_small_b1.5_s2,full,clonotrace_min2,Clonotrace,simulation,completed,0.07263055555555556,0.2793566666666667
+sim_small_b1.5_s2,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.004563888888888889,0.018255555555555556
+sim_small_b1.5_s2,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.011666666666666667,0.04666666666666667
+sim_small_b1.5_s2,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.010391666666666665,0.04156666666666666
+sim_small_b1.5_s2,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.003547222222222222,0.014188888888888888
+sim_small_b1.5_s2,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.013766666666666667,0.05506666666666667
+sim_small_b1.5_s2,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.010388888888888888,0.041555555555555554
+sim_small_b1.5_s2,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0034305555555555556,0.013722222222222222
+sim_small_b1.5_s2,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.013261111111111112,0.05304444444444445
+sim_small_b1.5_s2,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.01096111111111111,0.04384444444444444
+sim_small_b1.5_s2,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.003661111111111111,0.014644444444444444
+sim_small_b1.5_s2,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.015022222222222222,0.060088888888888886
+sim_small_b1.5_s2,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.011005555555555555,0.04402222222222222
+sim_small_b1.5_s2,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.0035555555555555557,0.014222222222222223
+sim_small_b1.5_s2,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.015302777777777778,0.06121111111111111
+sim_small_b1.5_s2,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.013555555555555555,0.05422222222222222
+sim_small_b1.5_s2,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0034194444444444446,0.013677777777777778
+sim_small_b1.5_s2,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.014558333333333333,0.05823333333333333
+sim_small_b1.5_s2,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.012430555555555556,0.04972222222222222
+sim_small_b1.5_s3,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.001963888888888889,0.003927777777777778
+sim_small_b1.5_s3,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009383333333333334,0.037533333333333335
+sim_small_b1.5_s3,full,clone2vec_min2,clone2vec,simulation,completed,0.01338888888888889,0.05355555555555556
+sim_small_b1.5_s3,full,clone2vec_min3,clone2vec,simulation,completed,0.016680555555555556,0.06672222222222222
+sim_small_b1.5_s3,full,clonotrace_exact_min2,"Clonotrace, exact OT",simulation,completed,0.053886111111111114,0.40579750000000003
+sim_small_b1.5_s3,full,clonotrace_min2,Clonotrace,simulation,completed,0.06300277777777778,0.24268194444444446
+sim_small_b1.5_s3,halfA_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.003725,0.0149
+sim_small_b1.5_s3,halfA_s0,clone2vec_min2,clone2vec,simulation,completed,0.011272222222222222,0.04508888888888889
+sim_small_b1.5_s3,halfA_s0,clone2vec_min3,clone2vec,simulation,completed,0.010352777777777778,0.041411111111111114
+sim_small_b1.5_s3,halfA_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.004980555555555556,0.019922222222222223
+sim_small_b1.5_s3,halfA_s1,clone2vec_min2,clone2vec,simulation,completed,0.011491666666666666,0.04596666666666666
+sim_small_b1.5_s3,halfA_s1,clone2vec_min3,clone2vec,simulation,completed,0.01041111111111111,0.04164444444444444
+sim_small_b1.5_s3,halfA_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0034777777777777776,0.01391111111111111
+sim_small_b1.5_s3,halfA_s2,clone2vec_min2,clone2vec,simulation,completed,0.010908333333333334,0.043633333333333336
+sim_small_b1.5_s3,halfA_s2,clone2vec_min3,clone2vec,simulation,completed,0.010930555555555556,0.043722222222222225
+sim_small_b1.5_s3,halfB_s0,_threadfin_task,Threadfin and baselines,simulation,completed,0.0049833333333333335,0.019933333333333334
+sim_small_b1.5_s3,halfB_s0,clone2vec_min2,clone2vec,simulation,completed,0.011747222222222221,0.046988888888888886
+sim_small_b1.5_s3,halfB_s0,clone2vec_min3,clone2vec,simulation,completed,0.0111,0.0444
+sim_small_b1.5_s3,halfB_s1,_threadfin_task,Threadfin and baselines,simulation,completed,0.004691666666666667,0.018766666666666668
+sim_small_b1.5_s3,halfB_s1,clone2vec_min2,clone2vec,simulation,completed,0.012125,0.0485
+sim_small_b1.5_s3,halfB_s1,clone2vec_min3,clone2vec,simulation,completed,0.011636111111111111,0.046544444444444444
+sim_small_b1.5_s3,halfB_s2,_threadfin_task,Threadfin and baselines,simulation,completed,0.0034694444444444447,0.013877777777777779
+sim_small_b1.5_s3,halfB_s2,clone2vec_min2,clone2vec,simulation,completed,0.011411111111111111,0.045644444444444446
+sim_small_b1.5_s3,halfB_s2,clone2vec_min3,clone2vec,simulation,completed,0.011372222222222221,0.045488888888888884
+sim_small_b1.5_s4,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.002297222222222222,0.004594444444444444
+sim_small_b1.5_s4,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009455555555555556,0.03782222222222222
+sim_small_b1.5_s4,full,clone2vec_min2,clone2vec,simulation,completed,0.01858611111111111,0.07434444444444444
+sim_small_b1.5_s4,full,clone2vec_min3,clone2vec,simulation,completed,0.01326388888888889,0.05305555555555556
+sim_small_b1.5_s5,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0023750000000000004,0.004750000000000001
+sim_small_b1.5_s5,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.011208333333333334,0.044833333333333336
+sim_small_b1.5_s5,full,clone2vec_min2,clone2vec,simulation,completed,0.025777777777777778,0.10311111111111111
+sim_small_b1.5_s5,full,clone2vec_min3,clone2vec,simulation,completed,0.017855555555555555,0.07142222222222222
+sim_small_b1.5_s6,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.002266666666666667,0.004533333333333334
+sim_small_b1.5_s6,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.0097,0.0388
+sim_small_b1.5_s6,full,clone2vec_min2,clone2vec,simulation,completed,0.015369444444444444,0.06147777777777778
+sim_small_b1.5_s6,full,clone2vec_min3,clone2vec,simulation,completed,0.014380555555555556,0.057522222222222225
+sim_small_b1.5_s7,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.002305555555555556,0.004611111111111112
+sim_small_b1.5_s7,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010549999999999999,0.042199999999999994
+sim_small_b1.5_s7,full,clone2vec_min2,clone2vec,simulation,completed,0.015975,0.0639
+sim_small_b1.5_s7,full,clone2vec_min3,clone2vec,simulation,completed,0.017177777777777778,0.06871111111111111
+sim_small_b1.5_s8,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.002127777777777778,0.004255555555555556
+sim_small_b1.5_s8,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.009408333333333333,0.03763333333333333
+sim_small_b1.5_s8,full,clone2vec_min2,clone2vec,simulation,completed,0.016886111111111112,0.06754444444444445
+sim_small_b1.5_s8,full,clone2vec_min3,clone2vec,simulation,completed,0.012797222222222222,0.05118888888888889
+sim_small_b1.5_s9,full,_threadfin_sensitivity_task,Threadfin and baselines,simulation,completed,0.0019138888888888888,0.0038277777777777776
+sim_small_b1.5_s9,full,_threadfin_task,Threadfin and baselines,simulation,completed,0.010088888888888889,0.040355555555555554
+sim_small_b1.5_s9,full,clone2vec_min2,clone2vec,simulation,completed,0.016197222222222224,0.0647888888888889
+sim_small_b1.5_s9,full,clone2vec_min3,clone2vec,simulation,completed,0.02120277777777778,0.08481111111111111
+spont_gc,full,_threadfin_sensitivity_task,Threadfin and baselines,full data,completed,0.005636111111111111,0.011272222222222222
+spont_gc,full,_threadfin_task,Threadfin and baselines,full data,completed,0.010499999999999999,0.041999999999999996
+spont_gc,full,benisse_min2,Benisse,full data,completed,0.05853055555555556,0.23412222222222223
+spont_gc,full,clone2vec_min2,clone2vec,full data,completed,0.018444444444444447,0.07377777777777779
+spont_gc,full,clone2vec_min3,clone2vec,full data,completed,0.016441666666666667,0.06576666666666667
+spont_gc,full,clonotrace_exact_min10,"Clonotrace, exact OT",full data,completed,0.22310555555555553,1.747514166666667
+spont_gc,full,clonotrace_exact_min2,"Clonotrace, exact OT",full data,completed,0.20723055555555556,1.6118008333333333
+spont_gc,full,clonotrace_min10,Clonotrace,full data,completed,0.7266416666666666,0.8101083333333333
+spont_gc,full,clonotrace_min2,Clonotrace,full data,completed,0.4955333333333334,1.231939722222222
+spont_gc,halfA_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0022583333333333335,0.004516666666666667
+spont_gc,halfA_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.013408333333333335,0.05363333333333334
+spont_gc,halfA_s0,benisse_min2,Benisse,halves,completed,0.010386111111111112,0.041544444444444446
+spont_gc,halfA_s0,clone2vec_min2,clone2vec,halves,completed,0.042624999999999996,0.17049999999999998
+spont_gc,halfA_s0,clone2vec_min3,clone2vec,halves,completed,0.044955555555555554,0.17982222222222222
+spont_gc,halfA_s0,clonotrace_min10,Clonotrace,halves,completed,0.052575000000000004,0.2038127777777778
+spont_gc,halfA_s0,clonotrace_min2,Clonotrace,halves,completed,0.06824444444444444,0.2651455555555556
+spont_gc,halfA_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0022277777777777777,0.0044555555555555555
+spont_gc,halfA_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.0134,0.0536
+spont_gc,halfA_s1,clone2vec_min2,clone2vec,halves,completed,0.024830555555555557,0.09932222222222223
+spont_gc,halfA_s1,clone2vec_min3,clone2vec,halves,completed,0.04081388888888889,0.16325555555555557
+spont_gc,halfA_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.002263888888888889,0.004527777777777778
+spont_gc,halfA_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.013772222222222222,0.05508888888888889
+spont_gc,halfA_s2,clone2vec_min2,clone2vec,halves,completed,0.027908333333333334,0.11163333333333333
+spont_gc,halfA_s2,clone2vec_min3,clone2vec,halves,completed,0.040322222222222225,0.1612888888888889
+spont_gc,halfB_s0,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.00375,0.0075
+spont_gc,halfB_s0,_threadfin_task,Threadfin and baselines,halves,completed,0.015686111111111112,0.06274444444444445
+spont_gc,halfB_s0,benisse_min2,Benisse,halves,completed,0.0175,0.07
+spont_gc,halfB_s0,clone2vec_min2,clone2vec,halves,completed,0.06484444444444444,0.25937777777777776
+spont_gc,halfB_s0,clone2vec_min3,clone2vec,halves,completed,0.041791666666666664,0.16716666666666666
+spont_gc,halfB_s0,clonotrace_min10,Clonotrace,halves,completed,0.08086944444444444,0.31561111111111106
+spont_gc,halfB_s0,clonotrace_min2,Clonotrace,halves,completed,0.10677777777777778,0.41719861111111106
+spont_gc,halfB_s1,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0038027777777777778,0.0076055555555555555
+spont_gc,halfB_s1,_threadfin_task,Threadfin and baselines,halves,completed,0.014697222222222221,0.058788888888888884
+spont_gc,halfB_s1,clone2vec_min2,clone2vec,halves,completed,0.040924999999999996,0.16369999999999998
+spont_gc,halfB_s1,clone2vec_min3,clone2vec,halves,completed,0.02175,0.087
+spont_gc,halfB_s2,_threadfin_sensitivity_task,Threadfin and baselines,halves,completed,0.0037777777777777775,0.007555555555555555
+spont_gc,halfB_s2,_threadfin_task,Threadfin and baselines,halves,completed,0.012730555555555556,0.05092222222222222
+spont_gc,halfB_s2,clone2vec_min2,clone2vec,halves,completed,0.040841666666666665,0.16336666666666666
+spont_gc,halfB_s2,clone2vec_min3,clone2vec,halves,completed,0.022241666666666663,0.08896666666666665

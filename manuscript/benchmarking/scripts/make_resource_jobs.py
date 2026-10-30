@@ -8,20 +8,25 @@
 ``size``     every tool with 8 cores on random 5, 10, 25 and 50 % subsets of GSE195673 (make_scaling_inputs.py);
              the full dataset comes from the main runs.
 
-Jobs are spread over the user's SLURM accounts (fair share). Usage: python make_resource_jobs.py [--submit]
+Jobs are spread over the user's SLURM accounts (fair share); accounts and partitions are those of the authors'
+cluster. The programs come from the same environment variables as make_tasks.py. Note that the partitions
+differ in their nodes (Spartan: ``long`` and ``sapphire`` are 128-core Sapphire Rapids nodes, ``cascade`` 72-core
+nodes, ``bigmem`` both kinds), so cross-tool absolute times depend on where each job ran
+(results/run_hosts.csv). Usage: python make_resource_jobs.py [--submit]
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 from bench_paths import HERE, INPUTS, RUNS, WORK
 
-ENVS = "/data/scratch/projects/punim1236/python_envs"
-TF, C2V = f"{ENVS}/threadfin_v4/bin/python", f"{ENVS}/clone2vec/bin/python"
-RSCRIPT = f"{ENVS}/clonotrace_r/bin/Rscript"
-RLIB = WORK.parent / "envs" / "R_clonotrace_1.2.1"
+TF = os.environ.get("THREADFIN_PYTHON", sys.executable)
+C2V = os.environ.get("CLONE2VEC_PYTHON", "python")
+RSCRIPT = os.environ.get("CLONOTRACE_RSCRIPT", "Rscript")
+RLIB = os.environ.get("CLONOTRACE_R_LIBS", str(WORK.parent / "envs" / "R_clonotrace_1.2.1"))
 CT_R = WORK / "frozen" / "run_clonotrace_v4.R"
 LOGS = WORK.parent / "logs"
 PROF = WORK / "profile_run"

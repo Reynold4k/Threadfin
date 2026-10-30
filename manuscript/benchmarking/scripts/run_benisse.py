@@ -30,12 +30,12 @@ import numpy as np
 import pandas as pd
 
 import bench_io
-from bench_paths import INPUTS
+from bench_paths import INPUTS, WORK
 
-SRC = Path(os.environ.get("BENISSE_SRC", "/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/"
-                                        "benchmarking_2026-10-20/src/Benisse"))
-PYTHON = os.environ.get("BENISSE_PYTHON", "/data/scratch/projects/punim1236/python_envs/threadfin_v4/bin/python")
-RSCRIPT = os.environ.get("BENISSE_RSCRIPT", "/data/scratch/projects/punim1236/python_envs/clonotrace_r/bin/Rscript")
+# a clone of wooyongc/Benisse at f0ff4c1, the Python that runs its encoder (torch) and the Rscript of its R core
+SRC = Path(os.environ.get("BENISSE_SRC", WORK.parent / "src" / "Benisse"))
+PYTHON = os.environ.get("BENISSE_PYTHON", sys.executable)
+RSCRIPT = os.environ.get("BENISSE_RSCRIPT", "Rscript")
 HYPER = ["1610", "1", "100", "1", "1", "10", "1e-10"]
 
 

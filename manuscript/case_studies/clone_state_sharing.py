@@ -17,7 +17,7 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATA_DIR = Path(os.environ.get("THREADFIN_DATA", "/data/scratch/projects/punim1236/threadfin_data")) / "gse286215_malaria"
+DEFAULT_DATA_DIR = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parent / "data")) / "gse286215_malaria"
 STATES = ("GC", "PB", "Memory")
 PAIRS = (("GC", "PB"), ("GC", "Memory"), ("Memory", "PB"))
 

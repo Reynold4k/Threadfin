@@ -1,0 +1,5 @@
+row,column,verdict_005,verdict_001,shown_005,p_005
+"clone2vec, its default (clones ≥ 3 cells)",Peak memory,worse,similar,2.3× more,0.013671875
+"clone2vec, forced to clones ≥ 2 cells",Peak memory,worse,similar,2.3× more,0.013671875
+"Clonotrace, its default (clones ≥ 10 cells)",Predicts measured clone traits,worse,similar,0 better 6 worse,0.03125
+Threadfin with another random seed (negative control),… when traits come from other cells,better,similar,21 better 8 worse,0.0241195447742939

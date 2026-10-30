@@ -5,8 +5,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "manuscript" / "case_studies"))
+_HERE = Path(__file__).resolve().parents[1] / "manuscript" / "case_studies"
+if not (_HERE / "clone_state_sharing.py").exists():  # the sdist ships tests/ but not manuscript/
+    pytest.skip("needs manuscript/ from the repository", allow_module_level=True)
+sys.path.insert(0, str(_HERE))
 import clone_state_sharing as css  # noqa: E402
 
 

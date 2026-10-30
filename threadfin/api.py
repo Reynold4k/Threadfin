@@ -3,16 +3,16 @@
 ``threadfin.run`` answers three questions about a paired single-cell
 RNA-seq + BCR-seq dataset, in this order:
 
-1. **Is cell state inherited within clones?** - the *clonal coherence*: how
-   much of the transcriptional variation inside each sample is explained by
-   which clone a cell belongs to, tested against shuffled clone labels.
+1. **Are cells of one clone more alike than cells of different clones?** -
+   the *clonal coherence*: how much of the variation of cell states (the
+   expression embedding) is explained by which clone a cell belongs to,
+   tested against clone labels shuffled within sampling units.
 2. **Which clones behave alike?** - genetically distinct clones are grouped
-   into *clonal programmes* by the state bias of their cells (for example
-   "plasmablast-biased" or "germinal-centre-retained" clones). Every split
-   between programmes must pass a significance test, and every programme
-   gets a bootstrap stability score; if no split is significant, a single
-   programme is reported (the clones differ, but not as groups the test can
-   separate).
+   into *clonal programmes* by the state composition of their cells (for
+   example ASC-rich or germinal-centre-dominated clones). Every split
+   between programmes must pass a split test against a single Gaussian
+   group, and every programme gets a bootstrap stability score; if no split
+   passes, a single programme is reported.
 3. **Do your labels explain how clones differ?** - optional clone-level
    tests against any labels you have (antigen specificity, isotype,
    infection, disease group): first whether the label explains clone
@@ -24,13 +24,15 @@ Every step is also available on its own in :mod:`threadfin.tl`.
 
 from __future__ import annotations
 
+import re
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from ._utils import ensure_actual, log, require_complete_groups, require_obs, require_positive_int
+from ._utils import ensure_actual, get_uns, h5ad_safe, log, require_complete_groups, require_obs, require_positive_int
 
 # --------------------------------------------------------------------------- reading BCR files
 
@@ -100,6 +102,39 @@ def read_bcr(path, *, barcode_prefix: str = "", barcode_suffix: str = "") -> pd.
     return out
 
 
+def _versions() -> dict:
+    """Versions of the packages that shape the numbers, and the BLAS threads (the automatic clone map depends
+    on them), recorded with every run."""
+    import platform
+    from importlib.metadata import PackageNotFoundError, version
+
+    from . import __version__
+
+    out = {"threadfin": __version__, "python": platform.python_version()}
+    for dist in ("numpy", "scipy", "pandas", "scikit-learn", "anndata", "scanpy", "umap-learn", "pynndescent",
+                 "numba", "igraph", "leidenalg", "harmonypy", "sc-dandelion"):
+        try:
+            out[dist] = version(dist)
+        except PackageNotFoundError:
+            pass
+    try:
+        from threadpoolctl import threadpool_info
+
+        threads = [d.get("num_threads") for d in threadpool_info() if d.get("user_api") == "blas"]
+        if threads:
+            out["blas_threads"] = int(max(threads))
+    except Exception:                                   # noqa: BLE001 - the record is informative only
+        pass
+    return out
+
+
+def _odds(v: float) -> str:
+    """An odds ratio for the summary; values from sparse tables are bounded instead of printed in full."""
+    if not np.isfinite(v):
+        return "> 100" if v > 0 else "n/a"
+    return "> 100" if v > 100 else "< 0.01" if v < 0.01 else f"{v:.2f}"
+
+
 # --------------------------------------------------------------------------- result object
 
 
@@ -125,6 +160,45 @@ class ThreadfinResult:
         return (f"ThreadfinResult(clonal ICC={self.coherence['icc']:.3f}, "
                 f"p={self.coherence['p_value']:.3g}, programmes={n_prog}, clones in programmes={n_cl})")
 
+    @classmethod
+    def from_adata(cls, adata) -> "ThreadfinResult":
+        """The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after
+        ``write_h5ad`` and ``read_h5ad``), so that :meth:`summary`, :meth:`methods` and :meth:`plot` work again.
+
+        Label tests are taken from ``adata.uns['threadfin']``, where a later call of the same test with the same
+        label replaces the one :func:`run` made.
+        """
+        from .programmes import programme_composition
+
+        th = adata.uns.get("threadfin", {})
+        record = th.get("run")
+        if record is None:
+            raise ValueError("adata holds no record of threadfin.run() (written by Threadfin 4.6.0 or later).")
+        keys = ("clone_key", "donor_key", "sample_key", "strata_key", "state_key", "composition_weight",
+                "time_key", "basis", "representation", "receptor", "clone_calling")
+        settings = {k: None for k in keys}
+        settings.update(dict(record.get("settings", {})))
+        prog = th.get("programmes", {}).get("summary")
+        programmes = (prog.copy() if isinstance(prog, pd.DataFrame) and "clone_programme" in adata.obs else
+                      pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence", "stability"]))
+        composition = None
+        if settings["state_key"] and not programmes.empty:
+            composition = programme_composition(adata, settings["state_key"],
+                                                weight=settings.get("composition_weight") or "cells")
+        labels = lambda key: [str(x) for x in np.atleast_1d(record.get(key, []))]  # noqa: E731
+        tests = {k: th["associations"][k].copy() for k in labels("tests") if k in th.get("associations", {})}
+        for k, tab in tests.items():                  # DataFrame attributes are not written to h5ad
+            tab.attrs.update(dict(record.get("test_attrs", {}).get(k, {})))
+        time_key = settings["time_key"]
+        return cls(
+            adata=adata, coherence=dict(th["coherence"]), programmes=programmes,
+            clones=th["profiles"]["clone_table"], composition=composition,
+            tests=tests,
+            profile_tests={k: dict(th["profile_associations"][k]) for k in labels("profile_tests")
+                           if k in th.get("profile_associations", {})},
+            memory=(dict(th["memory"][time_key]) if time_key and time_key in th.get("memory", {}) else None),
+            settings=settings, skipped={str(k): str(v) for k, v in dict(record.get("skipped", {})).items()})
+
     def summary(self) -> str:
         """Plain-language summary of the results."""
         from .programmes import get_programmes
@@ -138,13 +212,18 @@ class ThreadfinResult:
             "=================",
             f"Cells with a {self.settings.get('receptor') or 'clone id'}: {clones.size:,} of {ad.n_obs:,}, "
             f"in {sizes.size:,} clones "
-            f"({int((sizes >= 3).sum()):,} clones have >= 3 cells).",
+            f"({int((sizes >= 2).sum()):,} clones have two or more cells and are profiled).",
             "",
-            "1. Does clone identity shape cell state? (clonal coherence)",
-            f"   Clone identity explains {100 * coh['icc']:.1f}% of transcriptional variance within "
-            f"'{coh['strata_key']}' strata; shuffled clones explain {100 * coh['null_mean']:.1f}% "
-            f"(p = {coh['p_value']:.3g}, {coh['n_perm']} permutations).",
+            "1. Are cells of one clone more alike than cells of different clones? (clonal coherence)",
+            f"   Clone identity explains {100 * coh['icc']:.1f}% of the variance of cell states (the expression "
+            f"embedding); with clone labels shuffled "
+            + (f"within '{coh['strata_key']}'" if coh.get("strata_key") else "across all cells")
+            + f", {100 * coh['null_mean']:.1f}% (p = {coh['p_value']:.3g}, {coh['n_perm']} permutations): an excess "
+            f"of {100 * (coh['icc'] - coh['null_mean']):.1f} percentage points.",
         ]
+        if coh["p_value"] >= 0.05:
+            lines.append("   Clone identity is not significantly more informative than shuffled labels here, so the "
+                         "programmes below are descriptive.")
         prof_vc = ad.uns["threadfin"]["profiles"]["variance_components"]
         from .profiles import VarianceComponents
 
@@ -152,29 +231,37 @@ class ThreadfinResult:
                                 prof_vc["n0"], prof_vc["n_clones"], prof_vc["n_cells"],
                                 np.zeros(len(prof_vc["tau2"])))
         n_half = vc.min_cells_for(0.5)
-        lines.append(f"   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at "
-                     f"{n_half} {'cell' if n_half == 1 else 'cells'}. No clone is filtered out on reliability.")
+        lines.append(f"   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches "
+                     f"reliability 0.5 at {n_half} {'cell' if n_half == 1 else 'cells'}; no clone is filtered out "
+                     "on reliability.")
         n_profiled = int(prof_vc["n_clones"])
         if n_profiled < 10:
             lines.append(f"   Caution: only {n_profiled} clones have two or more cells. Estimates from so few clones "
-                         "are unstable; Threadfin's power analyses need about 10 clones to detect a clonal ICC "
+                         "are unstable; Threadfin's power analyses need about 10 to 20 clones (depending on the number "
+                         "of dimensions that carry the signal) to detect a clonal ICC "
                          "of 0.1, and more for weaker effects.")
         prog = self.programmes
         lines += ["", "2. Which clones behave alike? (clonal programmes)"]
         if prog.empty:
-            lines.append("   Not enough reliably profiled clones to define programmes in this dataset.")
+            lines.append("   No programmes: " + self.skipped.get(
+                "clonal programmes", "not enough profiled clones to define programmes in this dataset."))
         elif prog.shape[0] == 1:
             tests = get_programmes(ad).get("split_tests", pd.DataFrame())
             p_root = f" (split test p = {tests['pvalue'].iloc[0]:.2g})" if not tests.empty else ""
-            lines.append(f"   No distinct programmes: the {int(prog['n_clones'].sum()):,} reliable clones differ, "
-                         f"but no split into separate groups was significant{p_root}.")
+            lines.append(f"   No distinct programmes: no split of the {int(prog['n_clones'].sum()):,} profiled clones "
+                         f"into separate groups was significant{p_root}.")
         else:
             params = get_programmes(ad)["params"]
             n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
             verb = "is" if n_stable == 1 else "are"
-            lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} reliable clones "
-                         f"(every split significant); {n_stable} {verb} stable "
+            lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} profiled clones "
+                         f"(every split passed the split test); {n_stable} {verb} stable "
                          f"(bootstrap Jaccard >= {params['stability_threshold']}).")
+        if prog.shape[0] > 1 and self.composition is not None:
+            lines.append("   State composition: " + (
+                "each clone's share of cells per state, averaged over the programme's clones (every clone counts "
+                "once)." if self.settings.get("composition_weight") == "clones"
+                else "share of the programme's cells in each state."))
         for name, row in (prog.iterrows() if prog.shape[0] > 1 else []):
             desc = ""
             if self.composition is not None and name in self.composition.index:
@@ -187,44 +274,84 @@ class ThreadfinResult:
         if self.profile_tests or self.tests:
             lines += ["", f"{section}. Do your labels explain how clones differ? (clone-level tests)"]
             section += 1
+            sized = any(r.get("size_bins") is not None for r in self.profile_tests.values()) or any(
+                t.attrs.get("size_bins") is not None for t in self.tests.values())
+            if sized:
+                lines.append("   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or "
+                             ">= 10 cells), because small clones' profiles are pulled towards the average profile: "
+                             "an effect below cannot be explained by clone size alone.")
+        sample_noted = set()
         for label, r in self.profile_tests.items():
             verdict = "explains" if r["p_value"] < 0.05 else "does not significantly explain"
+            notes = ""
+            if r.get("n_without_majority"):
+                notes += f"; {r['n_without_majority']:,} clones without a majority level left out"
+            if label == self.settings.get("state_key"):
+                notes += "; this is the state annotation itself, a positive control"
             lines.append(f"   {label} {verdict} clone states: {100 * r['r2']:.1f}% of clone-profile variance "
                          f"vs {100 * r['null_mean']:.1f}% for shuffled labels (p = {r['p_value']:.3g}, "
-                         f"{r['n_clones']} clones).")
+                         f"{r['n_clones']} clones{notes}).")
+            if r.get("sample_level"):
+                sample_noted.add(label)
+                lines.append(f"      This label is fixed within each {r['sample_key']}: the comparison is between "
+                             f"{r['sample_key']}s (n = {r['n_samples']}), not between independent clones.")
         if self.tests:
-            lines.append("   Programme differences (FDR < 0.05):")
+            unstable = set(prog.index[prog["stability"] < 0.6].astype(str)) if prog.shape[0] > 1 else set()
+            within = ("donor x clone-size bins" if any(t.attrs.get("size_bins") is not None for t in self.tests.values())
+                      else "donors")
+            lines.append(f"   Programme differences (FDR < 0.05; odds ratios within {within}, with 95% intervals):")
             for label, tab in self.tests.items():
+                if tab.attrs.get("sample_level") and label not in sample_noted:
+                    lines.append(f"   {label} is fixed within each {tab.attrs.get('sample_key')}: the comparison is "
+                                 f"between {tab.attrs.get('sample_key')}s (n = {tab.attrs.get('n_samples')}), not "
+                                 "between independent clones.")
                 sig = tab[tab["fdr"] < 0.05]
+                if "mirror" in sig:                   # a two-level label: each effect is shown once
+                    sig = sig[~sig["mirror"].astype(bool)]
                 if sig.empty:
                     lines.append(f"   {label}: no significant programme effect.")
                     continue
                 for _, r in sig.sort_values("pvalue").head(6).iterrows():
+                    flag = "  [unstable programme]" if str(r["programme"]) in unstable else ""
                     if "level" in r:
+                        up = r["odds_ratio"] > 1
+                        pooled = ("" if (r["frac_in_programme"] > r["frac_elsewhere"]) == up
+                                  else "; the pooled shares point the other way, because donors or clone sizes differ")
+                        ci = (f" [{_odds(r['ci_low'])}, {_odds(r['ci_high'])}]"
+                              if "ci_low" in r and np.isfinite(r["ci_low"]) else "")
                         lines.append(
-                            f"   {label}: {r['programme']} {'enriched' if r['odds_ratio'] > 1 else 'depleted'} "
+                            f"   {label}: {r['programme']} {'enriched' if up else 'depleted'} "
                             f"for '{r['level']}' ({100 * r['frac_in_programme']:.0f}% vs "
-                            f"{100 * r['frac_elsewhere']:.0f}% of clones; OR {r['odds_ratio']:.2f}, FDR {r['fdr']:.2g})")
+                            f"{100 * r['frac_elsewhere']:.0f}% of clones; OR {_odds(r['odds_ratio'])}{ci}, "
+                            f"FDR {r['fdr']:.2g}{pooled}){flag}")
                     else:
                         lines.append(
                             f"   {label}: {r['programme']} median {r['median_in_programme']:.3g} vs "
-                            f"{r['median_elsewhere']:.3g} elsewhere (FDR {r['fdr']:.2g})")
+                            f"{r['median_elsewhere']:.3g} elsewhere (FDR {r['fdr']:.2g}){flag}")
         if self.memory is not None:
             m = self.memory
             lo, hi = m["memory_index_ci"]
+            other = ("another clone of its donor seen at the same levels" if m.get("reference", "persistent") ==
+                     "persistent" else "a random clone of its donor")
+            index = (f"memory index {m['memory_index']:.2f} [{lo:.2f}, {hi:.2f}], p = {m['p_value']:.3g} (1 = clones "
+                     f"stay as distinct as they were, 0 = no more similar to their earlier self than to {other}; "
+                     "sampling noise can put it outside 0-1)" if np.isfinite(lo) and np.isfinite(hi)
+                     else f"memory index not estimable (too few clones for an interval), p = {m['p_value']:.3g}")
+            order = " -> ".join(map(str, m.get("levels", [])))
             lines += [
                 "",
-                f"{section}. Do clones keep their state over '{m['time_key']}'? (clonal memory)",
-                f"   {m['n_clones']} clones seen at >= 2 levels: memory index {m['memory_index']:.2f} "
-                f"[{lo:.2f}, {hi:.2f}], p = {m['p_value']:.3g} (1 = clones stay as distinct as they were, "
-                "0 = no more similar to their earlier self than to a random clone).",
+                f"{section}. Do clones keep their state over '{m['time_key']}'? (clonal memory"
+                + (f"; levels in the order {order}" if order else "") + ")",
+                f"   {m['n_clones']} clones seen at >= 2 levels: {index}.",
             ]
             if "persistence" in m:
                 lines.append(f"   Same programme at the next level: {100 * m['persistence']:.0f}% of clones vs "
-                             f"{100 * m['persistence_null']:.0f}% expected for random clones.")
-        if self.skipped:
+                             f"{100 * m['persistence_null']:.0f}% expected for "
+                             + ("other clones seen at the same levels." if m.get("reference", "persistent") ==
+                                "persistent" else "random clones."))
+        if any(what != "clonal programmes" for what in self.skipped):
             lines += ["", "Not run (everything above is complete):"]
-            lines += [f"   {what}: {why}" for what, why in self.skipped.items()]
+            lines += [f"   {what}: {why}" for what, why in self.skipped.items() if what != "clonal programmes"]
         lines += ["", "Per-cell programme labels: adata.obs['clone_programme']; "
                       "per-clone table: result.clones."]
         return "\n".join(lines)
@@ -247,7 +374,11 @@ class ThreadfinResult:
 
         from . import __version__
 
+        recorded = dict((self.adata.uns.get("threadfin", {}).get("run") or {}).get("versions") or {})
+
         def ver(dist):
+            if dist in recorded:
+                return str(recorded[dist])
             try:
                 return version(dist)
             except PackageNotFoundError:
@@ -259,7 +390,8 @@ class ThreadfinResult:
         ad, st = self.adata, self.settings
         uns = ad.uns.get("threadfin", {})
         refs = {"threadfin": "Threadfin (https://github.com/Reynold4k/Threadfin)"}
-        text = [f"Clonal analyses used Threadfin {__version__} (Python {platform.python_version()}, "
+        text = [f"Clonal analyses used Threadfin {recorded.get('threadfin', __version__)} "
+                f"(Python {recorded.get('python', platform.python_version())}, "
                 f"scanpy {ver('scanpy')}, anndata {ver('anndata')})."]
 
         # clones
@@ -296,9 +428,10 @@ class ThreadfinResult:
                 + f", from productive contigs, requiring the same V and J genes and junction length on {chains} and "
                 f"{ident_txt}" + (", after Dandelion's contig check" if cc.get("check_contigs") else "") + ". "
                 + (f"Cells without {vdj} were not assigned to a clone. " if cc.get("require_heavy_chain", True) else "")
-                + (f"Python's hash seed was fixed ({cc['python_hash_seed']}) so that clone calls are reproducible."
-                   if cc.get("python_hash_seed") is not None else
-                   "Python's hash seed was not fixed, so clone calls can differ slightly between sessions."))
+                + (f"Python's hash seed was fixed ({cc.get('dandelion_hash_seed', cc.get('python_hash_seed'))}) so "
+                   "that clone calls are reproducible."
+                   if cc.get("dandelion_hash_seed", cc.get("python_hash_seed")) is not None else
+                   "Python's hash seed was not fixed, so clone calls can differ between sessions."))
             refs["dandelion"] = ("Suo C et al. Dandelion uses the single-cell adaptive immune receptor repertoire "
                                  "to explore lymphocyte developmental origins. Nat Biotechnol 2024;42:40-51.")
         else:
@@ -333,11 +466,13 @@ class ThreadfinResult:
             smooth = int(pp_.get("smooth", 0))
             text.append(
                 centring
-                + (f"Each cell was averaged with its {smooth} nearest neighbours and " if smooth else "Cells were ")
+                + (f"Each cell was averaged with its {smooth} nearest cells (itself included"
+                   + ("; neighbours found approximately with pynndescent" if ad.n_obs > 50_000 else "")
+                   + ") and " if smooth else "Cells were ")
                 + f"mapped to {pp_.get('n_features', 256)} random Fourier features of a Gaussian kernel (bandwidth "
                 f"{float(pp_.get('bandwidth', float('nan'))):.3g}, the median distance between cells; ref. rff); every "
                 f"clone with at least {pp_.get('min_cells', 2)} cells was described by the mean of its cells' "
-                "features (kernel mean embedding; ref. kme), shrunk towards the context average the more, the fewer "
+                "features (kernel mean embedding; ref. kme), shrunk towards the average profile the more, the fewer "
                 "cells it has (best linear unbiased prediction under a random-effects model; ref. searle), and the "
                 f"profiles were reduced to {pp_.get('n_components', 30)} principal components.")
             refs["rff"] = "Rahimi A, Recht B. Random features for large-scale kernel machines. NeurIPS 2007."
@@ -345,7 +480,7 @@ class ThreadfinResult:
                            "distributions: a review and beyond. Found Trends Mach Learn 2017;10:1-141.")
         else:
             text.append(centring + f"Every clone with at least {pp_.get('min_cells', 2)} cells was described by the "
-                        "mean of its cells' coordinates, shrunk towards the context average the more, the fewer cells "
+                        "mean of its cells' coordinates, shrunk towards the average profile the more, the fewer cells "
                         "it has (best linear unbiased prediction under a random-effects model; ref. searle).")
         refs["searle"] = "Searle SR, Casella G, McCulloch CE. Variance Components. Wiley, 1992."
 
@@ -390,6 +525,11 @@ class ThreadfinResult:
                               "communities. Sci Rep 2019;9:5233.")
             refs["hennig"] = ("Hennig C. Cluster-wise assessment of cluster stability. Comput Stat Data Anal "
                               "2007;52:258-271.")
+            if self.composition is not None:
+                text.append(f"The composition of each programme in {st.get('state_key')!r} was " + (
+                    "the mean, over its clones, of each clone's share of cells in each state, so that every "
+                    "clone counted once." if st.get("composition_weight") == "clones"
+                    else "the share of its cells in each state."))
 
         # label tests and memory
         if self.profile_tests:
@@ -399,12 +539,23 @@ class ThreadfinResult:
                 f"For {labels}, the share of the variance between clone profiles explained by the clone-level label "
                 f"(as in PERMANOVA; ref. anderson) was tested with {n(r0.get('n_perm', 2000))} permutations of the label "
                 + (f"among clones of the same {r0['strata_key']!r}" if r0.get("strata_key") else "among clones")
+                + (" and clone-size bin (2, 3-4, 5-9 and >= 10 cells)" if r0.get("size_bins") is not None else "")
                 + ".")
             refs["anderson"] = ("Anderson MJ. A new method for non-parametric multivariate analysis of variance. "
                                 "Austral Ecol 2001;26:32-46.")
         if self.memory is not None:
-            text.append(f"Clonal memory over {self.memory['time_key']!r} compared the change of each clone's profile "
-                        "between levels, corrected for sampling, with the distance to a random clone of the same donor.")
+            if self.memory.get("reference", "persistent") == "persistent":
+                text.append(f"Clonal memory over {self.memory['time_key']!r} compared the change of each clone's "
+                            "profile between consecutive levels, corrected for sampling noise with each snapshot's own "
+                            "variance, with the change to other clones of the same donor seen at the same two levels "
+                            "(a concordance correlation; ref. lin); the p-value permuted the later profiles among "
+                            "those clones.")
+                refs["lin"] = ("Lin LI. A concordance correlation coefficient to evaluate reproducibility. "
+                              "Biometrics 1989;45:255-268.")
+            else:
+                text.append(f"Clonal memory over {self.memory['time_key']!r} compared the change of each clone's "
+                            "profile between levels, corrected for sampling, with the distance to a random clone of the "
+                            "same donor.")
 
         body = " ".join(text)
         order = list(dict.fromkeys(k for k in refs if k != "threadfin"))
@@ -417,7 +568,8 @@ class ThreadfinResult:
         """Overview figure (clone map, coherence test, programme composition, stability)."""
         from .plotting import overview
 
-        return overview(self.adata, state_key=self.settings.get("state_key"), coherence_result=self.coherence, save=save)
+        return overview(self.adata, state_key=self.settings.get("state_key"), coherence_result=self.coherence,
+                        composition_weight=self.settings.get("composition_weight", "cells"), save=save)
 
 
 # --------------------------------------------------------------------------- the pipeline
@@ -429,8 +581,10 @@ def run(
     *,
     donor_key: str | None = None,
     sample_key: str | None = None,
+    strata_key: str | None = None,
     batch_key: str | None = None,
     state_key: str | None = None,
+    composition_weight: str = "cells",
     time_key: str | None = None,
     test=None,
     clone_key: str = "clone_id",
@@ -469,13 +623,29 @@ def run(
         stratified by donor.
     sample_key
         ``obs`` column naming the sample/library of each cell. Clones are
-        compared with the other cells of their own sample, and the null
-        model shuffles clone labels only within samples.
+        compared with the other cells of their own sample (the context), and
+        the coherence test shuffles clone labels within it unless
+        ``strata_key`` names a finer sampling unit.
+    strata_key
+        ``obs`` column within which the coherence test shuffles clone labels;
+        defaults to ``sample_key``. Set it to the finest sampling unit (the
+        library, sort gate or tissue sample) when ``sample_key`` is coarser,
+        for example the donor in a design that compares tissues or gates:
+        cells of one clone are sequenced together, so shuffling across
+        sampling units would count differences between those units as
+        clonal.
     batch_key
         Optional ``obs`` column to integrate over with Harmony when the
         embedding is built (technical batches only).
     state_key
         Optional cell-type/state annotation, used to describe programmes.
+    composition_weight
+        How the state composition of each programme is counted:
+        ``"cells"`` (default; the fraction of the programme's cells in
+        each state, so an expanded clone weighs in proportion to its cells)
+        or ``"clones"`` (every clone counts once: each clone's share of
+        cells in each state, averaged over the programme's clones). See
+        :func:`threadfin.tl.programme_composition`.
     time_key
         Optional time point (or tissue) column; enables the clonal-memory test.
     test
@@ -518,9 +688,15 @@ def run(
 
     Returns
     -------
-    :class:`ThreadfinResult`. Also adds ``obs[clone_key]`` (if ``bcr`` is
-    given), ``obs['clone_programme']`` and results under
-    ``adata.uns['threadfin']``.
+    :class:`ThreadfinResult`. ``adata`` is changed in place:
+
+    * ``obs``: ``clone_key`` and the ``bcr_*`` receptor columns (when ``bcr``
+      is given), ``clone_programme`` and ``clone_programme_assigned``;
+    * when the embedding is built (``basis=None``): ``obsm['X_threadfin']``,
+      ``obsm['X_pca']`` (replaced by the PCA of the selected genes),
+      ``var['highly_variable']`` (replaced), ``var['threadfin_receptor_gene']``
+      and ``layers['log_norm']`` (normalised, log-transformed counts);
+    * ``uns['threadfin']``: every result and the settings that made it.
 
     Examples
     --------
@@ -542,16 +718,33 @@ def run(
     # downstream statistical routine.  In particular, a misspelled requested
     # test label must not be silently reported as a skipped analysis.
     test_cols = [test] if isinstance(test, str) else list(test or [])
-    require_obs(adata, donor_key, sample_key, state_key, time_key, batch_key, *test_cols,
+    require_obs(adata, donor_key, sample_key, strata_key, state_key, time_key, batch_key, *test_cols,
                 context="threadfin.run()")
-    require_complete_groups(adata, donor_key, sample_key, batch_key, context="threadfin.run()")
+    require_complete_groups(adata, donor_key, sample_key, strata_key, batch_key, context="threadfin.run()")
     if counts_layer is not None and counts_layer not in adata.layers:
         raise KeyError(f"counts_layer '{counts_layer}' is not in adata.layers (layers: "
                        f"{', '.join(map(repr, adata.layers.keys())) or 'none'}).")
     require_positive_int(n_perm, "n_perm")
     require_positive_int(n_boot, "n_boot")
+    if isinstance(random_state, bool) or not isinstance(random_state, (int, np.integer)):
+        raise ValueError(f"random_state must be an integer, not {random_state!r}.")
+    if n_jobs is not None and (isinstance(n_jobs, bool) or not isinstance(n_jobs, (int, np.integer)) or n_jobs == 0):
+        raise ValueError(f"n_jobs must be a non-zero integer (-1: all cores) or None, not {n_jobs!r}.")
+    if map_n_neighbors != "auto" and (isinstance(map_n_neighbors, bool)
+                                      or not isinstance(map_n_neighbors, (int, np.integer)) or map_n_neighbors < 2):
+        raise ValueError(f"map_n_neighbors must be 'auto' or an integer of at least 2, not {map_n_neighbors!r}.")
+    if map_min_dist != "auto" and (isinstance(map_min_dist, bool) or not isinstance(map_min_dist, (int, float, np.number))
+                                   or not 0 <= float(map_min_dist) <= 1):
+        raise ValueError(f"map_min_dist must be 'auto' or a number between 0 and 1, not {map_min_dist!r}.")
     if representation not in {"mean", "kernel"}:
         raise ValueError("representation must be 'mean' or 'kernel'.")
+    if composition_weight not in {"cells", "clones"}:
+        raise ValueError(f"composition_weight must be 'cells' or 'clones', not {composition_weight!r}.")
+    if sample_key is None and strata_key is None:
+        warnings.warn("No sample_key was given: every clone is compared with all cells, and the coherence test "
+                      "shuffles clone labels across all cells. If the cells come from more than one sample or "
+                      "library, pass sample_key (and strata_key, see Tutorial 2, section 5); otherwise "
+                      "differences between samples count as clonal.", UserWarning, stacklevel=2)
 
     # Step 1 - clones from receptor sequences (within each donor).
     # Threadfin's clone definition is Dandelion's paired heavy + light definition, so the
@@ -605,17 +798,25 @@ def run(
 
     # Threadfin needs clones observed more than once; say so plainly instead of failing deep inside the model
     sizes = adata.obs[clone_key].dropna().astype(str).value_counts()
-    if int((sizes >= 2).sum()) < 2:
+    if int((sizes >= 2).sum()) < 3:
         raise ValueError(
             f"Only {int((sizes >= 2).sum())} clone(s) have two or more cells ({sizes.size:,} clones, "
             f"{int(sizes.sum()):,} cells with a clone id). Threadfin compares the cells within a clone, so it needs "
-            "clones seen at least twice. Check that the receptor barcodes match adata.obs_names (the share of cells with a "
+            "at least 3 clones seen at least twice. Check that the receptor barcodes match adata.obs_names (the share of cells with a "
             "clone id), that clones were called within donors, and that the data contain expanded B cells.")
 
     # Step 2 - expression embedding without immunoglobulin genes
     if basis is None:
         basis = "X_threadfin"
-        if basis not in adata.obsm:
+        made = adata.uns.get("threadfin", {}).get("prepare_embedding") if basis in adata.obsm else None
+        stale = made is not None and (made.get("counts_layer"), made.get("batch_key")) != (counts_layer, batch_key)
+        if stale:
+            log(f"obsm['{basis}'] was built with counts_layer={made.get('counts_layer')!r}, "
+                f"batch_key={made.get('batch_key')!r}; building it again with counts_layer={counts_layer!r}, "
+                f"batch_key={batch_key!r}.", verbose)
+        elif basis in adata.obsm:
+            log(f"using the existing obsm['{basis}'] (delete it to build a new embedding).", verbose)
+        if basis not in adata.obsm or stale:
             prepare_embedding(adata, counts_layer=counts_layer, batch_key=batch_key, random_state=random_state,
                               verbose=verbose)
 
@@ -625,10 +826,11 @@ def run(
                    random_state=random_state, verbose=verbose)
 
     # Step 4 - is clone identity informative at all?
-    coherence = clonal_coherence(adata, strata_key=sample_key, n_perm=n_perm,
+    coherence = clonal_coherence(adata, strata_key=strata_key or sample_key, n_perm=n_perm,
                                  random_state=random_state, verbose=verbose)
 
     # Step 5 - group clones into programmes (significant splits only), with bootstrap stability
+    no_programmes = None
     try:
         # the clone map is drawn separately from programme discovery, over every profiled clone;
         # find_programmes used to do it over its reliability-gated subset, which silently left some
@@ -637,26 +839,35 @@ def run(
                      random_state=random_state, n_jobs=n_jobs, verbose=verbose)
         programmes = find_programmes(adata, n_boot=n_boot, random_state=random_state, n_jobs=n_jobs,
                                      verbose=verbose)
-    except ValueError as e:  # too few expanded clones: keep the coherence result
+    except ValueError as e:  # too few expanded clones (or n_boot < 5): keep the coherence result
         log(f"no programmes: {e}", verbose)
+        no_programmes = str(e)
         programmes = pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
                                            "stability"])
 
     # Step 6 - describe and test the programmes
     composition = None
     tests, profile_tests, skipped = {}, {}, {}
+    if no_programmes is not None:
+        skipped["clonal programmes"] = no_programmes
     if not programmes.empty:
-        composition = programme_composition(adata, state_key) if state_key else None
+        composition = (programme_composition(adata, state_key, weight=composition_weight)
+                       if state_key else None)
     for col in test_cols:
         # does the label explain clone states at all? (needs no programmes)
         try:
-            profile_tests[col] = profile_association(adata, col, random_state=random_state, verbose=verbose)
+            profile_tests[col] = profile_association(adata, col, sample_key=strata_key or sample_key,
+                                                     random_state=random_state, verbose=verbose)
         except ValueError as e:
             skipped[f"clone-level test of '{col}'"] = str(e)
             log(f"profile test '{col}' skipped: {e}", verbose)
         if programmes.shape[0] >= 2:  # which programmes differ? (needs >= 2 programmes)
             try:
-                tests[col] = association_test(adata, col, random_state=random_state, verbose=verbose)
+                with warnings.catch_warnings():
+                    if col in profile_tests:  # its sample-level warning was given by the profile test
+                        warnings.filterwarnings("ignore", message=re.escape(f"'{col}' is the same for every cell"))
+                    tests[col] = association_test(adata, col, sample_key=strata_key or sample_key,
+                                                  random_state=random_state, verbose=verbose)
             except ValueError as e:
                 if str(e) not in skipped.values():  # the profile test already reported the same reason
                     skipped[f"programme test of '{col}'"] = str(e)
@@ -676,9 +887,17 @@ def run(
         adata=adata, coherence=coherence, programmes=programmes, clones=clones,
         composition=composition, tests=tests, profile_tests=profile_tests, memory=memory, skipped=skipped,
         settings={"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
-                  "state_key": state_key, "time_key": time_key, "basis": basis,
+                  "strata_key": strata_key or sample_key,
+                  "state_key": state_key, "composition_weight": composition_weight, "time_key": time_key,
+                  "basis": basis,
                   "representation": representation, "receptor": receptor, "clone_calling": clone_calling,
                   "n_perm": int(n_perm), "n_boot": int(n_boot), "random_state": int(random_state)},
     )
+    get_uns(adata)["run"] = h5ad_safe({
+        "settings": {k: v for k, v in result.settings.items() if v is not None},
+        "skipped": dict(skipped), "profile_tests": list(profile_tests), "tests": list(tests),
+        "test_attrs": {k: {a: v for a, v in t.attrs.items() if v is not None} for k, t in tests.items()},
+        "versions": _versions(),
+    })
     log("done. print(result.summary()) for a readable report.", verbose)
     return result

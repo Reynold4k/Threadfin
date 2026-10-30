@@ -1,8 +1,8 @@
 # Tutorial 3 — The clone map
 
 The clone map places every clone on a plane, one point per clone, so that clones whose cells are
-distributed alike sit close together. Continuous transitions between clones — for example from
-germinal-centre clones to plasma-cell clones — then appear as paths. This tutorial shows how Threadfin
+distributed alike sit close together. Gradients in the composition of clones — for example from clones of
+germinal-centre B cells to clones of ASCs — then appear as paths. This tutorial shows how Threadfin
 chooses the map's settings, how to set them by hand and how to check any map.
 
 The map is a display. Clone profiles, clonal coherence, programmes and every test are computed in profile
@@ -21,12 +21,13 @@ preserves *neighbourhoods* well and *large distances* only roughly.
 | You may read from the map | You should not read from the map |
 |---|---|
 | which clones have similar state distributions (neighbours) | ancestry, or which clone came from which |
-| whether clones form separate groups or one continuous population | time or direction of differentiation |
-| how an annotation (antigen binding, isotype, sort gate) varies across clones, when you colour by it | exact distances, or the meaning of an axis |
-| where a programme lies relative to the others | statistical significance — use the tests, which use the profiles |
+| how an annotation (antigen binding, isotype, sort gate) varies across clones, when you colour by it | time or direction of differentiation |
+| where a programme lies relative to the others | whether clones form discrete groups or a continuum — the layout is chosen to stay connected; use the programmes, their stability and the tests |
+| gradients in the composition of clones | exact distances, or the meaning of an axis |
+| | statistical significance — use the tests, which use the profiles |
 
 **Why the settings matter.** With too few neighbours per clone (`n_neighbors`) or too little spacing
-(`min_dist`), UMAP breaks a continuous population of clones into islands that do not exist in profile space —
+(`min_dist`), UMAP breaks a connected population of clones into islands that do not exist in profile space —
 the most common way a clone map misleads. With too many neighbours, local structure is smoothed away.
 Because the right values depend on the dataset, Threadfin chooses them automatically (section 1).
 
@@ -42,6 +43,7 @@ table = tf.tl.embed_clones(adata)          # n_neighbors="auto", min_dist="auto"
 ```
 
 ```
+[threadfin] clone profiles: 931 clones (>= 2 cells, 6398 cells in all). Profiles are shrunk, so a clone reaches reliability 0.5 at 3 cells; nothing is filtered on that.
 [threadfin] choosing clone-map settings (ladder) on 931 clones; target: at least 99.0% of clones in one piece.
 [threadfin]   ladder: n_neighbors 56, min_dist 0.95 -> score 0.742 (smoothed 0.740)
 [threadfin]   ladder: n_neighbors 32, min_dist 0.95 -> score 0.737 (smoothed 0.739)
@@ -51,8 +53,8 @@ table = tf.tl.embed_clones(adata)          # n_neighbors="auto", min_dist="auto"
 ```
 
 Two UMAP settings shape the map: `n_neighbors`, the number of profile neighbours each clone is tied to,
-and `min_dist`, how closely clones may pack. With too few neighbours or too little spacing, a continuum
-of clones breaks into islands. Threadfin therefore tries a ladder of settings and scores every layout on
+and `min_dist`, how closely clones may pack. With too few neighbours or too little spacing, a connected
+population of clones breaks into islands. Threadfin therefore tries a ladder of settings and scores every layout on
 
 * **coherence** — the fraction of clones in one connected piece of the map;
 * **local fidelity** — how many of each clone's 30 nearest neighbours in profile space stay its
@@ -62,22 +64,28 @@ of clones breaks into islands. Threadfin therefore tries a ladder of settings an
 It keeps the most faithful setting that holds together in every layout it tried. How much of the map must
 hold together is set by the profiles themselves: the fraction of clones that are connected in the mutual
 15-nearest-neighbour graph of profiles (here 99%). A small group of clones that is genuinely separate in
-profile space may therefore stay apart, but a continuum is never broken up. The full procedure is
-described in [Methods](../METHODS.md#5-the-clone-map-embed_clones-tune_clone_map).
+profile space may therefore stay apart, but a population that is connected in profile space is never broken
+up. The full procedure is described in [Methods](../METHODS.md#5-the-clone-map-embed_clones-tune_clone_map).
 
 ## 2. What was chosen, and why
 
 ```python
 mp = adata.uns["threadfin"]["profiles"]["map_params"]
-mp["n_neighbors"], mp["min_dist"], mp["quality"]
+print(mp["n_neighbors"], mp["min_dist"], {k: round(float(v), 3) for k, v in mp["quality"].items()})
 ```
 
 ```
-(56, 0.95, {'score': 0.739, 'coherence': 0.998, 'local_fidelity': 0.578, 'global_fidelity': 0.9, 'coherence_target': 0.99})
+56 0.95 {'score': 0.739, 'coherence': 0.998, 'local_fidelity': 0.578, 'global_fidelity': 0.9, 'coherence_target': 0.99}
 ```
 
-`mp["tuning"]["candidates"]` lists the settings that were confirmed on six layouts each, and
-`mp["tuning"]["history"]` every layout scored:
+`mp["tuning"]["candidates"]` lists the settings that were confirmed on six layouts each
+(`mp["tuning"]["history"]` lists every layout scored):
+
+```python
+columns = ["n_neighbors", "min_dist", "repulsion_strength", "n_layouts", "score", "coherence",
+           "local_fidelity", "global_fidelity"]
+print(mp["tuning"]["candidates"][columns].round(3).to_string(index=False))
+```
 
 ```
  n_neighbors  min_dist  repulsion_strength  n_layouts  score  coherence  local_fidelity  global_fidelity
@@ -122,7 +130,8 @@ map from section 3:
 ```python
 prof = adata.uns["threadfin"]["profiles"]
 xy = prof["clone_table"].loc[:, ["x", "y"]].dropna()
-tf.tl.map_quality(prof["features"].loc[xy.index], xy.to_numpy())
+quality = tf.tl.map_quality(prof["features"].loc[xy.index], xy.to_numpy())
+print({k: round(float(v), 3) for k, v in quality.items()})
 ```
 
 ```
@@ -143,6 +152,10 @@ tf.tl.find_programmes(adata)
 tf.pl.clone_map(adata, color="clone_programme")      # categories: one panel per programme
 ```
 
+```
+[threadfin] programmes: 4 programmes over 931 core clones (resolution 0.2); 1 with bootstrap stability >= 0.75; 931 of 931 profiled clones assigned with posterior >= 0.7.
+```
+
 `tf.tl.clone_labels` collapses any cell-level column to one value per clone: the majority category, the
 mean of a number, or the fraction of the clone's cells in one category. On your own data the same call
 summarises, for example, antigen binding (`how="fraction:positive"`) or mutation load (`how="mean"`).
@@ -151,8 +164,8 @@ summarises, for example, antigen binding (`how="fraction:positive"`) or mutation
 
 1. **Is the map at least as connected as the profiles?** `mp["quality"]["coherence"]` should be close to
    `mp["quality"]["coherence_target"]`. If it is much lower, islands on the map are artefacts of the layout.
-2. **Does colouring by a known annotation give a smooth pattern?** Colour by the fraction of plasma cells,
-   germinal-centre cells or by isotype. A biologically meaningful map usually shows gradients; random
+2. **Does colouring by a known annotation give a smooth pattern?** Colour by the fraction of ASCs,
+   germinal-centre B cells or by isotype. A biologically meaningful map usually shows gradients; random
    speckle means the profiles carry little about that annotation (check the test in `result.profile_tests`).
 3. **Is a group made of one donor?** Colour by donor
    (`tf.pl.clone_map(adata, color="donor")`). A region filled by one donor can reflect a difference in what
@@ -160,13 +173,19 @@ summarises, for example, antigen binding (`how="fraction:positive"`) or mutation
 4. **Does the structure survive a different seed?** `tf.tl.embed_clones(adata, random_state=1)`; the
    automatic settings are chosen to hold together across seeds, but hand-set settings may not.
 5. **Is the structure also in the profiles?** Programmes and their stability are computed from the profiles,
-   not the map. A group you see on the map but not as a stable programme is a region of a continuum.
+   not the map. A group you see on the map but not as a stable programme is not supported as a group by the
+   profiles.
+6. **Does a connected map mean a continuum?** No. The layout is chosen to be as connected as the profile
+   graph, and discrete types of clones joined by clones that mix their states also form one connected piece.
+   Judge groups from the programmes, their stability and the tests.
 
 ## 7. Notes
 
-* **Reproducibility.** The choice is deterministic for a given `random_state`. If the final layout falls
-  short of the coherence target, Threadfin tries two more seeds and then the next confirmed settings;
-  `mp["layout_seed"]` and `mp["attempts"]` record what was used.
+* **Reproducibility.** The choice is deterministic for a given `random_state` and number of BLAS threads. With
+  another number of BLAS threads (`OMP_NUM_THREADS`) the computations differ at floating-point precision, which
+  can change the chosen settings; keep the thread count the same between runs that must give the same map. If
+  the final layout falls short of the coherence target, Threadfin tries two more seeds and then the next
+  confirmed settings; `mp["layout_seed"]` and `mp["attempts"]` record what was used.
 * **Weaker repulsion.** If no standard setting holds together, Threadfin lays the most coherent settings
   out again with weaker repulsion between clones (`repulsion_strength` 0.5, then 0.25), which keeps weakly
   connected groups together. The value used is recorded in `mp["repulsion_strength"]`.

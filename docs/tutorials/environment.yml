@@ -2,8 +2,9 @@
 #   curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/environment.yml
 #   conda env create -f environment.yml
 #   conda activate threadfin
-#   python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)" --env PYTHONHASHSEED 0
-# (the fixed hash seed makes Dandelion's clone calls identical run after run; see Step 0 of the notebook)
+#   python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)"
+# (clone calls are identical in every session: Threadfin calls Dandelion under hash seed 0)
+# Exact versions of the published run: requirements-lock.txt (pip install -r requirements-lock.txt).
 name: threadfin
 channels:
   - conda-forge
@@ -12,7 +13,7 @@ dependencies:
   - python=3.11
   - pip
   - pip:
-      - threadfin>=4.5.3        # 4.5.3 keeps pynndescent below 0.7, whose output scanpy cannot yet read
+      - threadfin>=4.6.0        # the notebook uses strata_key (4.6.0); pynndescent stays below 0.7 (4.5.3)
       - sc-dandelion==0.5.7
       - matplotlib<3.9          # Dandelion 0.5.7 uses matplotlib.cm.get_cmap, removed in matplotlib 3.9
       - jupyterlab

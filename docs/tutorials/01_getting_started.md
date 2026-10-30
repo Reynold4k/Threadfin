@@ -17,7 +17,7 @@ assumed — each step explains what is computed and why.
 | Word | Meaning | Example |
 |---|---|---|
 | **cell** | one sequenced B cell: its gene expression (RNA) and its receptor sequence (BCR) | one row of `adata` |
-| **clone** | all cells that descend from one activated B cell; they share one heavy- and one light-chain rearrangement | 12 cells with the same receptor |
+| **clone** | all cells that descend from one naive B cell (one V(D)J rearrangement): they share its heavy- and light-chain rearrangements | 12 cells with the same receptor |
 | **clone profile** | Threadfin's description of a clone: *where its cells sit in expression space*, relative to the other cells sampled with them, and shrunk when the clone was seen in few cells | one vector per clone |
 | **clone map** (clone embedding) | a 2-D picture with **one point per clone**; clones with similar profiles are close | like a UMAP, but of clones |
 | **programme** | a group of clones with similar profiles (if such groups exist) | "GC-dominated clones" |
@@ -27,15 +27,20 @@ B cell …). Two clones can have the same *average* state and still differ in *h
 Threadfin therefore describes each clone by the distribution of its cells, and compares clones with each other.
 
 > **Why not just analyse cells?** Questions like *"which clones connect the germinal centre with
-> plasma-cell output?"* or *"do antigen-binding clones differ from others?"* are questions about clones.
-> Treating cells as independent makes large clones dominate and makes P values far too small; Threadfin uses
-> the clone as the unit of every test.
+> antibody-secreting cells (ASCs)?"* or *"do antigen-binding clones differ from others?"* are questions about
+> clones. Treating cells as independent makes large clones dominate and makes P values far too small; Threadfin
+> builds every test on clones: labels are tested with clones as replicates, and coherence compares real clones
+> with random clones of the same sizes.
 
 Check your installation first (see the [README](../../README.md#1-install)):
 
 ```python
 import threadfin as tf
-print(tf.__version__)          # 4.5.1 or later
+print(tf.__version__)          # 4.6.0 or later
+```
+
+```
+4.6.0
 ```
 
 ---
@@ -55,6 +60,8 @@ AnnData object with n_obs × n_vars = 8467 × 20
     uns: 'simulation'
     obsm: 'X_pca'
 ```
+
+(anndata 0.13 and later print one more line, `layers: None (.X)`.)
 
 **What this is.** An [AnnData](https://anndata.readthedocs.io) object, the standard container of the
 Python single-cell ecosystem. Each row (*observation*) is a cell; `adata.obs` holds one column per cell
@@ -77,7 +84,7 @@ as a single cell:
 
 ```python
 sizes = adata.obs["clone_id"].value_counts()
-print(sizes.value_counts().sort_index().head(6))   # number of clones with 1, 2, 3, ... cells
+print(sizes.value_counts().sort_index().head(6).to_string())   # number of clones with 1, 2, 3, ... cells
 print(f"{(sizes >= 2).sum()} clones have two or more cells; largest clone: {sizes.max()} cells")
 ```
 
@@ -120,14 +127,19 @@ print(result.summary())
   never look like a difference between clones.
 * `sample_key` — the column naming the sampling context (library, sort, time point). Each cell is described
   **relative to the other cells of its sample**: if one library was sequenced more deeply or one sample was
-  enriched for plasma cells, that difference is removed before clones are compared. *Choose a nuisance
-  variable here — never a tissue, time point or sort gate that you want to compare between clones*
-  ([Tutorial 2](02_your_data.md#5-choosing-donor_key-sample_key-and-batch_key) explains the choice).
+  enriched for ASCs, that difference is removed before clones are compared. The coherence test shuffles clone
+  labels within the same column. *Choose a nuisance variable here — never a tissue, time point or sort gate
+  that you want to compare between clones*
+  ([Tutorial 2](02_your_data.md#5-choosing-donor_key-sample_key-strata_key-and-batch_key) explains the choice).
+* `strata_key` (not needed here) — a finer column within which the coherence test shuffles clone labels. Set
+  it to the library when `sample_key` is coarser, for example the donor in a design that compares tissues or
+  sort gates (Tutorial 2, section 5).
 * `basis` — the expression embedding to use. On real data omit it: Threadfin then builds one that excludes
   immunoglobulin genes (otherwise cells of one clone would look alike simply because they express the same
   receptor transcripts).
 * `state_key` — an existing cell annotation. It is used only to *describe* programmes afterwards, never to
-  build them.
+  build them: by default as the share of each programme's cells in each state (`composition_weight="cells"`),
+  or with `composition_weight="clones"` as the average clone's shares (see the questions at the end).
 * `test` — annotations to test against the clones afterwards (antigen binding, isotype, sort gate …).
 
 **What happens inside `tf.run`, in order.**
@@ -135,55 +147,76 @@ print(result.summary())
 1. *Clones* (only when you pass `bcr=`): defined from paired heavy and light chains within each donor.
 2. *Embedding*: an expression embedding without immunoglobulin genes (skipped here, `basis` is given).
 3. *Clone profiles*: one profile per clone with ≥ 2 cells, relative to its sample, shrunk by clone size.
-4. *Clonal coherence*: does clone identity explain cell state at all?
+4. *Clonal coherence*: are cells of one clone more alike than cells of different clones?
 5. *Clone map*: a 2-D layout of the profiles, with settings chosen automatically.
-6. *Programmes*: groups of clones with similar profiles — only if the groups pass a test — and their
-   bootstrap stability.
+6. *Programmes*: groups of clones with similar profiles — only where a split passes a test against one
+   Gaussian group — and their bootstrap stability.
 7. *Tests*: how much each `test` annotation explains about the differences between clones.
 
-The printed report:
+`tf.run` first prints one progress line per step, each starting with `[threadfin]` (not shown here), and then
+the report:
 
 ```
 Threadfin summary
 =================
-Cells with a clone id: 8,467 of 8,467, in 3,000 clones (494 clones have >= 3 cells).
+Cells with a clone id: 8,467 of 8,467, in 3,000 clones (931 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 27.2% of transcriptional variance within 'context' strata; shuffled clones explain 0.2% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 3 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 27.2% of the variance of cell states (the expression embedding); with clone labels shuffled within 'context', 0.2% (p = 0.00498, 200 permutations): an excess of 27.0 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 3 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   4 programmes from 931 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   4 programmes from 931 profiled clones (every split passed the split test); 1 is stable (bootstrap Jaccard >= 0.75).
+   State composition: share of the programme's cells in each state.
    P1: 285 clones, 1,577 cells, stability 0.75; S5 87%, S1 8%
    P2: 259 clones, 1,979 cells, stability 0.71; S2 53%, S4 19%
    P3: 229 clones, 1,655 cells, stability 0.66; S0 64%, S2 20%
    P4: 158 clones, 1,187 cells, stability 0.72; S3 56%, S5 32%
 
 3. Do your labels explain how clones differ? (clone-level tests)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
    true_programme explains clone states: 55.6% of clone-profile variance vs 0.3% for shuffled labels (p = 0.0005, 931 clones).
-   ...
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   true_programme: P1 depleted for 'G0' (1% vs 38% of clones; OR 0.02 [< 0.01, 0.06], FDR 0.00053)
+   true_programme: P1 depleted for 'G1' (3% vs 38% of clones; OR 0.05 [0.02, 0.10], FDR 0.00053)
+   true_programme: P1 enriched for 'G2' (79% vs 0% of clones; OR > 100 [> 100, > 100], FDR 0.00053)
+   true_programme: P2 depleted for 'G0' (14% vs 32% of clones; OR 0.33 [0.22, 0.49], FDR 0.00053)
+   true_programme: P2 depleted for 'G2' (0% vs 34% of clones; OR < 0.01 [< 0.01, 0.05], FDR 0.00053)
+   true_programme: P2 enriched for 'G1' (85% vs 5% of clones; OR > 100 [72.96, > 100], FDR 0.00053)
+
+Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.
 ```
 
 **How to read it, line by line.**
 
-1. **Clonal coherence.** Clone identity explains 27% of the variation in cell state within samples. When the
-   clone labels are shuffled among the cells of each sample, they explain 0.2% — that is what the sampling
-   design alone produces. The gap is the evidence that cells of a clone share their state. The P value is a
-   permutation P value: with 200 permutations the smallest possible value is 1/201 ≈ 0.005, so
-   `p = 0.00498` means "none of the 200 shuffles came close".
-   *A large shuffled value (say 10–30 %) is a warning that samples differ a lot in composition; Threadfin
-   accounts for it, but a cell-level test that ignored samples would have called that clonal.*
+1. **Clonal coherence.** Clone identity explains 27% of the variance of cell states (the expression embedding).
+   When the clone labels are shuffled among the cells of each sample (the strata named in the line, here
+   `context`), they explain 0.2% — that is what the sampling design alone produces. The excess, 27 percentage
+   points, is the evidence that cells of a clone share their state. The P value is a permutation P value: with
+   200 permutations the smallest possible value is 1/201 ≈ 0.005, so `p = 0.00498` means "none of the 200
+   shuffles came close".
+   *A large shuffled value (say 10–30 %) is a warning that samples differ a lot in composition. Shuffling
+   within the sampling units accounts for it, which is why the strata must be those units (`strata_key`); a
+   cell-level test that ignored samples would have called that difference clonal.*
 2. **Reliability.** A profile's *reliability* estimates how well it would agree with the clone's true profile
    (the expected squared correlation). It grows with the number of cells: here a clone reaches 0.5 at three
-   cells. Small clones are not removed; they simply weigh less (their profiles are shrunk and they have less
-   influence on the programmes).
-3. **Programmes.** Threadfin found four programmes, and every split between them passed a test against a
-   single group. *Stability* is how reproducibly each programme is recovered when cells are resampled
-   (bootstrap Jaccard index): **≥ 0.75 stable; 0.6–0.75 present but blurred; < 0.6 do not interpret**.
-   The percentages are the shares of each programme's cells in each cell state.
+   cells. The summary speaks of the *smoothed* profile because each cell is first averaged with its 15 nearest
+   cells; for smoothed cells the reliability is slightly optimistic. Small clones are not removed; they simply
+   weigh less (their profiles are shrunk towards the average profile, and they have less influence on the
+   programmes).
+3. **Programmes.** Threadfin found four programmes, and every split between them passed the split test against
+   a single Gaussian group. A split shows that the clone profiles are not one Gaussian cloud, which graded
+   variation can also produce, so judge each programme by its stability. *Stability* is how reproducibly each
+   programme is recovered when the cells of every clone are resampled (bootstrap Jaccard index): **≥ 0.75
+   stable; 0.6–0.75 present but blurred; < 0.6 do not interpret**. The summary marks programmes below 0.6 as
+   unstable, also on the lines of the label tests. The percentages are the shares of each programme's cells in
+   each cell state; the line before them says how they were counted.
 4. **Tests.** `true_programme` explains 56% of the variation between clone profiles, against 0.3% for
    shuffled labels — expected here, because it is the simulated truth. On real data the same line tells you
-   whether, for example, antigen binding explains where clones sit.
+   whether, for example, antigen binding explains where clones sit. The lines under *Programme differences*
+   name the programmes that differ, with odds ratios pooled within donor × clone-size bins and their 95%
+   intervals; a note marks any line where the pooled shares of clones point the other way, because donors or
+   clone sizes differ.
 
 **Check the answer.** Because the data are simulated, we can compare the programmes Threadfin found with the
 simulated ones:
@@ -229,12 +262,12 @@ result.plot("threadfin_overview.png")
   cells). The highlighted points are the clones of that programme; grey points are all other clones. Clones
   close together have similar distributions of cell states.
 * **b — clonal coherence.** The left bar is the variance explained by clone identity; the right bar is the
-  same after shuffling clone labels within samples (with its spread). A tall left bar and a near-zero right
-  bar mean clone identity matters.
+  same after shuffling clone labels within the strata named under it (here `context`), with its spread. A tall
+  left bar and a near-zero right bar mean clone identity matters.
 * **c — programme stability.** One bar per programme; the upper line marks 0.75 (stable), the lower 0.6
   (do not interpret below).
 * **d — programme composition.** The share of each programme's cells in each cell state (a large clone counts
-  with all of its cells).
+  with all of its cells). With `composition_weight="clones"` every clone counts once, and the title says so.
 
 > **Three common misreadings.**
 > 1. *Proximity on the clone map is not ancestry.* Two clones are close because their cells are distributed
@@ -256,15 +289,17 @@ print(mp["n_neighbors"], mp["min_dist"], round(mp["quality"]["coherence"], 3))
 56 0.95 0.998
 ```
 
-`n_neighbors` and `min_dist` are the two UMAP settings; `coherence` 0.998 means 99.8% of clones form one
-connected piece of the map, so the continuum of clones was not broken into artificial islands.
+`n_neighbors` and `min_dist` are the two UMAP settings; `coherence` 0.998 means that 99.8% of clones form one
+connected piece of the map, as connected as the clone profiles themselves, so no artificial islands were
+created. The layout is chosen to stay connected, so read groups from the programmes and their stability, not
+from the map: here four simulated programmes share one connected map.
 
 ---
 
 ## 4. What you get back
 
 ```python
-result.clones.head()[["n_cells", "reliability", "clone_programme", "confidence"]]
+print(result.clones.head()[["n_cells", "reliability", "clone_programme", "confidence"]])
 ```
 
 ```
@@ -284,7 +319,7 @@ Reliability grows with clone size:
 
 ```python
 t = result.clones
-print(t.groupby(t["n_cells"].clip(upper=10))["reliability"].median().round(2))   # 10 = ten or more cells
+print(t.groupby(t["n_cells"].clip(upper=10))["reliability"].median().round(2).to_string())   # 10 = ten or more
 ```
 
 ```
@@ -304,8 +339,9 @@ n_cells
 |---|---|---|
 | per-clone table | `result.clones` | size, reliability, programme, bootstrap confidence, map coordinates (`x`, `y`) |
 | programme of every cell | `adata.obs["clone_programme"]` | the programme of the cell's clone |
-| clonal coherence | `result.coherence` | variance explained by clone, permutation null and P value |
+| clonal coherence | `result.coherence` | variance explained by clone, permutation null, excess, strata and P value |
 | programmes | `result.programmes` | size and bootstrap stability of each programme |
+| programme composition | `result.composition` | share of each cell state in each programme (with `state_key`) |
 | label tests | `result.profile_tests`, `result.tests` | variance explained by each label; per-programme effects |
 | a Methods paragraph | `result.methods()` | what was run, with the settings and package versions used, and references |
 | everything else | `adata.uns["threadfin"]` | profiles, map settings and the full record of each step |
@@ -313,9 +349,11 @@ n_cells
 Save them with
 
 ```python
+from pathlib import Path
+
 result.clones.to_csv("threadfin_clones.csv")      # opens in any spreadsheet
-adata.write_h5ad("threadfin_result.h5ad")         # everything, including adata.uns["threadfin"]
-open("threadfin_methods.txt", "w").write(result.methods())   # a starting point for your Methods section
+Path("threadfin_methods.txt").write_text(result.methods())   # a starting point for your Methods section
+adata.write_h5ad("threadfin_result.h5ad")         # the AnnData with its results in adata.uns["threadfin"]
 ```
 
 ---
@@ -323,10 +361,12 @@ open("threadfin_methods.txt", "w").write(result.methods())   # a starting point 
 ## 5. Frequently asked questions
 
 **How long does it take on real data, and how much memory?** From under a minute (a few thousand cells) to about
-12 minutes (190,000 cells, 11,000 clones) on 8 CPU cores, from raw counts and contigs to the summary; the
-clone-map settings search is usually the longest step. Memory grows with the number of cells: about 3 GB for
-20,000 cells, 8 GB for 36,000 and 30 GB for 200,000 (most of it for the expression embedding). Add
-`n_jobs=-1` to use every core.
+11 minutes (205,630 cells) on 8 CPU cores, from raw counts and contigs to the summary. With 25,000 cells or more,
+clone calling with Dandelion is the longest step (28 s at 25,000 cells, 292 s at 205,630), ahead of the search
+for the clone-map settings (36–62 s). Memory grows with the number of cells: about 3 GB for 20,000 cells, 8 GB
+for 36,000 and 30 GB for 200,000, most of it for building the expression embedding
+([README](../../README.md#run-time-and-memory)). Add `n_jobs=-1` to use every core for the map search and the
+programme bootstrap.
 
 **Do I need a GPU or R?** No.
 
@@ -339,12 +379,27 @@ cells were seen; removing them as well discards the same information twice and c
 published dataset a reliability cut-off of 0.5 removed every clone).
 
 **Threadfin reported a single programme. Does that mean the clones form a continuum?** It means no split
-passed the test. The split test is deliberately conservative, so a single programme is *not* proof of a
-continuum; look at the clone map and at the tests of your annotations instead.
+passed the test. The split test rarely rejects one Gaussian group, so a single programme is *not* proof of a
+continuum. Describe how the clones vary with `tf.tl.landscape_genes`, and test your annotations against the
+profiles with `tf.tl.profile_association`; both work without programmes.
+
+**Threadfin reported several programmes. Does that mean the clones fall into discrete types?** Not by itself.
+A split shows that the clone profiles depart from one Gaussian group, and graded variation along a path does
+that too. A programme is a partition of the clones: read it with its stability, and name it from its state
+composition and its markers.
+
+**Cells or clones: how is the composition of a programme counted?** By default (`composition_weight="cells"`)
+it is the share of the programme's cells in each state, so an expanded clone weighs in proportion to its cells.
+Use it for questions about output and abundance. `tf.run(..., composition_weight="clones")` counts every clone
+once (each clone's share of cells in each state, averaged over the programme's clones); use it to describe a
+typical clone and to name programmes. If the two differ, a few large clones drive the cell-weighted view. In
+sorted designs neither equals the composition in the animal, because the sort decided how many cells of each
+state were sequenced.
 
 **What if coherence is not significant?** Then clone identity does not detectably explain cell state in
-your data (or there were too few clones of two or more cells). Annotations can still be associated with
-clone profiles — coherence and association are different questions
+your data (or there were too few clones of two or more cells), and the summary says that its programmes are
+descriptive. Annotations can still be associated with clone profiles — coherence and association are different
+questions
 ([Methods](../METHODS.md#4-clonal-coherence-clonal_coherence)).
 
 Next: [Tutorial 2 — your own data](02_your_data.md).

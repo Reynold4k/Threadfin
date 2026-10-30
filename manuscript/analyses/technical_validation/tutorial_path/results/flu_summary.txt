@@ -1,13 +1,13 @@
 Threadfin summary
 =================
-Cells with a BCR: 84,039 of 123,693, in 80,760 clones (479 clones have >= 3 cells).
+Cells with a BCR: 84,039 of 123,693, in 80,760 clones (2,082 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 56.1% of transcriptional variance within 'donor' strata; shuffled clones explain 2.5% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 1 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 56.1% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 3.0% (p = 0.00498, 200 permutations): an excess of 53.2 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 1 cell; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   5 programmes from 2,082 reliable clones (every split significant); 4 are stable (bootstrap Jaccard >= 0.75).
+   5 programmes from 2,082 profiled clones (every split passed the split test); 4 are stable (bootstrap Jaccard >= 0.75).
    P1: 845 clones, 1,982 cells, stability 0.79
    P2: 421 clones, 875 cells, stability 0.90
    P3: 414 clones, 1,135 cells, stability 0.78
@@ -15,24 +15,25 @@ Cells with a BCR: 84,039 of 123,693, in 80,760 clones (479 clones have >= 3 cell
    P5: 33 clones, 78 cells, stability 0.34  [unstable - do not interpret]
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   timepoint explains clone states: 7.8% of clone-profile variance vs 1.1% for shuffled labels (p = 0.0005, 1567 clones).
-   isotype explains clone states: 16.9% of clone-profile variance vs 0.6% for shuffled labels (p = 0.0005, 1771 clones).
-   Programme differences (FDR < 0.05):
-   timepoint: P2 depleted for 'd7' (14% vs 46% of clones; OR 0.26, FDR 0.00083)
-   timepoint: P2 enriched for 'd0' (86% vs 54% of clones; OR 3.82, FDR 0.00083)
-   timepoint: P3 enriched for 'd7' (42% vs 38% of clones; OR 1.95, FDR 0.00083)
-   timepoint: P3 depleted for 'd0' (58% vs 62% of clones; OR 0.51, FDR 0.00083)
-   timepoint: P4 depleted for 'd0' (29% vs 70% of clones; OR 0.26, FDR 0.00083)
-   timepoint: P4 enriched for 'd7' (71% vs 30% of clones; OR 3.82, FDR 0.00083)
-   isotype: P1 depleted for 'IGHD' (1% vs 7% of clones; OR 0.28, FDR 0.00091)
-   isotype: P2 depleted for 'IGHG' (1% vs 17% of clones; OR 0.09, FDR 0.00091)
-   isotype: P2 enriched for 'IGHD' (11% vs 3% of clones; OR 2.43, FDR 0.00091)
-   isotype: P2 depleted for 'IGHA' (1% vs 19% of clones; OR 0.04, FDR 0.00091)
-   isotype: P2 enriched for 'IGHM' (87% vs 61% of clones; OR 3.32, FDR 0.00091)
-   isotype: P3 enriched for 'IGHM' (85% vs 61% of clones; OR 4.12, FDR 0.00091)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   timepoint explains clone states: 7.8% of clone-profile variance vs 1.9% for shuffled labels (p = 0.0005, 1567 clones; 515 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 12), not between independent clones.
+   isotype explains clone states: 16.9% of clone-profile variance vs 1.0% for shuffled labels (p = 0.0005, 1771 clones; 308 clones without a majority level left out).
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   timepoint: P2 depleted for 'd7' (14% vs 46% of clones; OR 0.30 [0.21, 0.42], FDR 0.00083)
+   timepoint: P3 enriched for 'd7' (42% vs 38% of clones; OR 1.81 [1.31, 2.51], FDR 0.00083)
+   timepoint: P4 enriched for 'd7' (71% vs 30% of clones; OR 3.33 [2.43, 4.55], FDR 0.00083)
+   timepoint: P5 depleted for 'd7' (14% vs 39% of clones; OR 0.25 [0.08, 0.79], FDR 0.02)  [unstable programme]
+   timepoint: P1 depleted for 'd7' (35% vs 40% of clones; OR 0.76 [0.59, 0.96], FDR 0.02)
+   isotype: P1 depleted for 'IGHD' (1% vs 7% of clones; OR 0.27 [0.13, 0.55], FDR 0.00083)
+   isotype: P1 depleted for 'IGHG' (10% vs 18% of clones; OR 0.58 [0.43, 0.77], FDR 0.00083)
+   isotype: P2 enriched for 'IGHD' (11% vs 3% of clones; OR 2.90 [1.70, 4.94], FDR 0.00083)
+   isotype: P2 depleted for 'IGHA' (1% vs 19% of clones; OR 0.03 [< 0.01, 0.13], FDR 0.00083)
+   isotype: P2 depleted for 'IGHG' (1% vs 17% of clones; OR 0.09 [0.03, 0.29], FDR 0.00083)
+   isotype: P2 enriched for 'IGHM' (87% vs 61% of clones; OR 3.46 [2.38, 5.03], FDR 0.00083)
 
-4. Do clones keep their state over 'timepoint'? (clonal memory)
-   726 clones seen at >= 2 levels: memory index 0.89 [0.81, 0.98], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
-   Same programme at the next level: 72% of clones vs 43% expected for random clones.
+4. Do clones keep their state over 'timepoint'? (clonal memory; levels in the order d0 -> d7)
+   726 clones seen at >= 2 levels: memory index 0.82 [0.67, 1.05], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to another clone of its donor seen at the same levels; sampling noise can put it outside 0-1).
+   Same programme at the next level: 72% of clones vs 50% expected for other clones seen at the same levels.
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

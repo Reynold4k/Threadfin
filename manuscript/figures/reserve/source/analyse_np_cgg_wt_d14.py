@@ -119,5 +119,5 @@ if __name__=='__main__':
  if '--call' in sys.argv:call()
  else:
   if not (OUT/'clone_ids.csv').exists():
-   subprocess.run(['/data/scratch/projects/punim1236/python_envs/dandelion/bin/python',str(Path(__file__).resolve()),'--call'],check=True)
+   subprocess.run([os.environ.get('DANDELION_PYTHON',sys.executable),str(Path(__file__).resolve()),'--call'],check=True)
   analyse()

@@ -3,6 +3,7 @@
 
 Fixed coordinates and exact labels; random overplotting order only. Original S2 is unchanged.
 """
+import os
 from pathlib import Path
 import argparse,json,hashlib,sys
 sys.dont_write_bytecode=True
@@ -319,7 +320,7 @@ def supplement_reporters(args):
  c,t=data('gut_gc_reporter')
  ax=suppax(f,3,0,'M','Source RNA annotation');p=STATE_COLORS['S3'];categorical(ax,c,c.celltype,p);key(ax,p,ncol=2,labels={'B_cell':'B cell','GC_Bcell':'GC B cell','plasma':'PC','other':'Other'},size=5.8)
  # Exact source metadata join; categorical sort label, never fluorescence intensity.
- meta=pd.read_csv('/data/scratch/projects/punim1236/threadfin_data/gse284622_gut_gc/gex_reporter/metadata.csv.gz',index_col='cell')
+ meta=pd.read_csv(Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse284622_gut_gc"/'gex_reporter'/'metadata.csv.gz',index_col='cell')
  assert meta.index.is_unique and c.index.isin(meta.index).all()
  sort=meta.reindex(c.index)['gc'];assert sort.isin(['GC','nonGC']).all()
  for cc,mc in [('sample','sample_id'),('tissue','tissue'),('celltype','celltype')]:

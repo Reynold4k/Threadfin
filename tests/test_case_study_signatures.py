@@ -9,6 +9,8 @@ import pandas as pd
 import pytest
 
 HERE = Path(__file__).resolve().parents[1] / "manuscript" / "case_studies"
+if not (HERE / "run_case_study.py").exists():  # the sdist ships tests/ but not manuscript/
+    pytest.skip("needs manuscript/ from the repository", allow_module_level=True)
 sys.path.insert(0, str(HERE))
 spec = importlib.util.spec_from_file_location("case_run", HERE / "run_case_study.py")
 case_run = importlib.util.module_from_spec(spec)

@@ -1,11 +1,11 @@
 {
  "dataset": "malaria_late",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 42.3,
-  "threadfin_run": 268.8,
-  "plot_and_save": 2.2
+  "user_inputs": 33.8,
+  "threadfin_run": 210.1,
+  "plot_and_save": 1.9
  },
  "warnings": [
   {
@@ -16,7 +16,7 @@
   },
   {
    "category": "UserWarning",
-   "message": "No resolution reached stability 0.75; using the most stable partition (stability 0.66). Interpret programmes cautiously.",
+   "message": "No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.66). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).",
    "file": "api.py",
    "count": 1
   }
@@ -29,7 +29,23 @@
   "cell_state",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": "cell_state",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 2.22,
+ "gallery_h5ad": "malaria_late.h5ad",
  "clones": 58594,
  "clones_ge2": 1007,
  "icc": 0.45385865623055355,
@@ -41,6 +57,6 @@
   "n_neighbors": 32,
   "min_dist": 0.8
  },
- "seconds_total": 313.5,
+ "seconds_total": 245.9,
  "peak_rss_gb": 6.5
 }

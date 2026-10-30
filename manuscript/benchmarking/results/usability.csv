@@ -35,12 +35,12 @@ Trust the code,Tests run on every change,clone2vec,1.0,GitHub Actions tests.yml
 Trust the code,Tests run on every change,Benisse,0.0,no continuous integration
 Trust the code,Tests run on every change,CoNGA,0.0,no continuous integration
 Trust the code,Tests run on every change,scirpy,1.0,"GitHub Actions (tests, tutorials, conda build)"
-Trust the code,Same result when re-run,Threadfin,1.0,identical clone maps and programmes with 1 and 8 processes and with the released 4.3.1 (this benchmark)
-Trust the code,Same result when re-run,Clonotrace,1.0,"clone distances identical with one and four R sessions (49,455 and 648,091 pairs; this benchmark)"
-Trust the code,Same result when re-run,clone2vec,0.5,"slightly different with 1-16 cores: clone distances correlate 0.9999 (Spearman), max difference 0.503 (this benchmark)"
-Trust the code,Same result when re-run,Benisse,0.5,"slightly different with 1-16 cores: clone distances correlate 1.0000 (Spearman), max difference 0.00931 (this benchmark)"
-Trust the code,Same result when re-run,CoNGA,,not assessed (only CoNGA's clone-reduction rule was used)
-Trust the code,Same result when re-run,scirpy,,not assessed
+Trust the code,Same result with more cores,Threadfin,1.0,identical clone maps and programmes with 1 and 8 processes and with the released 4.3.1 (this benchmark)
+Trust the code,Same result with more cores,Clonotrace,1.0,"clone distances identical with one and four R sessions (49,455 and 648,091 pairs; this benchmark)"
+Trust the code,Same result with more cores,clone2vec,0.5,"slightly different with 1-16 cores: clone distances correlate 0.9999 (Spearman), max difference 0.503 (this benchmark)"
+Trust the code,Same result with more cores,Benisse,0.5,"slightly different with 1-16 cores: clone distances correlate 1.0000 (Spearman), max difference 0.00931 (this benchmark)"
+Trust the code,Same result with more cores,CoNGA,,not assessed (only CoNGA's clone-reduction rule was used)
+Trust the code,Same result with more cores,scirpy,,not assessed
 Learn it,Step-by-step tutorial,Threadfin,1.0,"notebook that downloads public data and runs end to end, tested in a clean environment (docs/tutorials)"
 Learn it,Step-by-step tutorial,Clonotrace,1.0,vignette on the pkgdown site
 Learn it,Step-by-step tutorial,clone2vec,1.0,tutorials on Read the Docs

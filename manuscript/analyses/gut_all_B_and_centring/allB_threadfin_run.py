@@ -39,10 +39,9 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[3]
+REPO = HERE.parents[2]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "case_studies"))
-os.environ.setdefault("THREADFIN_DATA", "/data/scratch/projects/punim1236/threadfin_data")
 
 import threadfin as tf  # noqa: E402
 from datasets import load_gut_gc_reporter  # noqa: E402

@@ -6,7 +6,7 @@ import sys
 PROJECT = Path(__file__).resolve().parents[2]
 env = os.environ.copy()
 env.update(PYTHONNOUSERSITE="1", PYTHONPATH=str(PROJECT),
-           THREADFIN_DATA="/data/scratch/projects/punim1236/threadfin_data",
+           THREADFIN_DATA=os.environ.get("THREADFIN_DATA", str(PROJECT / "manuscript" / "case_studies" / "data")),
            OMP_NUM_THREADS="8", OPENBLAS_NUM_THREADS="8", MKL_NUM_THREADS="8",
            NUMBA_NUM_THREADS="8", MPLCONFIGDIR=str(PROJECT / "manuscript/case_studies/results/storyline_verification_2026-10-14/matplotlib"))
 logs = PROJECT / "manuscript/case_studies/results/storyline_verification_2026-10-14/execution_logs"
@@ -15,7 +15,7 @@ log_path = logs / (Path(sys.argv[1]).stem + ".log")
 print("Execution log:", log_path, flush=True)
 with log_path.open("w") as log:
     proc = subprocess.Popen(
-        ["/data/scratch/projects/punim1236/python_envs/threadfin_v4/bin/python", *sys.argv[1:]],
+        [os.environ.get("THREADFIN_PYTHON", sys.executable), *sys.argv[1:]],
         cwd=PROJECT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
     for line in proc.stdout:
         log.write(line)

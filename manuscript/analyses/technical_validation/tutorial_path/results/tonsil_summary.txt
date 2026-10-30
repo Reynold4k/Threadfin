@@ -1,20 +1,22 @@
 Threadfin summary
 =================
-Cells with a BCR: 11,570 of 22,478, in 11,075 clones (76 clones have >= 3 cells).
+Cells with a BCR: 11,570 of 22,478, in 11,075 clones (361 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 25.3% of transcriptional variance within 'donor' strata; shuffled clones explain 3.3% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 3 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 25.3% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 3.3% (p = 0.00498, 200 permutations): an excess of 22.0 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 3 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   2 programmes from 361 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   2 programmes from 361 profiled clones (every split passed the split test); 1 is stable (bootstrap Jaccard >= 0.75).
+   State composition: share of the programme's cells in each state.
    P1: 277 clones, 663 cells, stability 0.70; Cycling B 60%, GC 20%
    P2: 84 clones, 193 cells, stability 0.80; Plasmablast 67%, Cycling B 20%
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   isotype explains clone states: 3.8% of clone-profile variance vs 1.2% for shuffled labels (p = 0.0005, 317 clones).
-   Programme differences (FDR < 0.05):
-   isotype: P1 depleted for 'IGHG' (40% vs 65% of clones; OR 0.33, FDR 0.002)
-   isotype: P2 enriched for 'IGHG' (65% vs 40% of clones; OR 3.01, FDR 0.002)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   isotype explains clone states: 3.8% of clone-profile variance vs 1.1% for shuffled labels (p = 0.0005, 317 clones; 42 clones without a majority level left out).
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   isotype: P1 depleted for 'IGHG' (40% vs 65% of clones; OR 0.32 [0.17, 0.61], FDR 0.002)
+   isotype: P2 enriched for 'IGHG' (65% vs 40% of clones; OR 3.09 [1.65, 5.81], FDR 0.002)
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

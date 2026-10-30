@@ -1,11 +1,11 @@
 {
  "dataset": "gc_np_pc",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 0.8,
-  "threadfin_run": 49.7,
-  "plot_and_save": 0.6
+  "user_inputs": 0.6,
+  "threadfin_run": 27.1,
+  "plot_and_save": 0.5
  },
  "warnings": [
   {
@@ -19,6 +19,12 @@
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "adata.obs['isotype'] has a level that looks like a missing value: '.' (7 cells). It is treated as a level of their own; if these cells have no isotype, set their adata.obs['isotype'] to NaN.",
+   "file": "stats.py",
+   "count": 2
   }
  ],
  "error": null,
@@ -29,7 +35,23 @@
   "fate",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": "fate",
+  "composition_weight": "cells",
+  "time_key": null,
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 0.06,
+ "gallery_h5ad": "gc_np_pc.h5ad",
  "clones": 609,
  "clones_ge2": 92,
  "icc": 0.04896730686385704,
@@ -43,6 +65,6 @@
   "n_neighbors": 18,
   "min_dist": 0.95
  },
- "seconds_total": 51.1,
- "peak_rss_gb": 0.6
+ "seconds_total": 28.3,
+ "peak_rss_gb": 0.55
 }

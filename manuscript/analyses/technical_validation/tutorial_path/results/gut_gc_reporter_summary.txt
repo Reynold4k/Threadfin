@@ -1,43 +1,44 @@
 Threadfin summary
 =================
-Cells with a BCR: 11,723 of 16,619, in 6,963 clones (543 clones have >= 3 cells).
+Cells with a BCR: 11,723 of 16,619, in 6,963 clones (964 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 40.1% of transcriptional variance within 'donor' strata; shuffled clones explain 2.3% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 2 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 40.1% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 27.8% (p = 0.00498, 200 permutations): an excess of 12.3 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 2 cells; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   3 programmes from 964 reliable clones (every split significant); 1 is stable (bootstrap Jaccard >= 0.75).
+   3 programmes from 964 profiled clones (every split passed the split test); 1 is stable (bootstrap Jaccard >= 0.75).
+   State composition: share of the programme's cells in each state.
    P1: 475 clones, 2,442 cells, stability 0.85; GC_Bcell 91%, plasma 5%
    P2: 302 clones, 1,974 cells, stability 0.52; plasma 68%, GC_Bcell 29%  [unstable - do not interpret]
    P3: 187 clones, 1,308 cells, stability 0.69; plasma 92%, GC_Bcell 6%
 
 3. Do your labels explain how clones differ? (clone-level tests)
-   gc_sort explains clone states: 5.4% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 920 clones).
-   tissue explains clone states: 51.4% of clone-profile variance vs 1.8% for shuffled labels (p = 0.0005, 876 clones).
-   isotype explains clone states: 21.1% of clone-profile variance vs 0.5% for shuffled labels (p = 0.0005, 896 clones).
-   Programme differences (FDR < 0.05):
-   gc_sort: P3 enriched for 'nonGC' (24% vs 5% of clones; OR 4.94, FDR 0.0015)
-   gc_sort: P3 depleted for 'GC' (76% vs 95% of clones; OR 0.20, FDR 0.0015)
-   gc_sort: P1 enriched for 'GC' (94% vs 89% of clones; OR 2.35, FDR 0.0022)
-   gc_sort: P1 depleted for 'nonGC' (6% vs 11% of clones; OR 0.43, FDR 0.0022)
-   gc_sort: P2 depleted for 'nonGC' (3% vs 11% of clones; OR 0.38, FDR 0.013)
-   gc_sort: P2 enriched for 'GC' (97% vs 89% of clones; OR 2.60, FDR 0.013)
-   tissue: P1 depleted for 'LP' (2% vs 78% of clones; OR 0.00, FDR 0.00064)
-   tissue: P1 enriched for 'MLN' (20% vs 9% of clones; OR 3.29, FDR 0.00064)
-   tissue: P1 enriched for 'PP' (78% vs 14% of clones; OR 18.01, FDR 0.00064)
-   tissue: P2 enriched for 'LP' (68% vs 27% of clones; OR 2.12, FDR 0.00064)
-   tissue: P3 enriched for 'LP' (90% vs 24% of clones; OR 126.36, FDR 0.00064)
-   tissue: P3 depleted for 'MLN' (9% vs 16% of clones; OR 0.24, FDR 0.00064)
-   isotype: P1 depleted for 'IGHA' (40% vs 88% of clones; OR 0.06, FDR 0.00086)
-   isotype: P1 enriched for 'IGHG' (54% vs 12% of clones; OR 12.28, FDR 0.00086)
-   isotype: P1 enriched for 'IGHM' (5% vs 0% of clones; OR inf, FDR 0.00086)
-   isotype: P2 enriched for 'IGHA' (85% vs 55% of clones; OR 3.34, FDR 0.00086)
-   isotype: P2 depleted for 'IGHG' (15% vs 41% of clones; OR 0.35, FDR 0.00086)
-   isotype: P3 enriched for 'IGHA' (91% vs 57% of clones; OR 19.33, FDR 0.00086)
+   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or >= 10 cells), because small clones' profiles are pulled towards the average profile: an effect below cannot be explained by clone size alone.
+   gc_sort explains clone states: 5.4% of clone-profile variance vs 0.1% for shuffled labels (p = 0.0005, 920 clones; 44 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 17), not between independent clones.
+   tissue explains clone states: 51.4% of clone-profile variance vs 2.2% for shuffled labels (p = 0.0005, 876 clones; 88 clones without a majority level left out).
+      This label is fixed within each sample: the comparison is between samples (n = 17), not between independent clones.
+   isotype explains clone states: 21.1% of clone-profile variance vs 0.5% for shuffled labels (p = 0.0005, 896 clones; 68 clones without a majority level left out).
+   Programme differences (FDR < 0.05; odds ratios within donor x clone-size bins, with 95% intervals):
+   gc_sort: P1 depleted for 'nonGC' (6% vs 11% of clones; OR 0.32 [0.19, 0.55], FDR 0.00075)
+   gc_sort: P3 enriched for 'nonGC' (24% vs 5% of clones; OR 6.57 [3.77, 11.45], FDR 0.00075)
+   gc_sort: P2 depleted for 'nonGC' (3% vs 11% of clones; OR 0.42 [0.20, 0.91], FDR 0.023)  [unstable programme]
+   tissue: P1 depleted for 'LP' (2% vs 78% of clones; OR < 0.01 [< 0.01, < 0.01], FDR 0.00075)
+   tissue: P1 enriched for 'MLN' (20% vs 9% of clones; OR 3.56 [2.25, 5.62], FDR 0.00075)
+   tissue: P1 enriched for 'PP' (78% vs 14% of clones; OR 21.16 [13.31, 33.63], FDR 0.00075)
+   tissue: P3 enriched for 'LP' (90% vs 24% of clones; OR > 100 [67.11, > 100], FDR 0.00075)
+   tissue: P3 depleted for 'PP' (1% vs 60% of clones; OR < 0.01 [< 0.01, 0.02], FDR 0.00075)
+   tissue: P3 depleted for 'MLN' (9% vs 16% of clones; OR 0.21 [0.12, 0.39], FDR 0.00075)
+   isotype: P1 depleted for 'IGHA' (40% vs 88% of clones; OR 0.06 [0.04, 0.09], FDR 0.00086)
+   isotype: P1 enriched for 'IGHG' (54% vs 12% of clones; OR 13.28 [8.76, 20.14], FDR 0.00086)
+   isotype: P1 enriched for 'IGHM' (5% vs 0% of clones; OR > 100, FDR 0.00086)
+   isotype: P2 enriched for 'IGHA' (85% vs 55% of clones; OR 3.21 [2.16, 4.77], FDR 0.00086)  [unstable programme]
+   isotype: P2 depleted for 'IGHG' (15% vs 41% of clones; OR 0.36 [0.24, 0.53], FDR 0.00086)  [unstable programme]
+   isotype: P3 enriched for 'IGHA' (91% vs 57% of clones; OR 20.91 [11.28, 38.76], FDR 0.00086)
 
-4. Do clones keep their state over 'tissue'? (clonal memory)
-   317 clones seen at >= 2 levels: memory index 0.10 [0.04, 0.15], p = 0.002 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to a random clone).
-   Same programme at the next level: 27% of clones vs 23% expected for random clones.
+4. Do clones keep their state over 'tissue'? (clonal memory; levels in the order LP -> MLN -> PP)
+   317 clones seen at >= 2 levels: memory index 0.03 [-0.02, 0.09], p = 0.018 (1 = clones stay as distinct as they were, 0 = no more similar to their earlier self than to another clone of its donor seen at the same levels; sampling noise can put it outside 0-1).
+   Same programme at the next level: 27% of clones vs 26% expected for other clones seen at the same levels.
 
 Per-cell programme labels: adata.obs['clone_programme']; per-clone table: result.clones.

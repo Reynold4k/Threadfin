@@ -70,51 +70,61 @@ conda create -n threadfin -c conda-forge --override-channels python=3.11 pip -y
 conda activate threadfin
 
 # 2. Threadfin and Dandelion from PyPI, and Jupyter
-pip install threadfin "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
+pip install "threadfin>=4.6.0" "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
 
-# 3. make the environment available as a Jupyter kernel (with a fixed hash seed, see below)
-python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)" --env PYTHONHASHSEED 0
+# 3. make the environment available as a Jupyter kernel
+python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)"
 
 # 4. get this notebook (or clone the whole repository: git clone https://github.com/Reynold4k/Threadfin)
 curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/05_end_to_end_tutorial.ipynb
 jupyter lab 05_end_to_end_tutorial.ipynb
 ```
 
-The same environment can be created from [`environment.yml`](environment.yml), which also lists the kernel
-command of step 3:
+The same environment can be created from [`environment.yml`](environment.yml) instead of steps 1–3:
 
 ```bash
 curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/environment.yml
 conda env create -f environment.yml
+conda activate threadfin
+python -m ipykernel install --user --name threadfin --display-name "Python (threadfin)"
+```
+
+then step 4.
+
+To reproduce the outputs below exactly, install every package at the version this notebook was executed with
+from [`requirements-lock.txt`](requirements-lock.txt) instead of step 2 (tested on Linux with Python 3.11):
+
+```bash
+curl -LO https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/requirements-lock.txt
+pip install -r requirements-lock.txt
 ```
 
 **Why.**
 
 * *An isolated environment* keeps the package versions this tutorial was tested with (listed in the last
   cell) and keeps Threadfin's dependencies from changing packages that other projects rely on.
-* *`matplotlib<3.9`* is needed by Dandelion 0.5.7, which imports nxviz, which uses a matplotlib function removed
-  in version 3.9 (`matplotlib.cm.get_cmap`); neither package's metadata says so, so pip would otherwise install a
-  newer matplotlib and `import dandelion` would fail. Threadfin itself works with matplotlib 3.7 and later.
+* *`matplotlib<3.9`* keeps the version range used for this tutorial. Dandelion 0.5.7 imports nxviz, which uses
+  `matplotlib.cm.get_cmap`, a function removed in matplotlib 3.9. Importing Threadfin restores it, so with
+  matplotlib 3.9 or later, import Threadfin before Dandelion.
 * *`sc-dandelion==0.5.7`* is the version the tutorial and the manuscript used. Dandelion 1.0 (October 2026)
   calls clones differently (on these data about 7,200 instead of 8,700 clones), so the numbers below would not
   match; Threadfin warns when it finds Dandelion 1.x.
-* *Python 3.11* is the version the manuscript analyses used. Threadfin supports 3.10–3.14, Dandelion 0.5 only
-  3.10–3.12 (matplotlib < 3.9 has no packages for later versions).
+* *Python 3.11* is the version the manuscript analyses used. Threadfin and its Dandelion extra support
+  Python 3.10–3.14.
 * *`--override-channels`* takes every conda package from conda-forge only, so conda never consults Anaconda's
   own channels (whose terms of service newer conda versions ask you to accept).
 * *Dandelion* is only needed to define clones. If you already have clone ids (one per cell), you can skip it
   and put them in `adata.obs["clone_id"]`.
-* *`--env PYTHONHASHSEED 0`* makes clone calling reproducible. Dandelion's clone assignment depends on the
-  order in which Python iterates over sets of sequences, and that order is randomised in every new Python
-  session unless `PYTHONHASHSEED` is fixed. Without it, repeated runs of this notebook give a few clones
-  more or fewer (for example 8,729 or 8,731 clones) and slightly different downstream numbers; the
-  conclusions do not change. The first code cell reports whether the seed is set.
+* *Reproducible clone calls need no setting.* Dandelion's clone assignment depends on Python's string-hash
+  seed, which is random in every new Python session; Threadfin calls clones under seed 0 in every session
+  (in a separate Python process when the kernel was not started with `PYTHONHASHSEED=0`), so every run of this
+  notebook gives exactly the numbers shown here.
 * No GPU, R or compiler is needed.
 
 *If `pip install` fails on a cluster, check that you are inside the activated environment (`which python`
 should point into it). If `import dandelion` fails with "cannot import name 'get_cmap'", run
-`pip install "matplotlib<3.9"`. If `sc.pp.neighbors` (Step 8) fails with "'csr_array' object has no attribute
-'getnnz'", the environment has pynndescent 0.7, whose output scanpy cannot yet read: run
+`import threadfin` before `import dandelion`. If `sc.pp.neighbors` (Step 8) fails with "'csr_array' object has
+no attribute 'getnnz'", the environment has pynndescent 0.7, whose output scanpy cannot yet read: run
 `pip install "pynndescent<0.7"` (Threadfin 4.5.3 and later install it).*
 
 **What to look for.** The next cell should print the versions without errors.
@@ -122,7 +132,6 @@ should point into it). If `import dandelion` fails with "cannot import name 'get
 
 code(r"""
 import importlib
-import os
 import platform
 import sys
 import warnings
@@ -139,10 +148,8 @@ with warnings.catch_warnings():               # silence import-time notices of t
         print(f"{module:12s} {version(dist)}")
 
 import threadfin as tf
-assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 5, 3), "this tutorial needs threadfin >= 4.5.3"
-seed = os.environ.get("PYTHONHASHSEED")
-print(f"\nPYTHONHASHSEED = {seed}" if seed is not None else
-      "\nPYTHONHASHSEED is not set: clone calls may differ slightly between runs (see Step 0)")
+assert tuple(int(x) for x in tf.__version__.split(".")[:3]) >= (4, 6, 0), (
+    "this tutorial needs threadfin >= 4.6.0: run pip install -U threadfin")
 """)
 
 md(r"""
@@ -442,10 +449,11 @@ two** cells: a clone seen once has no second cell to compare, so it cannot answe
 share a state. Clones of two or three cells are kept — Threadfin shrinks their profiles instead of
 discarding them (Step 9). Expect about 8,700 clones, of which about 1,880 have ≥ 2 cells (the manuscript
 analysed 1,887), a log line saying that about 5,300 cells without a heavy chain were left without a clone, and
-one saying that about 150 contigs were renamed because their barcode occurs in two tubes. With `PYTHONHASHSEED=0` (Step 0) you get exactly the clone numbers shown here; without it, a few clones
-more or fewer. From Step 9 on, the automatically chosen map settings and the bootstrap stabilities can differ
-slightly between computers (different CPUs and numerical libraries); the clones, the programmes' sizes and the
-conclusions do not.
+one saying that about 150 contigs were renamed because their barcode occurs in two tubes. Every run gives
+exactly the clone numbers shown here: Threadfin calls clones under Python's hash seed 0 whatever the kernel's
+own seed. From Step 9 on, the automatically chosen map settings and the bootstrap stabilities can differ
+slightly between computers (different CPUs, numbers of threads and numerical libraries); the clones, the
+programmes' sizes and the conclusions do not.
 """)
 
 code(r"""
@@ -502,6 +510,9 @@ clonal programmes with bootstrap stability, and clone-level tests of the annotat
   *sampling context*). The context must be a nuisance variable. Here the `sample` column (mouse × gate)
   would be wrong, because centring on it would subtract exactly the gate differences we want to test.
   Rule of thumb: use the donor, or a technical batch, as the context — never a variable you want to study.
+* `strata_key="sample"`: the coherence test shuffles clone labels within each mouse × gate population, the
+  unit in which cells were sorted and sequenced. Cells of one clone are sequenced together, so shuffling across
+  a mouse's gates would count the differences between the gates as clonal (Step 11 shows how much).
 * `basis="X_threadfin"`: the embedding from Step 8.
 * `test=[...]`: annotations to test against the clone profiles afterwards. They are **not** used to build
   the profiles.
@@ -510,9 +521,9 @@ clonal programmes with bootstrap stability, and clone-level tests of the annotat
 on its mouse; each cell is averaged with its 15 nearest cells (to de-noise small clones); the cells are
 mapped into 256 random Fourier features of a Gaussian kernel, whose mean over a clone's cells (a *kernel
 mean embedding*) describes the clone's whole distribution of states — so a clone split between two states
-differs from a clone sitting between them; finally, the profile is **shrunk** towards the mouse average in
-proportion to how few cells were sampled (best linear unbiased prediction). Clones of two cells therefore
-count, but weigh less.
+differs from a clone sitting between them; finally, the profile is **shrunk** towards the average profile of
+all profiled clones, the more the fewer cells were sampled (best linear unbiased prediction). Clones of two
+cells therefore count, but weigh less.
 
 **What to look for.** The run prints each step; it takes a few minutes, mostly the automatic choice of the
 clone-map layout.
@@ -523,6 +534,7 @@ result = tf.run(
     adata,
     donor_key="donor",
     sample_key="donor",
+    strata_key="sample",
     basis="X_threadfin",
     test=["division_gate", "rbd_bait", "zone_gate"],
     random_state=0,
@@ -536,16 +548,25 @@ md(r"""
 
 **How to read it.**
 
-1. **Clonal coherence** — the share of transcriptional variance explained by clone identity (an intraclass
-   correlation, ICC), next to what shuffled clone labels give. If the observed value is far above the
-   shuffled one, cells of a clone share their state more than chance.
+1. **Clonal coherence** — the share of the variance of cell states (the expression embedding) explained by
+   clone identity (an intraclass correlation, ICC), next to what clone labels shuffled within each mouse × gate
+   population give, and the difference in percentage points. If the observed value is far above the shuffled
+   one, cells of a clone share their state more than chance.
 2. **Reliability** — a profile's expected squared correlation with the true profile; the report says how many
-   cells a clone needs to reach 0.5. Nothing is filtered on reliability.
-3. **Clonal programmes** — groups of clones with similar profiles. Look at their **stability** (mean
-   bootstrap Jaccard index): ≥ 0.75 is stable, < 0.6 should not be interpreted. Unstable programmes suggest that the
-   clones vary continuously rather than falling into groups.
+   cells a clone's (smoothed) profile needs to reach 0.5. For smoothed cells the value is slightly optimistic.
+   Nothing is filtered on reliability.
+3. **Clonal programmes** — groups of clones with similar profiles, kept where a split passes a test against one
+   Gaussian group. Look at their **stability** (mean bootstrap Jaccard index): ≥ 0.75 is stable, < 0.6 should
+   not be interpreted, and the summary marks such programmes, also on the lines of the label tests. An unstable
+   programme is not reproduced when the cells are resampled; that alone does not show whether the clones vary
+   continuously.
 4. **Clone-level tests** — for each annotation, how much of the variation between clone profiles it
-   explains (R²) and its permutation P value.
+   explains (R²) and its permutation P value; for programmes, odds ratios within mice and clone-size bins,
+   with 95% intervals. Labels are shuffled among clones of the same mouse and of similar size, so clone size
+   alone cannot create an effect. The three gate labels are each fixed within a mouse × gate population (the
+   strata of Step 9), which is also a sorting and sequencing unit, so the summary notes that their comparison
+   is between populations, not between independent clones; Step 13 shows how the design nonetheless separates
+   division from the sequencing tube.
 """)
 
 code(r"""
@@ -553,38 +574,45 @@ print(result.summary())
 """)
 
 md(r"""
-## Step 11 — Clonal coherence, tested within each mouse × gate
+## Step 11 — Why the strata of the coherence test matter
 
-**What.** Repeat the coherence test with clone labels shuffled **within each mouse × gate population**
-(`strata_key="sample"`), as in the manuscript, with 500 permutations.
+**What.** Repeat the coherence test with 500 permutations, once with clone labels shuffled **within each
+mouse** (`strata_key="donor"`) and once **within each mouse × gate population** (`strata_key="sample"`, as
+`tf.run` did in Step 9 and as in the manuscript).
 
 **Why.** The null distribution should keep everything about how cells were sampled and change only which
-clone a cell belongs to. Shuffling within mouse × gate keeps each sorted population's composition, so gate
-differences cannot masquerade as clonal coherence. This is stricter than shuffling within mice.
+clone a cell belongs to. Each mouse × gate population was sorted and sequenced as one unit, and cells of one
+clone are sequenced together. Shuffling within mice moves clone labels across gates, so the differences
+between the gates' cell states count as clonal; shuffling within mouse × gate keeps each sorted population's
+composition, so gate differences cannot masquerade as clonal coherence.
 
-**What to look for.** The observed ICC (manuscript: 0.17 for this dataset) well above the permutation mean
-and its 95th percentile; with 500 permutations the smallest possible P value is 1/501 ≈ 0.002.
+**What to look for.** The observed ICC is the same in both lines (manuscript: 0.17 for this dataset). The
+shuffled ICC is several times larger within mouse × gate than within mice, so the excess, the part of the
+variance that clone identity explains beyond the sampling design, is smaller with the right strata, and still
+far above the shuffled value. With 500 permutations the smallest possible P value is 1/501 ≈ 0.002.
 """)
 
 code(r"""
-coherence = tf.tl.clonal_coherence(adata, strata_key="sample", n_perm=500, random_state=0)
-print({k: round(v, 4) if isinstance(v, float) else v for k, v in coherence.items()
-       if k in ("icc", "null_mean", "null_q95", "excess", "p_value", "n_clones", "n_cells")})
+for strata in ["donor", "sample"]:             # "sample" last, so adata.uns keeps the test with the right strata
+    c = tf.tl.clonal_coherence(adata, strata_key=strata, n_perm=500, random_state=0, verbose=False)
+    print(f"shuffled within {strata!r:9}: ICC {c['icc']:.3f}, shuffled {c['null_mean']:.3f} "
+          f"(95th percentile {c['null_q95']:.3f}), excess {c['excess']:.3f}, P = {c['p_value']:.3g}")
 """)
 
 md(r"""
 ## Step 12 — The clone map
 
 **What.** Draw the overview figure, then the clone map coloured by the fraction of each clone's cells that
-had recently divided. Panel b of the overview shows the coherence test of `result` (Step 10), not the
-additional test of Step 11.
+had recently divided. Panel b of the overview shows the coherence test of `result` (Step 10: 200 permutations
+within mouse × gate), not the tests of Step 11.
 
 **How to read a clone map.** One dot is one clone; dot size grows with the number of cells sampled. Clones
 close together have similar *distributions* of cell states. The map is a display: no statistic uses its
-coordinates, and proximity does **not** mean shared ancestry or a direction of differentiation.
+coordinates, and proximity does **not** mean shared ancestry or a direction of differentiation. The layout is
+chosen to stay connected, so the map itself does not show whether clones form groups.
 
-**What to look for.** A gradient of the recently divided fraction across the map — clones are not split into
-"dividing" and "resting" groups, they vary continuously.
+**What to look for.** A gradient of the recently divided fraction across the map: clones differ in how many of
+their cells recently divided. Step 14 follows this along the main axis of the profiles.
 """)
 
 code(r"""
@@ -610,7 +638,7 @@ md(r"""
 
 **What.** `tf.tl.profile_association` asks how much of the variation between clone profiles is explained by
 a clone-level annotation (here: the fraction of a clone's cells in a gate), and compares it with 2,000
-random re-assignments of the annotation among clones **of the same mouse**. We test recent division in all
+random re-assignments of the annotation among clones **of the same mouse and of similar size**. We test recent division in all
 mice and in each cohort separately, RBD-bait binding in the protein cohort, and the dark-zone gate in the mRNA
 cohort.
 
@@ -620,7 +648,8 @@ re-assignment gives; `excess_r2 = r2 − null_mean`; `p_value` is the permutatio
 describes the whole transcriptome.
 
 **The library caveat — read this before interpreting.** Each gate was sorted into its own sequencing tube,
-so a gate effect could also be a tube effect. For **division**, the design crosses tubes between cohorts
+so a gate effect could also be a tube effect, and the summary of Step 10 flags the gate labels as fixed
+within each sorted population. For **division**, the design crosses tubes between cohorts
 (Step 4): a tube effect would push the profiles in *opposite* directions in the two cohorts, a division
 effect in the *same* direction. We check that with the cosine similarity of the two cohorts' division
 directions (manuscript: 0.89; a pure tube effect would give −1). **RBD-bait** and **dark-zone** gates were
@@ -670,9 +699,9 @@ groups (deciles) along it, and plot the mean fraction of recently divided cells 
 the analysis behind Figure 4d of the manuscript. PC1 is oriented so that it increases with a dark-zone /
 cycling gene score.
 
-**Why.** Programme labels are unstable here (Step 10), so instead of groups we look at the dominant
-continuous axis of variation between clones and ask what it tracks. The gene score only orients the axis;
-the division gate was never used to compute it.
+**Why.** Programme labels are unstable here (Step 10), so instead of groups we look at the main axis of
+variation between clone profiles and ask what it tracks. The gene score only orients the axis; the division
+gate was never used to compute it.
 
 **What to look for.** In both cohorts the recently divided fraction rises from about 0.1 in the lowest decile
 to 0.7–0.9 in the highest, most of the rise within the first three deciles (as in the manuscript).
@@ -712,13 +741,14 @@ in profile space (Moran's I, `tf.tl.landscape_genes`), and split the genes that 
 by the direction in which they change along its main axis (`corr_axis1`).
 
 **Why.** Programmes are unstable here (Step 10), so programme markers would describe unstable groups.
-`landscape_genes` needs no groups: it names the genes that vary along the continuum of clones. The profiles
-are built from the same expression, so this describes the landscape; it is not an independent test.
+`landscape_genes` needs no groups: it names the genes that vary across the landscape of clone profiles. The
+profiles are built from the same expression, so this describes the landscape; it is not an independent test.
 
 **What to look for.** One end of the main axis carries dark-zone and cell-cycle genes (*Mki67*, *Top2a*,
 *Hmgb2*), the other genes of B cells outside the dark zone, resting or activated (*Fcer2a*, *Cd83*, *Bank1*,
 *Cd74*): the axis that follows division history in Step 14. With almost 2,000 clones most expressed genes
-pass FDR < 0.05, so read Moran's I (here at least 0.3) rather than the number of significant genes.
+pass FDR < 0.05, and the FDR is descriptive when clone sizes differ, so read Moran's I (here at least 0.3)
+rather than the number of significant genes.
 """)
 
 code(r"""
@@ -771,15 +801,17 @@ md(r"""
   BCR barcodes matched; if your experiment truly sampled few cells per clone, coherence can still be tested
   but programmes may not be defined.
 * *Which column should be the context (`sample_key`)?* A nuisance variable: the donor, or a technical batch.
-  Never a tissue, time point, sort gate or treatment that you want to compare between clones.
+  Never a tissue, time point, sort gate or treatment that you want to compare between clones. When the context
+  is coarser than the units in which cells were sorted and sequenced, name those units as `strata_key`, as in
+  Step 9.
 * *Are programmes cell types?* No. A programme is a group of clones with similar distributions of states; use
-  stability to decide whether it is a group at all.
+  its stability to decide whether it is reproducible enough to interpret.
 """)
 
 code(r"""
 print("threadfin", version("threadfin"), "| sc-dandelion", version("sc-dandelion"), "| scanpy", version("scanpy"),
       "| anndata", version("anndata"), "| python", sys.version.split()[0],
-      "| PYTHONHASHSEED", os.environ.get("PYTHONHASHSEED"))
+      "| dandelion_hash_seed", clone_ids.attrs.get("dandelion_hash_seed"))
 """)
 
 for i, cell in enumerate(cells):                 # nbformat 4.5 requires a unique id per cell

@@ -35,12 +35,12 @@ Trust the code,Tests run on every change,clone2vec,1,GitHub Actions tests.yml
 Trust the code,Tests run on every change,Benisse,0,no continuous integration
 Trust the code,Tests run on every change,CoNGA,0,no continuous integration
 Trust the code,Tests run on every change,scirpy,1,"GitHub Actions (tests, tutorials, conda build)"
-Trust the code,Same result when re-run,Threadfin,1,identical clone maps and programmes with 1 and 8 processes and with the released 4.3.1 (this benchmark)
-Trust the code,Same result when re-run,Clonotrace,1,"clone distances identical with one and four R sessions (49,455 and 648,091 pairs; this benchmark)"
-Trust the code,Same result when re-run,clone2vec,,assessed from the runs with 1-16 cores (filled by make_overview.py)
-Trust the code,Same result when re-run,Benisse,,assessed from the runs with 1-16 cores (filled by make_overview.py)
-Trust the code,Same result when re-run,CoNGA,,not assessed (only CoNGA's clone-reduction rule was used)
-Trust the code,Same result when re-run,scirpy,,not assessed
+Trust the code,Same result with more cores,Threadfin,1,identical clone maps and programmes with 1 and 8 processes and with the released 4.3.1 (this benchmark)
+Trust the code,Same result with more cores,Clonotrace,1,"clone distances identical with one and four R sessions (49,455 and 648,091 pairs; this benchmark)"
+Trust the code,Same result with more cores,clone2vec,,assessed from the runs with 1-16 cores (filled by make_overview.py)
+Trust the code,Same result with more cores,Benisse,,assessed from the runs with 1-16 cores (filled by make_overview.py)
+Trust the code,Same result with more cores,CoNGA,,not assessed (only CoNGA's clone-reduction rule was used)
+Trust the code,Same result with more cores,scirpy,,not assessed
 Learn it,Step-by-step tutorial,Threadfin,1,"notebook that downloads public data and runs end to end, tested in a clean environment (docs/tutorials)"
 Learn it,Step-by-step tutorial,Clonotrace,1,vignette on the pkgdown site
 Learn it,Step-by-step tutorial,clone2vec,1,tutorials on Read the Docs

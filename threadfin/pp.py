@@ -2,7 +2,8 @@
 
 Why a dedicated step: in B cells, immunoglobulin (IG) transcripts are the
 receptor itself. Every cell of a clone expresses the same IGHV/IGKV/IGLV
-genes and, after class switching, the same constant-region gene. If those
+genes, and its cells share constant-region genes (one isotype, or a few after
+class switching within the clone). If those
 transcripts enter the highly-variable-gene set, clonally related cells look
 similar *because they share a receptor*, not because they share a state —
 which inflates every downstream clone-state statistic, and makes isotype
@@ -13,6 +14,7 @@ useless as an independent validation label. :func:`ig_gene_mask` and
 from __future__ import annotations
 
 import re
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -161,8 +163,6 @@ def prepare_embedding(
         )
     sample = values[: 200_000] if values.size > 200_000 else values
     if sample.size and not np.allclose(sample, np.round(sample)):
-        import warnings
-
         warnings.warn(
             f"{'adata.layers[' + repr(counts_layer) + ']' if counts_layer else 'adata.X'} does not look like raw counts "
             "(it has non-integer values). Threadfin normalises and log-transforms the counts itself, so normalised "
@@ -178,13 +178,20 @@ def prepare_embedding(
             "(adata.var_names itself is unchanged)", verbose)
     tmp = sc.AnnData(X=counts.copy(), obs=adata.obs[[]].copy(), var=pd.DataFrame(index=genes))
     if batch_key is not None:
-        tmp.obs[batch_key] = adata.obs[batch_key].astype(str).values
+        tmp.obs[batch_key] = pd.Categorical(adata.obs[batch_key].astype(str).values)
     sc.pp.normalize_total(tmp, target_sum=1e4)
     sc.pp.log1p(tmp)
     adata.layers["log_norm"] = tmp.X.copy()
 
     receptor = ig_gene_mask(tmp.var_names, constant=True, tr_genes=True)
     adata.var["threadfin_receptor_gene"] = receptor
+    if exclude_receptor_genes and receptor.sum() < 20 and tmp.n_vars >= 5000:
+        warnings.warn(
+            f"Only {int(receptor.sum())} immunoglobulin/TCR genes were recognised among {tmp.n_vars:,} genes, so "
+            "receptor genes may stay in the embedding. Threadfin recognises gene symbols (IGHG1, IGKC, TRBC2 ...): if "
+            "adata.var_names hold other identifiers (e.g. Ensembl ids), set them to symbols first, e.g. "
+            "adata.var_names = adata.var['gene_symbols']. Ignore this if the receptor genes were removed beforehand.",
+            UserWarning, stacklevel=2)
     pool = tmp[:, ~receptor] if exclude_receptor_genes else tmp
     if pool.n_vars == 0:
         raise ValueError(
@@ -225,7 +232,7 @@ def prepare_embedding(
     n_comps_used = min(int(n_comps), max_comps)
     sc.tl.pca(sub, n_comps=n_comps_used, random_state=random_state)
     adata.obsm["X_pca"] = sub.obsm["X_pca"]
-    adata.uns["threadfin_pca_variance_ratio"] = sub.uns["pca"]["variance_ratio"]
+    pca_variance_ratio = np.asarray(sub.uns["pca"]["variance_ratio"])
 
     emb = sub.obsm["X_pca"]
     if integrate == "harmony" and batch_key is not None:
@@ -244,10 +251,12 @@ def prepare_embedding(
     adata.obsm[key_added] = np.ascontiguousarray(emb, dtype=np.float32)
     adata.uns.setdefault("threadfin", {})["prepare_embedding"] = {
         "batch_key": batch_key,
+        "counts_layer": counts_layer,
         "n_top_genes": int(n_top_genes),
         "n_comps": int(n_comps_used),
         "exclude_receptor_genes": bool(exclude_receptor_genes),
         "integrate": integrate if batch_key is not None else None,
         "key_added": key_added,
+        "pca_variance_ratio": pca_variance_ratio,
     }
     return adata

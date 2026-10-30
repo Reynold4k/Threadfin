@@ -1,0 +1,170 @@
+{
+ "dataset": "covid_bcell",
+ "name": "GSE171703 SARS-CoV-2 bait-sorted B cells",
+ "threadfin_run": "4.6.0",
+ "threadfin_drawn": "4.6.0",
+ "record": {
+  "cells": 61423,
+  "clones_ge2": 588,
+  "icc": 0.40028924112303604,
+  "icc_shuffled": 0.05204689744130857,
+  "p_value": 0.004975124378109453,
+  "programmes": 1,
+  "test": [
+   "antigen_call",
+   "isotype"
+  ],
+  "skipped": {}
+ },
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "visit",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
+ "figures": [
+  {
+   "name": "overview",
+   "file": "overview.png",
+   "title": "Overview (`result.plot()`)",
+   "shows": "The figure that `result.plot()` saves: (a) clonal programmes on the clone map, (b) clonal coherence, (c) programme stability, (d) programme sizes.",
+   "dpi": 300,
+   "bytes": 188422,
+   "width": 2204,
+   "height": 1438,
+   "seconds": 0.7
+  },
+  {
+   "name": "coherence",
+   "file": "coherence.png",
+   "title": "Clonal coherence",
+   "shows": "Share of transcriptional variance explained by clone identity (clonal ICC), observed and with clone labels shuffled within each `donor x sample` (bar: mean of 200 permutations; whisker: their central 95 %).",
+   "dpi": 300,
+   "bytes": 32006,
+   "width": 662,
+   "height": 668,
+   "seconds": 0.1
+  },
+  {
+   "name": "clone_map_clone_size",
+   "file": "clone_map_clone_size.png",
+   "title": "Clone map: clone size",
+   "shows": "The clone map coloured by the number of cells of each clone.",
+   "dpi": 300,
+   "bytes": 97117,
+   "width": 908,
+   "height": 770,
+   "seconds": 0.3
+  },
+  {
+   "name": "clone_map_reliability",
+   "file": "clone_map_reliability.png",
+   "title": "Clone map: profile reliability",
+   "shows": "The clone map coloured by the reliability of each clone's profile (0 to 1; it grows with the number of cells sampled from the clone).",
+   "dpi": 300,
+   "bytes": 110081,
+   "width": 931,
+   "height": 770,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_donor",
+   "file": "clone_map_donor.png",
+   "title": "Clone map: donor",
+   "shows": "The clone map coloured by donor, one panel per donor, every other clone in grey.",
+   "dpi": 200,
+   "bytes": 765120,
+   "width": 1104,
+   "height": 2821,
+   "seconds": 6.3
+  },
+  {
+   "name": "clone_map_antigen_call",
+   "file": "clone_map_antigen_call.png",
+   "title": "Clone map: antigen_call",
+   "shows": "The clone map coloured by `antigen_call`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 230217,
+   "width": 1657,
+   "height": 1034,
+   "seconds": 0.6
+  },
+  {
+   "name": "clone_map_isotype",
+   "file": "clone_map_isotype.png",
+   "title": "Clone map: isotype",
+   "shows": "The clone map coloured by `isotype`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 188161,
+   "width": 1657,
+   "height": 578,
+   "seconds": 0.4
+  },
+  {
+   "name": "label_effects",
+   "file": "label_effects.png",
+   "title": "Label effects",
+   "shows": "For each tested label, the share of the variance between clone profiles that it explains (blue) and the same with the label shuffled among clones of the same donor and of similar size (grey), with the permutation P value.",
+   "dpi": 300,
+   "bytes": 30625,
+   "width": 1420,
+   "height": 527,
+   "seconds": 0.1
+  },
+  {
+   "name": "memory_visit",
+   "file": "memory_visit.png",
+   "title": "Clonal memory over visit",
+   "shows": "How much a clone's profile changes between levels of `visit`, against other clones of the same donor seen at the same two levels; the title gives the memory index with its 95 % CI.",
+   "dpi": 300,
+   "bytes": 32064,
+   "width": 788,
+   "height": 622,
+   "seconds": 0.1
+  },
+  {
+   "name": "heritability",
+   "file": "heritability.png",
+   "title": "Gene heritability",
+   "shows": "Clonal ICC of every gene expressed in at least 5 % of the cells of clones with two or more cells (receptor genes excluded), by rank; the 12 highest are named (`tl.gene_heritability` with its defaults).",
+   "dpi": 300,
+   "bytes": 75346,
+   "width": 981,
+   "height": 730,
+   "seconds": 0.4
+  },
+  {
+   "name": "cells_antigen_call",
+   "file": "cells_antigen_call.png",
+   "title": "Cells: antigen_call",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `antigen_call`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 377161,
+   "width": 2120,
+   "height": 1120,
+   "seconds": 1.0
+  },
+  {
+   "name": "cells_isotype",
+   "file": "cells_isotype.png",
+   "title": "Cells: isotype",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `isotype`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 193170,
+   "width": 2031,
+   "height": 562,
+   "seconds": 0.6
+  }
+ ],
+ "not_drawn": [],
+ "seconds": 23.7
+}

@@ -198,6 +198,8 @@ def test_overview_is_drawn_when_no_programmes_were_found():
     adata = tf.sim.simulate_repertoire(random_state=0, n_clones=200)
     res = tf.run(adata, basis="X_pca", donor_key="donor", sample_key="context", n_perm=10, n_boot=3, verbose=False)
     assert res.programmes.empty
+    # the summary gives the reason (here too few bootstrap replicates or too few clones), not a generic line
+    assert "No programmes: " + res.skipped["clonal programmes"] in res.summary()
     assert res.plot() is not None
 
 

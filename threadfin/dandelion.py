@@ -11,18 +11,20 @@ CSV / AIRR TSV / contig-level DataFrame for it. (Threadfin's earlier heavy-chain
 Dandelion's clone id is composite — ``B_VDJ_105_9_7_VJ_261_2_1`` — the heavy (VDJ) V/J/junction group and
 the light (VJ) group, so the pairing is visible in the label.
 
-What changes when the light chain is used. Measured on GSE286215 experiment 1 (23,259 cells):
+What changes when the light chain is used. Measured on GSE286215 experiment 1 as ``tf.run`` calls clones (the
+21,145 cells of the expression data with a heavy chain, within each of the 19 mice; sc-dandelion 0.5.7, hash seed 0):
 
 ===========================  ===========  ===========
 quantity                     heavy only   heavy+light
 ===========================  ===========  ===========
-clones                           20,100        22,351
-clones with >= 2 cells              801           616
-largest clone                     8 cells      33 cells
+clones                           20,316        20,500
+clones with >= 2 cells              650           523
+cells in those clones             1,479         1,168
+largest clone                     8 cells       8 cells
 ===========================  ===========  ===========
 
-Roughly a quarter of the analysable clone population is lost, because a clone now has to agree on both
-chains. That is the price of the stricter definition and it is reported, not hidden.
+A fifth of the clones with two or more cells are split, because a clone now has to agree on both chains. That is
+the price of the stricter definition and it is reported, not hidden.
 
 Not every deposit carries a light chain — GSE175522 (influenza vaccine) is heavy only — so
 ``use_light_chain`` is a parameter rather than an assumption, and the setting is recorded in the result so
@@ -30,23 +32,33 @@ a figure can state which definition produced it.
 
 Dandelion is an optional dependency::
 
-    pip install "threadfin[dandelion]"        # or: pip install "sc-dandelion<1" "matplotlib<3.9"
+    pip install "threadfin[dandelion]"        # or: pip install "sc-dandelion<1"
 
-Dandelion 0.5.7 imports ``matplotlib.cm.get_cmap``, which matplotlib 3.9 removed, but its package metadata
-does not pin matplotlib, so the extra pins ``matplotlib < 3.9`` for it.
+Dandelion 0.5.7 imports nxviz, which imports ``matplotlib.cm.get_cmap``; matplotlib 3.9 removed that function, and
+the matplotlib versions that still have it install on Python 3.12 at most. When matplotlib lacks it, importing
+Threadfin puts the function back (with the body it had in matplotlib 3.8), so Dandelion can be imported in any
+session that imported Threadfin, with current matplotlib and Python; nothing changes with matplotlib < 3.9.
 
-Dandelion's clone assignment depends on the order in which Python iterates over sets of sequences, which is
-randomised in every new Python session unless the environment variable ``PYTHONHASHSEED`` is fixed before
-Python starts. Repeated runs therefore differ by a few clones (GSE287123: 8,729 or 8,731 clones from the same
-contigs). Set ``PYTHONHASHSEED=0`` (for a Jupyter kernel: ``python -m ipykernel install ... --env
-PYTHONHASHSEED 0``) when clone ids must be reproducible; the value in use is recorded in the result.
+Reproducible clone calls. Dandelion's clone assignment iterates over Python sets of sequences and of V/J groups, so
+it depends on Python's string-hash seed. That seed is random in every new Python session unless the environment
+variable ``PYTHONHASHSEED`` is set before Python starts, and it cannot be changed in a running session. On the
+GSE287123 tutorial data (16,667 cells), sessions with other seeds gave 8,727-8,750 instead of 8,736 clones; 11-13 %
+of the clones with two or more cells changed members, and nearly every clone id changed.
+:func:`define_clones_dandelion` therefore calls clones under seed 0 by default (``hash_seed=0``): in a session
+started with ``PYTHONHASHSEED=0`` Dandelion runs in that session, as before; in any other session it runs in a
+separate Python process started with ``PYTHONHASHSEED=0`` (:mod:`threadfin._dandelion_worker`). Either way the
+clones are the same in every session, and the same as in Threadfin's validation records, which were made with
+``PYTHONHASHSEED=0``. The result records the seed (``attrs['dandelion_hash_seed']``) and whether a separate process
+was used.
 """
 
 from __future__ import annotations
 
 import contextlib
 import io
+import operator
 import os
+import sys
 import warnings
 from pathlib import Path
 
@@ -55,6 +67,9 @@ import pandas as pd
 from ._utils import log
 
 __all__ = ["define_clones_dandelion", "read_contigs"]
+
+_INSTALL_HINT = ("Clone calling needs the Dandelion package: pip install \"threadfin[dandelion]\" (or: pip install "
+                 "\"sc-dandelion<1\"). Alternatively call clones elsewhere and put the ids in adata.obs['clone_id'].")
 
 REQUIRED = ("cell_id", "v_call", "j_call", "junction")
 
@@ -97,7 +112,9 @@ def read_contigs(bcr, obs_names=None) -> pd.DataFrame:
         bcr = _contigs_from_scirpy(bcr)               # scirpy AnnData / MuData
     if isinstance(bcr, pd.DataFrame):
         t = bcr.copy()
-        if "cell_id" not in t.columns and "barcode" not in t.columns:
+        per_cell = (not {"locus", "chain"} & set(t.columns)
+                    and ("n_contigs" in t.columns or any(str(c).endswith("_light") for c in t.columns)))
+        if per_cell or ("cell_id" not in t.columns and "barcode" not in t.columns):
             raise ValueError(
                 "A per-cell BCR table cannot be used for clone definition: Threadfin's clone "
                 "definition is Dandelion's paired heavy + light definition, which needs the "
@@ -150,30 +167,104 @@ def _dandelion_version(ddl) -> str:
         return str(getattr(ddl, "__version__", "unknown"))
 
 
-def _require_dandelion():
+def _restore_get_cmap() -> None:
+    """Put back ``matplotlib.cm.get_cmap`` when it is missing.
+
+    Dandelion 0.5.x imports nxviz, which runs ``from matplotlib.cm import get_cmap`` on import. matplotlib 3.9
+    removed that function, and matplotlib < 3.9 has no packages for Python 3.13 or later, so without this Dandelion
+    cannot be imported there. The replacement is the old function's own body (matplotlib's colormap registry, plus
+    the ``lut`` argument), and nothing changes with matplotlib < 3.9, which still has the function. It is applied
+    when this module is imported (with ``import threadfin``, which imports matplotlib anyway), so that Dandelion can
+    be imported in any session that imported Threadfin: by Threadfin, by the user, or by a test.
+    """
     try:
-        with warnings.catch_warnings():
-            # Dandelion imports nxviz, which prints a long notice about its own API change on import
-            warnings.filterwarnings("ignore", message=r"\s*nxviz has a new API")
-            import dandelion as ddl
-    except ImportError as exc:  # pragma: no cover - exercised only without the optional dependency
-        raise ImportError(
-            "Clone calling needs the Dandelion package: pip install \"threadfin[dandelion]\" (or: pip install "
-            "\"sc-dandelion<1\" \"matplotlib<3.9\"; "
-            "Dandelion 0.5.7 needs matplotlib < 3.9 but does not say so). Alternatively call clones elsewhere and "
-            "put the ids in adata.obs['clone_id']."
-        ) from exc
-    major = _dandelion_version(ddl).split(".")[0]
+        import matplotlib
+        import matplotlib.cm
+        import matplotlib.colors
+    except ImportError:  # pragma: no cover - matplotlib is a dependency of Threadfin
+        return
+    if hasattr(matplotlib.cm, "get_cmap"):
+        return
+
+    def get_cmap(name=None, lut=None):
+        """``matplotlib.cm.get_cmap`` as in matplotlib < 3.9 (restored by Threadfin for Dandelion 0.5.x/nxviz)."""
+        if isinstance(name, matplotlib.colors.Colormap):
+            return name
+        cmap = matplotlib.colormaps.get_cmap(name)        # None: the default colormap, as before
+        return cmap if lut is None else cmap.resampled(lut)
+
+    matplotlib.cm.get_cmap = get_cmap
+
+
+_restore_get_cmap()
+
+
+def _import_dandelion():
+    """Import Dandelion (sc-dandelion), with matplotlib >= 3.9 as well."""
+    _restore_get_cmap()
+    with warnings.catch_warnings():
+        # Dandelion imports nxviz, which prints a long notice about its own API change on import
+        warnings.filterwarnings("ignore", message=r"\s*nxviz has a new API")
+        import dandelion as ddl
+    return ddl
+
+
+def _warn_if_unvalidated(version: str, stacklevel: int) -> None:
+    major = version.split(".")[0]
     if major.isdigit() and int(major) >= 1:
         from . import __version__
 
         warnings.warn(
-            f"sc-dandelion {_dandelion_version(ddl)} is installed; Threadfin {__version__} is validated with "
+            f"sc-dandelion {version} is installed; Threadfin {__version__} is validated with "
             "sc-dandelion 0.5.x. Dandelion 1.0 calls clones differently (on the GSE287123 tutorial data: 7,208 "
             "instead of 8,736 clones, largest clone 494 instead of 252 cells), so results will not match the "
             "documentation or the manuscript. Install the validated version with: pip install \"sc-dandelion<1\"",
-            UserWarning, stacklevel=3)
+            UserWarning, stacklevel=stacklevel + 1)
+
+
+def _require_dandelion():
+    try:
+        ddl = _import_dandelion()
+    except ImportError as exc:  # pragma: no cover - exercised only without the optional dependency
+        raise ImportError(_INSTALL_HINT) from exc
+    _warn_if_unvalidated(_dandelion_version(ddl), stacklevel=3)
     return ddl
+
+
+def _check_dandelion_installed() -> None:
+    """Before Dandelion runs in a separate process: fail now if it is missing, and warn about an unvalidated
+    version, without importing it into this one."""
+    import importlib.util
+
+    if importlib.util.find_spec("dandelion") is None:
+        raise ImportError(_INSTALL_HINT)
+    _warn_if_unvalidated(_dandelion_version(None), stacklevel=3)
+
+
+# --------------------------------------------------------------------------------------- Python's hash seed
+# Dandelion 0.5.x numbers V/J groups, and orders the sequences it clusters, by iterating over Python sets, so its
+# clone calls depend on the string-hash seed of the process that runs it. That seed is fixed when Python starts
+# (PYTHONHASHSEED; random when unset) and cannot be changed later; sys.flags.hash_randomization is 0 exactly when
+# the interpreter was started with PYTHONHASHSEED=0.
+
+def _session_hash_seed() -> int | None:
+    """0 when this interpreter was started with PYTHONHASHSEED=0; None otherwise (a random seed, or another fixed
+    seed, which cannot be verified from inside the process)."""
+    return 0 if sys.flags.hash_randomization == 0 else None
+
+
+def _check_hash_seed(hash_seed) -> int | None:
+    if hash_seed is None:
+        return None
+    try:
+        if isinstance(hash_seed, bool):
+            raise TypeError
+        seed = operator.index(hash_seed)
+    except TypeError:
+        raise TypeError(f"hash_seed must be an integer from 0 to 4294967295, or None; got {hash_seed!r}") from None
+    if not 0 <= seed <= 4294967295:                       # the range PYTHONHASHSEED accepts
+        raise ValueError(f"hash_seed must be from 0 to 4294967295, or None; got {seed}")
+    return seed
 
 
 def _locus(contigs: pd.DataFrame) -> pd.Series:
@@ -265,6 +356,49 @@ def _unique_sequence_ids(t: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
     return t
 
 
+def _call_clones(ddl, groups, *, identity, check_contigs: bool, productive_only: bool, say=None) -> dict:
+    """Dandelion's part of :func:`define_clones_dandelion`, donor by donor: the step whose result depends on
+    Python's string-hash seed. It runs in the caller's process, or in a separate one started with a fixed seed
+    (:mod:`threadfin._dandelion_worker`); ``say`` receives the progress line of each donor."""
+    out, n_ambiguous, combined, two_heavy, with_heavy = {}, 0, set(), set(), set()
+    for donor, sub in groups:
+        if sub["cell_id"].nunique() < 2:
+            continue
+        with _quiet():
+            vdj = ddl.Dandelion(sub.reset_index(drop=True))
+        if check_contigs:
+            with _quiet(), warnings.catch_warnings():
+                warnings.simplefilter("ignore", FutureWarning)
+                # returns the Dandelion object alone, or (Dandelion, AnnData) when an AnnData is passed
+                checked = ddl.pp.check_contigs(vdj, productive_only=productive_only, verbose=False)
+            vdj = checked[0] if isinstance(checked, tuple) else checked
+            n_ambiguous += int(vdj.data["ambiguous"].astype(str).eq("T").sum()) if "ambiguous" in vdj.data else 0
+        # find_clones ignores contigs flagged ambiguous, so a cell whose heavy chains were all set aside has
+        # no heavy chain left to call a clone on
+        kept = vdj.data if "ambiguous" not in vdj.data else vdj.data[vdj.data["ambiguous"].astype(str) != "T"]
+        with_heavy.update(_cells_with_heavy_chain(kept))
+        heavy = kept[_locus(kept).isin(VDJ_LOCI).to_numpy()].drop_duplicates(["cell_id", "v_call", "j_call", "junction_aa"])
+        n_heavy = heavy.groupby("cell_id").size()
+        two_heavy.update(n_heavy.index[n_heavy >= 2].astype(str))
+        with _quiet():
+            ddl.tl.find_clones(vdj, identity=identity, verbose=False)
+        # a cell Dandelion could not place (e.g. all its heavy chains set aside by the check) gets an empty id
+        clone_ids = vdj.data["clone_id"]
+        called = vdj.data[clone_ids.notna() & clone_ids.astype(str).str.strip().ne("")]
+        per_cell = called.groupby("cell_id")["clone_id"].first()
+        # Dandelion joins the clones of a cell with two productive chains of one kind ("a|b")
+        combined.update(per_cell.index[per_cell.astype(str).str.contains("|", regex=False)].astype(str))
+        prefix = "" if donor is None else f"{donor}|"
+        for cell, clone in per_cell.items():
+            out[str(cell)] = f"{prefix}{clone}"
+        if say is not None and donor is not None:
+            say(f"  {donor}: {per_cell.nunique()} clones over {len(per_cell)} cells")
+    # find_clones adds Dandelion's default for a chain type missing from an identity dict; returned so that the
+    # caller records the identity actually used when this ran in a separate process
+    return {"clone_ids": out, "n_ambiguous": n_ambiguous, "combined": combined, "two_heavy": two_heavy,
+            "with_heavy": with_heavy, "identity": identity}
+
+
 def define_clones_dandelion(
     contigs: pd.DataFrame,
     *,
@@ -277,6 +411,7 @@ def define_clones_dandelion(
     check_contigs: bool = False,
     out_col: str = "clone_id",
     verbose: bool = True,
+    hash_seed: int | None = 0,
 ) -> pd.Series:
     """Call clones with Dandelion and return one clone id per cell.
 
@@ -317,15 +452,29 @@ def define_clones_dandelion(
         counts (``umi_count`` or ``duplicate_count``); without them every cell with two chains of one kind is
         set aside. Read counts (``consensus_count``) break ties and are replaced by the UMI count when absent.
         ``False`` (default, as in the manuscript) calls clones on all productive contigs.
+    hash_seed
+        Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
+        sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
+        clones in every Python session, those of Threadfin's documentation and validation records: if this
+        session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
+        (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+        temporary file). Another integer calls the clones under that seed, always in a separate process, to see
+        how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
+        and earlier did; clone ids are then reproducible only between sessions started with the same
+        ``PYTHONHASHSEED``.
 
     Returns
     -------
     Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts (with
     ``n_cells_with_combined_id``, the cells with two productive chains of one kind, and
-    ``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), and the
-    ``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
-    sessions, see the module notes).
+    ``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), ``dandelion_hash_seed`` (the
+    string-hash seed the clones were called under; ``None`` only with ``hash_seed=None`` in a session not started
+    with ``PYTHONHASHSEED=0``), ``dandelion_subprocess`` (``True`` when Dandelion ran in a separate process) and
+    ``python_hash_seed`` (this session's ``PYTHONHASHSEED`` environment variable, ``None`` when unset).
     """
+    hash_seed = _check_hash_seed(hash_seed)
+    # in a separate process unless this one already has the seed (hash_seed=None: this process, whatever its seed)
+    in_subprocess = hash_seed is not None and hash_seed != _session_hash_seed()
     required = [cell_key if c == "cell_id" else c for c in REQUIRED]
     if any(c not in contigs.columns for c in required) and cell_key == "cell_id":
         # Cell Ranger's filtered_contig_annotations.csv names the columns barcode, v_gene, j_gene, cdr3_nt;
@@ -335,7 +484,11 @@ def define_clones_dandelion(
     if missing:
         raise ValueError(f"contigs is missing {missing}; this function needs a contig-level AIRR table "
                          f"(cell_key={cell_key!r} names the column with the cell barcode).")
-    ddl = _require_dandelion()
+    if in_subprocess:
+        _check_dandelion_installed()          # Dandelion itself is imported by the separate process only
+        ddl = None
+    else:
+        ddl = _require_dandelion()
 
     t = contigs.copy()
     t[cell_key] = t[cell_key].astype(str)
@@ -377,10 +530,7 @@ def define_clones_dandelion(
         if col not in t.columns:
             t[col] = "T" if col == "productive" else ""
     t = _fill_junction_aa(t, verbose=verbose)
-    with_heavy = set()
 
-    groups = [(None, t)] if donor_key is None else list(t.groupby(donor_key, observed=True))
-    out, n_ambiguous, combined, two_heavy = {}, 0, set(), set()
     if check_contigs and "umi_count" in t.columns and pd.to_numeric(t["umi_count"], errors="coerce").nunique() <= 1:
         warnings.warn("check_contigs=True but the contigs have no UMI counts, so no chain can dominate: every cell "
                       "with two chains of one kind will be set aside.", UserWarning, stacklevel=2)
@@ -388,38 +538,31 @@ def define_clones_dandelion(
         # the check breaks ties in UMIs on read counts; without them the UMI count stands in
         umis = t["umi_count"] if "umi_count" in t.columns else t["duplicate_count"]
         t["consensus_count"] = pd.to_numeric(umis, errors="coerce").fillna(1).clip(lower=1)
-    for donor, sub in groups:
-        if sub["cell_id"].nunique() < 2:
-            continue
-        with _quiet():
-            vdj = ddl.Dandelion(sub.reset_index(drop=True))
-        if check_contigs:
-            with _quiet(), warnings.catch_warnings():
-                warnings.simplefilter("ignore", FutureWarning)
-                # returns the Dandelion object alone, or (Dandelion, AnnData) when an AnnData is passed
-                checked = ddl.pp.check_contigs(vdj, productive_only=productive_only, verbose=False)
-            vdj = checked[0] if isinstance(checked, tuple) else checked
-            n_ambiguous += int(vdj.data["ambiguous"].astype(str).eq("T").sum()) if "ambiguous" in vdj.data else 0
-        # find_clones ignores contigs flagged ambiguous, so a cell whose heavy chains were all set aside has
-        # no heavy chain left to call a clone on
-        kept = vdj.data if "ambiguous" not in vdj.data else vdj.data[vdj.data["ambiguous"].astype(str) != "T"]
-        with_heavy.update(_cells_with_heavy_chain(kept))
-        heavy = kept[_locus(kept).isin(VDJ_LOCI).to_numpy()].drop_duplicates(["cell_id", "v_call", "j_call", "junction_aa"])
-        n_heavy = heavy.groupby("cell_id").size()
-        two_heavy.update(n_heavy.index[n_heavy >= 2].astype(str))
-        with _quiet():
-            ddl.tl.find_clones(vdj, identity=identity, verbose=False)
-        # a cell Dandelion could not place (e.g. all its heavy chains set aside by the check) gets an empty id
-        clone_ids = vdj.data["clone_id"]
-        called = vdj.data[clone_ids.notna() & clone_ids.astype(str).str.strip().ne("")]
-        per_cell = called.groupby("cell_id")["clone_id"].first()
-        # Dandelion joins the clones of a cell with two productive chains of one kind ("a|b")
-        combined.update(per_cell.index[per_cell.astype(str).str.contains("|", regex=False)].astype(str))
-        prefix = "" if donor is None else f"{donor}|"
-        for cell, clone in per_cell.items():
-            out[str(cell)] = f"{prefix}{clone}"
-        if verbose and donor is not None:
-            log(f"  {donor}: {per_cell.nunique()} clones over {len(per_cell)} cells")
+    # split by donor only now, so that every donor's table has the column added above (split earlier, the donors'
+    # tables lacked it, and Dandelion's check stopped with KeyError: 'consensus_count')
+    groups = [(None, t)] if donor_key is None else list(t.groupby(donor_key, observed=True))
+    settings = {"identity": identity, "check_contigs": check_contigs, "productive_only": productive_only}
+    if in_subprocess:
+        from ._dandelion_worker import run as _run_in_subprocess
+
+        if verbose and hash_seed == 0:
+            late = (" (setting PYTHONHASHSEED in a running session has no effect)"
+                    if os.environ.get("PYTHONHASHSEED") == "0" else "")
+            log("Dandelion's clone calls depend on Python's string-hash seed, and this session was not started with "
+                f"PYTHONHASHSEED=0{late}: Dandelion runs in a separate Python process that is, so the clones are the "
+                "same in every session")
+        elif verbose:
+            log(f"Dandelion runs in a separate Python process started with PYTHONHASHSEED={hash_seed} "
+                f"(hash_seed={hash_seed})")
+        child = _run_in_subprocess({"groups": groups, **settings}, seed=hash_seed)
+        called, version = child["value"], child["dandelion_version"]
+        for line in child["messages"] if verbose else ():
+            log(line)
+    else:
+        called = _call_clones(ddl, groups, say=log if verbose else None, **settings)
+        version = _dandelion_version(ddl)
+    out, n_ambiguous, identity = called["clone_ids"], called["n_ambiguous"], called["identity"]
+    combined, two_heavy, with_heavy = called["combined"], called["two_heavy"], called["with_heavy"]
 
     s = pd.Series(out, name=out_col, dtype="object")
     s.index.name = "cell_id"
@@ -435,7 +578,7 @@ def define_clones_dandelion(
     s.attrs.update({
         "method": "dandelion",
         "receptor": _receptor_name(t["locus"]),
-        "dandelion_version": _dandelion_version(ddl),
+        "dandelion_version": version,
         "use_light_chain": bool(use_light_chain),
         "require_heavy_chain": bool(require_heavy_chain),
         "check_contigs": bool(check_contigs),
@@ -449,6 +592,9 @@ def define_clones_dandelion(
         "n_clones": int(sizes.size),
         "n_clones_ge2": int((sizes >= 2).sum()),
         "largest_clone": int(sizes.max()) if sizes.size else 0,
+        # the seed the clones were called under, and whether that needed a separate process
+        "dandelion_hash_seed": hash_seed if hash_seed is not None else _session_hash_seed(),
+        "dandelion_subprocess": bool(in_subprocess),
         "python_hash_seed": os.environ.get("PYTHONHASHSEED"),
     })
     if verbose:
@@ -466,7 +612,12 @@ def define_clones_dandelion(
             else:
                 log(f"{share}: doublets, ambient RNA or allelic inclusion; {joined}. check_contigs=True keeps the "
                     "dominant heavy chain of a cell (Dandelion allows two light chains).")
-        if os.environ.get("PYTHONHASHSEED") is None:
-            log("PYTHONHASHSEED is not set, so Dandelion's clone calls can differ by a few clones between "
-                "Python sessions; set it (e.g. to 0) before starting Python for reproducible clone ids")
+    if s.attrs["dandelion_hash_seed"] is None:
+        warnings.warn(
+            "hash_seed=None: Dandelion called the clones in this Python session, which was not started with "
+            "PYTHONHASHSEED=0. Dandelion's clone calls depend on Python's string-hash seed (on the GSE287123 "
+            "tutorial data, other seeds changed the cells of 11-13% of the clones with two or more cells and "
+            "renumbered nearly every clone), so these clone ids can differ from those of another session and from "
+            "Threadfin's documentation. The default, hash_seed=0, gives the same clones in every session.",
+            UserWarning, stacklevel=2)
     return s

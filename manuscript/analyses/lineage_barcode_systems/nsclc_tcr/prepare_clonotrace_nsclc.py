@@ -8,6 +8,7 @@ longitudinal occurrences remain separate observations linked by that key.
 """
 from __future__ import annotations
 
+import os
 import argparse
 import concurrent.futures
 import hashlib
@@ -25,10 +26,10 @@ import scipy.sparse as sp
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-DATA = Path("/data/scratch/projects/punim1236/threadfin_data/gse266219_nsclc")
-PRIVATE = Path("/data/scratch/projects/punim1236/AAA_Chen_is_here/Threadfin发表/internal_validation/paper_673503/nsclc")
+DATA = Path(os.environ.get("THREADFIN_DATA", Path(__file__).resolve().parents[3] / "case_studies" / "data")) / "gse266219_nsclc"
+PRIVATE = Path(__file__).resolve().parents[4].parent / "internal_validation" / "paper_673503" / "nsclc"
 OUT = HERE / "results" / "clonotrace_nsclc"
-RSCRIPT = Path("/data/scratch/projects/punim1236/python_envs/rseurat/bin/Rscript")
+RSCRIPT = Path(os.environ.get("RSCRIPT", "Rscript"))   # an R with Seurat and Clonotrace
 BASE = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE266nnn/GSE266219/suppl/"
 FILES = [f"GSE266219_Merged_p{x}_CD8_sorted_and_PBMC_extracted.rds.gz"
          for x in (12, 13, 25, 27, 38, 3, 4, 69, 6, 7)]

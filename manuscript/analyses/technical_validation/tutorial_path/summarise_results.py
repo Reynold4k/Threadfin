@@ -70,13 +70,20 @@ def main(src: Path):
             return "—"
         return {"int": f"{int(v):,}", "pct": f"{100 * v:.0f} %", "icc": f"{v:.3f}"}.get(kind, str(v))
 
+    def figures(key):
+        """Link to the dataset's figures (make_gallery.py), with their number."""
+        manifest = HERE / "figures" / key / "figures.json"
+        if not manifest.exists():
+            return "—"
+        return f"[{len(json.loads(manifest.read_text())['figures'])}](figures/{key}/README.md)"
+
     lines = ["| dataset | errors | cells | contigs matching a cell | clones ≥ 2 cells (case study) | clonal ICC "
-             "(case study) | minutes | peak memory |", "|---|---|---|---|---|---|---|---|"]
+             "(case study) | minutes | peak memory | figures |", "|---|---|---|---|---|---|---|---|---|"]
     for _, r in t.iterrows():
         lines.append(f"| {r['dataset']} | {r['errors']} | {fmt(r['cells'], 'int')} | {fmt(r['contigs matching a cell'], 'pct')} | "
                      f"{fmt(r['clones with >= 2 cells'], 'int')} ({fmt(r['case study'], 'int')}) | "
                      f"{fmt(r['clonal ICC'], 'icc')} ({fmt(r['case study ICC'], 'icc')}) | {r['minutes']} | "
-                     f"{r['peak memory, GB']} GB |")
+                     f"{r['peak memory, GB']} GB | {figures(r['key'])} |")
     readme = HERE / "README.md"
     text = readme.read_text(encoding="utf-8")
     text = re.sub(r"(<!-- BEGIN:table -->).*?(<!-- END:table -->)", lambda m: m.group(1) + "\n\n" + "\n".join(lines)

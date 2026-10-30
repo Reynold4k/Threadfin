@@ -15,6 +15,7 @@ import json
 import platform
 import resource
 import time
+import zlib
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -22,6 +23,18 @@ import numpy as np
 import pandas as pd
 
 from bench_paths import INPUTS, run_dir
+
+BASE_SEED = 20261020
+
+
+def rng_for(*key) -> np.random.Generator:
+    """A random generator that depends only on ``key`` (what is being compared), never on what ran before.
+
+    The key is hashed with CRC-32 (stable across processes, unlike Python's salted ``hash()``), so every
+    comparison draws the same random numbers whichever other comparisons run, fail or are added, and in
+    whatever order or process the readouts are computed.
+    """
+    return np.random.default_rng([BASE_SEED, zlib.crc32("|".join(map(str, key)).encode())])
 
 
 def load(dataset: str, variant: str = "full"):

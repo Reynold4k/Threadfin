@@ -1,0 +1,36 @@
+name: tutorial notebook
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"   # every Monday: the end-to-end notebook on real GEO data with the newest allowed dependencies
+  workflow_dispatch:
+
+jobs:
+  notebook:
+    # installs as Step 0 of the notebook says (Threadfin from this checkout), builds the notebook from its source and
+    # runs every cell, downloading the GEO files (about 600 MB), so that a dependency release that breaks the
+    # tutorial path of a new user is noticed within a week
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install as in Step 0
+        run: pip install . "sc-dandelion==0.5.7" "matplotlib<3.9" jupyterlab ipykernel
+      - name: Build and run the notebook
+        working-directory: ${{ runner.temp }}
+        run: |
+          python "$GITHUB_WORKSPACE/docs/tutorials/make_tutorial_notebook.py" 05_end_to_end_tutorial.ipynb
+          jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 \
+            05_end_to_end_tutorial.ipynb
+          pip list --format=freeze > pip_freeze.txt
+      - name: Keep the executed notebook and the versions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: executed-notebook
+          path: |
+            ${{ runner.temp }}/05_end_to_end_tutorial.ipynb
+            ${{ runner.temp }}/pip_freeze.txt

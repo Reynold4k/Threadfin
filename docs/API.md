@@ -1,4 +1,4 @@
-# API reference (threadfin 4.5.3)
+# API reference (threadfin 4.6.0)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -26,12 +26,12 @@ The complete analysis and its result.
 
 ```python
 tf.run(adata, bcr=None, *, donor_key: 'str | None' = None, sample_key: 'str | None' = None,
-    batch_key: 'str | None' = None, state_key: 'str | None' = None, time_key: 'str | None' = None,
-    test=None, clone_key: 'str' = 'clone_id', basis: 'str | None' = None, counts_layer: 'str | None'
-    = None, representation: 'str' = 'kernel', map_n_neighbors: 'int | str' = 'auto', map_min_dist:
-    'float | str' = 'auto', n_perm: 'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0,
-    n_jobs: 'int | None' = 1, clone_options: 'dict | None' = None, verbose: 'bool' = True) ->
-    'ThreadfinResult'
+    strata_key: 'str | None' = None, batch_key: 'str | None' = None, state_key: 'str | None' = None,
+    composition_weight: 'str' = 'cells', time_key: 'str | None' = None, test=None, clone_key: 'str'
+    = 'clone_id', basis: 'str | None' = None, counts_layer: 'str | None' = None, representation:
+    'str' = 'kernel', map_n_neighbors: 'int | str' = 'auto', map_min_dist: 'float | str' = 'auto',
+    n_perm: 'int' = 200, n_boot: 'int' = 30, random_state: 'int' = 0, n_jobs: 'int | None' = 1,
+    clone_options: 'dict | None' = None, verbose: 'bool' = True) -> 'ThreadfinResult'
 ```
 
 ```text
@@ -58,13 +58,29 @@ donor_key
     stratified by donor.
 sample_key
     ``obs`` column naming the sample/library of each cell. Clones are
-    compared with the other cells of their own sample, and the null
-    model shuffles clone labels only within samples.
+    compared with the other cells of their own sample (the context), and
+    the coherence test shuffles clone labels within it unless
+    ``strata_key`` names a finer sampling unit.
+strata_key
+    ``obs`` column within which the coherence test shuffles clone labels;
+    defaults to ``sample_key``. Set it to the finest sampling unit (the
+    library, sort gate or tissue sample) when ``sample_key`` is coarser,
+    for example the donor in a design that compares tissues or gates:
+    cells of one clone are sequenced together, so shuffling across
+    sampling units would count differences between those units as
+    clonal.
 batch_key
     Optional ``obs`` column to integrate over with Harmony when the
     embedding is built (technical batches only).
 state_key
     Optional cell-type/state annotation, used to describe programmes.
+composition_weight
+    How the state composition of each programme is counted:
+    ``"cells"`` (default; the fraction of the programme's cells in
+    each state, so an expanded clone weighs in proportion to its cells)
+    or ``"clones"`` (every clone counts once: each clone's share of
+    cells in each state, averaged over the programme's clones). See
+    :func:`threadfin.tl.programme_composition`.
 time_key
     Optional time point (or tissue) column; enables the clonal-memory test.
 test
@@ -107,9 +123,15 @@ clone_options
 
 Returns
 -------
-:class:`ThreadfinResult`. Also adds ``obs[clone_key]`` (if ``bcr`` is
-given), ``obs['clone_programme']`` and results under
-``adata.uns['threadfin']``.
+:class:`ThreadfinResult`. ``adata`` is changed in place:
+
+* ``obs``: ``clone_key`` and the ``bcr_*`` receptor columns (when ``bcr``
+  is given), ``clone_programme`` and ``clone_programme_assigned``;
+* when the embedding is built (``basis=None``): ``obsm['X_threadfin']``,
+  ``obsm['X_pca']`` (replaced by the PCA of the selected genes),
+  ``var['highly_variable']`` (replaced), ``var['threadfin_receptor_gene']``
+  and ``layers['log_norm']`` (normalised, log-transformed counts);
+* ``uns['threadfin']``: every result and the settings that made it.
 
 Examples
 --------
@@ -321,7 +343,8 @@ matches more of ``obs_names`` (by default ``cell_id``) names the cells.
 tf.define_clones_dandelion(contigs: 'pd.DataFrame', *, use_light_chain: 'bool' = True, identity:
     'float | dict | None' = None, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id',
     productive_only: 'bool' = True, require_heavy_chain: 'bool' = True, check_contigs: 'bool' =
-    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True) -> 'pd.Series'
+    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True, hash_seed: 'int | None' = 0) ->
+    'pd.Series'
 ```
 
 ```text
@@ -364,14 +387,25 @@ check_contigs
     counts (``umi_count`` or ``duplicate_count``); without them every cell with two chains of one kind is
     set aside. Read counts (``consensus_count``) break ties and are replaced by the UMI count when absent.
     ``False`` (default, as in the manuscript) calls clones on all productive contigs.
+hash_seed
+    Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
+    sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
+    clones in every Python session, those of Threadfin's documentation and validation records: if this
+    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
+    (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+    temporary file). Another integer calls the clones under that seed, always in a separate process, to see
+    how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
+    and earlier did; clone ids are then reproducible only between sessions started with the same
+    ``PYTHONHASHSEED``.
 
 Returns
 -------
 Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts (with
 ``n_cells_with_combined_id``, the cells with two productive chains of one kind, and
-``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), and the
-``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
-sessions, see the module notes).
+``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), ``dandelion_hash_seed`` (the
+string-hash seed the clones were called under; ``None`` only with ``hash_seed=None`` in a session not started
+with ``PYTHONHASHSEED=0``), ``dandelion_subprocess`` (``True`` when Dandelion ran in a separate process) and
+``python_hash_seed`` (this session's ``PYTHONHASHSEED`` environment variable, ``None`` when unset).
 ```
 
 ### tf.define_clones
@@ -529,11 +563,11 @@ The steps that `tf.run` calls, and further analyses, one by one.
 | [`tf.tl.define_clones`](#tftldefine_clones) | Group cells into B-cell clones (lineages) from their receptor sequences. |
 | [`tf.tl.define_clones_dandelion`](#tftldefine_clones_dandelion) | Call clones with Dandelion and return one clone id per cell. |
 | [`tf.tl.embed_clones`](#tftlembed_clones) | Lay the clone profiles out in two dimensions — **every** profiled clone, by default. |
-| [`tf.tl.export_lag`](#tftlexport_lag) | Date each clone's output against its own germinal centre. |
+| [`tf.tl.export_lag`](#tftlexport_lag) | Within-clone mutation gap between output cells and the clone's own GC cells. |
 | [`tf.tl.find_programmes`](#tftlfind_programmes) | Group clones into clonal programmes, with bootstrap stability. |
 | [`tf.tl.find_threshold`](#tftlfind_threshold) | Threshold at the density valley of a distance-to-nearest distribution. |
 | [`tf.tl.gene_heritability`](#tftlgene_heritability) | Clonal ICC of every gene, with a within-stratum permutation p-value. |
-| [`tf.tl.geneset_heritability`](#tftlgeneset_heritability) | Summarise :func:`gene_heritability` over named gene sets. |
+| [`tf.tl.geneset_heritability`](#tftlgeneset_heritability) | Test whether named gene sets are more clonal than genes of similar expression. |
 | [`tf.tl.landscape_genes`](#tftllandscape_genes) | Genes whose expression changes smoothly across the clones, with no programmes needed. |
 | [`tf.tl.layout_clone_map`](#tftllayout_clone_map) | Lay the clones out at given settings, at UMAP's default number of epochs, and check the result. |
 | [`tf.tl.lineage_forest`](#tftllineage_forest) | Group cells into clone x block units and collect their lineage-tree distances. |
@@ -541,7 +575,7 @@ The steps that `tf.run` calls, and further analyses, one by one.
 | [`tf.tl.map_quality`](#tftlmap_quality) | Score a clone map: coherence, local and global fidelity, and the tuner's combined score. |
 | [`tf.tl.mutation_frequency`](#tftlmutation_frequency) | V-region somatic mutation frequency from AIRR alignments. |
 | [`tf.tl.profile_association`](#tftlprofile_association) | Does a clone-level label explain how clones differ? (no programmes needed) |
-| [`tf.tl.programme_composition`](#tftlprogramme_composition) | Fraction of each programme's cells in each cell state (rows sum to 1). |
+| [`tf.tl.programme_composition`](#tftlprogramme_composition) | Share of each cell state in each programme (rows sum to 1). |
 | [`tf.tl.programme_markers`](#tftlprogramme_markers) | Genes that distinguish programmes, tested with clones as replicates. |
 | [`tf.tl.tune_clone_map`](#tftltune_clone_map) | Choose UMAP ``n_neighbors`` and ``min_dist`` for a clone map. |
 
@@ -549,7 +583,8 @@ The steps that `tf.run` calls, and further analyses, one by one.
 
 ```python
 tf.tl.association_test(adata, label_key: 'str', *, programme_key: 'str' = 'clone_programme',
-    clone_key: 'str | None' = None, strata_key: 'str | None' = 'auto', how: 'str' = 'auto',
+    clone_key: 'str | None' = None, strata_key: 'str | None' = 'auto', size_strata: 'bool |
+    tuple[int, ...] | None' = None, sample_key: 'str | None' = 'auto', how: 'str' = 'auto',
     min_frac: 'float' = 0.5, n_perm: 'int' = 2000, random_state: 'int' = 0, verbose: 'bool' = True)
     -> 'pd.DataFrame'
 ```
@@ -559,21 +594,44 @@ Clone-level association between programmes and a label.
 
 Each clone contributes once. Cell-level labels are first collapsed per
 clone (:func:`clone_labels`). P-values come from permuting clone labels
-within strata (default: donor), which keeps every donor's label
-frequencies fixed; Benjamini-Hochberg FDR is computed across all rows.
-A label that never varies within a stratum (a donor's age or sex) cannot
-be tested this way and raises ``ValueError``.
+within strata: clones of the same donor and, by default, of similar size
+(``size_strata``), which keeps each donor's label frequencies and the
+label's link with clone size as observed. Benjamini-Hochberg FDR is
+computed across all rows. A label that never varies within a stratum (a
+donor's age or sex) cannot be tested this way and raises ``ValueError``.
+
+Clone size matters because profiles are shrunk: a small clone is pulled
+towards the average profile, so programmes differ in clone size, and a
+label that follows clone size (a majority call over few cells, detection
+in a rare sort gate, expansion) would otherwise show up as a programme
+effect. Each row gives the programme's median clone size
+(``median_cells_programme``) and share of two-cell clones
+(``frac_2cell_programme``).
+
+A label that is the same for every cell of each sample (library, sort
+gate, tissue, visit) is tested with a warning and
+``.attrs['sample_level'] = True``: it then compares samples
+(``.attrs['n_samples']``), and clones of one sample are not independent
+replicates.
 
 *Categorical labels* (e.g. antigen specificity, isotype, infection
-status) give one row per (programme, level) with the observed and
-expected number of clones, the Mantel-Haenszel odds ratio across strata
-with a 95% confidence interval, and a two-sided permutation p-value.
+status) give one row per (programme, level) with the observed number of
+clones, the number expected from the strata alone, the Mantel-Haenszel
+odds ratio across strata with a 95% confidence interval, and a two-sided
+permutation p-value. For a two-level label the rows of the more common
+level mirror those of the rarer level (same p-value, inverse odds ratio):
+they are marked ``mirror``, are not counted as separate effects, and leave
+the FDR unchanged (Benjamini-Hochberg gives the same values with or
+without exact duplicates).
 
 *Numeric labels* (e.g. mutation frequency, fraction of a clone's cells in
 a sort gate) give one row per programme with the median in vs out of the
 programme, a rank-based effect (difference in mean ranks scaled to
-[-1, 1]) and a two-sided permutation p-value; an omnibus Kruskal-Wallis
-test with the same permutation scheme is stored in ``.attrs``.
+[-1, 1]), the effect expected from the strata alone
+(``expected_rank_effect``) and a two-sided permutation p-value for the
+difference between the two; an omnibus Kruskal-Wallis test with the same
+permutation scheme (rank sums against their expectation within strata) is
+stored in ``.attrs``.
 
 Parameters
 ----------
@@ -582,7 +640,15 @@ label_key
 strata_key
     Permutation strata. ``"auto"`` uses the donor recorded by
     :func:`threadfin.tl.clone_profiles` (if any); ``None`` permutes
-    globally.
+    among all clones (within clone-size bins if ``size_strata``).
+size_strata
+    Also permute within clone-size bins (``SIZE_BINS``: 2, 3-4, 5-9 and
+    >= 10 cells). ``None`` uses ``SIZE_STRATA_DEFAULT`` (on for this
+    test); a tuple of clone sizes sets where bins start, e.g. ``(2, 5, 20)``.
+sample_key
+    ``obs`` column of samples for the sample-level check. ``"auto"`` uses
+    the ``context_key`` of :func:`threadfin.tl.clone_profiles` (the
+    ``sample_key`` of :func:`threadfin.run`); ``None`` skips the check.
 how, min_frac
     Passed to :func:`clone_labels`.
 ```
@@ -609,7 +675,10 @@ Parameters
 strata_key
     ``obs`` column defining permutation strata. Defaults to the
     ``context_key`` used for :func:`threadfin.tl.clone_profiles`; with
-    neither, labels are shuffled globally (not recommended).
+    neither, labels are shuffled globally (not recommended). Strata
+    stay within the ``context_key`` groups: if a stratum holds cells of
+    several of them (a library pooling donors), the strata are the
+    ``context_key`` x ``strata_key`` combinations, with a warning.
 n_perm
     Number of permutations.
 
@@ -623,9 +692,10 @@ in ``adata.uns['threadfin']['coherence']``.
 ### tf.tl.clonal_memory
 
 ```python
-tf.tl.clonal_memory(adata, time_key: 'str', *, order=None, programme_key: 'str' = 'clone_programme',
-    min_cells: 'int' = 1, min_pairs: 'int' = 10, n_null: 'int' = 500, n_boot: 'int' = 500,
-    random_state: 'int' = 0, verbose: 'bool' = True) -> 'dict'
+tf.tl.clonal_memory(adata, time_key: 'str', *, order=None, reference: 'str' = 'persistent', noise:
+    'str' = 'snapshot', programme_key: 'str' = 'clone_programme', min_cells: 'int' = 1, min_pairs:
+    'int' = 10, n_null: 'int' = 500, n_boot: 'int' = 500, random_state: 'int' = 0, verbose: 'bool' =
+    True) -> 'dict'
 ```
 
 ```text
@@ -636,9 +706,22 @@ Parameters
 time_key
     ``obs`` column with the time point (or tissue) of each cell.
 order
-    Order of the levels of ``time_key``; inferred from numbers in the
-    labels (``d7`` < ``d28``) when omitted. Each clone's consecutive
-    observed levels are paired.
+    Order of the levels of ``time_key``. When omitted: the order of an
+    ordered Categorical column, else numbers in the labels (``d7`` <
+    ``d28``), else alphabetical, with a warning. Each clone's
+    consecutive observed levels are paired.
+reference
+    The clones that a clone's change is compared with. ``"persistent"``
+    (default): other clones of the same donor seen at the same two
+    levels. ``"all"``: any other clone of the same donor at the later
+    level, including clones seen only there (Threadfin 4.5); a state that
+    the clones seen twice share then counts as memory.
+noise
+    The variance used to remove sampling noise. ``"snapshot"`` (default):
+    each snapshot's own; a one-cell snapshot uses the mean of the
+    multi-cell snapshots of its level from clones of its kind (module
+    docstring). ``"pooled"``: one variance pooled over all snapshots
+    (Threadfin 4.5). With ``min_cells=2`` every snapshot uses its own.
 programme_key
     Programme column of the clone table (for the descriptive transition
     table); skipped when absent.
@@ -649,15 +732,23 @@ min_pairs
     bootstrap interval collapses and the estimate says nothing, so the
     function raises instead of returning a number.
 n_null, n_boot
-    Random re-pairings for the p-value; bootstrap replicates for the CI.
+    Permutations (random re-pairings) for the p-value; bootstrap
+    replicates for the CI.
 
 Returns
 -------
-dict with ``memory_index`` (see module docstring), its bootstrap
-``memory_index_ci``, ``p_value``, ``n_clones``, ``n_pairs``, the
+dict with ``memory_index`` (module docstring; not bounded by 0 and 1),
+its bootstrap ``memory_index_ci``, ``p_value``, ``n_clones``,
+``n_pairs``, the ``reference`` and ``noise`` used, ``mean_change`` and
+``mean_change_random`` (mean ``D_same`` and ``D_other``),
+``mean_change_shared`` (the part of ``mean_change`` that all compared
+clones of a donor share: the squared change of their mean profile;
+with the default reference it is also part of ``mean_change_random``),
+``mean_noise_removed`` (mean noise term subtracted from ``D_same``), the
 per-pair table ``pairs`` and, when programmes exist, programme
 ``persistence`` with ``persistence_null`` and the ``transitions`` /
-``transitions_expected`` tables. Stored in
+``transitions_expected`` tables. When the interval cannot be computed it
+is ``(nan, nan)`` and the index should not be interpreted. Stored in
 ``adata.uns['threadfin']['memory'][time_key]``.
 ```
 
@@ -694,6 +785,10 @@ how
     ``"fraction:<level>"``: fraction of the clone's labelled cells equal
     to ``<level>`` (numeric output);
     ``"auto"``: ``"mean"`` for numeric columns, else ``"majority"``.
+
+Levels written as text that stand for a missing value (``"nan"``,
+``"None"``, ``"NA"``, ``"."`` ...) are kept as levels, with a warning; set
+those cells to NaN to leave them out.
 ```
 
 ### tf.tl.clone_profiles
@@ -743,11 +838,10 @@ smooth
 min_cells
     Clones with fewer cells are not profiled. The default of 2 is **not** a quality filter --
     Threadfin never filters on reliability -- it is what the clone map is *of*. Singleton clones
-    are 75 to 98 % of clones in these deposits, so including them turns the clone embedding back
-    into the cell UMAP it is supposed to summarise. Set 1 to include them; they are then drawn as
-    triangles rather than circles so a reader can see how much of a map rests on a single cell.
+    are 63 to 98 % of clones in the manuscript's 14 BCR datasets, so including them turns the clone
+    embedding back into the cell UMAP it is supposed to summarise. Set 1 to include them.
     Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
-    few cells is pulled towards the population mean, so its influence is down-weighted in
+    few cells is pulled towards the average profile, so its influence is down-weighted in
     proportion to how little was seen. A reliability floor on top of that discards the same
     information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
     75-100 % of the profiled clones.
@@ -818,7 +912,8 @@ sequence type and the number of clones.
 tf.tl.define_clones_dandelion(contigs: 'pd.DataFrame', *, use_light_chain: 'bool' = True, identity:
     'float | dict | None' = None, donor_key: 'str | None' = None, cell_key: 'str' = 'cell_id',
     productive_only: 'bool' = True, require_heavy_chain: 'bool' = True, check_contigs: 'bool' =
-    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True) -> 'pd.Series'
+    False, out_col: 'str' = 'clone_id', verbose: 'bool' = True, hash_seed: 'int | None' = 0) ->
+    'pd.Series'
 ```
 
 ```text
@@ -861,14 +956,25 @@ check_contigs
     counts (``umi_count`` or ``duplicate_count``); without them every cell with two chains of one kind is
     set aside. Read counts (``consensus_count``) break ties and are replaced by the UMI count when absent.
     ``False`` (default, as in the manuscript) calls clones on all productive contigs.
+hash_seed
+    Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
+    sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
+    clones in every Python session, those of Threadfin's documentation and validation records: if this
+    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
+    (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+    temporary file). Another integer calls the clones under that seed, always in a separate process, to see
+    how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
+    and earlier did; clone ids are then reproducible only between sessions started with the same
+    ``PYTHONHASHSEED``.
 
 Returns
 -------
 Series indexed by cell id. ``attrs`` records the settings, the resulting clone counts (with
 ``n_cells_with_combined_id``, the cells with two productive chains of one kind, and
-``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), and the
-``PYTHONHASHSEED`` in use (``None`` when unset; clone calls are then not bit-reproducible between Python
-sessions, see the module notes).
+``n_cells_with_combined_id_two_heavy``, those among them with two heavy chains), ``dandelion_hash_seed`` (the
+string-hash seed the clones were called under; ``None`` only with ``hash_seed=None`` in a session not started
+with ``PYTHONHASHSEED=0``), ``dandelion_subprocess`` (``True`` when Dandelion ran in a separate process) and
+``python_hash_seed`` (this session's ``PYTHONHASHSEED`` environment variable, ``None`` when unset).
 ```
 
 ### tf.tl.embed_clones
@@ -927,12 +1033,18 @@ were laid out.
 ```python
 tf.tl.export_lag(adata, *, state_key: 'str', source_states, output_states, clone_key: 'str' =
     'clone_id', mutation_key: 'str' = 'mutation_frequency', within=(), time_key: 'str | None' =
-    None, isotype_key: 'str | None' = 'isotype', switched_only: 'bool' = True, min_cells: 'int' = 1)
-    -> 'dict'
+    None, isotype_key: 'str | None' = 'isotype', switched_only: 'bool' = True, min_cells: 'int' = 1,
+    donor_key: 'str | None' = None, clock: 'str' = 'medians') -> 'dict'
 ```
 
 ```text
-Date each clone's output against its own germinal centre.
+Within-clone mutation gap between output cells and the clone's own GC cells.
+
+For every clone captured in both compartments (and matched on ``within``), the lag is the mean
+mutation of its output cells minus that of its GC cells. The result is the median lag across clones
+with a distribution-free 95 % interval (order statistics inverting the sign test; clones as the unit,
+conditional on the donors sampled) and a sign test of a zero median. Several processes produce a
+gap; see the module documentation before reading it as time.
 
 Parameters
 ----------
@@ -946,13 +1058,22 @@ within
     Pass the visit and the tissue here: a clone's germinal-centre cell from one visit should not be
     compared with its plasma cell from another.
 time_key
-    Optional numeric (or ``d28``-style) column. When given, the source compartment's own maturation
-    slope converts each clone's lag into days.
+    Optional numeric (or ``d28``-style) column. When given, the source compartment's maturation rate
+    converts each clone's lag into days.
 switched_only
     Compare only class-switched cells. Class switching is irreversible, so an IgM cell and an IgG cell
     of one clone are separated by an event that mutation count does not describe.
 min_cells
     Cells of the clone required on each side of a comparison.
+donor_key
+    Optional ``obs`` column of the donor (animal). Adds ``per_donor``: each donor's median lag with
+    its own interval and sign test. With at least six donors the median of the donor medians and its
+    interval describe the population of donors.
+clock
+    How the maturation rate is fitted when ``time_key`` is given. ``"medians"`` (default): Theil-Sen
+    through the per-time-point medians of the source cells, with Sen's interval. ``"cells"``: the
+    earlier fit over all source cells, which treats cells as independent observations of the trend
+    and has no interval; kept for comparison.
 
 Returns
 -------
@@ -961,18 +1082,25 @@ dict with
 ``pairs``
     one row per clone (and stratum): ``source``, ``output``, ``lag``, cell counts, and ``lag_days``
     when ``time_key`` is given.
-``n_clones``, ``n_output_earlier``, ``n_output_later``
-    how many clones were compared and how the lag fell.
-``median_lag``
-    median lag in mutation-frequency units, with a clone bootstrap interval.
-``maturation_slope``
-    mutation per unit time in the source compartment, when ``time_key`` is given.
+``n_clones``, ``n_output_earlier``, ``n_output_later``, ``n_equal``
+    how many clones were compared and how many have a negative, positive or zero lag (output less,
+    more or equally mutated than the clone's GC cells).
+``median_lag``, ``median_lag_ci``, ``sign_test_pvalue``
+    median lag in mutation-frequency units, its 95 % interval, and the two-sided sign test.
+``maturation_slope``, ``maturation_slope_ci``, ``n_timepoints``, ``clock_points``
+    mutation per unit time in the source compartment, its 95 % interval, and the per-time-point
+    medians it was fitted on (``clock="medians"``), when ``time_key`` is given.
+``median_lag_days``, ``median_lag_days_ci``
+    the median lag divided by the rate, and an interval covering at least 95 % (nan when the rate's
+    interval does not exclude zero or is not estimable).
+``per_donor``, ``median_lag_across_donors``, ``median_lag_across_donors_ci``
+    with ``donor_key``.
 
 Examples
 --------
 >>> res = export_lag(adata, state_key="cell_state", source_states=["GC"],
 ...                  output_states=["PB"], within=("timepoint",), time_key="timepoint")
->>> res["median_lag"], res["n_output_earlier"], res["n_clones"]
+>>> res["median_lag"], res["median_lag_ci"], res["sign_test_pvalue"]
 ```
 
 ### tf.tl.find_programmes
@@ -1002,14 +1130,13 @@ n_neighbors
     Neighbours per clone in the clone graph.
 weight_by_reliability
     Scale each graph edge by ``sqrt(rel_i * rel_j)`` so that every clone is clustered but a
-    thinly observed one pulls weakly. This is what makes ``min_reliability=0`` safe: on a
-    simulated one-programme continuum of 3,000 clones with a median of one cell each, an
-    unweighted unfiltered run invents four programmes at bootstrap stability 0.78-0.86, while the
-    weighted run recovers the single true programme.
+    thinly observed one pulls weakly on its neighbours. Clones of a single cell are not profiled
+    (``min_cells=2`` in :func:`threadfin.tl.clone_profiles`); that, rather than the weighting, keeps
+    unfiltered runs from inventing programmes on a simulated one-programme repertoire.
 min_reliability
     Reliability floor for clustering; ``0.0`` (the default) clusters every profiled clone.
     Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
-    few cells is pulled towards the population mean, so its influence is down-weighted in
+    few cells is pulled towards the average profile, so its influence is down-weighted in
     proportion to how little was seen. A reliability floor on top of that discards the same
     information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
     75-100 % of the profiled clones.
@@ -1078,7 +1205,8 @@ upper bound follows common practice for nucleotide junction distances
 tf.tl.gene_heritability(adata, *, clone_key: 'str | None' = None, context_key: 'str | None' =
     'auto', strata_key: 'str | None' = None, layer: 'str | None' = 'log_norm', genes=None,
     min_frac_expressed: 'float' = 0.05, exclude_receptor_genes: 'bool' = True, n_perm: 'int' = 100,
-    chunk_size: 'int' = 1000, random_state: 'int' = 0, verbose: 'bool' = True) -> 'pd.DataFrame'
+    n_boot: 'int' = 200, chunk_size: 'int' = 1000, random_state: 'int' = 0, verbose: 'bool' = True)
+    -> 'pd.DataFrame'
 ```
 
 ```text
@@ -1090,7 +1218,8 @@ clone_key, context_key
     Default to the values used by :func:`threadfin.tl.clone_profiles`
     (``context_key="auto"``); pass ``None`` to disable context centring.
 strata_key
-    Permutation strata (defaults to the context).
+    Permutation strata (defaults to the context), kept within the context
+    groups as in :func:`threadfin.tl.clonal_coherence`.
 layer
     Log-normalised expression layer (``None`` uses ``adata.X``).
 genes
@@ -1104,6 +1233,11 @@ exclude_receptor_genes
 n_perm
     Permutations (shared across genes, so the cost is ``n_perm`` matrix
     products per chunk of genes).
+n_boot
+    Clone-bootstrap replicates of every gene's ``excess_fisher_z``: clones
+    drawn with replacement within strata (each clone in the stratum
+    holding most of its cells). :func:`geneset_heritability` takes its
+    standard errors from them. ``0`` skips them.
 
 Returns
 -------
@@ -1111,26 +1245,92 @@ DataFrame indexed by gene: ``icc``, ``tau2``, ``sigma2``, ``mean``,
 ``frac_expressed``, ``null_mean``, ``pvalue``, ``fdr`` and ``excess_icc``
 (``icc - null_mean``, the effect size), sorted by ``excess_icc``. In large
 datasets nearly every gene passes FDR < 0.05; interpret ``excess_icc``.
-Also stored in ``adata.uns['threadfin']['gene_heritability']``.
+``excess_fisher_z`` is the same comparison on Fisher's z scale of the ICC,
+``0.5 * log(MSB / MSW)`` (between- and within-clone mean squares, not
+truncated at zero), minus the same quantity for the mean squares expected
+under the shuffles (exact, no Monte Carlo error); its sampling variance
+hardly depends on the ICC, and :func:`geneset_heritability` tests on it.
+Also stored in ``adata.uns['threadfin']['gene_heritability']``. The
+bootstrap replicates of ``excess_fisher_z`` (genes x replicates) are
+attached to the table as ``table.attrs['clone_bootstrap']`` and stored in
+``adata.uns['threadfin']['gene_heritability_bootstrap']``.
 ```
 
 ### tf.tl.geneset_heritability
 
 ```python
 tf.tl.geneset_heritability(table: 'pd.DataFrame', gene_sets: 'dict[str, list[str]]', *, n_bins:
-    'int' = 10, seed: 'int' = 0) -> 'pd.DataFrame'
+    'int' = 10, seed: 'int' = 0, bootstrap=None) -> 'pd.DataFrame'
 ```
 
 ```text
-Summarise :func:`gene_heritability` over named gene sets.
+Test whether named gene sets are more clonal than genes of similar expression.
 
 Highly expressed genes are measured with less noise and therefore have
 higher ICCs, so each set is compared with an **expression-matched**
-background: other tested genes drawn from the same mean-expression deciles
-as the set's genes (up to 20 background genes per set gene). Reports the
-set's median ICC, the matched background median, the fraction of set genes
-significant at FDR < 0.05 and a Mann-Whitney p-value (set vs matched
-background).
+background: all other tested genes in the same mean-expression bin
+(``n_bins`` quantile bins), each bin weighted by its share of the set.
+
+The test is competitive: is the set's mean ``excess_fisher_z`` (the excess
+clonal ICC on Fisher's z scale, whose sampling variance hardly depends on
+the ICC) different from that of its matched background? Under the null
+hypothesis the set's genes are like other genes of the same expression
+level, so the variance of the difference has two parts:
+
+* ``se_genes``: genes differ in how clonal they truly are. The spread of
+  true values between genes of one bin is the variance of
+  ``excess_fisher_z`` across the bin's genes minus their mean bootstrap
+  variance.
+* ``se_clones``: the error from sampling clones, from the clone bootstrap
+  of :func:`gene_heritability` (clones resampled with replacement within
+  strata, every gene from the same resampled clones). It carries the
+  correlation between genes, whether it comes from co-expression within
+  cells or from programmes shared within clones.
+
+Genes of one set are usually co-expressed, so their estimates rise and fall
+together; the Mann-Whitney test used up to Threadfin 4.5.3 treated them as
+independent and rejected 15 % of co-expressed null sets at alpha = 0.05.
+This is the competitive-test problem described by Goeman & Buehlmann (2007)
+and Wu & Smyth (2012, camera); here the correlation is measured by
+resampling clones instead of being estimated from residuals. The p-value is
+two-sided, from ``difference / se`` and the normal distribution. Like the
+permutation test of each gene, the inference is conditional on the sampled
+strata (samples or donors). In simulations with co-expressed and clonal
+gene modules the test rejected 4.4-6.3 % of null sets at alpha = 0.05,
+and 3.8-5.1 % of random gene sets of the gut case study. Shuffling clone
+labels is no reference for this comparison: it removes every gene's clonal
+component, and with it the variation that comes from sampling clones.
+
+Parameters
+----------
+table
+    Output of :func:`gene_heritability`.
+gene_sets
+    ``{name: [genes]}``; sets with fewer than 3 tested genes are skipped.
+n_bins
+    Mean-expression bins used to match the background.
+seed
+    Random draw of background genes for ``pvalue_mw_genes_independent``
+    only.
+bootstrap
+    Clone-bootstrap replicates (genes x replicates). Taken from
+    ``table.attrs`` when the table comes straight from
+    :func:`gene_heritability`; for a table read back from disk, pass
+    ``adata.uns['threadfin']['gene_heritability_bootstrap']``.
+
+Returns
+-------
+DataFrame, one row per set: ``median_icc`` and
+``matched_background_median_icc``, the median ``excess_icc`` of the set
+and of its matched background (descriptive); ``difference``, the set's
+mean ``excess_fisher_z`` minus the background's, with its standard error
+``se`` (from ``se_genes`` and ``se_clones``) and 95 % interval
+(``ci_low``, ``ci_high``); ``pvalue_vs_matched`` (the test above) and its
+Benjamini-Hochberg ``fdr`` across sets; ``frac_significant`` (set genes at
+gene-level FDR < 0.05); ``pvalue_mw_genes_independent``, the previous
+Mann-Whitney test against a random matched draw, which ignores the
+correlation between genes and is kept for comparison only; ``method``;
+``genes``.
 ```
 
 ### tf.tl.landscape_genes
@@ -1320,8 +1520,9 @@ The windows used are reported in ``.attrs['windows']``.
 
 ```python
 tf.tl.profile_association(adata, label_key: 'str', *, clone_key: 'str | None' = None, strata_key:
-    'str | None' = 'auto', how: 'str' = 'auto', min_frac: 'float' = 0.5, min_reliability: 'float' =
-    0.0, n_perm: 'int' = 2000, random_state: 'int' = 0, verbose: 'bool' = True) -> 'dict'
+    'str | None' = 'auto', size_strata: 'bool | tuple[int, ...] | None' = None, sample_key: 'str |
+    None' = 'auto', how: 'str' = 'auto', min_frac: 'float' = 0.5, min_reliability: 'float' = 0.0,
+    n_perm: 'int' = 2000, random_state: 'int' = 0, verbose: 'bool' = True) -> 'dict'
 ```
 
 ```text
@@ -1335,9 +1536,21 @@ explained by the label: the share of the profile sum of squares between
 label groups (categorical labels, as in PERMANOVA; Anderson 2001) or
 captured by a linear trend in the label (numeric labels, as in
 distance-based redundancy analysis; McArdle & Anderson 2001). The
-p-value comes from permuting labels among clones within strata (donors).
-A label that never varies within a stratum (a donor's age or sex) cannot
-be tested this way and raises ``ValueError``.
+p-value comes from permuting labels among clones within strata (donors,
+and clone-size bins). A label that never varies within a stratum (a
+donor's age or sex) cannot be tested this way and raises ``ValueError``.
+
+Profiles of small clones are shrunk towards the average profile, so they
+are less spread out, and clone size can go with clone state; a label that
+follows clone size can then explain profile variance by itself. The label
+is therefore shuffled, by default, among clones of the same donor and
+similar size (``size_strata``), and the result gives the clone sizes
+behind the label (``clone_size``).
+
+A label that is the same for every cell of each sample (library, sort
+gate, tissue, visit) is tested with a warning and ``sample_level`` set to
+True: it then compares ``n_samples`` samples, and clones of one sample are
+not independent replicates.
 
 Parameters
 ----------
@@ -1347,10 +1560,18 @@ label_key, how, min_frac
 strata_key
     Clone-table column whose levels define permutation strata;
     ``"auto"`` uses the donor when available.
+size_strata
+    Also permute within clone-size bins (``SIZE_BINS``: 2, 3-4, 5-9 and
+    >= 10 cells). ``None`` uses ``SIZE_STRATA_DEFAULT`` (on for this
+    test); a tuple of clone sizes sets where bins start, e.g. ``(2, 5, 20)``.
+sample_key
+    ``obs`` column of samples for the sample-level check. ``"auto"`` uses
+    the ``context_key`` of :func:`threadfin.tl.clone_profiles` (the
+    ``sample_key`` of :func:`threadfin.run`); ``None`` skips the check.
 min_reliability
     Reliability floor; ``0.0`` (the default) uses every profiled clone.
     Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
-    few cells is pulled towards the population mean, so its influence is down-weighted in
+    few cells is pulled towards the average profile, so its influence is down-weighted in
     proportion to how little was seen. A reliability floor on top of that discards the same
     information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
     75-100 % of the profiled clones.
@@ -1361,18 +1582,31 @@ dict with ``r2`` (fraction of profile variance explained by the label),
 the permutation ``null_mean``, ``excess_r2`` (``r2 - null_mean``),
 ``p_value``, ``n_clones``, ``kind`` and, for every level of a categorical
 label (or for the numeric label), Spearman correlations with the first
-three principal axes of the profiles (``axis_correlation``). Stored in
-``adata.uns['threadfin']['profile_associations'][label_key]``.
+three principal axes of the profiles (``axis_correlation``); the clone
+sizes behind the label (``clone_size``: number of clones, median cells and
+share of two-cell clones per level, and for a numeric label its Spearman
+correlation with clone size); ``size_bins`` (None without size strata);
+and the sample-level check (``sample_level``, ``sample_key``,
+``n_samples``, and ``samples_per_level`` for a categorical label). Stored
+in ``adata.uns['threadfin']['profile_associations'][label_key]``.
 ```
 
 ### tf.tl.programme_composition
 
 ```python
-tf.tl.programme_composition(adata, state_key: 'str', *, key: 'str | None' = None) -> 'pd.DataFrame'
+tf.tl.programme_composition(adata, state_key: 'str', *, key: 'str | None' = None, weight: 'str' =
+    'cells', clone_key: 'str | None' = None) -> 'pd.DataFrame'
 ```
 
 ```text
-Fraction of each programme's cells in each cell state (rows sum to 1).
+Share of each cell state in each programme (rows sum to 1).
+
+``weight="cells"`` (default) counts every cell once: the fraction of the programme's cells in each state,
+to which an expanded clone contributes in proportion to its sampled cells. ``weight="clones"`` counts every
+clone once: the share of each clone's cells in each state, averaged over the programme's clones; it describes
+a typical clone of the programme and is not dominated by a few large clones. Only cells with both a
+programme and a state are counted. ``clone_key`` (for ``weight="clones"``) defaults to the clone column of
+:func:`threadfin.tl.clone_profiles`.
 ```
 
 ### tf.tl.programme_markers
@@ -1482,7 +1716,7 @@ candidates (``candidates``).
 
 ## Figures: tf.pl
 
-Every figure takes the AnnData that the analysis wrote to.
+Figures of the analysis take the AnnData it wrote to; figures of test results take the result tables.
 
 | function | what it does |
 |---|---|
@@ -1490,10 +1724,10 @@ Every figure takes the AnnData that the analysis wrote to.
 | [`tf.pl.category_colors`](#tfplcategory_colors) | Fixed-order colours for categories; beyond eight, grey 'other'. |
 | [`tf.pl.clone_map`](#tfplclone_map) | Scatter of clones (one point per clone; size = number of cells). |
 | [`tf.pl.coherence`](#tfplcoherence) | Observed clonal ICC next to the within-stratum permutation null. |
-| [`tf.pl.programme_composition`](#tfplprogramme_composition) | Stacked bars: fraction of each programme's cells in each cell state. |
+| [`tf.pl.programme_composition`](#tfplprogramme_composition) | Stacked bars: share of each cell state in each programme. |
 | [`tf.pl.stability`](#tfplstability) | Bootstrap stability (Jaccard) of each programme, with the 0.75 / 0.6 guides. |
 | [`tf.pl.association`](#tfplassociation) | Forest plot of clone-level programme effects from :func:`threadfin.tl.association_test`. |
-| [`tf.pl.memory`](#tfplmemory) | Clonal memory: how much a clone changes between snapshots, vs random clones. |
+| [`tf.pl.memory`](#tfplmemory) | Clonal memory: how much a clone changes between snapshots, vs other clones. |
 | [`tf.pl.label_effects`](#tfpllabel_effects) | How much of the difference between clones each label explains. |
 | [`tf.pl.heritability`](#tfplheritability) | Genes ranked by clonal ICC; optional gene sets highlighted (<= 3 sets). |
 | [`tf.pl.overview`](#tfploverview) | Four-panel summary of a :func:`threadfin.run` result. |
@@ -1563,11 +1797,14 @@ stored in ``adata.uns``.
 
 ```python
 tf.pl.programme_composition(adata, state_key: 'str', *, programme_key: 'str' = 'clone_programme',
-    ax=None, save=None, legend: 'bool' = True)
+    weight: 'str' = 'cells', ax=None, save=None, legend: 'bool' = True)
 ```
 
 ```text
-Stacked bars: fraction of each programme's cells in each cell state.
+Stacked bars: share of each cell state in each programme.
+
+``weight="cells"`` (default) shows the fraction of the programme's cells; ``weight="clones"`` counts every
+clone once (see :func:`threadfin.tl.programme_composition`).
 ```
 
 ### tf.pl.stability
@@ -1602,10 +1839,11 @@ tf.pl.memory(res: 'dict', *, ax=None, save=None)
 ```
 
 ```text
-Clonal memory: how much a clone changes between snapshots, vs random clones.
+Clonal memory: how much a clone changes between snapshots, vs other clones.
 
 Bars show the mean noise-corrected squared change of the same clone and of
-random same-donor clones; the title gives the memory index with its 95% CI.
+other same-donor clones seen at the same levels; the title gives the memory
+index with its 95% CI. A noise-corrected change can be negative.
 ```
 
 ### tf.pl.label_effects
@@ -1637,7 +1875,7 @@ Genes ranked by clonal ICC; optional gene sets highlighted (<= 3 sets).
 
 ```python
 tf.pl.overview(adata, *, state_key: 'str | None' = None, coherence_result: 'dict | None' = None,
-    save=None)
+    composition_weight: 'str' = 'cells', save=None)
 ```
 
 ```text
@@ -1645,7 +1883,7 @@ Four-panel summary of a :func:`threadfin.run` result.
 
 ``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
 ``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
-``adata.uns``.
+``adata.uns``. ``composition_weight`` is passed to :func:`programme_composition` for panel d.
 ```
 
 ### tf.pl.cells

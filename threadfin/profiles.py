@@ -10,19 +10,23 @@ fits the one-way random-effects model, independently for every feature ``j``::
 
 * ``mu_s`` is the context mean, estimated from *all* cells of the context, so
   a clone is described relative to the cells it was sampled with;
-* ``tau2_j`` is the between-clone (clonally inherited) variance and
+* ``tau2_j`` is the between-clone variance (shared within clones) and
   ``sigma2_j`` the within-clone variance;
 * the **clonal intraclass correlation**
-  ``ICC = sum(tau2) / sum(tau2 + sigma2)`` is the fraction of transcriptional
-  variance explained by clone identity;
+  ``ICC = sum(tau2) / sum(tau2 + sigma2)`` is the fraction of the variance of
+  cell states (the expression embedding) explained by clone identity;
 * each clone is represented by its BLUP (best linear unbiased predictor)
-  ``u_c = lambda_c * mean_i(x_i - mu_s)``, with
+  ``u_c = lambda_c * (mean_i(x_i - mu_s) - m)``, with ``m`` the mean of the
+  centred cells of all profiled clones and
   ``lambda_cj = n_c tau2_j / (n_c tau2_j + sigma2_j)``. Small clones are
-  shrunk towards their context, expanded clones keep their own profile, and
+  shrunk towards the average profile, expanded clones keep their own profile, and
   expression directions without clonal signal (``tau2_j = 0``) drop out;
 * a clone's **reliability** is the tau2-weighted mean of ``lambda_cj``
   (Spearman-Brown): the expected squared correlation between the estimated
-  and the true clone profile.
+  and the true clone profile. It is exact for independent cells; the kernel
+  profiles are computed from smoothed cells, for which it is slightly
+  optimistic (in simulation by 0.02-0.03 for clones of two to four cells and
+  up to 0.09 for clones of 30 or more).
 
 With ``representation="kernel"`` the same model is applied to random Fourier
 features of the embedding (Rahimi & Recht 2007). Each clone is then summarised
@@ -443,11 +447,10 @@ def clone_profiles(
     min_cells
         Clones with fewer cells are not profiled. The default of 2 is **not** a quality filter --
         Threadfin never filters on reliability -- it is what the clone map is *of*. Singleton clones
-        are 75 to 98 % of clones in these deposits, so including them turns the clone embedding back
-        into the cell UMAP it is supposed to summarise. Set 1 to include them; they are then drawn as
-        triangles rather than circles so a reader can see how much of a map rests on a single cell.
+        are 63 to 98 % of clones in the manuscript's 14 BCR datasets, so including them turns the clone
+        embedding back into the cell UMAP it is supposed to summarise. Set 1 to include them.
         Threadfin does not filter clones on reliability. Profiles are already shrunk: a clone seen in
-        few cells is pulled towards the population mean, so its influence is down-weighted in
+        few cells is pulled towards the average profile, so its influence is down-weighted in
         proportion to how little was seen. A reliability floor on top of that discards the same
         information twice; in the germinal-centre datasets of the manuscript a floor of 0.5 removes
         75-100 % of the profiled clones.
@@ -475,7 +478,17 @@ def clone_profiles(
             raise ValueError(
                 f"{len(shared):,} clone id(s) occur in more than one donor (e.g. {shared[0]!r}). A clone belongs to one "
                 f"individual: call clones within donors, or make the ids donor-private, e.g. "
-                f"adata.obs['{clone_key}'] = adata.obs['{donor_key}'].astype(str) + '|' + adata.obs['{clone_key}'].astype(str)")
+                f"adata.obs['{clone_key}'] = (adata.obs['{donor_key}'].astype(str) + '|' + "
+                f"adata.obs['{clone_key}'].astype(str)).where(adata.obs['{clone_key}'].notna())")
+    as_text = adata.obs[clone_key].dropna().astype(str)
+    looks_missing = as_text.str.fullmatch(r"(?:.*\|)?(?:nan|NaN|None|none|NA|<NA>|)")
+    if looks_missing.any():
+        import warnings
+
+        warnings.warn(
+            f"{int(looks_missing.sum()):,} cells have a clone id that looks like a missing value (e.g. "
+            f"{as_text[looks_missing].iloc[0]!r}); they are treated as one clone per id. If these cells have no "
+            f"clone, set their adata.obs['{clone_key}'] to NaN.", UserWarning, stacklevel=2)
     if smooth is None:
         smooth = 15 if representation == "kernel" else 0
     model = build_model(

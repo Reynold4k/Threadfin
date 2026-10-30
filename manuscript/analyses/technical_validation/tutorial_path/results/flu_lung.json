@@ -1,11 +1,11 @@
 {
  "dataset": "flu_lung",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 25.6,
-  "threadfin_run": 43.8,
-  "plot_and_save": 0.6
+  "user_inputs": 24.6,
+  "threadfin_run": 32.1,
+  "plot_and_save": 0.5
  },
  "warnings": [
   {
@@ -19,6 +19,18 @@
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'tissue' is the same for every cell of each 'sample', so this test compares 15 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'tissue', and the p-value counts clones as replicates. Read it as descriptive, or compare the samples w",
+   "file": "stats.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "The levels of 'tissue' (Lung, medLN) have no order, so they are paired in alphabetical order. If they have one (time points, or a path between tissues), pass order=[...] or make the column an ordered pandas Categorical.",
+   "file": "api.py",
+   "count": 1
   }
  ],
  "error": null,
@@ -30,11 +42,27 @@
   "tissue",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "tissue",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 0.14,
+ "gallery_h5ad": "flu_lung.h5ad",
  "clones": 1367,
  "clones_ge2": 204,
  "icc": 0.16163318219793016,
- "icc_shuffled": 0.01838956311103565,
+ "icc_shuffled": 0.051085570574239195,
  "p_value": 0.004975124378109453,
  "programmes": 1,
  "skipped": {},
@@ -42,6 +70,6 @@
   "n_neighbors": 32,
   "min_dist": 0.95
  },
- "seconds_total": 70.0,
+ "seconds_total": 57.3,
  "peak_rss_gb": 1.13
 }

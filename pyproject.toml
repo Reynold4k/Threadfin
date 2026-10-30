@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "threadfin"
-version = "4.5.3"
+version = "4.6.0"
 description = "Relationships between B-cell clones from paired single-cell RNA and BCR sequencing: clone embeddings, clonal coherence, clonal programmes, clone-level tests and clonal memory"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -47,9 +47,10 @@ dependencies = [
 
 [project.optional-dependencies]
 # clone definition with Dandelion; sc-dandelion 0.5.7 imports nxviz, which uses matplotlib.cm.get_cmap, removed in
-# matplotlib 3.9. matplotlib < 3.9 has wheels only for Python <= 3.12, so the extra needs Python 3.10-3.12.
+# matplotlib 3.9. Up to Python 3.12 the extra keeps the validated matplotlib < 3.9; matplotlib < 3.9 has no wheels
+# for Python 3.13+, where importing threadfin restores get_cmap for Dandelion (clone calls verified identical).
 # sc-dandelion 1.0 (2026-10-25) calls clones differently and is not yet validated, hence < 1.
-dandelion = ["sc-dandelion>=0.5.7,<1", "matplotlib>=3.7,<3.9"]
+dandelion = ["sc-dandelion>=0.5.7,<1", "matplotlib>=3.7,<3.9; python_version < '3.13'"]
 seq = ["parasail>=1.3"]          # faster CDR3 alignment for the legacy v3 functions
 data = ["mudata>=0.3", "awkward>=2"]  # reading scirpy/MuData example data
 test = ["pytest>=7", "pytest-cov>=4"]

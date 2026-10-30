@@ -1,11 +1,11 @@
 {
  "dataset": "covid_bcell",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 10.3,
-  "threadfin_run": 155.5,
-  "plot_and_save": 1.4
+  "user_inputs": 7.2,
+  "threadfin_run": 122.4,
+  "plot_and_save": 1.2
  },
  "warnings": [
   {
@@ -15,9 +15,9 @@
    "count": 36
   },
   {
-   "category": "ImplicitModificationWarning",
-   "message": "Trying to modify attribute `.obs` of view, initializing view as actual.",
-   "file": "anndata.py",
+   "category": "UserWarning",
+   "message": "3 of 36 'sample' groups contain cells of more than one 'donor' (for example libraries that pool several donors). Clone labels are shuffled within each 'donor' x 'sample' combination, so they never move between 'donor' groups.",
+   "file": "api.py",
    "count": 1
   },
   {
@@ -28,7 +28,13 @@
   },
   {
    "category": "UserWarning",
-   "message": "The confidence interval of the memory index could not be computed: in some bootstrap resamples of clones no between-clone difference was left to compare with (too few clones seen at two levels). The memory index and its P value are unaffected; the interval is reported as missing.",
+   "message": "adata.obs['antigen_call'] has a level that looks like a missing value: 'none' (7,186 cells). It is treated as a level of their own; if these cells have no antigen_call, set their adata.obs['antigen_call'] to NaN.",
+   "file": "stats.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "The confidence interval of the memory index could not be computed: in some bootstrap resamples of clones no between-clone difference was left to compare with (too few clones seen at two levels). The interval is reported as missing and the index should not be interpreted; the P value (a permutation t",
    "file": "api.py",
    "count": 1
   }
@@ -41,11 +47,27 @@
   "antigen_call",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "visit",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 1.06,
+ "gallery_h5ad": "covid_bcell.h5ad",
  "clones": 38059,
  "clones_ge2": 588,
  "icc": 0.40028924112303604,
- "icc_shuffled": 0.045626755289156835,
+ "icc_shuffled": 0.05204689744130857,
  "p_value": 0.004975124378109453,
  "programmes": 1,
  "skipped": {},
@@ -53,6 +75,6 @@
   "n_neighbors": 56,
   "min_dist": 0.95
  },
- "seconds_total": 167.5,
- "peak_rss_gb": 4.31
+ "seconds_total": 131.0,
+ "peak_rss_gb": 3.82
 }

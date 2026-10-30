@@ -14,7 +14,7 @@ record of exactly what was run.
 
 | Folder | Question | Answer |
 |---|---|---|
-| [`tutorial_path/`](tutorial_path/README.md) | Does the documented path work on real data, as a new user would follow it? | `tf.run` on all 14 public BCR datasets and the two LARRY datasets, in a new environment, with every setting at its default: no errors; every code block of Tutorials 1, 3 and 4 runs. |
+| [`tutorial_path/`](tutorial_path/README.md) | Does the documented path work on real data, as a new user would follow it? | `tf.run` on all 14 public BCR datasets and the two LARRY datasets, in a new environment, with every setting at its default: no errors; every code block of Tutorials 1, 3 and 4 runs; every figure in a [gallery](tutorial_path/figures/README.md). |
 | [`clone_definition/`](clone_definition/README.md) | Do the results depend on how clones are called? | Junction identities 0.75–1.0 and Dandelion's contig check, on two case studies: every conclusion holds. |
 | [`embedding/`](embedding/README.md) | Do the results depend on how the expression embedding is built? | No: 2,000–5,000 variable genes and 20–50 components leave the excess clonal ICC within 0.115–0.126 and every label effect significant; leaving the receptor genes in would inflate the RBD coherence (excess 0.118 → 0.176). |
 | [`power/`](power/README.md) | How many clones does the coherence test need? | Calibrated; 80 % power for a clonal ICC of 0.1 with about 10 clones of two or more cells, 0.05 with about 40, 0.02 with 160–320. |

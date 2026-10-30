@@ -1,0 +1,280 @@
+{
+ "dataset": "flu",
+ "name": "GSE175522 blood, influenza vaccine",
+ "threadfin_run": "4.6.0",
+ "threadfin_drawn": "4.6.0",
+ "record": {
+  "cells": 123693,
+  "clones_ge2": 2082,
+  "icc": 0.5614943486603674,
+  "icc_shuffled": 0.02968097868372271,
+  "p_value": 0.004975124378109453,
+  "programmes": 5,
+  "test": [
+   "timepoint",
+   "isotype"
+  ],
+  "skipped": {}
+ },
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "timepoint",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
+ "figures": [
+  {
+   "name": "overview",
+   "file": "overview.png",
+   "title": "Overview (`result.plot()`)",
+   "shows": "The figure that `result.plot()` saves: (a) clonal programmes on the clone map, (b) clonal coherence, (c) programme stability, (d) programme sizes.",
+   "dpi": 300,
+   "bytes": 447430,
+   "width": 2204,
+   "height": 1438,
+   "seconds": 1.0
+  },
+  {
+   "name": "coherence",
+   "file": "coherence.png",
+   "title": "Clonal coherence",
+   "shows": "Share of transcriptional variance explained by clone identity (clonal ICC), observed and with clone labels shuffled within each `sample` (bar: mean of 200 permutations; whisker: their central 95 %).",
+   "dpi": 300,
+   "bytes": 32271,
+   "width": 641,
+   "height": 668,
+   "seconds": 0.1
+  },
+  {
+   "name": "clone_map_programmes",
+   "file": "clone_map_programmes.png",
+   "title": "Clone map: programmes",
+   "shows": "The clone map (UMAP of clone profiles; one point per clone, area by its number of cells) coloured by clonal programme, one panel per programme, every other clone in grey.",
+   "dpi": 300,
+   "bytes": 379383,
+   "width": 1657,
+   "height": 1034,
+   "seconds": 0.6
+  },
+  {
+   "name": "clone_map_clone_size",
+   "file": "clone_map_clone_size.png",
+   "title": "Clone map: clone size",
+   "shows": "The clone map coloured by the number of cells of each clone.",
+   "dpi": 300,
+   "bytes": 146806,
+   "width": 908,
+   "height": 770,
+   "seconds": 0.3
+  },
+  {
+   "name": "clone_map_reliability",
+   "file": "clone_map_reliability.png",
+   "title": "Clone map: profile reliability",
+   "shows": "The clone map coloured by the reliability of each clone's profile (0 to 1; it grows with the number of cells sampled from the clone).",
+   "dpi": 300,
+   "bytes": 168113,
+   "width": 931,
+   "height": 770,
+   "seconds": 0.3
+  },
+  {
+   "name": "clone_map_donor",
+   "file": "clone_map_donor.png",
+   "title": "Clone map: donor",
+   "shows": "The clone map coloured by donor, one panel per donor, every other clone in grey.",
+   "dpi": 300,
+   "bytes": 452616,
+   "width": 1657,
+   "height": 1034,
+   "seconds": 0.6
+  },
+  {
+   "name": "clone_map_timepoint",
+   "file": "clone_map_timepoint.png",
+   "title": "Clone map: timepoint",
+   "shows": "The clone map coloured by `timepoint`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 170992,
+   "width": 843,
+   "height": 578,
+   "seconds": 0.2
+  },
+  {
+   "name": "clone_map_isotype",
+   "file": "clone_map_isotype.png",
+   "title": "Clone map: isotype",
+   "shows": "The clone map coloured by `isotype`, the level held by at least half of each clone's cells, one panel per level, every other clone in grey (clones without such a majority appear only in grey).",
+   "dpi": 300,
+   "bytes": 312106,
+   "width": 1657,
+   "height": 578,
+   "seconds": 0.4
+  },
+  {
+   "name": "stability",
+   "file": "stability.png",
+   "title": "Programme stability",
+   "shows": "Bootstrap stability of each programme (mean Jaccard overlap with the best-matching group over 30 bootstrap replicates), with the 0.75 (stable) and 0.6 guides.",
+   "dpi": 300,
+   "bytes": 27579,
+   "width": 994,
+   "height": 592,
+   "seconds": 0.1
+  },
+  {
+   "name": "composition_timepoint_cells",
+   "file": "composition_timepoint_cells.png",
+   "title": "Programme composition: timepoint (cells)",
+   "shows": "For each programme (one bar), the fraction of the programme's cells in each level of `timepoint` (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 20301,
+   "width": 873,
+   "height": 648,
+   "seconds": 0.1
+  },
+  {
+   "name": "composition_timepoint_clones",
+   "file": "composition_timepoint_clones.png",
+   "title": "Programme composition: timepoint (clones)",
+   "shows": "For each programme (one bar), the mean over the programme's clones of each clone's fraction of cells in each level of `timepoint`, so that every clone counts once (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 19995,
+   "width": 873,
+   "height": 648,
+   "seconds": 0.1
+  },
+  {
+   "name": "composition_isotype_cells",
+   "file": "composition_isotype_cells.png",
+   "title": "Programme composition: isotype (cells)",
+   "shows": "For each programme (one bar), the fraction of the programme's cells in each level of `isotype` (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 26347,
+   "width": 921,
+   "height": 648,
+   "seconds": 0.3
+  },
+  {
+   "name": "composition_isotype_clones",
+   "file": "composition_isotype_clones.png",
+   "title": "Programme composition: isotype (clones)",
+   "shows": "For each programme (one bar), the mean over the programme's clones of each clone's fraction of cells in each level of `isotype`, so that every clone counts once (levels beyond the seventh pooled as 'other').",
+   "dpi": 300,
+   "bytes": 25750,
+   "width": 921,
+   "height": 648,
+   "seconds": 0.2
+  },
+  {
+   "name": "label_effects",
+   "file": "label_effects.png",
+   "title": "Label effects",
+   "shows": "For each tested label, the share of the variance between clone profiles that it explains (blue) and the same with the label shuffled among clones of the same donor and of similar size (grey), with the permutation P value.",
+   "dpi": 300,
+   "bytes": 28919,
+   "width": 1385,
+   "height": 527,
+   "seconds": 0.1
+  },
+  {
+   "name": "association_timepoint",
+   "file": "association_timepoint.png",
+   "title": "Programme association: timepoint",
+   "shows": "Clone-level association of each programme with `timepoint`: Mantel-Haenszel odds ratio within donor x clone-size bins with its 95 % CI, one panel per level. Filled markers: FDR < 0.05.",
+   "dpi": 300,
+   "bytes": 22188,
+   "width": 1702,
+   "height": 696,
+   "seconds": 0.3
+  },
+  {
+   "name": "association_isotype",
+   "file": "association_isotype.png",
+   "title": "Programme association: isotype",
+   "shows": "Clone-level association of each programme with `isotype`: Mantel-Haenszel odds ratio within donor x clone-size bins with its 95 % CI, one panel per level. Filled markers: FDR < 0.05.",
+   "dpi": 300,
+   "bytes": 53666,
+   "width": 2577,
+   "height": 1431,
+   "seconds": 0.8
+  },
+  {
+   "name": "memory_timepoint",
+   "file": "memory_timepoint.png",
+   "title": "Clonal memory over timepoint",
+   "shows": "How much a clone's profile changes between levels of `timepoint`, against other clones of the same donor seen at the same two levels; the title gives the memory index with its 95 % CI.",
+   "dpi": 300,
+   "bytes": 29053,
+   "width": 664,
+   "height": 622,
+   "seconds": 0.1
+  },
+  {
+   "name": "heritability",
+   "file": "heritability.png",
+   "title": "Gene heritability",
+   "shows": "Clonal ICC of every gene expressed in at least 5 % of the cells of clones with two or more cells (receptor genes excluded), by rank; the 12 highest are named (`tl.gene_heritability` with its defaults).",
+   "dpi": 300,
+   "bytes": 75580,
+   "width": 997,
+   "height": 730,
+   "seconds": 0.4
+  },
+  {
+   "name": "cells_programmes",
+   "file": "cells_programmes.png",
+   "title": "Cells: programmes",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each programme's clones, one panel per programme, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 206763,
+   "width": 2120,
+   "height": 1120,
+   "seconds": 1.1
+  },
+  {
+   "name": "cells_timepoint",
+   "file": "cells_timepoint.png",
+   "title": "Cells: timepoint",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `timepoint`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 87417,
+   "width": 891,
+   "height": 562,
+   "seconds": 0.4
+  },
+  {
+   "name": "cells_isotype",
+   "file": "cells_isotype.png",
+   "title": "Cells: isotype",
+   "shows": "Cells on a UMAP of the embedding the run used (`X_threadfin`): the cells of each level of `isotype`, one panel per level, on the grey of all cells.",
+   "dpi": 300,
+   "bytes": 352270,
+   "width": 2120,
+   "height": 1679,
+   "seconds": 2.2
+  },
+  {
+   "name": "signatures",
+   "file": "signatures.png",
+   "title": "Marker signatures by programme",
+   "shows": "Mean log-normalised expression of the case-study marker sets (plasma cell, germinal centre, dark zone / cycling, light zone, memory, naive, interferon) in the cells of each programme, z-scored across programmes.",
+   "dpi": 300,
+   "bytes": 101393,
+   "width": 1751,
+   "height": 915,
+   "seconds": 0.5
+  }
+ ],
+ "not_drawn": [],
+ "seconds": 36.0
+}

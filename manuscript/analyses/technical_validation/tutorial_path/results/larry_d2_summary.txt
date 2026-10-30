@@ -1,13 +1,14 @@
 Threadfin summary
 =================
-Cells with a clone id: 4,638 of 28,249, in 2,672 clones (411 clones have >= 3 cells).
+Cells with a clone id: 4,638 of 28,249, in 2,672 clones (1,401 clones have two or more cells and are profiled).
 
-1. Does clone identity shape cell state? (clonal coherence)
-   Clone identity explains 68.0% of transcriptional variance within 'sample' strata; shuffled clones explain 1.0% (p = 0.00498, 200 permutations).
-   Profiles are shrunk towards the mean, so a clone reaches reliability 0.5 at 1 cells. No clone is filtered out on reliability.
+1. Are cells of one clone more alike than cells of different clones? (clonal coherence)
+   Clone identity explains 68.0% of the variance of cell states (the expression embedding); with clone labels shuffled within 'sample', 1.0% (p = 0.00498, 200 permutations): an excess of 67.0 percentage points.
+   Profiles are shrunk towards the average profile, so a clone's (smoothed) profile reaches reliability 0.5 at 1 cell; no clone is filtered out on reliability.
 
 2. Which clones behave alike? (clonal programmes)
-   4 programmes from 1,401 reliable clones (every split significant); 3 are stable (bootstrap Jaccard >= 0.75).
+   4 programmes from 1,401 profiled clones (every split passed the split test); 3 are stable (bootstrap Jaccard >= 0.75).
+   State composition: share of the programme's cells in each state.
    P1: 1,007 clones, 2,437 cells, stability 0.79; Undifferentiated 95%, Neutrophil 5%
    P2: 149 clones, 334 cells, stability 0.57; Undifferentiated 96%, Lymphoid 4%  [unstable - do not interpret]
    P3: 138 clones, 319 cells, stability 0.82; Undifferentiated 85%, Baso 8%

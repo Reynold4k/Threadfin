@@ -20,17 +20,27 @@ Clones are donor-private; every donor's cells are shifted by a random vector of 
 (in within-state standard deviations), and donors differ in programme composition (Dirichlet(4)
 weights). Unlabelled background cells (8,000, from all states) are the context that real data carry.
 
-Usage: python simulate_inputs.py
+The two donor-shift levels of one seed share the same clones and cells (the shift is added afterwards), and
+the small and large regimes of one seed share the donor shifts and programme weights, so the independent
+unit is the seed. Seeds 1-3 were run with every tool; seeds 4-10 were added on 2026-10-28 so that the
+simulation readouts can be tested at the level of seeds (every tool except Clonotrace, whose runs on large
+simulated clones take hours each).
+
+Usage: python simulate_inputs.py [seed ...] [--force]     (default: seeds 1-10; an existing input is kept
+       unless --force is given)
 """
 from __future__ import annotations
 
 import json
+import sys
 
 import numpy as np
 import pandas as pd
 
 from bench_paths import INPUTS
 from prepare_inputs import SEEDS, split_halves
+
+SIM_SEEDS = tuple(range(1, 11))
 
 DIM = 30
 SEP = 4.0
@@ -87,12 +97,18 @@ def simulate(name: str, *, seed: int, regime: str, batch: float, n_clones=600, n
     print(json.dumps(meta), flush=True)
 
 
-def main():
+def main(argv):
+    force = "--force" in argv
+    seeds = [int(a) for a in argv if a.isdigit()] or SIM_SEEDS
     for regime in ("small", "large"):
         for batch in (0.0, 1.5):
-            for seed in (1, 2, 3):
-                simulate(f"sim_{regime}_b{batch:g}_s{seed}", seed=seed, regime=regime, batch=batch)
+            for seed in seeds:
+                name = f"sim_{regime}_b{batch:g}_s{seed}"
+                if (INPUTS / name / "meta.json").exists() and not force:
+                    print(f"{name}: exists, kept", flush=True)
+                    continue
+                simulate(name, seed=seed, regime=regime, batch=batch)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

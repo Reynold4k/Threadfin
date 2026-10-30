@@ -1,11 +1,11 @@
 {
  "dataset": "mouse_np",
- "threadfin": "4.5.0",
+ "threadfin": "4.6.0",
  "python_hash_seed": "0",
  "steps": {
-  "user_inputs": 15.2,
-  "threadfin_run": 50.4,
-  "plot_and_save": 0.7
+  "user_inputs": 13.7,
+  "threadfin_run": 37.1,
+  "plot_and_save": 0.6
  },
  "warnings": [
   {
@@ -19,6 +19,18 @@
    "message": "Tensorflow not installed; ParametricUMAP will be unavailable",
    "file": "__init__.py",
    "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "'division_gate' is the same for every cell of each 'sample', so this test compares 14 samples, not independent clones: whatever differs between samples (library, sort, processing) is read as an effect of 'division_gate', and the p-value counts clones as replicates. Read it as descriptive, or compare",
+   "file": "stats.py",
+   "count": 1
+  },
+  {
+   "category": "UserWarning",
+   "message": "The levels of 'division_gate' (mCherry-high, mCherry-low) have no order, so they are paired in alphabetical order. If they have one (time points, or a path between tissues), pass order=[...] or make the column an ordered pandas Categorical.",
+   "file": "api.py",
+   "count": 1
   }
  ],
  "error": null,
@@ -29,11 +41,27 @@
   "division_gate",
   "isotype"
  ],
+ "settings": {
+  "clone_key": "clone_id",
+  "donor_key": "donor",
+  "sample_key": "donor",
+  "strata_key": "sample",
+  "state_key": null,
+  "composition_weight": "cells",
+  "time_key": "division_gate",
+  "basis": "X_threadfin",
+  "representation": "kernel",
+  "receptor": "BCR",
+  "n_perm": 200,
+  "n_boot": 30,
+  "random_state": 0
+ },
  "h5ad_gb": 0.46,
+ "gallery_h5ad": "mouse_np.h5ad",
  "clones": 2295,
  "clones_ge2": 470,
  "icc": 0.11662370917944359,
- "icc_shuffled": 0.00783803445306593,
+ "icc_shuffled": 0.04005630411102011,
  "p_value": 0.004975124378109453,
  "programmes": 1,
  "skipped": {},
@@ -41,6 +69,6 @@
   "n_neighbors": 18,
   "min_dist": 0.8
  },
- "seconds_total": 66.4,
+ "seconds_total": 51.4,
  "peak_rss_gb": 1.62
 }
