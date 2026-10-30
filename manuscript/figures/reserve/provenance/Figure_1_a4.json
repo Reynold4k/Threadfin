@@ -1,5 +1,5 @@
 {
-  "figure": "Figure 1 (A4): a, Threadfin concept; b, algorithm pipeline, fidelity test, biological inference",
+  "figure": "Figure 1 (A4): a, Threadfin concept; b, algorithm pipeline, clonal coherence test, biological inference",
   "page_mm": [
     210.0,
     297.0
@@ -15,7 +15,7 @@
       "2 overlapping clones pooled into Frechet means",
       "3 clone embedding: points at Frechet means; A and A' share a footprint and sit together; cells of the two right arms interleave evenly on the scRNA UMAP"
     ],
-    "Clone embedding fidelity test": [
+    "Clonal coherence test": [
       "4 observed clonal ICC vs 500 clone-label shuffles within samples"
     ],
     "Biological inference": [

@@ -29,7 +29,7 @@ manuscript stands, what was tested on which data, what was found, and what is st
 | **Title** | Threadfin infers relationships between B-cell clones from paired single-cell RNA and receptor sequencing |
 | **Authors** | Chen Zhu (Peter Doherty Institute, University of Melbourne), Yang Yang (Frazer Institute, University of Queensland; corresponding), Zewen Kelvin Tuong (Ian Frazer Centre for Children's Immunotherapy Research, University of Queensland; corresponding), Zhian Chen (affiliation to be provided) |
 | **Article type and target** | Article, prepared for *Nature Methods* (format, word limits and reporting standards of that journal); *Cell Systems* and *Genome Biology* were assessed as alternatives |
-| **Current version** | preprint draft of 2026-10-17, with the new Figure 4 added on 2026-10-19; package version used for the analyses 4.2.0, current package 4.6.0 |
+| **Current version** | preprint draft of 2026-10-17, with the new Figure 4 added on 2026-10-19, revised on 2026-10-30 after five independent reviews (changes approved by the authors; the Word files of 2026-10-30, with and without tracked changes, are kept outside the repository); figures made with 4.2.0–4.3.1, reported statistics computed with 4.6.0, the current package |
 | **Main figures** | 4 (concept; application to germinal-centre data; clone states; model-antigen germinal centres) |
 | **Supplementary material** | 6 supplementary figures (Supplementary Fig. 1 in two sheets), 2 supplementary tables |
 | **Datasets** | 9 paired scRNA-seq + scBCR-seq datasets in the manuscript, 6 further B-cell datasets analysed, 3 non-B-cell lineage datasets |
@@ -52,9 +52,9 @@ clone as the unit and respect the sampling design.
    clone property invisible on the cell-level embedding.
 4. In spontaneous germinal centres, clones are ordered from single-state antibody-secreting clones to
    multi-state clones, and memory B cells occur mostly in the multi-state clones.
-5. In gut-associated lymphoid tissues, the clone embedding resolves a continuous path from GC clones through
-   clones spanning inductive sites and the lamina propria to IgA plasma-cell clones; clones whose plasma cells
-   lacked GC-fate labelling group at the end of the path.
+5. In gut-associated lymphoid tissues, the clone embedding resolves an ordered path from GC clones through
+   clones spanning inductive sites and the lamina propria to IgA antibody-secreting-cell (ASC) clones; clones
+   whose ASCs lacked GC-fate labelling group at the end of the path.
 6. In RBD-immunised division-reporter mice, the main axis of clone profiles follows recent division in two
    cohorts whose sequencing libraries are crossed, which excludes a library artefact for division.
 
@@ -93,7 +93,7 @@ The seven Results headings:
 3. Clone-level structure is detectable when most clones are sampled as two cells
 4. Plasmablasts in one transcriptional state belong to clones that differ in the states they contain
 5. State diversity decreases towards antibody-secreting clones, and memory B cells occur in the most diverse clones
-6. Clones spanning inductive sites and the lamina propria connect germinal-centre B cells with intestinal IgA plasma cells
+6. Clones spanning inductive sites and the lamina propria connect germinal-centre B cells with intestinal IgA antibody-secreting cells
 7. Division, antigen binding and zone vary continuously between clones in model-antigen germinal centres
 
 ### 2.2 The figures
@@ -127,8 +127,8 @@ was retired; its material is in [`analyses/lineage_barcode_systems/`](analyses/l
 | Two-cell clones contribute | *Plasmodium*: 830/1,015 clones have two cells, ICC 0.451 vs 0.015 (Fig. 2C) | GSE286215 | stability of P3 0.28: a continuum region, not a group |
 | A clone property not visible on cells | P2 and P3 plasmablasts overlap on the cell embedding; P3 clones also contain GC cells (Fig. 2D) | GSE286215 | — |
 | State diversity orders clones | entropy vs clone axis ρ = −0.742 (322 clones); memory-containing clones 35.8 % → 2.5 % across quartiles; negative in 8/8 mice; same on profile axes, after rarefaction and size adjustment (Fig. 3a–f; Supp. Fig. 3) | GSE203132 | annotations are RNA-derived; P3/P4 split is post hoc; clones are heavy-chain clones, and paired-chain clones give the same result (ρ −0.754, 8/8 mice; item 2.3-1) |
-| A GC → plasma-cell clonal path in the gut | bridging clones: 131/146 contain GC B and plasma cells, 128/146 span inductive sites and LP; isotype IgG1 → IgA along the path (measured in BCR); profiles associated with IgA (R² 0.18), IgG1 (0.08), LP (0.51), GC sort (0.067) (Fig. 3g–j; Supp. Fig. 4) | GSE284622 | a static arrangement, not a measured trajectory; the second plasma branch is one mouse (Supp. Fig. 5) |
-| Division history is written into clone profiles | excess R² 0.088 (1,887 clones); per cohort 0.092 and 0.069; cosine of division directions 0.89 vs −1 for a library effect; ρ > 0 in 10/10 mice (Fig. 4) | GSE287123 | bait and zone gates are library-confounded; bait is a gate, not affinity |
+| A GC → ASC clonal path in the gut | bridging clones: 131/146 contain GC B cells and ASCs, 128/146 span inductive sites and LP; isotype IgG1 → IgA along the path (measured in BCR); profiles associated with IgA (R² 0.18), IgG1 (0.08), LP (0.51), GC sort (0.067) (Fig. 3g–j; Supp. Fig. 4) | GSE284622 | a static arrangement, not a measured trajectory; the second ASC branch is one mouse (Supp. Fig. 5) |
+| Division history is written into clone profiles | excess R² 0.087 (1,887 clones); per cohort 0.091 and 0.067 (Threadfin 4.6.0; labels shuffled within mouse × clone size); cosine of division directions 0.89 vs −1 for a library effect; ρ > 0 in 10/10 mice (Fig. 4) | GSE287123 | bait and zone gates are library-confounded; bait is a gate, not affinity |
 
 Full statistics: Supplementary Table 2 of the manuscript and the `summary.json` / `label_effects.csv` files
 of each dataset in [`case_studies/results/`](case_studies/results).
@@ -431,6 +431,7 @@ Listed by priority. "Before submission" items are also in section 2.3.
 | 2026-10-27 | benchmark refreshed after Clonotrace's run on the 11,141 lymph-node clones finished (101 h on 32 workers): forced to two-cell clones, Clonotrace now runs on all 11 datasets; the reason texts of Clonotrace runs in `benchmarking/results/coverage_runtime.csv` corrected; package 4.5.2 (labels fixed within each donor reported as not testable, `counts_layer=`, documentation checked against the code) |
 | 2026-10-28 | package 4.5.3 (pynndescent kept below 0.7, whose release of 2026-10-27 broke scanpy's neighbour search and changed approximate neighbours; the Dandelion extra documented as Python 3.10–3.12), found by following every tutorial in new environments |
 | 2026-10-30 | package 4.6.0, after five independent reviews (software, statistics, concept, biology, benchmark): composition per clone (`composition_weight`), coherence strata (`strata_key`), corrected clonal memory, label tests stratified by clone size with sample-level labels flagged, a gene-set test that allows for co-expressed genes, distribution-free export-lag intervals, clone calls identical in every session, the run recorded in the AnnData, and 25 new tests of statistical properties; the tutorial path re-run with a figure gallery of every dataset |
+| 2026-10-30 | manuscript and figures revised after the five reviews, with the authors' approval: the three misplaced Results headings restored; the Discussion's benchmark sentence; package versions; label-test strata and the numbers re-derived with 4.6.0 (Supplementary Table 2: one call changes, the GSE246382 dark-zone gate); ASC wording for the gut annotation; donor-level annotations no longer tested; Methods corrections (shrinkage target, reliability, stability, resolution rule, hash seed, heavy-chain-only clones) and additions (disjoint-cell robustness, kernel versus mean, a million cells, clone-definition and embedding sensitivity); Figure 1 panel renamed "Clonal coherence test"; Supplementary Figs. 4–5 with ASC labels and 4.6.0 values |
 
 ---
 

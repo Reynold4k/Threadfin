@@ -16,8 +16,8 @@ b  Reached by an arrow from the fish. Three colour-coded sections of
                            Frechet mean falls; clones with the same state
                            footprint (A, A') are neighbours; cells of the two
                            right arms interleave evenly on the scRNA UMAP.
-   Clone embedding      4  observed clonal ICC against 500 clone-label
-   fidelity test           shuffles within each sample.
+   Clonal coherence     4  observed clonal ICC against 500 clone-label
+   test                    shuffles within each sample.
    Biological           5  GC B and plasma cells form one mass on the scRNA
    inference               UMAP; Threadfin resolves their clones into a
                            continuous structure, a GC hub with two parallel
@@ -75,7 +75,7 @@ S_FID = (6.0, S_PIPE[1] + S_PIPE[3] + 4.0, 66.0, 57.0)
 S_BIO = (76.0, S_FID[1], 128.0, 57.0)
 SECTIONS = [  # box, title, face, title colour
     (S_PIPE, 'Algorithm pipeline', '#EAF1F7', '#2B5D82'),
-    (S_FID, 'Clone embedding fidelity test', '#FBF3E1', '#86600F'),
+    (S_FID, 'Clonal coherence test', '#FBF3E1', '#86600F'),
     (S_BIO, 'Biological inference', '#E8F4F0', '#256E60'),
 ]
 CARD_TOP, CARD_PAD = 8.5, 3.0                          # card offset from the section top; bottom pad
@@ -571,7 +571,7 @@ def audit(fig):
 
 def manifest():
     return {
-        'figure': 'Figure 1 (A4): a, Threadfin concept; b, algorithm pipeline, fidelity test, biological inference',
+        'figure': 'Figure 1 (A4): a, Threadfin concept; b, algorithm pipeline, clonal coherence test, biological inference',
         'page_mm': [PAGE_W, PAGE_H],
         'panel_a': {'source': 'figure1_programmes.draw(header=False, key=False)', 'mm_per_design_unit': A_K},
         'panel_b_title': B_TITLE,
@@ -580,7 +580,7 @@ def manifest():
                                    '2 overlapping clones pooled into Frechet means',
                                    "3 clone embedding: points at Frechet means; A and A' share a footprint and sit "
                                    'together; cells of the two right arms interleave evenly on the scRNA UMAP'],
-            'Clone embedding fidelity test': ['4 observed clonal ICC vs 500 clone-label shuffles within samples'],
+            'Clonal coherence test': ['4 observed clonal ICC vs 500 clone-label shuffles within samples'],
             'Biological inference': ['5 GC B and plasma cells: one mass on the scRNA UMAP; their clones form a '
                                      'continuous GC hub with two parallel, unlabelled branches in the clone '
                                      'embedding (coloured GC-like to plasma-like)',

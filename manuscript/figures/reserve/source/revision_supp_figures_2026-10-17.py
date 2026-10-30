@@ -40,9 +40,11 @@ REGION_ORDER = ["P1", "P2 bridge", "P2 lower", "P3"]
 MOUSE = {"mouse2": "#6a5acd", "mouse3": "#e07fb0", "mouse4": "#1b9e77"}
 MOUSE_LABEL = {"mouse2": "Mouse 2", "mouse3": "Mouse 3", "mouse4": "Mouse 4"}
 CELLTYPE = {"B_cell": "#91a6bd", "GC_Bcell": "#2a78d6", "plasma": "#4a3aa7", "other": "#c3c2b7"}
-CELLTYPE_LABEL = {"B_cell": "B cell", "GC_Bcell": "GC B cell", "plasma": "Plasma cell", "other": "Other"}
+CELLTYPE_LABEL = {"B_cell": "B cell", "GC_Bcell": "GC B cell", "plasma": "ASC", "other": "Other"}
 TISSUE = {"PP": "#6c9a3f", "MLN": "#c9a227", "LP": "#b5523b"}
 SPAN = {"GC B only": "#405BD8", "GC B and plasma": "#2fa4a0", "plasma only": "#E44336", "other": "#c3c2b7"}
+# the original study's "plasma" class includes all antibody-secreting cells (ASCs); shown as ASC
+SPAN_LABEL = {"GC B only": "GC B only", "GC B and plasma": "GC B and ASC", "plasma only": "ASC only", "other": "other"}
 ISO = {"IgA": "#b5523b", "IgG1": "#4a3aa7", "IgG2b": "#8f86cf", "IgM": "#91a6bd", "IgD": "#c3c2b7",
        "other": "#e6e4dc"}
 HIST = {"all GC-sorted": "#f2c94c", "mixed": "#2fa4a0", "all nonGC": "#2b1d73"}
@@ -288,7 +290,7 @@ def path_positions(d: pd.DataFrame) -> tuple[pd.Series, str]:
     return pd.Series(dd / dd[np.isfinite(dd)].max(), index=d.index), d.index[root]
 
 
-PATH_LINES = [("frac_GC", "GC B cells", "#2a78d6", "-"), ("frac_plasma", "Plasma cells", "#4a3aa7", "-"),
+PATH_LINES = [("frac_GC", "GC B cells", "#2a78d6", "-"), ("frac_plasma", "ASCs", "#4a3aa7", "-"),
               ("frac_LP", "Lamina propria", "#b5523b", "-"), ("frac_IgA", "IgA", "#e0a33a", "-"),
               ("frac_IgG1", "IgG1", "#8f86cf", "-"), ("nonGC", "NonGC-sorted", "#111111", (0, (3, 1.5)))]
 
@@ -333,7 +335,7 @@ def figure_s4():
     # b, state span
     ax = pg.ax(80, 12, 52, 44, "b")
     emb(ax, d["state_span"].map(SPAN), "Cell states within each clone")
-    legend_below(ax, [(k, SPAN[k]) for k in ("GC B only", "GC B and plasma", "plasma only", "other")], ncol=2)
+    legend_below(ax, [(SPAN_LABEL[k], SPAN[k]) for k in ("GC B only", "GC B and plasma", "plasma only", "other")], ncol=2)
     # c, tissue span
     ax = pg.ax(146, 12, 52, 44, "c")
     o2 = np.argsort(d["path"].to_numpy())
@@ -369,7 +371,7 @@ def figure_s4():
         ax.barh([1, 0], tab[k].to_numpy() * 100, left=left, color=ISO[k], height=0.6, label=k)
         left += tab[k].to_numpy() * 100
     ax.set_yticks([1, 0], [f"GC B cells\n({int((cc.celltype == 'GC_Bcell').sum()):,})",
-                           f"Plasma cells\n({int((cc.celltype == 'plasma').sum()):,})"])
+                           f"ASCs\n({int((cc.celltype == 'plasma').sum()):,})"])
     ax.set_xlabel("Isotyped cells (%)"), ax.set_xlim(0, 100)
     ax.set_title("Isotype by cell state")
     ax.legend(loc="upper center", bbox_to_anchor=(0.45, -0.32), ncol=3, handlelength=0.9, columnspacing=0.8)
@@ -380,7 +382,7 @@ def figure_s4():
     bottom = np.zeros(4)
     for k in ("GC B only", "GC B and plasma", "plasma only", "other"):
         vals = np.array([comp[r]["state_span"].get(k, 0) / comp[r]["n_clones"] for r in REGION_ORDER]) * 100
-        ax.bar(np.arange(4), vals, bottom=bottom, color=SPAN[k], width=0.66, label=k)
+        ax.bar(np.arange(4), vals, bottom=bottom, color=SPAN[k], width=0.66, label=SPAN_LABEL[k])
         bottom += vals
     ax.set_xticks(np.arange(4), [f"{r}\n({comp[r]['n_clones']})" for r in REGION_ORDER])
     ax.set_ylabel("Clones (%)"), ax.set_ylim(0, 100)
@@ -410,13 +412,16 @@ def figure_s4():
             ns.append(len(s))
         ax.bar(np.arange(3) + (j - 1.5) * w, vals, width=w * 0.95, color=REGION[r], label=r)
     ax.set_xticks(np.arange(3), [s[2] for s in strata])
-    ax.set_ylabel("Clones with GC B and plasma cells (%)"), ax.set_ylim(0, 105)
+    ax.set_ylabel("Clones with GC B cells and ASCs (%)"), ax.set_ylim(0, 105)
     ax.set_title("Comparison at matched clone size")
     ax.legend(loc="upper left", ncol=2, handlelength=0.9, columnspacing=0.6)
 
     # j, profile associations
     ax = pg.ax(52, 230, 60, 50, "j", dx=-38)
-    assoc = summ["associations"]
+    # Threadfin 4.6.0 values (labels shuffled within mice and clone-size bins), re-derived on 2026-10-30
+    assoc = json.loads((REV / "gut" / "associations_460.json").read_text())["v460"]
+    shown = {"Plasma-cell proportion": "ASC proportion",
+             "Clone contains GC B and plasma cells": "Clone contains GC B cells and ASCs"}
     kind = {"Plasma-cell proportion": "RNA", "GC B-cell proportion": "RNA",
             "Clone contains GC B and plasma cells": "RNA", "Lamina-propria proportion": "sampling",
             "Peyer's-patch proportion": "sampling", "Clone spans PP/MLN and LP": "sampling",
@@ -426,8 +431,8 @@ def figure_s4():
     items = sorted(assoc.items(), key=lambda kv: kv[1]["excess_r2"])
     yy = np.arange(len(items))
     ax.barh(yy, [v["excess_r2"] for _, v in items], color=[kcol[kind[k]] for k, _ in items], height=0.66)
-    ax.set_yticks(yy, [k for k, _ in items])
-    ax.set_xlabel("Excess R$^2$ (2,000 permutations within mice)")
+    ax.set_yticks(yy, [shown.get(k, k) for k, _ in items])
+    ax.set_xlabel("Excess R$^2$ (2,000 permutations within mouse × clone size)")
     ax.set_title("Annotations associated with clone profiles")
     for i, (_, v) in enumerate(items):
         ax.text(v["excess_r2"] + 0.01, i, f"{v['excess_r2']:.3f}", va="center", fontsize=5.6)
@@ -450,7 +455,7 @@ def figure_s4():
     # shared legend for g
     fig_ax = pg.ax(14, 208, 52, 6)
     fig_ax.set_axis_off()
-    fig_ax.legend(handles=[Patch(color=SPAN[k], label=k) for k in ("GC B only", "GC B and plasma",
+    fig_ax.legend(handles=[Patch(color=SPAN[k], label=SPAN_LABEL[k]) for k in ("GC B only", "GC B and plasma",
                                                                     "plasma only", "other")],
                   loc="center", ncol=2, handlelength=0.9, columnspacing=0.8)
     pg.save("Supplementary_Figure_4_gut_clone_relationships")
@@ -483,7 +488,7 @@ def figure_s7():
     ins.set_xlim(x0, x1), ins.set_ylim(y0, y1), ins.set_xticks([]), ins.set_yticks([])
     for sp in ins.spines.values():
         sp.set_visible(True), sp.set_linewidth(0.5)
-    ins.set_title("Plasma-cell region", fontsize=6.2)
+    ins.set_title("ASC region", fontsize=6.2)
 
     # b, c, composition per mouse
     comp = summ["mouse_composition"]
@@ -547,7 +552,7 @@ def figure_s7():
 
     # i, same-mouse neighbours: cells versus clones
     ax = pg.ax(146, 168, 52, 42, "i")
-    rows = [("Plasma cells\n(cell embedding)", summ["mixing_cells_embedding"]),
+    rows = [("ASCs\n(cell embedding)", summ["mixing_cells_embedding"]),
             ("Clones, centred\non mouse", summ["mixing_clones_donor"]),
             ("Clones, no\ncentring", summ["mixing_clones_none"]),
             ("Clones, balanced\ncentring", summ["mixing_clones_balanced"])]
@@ -572,8 +577,8 @@ def figure_s7():
     ax.bar(xx + 0.2, [100 * sh[r]["expected_from_mouse"] for r in regs], width=0.38, color="#a59fd8",
            label="Expected from mouse mix")
     ax.set_xticks(xx, [f"{r}\n({sh[r]['n_clones']})" for r in regs])
-    ax.set_ylabel("NonGC-sorted plasma cells (%)"), ax.set_ylim(0, 24)
-    ax.set_title("GC-fate sort of plasma cells by region")
+    ax.set_ylabel("NonGC-sorted ASCs (%)"), ax.set_ylim(0, 24)
+    ax.set_title("GC-fate sort of ASCs by region")
     ax.legend(loc="upper center", ncol=2, handlelength=1.0, columnspacing=0.8)
 
     # k, within-mouse GC-history neighbourhoods under each centring
@@ -604,7 +609,7 @@ def figure_s7():
         ax.bar(np.arange(3), tab[m].to_numpy(), bottom=bottom, color=MOUSE[m], width=0.7)
         bottom += tab[m].to_numpy()
     ax.set_xticks(np.arange(3), ["Bridge", "Lower", "P3"], fontsize=5.6)
-    ax.set_ylabel("Plasma-cell-dominated clones"), ax.set_ylim(0, 240)
+    ax.set_ylabel("ASC-dominated clones"), ax.set_ylim(0, 240)
     ax.set_title("Mice per region")
     legend_points(ax, [(MOUSE_LABEL[m], MOUSE[m]) for m in MOUSE], loc="upper left", ms=3.5)
     pg.save("Supplementary_Figure_5_gut_centring")
