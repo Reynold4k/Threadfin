@@ -310,6 +310,23 @@ def test_run_can_weight_the_composition_by_clones(sim, tmp_path):
     again.plot(save=str(tmp_path / "overview_again.png"))
 
 
+def test_a_run_without_programmes_leaves_none_from_an_earlier_run(sim):
+    """A second run that cannot make programmes removes the first run's, so that neither the AnnData nor the
+    result rebuilt from it shows programmes of other profiles."""
+    ad = sim.copy()
+    kw = dict(donor_key="donor", sample_key="context", basis="X_pca", map_n_neighbors=15, map_min_dist=0.5,
+              n_perm=10, verbose=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        first = tf.run(ad, n_boot=6, **kw)
+        assert first.programmes.shape[0] > 1 and "clone_programme" in ad.obs
+        second = tf.run(ad, n_boot=3, **kw)                # choosing the resolution needs n_boot >= 5
+    assert second.programmes.empty and "clone_programme" not in ad.obs
+    assert "programmes" not in ad.uns["threadfin"]
+    assert "No programmes: " in second.summary()
+    assert tf.ThreadfinResult.from_adata(ad).summary() == second.summary()
+
+
 def test_run_warns_once_about_a_sample_level_label(sim):
     """Both label tests check a label fixed within each sample; run() says so once, not once per test."""
     ad = sim.copy()

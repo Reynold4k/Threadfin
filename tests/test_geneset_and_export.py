@@ -282,3 +282,34 @@ def test_per_donor_estimates():
     six = run(lag_data(n_clones=180, donors=6), donor_key="donor")
     lo, hi = six["median_lag_across_donors_ci"]
     assert lo <= six["median_lag_across_donors"] <= hi
+
+
+def test_genes_with_the_same_name_keep_their_own_rows():
+    """Deposited matrices often repeat a gene name: each copy keeps its own values and bootstrap replicates,
+    and the gene-set test asks for unique names instead of guessing which copy a set means."""
+    import warnings
+
+    adata, sets = modules(3, tau2=0.3)
+    unique = adata.copy()
+    table = heritability(unique, n_boot=20)
+    repeated = adata.copy()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")                      # anndata warns about non-unique names
+        repeated.var_names = [adata.var_names[0], adata.var_names[0], *adata.var_names[2:]]   # gene 2 renamed
+    again = heritability(repeated, n_boot=20)
+    assert again.index.duplicated().sum() == 1
+    np.testing.assert_allclose(again["icc"].to_numpy(), table["icc"].to_numpy())
+    np.testing.assert_allclose(repeated.uns["threadfin"]["gene_heritability_bootstrap"].to_numpy(),
+                               unique.uns["threadfin"]["gene_heritability_bootstrap"].to_numpy())
+    with pytest.raises(ValueError, match="more than once"):
+        tf.tl.geneset_heritability(again, sets)
+
+
+def test_clones_without_a_donor_stay_in_the_overall_lag():
+    """donor_key adds per-donor results; clones whose cells have no donor stay in the overall estimate."""
+    a = lag_data(n_clones=120, donors=3)
+    whole = run(a)
+    a.obs.loc[a.obs["clone_id"].isin([f"c{c}" for c in range(0, 120, 4)]), "donor"] = np.nan
+    r = run(a, donor_key="donor")
+    assert r["n_clones"] == whole["n_clones"] and r["median_lag"] == whole["median_lag"]
+    assert r["per_donor"]["n_clones"].sum() < r["n_clones"]

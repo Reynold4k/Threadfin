@@ -128,6 +128,21 @@ def _versions() -> dict:
     return out
 
 
+def _size_bins_text(bins, last: str) -> str:
+    """Clone-size bins from their lower bounds, from two cells on (profiles need two): '2, 3-4, 5-9 or >= 10
+    cells' for the default bins."""
+    edges = [int(e) for e in np.atleast_1d(bins)]
+    names = []
+    for i, lo in enumerate(edges):
+        lo = max(lo, 2)
+        if i == len(edges) - 1:
+            names.append(f">= {lo}")
+        elif edges[i + 1] - 1 >= lo:
+            hi = edges[i + 1] - 1
+            names.append(str(lo) if hi == lo else f"{lo}-{hi}")
+    return (", ".join(names[:-1]) + f" {last} " + names[-1] if len(names) > 1 else names[0]) + " cells"
+
+
 def _odds(v: float) -> str:
     """An odds ratio for the summary; values from sparse tables are bounded instead of printed in full."""
     if not np.isfinite(v):
@@ -178,9 +193,12 @@ class ThreadfinResult:
                 "time_key", "basis", "representation", "receptor", "clone_calling")
         settings = {k: None for k in keys}
         settings.update(dict(record.get("settings", {})))
+        skipped = {str(k): str(v) for k, v in dict(record.get("skipped", {})).items()}
         prog = th.get("programmes", {}).get("summary")
-        programmes = (prog.copy() if isinstance(prog, pd.DataFrame) and "clone_programme" in adata.obs else
-                      pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence", "stability"]))
+        found = "clonal programmes" not in skipped            # the recorded run made programmes
+        programmes = (prog.copy() if found and isinstance(prog, pd.DataFrame) and "clone_programme" in adata.obs
+                      else pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
+                                                 "stability"]))
         composition = None
         if settings["state_key"] and not programmes.empty:
             composition = programme_composition(adata, settings["state_key"],
@@ -197,7 +215,7 @@ class ThreadfinResult:
             profile_tests={k: dict(th["profile_associations"][k]) for k in labels("profile_tests")
                            if k in th.get("profile_associations", {})},
             memory=(dict(th["memory"][time_key]) if time_key and time_key in th.get("memory", {}) else None),
-            settings=settings, skipped={str(k): str(v) for k, v in dict(record.get("skipped", {})).items()})
+            settings=settings, skipped=skipped)
 
     def summary(self) -> str:
         """Plain-language summary of the results."""
@@ -274,12 +292,12 @@ class ThreadfinResult:
         if self.profile_tests or self.tests:
             lines += ["", f"{section}. Do your labels explain how clones differ? (clone-level tests)"]
             section += 1
-            sized = any(r.get("size_bins") is not None for r in self.profile_tests.values()) or any(
-                t.attrs.get("size_bins") is not None for t in self.tests.values())
-            if sized:
-                lines.append("   Labels are shuffled among clones of the same donor and of similar size (2, 3-4, 5-9 or "
-                             ">= 10 cells), because small clones' profiles are pulled towards the average profile: "
-                             "an effect below cannot be explained by clone size alone.")
+            bins = next((b for b in [r.get("size_bins") for r in self.profile_tests.values()]
+                         + [t.attrs.get("size_bins") for t in self.tests.values()] if b is not None), None)
+            if bins is not None:
+                lines.append("   Labels are shuffled among clones of the same donor and of similar size "
+                             f"({_size_bins_text(bins, 'or')}), because small clones' profiles are pulled towards "
+                             "the average profile: an effect below cannot be explained by clone size alone.")
         sample_noted = set()
         for label, r in self.profile_tests.items():
             verdict = "explains" if r["p_value"] < 0.05 else "does not significantly explain"
@@ -539,7 +557,8 @@ class ThreadfinResult:
                 f"For {labels}, the share of the variance between clone profiles explained by the clone-level label "
                 f"(as in PERMANOVA; ref. anderson) was tested with {n(r0.get('n_perm', 2000))} permutations of the label "
                 + (f"among clones of the same {r0['strata_key']!r}" if r0.get("strata_key") else "among clones")
-                + (" and clone-size bin (2, 3-4, 5-9 and >= 10 cells)" if r0.get("size_bins") is not None else "")
+                + (f" and clone-size bin ({_size_bins_text(r0['size_bins'], 'and')})"
+                   if r0.get("size_bins") is not None else "")
                 + ".")
             refs["anderson"] = ("Anderson MJ. A new method for non-parametric multivariate analysis of variance. "
                                 "Austral Ecol 2001;26:32-46.")
@@ -628,7 +647,7 @@ def run(
         ``strata_key`` names a finer sampling unit.
     strata_key
         ``obs`` column within which the coherence test shuffles clone labels;
-        defaults to ``sample_key``. Set it to the finest sampling unit (the
+        defaults to ``sample_key``, else ``donor_key``. Set it to the finest sampling unit (the
         library, sort gate or tissue sample) when ``sample_key`` is coarser,
         for example the donor in a design that compares tissues or gates:
         cells of one clone are sequenced together, so shuffling across
@@ -741,8 +760,9 @@ def run(
     if composition_weight not in {"cells", "clones"}:
         raise ValueError(f"composition_weight must be 'cells' or 'clones', not {composition_weight!r}.")
     if sample_key is None and strata_key is None:
-        warnings.warn("No sample_key was given: every clone is compared with all cells, and the coherence test "
-                      "shuffles clone labels across all cells. If the cells come from more than one sample or "
+        where = f"within each '{donor_key}'" if donor_key is not None else "across all cells"
+        warnings.warn(f"No sample_key was given: every clone is compared with all cells, and the coherence test "
+                      f"shuffles clone labels {where}. If the cells come from more than one sample or "
                       "library, pass sample_key (and strata_key, see Tutorial 2, section 5); otherwise "
                       "differences between samples count as clonal.", UserWarning, stacklevel=2)
 
@@ -842,6 +862,10 @@ def run(
     except ValueError as e:  # too few expanded clones (or n_boot < 5): keep the coherence result
         log(f"no programmes: {e}", verbose)
         no_programmes = str(e)
+        # programmes of an earlier run belong to other profiles: do not leave them for plots or from_adata
+        get_uns(adata).pop("programmes", None)
+        adata.obs.drop(columns=[c for c in ("clone_programme", "clone_programme_assigned") if c in adata.obs],
+                       inplace=True)
         programmes = pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
                                            "stability"])
 

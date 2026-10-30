@@ -177,7 +177,7 @@ differences between clones.
 |---|---|---|---|
 | `donor_key` | clones are defined within individuals; tests of your labels shuffle them among clones of one individual | the individual | — |
 | `sample_key` | each clone is described relative to the cells of its context; by default, coherence shuffles clone labels within it | the donor, a library, or donor × time point when time is *not* what you study | anything you want to compare between clones: tissue, sort gate, treatment, time point |
-| `strata_key` | the coherence test shuffles clone labels within it (default: `sample_key`) | the finest sampling unit — the library, sort gate or tissue sample — whenever `sample_key` is coarser | a column coarser than the libraries, such as the donor when each donor has several libraries |
+| `strata_key` | the coherence test shuffles clone labels within it (default: `sample_key`, else the donor) | the finest sampling unit — the library, sort gate or tissue sample — whenever `sample_key` is coarser | a column coarser than the libraries, such as the donor when each donor has several libraries |
 | `batch_key` | Harmony integration when the embedding is built | technical batches (libraries, runs) | biology |
 
 **Why the context must be a nuisance variable.** Threadfin subtracts each context's average before

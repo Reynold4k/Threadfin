@@ -31,6 +31,7 @@ followed in new environments, led to this release.
 
 ### Statistics
 
+- **Coherence without samples** (`tl.clonal_coherence`, `tl.gene_heritability`). With a `donor_key` but no `sample_key` or `strata_key`, clone labels are now shuffled within donors. They were shuffled across all cells, so that differences between donors counted as clonal: in simulations without any clonal structure, every test gave the smallest possible P value.
 - **Clonal memory** (`tl.clonal_memory`).
   - Each clone is now compared with other clones of its donor seen at the same two levels. It was compared with any clone of the later level, so clones found at two levels, a selected group that can share a state, read as having memory: in simulations with selection but no memory, the old index was 0.81 and its test rejected in 100 of 100 data sets, against −0.01 and 5 of 100 now.
   - Sampling noise is removed with each snapshot's own variance instead of one pooled variance, which put the index above 1 in 77% of data sets with a true index of 0.5.
@@ -39,19 +40,21 @@ followed in new environments, led to this release.
 - **Label tests** (`tl.profile_association`, `tl.association_test`, and `test=` in `tf.run`).
   - Labels are shuffled among clones of the same donor and of similar size (2, 3–4, 5–9, ≥ 10 cells). Small clones' profiles are pulled towards the average profile, so a label that follows only clone size was called significant in up to 42% of simulated data sets; now 3–8%, with 0–7 points of power lost. `size_strata=False` reproduces 4.5.
   - A label fixed within each sample (a tissue, sort gate or visit sequenced in its own library) is flagged: the comparison is between samples, not between independent clones. `tf.run` says so once per label.
-  - Two-level labels show each programme effect once.
+  - Each programme effect is shown once: a two-level label, or any label tested on two programmes, gives mirrored rows (same P value, inverse odds ratio), which are marked (`mirror`) and left out of the summary.
+  - Strata from a column that varies within clones put each clone in its most common level (a tie in the first level). Tied clones were pooled into one stratum across levels, and under pandas 3 the test failed.
   - The numeric programme test is centred within strata.
   - Levels that look like missing values ("nan", ".") give a warning.
-- **Gene sets** (`tl.geneset_heritability`). The new competitive test on Fisher's z of the clonal ICC has an error term that combines the spread between genes with a clone bootstrap. The Mann–Whitney test treated co-expressed genes as independent (16% false positives with co-expressed null genes; 50–60% when they also shared clonal programmes). It is kept only as the column `pvalue_mw_genes_independent`. `tl.gene_heritability` gains `n_boot` and the column `excess_fisher_z`.
+- **Gene sets** (`tl.geneset_heritability`). The new competitive test on Fisher's z of the clonal ICC has an error term that combines the spread between genes with a clone bootstrap. The Mann–Whitney test treated co-expressed genes as independent (16% false positives with co-expressed null genes; 50–60% when they also shared clonal programmes). It is kept only as the column `pvalue_mw_genes_independent`. `tl.gene_heritability` gains `n_boot` and the column `excess_fisher_z`; genes that share a name keep their own rows, and the gene-set test asks for unique names.
 - **Export lag** (`tl.export_lag`).
   - It is described as a within-clone mutation gap; its sign varies between clones.
   - The median gap has a sign-test interval (at least 95% coverage for any distribution, ties included) instead of a bootstrap.
   - The clock goes through per-time-point medians with Sen's exact interval, as in the manuscript's analysis.
   - Days come with an interval.
-  - `donor_key` gives per-donor results.
+  - `donor_key` adds per-donor results; clones without a donor stay in the overall result.
 
 ### Fixed
 
+- **A run that could not make programmes left those of an earlier run** in `adata.obs` and `adata.uns['threadfin']`, where plots and `ThreadfinResult.from_adata` found them. They are now removed.
 - **A fix suggested by an error message created false clones.** For clone ids shared between donors, the suggested line turned cells without a clone into one clone per donor ("BCP005|nan"). It now keeps missing ids missing, and clone ids that look like missing values give a warning.
 - **`counts_layer=` and `batch_key=` were ignored on a second run** when `obsm['X_threadfin']` already existed. The embedding is now rebuilt when they differ, and the log says which embedding was used.
 - **No programmes, and the wrong reason.** When the programme step could not run (for example with `n_boot` below 5), the summary said there were too few clones; it now gives the actual reason. `n_jobs`, `map_n_neighbors`, `map_min_dist` and `random_state` are checked before any work starts.

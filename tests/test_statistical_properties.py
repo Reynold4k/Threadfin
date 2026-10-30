@@ -159,6 +159,8 @@ def test_receptor_genes_never_enter_the_highly_variable_genes():
     assert kept.var.loc[receptor, "highly_variable"].sum() >= len(receptor) // 2   # the fixture can see the bug
     tf.pp.prepare_embedding(adata, n_top_genes=12, n_comps=5, integrate=None, verbose=False)
     assert not adata.var.loc[receptor, "highly_variable"].any()
+    np.testing.assert_array_equal(adata.uns["threadfin_pca_variance_ratio"],      # where 4.5 kept them
+                                  adata.uns["threadfin"]["prepare_embedding"]["pca_variance_ratio"])
     assert adata.var["highly_variable"].sum() == 12
     assert set(adata.var.index[adata.var["threadfin_receptor_gene"]]) == set(receptor)
     # a user's own HVG selection: exclude_ig_genes drops the receptor genes and keeps every other gene
@@ -254,6 +256,26 @@ def test_coherence_strata_stay_within_donors():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         assert tf.tl.clonal_coherence(adata, strata_key="donor", n_perm=5, verbose=False)["strata_key"] == "donor"
+
+
+def test_coherence_without_strata_shuffles_within_donors():
+    """Guards labels shuffled across donors when run() gets a donor_key but no sample_key: differences between
+    donors must not read as clonal."""
+    n_rep, n_perm = 20, 49
+    p_donor, p_all = [], []
+    for seed in range(n_rep):
+        adata = tf.sim.simulate_repertoire(scenario="null", n_clones=250, n_donors=3, contexts_per_donor=1,
+                                           context_shift=3.0, dim=8, random_state=seed)
+        tf.tl.clone_profiles(adata, basis="X_pca", context_key=None, donor_key="donor", verbose=False)
+        res = tf.tl.clonal_coherence(adata, n_perm=n_perm, random_state=seed, verbose=False)
+        assert res["strata_key"] == "donor"
+        p_donor.append(res["p_value"])
+        # the fixture can see the bug: without a donor_key, labels are shuffled across all cells
+        tf.tl.clone_profiles(adata, basis="X_pca", context_key=None, verbose=False)
+        p_all.append(tf.tl.clonal_coherence(adata, n_perm=n_perm, random_state=seed, verbose=False)["p_value"])
+    p_donor, p_all = np.array(p_donor), np.array(p_all)
+    assert (p_donor <= ALPHA).sum() <= _max_rejections(n_rep)
+    assert (p_all <= ALPHA).all()
 
 
 def test_coherence_is_measured_on_unsmoothed_context_centred_cells():

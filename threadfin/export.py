@@ -295,7 +295,7 @@ def export_lag(
         if isotype_key is None or isotype_key not in obs:
             raise ValueError("switched_only=True needs an isotype column; pass isotype_key=None to skip.")
         keep &= _switched(obs[isotype_key]) == 1
-    group_cols = list(within) + ([donor_key] if donor_key is not None and donor_key not in within else [])
+    group_cols = list(within)
     d = obs.loc[keep, [clone_key, state_key, mutation_key, *group_cols]].copy()
     if time_key is not None and time_key not in d.columns:
         d[time_key] = obs.loc[keep, time_key]
@@ -325,6 +325,11 @@ def export_lag(
         "n_output": wide[("size", "output")].to_numpy().astype(int),
     }, index=wide.index).reset_index()
     pairs["lag"] = pairs["output"] - pairs["source"]
+    if donor_key is not None and donor_key not in pairs.columns:
+        # each clone's donor, for per_donor only: a clone without one stays in the overall result
+        with_donor = obs.loc[keep & obs[donor_key].notna(), [clone_key, donor_key]]
+        donor_of = with_donor.groupby(with_donor[clone_key].astype(str), observed=True)[donor_key].first()
+        pairs.insert(1 + len(group_cols), donor_key, pairs[clone_key].astype(str).map(donor_of).to_numpy())
     lags = pairs["lag"].to_numpy()
 
     # the GC compartment's maturation rate: one point per time point, so cells of a visit count once

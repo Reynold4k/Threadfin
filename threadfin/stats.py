@@ -50,8 +50,9 @@ def clonal_coherence(
     ----------
     strata_key
         ``obs`` column defining permutation strata. Defaults to the
-        ``context_key`` used for :func:`threadfin.tl.clone_profiles`; with
-        neither, labels are shuffled globally (not recommended). Strata
+        ``context_key`` used for :func:`threadfin.tl.clone_profiles`, else
+        to its ``donor_key``; with none of them, labels are shuffled across
+        all cells (not recommended). Strata
         stay within donors (the ``donor_key`` of the profiles): if a stratum
         holds cells of several donors (a library pooling donors), the strata
         are the donor x ``strata_key`` combinations, with a warning.
@@ -69,7 +70,8 @@ def clonal_coherence(
     # the ICC is always measured on unsmoothed cells in the embedding itself, so it reads
     # as "share of transcriptional variance explained by clone" whatever the profile type
     model = model_from_adata(adata, unsmoothed=True, representation="mean")
-    strata_key = strata_key or prof["params"].get("context_key")
+    # without strata or a context, labels are still shuffled within donors: a clone lies within one donor
+    strata_key = strata_key or prof["params"].get("context_key") or prof["params"].get("donor_key")
     if strata_key is not None:
         require_complete_groups(adata, strata_key, context="coherence permutations")
     strata, strata_key = nested_strata(adata.obs, strata_key, prof["params"].get("donor_key"))
@@ -328,6 +330,17 @@ def _mirror_rows(level: pd.Series, labels: pd.Series) -> np.ndarray:
     return (level.astype(str) == common).to_numpy()
 
 
+def _clone_stratum(adata, strata_key: str, clone_key: str) -> pd.Series:
+    """Each clone's most common level of a cell-level column (a tie goes to the first level in sorted order),
+    so that every clone is in exactly one permutation stratum."""
+    cells = adata.obs[[clone_key, strata_key]].dropna()
+    counts = (pd.DataFrame({"clone": cells[clone_key].astype(str).to_numpy(),
+                            "stratum": cells[strata_key].astype(str).to_numpy()})
+              .value_counts().rename("n").reset_index()
+              .sort_values(["clone", "n", "stratum"], ascending=[True, False, True], kind="stable"))
+    return counts.drop_duplicates("clone").set_index("clone")["stratum"]
+
+
 def _assoc_table(adata, label_key, programme_key, clone_key, strata_key, how, min_frac):
     prof = get_profiles(adata)
     table = prof["clone_table"]
@@ -343,8 +356,11 @@ def _assoc_table(adata, label_key, programme_key, clone_key, strata_key, how, mi
         if strata_key in table.columns:
             df["stratum"] = table[strata_key].astype(str)
         else:
-            df["stratum"] = clone_labels(adata, strata_key, clone_key=clone_key, how="majority",
-                                         min_frac=0.0).reindex(table.index).astype(str)
+            stratum = _clone_stratum(adata, strata_key, clone_key).reindex(table.index.astype(str))
+            if stratum.isna().any():
+                raise ValueError(f"{int(stratum.isna().sum())} clones have no '{strata_key}' value in any cell; "
+                                 "every clone needs a stratum.")
+            df["stratum"] = stratum.to_numpy()
     else:
         df["stratum"] = "all"
     return df.dropna(subset=["programme", "label"])
@@ -459,6 +475,9 @@ def association_test(
     out["fdr"] = bh_fdr(out["pvalue"].to_numpy())
     if "level" in out.columns:
         out["mirror"] = _mirror_rows(out["level"], df["label"])
+    if len(progs) == 2:  # the second programme against the rest is the first one against the rest, mirrored
+        second = (out["programme"].astype(str) == str(progs[1])).to_numpy()
+        out["mirror"] = (out["mirror"].to_numpy() if "mirror" in out.columns else False) | second
     sample = _sample_level(adata, label_key, clone_key, df.index, sample_key, prof["params"].get("context_key"))
     _warn_sample_level(label_key, sample)
     out.attrs.update(strata_key=strata_key, size_bins=None if bins is None else list(bins), n_clones=int(len(df)),

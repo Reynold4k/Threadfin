@@ -167,8 +167,8 @@ def gene_heritability(
         Default to the values used by :func:`threadfin.tl.clone_profiles`
         (``context_key="auto"``); pass ``None`` to disable context centring.
     strata_key
-        Permutation strata (defaults to the context), kept within donors as in
-        :func:`threadfin.tl.clonal_coherence`.
+        Permutation strata (defaults to the context, else to the donor), kept
+        within donors as in :func:`threadfin.tl.clonal_coherence`.
     layer
         Log-normalised expression layer (``None`` uses ``adata.X``).
     genes
@@ -215,7 +215,7 @@ def gene_heritability(
     clone_key = clone_key or params.get("clone_key", "clone_id")
     if context_key == "auto":
         context_key = params.get("context_key")
-    strata_key = strata_key or context_key
+    strata_key = strata_key or context_key or params.get("donor_key")   # as in clonal_coherence
     require_obs(adata, clone_key, context_key, strata_key, context="gene heritability")
 
     require_complete_groups(adata, context_key, strata_key, context="gene heritability")
@@ -315,15 +315,17 @@ def gene_heritability(
         mu = np.asarray(ctx_member @ full) / np.maximum(ctx_n, 1)[:, None]
         control_icc = float(np.median(variance_components(full[cells] - mu[np.maximum(ctx[cells], 0)], cl)
                                       .icc_per_feature))
-    out = out.sort_values("excess_icc", ascending=False)
+    # sorted by position, so that genes with the same name (common in deposited matrices) keep their own rows
+    order = out.set_axis(pd.RangeIndex(out.shape[0])).sort_values("excess_icc", ascending=False).index.to_numpy()
+    out = out.iloc[order]
     out.index.name = "gene"
     stored = h5ad_safe(out)
     stored.attrs = {}
     get_uns(adata)["gene_heritability"] = stored
     get_uns(adata)["gene_heritability_receptor_icc"] = control_icc
     if n_boot:
-        boot_table = pd.DataFrame(np.vstack(boot_rows), index=var_names[gene_idx],
-                                  columns=[f"b{i}" for i in range(n_boot)]).reindex(out.index)
+        boot_table = pd.DataFrame(np.vstack(boot_rows)[order], index=out.index,
+                                  columns=[f"b{i}" for i in range(n_boot)])
         boot_table.index.name = "gene"
         get_uns(adata)["gene_heritability_bootstrap"] = boot_table
         out.attrs[BOOTSTRAP_ATTR] = _Replicates(boot_table)
@@ -389,7 +391,7 @@ def geneset_heritability(table: pd.DataFrame, gene_sets: dict[str, list[str]], *
 
     Genes of one set are usually co-expressed, so their estimates rise and fall
     together; the Mann-Whitney test used up to Threadfin 4.5.3 treated them as
-    independent and rejected 15 % of co-expressed null sets at alpha = 0.05.
+    independent and rejected 16 % of co-expressed null sets at alpha = 0.05.
     This is the competitive-test problem described by Goeman & Buehlmann (2007)
     and Wu & Smyth (2012, camera); here the correlation is measured by
     resampling clones instead of being estimated from residuals. The p-value is
@@ -434,6 +436,11 @@ def geneset_heritability(table: pd.DataFrame, gene_sets: dict[str, list[str]], *
     """
     from scipy.stats import mannwhitneyu, norm
 
+    if not table.index.is_unique:
+        dup = table.index[table.index.duplicated()].unique()
+        raise ValueError(f"{dup.size} gene names occur more than once in the table (e.g. '{dup[0]}'), so a gene set "
+                         "cannot say which is meant: make them unique (adata.var_names_make_unique()) and run "
+                         "tl.gene_heritability again.")
     boot = _bootstrap_table(table, bootstrap)
     reps = boot.reindex(table.index).to_numpy(float)
     col = "excess_icc" if "excess_icc" in table.columns else "icc"

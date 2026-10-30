@@ -149,7 +149,7 @@ def test_a_label_set_by_clone_size_is_refused_with_size_strata_and_tested_withou
     with pytest.raises(ValueError, match="size_strata=False"):
         tf.tl.profile_association(ad, "lab", size_strata=True, n_perm=19, verbose=False)
     res = tf.tl.association_test(ad, "lab", size_strata=False, n_perm=19, verbose=False)
-    assert (~res["mirror"]).sum() == 2                        # one row per programme for the rarer level
+    assert (~res["mirror"]).sum() == 1                        # two levels and two programmes: one test
 
 
 def test_a_donor_level_label_is_refused_with_the_same_message_with_or_without_size_strata():
@@ -209,25 +209,31 @@ def test_results_with_the_new_fields_can_be_concatenated_and_written(tmp_path):
 
 
 def test_a_two_level_label_marks_its_mirrored_rows():
-    """The rows of the more common level of a two-level label mirror those of the rarer level (same p-value,
-    inverse odds ratio): they are flagged, and the FDR is the same as over one row per programme."""
+    """Rows that repeat another row's test are flagged: the more common level of a two-level label mirrors the
+    rarer level, and with two programmes the second programme mirrors the first (same p-value, inverse odds
+    ratio). The FDR is the same as over the rows that are kept."""
     ad = _toy()
     table = ad.uns["threadfin"]["profiles"]["clone_table"]
-    n_prog = table["clone_programme"].nunique()
+    assert sorted(table["clone_programme"].unique()) == ["P1", "P2"]
     rng = np.random.default_rng(9)
     for rare, common in (("pos", "neg"), ("A", "B")):
         _set_clone_label(ad, np.where(rng.random(len(table)) < 0.3, rare, common))
         res = tf.tl.association_test(ad, "lab", n_perm=99, verbose=False)
-        assert len(res) == 2 * n_prog
-        assert set(res.loc[res["mirror"], "level"]) == {common} and set(res.loc[~res["mirror"], "level"]) == {rare}
-        kept = res[~res["mirror"]].set_index("programme")
-        mirrored = res[res["mirror"]].set_index("programme").loc[kept.index]
-        assert np.array_equal(kept["pvalue"].to_numpy(), mirrored["pvalue"].to_numpy())
-        assert np.allclose(kept["odds_ratio"].to_numpy() * mirrored["odds_ratio"].to_numpy(), 1.0)
+        assert len(res) == 4
+        kept = res[~res["mirror"]]
+        assert list(zip(kept["programme"], kept["level"])) == [("P1", rare)]
+        assert (res["pvalue"] == kept["pvalue"].iloc[0]).all()
+        odds = res.set_index(["programme", "level"])["odds_ratio"]
+        assert odds[("P2", common)] == pytest.approx(odds[("P1", rare)])
+        assert odds[("P1", common)] * odds[("P1", rare)] == pytest.approx(1.0)
         assert np.allclose(kept["fdr"], bh_fdr(kept["pvalue"].to_numpy()))
     _set_clone_label(ad, rng.choice(["a", "b", "c"], size=len(table)))
     res = tf.tl.association_test(ad, "lab", n_perm=19, verbose=False)
-    assert len(res) == 3 * n_prog and not res["mirror"].any()
+    assert len(res) == 6 and set(res.loc[~res["mirror"], "programme"]) == {"P1"}
+    assert set(res.loc[~res["mirror"], "level"]) == {"a", "b", "c"}
+    _set_clone_label(ad, rng.normal(size=len(table)))               # a numeric label: one row per programme
+    res = tf.tl.association_test(ad, "lab", n_perm=19, verbose=False)
+    assert res.loc[res["mirror"], "programme"].tolist() == ["P2"]
 
 
 def test_numeric_effects_are_compared_with_their_expectation_within_strata():
@@ -265,3 +271,29 @@ def test_levels_that_look_like_missing_values_are_named_once():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         tf.tl.clone_labels(ad, "clean")
+
+
+def test_strata_from_a_cell_column_put_every_clone_in_one_stratum():
+    """A clone whose cells split evenly between two levels of a cell-level stratum column goes to the first
+    level, so no clone is left without a stratum (pandas 3 kept such clones as missing, and the test failed)."""
+    from threadfin.stats import _clone_stratum
+
+    ad = _toy()
+    table = ad.uns["threadfin"]["profiles"]["clone_table"]
+    rank = ad.obs.groupby("clone_id").cumcount().to_numpy()
+    size = ad.obs["clone_id"].map(ad.obs["clone_id"].value_counts()).to_numpy()
+    ad.obs["half"] = np.where(rank < size // 2, "h0", "h1")      # even clones tie; odd clones are mostly h1
+    strata = _clone_stratum(ad, "half", "clone_id").reindex(table.index)
+    even = table["n_cells"].to_numpy() % 2 == 0
+    assert strata.notna().all() and (strata[even] == "h0").all() and (strata[~even] == "h1").all()
+    _set_clone_label(ad, np.where(np.random.default_rng(3).random(len(table)) < 0.4, "A", "B"))
+    res = tf.tl.association_test(ad, "lab", strata_key="half", n_perm=19, verbose=False)
+    assert res.attrs["strata_key"] == "half" and np.isfinite(res["pvalue"]).all()
+
+
+def test_the_summary_names_the_size_bins_that_were_used():
+    from threadfin.api import _size_bins_text
+
+    assert _size_bins_text(SIZE_BINS, "or") == "2, 3-4, 5-9 or >= 10 cells"
+    assert _size_bins_text([1, 2, 5, 20], "and") == "2-4, 5-19 and >= 20 cells"
+    assert _size_bins_text(np.array([1, 5]), "or") == "2-4 or >= 5 cells"

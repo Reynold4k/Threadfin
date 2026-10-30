@@ -145,7 +145,7 @@ keep their sizes and every sampling unit keeps its cell-state composition, so
 differences between sampling units cannot create apparent clonality. The
 strata should therefore be the finest sampling unit: the library, sort gate or
 tissue sample. By default they are the sampling context (`sample_key` in
-`threadfin.run`). When the context is coarser — for example the donor, in a
+`threadfin.run`), and without one the donor, because a clone lies within one donor. When the context is coarser — for example the donor, in a
 design that compares tissues or sort gates within donors — name the libraries
 with `strata_key`: cells of one clone are sequenced together, so shuffling
 across libraries would count the differences between libraries as clonal.

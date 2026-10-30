@@ -259,4 +259,5 @@ def prepare_embedding(
         "key_added": key_added,
         "pca_variance_ratio": pca_variance_ratio,
     }
+    adata.uns["threadfin_pca_variance_ratio"] = pca_variance_ratio      # where versions before 4.6.0 kept it
     return adata

@@ -63,7 +63,7 @@ sample_key
     ``strata_key`` names a finer sampling unit.
 strata_key
     ``obs`` column within which the coherence test shuffles clone labels;
-    defaults to ``sample_key``. Set it to the finest sampling unit (the
+    defaults to ``sample_key``, else ``donor_key``. Set it to the finest sampling unit (the
     library, sort gate or tissue sample) when ``sample_key`` is coarser,
     for example the donor in a design that compares tissues or gates:
     cells of one clone are sequenced together, so shuffling across
@@ -674,8 +674,9 @@ Parameters
 ----------
 strata_key
     ``obs`` column defining permutation strata. Defaults to the
-    ``context_key`` used for :func:`threadfin.tl.clone_profiles`; with
-    neither, labels are shuffled globally (not recommended). Strata
+    ``context_key`` used for :func:`threadfin.tl.clone_profiles`, else
+    to its ``donor_key``; with none of them, labels are shuffled across
+    all cells (not recommended). Strata
     stay within donors (the ``donor_key`` of the profiles): if a stratum
     holds cells of several donors (a library pooling donors), the strata
     are the donor x ``strata_key`` combinations, with a warning.
@@ -1218,8 +1219,8 @@ clone_key, context_key
     Default to the values used by :func:`threadfin.tl.clone_profiles`
     (``context_key="auto"``); pass ``None`` to disable context centring.
 strata_key
-    Permutation strata (defaults to the context), kept within donors as in
-    :func:`threadfin.tl.clonal_coherence`.
+    Permutation strata (defaults to the context, else to the donor), kept
+    within donors as in :func:`threadfin.tl.clonal_coherence`.
 layer
     Log-normalised expression layer (``None`` uses ``adata.X``).
 genes
@@ -1289,7 +1290,7 @@ level, so the variance of the difference has two parts:
 
 Genes of one set are usually co-expressed, so their estimates rise and fall
 together; the Mann-Whitney test used up to Threadfin 4.5.3 treated them as
-independent and rejected 15 % of co-expressed null sets at alpha = 0.05.
+independent and rejected 16 % of co-expressed null sets at alpha = 0.05.
 This is the competitive-test problem described by Goeman & Buehlmann (2007)
 and Wu & Smyth (2012, camera); here the correlation is measured by
 resampling clones instead of being estimated from residuals. The p-value is
