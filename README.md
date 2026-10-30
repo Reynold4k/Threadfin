@@ -13,6 +13,7 @@
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue.svg" alt="Python 3.10 to 3.14"></a>
   <a href="https://pypi.org/project/threadfin/"><img src="https://img.shields.io/pypi/v/threadfin.svg" alt="PyPI version"></a>
   <a href="https://github.com/Reynold4k/Threadfin/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
+  <a href="https://doi.org/10.5281/zenodo.23824521"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23824521.svg" alt="DOI 10.5281/zenodo.23824521"></a>
 </p>
 
 Threadfin takes paired single-cell RNA and receptor (BCR or TCR) sequencing and describes every clone by the
