@@ -12,6 +12,10 @@
   need Dandelion or scirpy were skipped, and the same with the oldest versions that `pyproject.toml` allows,
   installed as continuous integration installs them (Python 3.10, numpy 1.24.1, pandas 2.0.0, anndata 0.10.0,
   scanpy 1.10.0).
+* **Dandelion on Python 3.13 and 3.14.** Scanpy 1.13.0 (13 November 2026) removed `scanpy.plotting._tools`, which
+  sc-dandelion 0.5.7 imports. The Dandelion extra therefore installs Scanpy below 1.13; continuous integration
+  runs the Dandelion tests on Python 3.12, 3.13 and 3.14 with it. Without the extra, Threadfin runs with Scanpy
+  1.13.
 * **Simulated data.** Every code block of Tutorials 1, 3 and 4, of `docs/RECLUSTERING.md` and of the README (apart
   from the call on the reader's own files) ran, and so did `examples/tutorial.py`. Tutorials 1, 3 and 4 and
   `examples/tutorial.py` printed the same as with 4.6.1 apart from the version, and Tutorial 1's clone table and

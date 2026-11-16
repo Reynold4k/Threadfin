@@ -25,6 +25,9 @@ rebuilt with `ThreadfinResult.from_adata` is the run's own, whatever was compute
   - Files written by 4.6.0 and 4.6.1 load as before; earlier versions of Threadfin read files written by 4.6.2.
 - **Two broken sentences.** The log message and the docstring of `define_clones_dandelion` about Dandelion's
   separate Python process now say that it is started with `PYTHONHASHSEED=0`.
+- **`pip install "threadfin[dandelion]"` on Python 3.13 and 3.14.** Scanpy 1.13.0 (13 November 2026, Python 3.13
+  and later) removed a module that Dandelion 0.5.7 imports, so Dandelion no longer imported there. The Dandelion
+  extra now installs Scanpy below 1.13. `pip install threadfin` without the extra still installs the newest Scanpy.
 - **A warning from Scanpy** about the Leiden backend no longer appears in the earlier (v3) function
   `clonotype_recluster(cluster_on="embedding")`, which keeps the historical leidenalg recipe and its clusters.
 
