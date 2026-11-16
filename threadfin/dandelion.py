@@ -456,8 +456,8 @@ def define_clones_dandelion(
         Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
         sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
         clones in every Python session, those of Threadfin's documentation and validation records: if this
-        session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
-        (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+        session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process started
+        with it (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
         temporary file). Another integer calls the clones under that seed, always in a separate process, to see
         how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
         and earlier did; clone ids are then reproducible only between sessions started with the same
@@ -549,8 +549,8 @@ def define_clones_dandelion(
             late = (" (setting PYTHONHASHSEED in a running session has no effect)"
                     if os.environ.get("PYTHONHASHSEED") == "0" else "")
             log("Dandelion's clone calls depend on Python's string-hash seed, and this session was not started with "
-                f"PYTHONHASHSEED=0{late}: Dandelion runs in a separate Python process that is, so the clones are the "
-                "same in every session")
+                f"PYTHONHASHSEED=0{late}: Dandelion runs in a separate Python process started with "
+                "PYTHONHASHSEED=0, so the clones are the same in every session")
         elif verbose:
             log(f"Dandelion runs in a separate Python process started with PYTHONHASHSEED={hash_seed} "
                 f"(hash_seed={hash_seed})")

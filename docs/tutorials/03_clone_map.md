@@ -147,14 +147,19 @@ between programmes.
 ```python
 table = prof["clone_table"]
 table["fraction_S5"] = tf.tl.clone_labels(adata, "true_state", how="fraction:S5")
-tf.pl.clone_map(adata, color="fraction_S5")          # a number: one colour scale
+fig = tf.pl.clone_map(adata, color="fraction_S5")        # a number: one colour scale
 tf.tl.find_programmes(adata)
-tf.pl.clone_map(adata, color="clone_programme")      # categories: one panel per programme
+fig = tf.pl.clone_map(adata, color="clone_programme")    # categories: one panel per programme
 ```
 
 ```
+UserWarning: No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.71). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).
 [threadfin] programmes: 4 programmes over 931 core clones (resolution 0.2); 1 with bootstrap stability >= 0.75; 931 of 931 profiled clones assigned with posterior >= 0.7.
 ```
+
+The warning is the one explained in [Tutorial 1, section 2](01_getting_started.md#2-one-call): no partition of
+these clones is stable on average, so each programme is read by its own stability. In Jupyter, both maps appear
+below the cell when the notebook starts with `%matplotlib inline` (Tutorial 1, section 0).
 
 `tf.tl.clone_labels` collapses any cell-level column to one value per clone: the majority category, the
 mean of a number, or the fraction of the clone's cells in one category. On your own data the same call

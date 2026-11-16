@@ -2,6 +2,54 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.6.2 — 2026-11-16
+
+A first-time user followed the public 4.6.1 release in new environments, with the public documentation only. This
+release fixes what that test found. Clone calls, profiles, the clone map, programmes and every statistic are
+unchanged.
+
+**What this means for you:** nothing to do; every result is identical to 4.6.1. A result saved with 4.6.2 and
+rebuilt with `ThreadfinResult.from_adata` is the run's own, whatever was computed on the same AnnData afterwards.
+
+### Fixed
+
+- **A result rebuilt from a saved file showed later results instead of the run's.** `ThreadfinResult.from_adata`
+  read the label tests, coherence, memory and programmes from the entries of `adata.uns['threadfin']`, which later
+  calls of `tf.tl` functions replace. After `tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")`
+  (Tutorial 2, section 7), the rebuilt summary reported that test instead of the run's.
+  - `tf.run` now keeps a copy of everything it reported in `adata.uns['threadfin']['run']`. The rebuilt result
+    has the run's tables, summary and Methods paragraph.
+  - The result in memory no longer changes either: it holds its own copy of the clone table, which
+    `tf.tl.embed_clones` used to change in place.
+  - `result.plot()` draws the clone map and the programmes stored in `adata`, as before.
+  - Files written by 4.6.0 and 4.6.1 load as before; earlier versions of Threadfin read files written by 4.6.2.
+- **Two broken sentences.** The log message and the docstring of `define_clones_dandelion` about Dandelion's
+  separate Python process now say that it is started with `PYTHONHASHSEED=0`.
+- **A warning from Scanpy** about the Leiden backend no longer appears in the earlier (v3) function
+  `clonotype_recluster(cluster_on="embedding")`, which keeps the historical leidenalg recipe and its clusters.
+
+### Documentation
+
+- **README:** the Quick start includes a runnable line for users without data, with `result =`; the example of
+  `tf.tl.map_quality` defines its inputs; new notes on saving and on Jupyter; a "How to cite" section with the
+  Zenodo DOI (10.5281/zenodo.23824521).
+- **Tutorial 2** can be followed block by block on the public data of Tutorial 5 (GSE287123): a reading block and
+  a table of substitutions at the top. Section 8 states what reloading gives back.
+- **Jupyter:** with matplotlib older than 3.9 (installed with the Dandelion extra on Python 3.10–3.12), the first
+  figure of a session appeared one cell late or not at all. The tutorials say to start with `%matplotlib inline`;
+  the tutorial notebook does, and its published copy shows the quality-control plot of Step 5. Code blocks that
+  end with a figure assign it (`fig = result.plot(...)`), so that Jupyter shows it once.
+- **The warning "No resolution reached a clone-weighted mean stability of 0.75"** is shown where it occurs in
+  Tutorials 1, 3, 4 and 5, with what it means.
+- **Corrected numbers and text:** the README and Tutorial 5 give the cosine similarity of the two cohorts' division
+  directions as 0.90, the value the notebook computes (now printed in full, 0.896…), instead of 0.89; panel b of
+  the overview image reads "shuffled within context", as `result.plot()` draws it; Tutorial 1 shows version 4.6.2.
+- **`docs/RECLUSTERING.md`:** English labels, runnable examples (the second call names `basis`, whose default is
+  the cell UMAP), and no references to files that are not in the repository.
+- **Tutorial notebook:** a download that fails is tried again after a pause, five times in all. On 2 November
+  2026 a brief GEO outage had stopped the weekly test of the notebook at Step 1.
+- **Function reference:** lists `ThreadfinResult.from_adata`.
+
 ## 4.6.1 — 2026-10-31
 
 No change to the code. This release exists so that Zenodo archives Threadfin and gives it a citable DOI.

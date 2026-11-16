@@ -24,6 +24,7 @@ Every step is also available on its own in :mod:`threadfin.tl`.
 
 from __future__ import annotations
 
+import copy
 import re
 import warnings
 from dataclasses import dataclass, field
@@ -150,12 +151,43 @@ def _odds(v: float) -> str:
     return "> 100" if v > 100 else "< 0.01" if v < 0.01 else f"{v:.2f}"
 
 
+def _no_programmes() -> pd.DataFrame:
+    """The programme table of a run that made no programmes."""
+    return pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence", "stability"])
+
+
+def _report_entries(adata, programmes: pd.DataFrame) -> dict:
+    """The entries of ``adata.uns['threadfin']`` that :meth:`ThreadfinResult.summary` and
+    :meth:`ThreadfinResult.methods` read, as :func:`run` leaves them: variance components and settings of the
+    profiles, the clone-map settings, the programme settings and split tests, and the embedding settings. Later
+    calls of :mod:`threadfin.tl` functions replace the entries themselves."""
+    th = adata.uns["threadfin"]
+    prof = th["profiles"]
+    out = {"profiles": {
+        "variance_components": prof["variance_components"],
+        "params": {k: v for k, v in prof["params"].items() if k not in ("input_sha256", "feature_rng_state")},
+    }}
+    if prof.get("map_params") is not None:
+        out["profiles"]["map_params"] = {k: v for k, v in prof["map_params"].items() if k not in ("attempts", "tuning")}
+    if not programmes.empty and th.get("programmes") is not None:
+        out["programmes"] = {k: th["programmes"][k] for k in ("params", "split_tests")}
+    if th.get("prepare_embedding") is not None:
+        out["prepare_embedding"] = th["prepare_embedding"]
+    return out
+
+
 # --------------------------------------------------------------------------- result object
 
 
 @dataclass
 class ThreadfinResult:
-    """Everything :func:`run` computed. Print :meth:`summary` for a readable report."""
+    """Everything :func:`run` computed. Print :meth:`summary` for a readable report.
+
+    The result keeps what the run produced. Later calls of :mod:`threadfin.tl` functions on the same AnnData (for
+    example :func:`threadfin.tl.profile_association` with another ``how=``) store their own results in ``adata``
+    and change neither the tables of the result nor its :meth:`summary` and :meth:`methods`. :meth:`plot` draws
+    the clone map and the programmes stored in ``adata``. :meth:`from_adata` rebuilds the result after saving.
+    """
 
     adata: object = field(repr=False)
     coherence: dict = field(repr=False)
@@ -168,6 +200,9 @@ class ThreadfinResult:
     settings: dict = field(default_factory=dict, repr=False)
     #: analyses that were requested but could not be run on these data, with the reason
     skipped: dict = field(default_factory=dict, repr=False)
+    #: the record of the run, as written to ``adata.uns['threadfin']['run']``: settings, package versions and a
+    #: copy of everything the run reported, from which :meth:`summary` and :meth:`methods` are written
+    record: dict = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
         n_prog = self.programmes.shape[0]
@@ -175,13 +210,25 @@ class ThreadfinResult:
         return (f"ThreadfinResult(clonal ICC={self.coherence['icc']:.3f}, "
                 f"p={self.coherence['p_value']:.3g}, programmes={n_prog}, clones in programmes={n_cl})")
 
+    def _uns(self) -> dict:
+        """The entries of ``adata.uns['threadfin']`` that :meth:`summary` and :meth:`methods` read: as :func:`run`
+        left them (Threadfin 4.6.2 and later), else as they are now."""
+        saved = (self.record or {}).get("results", {}).get("uns")
+        return saved if saved is not None else self.adata.uns.get("threadfin", {})
+
     @classmethod
-    def from_adata(cls, adata) -> "ThreadfinResult":
+    def from_adata(cls, adata) -> ThreadfinResult:
         """The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after
         ``write_h5ad`` and ``read_h5ad``), so that :meth:`summary`, :meth:`methods` and :meth:`plot` work again.
 
-        Label tests are taken from ``adata.uns['threadfin']``, where a later call of the same test with the same
-        label replaces the one :func:`run` made.
+        :func:`run` keeps a copy of everything it reported in ``adata.uns['threadfin']['run']``. The rebuilt
+        result is therefore the run's own, also after later calls of :mod:`threadfin.tl` functions on the same
+        AnnData: its tables are those of the run, and :meth:`summary` and :meth:`methods` give the text they gave
+        right after the run. :meth:`plot` draws the clone map and the programmes stored in ``adata``.
+
+        Files written by Threadfin 4.6.0 and 4.6.1 hold no such copy. Their results are read from the entries of
+        ``adata.uns['threadfin']``, where a later call of a :mod:`threadfin.tl` function (for example the same
+        label test with the same label) replaces the one :func:`run` made.
         """
         from .programmes import programme_composition
 
@@ -194,34 +241,47 @@ class ThreadfinResult:
         settings = {k: None for k in keys}
         settings.update(dict(record.get("settings", {})))
         skipped = {str(k): str(v) for k, v in dict(record.get("skipped", {})).items()}
-        prog = th.get("programmes", {}).get("summary")
-        found = "clonal programmes" not in skipped            # the recorded run made programmes
-        programmes = (prog.copy() if found and isinstance(prog, pd.DataFrame) and "clone_programme" in adata.obs
-                      else pd.DataFrame(columns=["n_clones", "n_cells", "mean_reliability", "mean_confidence",
-                                                 "stability"]))
-        composition = None
-        if settings["state_key"] and not programmes.empty:
-            composition = programme_composition(adata, settings["state_key"],
-                                                weight=settings.get("composition_weight") or "cells")
         labels = lambda key: [str(x) for x in np.atleast_1d(record.get(key, []))]  # noqa: E731
-        tests = {k: th["associations"][k].copy() for k in labels("tests") if k in th.get("associations", {})}
+        saved = record.get("results")
+        if saved is not None:
+            # Threadfin 4.6.2 and later: the run's own copy; the label lists keep the order in which it reported
+            prog = saved.get("programmes")
+            programmes = prog.copy() if isinstance(prog, pd.DataFrame) else _no_programmes()
+            comp = saved.get("composition")
+            composition = comp.copy() if isinstance(comp, pd.DataFrame) else None
+            coherence, clones = dict(saved["coherence"]), saved["clones"].copy()
+            profile_tests = {k: dict(saved["profile_tests"][k]) for k in labels("profile_tests")
+                             if k in saved.get("profile_tests", {})}
+            tests = {k: saved["tests"][k].copy() for k in labels("tests") if k in saved.get("tests", {})}
+            memory = dict(saved["memory"]) if "memory" in saved else None
+        else:
+            # Threadfin 4.6.0 and 4.6.1: the entries as they are now
+            prog = th.get("programmes", {}).get("summary")
+            found = "clonal programmes" not in skipped            # the recorded run made programmes
+            programmes = (prog.copy() if found and isinstance(prog, pd.DataFrame) and "clone_programme" in adata.obs
+                          else _no_programmes())
+            composition = None
+            if settings["state_key"] and not programmes.empty:
+                composition = programme_composition(adata, settings["state_key"],
+                                                    weight=settings.get("composition_weight") or "cells")
+            coherence, clones = dict(th["coherence"]), th["profiles"]["clone_table"]
+            profile_tests = {k: dict(th["profile_associations"][k]) for k in labels("profile_tests")
+                             if k in th.get("profile_associations", {})}
+            tests = {k: th["associations"][k].copy() for k in labels("tests") if k in th.get("associations", {})}
+            time_key = settings["time_key"]
+            memory = dict(th["memory"][time_key]) if time_key and time_key in th.get("memory", {}) else None
         for k, tab in tests.items():                  # DataFrame attributes are not written to h5ad
             tab.attrs.update(dict(record.get("test_attrs", {}).get(k, {})))
-        time_key = settings["time_key"]
-        return cls(
-            adata=adata, coherence=dict(th["coherence"]), programmes=programmes,
-            clones=th["profiles"]["clone_table"], composition=composition,
-            tests=tests,
-            profile_tests={k: dict(th["profile_associations"][k]) for k in labels("profile_tests")
-                           if k in th.get("profile_associations", {})},
-            memory=(dict(th["memory"][time_key]) if time_key and time_key in th.get("memory", {}) else None),
-            settings=settings, skipped=skipped)
+        return cls(adata=adata, coherence=coherence, programmes=programmes, clones=clones, composition=composition,
+                   tests=tests, profile_tests=profile_tests, memory=memory, settings=settings, skipped=skipped,
+                   record=dict(record))
 
     def summary(self) -> str:
         """Plain-language summary of the results."""
         from .programmes import get_programmes
 
         ad, coh = self.adata, self.coherence
+        uns = self._uns()
         clone_key = self.settings["clone_key"]
         clones = ad.obs[clone_key].dropna()
         sizes = clones.value_counts()
@@ -242,7 +302,7 @@ class ThreadfinResult:
         if coh["p_value"] >= 0.05:
             lines.append("   Clone identity is not significantly more informative than shuffled labels here, so the "
                          "programmes below are descriptive.")
-        prof_vc = ad.uns["threadfin"]["profiles"]["variance_components"]
+        prof_vc = uns["profiles"]["variance_components"]
         from .profiles import VarianceComponents
 
         vc = VarianceComponents(np.asarray(prof_vc["sigma2"]), np.asarray(prof_vc["tau2"]),
@@ -264,12 +324,12 @@ class ThreadfinResult:
             lines.append("   No programmes: " + self.skipped.get(
                 "clonal programmes", "not enough profiled clones to define programmes in this dataset."))
         elif prog.shape[0] == 1:
-            tests = get_programmes(ad).get("split_tests", pd.DataFrame())
+            tests = (uns.get("programmes") or get_programmes(ad)).get("split_tests", pd.DataFrame())
             p_root = f" (split test p = {tests['pvalue'].iloc[0]:.2g})" if not tests.empty else ""
             lines.append(f"   No distinct programmes: no split of the {int(prog['n_clones'].sum()):,} profiled clones "
                          f"into separate groups was significant{p_root}.")
         else:
-            params = get_programmes(ad)["params"]
+            params = (uns.get("programmes") or get_programmes(ad))["params"]
             n_stable = int((prog["stability"] >= params["stability_threshold"]).sum())
             verb = "is" if n_stable == 1 else "are"
             lines.append(f"   {prog.shape[0]} programmes from {int(prog['n_clones'].sum()):,} profiled clones "
@@ -392,7 +452,7 @@ class ThreadfinResult:
 
         from . import __version__
 
-        recorded = dict((self.adata.uns.get("threadfin", {}).get("run") or {}).get("versions") or {})
+        recorded = dict((self.record or self.adata.uns.get("threadfin", {}).get("run") or {}).get("versions") or {})
 
         def ver(dist):
             if dist in recorded:
@@ -406,7 +466,7 @@ class ThreadfinResult:
             return f"{int(x):,}"
 
         ad, st = self.adata, self.settings
-        uns = ad.uns.get("threadfin", {})
+        uns = self._uns()
         refs = {"threadfin": "Threadfin (https://github.com/Reynold4k/Threadfin)"}
         text = [f"Clonal analyses used Threadfin {recorded.get('threadfin', __version__)} "
                 f"(Python {recorded.get('python', platform.python_version())}, "
@@ -715,7 +775,10 @@ def run(
       ``obsm['X_pca']`` (replaced by the PCA of the selected genes),
       ``var['highly_variable']`` (replaced), ``var['threadfin_receptor_gene']``
       and ``layers['log_norm']`` (normalised, log-transformed counts);
-    * ``uns['threadfin']``: every result and the settings that made it.
+    * ``uns['threadfin']``: every result and the settings that made it, and in
+      ``uns['threadfin']['run']`` the record of this run with a copy of what it
+      reported, from which :meth:`ThreadfinResult.from_adata` rebuilds the
+      result after saving.
 
     Examples
     --------
@@ -906,22 +969,39 @@ def run(
             skipped[f"clonal memory over '{time_key}'"] = str(e)
             log(f"clonal memory over '{time_key}' skipped: {e}", verbose)
 
-    clones = adata.uns["threadfin"]["profiles"]["clone_table"]
-    result = ThreadfinResult(
-        adata=adata, coherence=coherence, programmes=programmes, clones=clones,
-        composition=composition, tests=tests, profile_tests=profile_tests, memory=memory, skipped=skipped,
-        settings={"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
-                  "strata_key": strata_key or sample_key,
-                  "state_key": state_key, "composition_weight": composition_weight, "time_key": time_key,
-                  "basis": basis,
-                  "representation": representation, "receptor": receptor, "clone_calling": clone_calling,
-                  "n_perm": int(n_perm), "n_boot": int(n_boot), "random_state": int(random_state)},
-    )
-    get_uns(adata)["run"] = h5ad_safe({
-        "settings": {k: v for k, v in result.settings.items() if v is not None},
+    # the run's own copy of the clone table: tl.embed_clones changes the stored table in place
+    clones = adata.uns["threadfin"]["profiles"]["clone_table"].copy()
+    settings = {"clone_key": clone_key, "donor_key": donor_key, "sample_key": sample_key,
+                "strata_key": strata_key or sample_key,
+                "state_key": state_key, "composition_weight": composition_weight, "time_key": time_key,
+                "basis": basis,
+                "representation": representation, "receptor": receptor, "clone_calling": clone_calling,
+                "n_perm": int(n_perm), "n_boot": int(n_boot), "random_state": int(random_state)}
+    # What this run reported, kept apart from the entries of uns['threadfin'] that later calls of tl functions
+    # replace (a label test of the same label, clonal_coherence, find_programmes ...), so that
+    # ThreadfinResult.from_adata rebuilds this run's result. The keys before "results" are those of 4.6.0, which
+    # earlier versions read.
+    results = {"coherence": coherence, "clones": clones, "profile_tests": profile_tests, "tests": tests,
+               "uns": _report_entries(adata, programmes)}
+    if not programmes.empty:
+        results["programmes"] = programmes
+    if composition is not None:              # h5ad needs text labels; states can be numbers
+        results["composition"] = composition.set_axis(composition.index.astype(str), axis=0).set_axis(
+            composition.columns.astype(str), axis=1)
+    if memory is not None:
+        results["memory"] = memory
+    record = h5ad_safe({
+        "settings": {k: v for k, v in settings.items() if v is not None},
         "skipped": dict(skipped), "profile_tests": list(profile_tests), "tests": list(tests),
         "test_attrs": {k: {a: v for a, v in t.attrs.items() if v is not None} for k, t in tests.items()},
         "versions": _versions(),
+        "results": results,
     })
+    get_uns(adata)["run"] = record
+    result = ThreadfinResult(
+        adata=adata, coherence=coherence, programmes=programmes, clones=clones,
+        composition=composition, tests=tests, profile_tests=profile_tests, memory=memory, skipped=skipped,
+        settings=settings, record=copy.deepcopy(record),
+    )
     log("done. print(result.summary()) for a readable report.", verbose)
     return result

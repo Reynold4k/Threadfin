@@ -327,6 +327,64 @@ def test_a_run_without_programmes_leaves_none_from_an_earlier_run(sim):
     assert tf.ThreadfinResult.from_adata(ad).summary() == second.summary()
 
 
+def test_the_result_stays_the_runs_own_after_later_calls(tmp_path):
+    """Later calls of tl functions replace entries of uns['threadfin'] that run() wrote (a label test of the same
+    label, coherence, memory, the clone map, programmes). The result, in memory and rebuilt from the saved file
+    before or after those calls, keeps the run's tables, summary and Methods paragraph."""
+    import anndata
+
+    ad = tf.sim.simulate_repertoire(n_clones=1200, clone_size_exponent=1.9, n_timepoints=2, memory=0.8,
+                                    random_state=3)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        result = tf.run(ad, donor_key="donor", sample_key="context", basis="X_pca", state_key="true_state",
+                        test=["true_programme"], time_key="timepoint", map_n_neighbors=15, map_min_dist=0.5,
+                        n_perm=10, n_boot=6, verbose=False)
+    assert result.programmes.shape[0] > 1 and result.memory is not None and "true_programme" in result.tests
+    summary, methods = result.summary(), result.methods()
+    record = ad.uns["threadfin"]["run"]
+    assert list(record["profile_tests"]) == ["true_programme"] and list(record["tests"]) == ["true_programme"]
+    ad.write_h5ad(tmp_path / "run.h5ad")
+    # a file of Threadfin 4.6.0 or 4.6.1 has no copy of the results: its entries are read as they are
+    old = ad.copy()
+    del old.uns["threadfin"]["run"]["results"]
+    assert tf.ThreadfinResult.from_adata(old).summary() == summary
+    assert tf.ThreadfinResult.from_adata(old).methods() == methods
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        tf.tl.profile_association(ad, "true_programme", how="fraction:G0", n_perm=50, verbose=False)
+        tf.tl.association_test(ad, "true_programme", size_strata=False, n_perm=50, verbose=False)
+        tf.tl.clonal_coherence(ad, strata_key="donor", n_perm=5, verbose=False)
+        tf.tl.clonal_memory(ad, "timepoint", reference="all", noise="pooled", n_null=20, n_boot=20, verbose=False)
+        tf.tl.embed_clones(ad, n_neighbors=10, min_dist=0.05, verbose=False)
+        tf.tl.find_programmes(ad, resolution=1.0, n_boot=0, stability_threshold=0.5, verbose=False)
+    th = ad.uns["threadfin"]
+    assert th["profile_associations"]["true_programme"]["r2"] != result.profile_tests["true_programme"]["r2"]
+    assert th["coherence"]["n_perm"] == 5 and th["programmes"]["params"]["stability_threshold"] == 0.5
+    ad.write_h5ad(tmp_path / "later.h5ad")
+
+    assert result.summary() == summary and result.methods() == methods
+    for again in (tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "run.h5ad")),
+                  tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "later.h5ad")),
+                  tf.ThreadfinResult.from_adata(ad)):
+        assert again.summary() == summary
+        assert again.methods() == methods
+        assert again.coherence["icc"] == result.coherence["icc"]
+        assert again.coherence["p_value"] == result.coherence["p_value"]
+        assert again.programmes.index.astype(str).tolist() == result.programmes.index.astype(str).tolist()
+        assert np.allclose(again.programmes.to_numpy(float), result.programmes.to_numpy(float))
+        assert np.allclose(again.composition.to_numpy(float), result.composition.to_numpy(float))
+        assert again.clones.index.equals(result.clones.index)
+        assert np.allclose(again.clones[["n_cells", "reliability", "x", "y"]].to_numpy(float),
+                           result.clones[["n_cells", "reliability", "x", "y"]].to_numpy(float))
+        assert again.clones["clone_programme"].astype(object).equals(result.clones["clone_programme"].astype(object))
+        assert again.profile_tests["true_programme"]["r2"] == result.profile_tests["true_programme"]["r2"]
+        assert np.allclose(again.tests["true_programme"]["pvalue"], result.tests["true_programme"]["pvalue"])
+        assert again.tests["true_programme"].attrs["size_bins"] is not None
+        assert again.memory["memory_index"] == result.memory["memory_index"]
+
+
 def test_run_warns_once_about_a_sample_level_label(sim):
     """Both label tests check a label fixed within each sample; run() says so once, not once per test."""
     ad = sim.copy()

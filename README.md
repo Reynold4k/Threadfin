@@ -63,6 +63,17 @@ receptor genes, estimates one profile per clone with two or more cells, tests cl
 clone map and looks for clonal programmes. On the 16 public datasets tested (884 to 206,000 cells) it took about 1
 to 11 minutes with 8 cores ([run time and memory](https://github.com/Reynold4k/Threadfin#run-time-and-memory)).
 
+**No data at hand?** A simulated repertoire with a known answer already has clone ids and an embedding. Run it
+instead of the call above, and step 3 works as written, in a minute or two
+([Tutorial 1](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md)):
+
+```python
+import threadfin as tf
+
+adata = tf.sim.simulate_repertoire()
+result = tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca")
+```
+
 ### 3. Read the results
 
 ```python
@@ -104,9 +115,11 @@ result.clones.to_csv("clones.csv")      # per clone with >= 2 cells: size, relia
   either way. Random draws follow the order of the cells, so the same cells in another order can give different
   programmes; sort them first (`adata = adata[adata.obs_names.sort_values()].copy()`) when results must not
   depend on the order.
-* **No data at hand**: `adata = tf.sim.simulate_repertoire()` makes a repertoire with a known answer; it already
-  has clone ids and an embedding, so run it with
-  `tf.run(adata, donor_key="donor", sample_key="context", basis="X_pca")` (tutorial 1).
+* **Saving and reloading**: `adata.write_h5ad(...)` keeps the record of the run, and
+  `tf.ThreadfinResult.from_adata(anndata.read_h5ad(...))` gives the run's result back, with the same summary, also
+  after further `tf.tl` calls on the same AnnData.
+* **Jupyter**: start the notebook with `%matplotlib inline`. With matplotlib older than 3.9 (which the Dandelion
+  extra installs on Python 3.10–3.12), the first figure of a session otherwise appears one cell late, or not at all.
 
 ### Run time and memory
 
@@ -131,11 +144,14 @@ about an hour for a million simulated cells on 8 cores
 | Tutorial | What it covers |
 |---|---|
 | [1 — Getting started](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/01_getting_started.md) | the whole analysis on simulated data in a minute, with every output explained |
-| [2 — Your own data](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md) | from Cell Ranger output to results: quality control, several samples and donors, clone calling, T cells, troubleshooting |
+| [2 — Your own data](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/02_your_data.md) | from Cell Ranger output to results: quality control, several samples and donors, clone calling, T cells, troubleshooting; every step can be run on the public data of Tutorial 5 |
 | [3 — The clone map](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/03_clone_map.md) | automatic and hand-set layouts, and how to check a map |
 | [4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
 | [5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset (GSE287123) end to end: download, hashtag demultiplexing, clones, embedding, Threadfin and interpretation; executed in a fresh environment before every release (about 6 minutes on 8 cores) |
 
+New in 4.6.2: the result of `tf.run` stays the run's own after later `tf.tl` calls on the same AnnData, also when
+it is rebuilt from a saved file with `ThreadfinResult.from_adata`; every step of Tutorial 2 can be followed on the
+public data of Tutorial 5. Results are unchanged.
 New in 4.6.0: `strata_key=` names the sampling unit within which the coherence test shuffles clone labels when it
 is finer than the context (`sample_key`); `composition_weight="clones"` describes each programme by its average
 clone; the summary states the excess of clonal coherence over shuffled labels, the strata used and the order of
@@ -215,7 +231,7 @@ manuscript — status, datasets, every analysis and a benchmark against related 
 * **Model-antigen germinal centres** (Merkenschlager *et al.*, *Nature* 2025): the main axis of variation
   between clone profiles follows recent division in two cohorts whose sequencing libraries are crossed; a
   library effect would push the two cohorts in opposite directions, and their division directions agree
-  (cosine similarity 0.89). Antigen-bait and dark-zone gates are also associated with clone profiles but were
+  (cosine similarity 0.90). Antigen-bait and dark-zone gates are also associated with clone profiles but were
   each sequenced in their own library.
 
 ## A clone embedding that holds together
@@ -232,9 +248,12 @@ layout is chosen to stay connected, a connected map is not evidence of a continu
 is judged from the programmes, their stability and the tests, which use the profiles.
 
 ```python
-tf.tl.embed_clones(adata)                               # automatic (default)
+tf.tl.embed_clones(adata)                               # automatic (default), after tf.run or tf.tl.clone_profiles
 tf.tl.embed_clones(adata, n_neighbors=30, min_dist=0.3) # by hand
-tf.tl.map_quality(features, xy)                         # score any clone map (profiles, coordinates)
+
+prof = adata.uns["threadfin"]["profiles"]               # the clone profiles and the map drawn last
+xy = prof["clone_table"][["x", "y"]].dropna()
+tf.tl.map_quality(prof["features"].loc[xy.index], xy.to_numpy())   # score any clone map: profiles, coordinates
 ```
 
 ## How it works
@@ -275,12 +294,14 @@ The full description, with references, is in [Methods](https://github.com/Reynol
 | [Technical validation](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/analyses/technical_validation/README.md) | the tutorials on 16 public datasets, sensitivity to clone calling and embedding, power, a million cells, T cells |
 | [Figure gallery](https://github.com/Reynold4k/Threadfin/blob/main/manuscript/analyses/technical_validation/tutorial_path/figures/README.md) | every figure Threadfin draws, for each of the 16 public datasets of the technical validation |
 
-## Citation
+## How to cite
 
-A manuscript describing Threadfin is in preparation. Until it is available, please cite this repository
-([CITATION.cff](https://github.com/Reynold4k/Threadfin/blob/main/CITATION.cff)) and the tools Threadfin builds on: Dandelion (Suo *et al.*, *Nat.
-Biotechnol.* 2024) for clone definition, Scanpy (Wolf *et al.*, *Genome Biol.* 2018) and UMAP (McInnes
-*et al.*, *J. Open Source Softw.* 2018).
+Please cite Threadfin as in [CITATION.cff](https://github.com/Reynold4k/Threadfin/blob/main/CITATION.cff) (on
+GitHub: "Cite this repository"), with its Zenodo DOI
+[10.5281/zenodo.23824521](https://doi.org/10.5281/zenodo.23824521), which leads to the latest version;
+`result.methods()` names the version you used. A manuscript is in preparation. Please also cite the tools
+Threadfin builds on: Dandelion (Suo *et al.*, *Nat. Biotechnol.* 2024) for clone definition, Scanpy (Wolf
+*et al.*, *Genome Biol.* 2018) and UMAP (McInnes *et al.*, *J. Open Source Softw.* 2018).
 
 ## How Threadfin compares with related tools
 

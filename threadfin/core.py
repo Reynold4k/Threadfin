@@ -360,8 +360,11 @@ def clonotype_recluster(
         clone_adata = AnnData(clone_xy)
         sc.pp.neighbors(clone_adata, n_neighbors=graph_k, use_rep="X",
                         metric="euclidean", random_state=cluster_random_state)
-        sc.tl.leiden(clone_adata, resolution=resolution, random_state=cluster_random_state,
-                     flavor="leidenalg", directed=True, n_iterations=-1)
+        with warnings.catch_warnings():   # the historical recipe needs leidenalg; scanpy recommends igraph
+            warnings.filterwarnings("ignore", message="(In the future, the default backend for leiden|The `igraph` "
+                                    "implementation of leiden)")
+            sc.tl.leiden(clone_adata, resolution=resolution, random_state=cluster_random_state,
+                         flavor="leidenalg", directed=True, n_iterations=-1)
         labels = clone_adata.obs["leiden"].astype(str).to_numpy()
     else:
         labels = _leiden_on_distances(

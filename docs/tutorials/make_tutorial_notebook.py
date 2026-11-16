@@ -127,10 +127,14 @@ should point into it). If `import dandelion` fails with "cannot import name 'get
 no attribute 'getnnz'", the environment has pynndescent 0.7, whose output scanpy cannot yet read: run
 `pip install "pynndescent<0.7"` (Threadfin 4.5.3 and later install it).*
 
-**What to look for.** The next cell should print the versions without errors.
+**What to look for.** The next cell should print the versions without errors. Its first line,
+`%matplotlib inline`, shows every figure below the cell that draws it: with matplotlib older than 3.9 (the
+version this environment installs), the first figure of a session otherwise appears one cell late, or not at all.
 """)
 
 code(r"""
+%matplotlib inline
+
 import importlib
 import platform
 import sys
@@ -169,12 +173,14 @@ libraries*; each tube contains cells of all ten mice. The four files per tube ar
 | `*_GEX_HTO_barcodes.tsv.gz` | one row per cell barcode |
 | `*_airr_rearrangement.tsv.gz` | one row per receptor *chain* (contig) per cell, in the AIRR standard |
 
-**What to look for.** Each file ends with `ok`. A failed checksum means a broken download: delete the file
-and run the cell again.
+**What to look for.** Each file ends with `ok`. A download that fails, or whose checksum does not match, is
+tried again after a pause, five times in all; if GEO stays unreachable, the cell stops with a message, and
+running it later fetches only the files still missing.
 """)
 
 code(r"""
 import hashlib
+import time
 import urllib.request
 from pathlib import Path
 
@@ -215,21 +221,24 @@ def md5(path, chunk=1 << 22):
     return h.hexdigest()
 
 
-def fetch(name):
+def fetch(name, attempts=5):
     gsm = name.split("_")[0]
     url = f"https://ftp.ncbi.nlm.nih.gov/geo/samples/{gsm[:-3]}nnn/{gsm}/suppl/{name}"
     path = DATA / name
     if path.exists() and md5(path) == MD5[name]:
         return f"{name}: already present, ok"
-    for attempt in range(3):                       # GEO occasionally drops a connection
+    for attempt in range(1, attempts + 1):         # GEO occasionally refuses or drops a connection
         try:
             urllib.request.urlretrieve(url, path)
-            break
+            if md5(path) == MD5[name]:
+                return f"{name}: {path.stat().st_size / 1e6:.1f} MB, ok"
+            problem = "checksum mismatch"
         except OSError as err:
-            print(f"  retrying {name} ({err})")
-    if md5(path) != MD5[name]:
-        raise RuntimeError(f"checksum mismatch for {name}; delete it and run this cell again")
-    return f"{name}: {path.stat().st_size / 1e6:.1f} MB, ok"
+            problem = str(err)
+        if attempt < attempts:
+            print(f"  {name}: {problem}; trying again in {30 * attempt} s")
+            time.sleep(30 * attempt)
+    raise RuntimeError(f"{name} could not be downloaded from GEO ({problem}); run this cell again later")
 
 
 for name in MD5:
@@ -526,7 +535,10 @@ all profiled clones, the more the fewer cells were sampled (best linear unbiased
 cells therefore count, but weigh less.
 
 **What to look for.** The run prints each step; it takes a few minutes, mostly the automatic choice of the
-clone-map layout.
+clone-map layout. Two kinds of warning are expected here. The first says that no resolution gave programmes whose
+bootstrap stability, averaged over their clones, reached 0.75, so Threadfin kept the most stable partition and
+each programme is judged by its own stability (Step 10). The others say that each gate label is fixed within each
+mouse × gate population (Steps 10 and 13).
 """)
 
 code(r"""
@@ -652,7 +664,7 @@ so a gate effect could also be a tube effect, and the summary of Step 10 flags t
 within each sorted population. For **division**, the design crosses tubes between cohorts
 (Step 4): a tube effect would push the profiles in *opposite* directions in the two cohorts, a division
 effect in the *same* direction. We check that with the cosine similarity of the two cohorts' division
-directions (manuscript: 0.89; a pure tube effect would give −1). **RBD-bait** and **dark-zone** gates were
+directions (0.90 for these clones; a pure tube effect would give −1). **RBD-bait** and **dark-zone** gates were
 both sorted into tubes C and D, so for them a biological effect cannot be separated from a tube effect, and
 binding a bait is a sorting gate, not an affinity measurement.
 """)
@@ -687,8 +699,8 @@ for arm in ["RBD protein", "RBD mRNA"]:
     r2 = float(np.sum((np.outer(yc, beta)) ** 2) / np.sum(Xc ** 2))
     print(f"{'recent division, ' + arm:38s} R2 = {r2:.3f}  clones = {int(keep.sum())}")
 a, b = direction["RBD protein"], direction["RBD mRNA"]
-print(f"\ncosine similarity of the two cohorts' division directions: {a @ b / np.linalg.norm(a) / np.linalg.norm(b):.2f}"
-      "  (tube effect alone: -1)")
+cosine = float(a @ b / np.linalg.norm(a) / np.linalg.norm(b))
+print(f"\ncosine similarity of the two cohorts' division directions: {cosine}  (tube effect alone: -1)")
 """)
 
 md(r"""

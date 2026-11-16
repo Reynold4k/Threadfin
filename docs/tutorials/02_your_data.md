@@ -6,6 +6,87 @@ from Cell Ranger output to results, explains each decision you have to make, and
 most likely to meet and how to fix them. For a
 complete worked example on a published dataset, see [Tutorial 5](05_end_to_end_tutorial.ipynb).
 
+## Following this tutorial on public data
+
+Every code block below also runs on the files that [Tutorial 5](05_end_to_end_tutorial.ipynb) downloads from GEO
+(GSE287123, Step 1, into `data/GSE287123`): germinal-centre B cells of ten mice, pooled with hashtag antibodies
+into four libraries (tubes A–D), as 10x matrix-market and AIRR files. This block replaces the reading lines of
+sections 2 and 4 and builds the `adata` and `contigs` that those sections build:
+
+```python
+import anndata as ad
+import numpy as np
+import pandas as pd
+import scanpy as sc
+import threadfin as tf
+from sklearn.cluster import KMeans
+
+DATA = "data/GSE287123"                        # the folder of Tutorial 5, Step 1
+samples = {   # library: file prefix of its expression and hashtag counts, its AIRR file
+    "A": ("GSM8739143_Rebutal_4-5_Tube_A_GEX_HTO_", "GSM8739145_Rebutal_4-5_Tube_A_airr_rearrangement.tsv.gz"),
+    "B": ("GSM8739146_Rebutal_4-5_Tube_B_GEX_HTO_", "GSM8739148_Rebutal_4-5_Tube_B_airr_rearrangement.tsv.gz"),
+    "C": ("GSM8739149_Rebutal_4-5_Tube_C_GEX_HTO_", "GSM8739151_Rebutal_4-5_Tube_C_airr_rearrangement.tsv.gz"),
+    "D": ("GSM8739152_Rebutal_4-5_Tube_D_GEX_HTO_", "GSM8739154_Rebutal_4-5_Tube_D_airr_rearrangement.tsv.gz"),
+}
+
+
+def demultiplex(hto_counts: pd.DataFrame, min_total: int = 5) -> pd.Series:     # Tutorial 5, Step 3
+    x = hto_counts.to_numpy(dtype=float)
+    clr = np.log1p(x) - np.log1p(x).mean(axis=0, keepdims=True)
+    positive = np.zeros_like(clr, dtype=bool)
+    for j in range(clr.shape[1]):
+        km = KMeans(2, n_init=10, random_state=0).fit(clr[:, [j]])
+        positive[:, j] = km.labels_ == int(np.argmax(km.cluster_centers_.ravel()))
+    n_pos = positive.sum(axis=1)
+    call = np.where(n_pos == 1, np.asarray(hto_counts.columns)[positive.argmax(axis=1)], "negative")
+    call = np.where(n_pos > 1, "doublet", call)
+    call = np.where(x.sum(axis=1) < min_total, "negative", call)
+    return pd.Series(call, index=hto_counts.index, name="hashtag")
+
+
+parts, contigs = [], []
+for sample, (prefix, airr_file) in samples.items():
+    a = sc.read_10x_mtx(DATA, prefix=prefix, gex_only=False)    # genes and the 10 hashtags
+    a.var_names_make_unique()
+    a.obs_names = [f"{sample}_{b}" for b in a.obs_names]
+    a.obs["sample"] = sample
+    is_hto = (a.var["feature_types"] == "Antibody Capture").to_numpy()
+    hto = pd.DataFrame(a[:, is_hto].X.toarray(), index=a.obs_names, columns=a.var_names[is_hto])
+    a.obs["hashtag"] = demultiplex(hto).to_numpy()
+    a = a[~a.obs["hashtag"].isin(["doublet", "negative"]).to_numpy(), ~is_hto].copy()   # singlets, genes
+    a.obs["donor"] = a.obs["hashtag"].str.split("_").str[0]                             # the mouse
+    parts.append(a)
+    c = pd.read_csv(f"{DATA}/{airr_file}", sep="\t", low_memory=False)
+    c["cell_id"] = sample + "_" + c["cell_id"].astype(str)
+    contigs.append(c)
+
+adata = ad.concat(parts)
+contigs = pd.concat(contigs, ignore_index=True)
+tag = adata.obs["hashtag"]                                 # the sort gates, as in Tutorial 5, Step 4
+adata.obs["rbd_bait"] = tag.map(lambda s: "RBD+" if "_RBD_pos" in s else ("RBD-" if "_RBD_neg" in s else None))
+adata.obs["zone_gate"] = tag.map(lambda s: "LZ" if "_LZ_" in s else ("DZ" if "_DZ_" in s else None))
+adata.obs["division_gate"] = np.where(tag.str.contains("mCherry_low"), "mCherry-low", "mCherry-high")
+adata.obs["population"] = (adata.obs["donor"] + "_" + adata.obs["rbd_bait"].fillna(adata.obs["zone_gate"])
+                           + "_" + adata.obs["division_gate"])                   # mouse x gate, sorted together
+print(adata)
+```
+
+The other blocks run as written, with these substitutions:
+
+| Section | In this tutorial | On GSE287123 |
+|---|---|---|
+| 2 | the reading lines (`sc.read_10x_h5`, `var_names_make_unique`) | the block above; the quality control runs as written |
+| 3 | one sample of one donor | one library, whose cells come from ten mice: `a = adata[adata.obs["sample"] == "A"].copy()`, then `tf.run(a, bcr=contigs, donor_key="donor", sample_key="sample")` without the two `obs` lines |
+| 4 | the loop that reads the samples; `contigs["barcode"]` | the block above; `contigs["cell_id"]` (the AIRR column) |
+| 5 | `strata_key="sample"`, `test=["tissue"]` | `strata_key="population"`, the mouse × gate populations sorted together; `test=["division_gate"]` |
+| 6 | `ir.io.read_10x_vdj(f"{sample}/filtered_contig_annotations.csv")` | `ir.io.read_airr(f"{DATA}/{samples[sample][1]}")` |
+| 6 | `clones.csv`, clone ids from another tool | write one from an earlier run: `adata.obs[["clone_id"]].to_csv("clones.csv")` |
+| 7 | `state_key="cell_type"`, `test=["antigen_binding", "isotype"]`, `time_key="timepoint"` | `test=["rbd_bait", "isotype"]`; leave out `state_key` and `time_key` (no cell-type annotation, no time points) |
+| 7 | `how="fraction:IGHA"` | the same call runs, but these mice have a single IgA cell, so every clone's fraction is 0; `how="fraction:IGHG"` explains 3.5% of the clone-profile variance |
+
+With these substitutions every block of sections 2–8 runs: 34,175 of the 36,188 singlets pass the starting
+thresholds of section 2, and 1,859 clones have two or more cells.
+
 ---
 
 ## 0. Before you start: a checklist
@@ -48,7 +129,7 @@ define clones in a separate environment or with another clone caller and pass th
 sets of sequences, which is randomised in every new Python session: on the dataset of Tutorial 5, sessions with
 different seeds moved the cells of about one expanded clone in eight and changed nearly every clone id.
 Threadfin therefore calls clones under Python's hash seed 0 in every session: when Python was not started with
-`PYTHONHASHSEED=0`, Dandelion runs in a separate Python process that is (about 2 s more per call). The ids are
+`PYTHONHASHSEED=0`, Dandelion runs in a separate Python process started with it (about 2 s more per call). The ids are
 identical run after run, in scripts and notebooks alike, and the same as in these tutorials and the manuscript;
 you do not need to set anything. The seed is stored with the clone ids (`ids.attrs["dandelion_hash_seed"]`;
 `ids.attrs["dandelion_subprocess"]` says whether a separate process was used; after `tf.run(bcr=...)` both are in
@@ -86,6 +167,9 @@ adata = adata[(adata.obs["n_genes_by_counts"] >= 200) &
 * *Thresholds* depend on tissue and chemistry; read them off the violin plots rather than copying them.
   ASCs have many immunoglobulin transcripts and sometimes fewer detected genes — do not set the gene
   threshold so high that they disappear.
+* *In Jupyter*, put `%matplotlib inline` in the first cell of the notebook. With matplotlib older than 3.9, which
+  the Dandelion extra installs on Python 3.10–3.12, the violin plots, the first figure of the session, otherwise
+  appear one cell late, or not at all.
 * *Doublets*: if your samples were hashtagged, remove cells positive for two hashtags (Tutorial 5, Step 3);
   otherwise a doublet detector such as Scrublet (`sc.pp.scrublet`) helps.
 * *B-lineage cells*: keep cells annotated as B cells, germinal-centre B cells, plasmablasts, plasma cells
@@ -322,7 +406,7 @@ result = tf.run(adata, bcr=contigs, donor_key="donor", sample_key="sample",
                 test=["antigen_binding", "isotype"],           # labels to test, clones as the unit
                 time_key="timepoint")                          # do clones keep their state over time?
 print(result.summary())
-result.plot("threadfin_overview.pdf")
+fig = result.plot("threadfin_overview.pdf")
 ```
 
 For each label, Threadfin first asks how much of the difference between clone profiles the label explains
@@ -347,10 +431,10 @@ towards the average profile, so a label that follows only clone size would other
   `composition_weight="clones"` counts every clone once and describes a typical clone, which suits naming
   programmes. In sorted designs neither equals the composition in the animal, because the sort decided how
   many cells of each state were sequenced.
-* Results of `tf.tl.profile_association` and `tf.tl.association_test` are stored in `adata.uns["threadfin"]`
-  under the label's name, so a later call with the same label (for example the `how="fraction:IGHA"` test
-  above) replaces the result that `tf.run` stored there; `result.profile_tests` and `result.tests` keep the
-  results of the run.
+* `tf.tl.profile_association` and `tf.tl.association_test` store their results in `adata.uns["threadfin"]` under
+  the label's name, so a later call with the same label (for example the `how="fraction:IGHA"` test above)
+  replaces the entry there. `result` keeps the results of the run, and so does the result rebuilt from a saved
+  file (section 8).
 
 * A label that is **fixed within each sample** (a tissue, sort gate or visit sequenced in its own library) is
   compared between samples, not between independent clones: the summary says so and gives the number of
@@ -377,14 +461,19 @@ adata.write_h5ad("threadfin_result.h5ad")          # the AnnData, with the resul
 `result.methods()` describes what was run — clone calling, embedding, profiles, tests — with the settings and
 package versions of this analysis and the references it relies on, as a starting point for the Methods section
 of a paper. Check it against your own description of the data. The h5ad file also keeps the record of the run
-(settings, analyses not run and why, package versions), so the result can be rebuilt later:
+(settings, analyses not run and why, package versions and a copy of every result it reported), so the result can
+be rebuilt later:
 
 ```python
 import anndata
 
 result = tf.ThreadfinResult.from_adata(anndata.read_h5ad("threadfin_result.h5ad"))
-print(result.summary())                            # the same summary as before saving
+print(result.summary())                            # the summary that tf.run gave
 ```
+
+The rebuilt result is the run's own: later calls on the same AnnData, such as the `how="fraction:IGHA"` test of
+section 7, change neither its summary nor its tables. (Files saved with Threadfin 4.6.0 or 4.6.1 hold no copy of
+the results; for them, such a later call also replaces the run's result in the rebuilt summary.)
 
 ---
 

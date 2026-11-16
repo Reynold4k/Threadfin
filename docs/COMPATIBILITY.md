@@ -1,5 +1,36 @@
 # Verified compatibility
 
+## Version 4.6.2 — 16 November 2026
+
+* **Why this version.** A first-time user followed the public 4.6.1 release in new environments, with the public
+  documentation only: `pip install "threadfin[dandelion]"` on Python 3.11 and 3.12 and `pip install threadfin` on
+  Python 3.14, the README Quick start, Tutorials 1–5 and `examples/tutorial.py`. Every number they printed matched
+  the documentation; what else the test found is fixed in this version ([changelog](../CHANGELOG.md)).
+* **Tests.** In the validation environment (Python 3.11.18, sc-dandelion 0.5.7, pandas 2.3.3, numpy 2.4.6, anndata
+  0.12.19, scanpy 1.11.5) 360 passed and 1 was skipped (scirpy was not installed). With the newest releases of the
+  dependencies (Python 3.12.16, pandas 3.1.1, numpy 2.5.5, anndata 0.13.4, scanpy 1.12.6), 346 passed and 15 that
+  need Dandelion or scirpy were skipped, and the same with the oldest versions that `pyproject.toml` allows,
+  installed as continuous integration installs them (Python 3.10, numpy 1.24.1, pandas 2.0.0, anndata 0.10.0,
+  scanpy 1.10.0).
+* **Simulated data.** Every code block of Tutorials 1, 3 and 4, of `docs/RECLUSTERING.md` and of the README (apart
+  from the call on the reader's own files) ran, and so did `examples/tutorial.py`. Tutorials 1, 3 and 4 and
+  `examples/tutorial.py` printed the same as with 4.6.1 apart from the version, and Tutorial 1's clone table and
+  overview figure are identical, byte for byte. A new virtual environment with the wheel of this version and the
+  newest dependencies (Python 3.12) passed `pip check` and printed the same in `examples/tutorial.py`.
+* **The tutorial notebook** ran end to end in a new environment built as Step 0 describes (Python 3.11 from
+  conda-forge; this version, sc-dandelion 0.5.7, matplotlib 3.8.4), with the download from GEO: no error, 6.4
+  minutes on 8 cores, 7.6 GB. Twelve of its 18 code cells print what the published 4.6.0 copy printed. The other
+  six differ in the version, the quality-control plot (now shown), the corrected log message, the time of the
+  map search and a line number, and the cosine similarity, now printed in full (0.8962615719357584). The clone
+  and programme tables, the cell table and the overview figure it saves are identical, byte for byte, to those of
+  the 4.6.0 run. Every package version is in `docs/tutorials/requirements-lock.txt`.
+* **Tutorial 2 on public data.** Every code block of Tutorial 2 ran on GSE287123 with the substitutions its first
+  section lists, in the environment of the notebook (with scirpy 0.22.5 for its scirpy block): 34,175 of the
+  36,188 singlets passed the quality control, and 8,660 clones were called, 1,859 of them with two or more cells,
+  the same through scirpy. After the later `how="fraction:IGHA"` test of section 7, the result rebuilt from the
+  saved file printed the summary saved before the test (with 4.6.1 it reported that later test instead).
+* **Saved results.** Files written by 4.6.0 and 4.6.1 load as before. Threadfin 4.6.0 reads files written by 4.6.2.
+
 ## Version 4.6.0 — 30 October 2026
 
 * **The user's path.** A new environment was built as Tutorial 2 describes (Python 3.11, `pip install

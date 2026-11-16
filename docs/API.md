@@ -1,4 +1,4 @@
-# API reference (threadfin 4.6.1)
+# API reference (threadfin 4.6.2)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -21,6 +21,7 @@ The complete analysis and its result.
 | [`ThreadfinResult.summary`](#threadfinresultsummary) | Plain-language summary of the results. |
 | [`ThreadfinResult.methods`](#threadfinresultmethods) | A Methods paragraph for this analysis, with the settings and package versions that were used. |
 | [`ThreadfinResult.plot`](#threadfinresultplot) | Overview figure (clone map, coherence test, programme composition, stability). |
+| [`ThreadfinResult.from_adata`](#threadfinresultfrom_adata) | The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after ``write_h5ad`` and ``read_h5ad``), so that :meth:`summary`, :meth:`methods` and :meth:`plot` work again. |
 
 ### tf.run
 
@@ -131,7 +132,10 @@ Returns
   ``obsm['X_pca']`` (replaced by the PCA of the selected genes),
   ``var['highly_variable']`` (replaced), ``var['threadfin_receptor_gene']``
   and ``layers['log_norm']`` (normalised, log-transformed counts);
-* ``uns['threadfin']``: every result and the settings that made it.
+* ``uns['threadfin']``: every result and the settings that made it, and in
+  ``uns['threadfin']['run']`` the record of this run with a copy of what it
+  reported, from which :meth:`ThreadfinResult.from_adata` rebuilds the
+  result after saving.
 
 Examples
 --------
@@ -148,11 +152,16 @@ Examples
 tf.ThreadfinResult(adata: 'object', coherence: 'dict', programmes: 'pd.DataFrame', clones:
     'pd.DataFrame', composition: 'pd.DataFrame | None' = None, tests: 'dict' = <factory>,
     profile_tests: 'dict' = <factory>, memory: 'dict | None' = None, settings: 'dict' = <factory>,
-    skipped: 'dict' = <factory>) -> None
+    skipped: 'dict' = <factory>, record: 'dict' = <factory>) -> None
 ```
 
 ```text
 Everything :func:`run` computed. Print :meth:`summary` for a readable report.
+
+The result keeps what the run produced. Later calls of :mod:`threadfin.tl` functions on the same AnnData (for
+example :func:`threadfin.tl.profile_association` with another ``how=``) store their own results in ``adata``
+and change neither the tables of the result nor its :meth:`summary` and :meth:`methods`. :meth:`plot` draws
+the clone map and the programmes stored in ``adata``. :meth:`from_adata` rebuilds the result after saving.
 ```
 
 ### ThreadfinResult.summary
@@ -193,6 +202,26 @@ plot(self, save: 'str | Path | None' = None)
 
 ```text
 Overview figure (clone map, coherence test, programme composition, stability).
+```
+
+### ThreadfinResult.from_adata
+
+```python
+from_adata(adata) -> 'ThreadfinResult'
+```
+
+```text
+The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after
+``write_h5ad`` and ``read_h5ad``), so that :meth:`summary`, :meth:`methods` and :meth:`plot` work again.
+
+:func:`run` keeps a copy of everything it reported in ``adata.uns['threadfin']['run']``. The rebuilt
+result is therefore the run's own, also after later calls of :mod:`threadfin.tl` functions on the same
+AnnData: its tables are those of the run, and :meth:`summary` and :meth:`methods` give the text they gave
+right after the run. :meth:`plot` draws the clone map and the programmes stored in ``adata``.
+
+Files written by Threadfin 4.6.0 and 4.6.1 hold no such copy. Their results are read from the entries of
+``adata.uns['threadfin']``, where a later call of a :mod:`threadfin.tl` function (for example the same
+label test with the same label) replaces the one :func:`run` made.
 ```
 
 ## Reading data and calling clones
@@ -391,8 +420,8 @@ hash_seed
     Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
     sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
     clones in every Python session, those of Threadfin's documentation and validation records: if this
-    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
-    (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process started
+    with it (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
     temporary file). Another integer calls the clones under that seed, always in a separate process, to see
     how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
     and earlier did; clone ids are then reproducible only between sessions started with the same
@@ -961,8 +990,8 @@ hash_seed
     Python string-hash seed under which Dandelion calls the clones. Dandelion's grouping iterates over Python
     sets, so the clones it calls depend on this seed (see the module notes). ``0`` (default) gives the same
     clones in every Python session, those of Threadfin's documentation and validation records: if this
-    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process that is
-    (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
+    session was not started with ``PYTHONHASHSEED=0``, Dandelion runs in a separate Python process started
+    with it (about 2 s more per call, to start Python and import Dandelion; the contigs pass through a private
     temporary file). Another integer calls the clones under that seed, always in a separate process, to see
     how much they depend on it. ``None`` runs Dandelion in this session whatever its seed, as Threadfin 4.5.3
     and earlier did; clone ids are then reproducible only between sessions started with the same

@@ -127,6 +127,7 @@ print(programmes.to_string())
 ```
 
 ```
+UserWarning: No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.66). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).
 [threadfin] programmes: 3 programmes over 962 core clones (resolution 0.2 after merging 1 non-significant split(s)); 0 with bootstrap stability >= 0.75; 962 of 962 profiled clones assigned with posterior >= 0.7.
            n_clones  n_cells  mean_reliability  mean_confidence  stability  n_clones_with_assigned
 programme
@@ -148,8 +149,10 @@ two clones' reliabilities) and grouped by Leiden community detection. Two safegu
 
 **How to read the table.** `stability` ≥ 0.75: stable; 0.6–0.75: present but blurred; < 0.6: do not
 interpret. Here no programme reaches 0.75, and P1 (0.51) should not be interpreted: it is not reproduced when
-the cells are resampled. `mean_confidence` is the average share of resamples in which a clone stayed in its
-programme. Programme labels are written to `adata.obs["clone_programme"]`.
+the cells are resampled. The warning says the same for the partition as a whole: no resolution gave programmes
+whose stability, averaged over their clones, reached 0.75, so the most stable partition was kept.
+`mean_confidence` is the average share of resamples in which a clone stayed in its programme. Programme labels are
+written to `adata.obs["clone_programme"]`.
 
 > **Watch out.** A single programme is not proof of a continuum, and several programmes are not proof of
 > discrete types of clones (Methods, "a note on counting programmes").

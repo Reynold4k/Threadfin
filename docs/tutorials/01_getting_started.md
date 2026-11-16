@@ -40,8 +40,12 @@ print(tf.__version__)          # 4.6.0 or later
 ```
 
 ```
-4.6.0
+4.6.2
 ```
+
+**In Jupyter**, put `%matplotlib inline` in the first cell of the notebook. With matplotlib older than 3.9, which
+the Dandelion extra installs on Python 3.10–3.12, the first figure of a session otherwise appears one cell late, or
+not at all.
 
 ---
 
@@ -153,8 +157,18 @@ print(result.summary())
    Gaussian group — and their bootstrap stability.
 7. *Tests*: how much each `test` annotation explains about the differences between clones.
 
-`tf.run` first prints one progress line per step, each starting with `[threadfin]` (not shown here), and then
-the report:
+`tf.run` first prints one progress line per step, each starting with `[threadfin]` (not shown here), and on
+these data one warning:
+
+```
+UserWarning: No resolution reached a clone-weighted mean stability of 0.75 across programmes; using the most stable partition (mean stability 0.71). Single programmes can still be stable: judge each by its own stability (result.programmes['stability']).
+```
+
+It means that no Leiden resolution gave two or more programmes whose bootstrap stability, averaged over their
+clones, reached 0.75, so Threadfin kept the most stable of these partitions; each programme is then judged by its
+own stability, as the report does (point 3 below).
+
+The report:
 
 ```
 Threadfin summary
@@ -251,7 +265,7 @@ of small clones are uncertain, and the simulated programmes overlap in the state
 ## 3. The overview figure
 
 ```python
-result.plot("threadfin_overview.png")
+fig = result.plot("threadfin_overview.png")     # saves the figure and returns it (a matplotlib Figure)
 ```
 
 ![Overview figure](../_static/tutorial_overview.png)
