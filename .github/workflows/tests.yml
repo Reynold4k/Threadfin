@@ -10,6 +10,8 @@ on:
 
 jobs:
   pytest:
+    # pip installs pynndescent 0.6 and umap-learn 0.5 on Python 3.10-3.11, pynndescent 0.7 and umap-learn 0.6 from
+    # Python 3.12 on (pyproject.toml), so the matrix runs Threadfin's approximate neighbour search with both
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -22,6 +24,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: pip install -e ".[test,seq]"
+      - name: Scanpy's own neighbour search, UMAP and Leiden work with the pynndescent installed (users' calls)
+        run: python .github/scanpy_neighbours.py
       - name: Run tests
         run: python -m pytest tests/ -q
       - name: Tutorial on simulated data
@@ -58,10 +62,52 @@ jobs:
           pip install uv
           uv venv -p 3.10 .venv-oldest
           VIRTUAL_ENV=.venv-oldest uv pip install --resolution lowest-direct -e ".[test]"
+      - name: Scanpy's own neighbour search, UMAP and Leiden work with the pynndescent installed (users' calls)
+        run: .venv-oldest/bin/python .github/scanpy_neighbours.py
       - name: Run tests
         run: .venv-oldest/bin/python -m pytest tests/ -q
       - name: Tutorial on simulated data
         run: .venv-oldest/bin/python examples/tutorial.py
+
+  validated-stack:
+    # every package at the version of docs/tutorials/requirements-lock.txt (Python 3.11, pynndescent 0.6.0,
+    # umap-learn 0.5.12, scanpy 1.11.5, sc-dandelion 0.5.7, matplotlib 3.8.4), with which the published results were
+    # made and are reproduced exactly; Threadfin itself from this checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install the locked versions
+        run: |
+          grep -v -i '^threadfin==' docs/tutorials/requirements-lock.txt > "$RUNNER_TEMP/lock.txt"
+          pip install -r "$RUNNER_TEMP/lock.txt" pytest
+          pip install --no-deps -e .
+          pip check
+      - name: Run tests
+        run: python -m pytest tests/ -q -rs
+      - name: Tutorial on simulated data
+        run: python examples/tutorial.py
+
+  newest-neighbour-search:
+    # pynndescent >= 0.7 and umap-learn >= 0.6 on the newest Python, whatever the resolver picks elsewhere: the
+    # smoothing above 50,000 cells and the clone map of 4,096 or more clones (tests/test_neighbour_search.py), and
+    # Scanpy's own neighbour search with them
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install with pynndescent 0.7 and umap-learn 0.6 or later
+        run: pip install -e ".[test]" "pynndescent>=0.7" "umap-learn>=0.6"
+      - name: Scanpy's own neighbour search, UMAP and Leiden work with the pynndescent installed (users' calls)
+        run: python .github/scanpy_neighbours.py
+      - name: Run tests
+        run: python -m pytest tests/ -q -rs
+      - name: Tutorial on simulated data
+        run: python examples/tutorial.py
 
   dandelion:
     # the README's main path: clones called from receptor contigs with Dandelion, and scirpy input; tests run
@@ -86,6 +132,8 @@ jobs:
       - name: scirpy is importable on Python 3.12 (otherwise its test would be skipped)
         if: matrix.python-version == '3.12'
         run: python -c "import scirpy; from importlib.metadata import version; print('scirpy', version('scirpy'))"
+      - name: Scanpy's own neighbour search, UMAP and Leiden work with the pynndescent installed (users' calls)
+        run: python .github/scanpy_neighbours.py
       - name: Run tests
         run: python -m pytest tests/ -q -rs
       - name: Tutorial on simulated data

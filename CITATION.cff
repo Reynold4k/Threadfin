@@ -3,14 +3,14 @@ title: "Threadfin: clone-level analysis of B-cell states from paired single-cell
 message: "If you use Threadfin, please cite this repository."
 type: software
 authors:
-  - family-names: Satoshi
+  - family-names: Zhu
     given-names: Chen
     alias: Reynold4k
 url: "https://github.com/Reynold4k/Threadfin"
 repository-code: "https://github.com/Reynold4k/Threadfin"
 doi: 10.5281/zenodo.23824521
 license: MIT
-version: 4.6.2
+version: 4.7.0
 date-released: "2026-11-16"
 keywords:
   - single-cell

@@ -165,12 +165,15 @@ class _Reference:
                n_epochs: int | None = None) -> np.ndarray:
         import umap
 
+        from ._utils import umap_layout_options
+
         k = int(max(2, min(n_neighbors, self.knn_idx.shape[1])))
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             model = umap.UMAP(n_neighbors=k, min_dist=float(min_dist), spread=spread, random_state=int(seed),
                               repulsion_strength=float(repulsion), n_epochs=n_epochs,
-                              precomputed_knn=(self.knn_idx[:, :k].copy(), self.knn_dist[:, :k].copy()))
+                              precomputed_knn=(self.knn_idx[:, :k].copy(), self.knn_dist[:, :k].copy()),
+                              **umap_layout_options())
             return model.fit_transform(self.features)
 
     def quality(self, xy: np.ndarray, target: float, penalty: float) -> dict:
@@ -321,11 +324,13 @@ class _Search:
             return
         args = (self.spread, self.n_epochs, self.target, self.penalty)
         if self.n_jobs > 1 and len(todo) > 1:
-            from joblib import Parallel, delayed
+            from joblib import delayed
+
+            from ._utils import parallel
 
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                results = Parallel(n_jobs=min(self.n_jobs, len(todo)))(
+                results = parallel(min(self.n_jobs, len(todo)))(
                     delayed(_layout_quality)(self.ref, key, *args) for key, _ in todo)
         else:
             results = [_layout_quality(self.ref, key, *args) for key, _ in todo]
@@ -710,6 +715,8 @@ def layout_clone_map(features, *, n_neighbors: int, min_dist: float, repulsion_s
     """
     import umap
 
+    from ._utils import umap_layout_options
+
     feats = np.asarray(features, dtype=float)
     n = feats.shape[0]
     target = tuning.coherence_target if tuning is not None else coherence_target
@@ -718,7 +725,8 @@ def layout_clone_map(features, *, n_neighbors: int, min_dist: float, repulsion_s
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message=".*n_jobs value.*")
             xy = umap.UMAP(n_neighbors=int(min(k, n - 1)), min_dist=float(md), spread=spread,
-                           repulsion_strength=float(rep), random_state=int(seed)).fit_transform(feats)
+                           repulsion_strength=float(rep), random_state=int(seed),
+                           **umap_layout_options()).fit_transform(feats)
         return xy, map_quality(feats, xy, coherence_target=target)
 
     setting = (int(n_neighbors), float(min_dist), float(repulsion_strength), int(random_state))

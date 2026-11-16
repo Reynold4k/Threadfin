@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 from sklearn.decomposition import PCA
-from ._utils import require_positive_int
+from ._utils import require_positive_int, scanpy_argument_names
 
 
 class FrozenExpressionModel:
@@ -60,8 +60,9 @@ class FrozenExpressionModel:
         if keep.sum() < 2:
             raise ValueError("At least two non-receptor genes are required.")
         tmp = ad.AnnData(x[:, keep], var=pd.DataFrame(index=genes[keep]))
-        hv = sc.pp.highly_variable_genes(tmp, n_top_genes=min(n_top_genes, tmp.n_vars),
-                                        flavor="seurat", inplace=False)
+        with scanpy_argument_names():
+            hv = sc.pp.highly_variable_genes(tmp, n_top_genes=min(n_top_genes, tmp.n_vars),
+                                            flavor="seurat", inplace=False)
         selected = np.flatnonzero(keep)[hv.highly_variable.to_numpy()]
         sub = x[:, selected]
         sub = sub.toarray() if sp.issparse(sub) else np.asarray(sub)

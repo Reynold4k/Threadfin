@@ -274,6 +274,13 @@ def export_lag(
 
     Examples
     --------
+    The call needs, per cell in ``adata.obs``: the clone (``clone_id``); the captured state, with the levels named in
+    ``source_states`` and ``output_states`` (here ``cell_state`` with ``"GC"`` and ``"PB"``); the heavy-chain V
+    mutation frequency (``mutation_frequency``, for example :func:`threadfin.tl.mutation_frequency` of the AIRR table,
+    mapped to the cells); the isotype (``isotype``; with ``switched_only=True`` only IGHG, IGHA and IGHE cells count);
+    and, for ``within`` and ``time_key`` here, the visit (``timepoint``, numbers or ``d28``-style labels). The
+    simulated repertoire of the tutorials has no mutation frequencies, so the example needs data of this kind:
+
     >>> res = export_lag(adata, state_key="cell_state", source_states=["GC"],
     ...                  output_states=["PB"], within=("timepoint",), time_key="timepoint")
     >>> res["median_lag"], res["median_lag_ci"], res["sign_test_pvalue"]

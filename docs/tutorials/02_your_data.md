@@ -21,6 +21,11 @@ import scanpy as sc
 import threadfin as tf
 from sklearn.cluster import KMeans
 
+try:                                       # scanpy 1.13 and later keep the readers in scanpy.io
+    from scanpy.io import read_10x_mtx
+except ImportError:                        # scanpy 1.10 to 1.12
+    from scanpy import read_10x_mtx
+
 DATA = "data/GSE287123"                        # the folder of Tutorial 5, Step 1
 samples = {   # library: file prefix of its expression and hashtag counts, its AIRR file
     "A": ("GSM8739143_Rebutal_4-5_Tube_A_GEX_HTO_", "GSM8739145_Rebutal_4-5_Tube_A_airr_rearrangement.tsv.gz"),
@@ -46,7 +51,7 @@ def demultiplex(hto_counts: pd.DataFrame, min_total: int = 5) -> pd.Series:     
 
 parts, contigs = [], []
 for sample, (prefix, airr_file) in samples.items():
-    a = sc.read_10x_mtx(DATA, prefix=prefix, gex_only=False)    # genes and the 10 hashtags
+    a = read_10x_mtx(DATA, prefix=prefix, gex_only=False)       # genes and the 10 hashtags
     a.var_names_make_unique()
     a.obs_names = [f"{sample}_{b}" for b in a.obs_names]
     a.obs["sample"] = sample
@@ -75,17 +80,22 @@ The other blocks run as written, with these substitutions:
 
 | Section | In this tutorial | On GSE287123 |
 |---|---|---|
-| 2 | the reading lines (`sc.read_10x_h5`, `var_names_make_unique`) | the block above; the quality control runs as written |
+| 2 | the reading lines (`read_10x_h5`, `var_names_make_unique`) | the block above; the quality control runs as written |
 | 3 | one sample of one donor | one library, whose cells come from ten mice: `a = adata[adata.obs["sample"] == "A"].copy()`, then `tf.run(a, bcr=contigs, donor_key="donor", sample_key="sample")` without the two `obs` lines |
-| 4 | the loop that reads the samples; `contigs["barcode"]` | the block above; `contigs["cell_id"]` (the AIRR column) |
+| 4 | the reading part: the `samples` dictionary, the loop and the two `concat` lines | leave all of them out (the block above has made `adata` and `contigs`, and its `samples` is used again in section 6); then `contigs["cell_id"]` (the AIRR column) instead of `contigs["barcode"]` |
 | 5 | `strata_key="sample"`, `test=["tissue"]` | `strata_key="population"`, the mouse × gate populations sorted together; `test=["division_gate"]` |
 | 6 | `ir.io.read_10x_vdj(f"{sample}/filtered_contig_annotations.csv")` | `ir.io.read_airr(f"{DATA}/{samples[sample][1]}")` |
 | 6 | `clones.csv`, clone ids from another tool | write one from an earlier run: `adata.obs[["clone_id"]].to_csv("clones.csv")` |
 | 7 | `state_key="cell_type"`, `test=["antigen_binding", "isotype"]`, `time_key="timepoint"` | `test=["rbd_bait", "isotype"]`; leave out `state_key` and `time_key` (no cell-type annotation, no time points) |
-| 7 | `how="fraction:IGHA"` | the same call runs, but these mice have a single IgA cell, so every clone's fraction is 0; `how="fraction:IGHG"` explains 3.5% of the clone-profile variance |
+| 7 | `how="fraction:IGHA"` | the same call runs, but these mice have a single IgA cell, so every clone's fraction is 0; the IgG fraction is the informative one here (below) |
 
 With these substitutions every block of sections 2–8 runs: 34,175 of the 36,188 singlets pass the starting
-thresholds of section 2, and 1,859 clones have two or more cells.
+thresholds of section 2, and 1,859 clones have two or more cells. The IgG fraction of each clone, in place of
+section 7's IgA fraction, explains 3.5% of the clone-profile variance:
+
+```python
+tf.tl.profile_association(adata, "isotype", how="fraction:IGHG")
+```
 
 ---
 
@@ -150,9 +160,14 @@ spanning both states.
 ```python
 import scanpy as sc
 
-adata = sc.read_10x_h5("sample1/filtered_feature_bc_matrix.h5")
+try:                                       # scanpy 1.13 and later keep the readers in scanpy.io
+    from scanpy.io import read_10x_h5, read_10x_mtx
+except ImportError:                        # scanpy 1.10 to 1.12
+    from scanpy import read_10x_h5, read_10x_mtx
+
+adata = read_10x_h5("sample1/filtered_feature_bc_matrix.h5")
 # or, for a folder with matrix.mtx.gz, features.tsv.gz and barcodes.tsv.gz:
-# adata = sc.read_10x_mtx("sample1/filtered_feature_bc_matrix")
+# adata = read_10x_mtx("sample1/filtered_feature_bc_matrix")
 adata.var_names_make_unique()
 adata.var["mt"] = adata.var_names.str.upper().str.startswith("MT-")
 sc.pp.calculate_qc_metrics(adata, qc_vars=["mt"], percent_top=None, log1p=False, inplace=True)
@@ -219,10 +234,15 @@ import pandas as pd
 import scanpy as sc
 import threadfin as tf
 
+try:                                       # scanpy 1.13 and later keep the readers in scanpy.io
+    from scanpy.io import read_10x_h5, read_10x_mtx
+except ImportError:                        # scanpy 1.10 to 1.12
+    from scanpy import read_10x_h5, read_10x_mtx
+
 samples = {"d0_LN": "donor1", "d7_LN": "donor1", "d0_blood": "donor2"}
 parts, contigs = [], []
 for sample, donor in samples.items():
-    a = sc.read_10x_h5(f"{sample}/filtered_feature_bc_matrix.h5")
+    a = read_10x_h5(f"{sample}/filtered_feature_bc_matrix.h5")
     a.var_names_make_unique()
     a.obs_names = [f"{sample}_{b}" for b in a.obs_names]
     a.obs["sample"], a.obs["donor"] = sample, donor
@@ -417,9 +437,13 @@ towards the average profile, so a label that follows only clone size would other
 (`size_strata=False` shuffles within donors only).
 
 * A **categorical label** (isotype) is summarised per clone as its majority value; clones without a majority
-  level (a two-cell clone with one IgM and one IgG cell) are left out, and the summary says how many. Use
-  `tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")` to test the fraction of one level (the
-  level must be spelled as in the column; Threadfin warns when it never occurs).
+  level (a two-cell clone with one IgM and one IgG cell) are left out, and the summary says how many. To test the
+  fraction of one level instead (the level must be spelled as in the column; Threadfin warns when it never
+  occurs):
+
+  ```python
+  tf.tl.profile_association(adata, "isotype", how="fraction:IGHA")
+  ```
 * A **numeric label** (mutation frequency) is summarised as the clone mean.
 * Labels **constant within a donor** (age, sex, disease group) cannot be separated from other differences
   between donors; compare donors for those.
@@ -488,6 +512,7 @@ the results; for them, such a later call also replaces the run's result in the r
 | `N clone id(s) occur in more than one donor` | clone ids were not made donor-private | make them donor-private with the line the message shows (it keeps cells without a clone id missing), or call clones with `donor_key` |
 | `N cells have a clone id that looks like a missing value` | cells without a clone carry a text id such as `"nan"`, `"None"` or `"donor1\|nan"`, and each such id becomes one large clone | set those ids to missing (NaN) in `adata.obs["clone_id"]`; when you build ids by joining text, end with `.where(adata.obs["clone_id"].notna())` |
 | `Counts contain NaN, infinite, or negative values` | `adata.X` holds normalised or scaled data | put raw counts in `X`, or name the layer that holds them with `counts_layer=` (Threadfin 4.5.2 or later), or pass your own embedding with `basis=` |
+| `adata.X is empty (None)` | there are no counts in `adata.X`; with anndata 0.13 or later, `for k in list(adata.layers): del adata.layers[k]` also deletes `X`, which anndata keeps among the layers under the key `None` | put the counts back in `X`, or name their layer with `counts_layer=`; to remove the other layers only, use `adata.layers.clear(keep_x=True)` (anndata 0.13) or skip the key `None` |
 | `adata.X does not look like raw counts (it has non-integer values)` | `adata.X` holds normalised values | as above; ignore it only when the counts are corrected but not normalised (for example after ambient-RNA removal) |
 | `using the existing obsm['X_threadfin']` (in the log) | an embedding from an earlier run on the same AnnData is reused | expected when nothing changed; Threadfin builds it again by itself when `counts_layer` or `batch_key` differ from those it was built with (the log says so), and `del adata.obsm["X_threadfin"]` forces a new one |
 | `'X_...' has NaN or infinite values in N of M cells` | your own embedding (`basis=`) has missing values | drop those cells first; the message shows the line of code (it needs `import numpy as np`) |
@@ -495,7 +520,7 @@ the results; for them, such a later call also replaces the run's result in the r
 | `Clone calling needs the Dandelion package` | Dandelion is not installed | `pip install "threadfin[dandelion]"`, or pass clone ids yourself (section 6) |
 | `sc-dandelion 1.x is installed; Threadfin … is validated with sc-dandelion 0.5.x` | Dandelion 1.0 calls clones differently | `pip install "sc-dandelion<1"`; results then match the documentation |
 | `cannot import name 'get_cmap' from 'matplotlib.cm'` | `import dandelion` before `import threadfin`, with matplotlib ≥ 3.9 | import threadfin first, or let Threadfin call Dandelion |
-| `'csr_array' object has no attribute 'getnnz'` from `sc.pp.neighbors` | pynndescent 0.7 (October 2026) returns a sparse type that scanpy's neighbour search (for 8,192 or more cells) cannot yet read | `pip install "pynndescent<0.7"`; Threadfin 4.5.3 and later install it |
+| `'csr_array' object has no attribute 'getnnz'` from `sc.pp.neighbors` (and, on `import threadfin`, a warning that names both versions) | pynndescent 0.7 (October 2026) returns a sparse type that scanpy's neighbour search (for 8,192 or more cells) reads only from scanpy 1.12.5 on (Python 3.12 or later) | `pip install "pynndescent<0.7"`, or on Python 3.12 or later `pip install -U scanpy`; Threadfin installs a pair that works |
 | `No resolution reached a clone-weighted mean stability of 0.75` | the programmes are, on average, less stable than the threshold | judge each programme by its own stability (`result.programmes`); the summary marks those below 0.6 as unstable, also on the lines of the label tests |
 | `The levels of 'tissue' (…) have no order, so they are paired in alphabetical order` | `time_key` names a column whose levels carry no numbers and no order | give the order: `adata.obs["tissue"] = pd.Categorical(adata.obs["tissue"], categories=["PP", "MLN", "LP"], ordered=True)` before `tf.run`, or `tf.tl.clonal_memory(adata, "tissue", order=["PP", "MLN", "LP"])` |
 | coherence high but the shuffled value is also high (> 10 %) | samples differ strongly in composition | expected; Threadfin accounts for it — make sure the strata are the sampling units (`strata_key`, by default `sample_key`; section 5) |

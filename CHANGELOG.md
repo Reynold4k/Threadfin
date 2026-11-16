@@ -2,6 +2,111 @@
 
 Each version lists what changed and, under *What this means for you*, what you need to know or do.
 
+## 4.7.0 — 2026-11-16
+
+Threadfin installs with the newest Scanpy, UMAP and pynndescent. Versions 4.5.3–4.6.2 held every installation at
+pynndescent < 0.7, so Threadfin could not share an environment with umap-learn 0.6, which needs pynndescent 0.7.
+
+**What this means for you:**
+- **Python 3.12 and later** (with the Dandelion extra: Python 3.13 and later): `pip install threadfin` installs
+  pynndescent 0.7 and umap-learn 0.6. Threadfin uses approximate neighbours only above 50,000 cells, or for clone
+  maps of 4,096 or more clones. On such data, profiles, programmes, label tests and the clone map differ slightly
+  from those with pynndescent 0.6; coherence and clonal memory do not. On five of the seven validation data sets of
+  these sizes no conclusion changes; on ln_vaccine one more programme effect passes FDR 0.05 (isotype, 12 → 13). On
+  the largest (EBV tonsil organoids, 205,630 cells) the programme partition changes: two programmes with pynndescent 0.6, four with 0.7, with the same main programme
+  ([Compatibility](docs/COMPATIBILITY.md) gives every number). Below these sizes, umap-learn 0.6 can lay out the
+  trial maps of the automatic clone-map search differently from 0.5: on one of the nine smaller validation data sets
+  the search chose min_dist 0.95 instead of 0.8; nothing else changes.
+- **Python 3.10 and 3.11, and the Dandelion extra on Python 3.12:** nothing changes. pip keeps pynndescent 0.6
+  and umap-learn 0.5 there, because the Scanpy these environments get (1.11) cannot read pynndescent 0.7.
+- **The published results** are reproduced exactly with the validated versions:
+  `pip install -r docs/tutorials/requirements-lock.txt` (Python 3.11). With them, every result of 4.7.0 is identical
+  to 4.6.2: clone tables, summaries and figures of the 16 validation data sets, and every output of Tutorial 5.
+- **Python 3.14 with the Dandelion extra:** `tf.run(..., n_jobs=8)` no longer stops in the clone-map search when
+  Dandelion was imported in the same session (below).
+- **`result.plot()`** now always draws the run's own clone map and programmes, also after later `tf.tl` calls on the
+  same AnnData; the figure of a fresh run is unchanged, byte for byte.
+- **Scanpy 1.13:** Threadfin's own Scanpy calls no longer print deprecation warnings.
+
+### Changed
+
+- **Dependencies.** pynndescent < 0.7 is now required only where Scanpy cannot read pynndescent 0.7, which Scanpy
+  does from 1.12.5 (Python 3.12 or later): on Python 3.10 and 3.11, and in the Dandelion extra below Python 3.13,
+  where the extra keeps matplotlib < 3.9 and with it Scanpy 1.11. Everywhere else pip installs pynndescent 0.7 and
+  umap-learn 0.6. [Compatibility](docs/COMPATIBILITY.md) lists what pip installs on each Python.
+- **`import threadfin` warns when the installed Scanpy cannot read the installed pynndescent** (Scanpy older than
+  1.12.5 with pynndescent 0.7 or later, for example after `pip install -U pynndescent`), in which case
+  `sc.pp.neighbors` fails on 8,192 or more cells; the warning names the fix. Threadfin's own steps do not use
+  Scanpy's neighbour search.
+- **UMAP keeps the layout pipeline of umap-learn 0.5.** umap-learn 0.6 has a second pipeline and warns that a later
+  release will make it the default; Threadfin passes `compatibility_layout=True`, which umap-learn 0.6 uses by
+  default today. Clone maps do not change, and the warning no longer appears.
+- **The Methods paragraph names the versions of umap-learn and, above 50,000 cells, of pynndescent.**
+
+### Fixed
+
+- **`n_jobs` on Python 3.14 with Dandelion 0.5.7.** Importing sc-dandelion 0.5.7 sets `pickle.HIGHEST_PROTOCOL` to
+  4, below the default protocol of Python 3.14 (5). joblib then could not hand the clone-map search or the
+  programme bootstrap to its worker processes ("Could not pickle the task to send it to the workers") once the
+  data had more than a few hundred profiled clones. This happened when Dandelion had been imported in the session
+  that ran `tf.run`: in a session started with `PYTHONHASHSEED=0`, where Threadfin calls Dandelion in the session,
+  or after `import dandelion`, as in Step 0 of Tutorial 5. Threadfin restores the protocol.
+- **Cells for which pynndescent finds fewer than 15 neighbours** now get their exact neighbours. pynndescent marks
+  the missing neighbours with -1, which indexed the last cell. None of the validation data sets has such a cell.
+- **An empty `adata.X`** gives an error that says so, and how to fix it, instead of a NumPy `TypeError`. With
+  anndata 0.13, deleting every entry of `adata.layers` also deletes `adata.X`.
+- **`result.plot()` draws the run's own figure.** It drew the clone map, programmes and composition stored in
+  `adata`, which later `tf.tl` calls (for example `tf.tl.embed_clones` with other settings) replace. It now draws
+  the result's own clone table, programmes, composition and coherence test, also for a result rebuilt with
+  `ThreadfinResult.from_adata`. Right after `tf.run` the figure is identical to before.
+- **The Methods paragraph of a saved result names clone calls made before `tf.run`.** When the clone ids came from
+  `tf.pp.define_clones_dandelion` in the same session, `result.methods()` described that clone calling, but a
+  result rebuilt from the saved file did not. `tf.run` now records it, as does `result.methods(clone_ids=...)`, so
+  both give the same paragraph.
+- **Scanpy 1.13 deprecation warnings.** Scanpy 1.13 renamed arguments that Threadfin passes (`inplace`, `batch_key`,
+  `layer`, `score_name`, `use_rep`); the new arguments need anndata 0.13, which Scanpy 1.13 does not require.
+  Threadfin keeps the names that every Scanpy from 1.10 on accepts, with the same computation, and silences
+  Scanpy's notice about them, as Scanpy does for its own internal calls. The reworded Leiden-backend warning of
+  Scanpy 1.13 no longer appears in `clonotype_recluster(cluster_on="embedding")`.
+
+### Tests and continuous integration
+
+- `tests/test_dependency_api.py` checks that Threadfin's Scanpy calls raise no deprecation warning with the
+  installed Scanpy; `tests/test_v4_core.py` checks that `result.plot()` and the Methods paragraph stay the run's own
+  after later calls and after saving.
+- `tests/test_neighbour_search.py` runs the smoothing above 50,000 cells and the clone map of 4,096 or more clones
+  with the installed pynndescent and umap-learn, and checks the import warning, the missing neighbours and the UMAP
+  option; a further test hands an array to worker processes after a package has lowered the pickle protocol.
+- Every Linux job runs Scanpy's own neighbour search, UMAP and Leiden on 12,000 cells, so that a dependency pair
+  that breaks users' Scanpy calls is noticed. New jobs: the validated versions of `requirements-lock.txt`, and
+  pynndescent 0.7 with umap-learn 0.6 on Python 3.14.
+
+### Documentation
+
+- **Compatibility:** what pip installs on each Python, with and without the Dandelion extra; the differences between
+  pynndescent 0.6 and 0.7 on the validation data sets; an evaluation of exact neighbour search, which would make
+  results independent of the pynndescent version; Python 3.15; Dandelion 1.x.
+- **Compatibility** also says why clone maps on Python 3.10 differ slightly from those on 3.11 and later: pip
+  installs SciPy 1.15 there, and SciPy 1.16 and earlier return UMAP's spectral starting layout with the opposite sign
+  of SciPy 1.17, so UMAP's optimisation ends in slightly different maps; profiles, programmes and every statistic
+  are identical.
+- **README** (installation), **Tutorial 2** (troubleshooting), **Methods** (reproducibility) and **Tutorial 5**
+  (Step 0) describe the new ranges. Tutorial 5 was executed again with this version: every number and saved table
+  is identical to 4.6.2, and `requirements-lock.txt` lists Threadfin 4.7.0.
+- **Calls valid with every Scanpy from 1.10 to 1.13:** the README reads the AnnData with `anndata.read_h5ad`;
+  Tutorial 2 imports the 10x readers from `scanpy.io` where it exists (Scanpy 1.13 moved them there) and from
+  `scanpy` otherwise; `docs/RECLUSTERING.md` calls `sc.pp.neighbors` without `use_rep`.
+- **Tutorial 2:** row 4 of the table for public data names the lines to leave out (the `samples` dictionary, the
+  loop and both `concat` lines), and the IgA and IgG calls are code blocks.
+- **Tutorial 3:** section 5 colours the automatic map again (section 3 had left the hand-set one in place); the
+  figure of section 3 is drawn by `docs/tutorials/make_tutorial_clone_map.py` from the tutorial's own code.
+- **`docs/STATE_DENSITY.md`** runs on the file Tutorial 5 saves and shows its output; the `export_lag` example in
+  the API reference says which data it needs.
+- **`docs/RECLUSTERING.md`:** the first example uses the default preset and every example shows its output.
+- **README:** on Python 3.13 and 3.14 with the Dandelion extra, `import dandelion` before `import threadfin` fails
+  (`cannot import name 'get_cmap'`); in Jupyter without ipywidgets, umap-learn's progress-bar import prints
+  `IProgress not found`, which can be ignored.
+
 ## 4.6.2 — 2026-11-16
 
 A first-time user followed the public 4.6.1 release in new environments, with the public documentation only. This

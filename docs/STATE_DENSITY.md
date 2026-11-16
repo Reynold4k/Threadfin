@@ -11,8 +11,19 @@ to be held out. The helper below selects receptor-excluded Seurat HVGs, fits
 scaling and PCA on the reference, and freezes them. It does not integrate a
 new donor into a jointly refitted embedding.
 
-~~~python
+The examples run on the file that [Tutorial 5](tutorials/05_end_to_end_tutorial.ipynb) saves in Step 16
+(GSE287123, raw counts in `X`, clone ids in `obs["clone_id"]`): the clones of the protein-immunised mice are the
+reference, and the clones of the mRNA-immunised mice are described against it.
+
+```python
+import anndata as ad
+import pandas as pd
 import threadfin as tf
+
+adata = ad.read_h5ad("threadfin_tutorial_output/GSE287123_rbd_threadfin.h5ad")
+cells = adata[adata.obs["clone_id"].notna()]
+reference_adata = cells[(cells.obs["arm"] == "RBD protein").to_numpy()].copy()
+query_adata = cells[(cells.obs["arm"] == "RBD mRNA").to_numpy()].copy()
 
 embedding = tf.pp.FrozenExpressionModel.fit(
     reference_adata, n_top_genes=2000, n_comps=30,
@@ -35,8 +46,29 @@ result.sampling_lower              # conservative simultaneous sampling interval
 result.sampling_upper
 result.lower                       # model-conditional marginal credible intervals
 result.upper
-result.contrast("clone_A", "clone_B")
-~~~
+largest = query_adata.obs["clone_id"].value_counts().index[:2]      # the two largest query clones
+print(result.contrast(largest[0], largest[1]))
+```
+
+```
+          difference     lower     upper  probability_positive
+state_0    -0.087761 -0.185336 -0.022719               0.00000
+state_1    -0.003815 -0.043444  0.018691               0.41825
+state_2    -0.241355 -0.372764 -0.126848               0.00000
+state_3    -0.044380 -0.118814 -0.004453               0.00575
+state_4    -0.100044 -0.215730 -0.009023               0.01600
+state_5     0.588497  0.487305  0.685256               1.00000
+state_6    -0.001244 -0.021232  0.010922               0.46325
+state_7    -0.023768 -0.086442  0.002646               0.04850
+state_8    -0.044331 -0.114193 -0.004931               0.00575
+state_9    -0.000204 -0.005411  0.001474               0.48575
+state_10   -0.175235 -0.298157 -0.080807               0.00000
+state_11   -0.001506 -0.024877  0.011023               0.46700
+state_12   -0.088085 -0.183960 -0.023611               0.00000
+state_13   -0.001683 -0.026062  0.010220               0.45475
+state_14    0.246870  0.106663  0.371681               1.00000
+state_15   -0.021957 -0.077536 -0.000402               0.00875
+```
 
 Pass only cells with known, donor-private biological clone identifiers to
 model fitting. The AnnData wrapper tf.tl.clone_densities omits cells with
@@ -94,17 +126,16 @@ independent sampling is not coverage under every experimental design.
 
 ## Locate changes and describe regions
 
-~~~python
-# Numeric log-expression, module scores, or one-hot cell annotations, rows aligned to reference_x.
+```python
+# numeric log-expression, module scores or one-hot cell annotations, rows aligned to reference_x
+gates = pd.get_dummies(reference_adata.obs["division_gate"]).astype(float)
 annotation = model.annotate_regions(
-    reference_x, reference_gene_or_module_scores,
+    reference_x, gates,
     reference_adata.obs["clone_id"],
 )
 annotation["values"]       # first average within clone/region, then equally across clones
 annotation["coverage"]     # number of cells and clones supporting each region
-
-difference = result.contrast("clone_A", "clone_B")
-~~~
+```
 
 A region's marker/module description helps interpret a shift. It reuses
 expression and is descriptive, rather than an independent differential

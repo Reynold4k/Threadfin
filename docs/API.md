@@ -1,4 +1,4 @@
-# API reference (threadfin 4.6.2)
+# API reference (threadfin 4.7.0)
 
 Generated from the docstrings by `python docs/make_api_reference.py`; do not edit by hand. Start with [`tf.run`](#tfrun): it runs every step below with the recommended settings. The tutorials in [`tutorials/`](tutorials/) show each function on real data.
 
@@ -20,7 +20,7 @@ The complete analysis and its result.
 | [`tf.ThreadfinResult`](#tfthreadfinresult) | Everything :func:`run` computed. Print :meth:`summary` for a readable report. |
 | [`ThreadfinResult.summary`](#threadfinresultsummary) | Plain-language summary of the results. |
 | [`ThreadfinResult.methods`](#threadfinresultmethods) | A Methods paragraph for this analysis, with the settings and package versions that were used. |
-| [`ThreadfinResult.plot`](#threadfinresultplot) | Overview figure (clone map, coherence test, programme composition, stability). |
+| [`ThreadfinResult.plot`](#threadfinresultplot) | Overview figure (clone map, coherence test, programme composition, stability) of this run: its own clone map, programmes and composition, also after later :mod:`threadfin.tl` calls on the same AnnData. |
 | [`ThreadfinResult.from_adata`](#threadfinresultfrom_adata) | The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after ``write_h5ad`` and ``read_h5ad``), so that :meth:`summary`, :meth:`methods` and :meth:`plot` work again. |
 
 ### tf.run
@@ -160,8 +160,8 @@ Everything :func:`run` computed. Print :meth:`summary` for a readable report.
 
 The result keeps what the run produced. Later calls of :mod:`threadfin.tl` functions on the same AnnData (for
 example :func:`threadfin.tl.profile_association` with another ``how=``) store their own results in ``adata``
-and change neither the tables of the result nor its :meth:`summary` and :meth:`methods`. :meth:`plot` draws
-the clone map and the programmes stored in ``adata``. :meth:`from_adata` rebuilds the result after saving.
+and change neither the tables of the result nor its :meth:`summary`, :meth:`methods` and :meth:`plot`.
+:meth:`from_adata` rebuilds the result after saving.
 ```
 
 ### ThreadfinResult.summary
@@ -201,7 +201,8 @@ plot(self, save: 'str | Path | None' = None)
 ```
 
 ```text
-Overview figure (clone map, coherence test, programme composition, stability).
+Overview figure (clone map, coherence test, programme composition, stability) of this run: its own
+clone map, programmes and composition, also after later :mod:`threadfin.tl` calls on the same AnnData.
 ```
 
 ### ThreadfinResult.from_adata
@@ -216,8 +217,8 @@ The result of :func:`run`, rebuilt from the AnnData it wrote to (for example aft
 
 :func:`run` keeps a copy of everything it reported in ``adata.uns['threadfin']['run']``. The rebuilt
 result is therefore the run's own, also after later calls of :mod:`threadfin.tl` functions on the same
-AnnData: its tables are those of the run, and :meth:`summary` and :meth:`methods` give the text they gave
-right after the run. :meth:`plot` draws the clone map and the programmes stored in ``adata``.
+AnnData: its tables are those of the run, :meth:`summary` and :meth:`methods` give the text they gave
+right after the run, and :meth:`plot` draws the run's clone map and programmes.
 
 Files written by Threadfin 4.6.0 and 4.6.1 hold no such copy. Their results are read from the entries of
 ``adata.uns['threadfin']``, where a later call of a :mod:`threadfin.tl` function (for example the same
@@ -864,7 +865,10 @@ smooth
     Average each cell with its ``smooth`` nearest cells before profiling
     (denoises small clones by borrowing strength from their local state).
     Default: 15 for ``"kernel"``, 0 for ``"mean"``. The coherence test and
-    clonal memory always use unsmoothed cells.
+    clonal memory always use unsmoothed cells. The neighbours are exact up
+    to 50,000 cells and found approximately with pynndescent above, where
+    pynndescent 0.6 and 0.7 give slightly different profiles
+    (docs/COMPATIBILITY.md).
 min_cells
     Clones with fewer cells are not profiled. The default of 2 is **not** a quality filter --
     Threadfin never filters on reliability -- it is what the clone map is *of*. Singleton clones
@@ -1128,6 +1132,13 @@ dict with
 
 Examples
 --------
+The call needs, per cell in ``adata.obs``: the clone (``clone_id``); the captured state, with the levels named in
+``source_states`` and ``output_states`` (here ``cell_state`` with ``"GC"`` and ``"PB"``); the heavy-chain V
+mutation frequency (``mutation_frequency``, for example :func:`threadfin.tl.mutation_frequency` of the AIRR table,
+mapped to the cells); the isotype (``isotype``; with ``switched_only=True`` only IGHG, IGHA and IGHE cells count);
+and, for ``within`` and ``time_key`` here, the visit (``timepoint``, numbers or ``d28``-style labels). The
+simulated repertoire of the tutorials has no mutation frequencies, so the example needs data of this kind:
+
 >>> res = export_lag(adata, state_key="cell_state", source_states=["GC"],
 ...                  output_states=["PB"], within=("timepoint",), time_key="timepoint")
 >>> res["median_lag"], res["median_lag_ci"], res["sign_test_pvalue"]
@@ -1905,7 +1916,7 @@ Genes ranked by clonal ICC; optional gene sets highlighted (<= 3 sets).
 
 ```python
 tf.pl.overview(adata, *, state_key: 'str | None' = None, coherence_result: 'dict | None' = None,
-    composition_weight: 'str' = 'cells', save=None)
+    composition_weight: 'str' = 'cells', save=None, result=None)
 ```
 
 ```text
@@ -1914,6 +1925,9 @@ Four-panel summary of a :func:`threadfin.run` result.
 ``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
 ``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
 ``adata.uns``. ``composition_weight`` is passed to :func:`programme_composition` for panel d.
+``result`` (a :class:`threadfin.ThreadfinResult`; ``result.plot()`` passes itself) draws that run's own clone
+map, programmes, stabilities and composition, also after later :mod:`threadfin.tl` calls changed those stored in
+``adata``; without it, the figure shows what ``adata`` holds now.
 ```
 
 ### tf.pl.cells

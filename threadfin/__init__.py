@@ -29,6 +29,10 @@ from .io import attach_bcr, build_clone_key, read_10x_vdj, read_airr
 pl = plotting
 sim = simulate
 
+from ._utils import check_neighbour_stack as _check_neighbour_stack  # noqa: E402
+
+_check_neighbour_stack()  # warns when scanpy cannot read the installed pynndescent's neighbour graphs
+
 # v3 API, kept for backward compatibility
 from . import clones, metrics, migration, programs, sequence, specificity  # noqa: E402
 from .bcrgraph import bcr_similarity_graph  # noqa: E402
@@ -39,7 +43,7 @@ from .programs import community_markers, community_score  # noqa: E402
 from .reclustering import reclustering_presets  # noqa: E402
 from .specificity import annotate_specificity, specificity_enrichment  # noqa: E402
 
-__version__ = "4.6.2"
+__version__ = "4.7.0"
 __all__ = [
     "ThreadfinResult",
     "DensityResult",

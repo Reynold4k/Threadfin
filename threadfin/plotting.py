@@ -139,6 +139,13 @@ def clone_map(
     if table is None or "x" not in table.columns:
         return _legacy_clone_map(adata, color=color or "clone_cluster", ax=ax, title=title, save=save,
                                  **legacy_kwargs)
+    return _clone_map_of_table(table, color, size_range=size_range, facet=facet, ncols=ncols, ax=ax, fig=fig,
+                               title=title, save=save)
+
+
+def _clone_map_of_table(table, color=None, *, size_range=(2, 60), facet=None, ncols=4, ax=None, fig=None,
+                        title=None, save=None):
+    """:func:`clone_map` of a given clone table (``x``, ``y``, ``n_cells`` and the ``color`` column)."""
     color = color or "clone_programme"
     tab = table.dropna(subset=["x", "y"])
     if color not in tab.columns:
@@ -280,6 +287,12 @@ def programme_composition(adata, state_key: str, *, programme_key: str = "clone_
     from .programmes import programme_composition as _composition
 
     frac = _composition(adata, state_key, key=programme_key, weight=weight)
+    return _composition_bars(frac, weight=weight, ax=ax, save=save, legend=legend)
+
+
+def _composition_bars(frac, *, weight="cells", ax=None, save=None, legend=True):
+    """:func:`programme_composition` of a given composition table (programmes x states)."""
+    frac = frac.copy()
     states = list(frac.sum(axis=0).sort_values(ascending=False).index)
     if len(states) > 8:  # fold the tail into "other"
         frac["other"] = frac[states[7:]].sum(axis=1)
@@ -310,11 +323,15 @@ def stability(adata, *, ax=None, save=None):
     prog = adata.uns.get("threadfin", {}).get("programmes")
     if prog is None:
         raise ValueError("Run threadfin.tl.find_programmes() first.")
-    summ = prog["summary"]
+    return _stability_bars(prog["summary"], prog["params"]["stability_threshold"], ax=ax, save=save)
+
+
+def _stability_bars(summ, threshold, *, ax=None, save=None):
+    """:func:`stability` of a given programme table (``stability`` column) and stability threshold."""
     fig, ax = _ax(ax, figsize=(2.6, 2.0))
     x = np.arange(len(summ))
     ax.bar(x, summ["stability"], width=0.6, color=PALETTE[0])
-    for thr, lab in ((prog["params"]["stability_threshold"], "stable"), (0.6, "do not interpret below")):
+    for thr, lab in ((threshold, "stable"), (0.6, "do not interpret below")):
         ax.axhline(thr, color=MUTED, linewidth=0.6)
         ax.text(1.02, thr, lab, transform=ax.get_yaxis_transform(), color=INK_2, va="center", ha="left",
                 fontsize=mpl.rcParams["font.size"] - 1, clip_on=False)
@@ -437,26 +454,40 @@ def heritability(table: pd.DataFrame, *, highlight: dict | None = None, n_label:
 
 
 def overview(adata, *, state_key: str | None = None, coherence_result: dict | None = None,
-             composition_weight: str = "cells", save=None):
+             composition_weight: str = "cells", save=None, result=None):
     """Four-panel summary of a :func:`threadfin.run` result.
 
     ``coherence_result`` is the coherence result to show in panel b (``result.plot()`` passes
     ``result.coherence``); by default the most recent :func:`threadfin.tl.clonal_coherence` stored in
     ``adata.uns``. ``composition_weight`` is passed to :func:`programme_composition` for panel d.
+    ``result`` (a :class:`threadfin.ThreadfinResult`; ``result.plot()`` passes itself) draws that run's own clone
+    map, programmes, stabilities and composition, also after later :mod:`threadfin.tl` calls changed those stored in
+    ``adata``; without it, the figure shows what ``adata`` holds now.
     """
     set_style()
     fig = plt.figure(figsize=(7.2, 5.2))
     gs = fig.add_gridspec(2, 3, width_ratios=[1.25, 1, 1], hspace=0.55, wspace=0.6)
     sub = fig.add_subfigure(gs[:, 0])
-    table = _clone_table(adata)
-    summ = adata.uns.get("threadfin", {}).get("programmes", {}).get("summary")
+    if result is not None:
+        table = result.clones
+        summ = result.programmes if len(result.programmes) else None
+        threshold = (result._uns().get("programmes", {}).get("params", {}).get("stability_threshold")
+                     if summ is not None else None)
+        composition = result.composition
+        coherence_result = result.coherence if coherence_result is None else coherence_result
+    else:
+        table = _clone_table(adata)
+        prog = adata.uns.get("threadfin", {}).get("programmes", {})
+        summ = prog.get("summary")
+        threshold = prog.get("params", {}).get("stability_threshold") if summ is not None else None
+        composition = None
     has_programmes = summ is not None and len(summ) > 0 and table is not None and "clone_programme" in table
     if has_programmes:
-        clone_map(adata, fig=sub, ncols=2, facet=True)
+        _clone_map_of_table(table, fig=sub, ncols=2, facet=True)
         sub.suptitle("a  clonal programmes on the clone map", x=0.02, ha="left", color=INK, fontweight="bold")
     elif table is not None and "x" in table.columns:
         # no programmes (too few reliably profiled clones): the map itself, coloured by clone size
-        clone_map(adata, "n_cells", ax=sub.add_subplot(1, 1, 1))
+        _clone_map_of_table(table, "n_cells", ax=sub.add_subplot(1, 1, 1))
         sub.suptitle("a  clone map (no programmes)", x=0.02, ha="left", color=INK, fontweight="bold")
     ax_b = fig.add_subplot(gs[0, 1])
     coherence(adata, result=coherence_result, ax=ax_b)
@@ -468,9 +499,12 @@ def overview(adata, *, state_key: str | None = None, coherence_result: dict | No
             ax.text(0.5, 0.5, "no clonal programmes:\ntoo few reliably profiled clones", ha="center",
                     va="center", color=INK_2, transform=ax.transAxes)
     else:
-        stability(adata, ax=ax_c)
+        _stability_bars(summ, threshold, ax=ax_c)
         if state_key is not None:
-            programme_composition(adata, state_key, weight=composition_weight, ax=ax_d)
+            if composition is not None:
+                _composition_bars(composition, weight=composition_weight, ax=ax_d)
+            else:
+                programme_composition(adata, state_key, weight=composition_weight, ax=ax_d)
             ax_d.set_title("programme composition by cell state"
                            + (" (clones weighted equally)" if composition_weight == "clones" else ""), color=INK)
         else:

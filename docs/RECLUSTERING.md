@@ -26,20 +26,36 @@ ids in `obs["clone_id"]` and a cell embedding in `obsm["X_pca"]`:
 import threadfin as tf
 
 adata = tf.sim.simulate_repertoire(random_state=0)
-tf.clonotype_recluster(
-    adata, basis="X_pca", min_clone_size=3,
-    preset="continuous", random_state=123,
-)
-tf.pl.clone_map(adata)
-print(adata.uns["threadfin"]["clonotype_recluster"])
+tf.clonotype_recluster(adata, basis="X_pca", min_clone_size=3, random_state=123)   # preset "cohesive"
+fig = tf.pl.clone_map(adata)
+rec = adata.uns["threadfin"]["clonotype_recluster"]
+print({k: rec[k] for k in ("preset", "n_neighbors", "resolution", "min_dist", "n_clones_clustered",
+                           "n_clone_clusters")})
+print(adata.uns["threadfin"]["clone_map"]["clone_cluster"].value_counts().to_dict())
+```
 
-# Explicit arguments override the preset. UMAP neighbours can be independent
-# of the graph used for Leiden; display changes do not redefine clusters.
+```
+[threadfin] 494 clones -> 4 clone clusters ('clone_cluster' added to obs, clone map in uns['threadfin']).
+{'preset': 'cohesive', 'n_neighbors': 20, 'resolution': 0.3, 'min_dist': 0.1, 'n_clones_clustered': 494, 'n_clone_clusters': 4}
+{'0': 176, '1': 151, '2': 124, '3': 43}
+```
+
+On these simulated clones (494 with at least three cells), the default `cohesive` preset finds four clone clusters;
+`continuous` (resolution 0.1) keeps them in one, and `discrete` (resolution 0.8) splits them into 15.
+
+Explicit arguments override the preset. UMAP neighbours can be independent of the graph used for Leiden;
+display changes do not redefine clusters:
+
+```python
 tf.clonotype_recluster(
     adata, basis="X_pca", preset="continuous", n_neighbors=25, umap_n_neighbors=20,
     resolution=0.2, min_dist=0.35, spread=1.2, learning_rate=1.0,
     random_state=123,
 )
+```
+
+```
+[threadfin] 494 clones -> 2 clone clusters ('clone_cluster' added to obs, clone map in uns['threadfin']).
 ```
 
 Always name the embedding: `basis` defaults to `"X_umap"`, the two-dimensional cell UMAP, as in Threadfin 3,
@@ -61,7 +77,7 @@ Threadfin 3 grew did. That recipe averages the cell UMAP, so it needs one:
 ```python
 import scanpy as sc
 
-sc.pp.neighbors(adata, use_rep="X_pca", random_state=0)      # a cell UMAP, if adata has none
+sc.pp.neighbors(adata, random_state=0)      # a cell UMAP, if adata has none
 sc.tl.umap(adata, random_state=0)
 tf.clonotype_recluster(
     adata, basis="X_umap", preset="continuous",
@@ -70,6 +86,17 @@ tf.clonotype_recluster(
     cluster_random_state=0,
 )
 ```
+
+```
+[threadfin] 494 clones -> 11 clone clusters ('clone_cluster' added to obs, clone map in uns['threadfin']).
+```
+
+Scanpy finds the neighbours of 8,192 or more cells with pynndescent; with pynndescent 0.7 (which pip installs on
+Python 3.12 and later) the cell UMAP of these 8,467 cells differs slightly, and this example gives 10 clone clusters.
+
+`sc.pp.neighbors` uses Scanpy's default representation, `obsm["X_pca"]` for data with more than 50 genes (and `X`
+itself when it has 50 columns or fewer, as for these simulated cells, whose `X` holds the same 20 components); pass
+the representation explicitly to use another one (`use_rep=`, or `use=` from Scanpy 1.13 on).
 
 This reproduces the notebook's geometry and graph (UMAP seed 123, graph and
 Leiden seed 0 as in Scanpy's defaults, Leiden resolution 0.3), not its clone

@@ -115,9 +115,10 @@ tf.tl.embed_clones(adata, n_neighbors=10, min_dist=0.05)
 
 ![Automatic and hand-set clone maps](../_static/tutorial_clone_map.png)
 
-Both maps show the same 931 clones coloured by the simulated programme. With these hand-set values the
-map breaks into separate islands, although the clone profiles form one connected population; the
-automatic settings keep the programmes in their own regions and show how they adjoin.
+Both maps show the same 931 clones coloured by the simulated programme (drawn with the code of sections 1 and
+3 by [`make_tutorial_clone_map.py`](make_tutorial_clone_map.py)). With these hand-set values the map breaks into
+separate islands, although the clone profiles form one connected population; the automatic settings keep the
+programmes in their own regions and show how they adjoin.
 
 One setting can also be fixed and the other tuned, e.g. `tf.tl.embed_clones(adata, n_neighbors=30)`.
 `threadfin.run` takes the same choice as `map_n_neighbors` and `map_min_dist`.
@@ -143,6 +144,18 @@ fidelity is lower than for the automatic map (0.815 against 0.900): the islands 
 between programmes.
 
 ## 5. Colouring the map
+
+First go back from the hand-set map of section 3 to the settings chosen in section 1, so that the colours are
+read on a map that holds together. With the same settings and seed, this gives back the automatic map of section 1,
+point for point:
+
+```python
+tf.tl.embed_clones(adata, n_neighbors=56, min_dist=0.95)   # the settings chosen in section 1
+```
+
+```
+[threadfin] clone map: 931 of 931 profiled clones laid out (n_neighbors 56, min_dist 0.95); 99.8% of clones in one connected piece.
+```
 
 ```python
 table = prof["clone_table"]

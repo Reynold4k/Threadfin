@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from ._utils import ensure_actual, log, require_complete_groups, require_positive_int
+from ._utils import ensure_actual, log, require_complete_groups, require_positive_int, scanpy_argument_names
 from .expression import FrozenExpressionModel
 
 __all__ = ["ig_gene_mask", "exclude_ig_genes", "prepare_embedding"]
@@ -155,6 +155,13 @@ def prepare_embedding(
         )
 
     counts = adata.layers[counts_layer] if counts_layer else adata.X
+    if counts is None:
+        raise ValueError(
+            "adata.X is empty (None), so there are no counts to build the embedding from. Put the raw counts in "
+            "adata.X, name the layer that holds them with counts_layer=, or pass your own embedding with "
+            "threadfin.run(basis=...). With anndata 0.13 or later, deleting every entry of adata.layers also deletes "
+            "adata.X, which anndata keeps there under the key None."
+        )
     values = counts.data if sp.issparse(counts) else np.asarray(counts)
     if not np.isfinite(values).all() or np.any(values < 0):
         raise ValueError(
@@ -198,9 +205,10 @@ def prepare_embedding(
             "No genes remain after receptor-gene exclusion. Provide non-receptor expression genes, "
             "set exclude_receptor_genes=False, or pass a precomputed embedding."
         )
-    hv = sc.pp.highly_variable_genes(
-        pool, n_top_genes=n_top_genes, batch_key=batch_key, flavor="seurat", inplace=False
-    )
+    with scanpy_argument_names():
+        hv = sc.pp.highly_variable_genes(
+            pool, n_top_genes=n_top_genes, batch_key=batch_key, flavor="seurat", inplace=False
+        )
     hvg = pd.Series(False, index=tmp.var_names)
     hvg.loc[pool.var_names[np.asarray(hv["highly_variable"], dtype=bool)]] = True
     adata.var["highly_variable"] = hvg.values

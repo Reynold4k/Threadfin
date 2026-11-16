@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "threadfin"
-version = "4.6.2"
+version = "4.7.0"
 description = "Relationships between B-cell clones from paired single-cell RNA and BCR sequencing: clone embeddings, clonal coherence, clonal programmes, clone-level tests and clonal memory"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-    { name = "Chen Satoshi", email = "103236530+Reynold4k@users.noreply.github.com" },
+    { name = "Chen Zhu", email = "103236530+Reynold4k@users.noreply.github.com" },
 ]
 keywords = ["single-cell", "scRNA-seq", "BCR", "VDJ", "B cell", "clone", "clonal lineage",
             "germinal center", "immunology", "repertoire"]
@@ -37,9 +37,13 @@ dependencies = [
     "igraph>=0.10",
     "leidenalg>=0.10",
     "umap-learn>=0.5.5",            # older releases import pkg_resources, absent from new environments
-    # likewise; 0.7 (2026-10-27) returns sparse arrays that scanpy's neighbour search cannot read, and finds
-    # different approximate neighbours, so new installations would no longer reproduce the validated results
-    "pynndescent>=0.5.8,<0.7",
+    # likewise. pynndescent 0.7 returns sparse arrays that scanpy's neighbour search reads only from scanpy 1.12.5
+    # on, which needs Python >= 3.12; on Python 3.10 and 3.11 scanpy stays at 1.11, and so pynndescent below 0.7
+    # (and umap-learn below 0.6, which needs pynndescent >= 0.7). Above 50,000 cells, or 4,096 clones on the clone
+    # map, 0.6 and 0.7 find different approximate neighbours: docs/COMPATIBILITY.md gives the differences, and
+    # docs/tutorials/requirements-lock.txt the validated versions
+    "pynndescent>=0.5.8,<0.7; python_version < '3.12'",
+    "pynndescent>=0.5.8; python_version >= '3.12'",
     "harmonypy>=0.0.9; platform_system != 'Windows'",
     # harmonypy 2.x ships no Windows wheels and does not compile with MSVC; 0.2 and earlier are pure Python
     "harmonypy>=0.0.9,<2; platform_system == 'Windows'",
@@ -47,12 +51,15 @@ dependencies = [
 
 [project.optional-dependencies]
 # clone definition with Dandelion; sc-dandelion 0.5.7 imports nxviz, which uses matplotlib.cm.get_cmap, removed in
-# matplotlib 3.9. Up to Python 3.12 the extra keeps the validated matplotlib < 3.9; matplotlib < 3.9 has no wheels
+# matplotlib 3.9. Up to Python 3.12 the extra keeps the validated matplotlib < 3.9, with which scanpy stays at 1.11
+# (scanpy 1.12 needs matplotlib >= 3.9), so pynndescent stays below 0.7 there too; matplotlib < 3.9 has no wheels
 # for Python 3.13+, where importing threadfin restores get_cmap for Dandelion (clone calls verified identical).
 # sc-dandelion 1.0 (2026-10-25) calls clones differently and is not yet validated, hence < 1.
 # scanpy 1.13.0 (2026-11-13, Python 3.13+) removed scanpy.plotting._tools, which sc-dandelion 0.5.7 imports, hence
-# scanpy < 1.13 with this extra; without it, Threadfin itself works with scanpy 1.13.
-dandelion = ["sc-dandelion>=0.5.7,<1", "matplotlib>=3.7,<3.9; python_version < '3.13'", "scanpy>=1.10,<1.13"]
+# scanpy < 1.13 with this extra (on Python 3.13+ scanpy 1.12, which reads pynndescent 0.7); without it, Threadfin
+# itself works with scanpy 1.13.
+dandelion = ["sc-dandelion>=0.5.7,<1", "matplotlib>=3.7,<3.9; python_version < '3.13'", "scanpy>=1.10,<1.13",
+             "pynndescent>=0.5.8,<0.7; python_version < '3.13'"]
 seq = ["parasail>=1.3"]          # faster CDR3 alignment for the legacy v3 functions
 data = ["mudata>=0.3", "awkward>=2"]  # reading scirpy/MuData example data
 test = ["pytest>=7", "pytest-cov>=4"]

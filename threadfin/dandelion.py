@@ -200,12 +200,16 @@ _restore_get_cmap()
 
 
 def _import_dandelion():
-    """Import Dandelion (sc-dandelion), with matplotlib >= 3.9 as well."""
+    """Import Dandelion (sc-dandelion), with matplotlib >= 3.9 as well, and leave pickle as Python has it
+    (Dandelion 0.5.x lowers ``pickle.HIGHEST_PROTOCOL`` to 4; see :func:`threadfin._utils.restore_pickle_protocol`)."""
+    from ._utils import restore_pickle_protocol
+
     _restore_get_cmap()
     with warnings.catch_warnings():
         # Dandelion imports nxviz, which prints a long notice about its own API change on import
         warnings.filterwarnings("ignore", message=r"\s*nxviz has a new API")
         import dandelion as ddl
+    restore_pickle_protocol()
     return ddl
 
 
@@ -620,4 +624,34 @@ def define_clones_dandelion(
             "renumbered nearly every clone), so these clone ids can differ from those of another session and from "
             "Threadfin's documentation. The default, hash_seed=0, gives the same clones in every session.",
             UserWarning, stacklevel=2)
+    _remember_clone_calls(s)
     return s
+
+
+#: the clone calls of the latest define_clones_dandelion calls of this session, so that a later run on these clone
+#: ids can record how they were called (ThreadfinResult.methods describes it, also after saving)
+_RECENT_CLONE_CALLS: list = []
+
+
+def _remember_clone_calls(ids: pd.Series, keep: int = 4) -> None:
+    _RECENT_CLONE_CALLS.insert(0, ids)
+    del _RECENT_CLONE_CALLS[keep:]
+
+
+def clone_calling_of(clone_ids: pd.Series) -> dict | None:
+    """The settings of the :func:`define_clones_dandelion` call of this session that gave these clone ids.
+
+    ``clone_ids`` is a per-cell column such as ``adata.obs['clone_id']``: it matches a call when every cell with a
+    clone id has the clone id that call gave it (the column may hold a subset of the cells of the call). ``None``
+    when no call of this session matches.
+    """
+    given = clone_ids.dropna()
+    if given.empty:
+        return None
+    given = pd.Series(given.astype(str).to_numpy(), index=given.index.astype(str))
+    for ids in _RECENT_CLONE_CALLS:
+        called = ids.dropna()
+        called = pd.Series(called.astype(str).to_numpy(), index=called.index.astype(str))
+        if given.index.isin(called.index).all() and (called.reindex(given.index) == given).all():
+            return dict(ids.attrs)
+    return None

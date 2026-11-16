@@ -291,3 +291,118 @@ def h5ad_safe(obj):
                 out[col] = s.map(lambda v: "" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v))
         return out
     return obj
+
+
+# --------------------------------------------------------------------------- worker processes
+
+
+def restore_pickle_protocol() -> None:
+    """Raise ``pickle.HIGHEST_PROTOCOL`` back to at least the default protocol when another package lowered it.
+
+    sc-dandelion 0.5.x sets ``pickle.HIGHEST_PROTOCOL = 4`` when it is imported. From Python 3.14 on the default
+    protocol is 5, and pickling with the default protocol then fails ("pickle protocol must be <= 4"): joblib does
+    so when it hands arrays of more than 1 MB to its worker processes, as the clone-map search and the programme
+    bootstrap do with ``n_jobs > 1``. With Python 3.10-3.13 (default protocol 4) nothing changes.
+    """
+    import pickle
+
+    if pickle.HIGHEST_PROTOCOL < pickle.DEFAULT_PROTOCOL:
+        pickle.HIGHEST_PROTOCOL = pickle.DEFAULT_PROTOCOL
+
+
+def parallel(n_jobs: int):
+    """``joblib.Parallel(n_jobs=n_jobs)`` for Threadfin's worker processes, after :func:`restore_pickle_protocol`."""
+    from joblib import Parallel
+
+    restore_pickle_protocol()
+    return Parallel(n_jobs=n_jobs)
+
+
+# --------------------------------------------------------------------------- the installed neighbour search
+
+#: the first scanpy release that reads the neighbour graphs of pynndescent 0.7 (sparse arrays)
+SCANPY_READS_PYNNDESCENT_07 = "1.12.5"
+
+
+def _installed_version(dist: str) -> str | None:
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        return version(dist)
+    except PackageNotFoundError:
+        return None
+
+
+def neighbour_stack_problem(scanpy_version: str | None, pynndescent_version: str | None) -> str | None:
+    """Why scanpy's neighbour search fails with these versions, or ``None`` when it works.
+
+    pynndescent 0.7 returns its neighbour graph as a SciPy sparse array, which scanpy reads from 1.12.5 on (a
+    release that needs Python 3.12 or later). With an earlier scanpy, ``sc.pp.neighbors`` on 8,192 or more cells
+    fails with "'csr_array' object has no attribute 'getnnz'". ``tf.run`` and ``tf.tl`` do not use scanpy's
+    neighbour search (the earlier v3 functions do, on 8,192 or more clones), and Threadfin's dependencies never
+    install this pair together, but an environment can hold it, for example after ``pip install -U pynndescent``
+    or when other packages keep scanpy older.
+    """
+    if not scanpy_version or not pynndescent_version:
+        return None
+    try:
+        from packaging.version import InvalidVersion, Version
+    except ImportError:                                 # pragma: no cover - scanpy and matplotlib require packaging
+        return None
+
+    try:
+        old_scanpy = Version(scanpy_version) < Version(SCANPY_READS_PYNNDESCENT_07)
+        new_pynndescent = Version(pynndescent_version).release >= (0, 7)
+    except InvalidVersion:
+        return None
+    if not (old_scanpy and new_pynndescent):
+        return None
+    return (f"pynndescent {pynndescent_version} is installed with scanpy {scanpy_version}: scanpy's neighbour search "
+            f"(sc.pp.neighbors on 8,192 or more cells) reads the neighbour graphs of pynndescent 0.7 only from "
+            f"scanpy {SCANPY_READS_PYNNDESCENT_07} on, and fails with \"'csr_array' object has no attribute "
+            "'getnnz'\". tf.run and tf.tl do not use it. Install pynndescent below 0.7 with: "
+            "pip install \"pynndescent<0.7\" (or, on Python 3.12 or later, scanpy 1.12.5 or later).")
+
+
+def check_neighbour_stack() -> str | None:
+    """Warn, once at import, when the installed scanpy cannot read the installed pynndescent's neighbour graphs."""
+    problem = neighbour_stack_problem(_installed_version("scanpy"), _installed_version("pynndescent"))
+    if problem:
+        warnings.warn(problem, UserWarning, stacklevel=2)
+    return problem
+
+
+def umap_layout_options() -> dict:
+    """Options that keep UMAP's layout pipeline the one Threadfin's clone map was validated with.
+
+    umap-learn 0.6 has a new layout pipeline (recursive initialisation, Adam optimiser, optionally the RINND
+    neighbour search) next to the one of umap-learn 0.5. It uses the 0.5 pipeline unless told otherwise, but warns
+    that a later release will change that default; ``compatibility_layout=True`` keeps it and silences the warning.
+    umap-learn 0.5 has no such option, and gets none.
+    """
+    import inspect
+
+    import umap
+
+    try:
+        accepts = "compatibility_layout" in inspect.signature(umap.UMAP).parameters
+    except (TypeError, ValueError):                     # pragma: no cover - a UMAP without a readable signature
+        accepts = False
+    return {"compatibility_layout": True} if accepts else {}
+
+
+class scanpy_argument_names(warnings.catch_warnings):
+    """Silence scanpy's notice about the argument names Threadfin passes to it.
+
+    scanpy 1.13 renamed ``inplace=False`` (now ``out=True``), ``batch_key`` (``batch``), ``layer`` (``use``),
+    ``score_name`` (``out``) and ``use_rep`` (``use``). Apart from ``out=True``, the new arguments take
+    ``anndata.acc`` references, which need anndata 0.13, and scanpy 1.13 also runs with anndata 0.12. Threadfin
+    therefore keeps the names that every scanpy from 1.10 on accepts, with the same computation, and silences the
+    notice about them, as scanpy does for its own internal calls.
+    """
+
+    def __enter__(self):
+        out = super().__enter__()
+        warnings.filterwarnings("ignore", category=FutureWarning,
+                                message=r"The argument (inplace|batch_key|layer|score_name|use_rep) is deprecated")
+        return out

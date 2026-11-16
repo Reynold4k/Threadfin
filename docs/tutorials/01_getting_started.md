@@ -40,12 +40,14 @@ print(tf.__version__)          # 4.6.0 or later
 ```
 
 ```
-4.6.2
+4.7.0
 ```
 
 **In Jupyter**, put `%matplotlib inline` in the first cell of the notebook. With matplotlib older than 3.9, which
 the Dandelion extra installs on Python 3.10–3.12, the first figure of a session otherwise appears one cell late, or
-not at all.
+not at all. Without ipywidgets, the first clone map of a session prints `TqdmWarning: IProgress not found`:
+umap-learn imports a progress bar that Threadfin never shows, so the notice can be ignored, and
+`pip install ipywidgets` removes it.
 
 ---
 

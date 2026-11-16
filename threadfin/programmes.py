@@ -116,9 +116,11 @@ def _leiden_many(tasks, n_jobs: int = 1) -> list:
     Each partition depends only on its graph, resolution and seed, so the result is the same for any ``n_jobs``.
     """
     if n_jobs > 1 and len(tasks) > 1:
-        from joblib import Parallel, delayed
+        from joblib import delayed
 
-        return Parallel(n_jobs=min(n_jobs, len(tasks)))(delayed(leiden)(g, r, s) for g, r, s in tasks)
+        from ._utils import parallel
+
+        return parallel(min(n_jobs, len(tasks)))(delayed(leiden)(g, r, s) for g, r, s in tasks)
     return [leiden(g, r, s) for g, r, s in tasks]
 
 
@@ -830,8 +832,9 @@ def _clone_expression(adata, *, clone_key, cell_mask, layer, context_key, state_
 
     if layer is not None and layer not in adata.layers:
         raise ValueError(f"{caller}: adata.layers has no '{layer}' (layers: "
-                         f"{', '.join(map(repr, adata.layers.keys())) or 'none'}). threadfin.pp.prepare_embedding "
-                         "(and threadfin.run without basis=) writes 'log_norm'; otherwise pass the layer that holds "
+                         f"{', '.join(repr(k) for k in adata.layers.keys() if k is not None) or 'none'}). "
+                         "threadfin.pp.prepare_embedding (and threadfin.run without basis=) writes 'log_norm'; "
+                         "otherwise pass the layer that holds "
                          "normalised, log-transformed counts, or layer=None to use adata.X.")
     x = adata.layers[layer] if layer is not None else adata.X
     x = sp.csr_matrix(x) if not sp.issparse(x) else x.tocsr()

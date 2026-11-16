@@ -33,8 +33,24 @@ Scanpy, Leiden, UMAP and Harmony are installed with it; a fresh `pip install "th
 depend on Python's string-hash seed, so Threadfin always calls them under seed 0, in a separate Python process
 when Python was not started with `PYTHONHASHSEED=0` (about 2 s more). Threadfin is validated with Dandelion 0.5.x;
 Dandelion 1.0 (October 2026) calls clones differently, so the extra installs `sc-dandelion<1`.
+On Python 3.13 and 3.14 the extra installs matplotlib 3.9 or later, with which `import dandelion` before
+`import threadfin` fails with `cannot import name 'get_cmap' from 'matplotlib.cm'`: import Threadfin first, which
+restores that function, or let Threadfin call Dandelion.
 The development version installs with
 `pip install "git+https://github.com/Reynold4k/Threadfin.git"`.
+
+Threadfin installs with the newest Scanpy, UMAP and pynndescent: on Python 3.12 and later, pip installs
+pynndescent 0.7 and umap-learn 0.6. Where Scanpy cannot read pynndescent 0.7 (before Scanpy 1.12.5, which needs
+Python 3.12), pip keeps pynndescent 0.6 and umap-learn 0.5: on Python 3.10 and 3.11, and with the Dandelion extra on
+Python 3.12, which keeps matplotlib below 3.9 for Dandelion 0.5.7 and with it Scanpy at 1.11. The Dandelion extra
+also keeps Scanpy below 1.13, which removed a module that Dandelion 0.5.7 imports. Threadfin uses approximate
+neighbours only above 50,000 cells or 4,096 profiled clones; there, pynndescent 0.6 and 0.7 give slightly different
+profiles, programmes and clone maps, and the same coherence and clonal memory. On smaller data, umap-learn 0.6 can
+choose other clone-map settings than 0.5 (on one of nine validation data sets), with every other result the same
+([how much](https://github.com/Reynold4k/Threadfin/blob/main/docs/COMPATIBILITY.md)). On Python 3.10, pip installs
+SciPy 1.15, with which UMAP starts from a mirrored layout: the clone maps of the tutorials differ slightly, and every
+other result is the same. The published results are reproduced exactly with the validated versions (Python 3.11):
+`pip install -r https://raw.githubusercontent.com/Reynold4k/Threadfin/main/docs/tutorials/requirements-lock.txt`.
 
 ### 2. Run
 
@@ -43,10 +59,10 @@ contig-level receptor table (Cell Ranger's `filtered_contig_annotations.csv` or 
 and sample of each cell.
 
 ```python
-import scanpy as sc
+import anndata as ad
 import threadfin as tf
 
-adata = sc.read_h5ad("b_cells.h5ad")           # raw counts, one row per cell
+adata = ad.read_h5ad("b_cells.h5ad")           # raw counts, one row per cell
 
 result = tf.run(
     adata,
@@ -110,9 +126,12 @@ result.clones.to_csv("clones.csv")      # per clone with >= 2 cells: size, relia
 * **scirpy users**: pass your scirpy AnnData or MuData as `bcr`.
 * **Clones defined elsewhere**: put them in `adata.obs["clone_id"]` and leave out `bcr`.
 * **Large data**: `n_jobs=-1` uses every CPU core ([run time and memory](https://github.com/Reynold4k/Threadfin#run-time-and-memory)).
-* **Identical results**: `n_jobs` never changes a result. The automatically chosen clone map can change with the
-  number of BLAS threads, so keep `OMP_NUM_THREADS` the same between runs; every statistic agrees to about 1e-7
-  either way. Random draws follow the order of the cells, so the same cells in another order can give different
+* **Identical results**: `n_jobs` never changes a result. The number of BLAS threads (`OMP_NUM_THREADS`) changes the
+  expression embedding that Threadfin builds when no `basis` is given at floating-point precision: the clonal ICC,
+  clonal memory and the variance explained by each label then agree to 1e-6 with the same P values, but programme
+  stabilities can change in the second decimal and the automatically chosen clone map can change, so keep the
+  thread count the same between runs that must match ([details](https://github.com/Reynold4k/Threadfin/blob/main/docs/COMPATIBILITY.md#blas-threads)).
+  Random draws follow the order of the cells, so the same cells in another order can give different
   programmes; sort them first (`adata = adata[adata.obs_names.sort_values()].copy()`) when results must not
   depend on the order.
 * **Saving and reloading**: `adata.write_h5ad(...)` keeps the record of the run, and
@@ -120,6 +139,8 @@ result.clones.to_csv("clones.csv")      # per clone with >= 2 cells: size, relia
   after further `tf.tl` calls on the same AnnData.
 * **Jupyter**: start the notebook with `%matplotlib inline`. With matplotlib older than 3.9 (which the Dandelion
   extra installs on Python 3.10–3.12), the first figure of a session otherwise appears one cell late, or not at all.
+  Without ipywidgets, the first clone map of a session prints `TqdmWarning: IProgress not found`: umap-learn imports
+  a progress bar that Threadfin never shows, so the notice can be ignored, and `pip install ipywidgets` removes it.
 
 ### Run time and memory
 
@@ -149,6 +170,12 @@ about an hour for a million simulated cells on 8 cores
 | [4 — Step by step](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/04_step_by_step.md) | the individual functions in `threadfin.tl` |
 | [5 — From GEO to results (notebook)](https://github.com/Reynold4k/Threadfin/blob/main/docs/tutorials/05_end_to_end_tutorial.ipynb) | a published dataset (GSE287123) end to end: download, hashtag demultiplexing, clones, embedding, Threadfin and interpretation; executed in a fresh environment before every release (about 6 minutes on 8 cores) |
 
+New in 4.7.0: Threadfin installs with pynndescent 0.7 and umap-learn 0.6 on Python 3.12 and later; above 50,000
+cells, profiles and programmes differ slightly from those with pynndescent 0.6 (coherence and clonal memory do not),
+and the lock file reproduces the published numbers. With the Dandelion extra on Python 3.14, `n_jobs` no longer
+fails when Dandelion was imported in the same session. `result.plot()` draws the run's own figure after later
+`tf.tl` calls, and Threadfin's Scanpy calls give no deprecation warnings with Scanpy 1.13. The Methods paragraph
+names the pynndescent and umap-learn versions.
 New in 4.6.2: the result of `tf.run` stays the run's own after later `tf.tl` calls on the same AnnData, also when
 it is rebuilt from a saved file with `ThreadfinResult.from_adata`; every step of Tutorial 2 can be followed on the
 public data of Tutorial 5. Results are unchanged.

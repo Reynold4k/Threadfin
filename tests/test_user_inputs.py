@@ -70,6 +70,14 @@ def test_prepare_embedding_rejects_negative_counts_with_fix():
         tf.pp.prepare_embedding(adata, verbose=False)
 
 
+def test_prepare_embedding_explains_an_empty_x():
+    """anndata 0.13 keeps X among the layers (key None): deleting every layer also deletes X."""
+    counts = np.random.default_rng(0).poisson(2.0, size=(6, 3)).astype(np.float32)
+    adata = AnnData(X=None, obs=_adata().obs, var=pd.DataFrame(index=["g0", "g1", "g2"]), layers={"counts": counts})
+    with pytest.raises(ValueError, match="adata.X is empty.*counts_layer="):
+        tf.pp.prepare_embedding(adata, verbose=False)
+
+
 @pytest.mark.parametrize("n_comps", [0, -1, 1.5, True])
 def test_prepare_embedding_requires_positive_integer_n_comps(n_comps):
     with pytest.raises(ValueError, match="n_comps must be a positive integer"):

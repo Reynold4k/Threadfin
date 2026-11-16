@@ -569,13 +569,28 @@ the same result. The following settings also matter for reproducibility:
 * **Clone calling.** Threadfin calls Dandelion under hash seed 0 in every session, in a separate Python process
   when needed, so no setting is needed for identical clone ids. `hash_seed=None` keeps the earlier in-session
   behaviour (section 1).
-* **BLAS threads.** With another number of BLAS threads (`OMP_NUM_THREADS`), the computations (from the expression
-  embedding on) differ at floating-point precision. Every statistic agrees to about 1e-7, but the automatically
-  chosen clone map can
-  change; keep the thread count the same between runs that must give the same map.
+* **BLAS threads.** The expression embedding of section 2 depends on the number of BLAS threads
+  (`OMP_NUM_THREADS`) at floating-point precision; no later step does. With an embedding of your own (`basis=`),
+  the thread count changes nothing. With the embedding Threadfin builds, the clonal ICC, clonal memory and the
+  variance explained by each label agree to 1e-6 with the same P values, but programme stabilities can change in the
+  second decimal and the automatically chosen clone map can change; keep the thread count the same between runs
+  that must give the same programmes and map ([Compatibility](COMPATIBILITY.md#blas-threads) gives the numbers).
 * **Order of the cells.** Random draws are made by position (the pairs of cells that set the kernel bandwidth,
   the bootstrap weights), so the same cells in another order can give different programmes. Sort the cells by
   name (`adata = adata[adata.obs_names.sort_values()].copy()`) when results must not depend on their order.
+* **pynndescent and umap-learn on large data.** The smoothing of section 3 finds each cell's 15 nearest cells
+  exactly up to 50,000 cells and with pynndescent's approximate search above, and UMAP lays out 4,096 or more
+  clones with pynndescent too. pynndescent 0.6 and 0.7 (with umap-learn 0.5 and 0.6) find slightly different
+  approximate neighbours, so on such data the profiles, programmes, label tests and the automatically chosen map
+  differ slightly between them; coherence and clonal memory, which use unsmoothed cells, do not. The Methods
+  paragraph names both versions, and [Compatibility](COMPATIBILITY.md) gives the differences on the validation data
+  sets. Threadfin asks umap-learn 0.6 for the layout pipeline of umap-learn 0.5 (`compatibility_layout=True`),
+  which gives the layouts of umap-learn 0.5 for most neighbour graphs but not all: on one of the nine smaller
+  validation data sets the automatic search chose another `min_dist` with umap-learn 0.6.
+* **SciPy and the clone map.** UMAP starts each layout from eigenvectors that SciPy computes; SciPy 1.16 and earlier
+  (the versions pip installs on Python 3.10) return them with the opposite sign of SciPy 1.17 and later, so the clone
+  maps, their scores and possibly the automatically chosen settings differ slightly, while profiles, programmes and
+  every statistic are identical ([Compatibility](COMPATIBILITY.md#python-310-scipy-and-the-clone-map)).
 
 ## References
 

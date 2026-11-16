@@ -124,8 +124,9 @@ pip install -r requirements-lock.txt
 *If `pip install` fails on a cluster, check that you are inside the activated environment (`which python`
 should point into it). If `import dandelion` fails with "cannot import name 'get_cmap'", run
 `import threadfin` before `import dandelion`. If `sc.pp.neighbors` (Step 8) fails with "'csr_array' object has
-no attribute 'getnnz'", the environment has pynndescent 0.7, whose output scanpy cannot yet read: run
-`pip install "pynndescent<0.7"` (Threadfin 4.5.3 and later install it).*
+no attribute 'getnnz'", the environment has pynndescent 0.7 with a scanpy older than 1.12.5, which cannot read
+its output: run `pip install "pynndescent<0.7"`. Threadfin installs a pair that works, and `import threadfin`
+warns when the installed pair does not.*
 
 **What to look for.** The next cell should print the versions without errors. Its first line,
 `%matplotlib inline`, shows every figure below the cell that draws it: with matplotlib older than 3.9 (the
@@ -270,11 +271,16 @@ import pandas as pd
 import scanpy as sc
 import anndata as ad
 
+try:                                       # Scanpy 1.13 and later keep the readers in scanpy.io
+    from scanpy.io import read_10x_mtx
+except ImportError:                        # Scanpy 1.10 to 1.12
+    from scanpy import read_10x_mtx
+
 sc.settings.verbosity = 1
 tubes = {}
 for tube, (gsm_gex, gsm_bcr, library) in TUBES.items():
-    a = sc.read_10x_mtx(DATA, prefix=f"{gsm_gex}_{library}_GEX_HTO_", var_names="gene_symbols",
-                        gex_only=False, make_unique=True)
+    a = read_10x_mtx(DATA, prefix=f"{gsm_gex}_{library}_GEX_HTO_", var_names="gene_symbols",
+                     gex_only=False, make_unique=True)
     a.obs_names = [f"{tube}|{barcode}" for barcode in a.obs_names]
     a.obs["tube"] = tube
     tubes[tube] = a

@@ -201,17 +201,26 @@ def neighbour_average(x: np.ndarray, k: int, random_state: int = 0) -> np.ndarra
 
     Borrows strength from cells in the same local state, which denoises the
     profiles of small clones. Used for programme profiles only: the
-    coherence and memory statistics are computed on unsmoothed cells.
+    coherence and memory statistics are computed on unsmoothed cells. The
+    neighbours are exact (scikit-learn) up to 50,000 cells; above, they come
+    from pynndescent's approximate search, and a cell for which it finds
+    fewer than ``k`` neighbours gets its exact neighbours.
     """
+    from sklearn.neighbors import NearestNeighbors
+
     n = x.shape[0]
     k = int(min(k, n))
     if n > 50_000:
         from pynndescent import NNDescent
 
         idx = NNDescent(x, n_neighbors=k, random_state=random_state).neighbor_graph[0]
+        short = (idx < 0).any(axis=1)
+        if short.any():
+            # pynndescent pads the row of a cell for which it found fewer than k neighbours with -1, which would
+            # index the last cell; those cells' neighbours are found exactly
+            idx = idx.copy()
+            idx[short] = NearestNeighbors(n_neighbors=k).fit(x).kneighbors(x[short], return_distance=False)
     else:
-        from sklearn.neighbors import NearestNeighbors
-
         idx = NearestNeighbors(n_neighbors=k).fit(x).kneighbors(x, return_distance=False)
     out = np.zeros_like(x)
     for j in range(k):  # column-wise accumulation keeps memory at O(n * features)
@@ -443,7 +452,10 @@ def clone_profiles(
         Average each cell with its ``smooth`` nearest cells before profiling
         (denoises small clones by borrowing strength from their local state).
         Default: 15 for ``"kernel"``, 0 for ``"mean"``. The coherence test and
-        clonal memory always use unsmoothed cells.
+        clonal memory always use unsmoothed cells. The neighbours are exact up
+        to 50,000 cells and found approximately with pynndescent above, where
+        pynndescent 0.6 and 0.7 give slightly different profiles
+        (docs/COMPATIBILITY.md).
     min_cells
         Clones with fewer cells are not profiled. The default of 2 is **not** a quality filter --
         Threadfin never filters on reliability -- it is what the clone map is *of*. Singleton clones

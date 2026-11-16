@@ -101,3 +101,19 @@ def test_parallel_bootstrap_gives_the_same_programmes():
     two = tf.tl.find_programmes(adata, n_boot=6, n_jobs=2, verbose=False)
     pd.testing.assert_frame_equal(one, two)
     assert labels_one.equals(adata.obs["clone_programme"].astype(str))
+
+
+def test_worker_processes_survive_a_lowered_pickle_protocol(monkeypatch):
+    """sc-dandelion 0.5.x sets pickle.HIGHEST_PROTOCOL = 4 when it is imported. From Python 3.14 the default protocol
+    is 5, and joblib's hand-over of arrays above 1 MB to the worker processes of the clone-map search and of the
+    programme bootstrap failed ("pickle protocol must be <= 4")."""
+    import pickle
+
+    from joblib import delayed
+
+    from threadfin._utils import parallel
+
+    monkeypatch.setattr(pickle, "HIGHEST_PROTOCOL", 4)
+    big = np.arange(300_000, dtype=np.int64)              # 2.4 MB: memory-mapped for the workers
+    assert parallel(2)(delayed(np.sum)(big) for _ in range(2)) == [big.sum()] * 2
+    assert pickle.HIGHEST_PROTOCOL >= pickle.DEFAULT_PROTOCOL

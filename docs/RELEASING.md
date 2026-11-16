@@ -5,7 +5,8 @@
 1. Update the version in `pyproject.toml`, `threadfin/__init__.py` and `CITATION.cff` (with `date-released`), add
    the entry to `CHANGELOG.md` and run
    `python docs/make_api_reference.py` (the function reference carries the version).
-2. Push to `main` and wait for the tests (Linux with Python 3.10–3.14 and the oldest allowed dependencies, macOS,
+2. Push to `main` and wait for the tests (Linux with Python 3.10–3.14, the oldest allowed dependencies, the
+   validated versions of `docs/tutorials/requirements-lock.txt` and pynndescent 0.7 / umap-learn 0.6; macOS;
    Windows).
 3. Create the GitHub release `vX.Y.Z` from `main`, with the changelog entry as its notes.
 

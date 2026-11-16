@@ -1,5 +1,273 @@
 # Verified compatibility
 
+## Version 4.7.0 — 16 November 2026
+
+* **Why this version.** Versions 4.5.3–4.6.2 held every installation at pynndescent < 0.7, because Scanpy 1.11
+  cannot read the neighbour graphs of pynndescent 0.7: `sc.pp.neighbors` then fails on 8,192 or more cells with
+  "'csr_array' object has no attribute 'getnnz'". Scanpy reads them from 1.12.5 on, a release that needs Python 3.12.
+  umap-learn 0.6 needs pynndescent 0.7, so the pin also kept umap-learn below 0.6. Threadfin 4.7.0 keeps pynndescent
+  below 0.7 only where pip cannot install a Scanpy that reads it.
+
+### What pip installs
+
+What `pip install --dry-run` resolves (pip 26.3, PyPI on 16 November 2026). Every row with Python 3.10–3.14 was also
+installed from the wheel of this version in a new virtual environment: `pip check` passed, Scanpy's own neighbour
+search, UMAP and Leiden ran on 12,000 cells, and the test suite passed (below).
+
+| Python | `pip install threadfin` | `pip install "threadfin[dandelion]"` |
+|---|---|---|
+| 3.10 | Scanpy 1.11.5, pynndescent 0.6.0, umap-learn 0.5.12 | Scanpy 1.11.5, pynndescent 0.6.0, umap-learn 0.5.12, matplotlib 3.8.4 |
+| 3.11 | Scanpy 1.11.5, pynndescent 0.6.0, umap-learn 0.5.12 | Scanpy 1.11.5, pynndescent 0.6.0, umap-learn 0.5.12, matplotlib 3.8.4 |
+| 3.12 | Scanpy 1.12.6, **pynndescent 0.7.0, umap-learn 0.6.0** | Scanpy 1.11.5, pynndescent 0.6.0, umap-learn 0.5.12, matplotlib 3.8.4 |
+| 3.13 | Scanpy 1.13.0, **pynndescent 0.7.0, umap-learn 0.6.0** | Scanpy 1.12.6, **pynndescent 0.7.0, umap-learn 0.6.0**, matplotlib 3.11.2 |
+| 3.14 | Scanpy 1.13.0, **pynndescent 0.7.0, umap-learn 0.6.0** | Scanpy 1.12.6, **pynndescent 0.7.0, umap-learn 0.6.0**, matplotlib 3.11.2 |
+
+Threadfin 4.6.2 resolves to pynndescent 0.6.0 and umap-learn 0.5.12 in every row; in bold what 4.7.0 changes. Every
+pair that pip installs works with Scanpy's own neighbour search: pynndescent 0.7 only with Scanpy 1.12.5 or later.
+An environment can still hold an older Scanpy with pynndescent 0.7 (after `pip install -U pynndescent`, or when other
+packages keep Scanpy older); `import threadfin` then warns and names the fix.
+
+The test suite of this version (`python -m pytest tests`, against the installed wheel), in those environments and
+two more:
+
+| Environment | Scanpy, pynndescent, umap-learn, numpy, pandas, anndata | Tests |
+|---|---|---|
+| Python 3.10, the oldest versions `pyproject.toml` allows | 1.10.0, 0.5.8, 0.5.5, 1.24.1, 2.0.0, 0.10.0 | 345 passed, 19 skipped |
+| Python 3.10 | 1.11.5, 0.6.0, 0.5.12, 2.2.6, 2.3.3, 0.11.4 | 345 passed, 19 skipped |
+| Python 3.11, `requirements-lock.txt` (the validated versions) | 1.11.5, 0.6.0, 0.5.12, 2.4.6, 2.3.3, 0.12.19 | 359 passed, 5 skipped |
+| Python 3.11 | 1.11.5, 0.6.0, 0.5.12, 2.4.6, 2.3.3, 0.12.19 | 345 passed, 19 skipped |
+| Python 3.12 | 1.12.6, 0.7.0, 0.6.0, 2.5.5, 3.1.1, 0.13.4 | 345 passed, 19 skipped |
+| Python 3.12, Dandelion extra | 1.11.5, 0.6.0, 0.5.12, 2.5.5, 3.1.1, 0.13.4 | 359 passed, 5 skipped |
+| Python 3.13 | 1.13.0, 0.7.0, 0.6.0, 2.5.5, 3.1.1, 0.13.4 | 345 passed, 19 skipped |
+| Python 3.13, Dandelion extra | 1.12.6, 0.7.0, 0.6.0, 2.5.5, 3.1.1, 0.13.4 | 359 passed, 5 skipped |
+| Python 3.14 | 1.13.0, 0.7.0, 0.6.0, 2.5.5, 3.1.1, 0.13.4 | 345 passed, 19 skipped |
+| Python 3.14, Dandelion extra | 1.12.6, 0.7.0, 0.6.0, 2.5.5, 3.1.1, 0.13.4 | 359 passed, 5 skipped |
+
+Five tests need the repository's `manuscript/` folder, which the wheel does not contain, or scirpy; without the
+Dandelion extra, 14 more need Dandelion. In the repository with the validated versions, 380 tests passed and 1 was
+skipped (scirpy is not installed). Every environment also passed `pip check`, Scanpy's neighbour search, UMAP and
+Leiden on 12,000 cells, and `examples/tutorial.py`.
+
+### Unchanged with the validated versions
+
+The validated versions are those of [`requirements-lock.txt`](tutorials/requirements-lock.txt): Python 3.11,
+pynndescent 0.6.0, umap-learn 0.5.12, Scanpy 1.11.5, sc-dandelion 0.5.7, matplotlib 3.8.4. With them, 4.7.0 gives every
+result of 4.6.2:
+
+* **The 16 validation data sets.** The user-path script of the 4.6.0 validation (`run_dataset.py`, unchanged) ran
+  every data set with this version: every clone table, summary and overview figure is identical, byte for byte, to
+  the 4.6.0 record, as are the cells, clones, clonal ICC, its P value, the programmes and the clone-map settings of
+  each record. The Methods paragraphs differ in the version and in naming umap-learn 0.5.12 and, above 50,000 cells,
+  pynndescent 0.6.0. The final code of this version, run again on all 16, gave the same.
+* **Tutorial 5** ran end to end in an environment built as Step 0 says (conda-forge Python 3.11; the newest versions
+  pip installs today are those of the lock file) with the real GEO download: every number it prints is the same as
+  in the 4.6.2 copy, and the clone, programme and cell tables and the overview figure it saves are identical to
+  those of 4.6.2 and 4.6.0. The differences are the version, timings and a line number in a warning. The published
+  copy was executed with the final code of this version (Step 2 now imports the 10x reader in a form that works with
+  every Scanpy from 1.10 to 1.13).
+* **Documentation.** Every code block of the README, Tutorials 1, 3 and 4, `docs/RECLUSTERING.md` and
+  `docs/STATE_DENSITY.md` (on the file Tutorial 5 saves) ran with this version and printed what the pages show; the
+  blocks that 4.6.2 also had printed what 4.6.2 printed, apart from the version and the Methods paragraph. With the
+  newest versions (Python 3.14, Scanpy 1.13, pynndescent 0.7, umap-learn 0.6), every block printed the same, apart
+  from the versions that the Methods paragraph names and the last example of `docs/RECLUSTERING.md` (10 clone
+  clusters instead of 11, from Scanpy's own neighbour search).
+
+### pynndescent 0.6 and 0.7 on large data sets
+
+Threadfin finds approximate neighbours in two places: when it smooths the cells of more than 50,000 cells (clone
+profiles), and when UMAP lays out 4,096 or more profiled clones (the clone map). pynndescent 0.6 and 0.7
+(umap-learn 0.5 and 0.6) find slightly different neighbours there. The seven validation data sets of these sizes ran
+with both, everything else equal (the validated versions, with pynndescent 0.7.0 and umap-learn 0.6.0 in place of
+0.6.0 and 0.5.12):
+
+| Data set | Cells | Profiled clones | Between-clone distances, r | Clonal ICC (P) | Programmes, 0.6 → 0.7 (stability) | Same partition (ARI) | Clone map, 0.6 → 0.7 (n_neighbors, min_dist) | Conclusions that change |
+|---|---:|---:|---:|---|---|---:|---|---|
+| bone_marrow_pc | 115,144 | 6,583 | 0.9997 | 0.427 (0.005), identical | 3 → 3 (0.34, 0.80, 0.64 → 0.33, 0.75, 0.66) | 0.96 | 70, 0.95 → 70, 0.80 | none |
+| covid_bcell | 61,423 | 588 | 0.9991 | 0.400 (0.005), identical | 1 → 1 (1.00 → 0.99) | 1.00 | 56, 0.95 → 32, 0.95 | none |
+| ebv | 205,630 | 6,124 | 0.9997 | 0.158 (0.005), identical | 2 → 4 (0.79, 0.54 → 0.78, 0.65, 0.49, 0.04) | 0.60 | 65, 0.80 → 37, 0.80 | programmes 2 → 4; programme effects with FDR < 0.05: gfp 1 → 4, isotype 4 → 13 |
+| flu | 123,693 | 2,082 | 0.9998 | 0.561 (0.005), identical | 5 → 5 (0.79, 0.90, 0.78, 0.87, 0.34 → 0.83, 0.90, 0.83, 0.83, 0.22) | 0.90 | 180, 0.80 → 180, 0.95 | none |
+| larry_d46 | 44,664 | 6,174 | 1.0000 | 0.598 (0.005), identical | 8 → 8, identical | 1.00 | 66, 0.55 → 66, 0.55 (layout differs slightly) | none |
+| ln_vaccine | 193,442 | 11,126 | 1.0000 | 0.326 (0.005), identical | 4 → 4 (0.81, 0.93, 0.60, 0.92 → 0.82, 0.94, 0.60, 0.91) | 0.83 | 37, 0.95 → 67, 0.95 | programme effects with FDR < 0.05: isotype 12 → 13 |
+| malaria_late | 72,359 | 1,007 | 1.0000 | 0.454 (0.005), identical | 4 → 4 (0.80, 0.41, 0.73, 0.71 → 0.81, 0.41, 0.72, 0.65) | 0.96 | 32, 0.80 → 18, 0.95 | none |
+
+Stabilities are those of the summaries, listed for programmes matched by their clones (programme numbers follow
+size, so they can swap).
+"r" is the correlation of the distances between clone profiles under the two versions (300,000 random pairs). The
+clonal memory index and its P value are identical on every data set that has one (bone_marrow_pc, covid_bcell, ebv,
+flu, ln_vaccine).
+
+* **Unchanged:** the clonal ICC, its shuffled value and P value, and clonal memory (index, interval and P value),
+  which are computed on unsmoothed cells; the P value of every label test.
+* **Changed slightly:** the clone profiles (between-clone distances correlate 0.999 or more); the variance explained
+  by each label (by at most 0.03 percentage points); the programme partitions and stabilities; the automatically
+  chosen clone map, on six of the seven data sets. Programmes are numbered by size, so when sizes change, numbers can
+  swap (bone_marrow_pc: P1 and P3).
+* **Conclusions.** On six data sets, the number of programmes, the number of programmes flagged as unstable
+  (stability below 0.6) and every label test are the same. On ln_vaccine, one programme effect more passes FDR 0.05
+  (isotype: 12 → 13). On ebv (205,630 cells), the partition changes: with pynndescent 0.6 two programmes, of which
+  P2 (2,431 clones) is unstable (0.54); with 0.7 four, of which P2 (2,002 clones, stability 0.65) is not flagged and
+  P3 and P4 (391 and 159 clones) are. P1, the IgM-enriched majority, is the same programme (Jaccard overlap 0.84,
+  stability 0.79 and 0.78). The programme effects follow the partition (FDR < 0.05: gfp 1 → 4, isotype 4 → 13). On
+  ln_vaccine, the layout search found no setting with 0.7 that kept 98.5 % of clones in one piece in every layout
+  (89.3 %, n_neighbors 67), where it found one with 0.6 (99.7 %, n_neighbors 37); the returned maps keep 98.6 % and
+  99.7 % of clones in one piece.
+* **Below these sizes.** On the nine smaller data sets, profiles, programmes, every statistic and the summaries are
+  identical (profiles to the last digit). umap-learn 0.6 alone (checked with pynndescent 0.6) lays out some trial
+  maps of the automatic search differently from 0.5: on larry_d2, those at n_neighbors 18 and 32 (the chosen
+  min_dist changed from 0.80 to 0.95, n_neighbors 100 in both), and on spont_gc those at n_neighbors 56 (the same
+  setting was chosen). The other eight clone maps are identical.
+* **Newest stack.** With every other package at its newest version as well (Python 3.14.10, numpy 2.5.5, SciPy 1.18.1,
+  pandas 3.1.1, anndata 0.13.4, Scanpy 1.12.6, scikit-learn 1.9.1, matplotlib 3.11.2, sc-dandelion 0.5.7, installed
+  as `pip install "threadfin[dandelion]"`), all 16 data sets give the results of pynndescent 0.7 above, to within
+  1.7e-14 (after matching the signs of principal components), with the same clone maps and programmes. One summary
+  differs, because of the data preparation rather than Threadfin: the malaria loader writes the cell states with
+  `astype(str)`, which under pandas 2 turns 298 missing states into the text "nan" (Threadfin warns about such a
+  level) and under pandas 3 keeps them missing, so the programme tests of `cell_state` lose the level "nan" and one
+  more programme effect passes FDR 0.05 (16 → 17).
+* **Run time.** The smoothing step takes longer with pynndescent 0.7 (in a new session, 34 instead of 18 s on
+  205,630 cells; 41 instead of 17 s on 61,423 cells). The complete `tf.run` varied by up to 40 % between runs on the
+  shared cluster nodes, more than any difference between the versions.
+* **To reproduce the published numbers exactly**, install the validated versions:
+  `pip install -r docs/tutorials/requirements-lock.txt` (Python 3.11), or `pip install "pynndescent<0.7"`, which also
+  brings back umap-learn 0.5, on any Python from 3.10 to 3.14. The Methods paragraph of each run names the versions
+  of pynndescent and umap-learn it used.
+
+### Python 3.10: SciPy and the clone map
+
+On Python 3.10, pip installs SciPy 1.15.3, the last SciPy for that Python. UMAP starts every layout from a spectral
+embedding that SciPy's eigensolver (ARPACK) computes. SciPy 1.15 and 1.16 return these eigenvectors with the
+opposite sign of SciPy 1.17 (the validated version) and 1.18, so UMAP starts from the point-reflected layout, and its
+stochastic optimisation ends in a slightly different map. The clone profiles, the neighbour graph that UMAP builds,
+the programmes and every statistic are identical; the scores of the maps differ in the third decimal, and the
+automatic search can settle on other settings:
+
+| Simulated data of | SciPy 1.17 (validated; Python 3.11) | SciPy 1.15 (Python 3.10) |
+|---|---|---|
+| Tutorial 1 | n_neighbors 56, min_dist 0.95; 99.8 % of clones in one piece | n_neighbors 56, min_dist 0.95; 99.7 % |
+| Tutorial 3, section 2 | quality score 0.739, coherence 0.998, local fidelity 0.578, global fidelity 0.900; six confirmed settings | 0.742, 0.997, 0.571, 0.913; five confirmed settings |
+| Tutorial 4, step 3 | n_neighbors 100, min_dist 0.95 | n_neighbors 32, min_dist 0.95 |
+
+The validated versions with SciPy 1.15.3 or 1.16.3 in place of 1.17.1 give the Python 3.10 numbers exactly (the
+spectral starting layouts are each other's negatives to within 1.3e-15); with scikit-learn 1.7.2 or numpy 2.2.6,
+the other versions that differ on Python 3.10, they give those of Python 3.11. The same holds on any Python with
+SciPy 1.16 or earlier. The numbers of the tutorials and of the validation were obtained with SciPy 1.17.1, which
+the lock file installs.
+
+### Exact neighbour search (evaluated, not adopted)
+
+Exact neighbours at every size would make the results independent of pynndescent: the smoothing as below 50,000
+cells (scikit-learn), and UMAP given exact neighbours (`precomputed_knn`) for 4,096 or more clones. Run on the same
+seven data sets with both versions:
+
+| Data set | Smoothing, s: 0.6 / 0.7 / exact | `tf.run`, s: 0.6 / 0.7 / exact | Peak memory, GB: 0.6 / 0.7 / exact | Exact against 0.6: distances r; map | Exact against 0.7: distances r; map | Conclusions of exact search that differ from 0.6 |
+|---|---|---|---|---|---|---|
+| bone_marrow_pc | 16 / 34 / 12 | 397 / 404 / 383 | 6.9 / 7.2 / 7.0 | 0.9998; 70, 0.95 → 123, 0.95 | 0.9998; 70, 0.80 → 123, 0.95 | programme effects with FDR < 0.05: sort 10 → 12, isotype 8 → 9 |
+| covid_bcell | 18 / 51 / 7 | 176 / 200 / 163 | 4.1 / 4.2 / 4.0 | 0.9992; 56, 0.95 → 32, 0.95 | 0.9992; the same map | none |
+| ebv | 20 / 41 / 46 | 570 / 948 / 873 | 25.7 / 25.8 / 25.7 | 0.9998; 65, 0.80 → 37, 0.80 | 0.9998; the same settings | those of pynndescent 0.7: programmes 2 → 4; gfp 1 → 4, isotype 4 → 13 |
+| flu | 17 / 33 / 16 | 312 / 315 / 338 | 8.1 / 8.3 / 8.4 | 0.9998; 180, 0.80 → 180, 0.95 | 0.9998; the same settings | programmes 5 → 4; programme effects with FDR < 0.05: time 5 → 4 |
+| larry_d46 | 2 / 2 / 2 | 215 / 222 / 192 | 1.0 / 1.1 / 0.8 | 1.0000; the same settings | 1.0000; the same settings | none |
+| ln_vaccine | 26 / 48 / 34 | 838 / 1,332 / 946 | 23.8 / 24.0 / 23.8 | 1.0000; 37, 0.95 → 67, 0.95 | 1.0000; 67, 0.95 → 37, 0.95 | those of pynndescent 0.7: isotype 12 → 13 |
+| malaria_late | 19 / 36 / 12 | 338 / 308 / 284 | 6.6 / 6.8 / 6.6 | 1.0000; 32, 0.80 → 32, 0.95 | 1.0000; 18, 0.95 → 32, 0.95 | none |
+
+Exact search ran with pynndescent 0.6 and with 0.7 (each with its umap-learn); the table shows the first, and the
+second gave identical profiles, programmes, tests and summaries. larry_d46 has fewer than 50,000 cells, so only its
+clone map changes method.
+
+* **Time and memory.** Exact smoothing took 4 to 24 s per call (24 s on the 205,630 cells of ebv), against 1 to 9 s
+  for pynndescent once compiled; pynndescent's first call in a session also compiles (15 to 20 s with 0.6, 31 to
+  41 s with 0.7). Over the two smoothing calls of `tf.run`, exact search was faster on four of the six data sets
+  above 50,000 cells and slower on the two largest (ebv: 46 against 20 s; ln_vaccine: 34 against 26 s). The complete
+  `tf.run` took 0.8 to 1.5 times as long as with pynndescent 0.6 (repeated runs varied by up to 40 % on the shared
+  nodes), and the peak memory changed by at most 0.4 GB (ebv: 25.7 GB with each).
+* **Results.** With exact search, pynndescent 0.6 and 0.7 give identical profiles, programmes, tests and summaries;
+  the clone maps are identical on five of the seven data sets (on bone_marrow_pc and ln_vaccine, umap-learn 0.6
+  lays out the same neighbours slightly differently, and on ln_vaccine the search settles on n_neighbors 37 instead
+  of 67). The exact results differ from either approximate version about as much as these differ from each other
+  (between-clone distances correlate 0.999 or more), so adopting exact search would change the large-data results
+  of the validation, and more of them than the change of pynndescent does: the number of programmes on ebv
+  (2 → 4) and flu (5 → 4), and programme effects passing FDR 0.05 on bone_marrow_pc, ebv, flu and ln_vaccine. The
+  clonal ICC, its P value and clonal memory do not change; the variance explained by each label changes by at most
+  0.08 percentage points, with the same P values.
+* Not adopted in 4.7.0; the default is unchanged.
+
+### BLAS threads
+
+Results can depend on the number of BLAS threads (`OMP_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `MKL_NUM_THREADS`), and
+only through one step: the expression embedding that `tf.pp.prepare_embedding` builds when `tf.run` is given no
+`basis`. Each step of `tf.run` was run with 8 threads and every other step with 1: with 8 threads in
+`prepare_embedding` alone, a run gives exactly the result of 8 threads everywhere, and with 8 threads in any other
+step alone, exactly the result of 1 thread. With 1 and 8 threads everywhere (same `n_jobs`; validated versions,
+except for the spaclone row, which ran with the newest versions on Python 3.12):
+
+| Data | Embedding | What differs between 1 and 8 threads |
+|---|---|---|
+| Tutorial 1 (simulated) | given (`basis="X_pca"`) | nothing: profiles within 2.2e-15, the same clone map, programmes and summary |
+| GSE287123 (Tutorial 5) | built by Threadfin | embedding by up to 0.003; clonal ICC 0.16918594 / 0.16918596 and clonal memory 0.6490177 / 0.6490177, each with the same P value; variance explained by each label within 1e-6, with the same P values; the same three programmes (ARI 1.0) with stabilities 0.64, 0.52, 0.14 / 0.66, 0.55, 0.21; the same programme effects passing FDR 0.05; clone map n_neighbors 18, min_dist 0.80 / n_neighbors 10, min_dist 0.95 |
+| AIR-SPACE, six lymph nodes, through spaclone 1.0.2's Threadfin bridge | built by Threadfin | embedding by up to 0.018; clonal ICC and its P value identical to six decimals; on day 3 the mean stability in the programme warning 0.67 / 0.63, the programme stabilities 0.593, 0.496 / 0.594, 0.498 |
+
+No conclusion changed. Tutorial 5 run with 1 thread prints the same in 15 of its 18 code cells; the other three
+differ in the clone-map settings, the programme stabilities above and the sixth decimal of a cosine similarity.
+In spaclone's bridge, the bead-type scores, the counts and the annotations it passes to
+Threadfin are identical with 1 and 8 threads; the difference arises in Threadfin's expression embedding, and 8
+threads inside `prepare_embedding` alone reproduce the 8-thread result.
+
+Making results independent of the thread count would mean running that step on a fixed number of threads (with
+`threadpoolctl`). Fixing it at 1 costs little time (on GSE287123 the complete `tf.run` took 102 s with 1 thread
+everywhere and 100 s with 8), but it would change the published numbers wherever Threadfin built the embedding,
+because the validation and Tutorial 5 ran with 8 threads (GSE287123 with 8 threads gives the published clone map,
+n_neighbors 10 and min_dist 0.95). Fixing it at 8 would keep them on processors and BLAS libraries like those of the
+validation, but would oversubscribe machines with fewer cores. 4.7.0 changes neither: keep the thread count the same
+between runs that must give the same programmes and map.
+
+### Python 3.15
+
+`pip install threadfin` does not complete on Python 3.15.2: h5py (which anndata needs), numcodecs and harmonypy have
+no Python 3.15 wheels yet, and h5py does not build without the HDF5 library ("Unable to load dependency HDF5").
+With the compiled packages from conda-forge (numpy 2.5.4, SciPy, pandas 3.1.1, h5py 3.16.0, numba 0.68.1, numcodecs
+and others; harmonypy 2.1.0 built by pip) and the rest from pip (Scanpy 1.13.0, pynndescent 0.7.0, umap-learn 0.6.0,
+anndata 0.13.4), `pip check` passed, Scanpy's neighbour search ran, the test suite passed (340 passed, 19 skipped: no
+Dandelion or scirpy, and no `manuscript/`) and so did `examples/tutorial.py`. Python 3.15 is therefore not yet
+listed as supported; it can be once h5py publishes Python 3.15 wheels.
+
+### Dandelion 1.x (not supported in this version)
+
+sc-dandelion 1.0.2 (16 November 2026) works through Threadfin's Dandelion adapter, but calls clones differently.
+Dandelion 0.5.7 joins a junction to its neighbours within the identity threshold; 1.0 takes connected components
+(single linkage) within each V–J–length group, so chains of similar junctions become one clone. Its clone membership
+no longer depends on Python's hash seed (identical partitions under seeds 0, 1 and 2; the clone ids are numbered
+differently). On five data sets with contigs, the same cells and the same embedding (validated stack; 1.0.2 on
+Python 3.12):
+
+| Data set | Clones (two or more cells), 0.5.7 → 1.0.2 | Largest clone | Adjusted Rand index | Profiled 0.5.7 clones kept exactly | Clonal ICC (P) | Programmes | Label tests: variance explained (P) | Clonal memory (P) |
+|---|---|---|---|---|---|---|---|---|
+| mouse_rbd (GSE287123, Tutorial 5) | 8,736 (1,881) → 7,208 (1,415) | 252 → 494 | 0.57 | 952 of 1,881 (929 merged) | 0.169 → 0.157 (0.005 / 0.005) | 3 → 2 | RBD bait 2.3 → 1.2% (0.0005 → 0.003); division 8.5 → 11.6%; zone 3.7 → 3.7%; isotype 4.6 → 5.1% | 0.65 → 0.53 (0.002 / 0.002) |
+| gut_gc_reporter (GSE284622) | 6,963 (964) → 6,388 (749) | 139 → 321 | 0.61 | 507 of 964 (457 merged) | 0.401 → 0.362 (0.005 / 0.005) | 3 → 3 | GC sort 5.4 → 6.4%; tissue 51.4 → 49.3%; isotype 21.1 → 21.4% | 0.03 → 0.03 (0.018 / 0.014) |
+| malaria (GSE286215, exp. 1) | 20,500 (523) → 20,492 (525) | 8 → 8 | 0.99 | 518 of 523 (5 merged) | 0.735 → 0.728 (0.005 / 0.005) | 4 → 4 | state 39.1 → 38.8%; isotype 15.2 → 15.3% | – |
+| spont_gc (GSE203132) | 2,879 (1,053) → 2,679 (918) | 111 → 340 | 0.60 | 818 of 1,053 (235 merged) | 0.279 → 0.270 (0.005 / 0.005) | 3 → 3 | isotype 3.7 → 4.0% | – |
+| gc_np_pc (GSE246382) | 609 (92) → 557 (100) | 11 → 19 | 0.64 | 69 of 92 (23 merged) | 0.049 → 0.045 (0.24 / 0.25) | 2 → 2 | fate 77.7 → 73.6% | – |
+
+Label-test P values are 0.0005 in both unless shown. Clone-map settings changed on every data set.
+
+No 0.5.7 clone is split by 1.0.2; every change merges clones. Supporting 1.x would change every number that rests on
+clone calls, including those of the manuscript and of the tutorials (Tutorial 5: 7,208 instead of 8,736 clones),
+so the extra keeps sc-dandelion < 1.
+
+### harmonypy on Windows
+
+No release of harmonypy publishes Windows wheels (2.1.0 has wheels for Linux and macOS only), and 2.x does not
+compile with Microsoft's compiler, so Windows keeps harmonypy < 2 (pure Python).
+
+### Two changes in the newest dependencies
+
+* **umap-learn 0.6** has a second layout pipeline (recursive initialisation, the Adam optimiser and optionally the
+  RINND neighbour search). It still uses the pipeline of umap-learn 0.5 by default, but warns that a later release
+  will not; Threadfin asks for the 0.5 pipeline (`compatibility_layout=True`). It gives the maps of umap-learn 0.5
+  for most neighbour graphs, not all (the trial maps of larry_d2 and spont_gc above).
+* **anndata 0.13** keeps `X` among the layers, under the key `None`, so `for k in list(adata.layers): del
+  adata.layers[k]` also deletes `X`. Threadfin then says that `adata.X` is empty instead of failing in NumPy. The
+  manuscript's loader of ln_vaccine does this; for the newest-stack run above, deleting the key `None` was skipped
+  while the data were read, which gives the loader's result of anndata 0.12.
+
 ## Version 4.6.2 — 16 November 2026
 
 * **Why this version.** A first-time user followed the public 4.6.1 release in new environments, with the public

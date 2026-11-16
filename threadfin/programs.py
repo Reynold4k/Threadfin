@@ -7,6 +7,8 @@ import warnings
 import pandas as pd
 import scanpy as sc
 
+from ._utils import scanpy_argument_names
+
 
 def _require_obs(adata, col: str) -> None:
     if col not in adata.obs.columns:
@@ -71,13 +73,14 @@ def community_markers(
         ad.obs[cluster_key] = ad.obs[cluster_key].cat.remove_unused_categories()
     if ad.obs[cluster_key].nunique() < 2:
         raise ValueError(f"Need at least two communities in '{cluster_key}'.")
-    sc.tl.rank_genes_groups(
-        ad,
-        groupby=cluster_key,
-        method=method,
-        layer=layer,
-        n_genes=min(n_genes, ad.n_vars),
-    )
+    with scanpy_argument_names():
+        sc.tl.rank_genes_groups(
+            ad,
+            groupby=cluster_key,
+            method=method,
+            layer=layer,
+            n_genes=min(n_genes, ad.n_vars),
+        )
     return _rank_genes_df(ad).reset_index(drop=True)
 
 
@@ -111,7 +114,8 @@ def community_score(
             skipped.append(name)
             continue
         col = f"_threadfin_score_{name}"
-        sc.tl.score_genes(adata, gene_list=present, score_name=col, **score_kwargs)
+        with scanpy_argument_names():
+            sc.tl.score_genes(adata, gene_list=present, score_name=col, **score_kwargs)
         df = pd.DataFrame({"community": clusters, "score": adata.obs[col]}).dropna()
         del adata.obs[col]
         for community, grp in df.groupby("community", observed=True):

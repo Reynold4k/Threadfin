@@ -19,6 +19,17 @@ def sim():
 # --------------------------------------------------------------------------- variance components
 
 
+def _png(fig) -> bytes:
+    """The figure as PNG bytes (closed afterwards)."""
+    import io
+
+    import matplotlib.pyplot as plt
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=80)
+    plt.close(fig)
+    return buf.getvalue()
+
 def test_singletons_do_not_enter_variance_components():
     x = np.arange(10, dtype=float)[:, None]
     codes = np.array([0, 0, 1, 1, 2, 3, 4, 5, 6, 7])  # only clones 0 and 1 have 2 cells
@@ -342,6 +353,9 @@ def test_the_result_stays_the_runs_own_after_later_calls(tmp_path):
                         n_perm=10, n_boot=6, verbose=False)
     assert result.programmes.shape[0] > 1 and result.memory is not None and "true_programme" in result.tests
     summary, methods = result.summary(), result.methods()
+    # the figure of a fresh run is the one drawn from adata, byte for byte
+    figure = _png(result.plot())
+    assert figure == _png(tf.pl.overview(ad, state_key="true_state", coherence_result=result.coherence))
     record = ad.uns["threadfin"]["run"]
     assert list(record["profile_tests"]) == ["true_programme"] and list(record["tests"]) == ["true_programme"]
     ad.write_h5ad(tmp_path / "run.h5ad")
@@ -365,11 +379,15 @@ def test_the_result_stays_the_runs_own_after_later_calls(tmp_path):
     ad.write_h5ad(tmp_path / "later.h5ad")
 
     assert result.summary() == summary and result.methods() == methods
+    # the later map and programmes are in adata now; the result still draws its own
+    assert _png(tf.pl.overview(ad, state_key="true_state", coherence_result=result.coherence)) != figure
+    assert _png(result.plot()) == figure
     for again in (tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "run.h5ad")),
                   tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "later.h5ad")),
                   tf.ThreadfinResult.from_adata(ad)):
         assert again.summary() == summary
         assert again.methods() == methods
+        assert _png(again.plot()) == figure
         assert again.coherence["icc"] == result.coherence["icc"]
         assert again.coherence["p_value"] == result.coherence["p_value"]
         assert again.programmes.index.astype(str).tolist() == result.programmes.index.astype(str).tolist()
@@ -384,6 +402,45 @@ def test_the_result_stays_the_runs_own_after_later_calls(tmp_path):
         assert again.tests["true_programme"].attrs["size_bins"] is not None
         assert again.memory["memory_index"] == result.memory["memory_index"]
 
+
+def test_clone_calls_made_before_the_run_stay_in_the_saved_methods(tmp_path):
+    """Clones called with define_clones_dandelion before run() (the notebook's workflow): the Methods paragraph
+    names the clone calling, also after saving and reloading, whether run() recognises the clone ids of this
+    session or methods(clone_ids) is given them."""
+    import anndata
+
+    from threadfin import dandelion as tfd
+
+    ad = tf.sim.simulate_repertoire(n_clones=400, random_state=5)
+    ids = ad.obs["clone_id"].copy()
+    ids.attrs.update({"method": "dandelion", "dandelion_version": "0.5.7", "donor_key": "donor",
+                      "use_light_chain": True, "require_heavy_chain": True, "check_contigs": False,
+                      "identity": {"ig": 0.85, "tr-ab": 1.0, "tr-gd": 1.0}, "dandelion_hash_seed": 0})
+    kw = dict(donor_key="donor", sample_key="context", basis="X_pca", map_n_neighbors=15, map_min_dist=0.5,
+              n_perm=10, n_boot=6, verbose=False)
+    saved = tfd._RECENT_CLONE_CALLS[:]
+    try:
+        tfd._RECENT_CLONE_CALLS.clear()
+        tfd._remember_clone_calls(ids)                         # as define_clones_dandelion does
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            first = tf.run(ad.copy(), **kw)
+        methods = first.methods()
+        assert "Clones were called with Dandelion 0.5.7 (ref. 1) within each donor ('donor')" in methods
+        first.adata.write_h5ad(tmp_path / "first.h5ad")
+        assert tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "first.h5ad")).methods() == methods
+
+        tfd._RECENT_CLONE_CALLS.clear()                        # clone ids of another session: not recognised
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            second = tf.run(ad.copy(), **kw)
+        assert "Clone identities were taken from adata.obs['clone_id']" in second.methods()
+        assert second.methods(clone_ids=ids) == methods
+        second.adata.write_h5ad(tmp_path / "second.h5ad")
+        assert second.methods() == methods
+        assert tf.ThreadfinResult.from_adata(anndata.read_h5ad(tmp_path / "second.h5ad")).methods() == methods
+    finally:
+        tfd._RECENT_CLONE_CALLS[:] = saved
 
 def test_run_warns_once_about_a_sample_level_label(sim):
     """Both label tests check a label fixed within each sample; run() says so once, not once per test."""

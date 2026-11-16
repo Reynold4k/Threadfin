@@ -19,7 +19,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ._utils import get_basis, require_positive_int
+from ._utils import get_basis, require_positive_int, scanpy_argument_names
 from .reclustering import _resolve_parameters
 
 _CLONE_INFO_KEY = "threadfin_clones"
@@ -343,11 +343,14 @@ def clonotype_recluster(
     if embed_clones:
         import umap
 
+        from ._utils import umap_layout_options
+
         reducer = umap.UMAP(
             n_neighbors=umap_k,
             metric="precomputed" if embedding_mode == "precomputed" else "euclidean",
             min_dist=settings["min_dist"], spread=settings["spread"],
             learning_rate=settings["learning_rate"], random_state=random_state,
+            **umap_layout_options(),
         )
         clone_xy = reducer.fit_transform(dist)
         clone_map["x"] = clone_xy[:, 0]
@@ -358,11 +361,12 @@ def clonotype_recluster(
         from anndata import AnnData
 
         clone_adata = AnnData(clone_xy)
-        sc.pp.neighbors(clone_adata, n_neighbors=graph_k, use_rep="X",
-                        metric="euclidean", random_state=cluster_random_state)
+        with scanpy_argument_names():
+            sc.pp.neighbors(clone_adata, n_neighbors=graph_k, use_rep="X",
+                            metric="euclidean", random_state=cluster_random_state)
         with warnings.catch_warnings():   # the historical recipe needs leidenalg; scanpy recommends igraph
             warnings.filterwarnings("ignore", message="(In the future, the default backend for leiden|The `igraph` "
-                                    "implementation of leiden)")
+                                    "(and `networkit` )?implementations? of leiden)")
             sc.tl.leiden(clone_adata, resolution=resolution, random_state=cluster_random_state,
                          flavor="leidenalg", directed=True, n_iterations=-1)
         labels = clone_adata.obs["leiden"].astype(str).to_numpy()

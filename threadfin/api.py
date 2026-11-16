@@ -185,8 +185,8 @@ class ThreadfinResult:
 
     The result keeps what the run produced. Later calls of :mod:`threadfin.tl` functions on the same AnnData (for
     example :func:`threadfin.tl.profile_association` with another ``how=``) store their own results in ``adata``
-    and change neither the tables of the result nor its :meth:`summary` and :meth:`methods`. :meth:`plot` draws
-    the clone map and the programmes stored in ``adata``. :meth:`from_adata` rebuilds the result after saving.
+    and change neither the tables of the result nor its :meth:`summary`, :meth:`methods` and :meth:`plot`.
+    :meth:`from_adata` rebuilds the result after saving.
     """
 
     adata: object = field(repr=False)
@@ -216,6 +216,21 @@ class ThreadfinResult:
         saved = (self.record or {}).get("results", {}).get("uns")
         return saved if saved is not None else self.adata.uns.get("threadfin", {})
 
+    def _record_clone_calling(self, cc: dict) -> None:
+        """Keep the settings of clone calls made before :func:`run` (from ``methods(clone_ids)``) with the result
+        and with the run's record in ``adata``, so that the Methods paragraph of a saved and rebuilt result names
+        them too."""
+        self.settings["clone_calling_before_run"] = dict(cc)
+        safe = h5ad_safe(dict(cc))
+        if self.record is not None:
+            self.record.setdefault("settings", {})["clone_calling_before_run"] = safe
+        run_record = self.adata.uns.get("threadfin", {}).get("run")
+        own = run_record is not None and self.record is not None and all(
+            str(run_record.get("settings", {}).get(k)) == str(v)
+            for k, v in (self.record.get("settings") or {}).items() if k != "clone_calling_before_run")
+        if own:
+            run_record.setdefault("settings", {})["clone_calling_before_run"] = safe
+
     @classmethod
     def from_adata(cls, adata) -> ThreadfinResult:
         """The result of :func:`run`, rebuilt from the AnnData it wrote to (for example after
@@ -223,8 +238,8 @@ class ThreadfinResult:
 
         :func:`run` keeps a copy of everything it reported in ``adata.uns['threadfin']['run']``. The rebuilt
         result is therefore the run's own, also after later calls of :mod:`threadfin.tl` functions on the same
-        AnnData: its tables are those of the run, and :meth:`summary` and :meth:`methods` give the text they gave
-        right after the run. :meth:`plot` draws the clone map and the programmes stored in ``adata``.
+        AnnData: its tables are those of the run, :meth:`summary` and :meth:`methods` give the text they gave
+        right after the run, and :meth:`plot` draws the run's clone map and programmes.
 
         Files written by Threadfin 4.6.0 and 4.6.1 hold no such copy. Their results are read from the entries of
         ``adata.uns['threadfin']``, where a later call of a :mod:`threadfin.tl` function (for example the same
@@ -237,7 +252,7 @@ class ThreadfinResult:
         if record is None:
             raise ValueError("adata holds no record of threadfin.run() (written by Threadfin 4.6.0 or later).")
         keys = ("clone_key", "donor_key", "sample_key", "strata_key", "state_key", "composition_weight",
-                "time_key", "basis", "representation", "receptor", "clone_calling")
+                "time_key", "basis", "representation", "receptor", "clone_calling", "clone_calling_before_run")
         settings = {k: None for k in keys}
         settings.update(dict(record.get("settings", {})))
         skipped = {str(k): str(v) for k, v in dict(record.get("skipped", {})).items()}
@@ -476,6 +491,9 @@ class ThreadfinResult:
         cc = st.get("clone_calling")
         if cc is None and clone_ids is not None and clone_ids.attrs.get("method") == "dandelion":
             cc = dict(clone_ids.attrs)
+            self._record_clone_calling(cc)
+        if cc is None:
+            cc = st.get("clone_calling_before_run")        # recorded by run() or by an earlier call of methods()
         clones = ad.obs[st["clone_key"]].dropna().astype(str)
         sizes = clones.value_counts()
         if cc:
@@ -545,7 +563,8 @@ class ThreadfinResult:
             text.append(
                 centring
                 + (f"Each cell was averaged with its {smooth} nearest cells (itself included"
-                   + ("; neighbours found approximately with pynndescent" if ad.n_obs > 50_000 else "")
+                   + (f"; neighbours found approximately with pynndescent {ver('pynndescent')}" if ad.n_obs > 50_000
+                      else "")
                    + ") and " if smooth else "Cells were ")
                 + f"mapped to {pp_.get('n_features', 256)} random Fourier features of a Gaussian kernel (bandwidth "
                 f"{float(pp_.get('bandwidth', float('nan'))):.3g}, the median distance between cells; ref. rff); every "
@@ -576,8 +595,8 @@ class ThreadfinResult:
         # clone map
         mp = prof.get("map_params")
         if mp:
-            text.append(f"The clone map is a UMAP (ref. umap) of the clone profiles with n_neighbors "
-                        f"{mp['n_neighbors']} and min_dist {mp['min_dist']:g}"
+            text.append(f"The clone map is a UMAP (umap-learn {ver('umap-learn')}; ref. umap) of the clone profiles "
+                        f"with n_neighbors {mp['n_neighbors']} and min_dist {mp['min_dist']:g}"
                         + (", chosen by Threadfin's layout search" if mp.get("chosen_by") == "tune_clone_map" else "")
                         + "; it is a display, and no statistic depends on it.")
             refs["umap"] = ("McInnes L, Healy J, Saul N, Grossberger L. UMAP: uniform manifold approximation and "
@@ -644,11 +663,13 @@ class ThreadfinResult:
         return "\n".join(lines)
 
     def plot(self, save: str | Path | None = None):
-        """Overview figure (clone map, coherence test, programme composition, stability)."""
+        """Overview figure (clone map, coherence test, programme composition, stability) of this run: its own
+        clone map, programmes and composition, also after later :mod:`threadfin.tl` calls on the same AnnData."""
         from .plotting import overview
 
         return overview(self.adata, state_key=self.settings.get("state_key"), coherence_result=self.coherence,
-                        composition_weight=self.settings.get("composition_weight", "cells"), save=save)
+                        composition_weight=self.settings.get("composition_weight", "cells"), save=save,
+                        result=self)
 
 
 # --------------------------------------------------------------------------- the pipeline
@@ -805,7 +826,7 @@ def run(
     require_complete_groups(adata, donor_key, sample_key, strata_key, batch_key, context="threadfin.run()")
     if counts_layer is not None and counts_layer not in adata.layers:
         raise KeyError(f"counts_layer '{counts_layer}' is not in adata.layers (layers: "
-                       f"{', '.join(map(repr, adata.layers.keys())) or 'none'}).")
+                       f"{', '.join(repr(k) for k in adata.layers.keys() if k is not None) or 'none'}).")
     require_positive_int(n_perm, "n_perm")
     require_positive_int(n_boot, "n_boot")
     if isinstance(random_state, bool) or not isinstance(random_state, (int, np.integer)):
@@ -878,6 +899,11 @@ def run(
         raise ValueError(f"Pass `bcr`, or provide clone ids in adata.obs['{clone_key}'].")
     else:
         receptor, clone_calling = None, None
+    # clone ids called before run() with define_clones_dandelion in this session: how they were called, for the
+    # Methods paragraph (also after saving)
+    from .dandelion import clone_calling_of
+
+    clone_calling_before = clone_calling_of(adata.obs[clone_key]) if clone_calling is None else None
 
     # Threadfin needs clones observed more than once; say so plainly instead of failing deep inside the model
     sizes = adata.obs[clone_key].dropna().astype(str).value_counts()
@@ -976,6 +1002,7 @@ def run(
                 "state_key": state_key, "composition_weight": composition_weight, "time_key": time_key,
                 "basis": basis,
                 "representation": representation, "receptor": receptor, "clone_calling": clone_calling,
+                "clone_calling_before_run": clone_calling_before,
                 "n_perm": int(n_perm), "n_boot": int(n_boot), "random_state": int(random_state)}
     # What this run reported, kept apart from the entries of uns['threadfin'] that later calls of tl functions
     # replace (a label test of the same label, clonal_coherence, find_programmes ...), so that
