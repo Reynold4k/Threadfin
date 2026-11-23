@@ -69,7 +69,7 @@ AnnData object with n_obs × n_vars = 8467 × 20
 
 (anndata 0.13 and later print one more line, `layers: None (.X)`.)
 
-**What this is.** An [AnnData](https://anndata.readthedocs.io) object, the standard container of the
+**What this is.** An [AnnData](https://anndata.scverse.org) object, the standard container of the
 Python single-cell ecosystem. Each row (*observation*) is a cell; `adata.obs` holds one column per cell
 annotation and `adata.obsm["X_pca"]` holds each cell's coordinates in a 20-dimensional expression space
 (on real data, the principal components of gene expression).

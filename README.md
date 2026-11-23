@@ -12,6 +12,7 @@
   <a href="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml"><img src="https://github.com/Reynold4k/Threadfin/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue.svg" alt="Python 3.10 to 3.14"></a>
   <a href="https://pypi.org/project/threadfin/"><img src="https://img.shields.io/pypi/v/threadfin.svg" alt="PyPI version"></a>
+  <a href="https://bioconda.github.io/recipes/threadfin/README.html"><img src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat" alt="install with bioconda"></a>
   <a href="https://github.com/Reynold4k/Threadfin/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
   <a href="https://doi.org/10.5281/zenodo.23824521"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23824521.svg" alt="DOI 10.5281/zenodo.23824521"></a>
 </p>
@@ -27,6 +28,14 @@ distribution of its cells' transcriptional states, so that clones, not cells, ca
 pip install threadfin                  # Python 3.10–3.14 on Linux, macOS or Windows; no GPU or R needed
 pip install "threadfin[dandelion]"     # also installs Dandelion (0.5.x), to call clones from BCR or TCR contigs
 ```
+
+Or with conda (Linux and macOS), from [Bioconda](https://bioconda.github.io/recipes/threadfin/README.html):
+
+```bash
+conda install -c conda-forge -c bioconda threadfin   # the core package; the extras come from pip in the same environment
+```
+
+The Bioconda package keeps umap-learn below 0.6 and pynndescent below 0.7 on every Python version.
 
 Scanpy, Leiden, UMAP and Harmony are installed with it; a fresh `pip install "threadfin[dandelion]"` takes about
 3 minutes. Clone calls are the same in every Python session, with no setting needed. Dandelion's clone calls
@@ -54,7 +63,7 @@ other result is the same. The published results are reproduced exactly with the 
 
 ### 2. Run
 
-You need, for the same cells: raw gene counts in an [AnnData](https://anndata.readthedocs.io) object, the
+You need, for the same cells: raw gene counts in an [AnnData](https://anndata.scverse.org) object, the
 contig-level receptor table (Cell Ranger's `filtered_contig_annotations.csv` or an AIRR `.tsv`), and the donor
 and sample of each cell.
 
@@ -204,7 +213,7 @@ Each clone is represented by the distribution of transcriptional states among it
 estimated relative to the cells sampled alongside it and shrunk according to the number of cells
 captured. Clones are then compared with one another: in a **clone embedding** with one point per clone,
 in **clonal programmes** of clones that behave alike, and in **clone-level tests** of anything you
-measured. Threadfin works with [AnnData](https://anndata.readthedocs.io) and
+measured. Threadfin works with [AnnData](https://anndata.scverse.org) and
 [Scanpy](https://scanpy.readthedocs.io), and defines clones with
 [Dandelion](https://github.com/zktuong/dandelion).
 

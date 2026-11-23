@@ -249,7 +249,7 @@ for name in MD5:
 md(r"""
 ## Step 2 — Read gene expression and hashtag counts
 
-**What.** Read each tube's count matrix into an [AnnData](https://anndata.readthedocs.io) object (cells ×
+**What.** Read each tube's count matrix into an [AnnData](https://anndata.scverse.org) object (cells ×
 features) and split the features into genes (`Gene Expression`) and hashtag antibodies (`Antibody Capture`).
 
 **Why.** AnnData is the standard container of the scverse ecosystem (Scanpy, scirpy, Dandelion, Threadfin):
